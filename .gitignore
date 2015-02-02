@@ -1,0 +1,14 @@
+*~
+*.#*
+*#*#
+*.swp
+*.ipr
+*.iml
+*.iws
+*.pyc
+.idea/
+.idea_modules/
+build/*.jar
+.settings
+.cache
+
