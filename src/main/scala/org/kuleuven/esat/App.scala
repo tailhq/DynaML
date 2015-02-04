@@ -30,7 +30,7 @@ object App extends App {
 
     model.setLearningRate(0.001)
       .setMaxIterations(args.apply(2).toInt)
-      .learn()
+      .learn
 
     println(model.parameters())
   }
