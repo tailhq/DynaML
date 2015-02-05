@@ -3,7 +3,7 @@ package org.kuleuven.esat.graphicalModels
 import breeze.linalg.{reshape, DenseVector}
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory
-import com.tinkerpop.gremlin.scala.{ScalaEdge, ScalaVertex, ScalaGraph}
+import com.tinkerpop.gremlin.scala.ScalaGraph
 import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.optimization.{SquaredL2Updater, LeastSquaresGradient, GradientDescent}
 
@@ -17,28 +17,32 @@ import org.kuleuven.esat.optimization.{SquaredL2Updater, LeastSquaresGradient, G
  * as a means for L2 regularization.
  */
 
-class GaussianLinearModel(
+private[graphicalModels] class GaussianLinearModel(
     override protected val g: ScalaGraph,
-    private val nPoints: Int)
+    override protected val nPoints: Int)
   extends LinearModel[ScalaGraph, DenseVector[Double]] {
 
   private val logger = Logger.getLogger(this.getClass)
-  private var params = g.getVertex("w").getProperty("slope").asInstanceOf[DenseVector[Double]]
+  override protected var params =
+    g.getVertex("w")
+      .getProperty("slope")
+      .asInstanceOf[DenseVector[Double]]
+
   private var maxIterations: Int = 100
   private var learningRate: Double = 0.001
 
 
-  private val optimizer = new GradientDescent(
+  override protected val optimizer = new GradientDescent(
     new LeastSquaresGradient(),
     new SquaredL2Updater())
 
 
-  def setMaxIterations(i: Int): GaussianLinearModel = {
+  def setMaxIterations(i: Int): this.type = {
     this.optimizer.setNumIterations(i)
     this
   }
 
-  def setLearningRate(alpha: Double): GaussianLinearModel = {
+  def setLearningRate(alpha: Double): this.type = {
     this.optimizer.setStepSize(alpha)
     this
   }
@@ -52,9 +56,6 @@ class GaussianLinearModel(
     this.params dot point1
   }
 
-  override def learn(): Unit = {
-    this.params = optimizer.optimize(this.g, nPoints)
-  }
 }
 
 object GaussianLinearModel {

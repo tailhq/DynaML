@@ -97,7 +97,9 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
 }
 
 object GradientDescent {
+
   private val logger = Logger.getLogger(this.getClass)
+
   def runSGD(
       g: ScalaGraph,
       nPoints: Int,

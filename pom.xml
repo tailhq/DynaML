@@ -107,6 +107,10 @@
                                     <name>run-App</name>
                                     <mainClass>org.kuleuven.esat.App</mainClass>
                                 </program>
+                                <program>
+                                    <name>run-Markov</name>
+                                    <mainClass>org.kuleuven.esat.AppMarkov</mainClass>
+                                </program>
                             </programs>
                             <assembleDirectory>${project.build.directory}</assembleDirectory>
                         </configuration>

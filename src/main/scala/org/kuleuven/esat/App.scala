@@ -1,10 +1,7 @@
 package org.kuleuven.esat
 
 import java.io.File
-import breeze.linalg.{norm, DenseVector}
 import com.github.tototoshi.csv._
-import com.tinkerpop.blueprints.pgm.impls.tg.{TinkerGraphFactory, TinkerGraph}
-import com.tinkerpop.gremlin.scala._
 import org.kuleuven.esat.graphicalModels.GaussianLinearModel
 
 /**

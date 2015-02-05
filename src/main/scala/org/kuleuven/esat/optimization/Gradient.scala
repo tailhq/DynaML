@@ -3,6 +3,15 @@ package org.kuleuven.esat.optimization
 import breeze.linalg._
 import org.kuleuven.esat.utils
 
+trait GeneralGradient {
+  def compute(
+               data: DenseVector[Double],
+               label: Double,
+               weights: DenseVector[Double])
+  : (DenseVector[Double], Double)
+}
+
+
 /**
  * Class used to compute the gradient for a loss function, given a single data point.
  */
