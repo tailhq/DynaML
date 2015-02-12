@@ -15,7 +15,7 @@ private[graphicalModels] class MarkovChain(
     override protected val g: ScalaGraph,
     override protected val nPoints: Int)
   extends GraphicalModel[ScalaGraph]
-  with ParameterizedLearner[ScalaGraph] {
+  with ParameterizedLearner[ScalaGraph, Int, DenseVector[Double]] {
 
   override protected var params = DenseVector.tabulate[Double](nPoints)((i) => {if(i == 1) 1.0 else 0.0})
 

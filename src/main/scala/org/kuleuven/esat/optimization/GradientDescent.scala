@@ -10,7 +10,7 @@ import org.apache.log4j.{Logger, Priority}
  * values of the model parameters.
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
-  extends Optimizer[ScalaGraph]{
+  extends Optimizer[ScalaGraph, Int, DenseVector[Double]]{
   private var stepSize: Double = 1.0
   private var numIterations: Int = 100
   private var regParam: Double = 1.0

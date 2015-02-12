@@ -8,7 +8,7 @@ import org.apache.log4j.{Priority, Logger}
  * Do SGD on a Markov chain to
  * calculate the stationary distribution.
  */
-class MarkovChainSGD extends Optimizer[ScalaGraph] {
+class MarkovChainSGD extends Optimizer[ScalaGraph, Int, DenseVector[Double]] {
 
   private var stepSize: Double = 0.001
   private var numIterations: Int = 100

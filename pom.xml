@@ -31,6 +31,16 @@
             <version>${scala.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.4</version>
@@ -62,6 +72,11 @@
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>jline</artifactId>
+            <version>2.9.0-1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -71,6 +86,7 @@
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -82,7 +98,7 @@
                 <configuration>
                     <scalaVersion>${scala.version}</scalaVersion>
                     <args>
-                        <arg>-target:jvm-1.5</arg>
+                        <arg>-target:jvm-1.7</arg>
                     </args>
                 </configuration>
             </plugin>
@@ -110,6 +126,10 @@
                                 <program>
                                     <name>run-Markov</name>
                                     <mainClass>org.kuleuven.esat.AppMarkov</mainClass>
+                                </program>
+                                <program>
+                                    <name>bayesLearn-repl</name>
+                                    <mainClass>org.kuleuven.esat.bayesLearn</mainClass>
                                 </program>
                             </programs>
                             <assembleDirectory>${project.build.directory}</assembleDirectory>

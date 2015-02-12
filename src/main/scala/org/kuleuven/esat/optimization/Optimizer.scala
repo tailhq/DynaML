@@ -1,14 +1,14 @@
 package org.kuleuven.esat.optimization
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{Tensor, Matrix, DenseVector}
 
 /**
  * Trait for optimization problem solvers.
  */
-trait Optimizer[T] extends Serializable {
+trait Optimizer[T, K, P <: Tensor[K, Double]] extends Serializable {
 
   /**
    * Solve the convex optimization problem.
    */
-  def optimize(data: T, nPoints: Int): DenseVector[Double]
+  def optimize(data: T, nPoints: Int): P
 }

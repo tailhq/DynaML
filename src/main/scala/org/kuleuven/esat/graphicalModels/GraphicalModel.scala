@@ -1,6 +1,8 @@
 package org.kuleuven.esat.graphicalModels
 
-import breeze.linalg.DenseVector
+import breeze.generic.UFunc
+import breeze.linalg.operators.OpMulInner
+import breeze.linalg.{Tensor, VectorLike, Matrix, DenseVector}
 import org.kuleuven.esat.optimization.Optimizer
 
 
@@ -13,9 +15,10 @@ trait GraphicalModel[T] {
   protected val g: T
 }
 
-trait ParameterizedLearner[G] extends GraphicalModel[G] {
-  protected var params: DenseVector[Double]
-  protected val optimizer: Optimizer[G]
+trait ParameterizedLearner[G, K, T <: Tensor[K, Double]]
+  extends GraphicalModel[G] {
+  protected var params: T
+  protected val optimizer: Optimizer[G, K, T]
   protected val nPoints: Int
 
   /**
@@ -43,9 +46,10 @@ trait ParameterizedLearner[G] extends GraphicalModel[G] {
  *
  * */
 
-trait LinearModel[T, P]
+abstract class LinearModel[T, K1, K2,
+  P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R]
   extends GraphicalModel[T]
-  with ParameterizedLearner[T] {
+  with ParameterizedLearner[T, K1, P] {
 
   /**
    * Predict the value of the
@@ -53,7 +57,6 @@ trait LinearModel[T, P]
    * point.
    *
    * */
-  def predict(point: P): Double
-
+  def predict(point: Q): R
 
 }

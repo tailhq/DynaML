@@ -1,6 +1,6 @@
 package org.kuleuven.esat.graphicalModels
 
-import breeze.linalg.{reshape, DenseVector}
+import breeze.linalg.{Tensor, reshape, DenseVector}
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory
 import com.tinkerpop.gremlin.scala.ScalaGraph
@@ -20,7 +20,8 @@ import org.kuleuven.esat.optimization.{SquaredL2Updater, LeastSquaresGradient, G
 private[graphicalModels] class GaussianLinearModel(
     override protected val g: ScalaGraph,
     override protected val nPoints: Int)
-  extends LinearModel[ScalaGraph, DenseVector[Double]] {
+  extends LinearModel[ScalaGraph, Int, Int,
+    DenseVector[Double], DenseVector[Double], Double] {
 
   private val logger = Logger.getLogger(this.getClass)
   override protected var params =
@@ -50,10 +51,9 @@ private[graphicalModels] class GaussianLinearModel(
   override def parameters(): DenseVector[Double] =
     this.params
 
-  override def predict(point: DenseVector[Double]) = {
-    val point1 = reshape(point, point.length + 1, 1).toDenseVector
-    point1.update(point.length, 1)
-    this.params dot point1
+  override def predict(point: DenseVector[Double]): Double = {
+    this.params(0 to this.params.length-2) dot point +
+      this.params(this.params.length-1)
   }
 
 }
