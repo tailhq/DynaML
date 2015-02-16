@@ -17,7 +17,7 @@ Prerequisites: Maven to build the executables.
   mvn package
 ```
 
-3. Make sure you give execution permission to bayeslearn-repl in the target/bin directory.
+3. Make sure you give execution permission to `bayeslearn-repl` in the `target/bin` directory.
 ```shell
   chmod +x target/bin/bayesLearn-repl
   target/bin/bayesLearn-repl
@@ -65,3 +65,7 @@ The `data/` directory contains a few sample data sets, we will be using them in 
 ```scala
   val pred = model.predict(DenseVector(0.68220219, 0.657091331))
 ```
+
+Documentation
+=============
+You can refer to the project [home page](http://mandar2812.github.io/bayeslearn/) or the [documentation](http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package) for getting started with Bayes Learn. Bear in mind that this is still at its infacy and there will be many more improvements/tweaks in the future.
