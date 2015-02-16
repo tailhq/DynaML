@@ -1,17 +1,14 @@
 package org.kuleuven.esat
 
 import java.io.{CharArrayWriter, PrintWriter}
-import java.net.URLClassLoader
-
 import scala.tools.nsc.interpreter.ILoop
 import scala.tools.nsc.Settings
 
 
 object bayesLearn extends App {
   override def main(args: Array[String]) = {
-    //println(System.getProperty("java.class.path"))
     val repl = new ILoop {
-      override def prompt = "==> "
+      override def prompt = "scala> "
 
       addThunk {
         intp.beQuietDuring {
@@ -23,6 +20,7 @@ object bayesLearn extends App {
       }
 
       override def printWelcome() {
+        echo("Welcome to Bayes Learn \n\n")
         echo("\n" +
           "         \\,,,/\n" +
           "         (o o)\n" +
@@ -45,8 +43,5 @@ object bayesLearn extends App {
     }
 
     repl.process(settings)
-    //repl.addImports("import breeze.linalg._")
-    //repl.addImports("org.kuleuven.esat.graphicalModels._")
-
   }
 }
