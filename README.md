@@ -17,7 +17,7 @@ Prerequisites: Maven to build the executables.
   mvn package
 ```
 
-3. Make sure you give execution permission to bayeslearn-repl in the target/bin directory.
+3. Make sure you give execution permission to `bayeslearn-repl` in the `target/bin` directory.
 ```shell
   chmod +x target/bin/bayesLearn-repl
   target/bin/bayesLearn-repl
