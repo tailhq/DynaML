@@ -18,6 +18,7 @@ object bayesLearn extends App {
           intp.addImports("breeze.linalg._")
           intp.addImports("org.kuleuven.esat.graphicalModels._")
           intp.addImports("org.kuleuven.esat.utils")
+          intp.addImports("org.kuleuven.esat.kernels._")
         }
       }
 

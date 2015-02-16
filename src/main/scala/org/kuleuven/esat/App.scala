@@ -10,7 +10,6 @@ object App extends App {
 
   override def main(args: Array[String]): Unit = {
     //Read csv file
-
    var delim: Char = ','
     if(args.apply(1).compare("tab") == 0) delim = '\t'
     val model = GaussianLinearModel(utils.getCSVReader(args.apply(0), delim))

@@ -1,10 +1,12 @@
 package org.kuleuven.esat.graphicalModels
 
-import breeze.linalg.{Tensor, reshape, DenseVector}
+import breeze.linalg.{DenseVector, DenseMatrix}
 import com.github.tototoshi.csv.CSVReader
+import com.tinkerpop.blueprints.pgm.Edge
 import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory
-import com.tinkerpop.gremlin.scala.ScalaGraph
+import com.tinkerpop.gremlin.scala.{ScalaVertex, ScalaEdge, ScalaGraph}
 import org.apache.log4j.{Priority, Logger}
+import org.kuleuven.esat.kernels.SVMKernel
 import org.kuleuven.esat.optimization.{SquaredL2Updater, LeastSquaresGradient, GradientDescent}
 
 
@@ -52,10 +54,43 @@ private[graphicalModels] class GaussianLinearModel(
     this.params
 
   override def predict(point: DenseVector[Double]): Double = {
-    this.params(0 to this.params.length-2) dot point +
+    this.params(0 to this.params.length-2) dot featureMap(List(point))(0) +
       this.params(this.params.length-1)
   }
 
+  override def getParamOutEdges() = this.g.getVertex("w").getOutEdges()
+
+  override def getxyPair(ed: Edge): (DenseVector[Double], Double) = {
+    val edge = ScalaEdge.wrap(ed)
+    val yV = ScalaVertex.wrap(edge.getInVertex)
+    val y = yV.getProperty("value").asInstanceOf[Double]
+
+    val xV = yV.getInEdges("causes").iterator().next().getOutVertex
+    val x = xV.getProperty("value").asInstanceOf[DenseVector[Double]]
+    (x, y)
+  }
+
+  override def applyKernel(kernel: SVMKernel[DenseMatrix[Double]]): Unit = {
+    //TODO: Comment here
+    val features = this.getPredictors().map((vector) => vector(0 to vector.length - 2))
+    val kernelMatrix =
+      kernel.buildKernelMatrix(features, features.length)
+    val decomposition = kernelMatrix.eigenDecomposition(features.length)
+    this.featureMap = kernel.featureMapping(decomposition)(features) _
+    val edges = this.getParamOutEdges().iterator()
+    this.params = DenseVector.ones[Double](decomposition._1.length + 1)
+    this.g.getVertex("w").setProperty("slope", this.params)
+    while (edges.hasNext) {
+      val vertex = edges.next().getInVertex
+        .getInEdges("causes").iterator()
+        .next().getOutVertex
+      val featurex = vertex.getProperty("value").asInstanceOf[DenseVector[Double]]
+      //TODO: Comment here
+      val mappedf = featureMap(List(featurex(0 to featurex.length - 2)))(0)
+      val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(Array(1.0)))
+      vertex.setProperty("value", newFeatures)
+    }
+  }
 }
 
 object GaussianLinearModel {

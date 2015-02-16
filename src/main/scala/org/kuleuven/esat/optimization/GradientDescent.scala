@@ -1,8 +1,10 @@
 package org.kuleuven.esat.optimization
 
 import breeze.linalg.DenseVector
+import com.tinkerpop.blueprints.pgm.Edge
 import com.tinkerpop.gremlin.scala.{ScalaEdge, ScalaVertex, ScalaGraph}
 import org.apache.log4j.{Logger, Priority}
+import org.kuleuven.esat.graphicalModels.LinearModel
 
 /**
  * Implements Gradient Descent on the graph
@@ -10,7 +12,7 @@ import org.apache.log4j.{Logger, Priority}
  * values of the model parameters.
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
-  extends Optimizer[ScalaGraph, Int, DenseVector[Double]]{
+  extends Optimizer[ScalaGraph, Int, DenseVector[Double], DenseVector[Double], Double]{
   private var stepSize: Double = 1.0
   private var numIterations: Int = 100
   private var regParam: Double = 1.0
@@ -70,7 +72,32 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
     this
   }
 
-  override def optimize(g: ScalaGraph, nPoints: Int): DenseVector[Double] =
+  /**
+   * Find the optimum value of the parameters using
+   * Gradient Descent.
+   *
+   * @param g The plate model representing
+   *          the linear Gaussian network
+   * @param nPoints The number of data points
+   * @param initialP The initial value of the parameters
+   *                 as a [[DenseVector]]
+   * @param ParamOutEdges An [[java.lang.Iterable]] object
+   *                      having all of the out edges of the
+   *                      parameter node
+   * @param xy A function which takes an edge and returns a
+   *           [[Tuple2]] of the form (x, y), x being the
+   *           predictor vector and y being the target.
+   *
+   * @return The value of the parameters as a [[DenseVector]]
+   *
+   *
+   * */
+  override def optimize(
+      g: ScalaGraph,
+      nPoints: Int,
+      initialP: DenseVector[Double],
+      ParamOutEdges: java.lang.Iterable[Edge],
+      xy: (Edge) => (DenseVector[Double], Double)): DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
         g,
@@ -79,7 +106,10 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
         this.numIterations,
         this.updater,
         this.gradient,
-        this.stepSize
+        this.stepSize,
+        initialP,
+        ParamOutEdges,
+        xy
       )
     } else {
       GradientDescent.runBatchSGD(
@@ -107,31 +137,25 @@ object GradientDescent {
       numIterations: Int,
       updater: Updater,
       gradient: Gradient,
-      stepSize: Double): DenseVector[Double] = {
+      stepSize: Double,
+      initial: DenseVector[Double],
+      POutEdges: java.lang.Iterable[Edge],
+      xy: (Edge) => (DenseVector[Double], Double)): DenseVector[Double] = {
     var count = 1
-    val w = ScalaVertex.wrap(g.getVertex("w"))
-    var oldW: DenseVector[Double] = w.getProperty("slope").asInstanceOf[DenseVector[Double]]
-    var newW: DenseVector[Double] = oldW
+    var oldW: DenseVector[Double] = initial
+    var newW = oldW
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
-      val targets = w.getOutEdges().iterator()
+      val targets = POutEdges.iterator()
       while (targets.hasNext) {
-        val edge = ScalaEdge.wrap(targets.next())
-        val yV = ScalaVertex.wrap(edge.getInVertex)
-        val y = yV.getProperty("value").asInstanceOf[Double]
-
-        val xV = yV.getInEdges("causes").iterator().next().getOutVertex
-        val x = xV.getProperty("value").asInstanceOf[DenseVector[Double]]
-
+        val (x, y) = xy(targets.next())
         val (grad, _): (DenseVector[Double], Double) = gradient.compute(x, y, oldW)
-
         newW = updater.compute(oldW, grad, stepSize, count, regParam)._1
         oldW = newW
       }
       count += 1
     }
 
-    w.setProperty("slope", newW)
     newW
   }
 
