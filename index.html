@@ -66,17 +66,15 @@
 <li>Run the following.</li>
 </ol>
 
-<pre><code>  mvn clean compile
-  mvn package
-</code></pre>
+<div class="highlight highlight-shell"><pre>  mvn clean compile
+  mvn package</pre></div>
 
 <ol>
 <li>Make sure you give execution permission to <code>bayeslearn-repl</code> in the <code>target/bin</code> directory.</li>
 </ol>
 
-<pre><code>  chmod +x target/bin/bayesLearn-repl
-  target/bin/bayesLearn-repl
-</code></pre>
+<div class="highlight highlight-shell"><pre>  chmod +x target/bin/bayesLearn-repl
+  target/bin/bayesLearn-repl</pre></div>
 
 <p>You should get the following prompt.</p>
 
@@ -100,30 +98,31 @@ scala&gt;
 <li>First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.</li>
 </ol>
 
-<pre><code>  val model = GaussianLinearModel(utils.getCSVReader("data/challenge.txt", '\t'))
-</code></pre>
+<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(utils.getCSVReader(<span class="pl-s1"><span class="pl-pds">"</span>data/challenge.txt<span class="pl-pds">"</span></span>, <span class="pl-c1">'<span class="pl-cce">\t</span>'</span>))</pre></div>
 
 <ol>
 <li>We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model. Although the kernel feature extraction is experimental as of now.</li>
 </ol>
 
-<pre><code>  val rbf = new RBFKernel(0.005)
-  model.applyKernel(rbf)
-</code></pre>
+<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">rbf</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">RBFKernel</span>(<span class="pl-c1">0.005</span>)
+  model.applyKernel(rbf)</pre></div>
 
 <ol>
 <li>Now we can use Gradient Descent to learn the parameters w of the Bayesian model, with priors corresponding to zero mean and variance depending on the regularization parameter.</li>
 </ol>
 
-<pre><code>  model.setMaxIterations(200).setLearningRate(0.001).learn
-</code></pre>
+<div class="highlight highlight-scala"><pre>  model.setMaxIterations(<span class="pl-c1">200</span>).setLearningRate(<span class="pl-c1">0.001</span>).learn</pre></div>
 
 <ol>
 <li>We can now predict the value of the targer variable given a new point consisting of a Vector of features</li>
 </ol>
 
-<pre><code>  val pred = model.predict(DenseVector(0.68220219, 0.657091331))
-</code></pre>
+<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">pred</span> <span class="pl-k">=</span> model.predict(<span class="pl-en">DenseVector</span>(<span class="pl-c1">0.68220219</span>, <span class="pl-c1">0.657091331</span>))</pre></div>
+
+<h1>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
+
+<p>You can refer to the project <a href="http://mandar2812.github.io/bayeslearn/">home page</a> or the <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still at its infacy and there will be many more improvements/tweaks in the future.</p>
       </section>
 
       <footer>
