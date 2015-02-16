@@ -63,17 +63,17 @@
 
 <p>Prerequisites: Maven to build the executables.</p>
 
-<ol>
+<ul>
 <li>Clone this repository</li>
 <li>Run the following.</li>
-</ol>
+</ul>
 
 <div class="highlight highlight-shell"><pre>  mvn clean compile
   mvn package</pre></div>
 
-<ol>
+<ul>
 <li>Make sure you give execution permission to <code>bayeslearn-repl</code> in the <code>target/bin</code> directory.</li>
-</ol>
+</ul>
 
 <div class="highlight highlight-shell"><pre>  chmod +x target/bin/bayesLearn-repl
   target/bin/bayesLearn-repl</pre></div>
@@ -96,28 +96,28 @@ scala&gt;
 
 <p>The <code>data/</code> directory contains a few sample data sets, we will be using them in the following example.</p>
 
-<ol>
+<ul>
 <li>First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.</li>
-</ol>
+</ul>
 
 <div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(utils.getCSVReader(<span class="pl-s1"><span class="pl-pds">"</span>data/challenge.txt<span class="pl-pds">"</span></span>, <span class="pl-c1">'<span class="pl-cce">\t</span>'</span>))</pre></div>
 
-<ol>
+<ul>
 <li>We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model. Although the kernel feature extraction is experimental as of now.</li>
-</ol>
+</ul>
 
 <div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">rbf</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">RBFKernel</span>(<span class="pl-c1">0.005</span>)
   model.applyKernel(rbf)</pre></div>
 
-<ol>
+<ul>
 <li>Now we can use Gradient Descent to learn the parameters w of the Bayesian model, with priors corresponding to zero mean and variance depending on the regularization parameter.</li>
-</ol>
+</ul>
 
 <div class="highlight highlight-scala"><pre>  model.setMaxIterations(<span class="pl-c1">200</span>).setLearningRate(<span class="pl-c1">0.001</span>).learn</pre></div>
 
-<ol>
+<ul>
 <li>We can now predict the value of the targer variable given a new point consisting of a Vector of features</li>
-</ol>
+</ul>
 
 <div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">pred</span> <span class="pl-k">=</span> model.predict(<span class="pl-en">DenseVector</span>(<span class="pl-c1">0.68220219</span>, <span class="pl-c1">0.657091331</span>))</pre></div>
 
