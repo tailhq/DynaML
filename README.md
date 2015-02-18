@@ -44,7 +44,7 @@ The `data/` directory contains a few sample data sets, we will be using them in 
 * First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.
 
 ```scala
-  val model = GaussianLinearModel(utils.getCSVReader("data/challenge.txt", '\t'))
+  val model = GaussianLinearModel(utils.getCSVReader("data/challenge.txt", '\t'), true, "regression")
 ```
 
 * We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model. Although the kernel feature extraction is experimental as of now.
