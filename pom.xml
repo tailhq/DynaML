@@ -97,7 +97,7 @@
                     <execution>
                         <goals>
                             <goal>compile</goal>
-                            <goal>testCompile</goal>
+                            <!--<goal>testCompile</goal>-->
                         </goals>
                     </execution>
                 </executions>
@@ -131,10 +131,10 @@
               </configuration>
               <executions>
                 <execution>
-                  <id>test</id>
+                  <!--<id>test</id>
                   <goals>
                     <goal>test</goal>
-                  </goals>
+                  </goals>-->
                 </execution>
               </executions>
             </plugin>
