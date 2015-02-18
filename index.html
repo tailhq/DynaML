@@ -100,7 +100,7 @@ scala&gt;
 <li>First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.</li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(utils.getCSVReader(<span class="pl-s1"><span class="pl-pds">"</span>data/challenge.txt<span class="pl-pds">"</span></span>, <span class="pl-c1">'<span class="pl-cce">\t</span>'</span>))</pre></div>
+<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(utils.getCSVReader(<span class="pl-s1"><span class="pl-pds">"</span>data/challenge.txt<span class="pl-pds">"</span></span>, <span class="pl-c1">'<span class="pl-cce">\t</span>'</span>), <span class="pl-c1">true</span>, <span class="pl-s1"><span class="pl-pds">"</span>regression<span class="pl-pds">"</span></span>)</pre></div>
 
 <ul>
 <li>We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model. Although the kernel feature extraction is experimental as of now.</li>
