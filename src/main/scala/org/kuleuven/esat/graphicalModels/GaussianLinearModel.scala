@@ -7,7 +7,7 @@ import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory
 import com.tinkerpop.gremlin.scala.{ScalaVertex, ScalaEdge, ScalaGraph}
 import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.kernels.SVMKernel
-import org.kuleuven.esat.optimization.{SquaredL2Updater, LeastSquaresGradient, GradientDescent}
+import org.kuleuven.esat.optimization._
 
 
 /**
@@ -21,7 +21,8 @@ import org.kuleuven.esat.optimization.{SquaredL2Updater, LeastSquaresGradient, G
 
 private[graphicalModels] class GaussianLinearModel(
     override protected val g: ScalaGraph,
-    override protected val nPoints: Int)
+    override protected val nPoints: Int,
+    val task: String)
   extends LinearModel[ScalaGraph, Int, Int,
     DenseVector[Double], DenseVector[Double], Double] {
 
@@ -35,9 +36,7 @@ private[graphicalModels] class GaussianLinearModel(
   private var learningRate: Double = 0.001
 
 
-  override protected val optimizer = new GradientDescent(
-    new LeastSquaresGradient(),
-    new SquaredL2Updater())
+  override protected val optimizer = GaussianLinearModel.getOptimizer(task)
 
 
   def setMaxIterations(i: Int): this.type = {
@@ -53,10 +52,8 @@ private[graphicalModels] class GaussianLinearModel(
   override def parameters(): DenseVector[Double] =
     this.params
 
-  override def predict(point: DenseVector[Double]): Double = {
-    this.params(0 to this.params.length-2) dot featureMap(List(point))(0) +
-      this.params(this.params.length-1)
-  }
+  override def predict(point: DenseVector[Double]): Double =
+    GaussianLinearModel.predict(task)(this.params)(featureMap(List(point))(0))
 
   override def getParamOutEdges() = this.g.getVertex("w").getOutEdges()
 
@@ -97,9 +94,33 @@ object GaussianLinearModel {
 
   val logger = Logger.getLogger(this.getClass)
 
-  def apply(reader: CSVReader): GaussianLinearModel = {
+  def getOptimizer(task: String): GradientDescent = task match {
+    case "classification" => new GradientDescent(
+      new LeastSquaresSVMGradient(),
+      new SquaredL2Updater())
+
+    case "regression" => new GradientDescent(
+      new LeastSquaresGradient(),
+      new SquaredL2Updater())
+  }
+
+  def predict(task: String)
+             (params: DenseVector[Double])
+             (point: DenseVector[Double]): Double = task match {
+
+    case "classification" => {
+      math.signum(params(0 to params.length-2) dot point +
+        params(params.length-1))
+    }
+
+    case "regression" => {
+      params(0 to params.length-2) dot point +
+        params(params.length-1)
+    }
+  }
+
+  def apply(reader: CSVReader, head: Boolean, task: String): GaussianLinearModel = {
     val g = TinkerGraphFactory.createTinkerGraph()
-    val head: Boolean = true
     val lines = reader.iterator
     var index = 1
     var dim = 0
@@ -109,12 +130,14 @@ object GaussianLinearModel {
 
     logger.log(Priority.INFO, "Creating graph for data set.")
     g.addVertex("w").setProperty("variable", "parameter")
-    g.getVertex("w").setProperty("slope", DenseVector.ones[Double](dim))
-
 
     while (lines.hasNext) {
       //Parse line and extract features
       val line = lines.next()
+      if(dim == 0) {
+        dim = line.length
+      }
+
       val yv = line.apply(line.length - 1).toDouble
       val features = line.map((s) => s.toDouble).toArray
       features.update(line.length - 1, 1.0)
@@ -144,7 +167,10 @@ object GaussianLinearModel {
 
       index += 1
     }
+
+    g.getVertex("w").setProperty("slope", DenseVector.ones[Double](dim))
+
     logger.log(Priority.INFO, "Graph constructed, now building model object.")
-    new GaussianLinearModel(ScalaGraph.wrap(g), index)
+    new GaussianLinearModel(ScalaGraph.wrap(g), index, task)
   }
 }

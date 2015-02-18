@@ -164,3 +164,33 @@ class HingeGradient extends Gradient {
     }
   }
 }
+
+/**
+ * Compute gradient and loss for a Least-squared loss function, as used in LS SVM.
+ * This is correct for the averaged least squares loss function (mean squared error)
+ *              L = 1/2n (1-||y * weights dot x||)**2
+ * See also the documentation for the precise formulation.
+ */
+
+class LeastSquaresSVMGradient extends Gradient {
+  override def compute(
+      data: DenseVector[Double],
+      label: Double, weights: DenseVector[Double])
+  : (DenseVector[Double], Double) = {
+    val diff = 1 - label*(weights.t * data)
+    val loss = diff * diff / 2.0
+    val gradient = data.copy
+    gradient :*= -1*label
+    (gradient, loss)
+  }
+
+  override def compute(
+      data: DenseVector[Double],
+      label: Double,
+      weights: DenseVector[Double],
+      cumGradient: DenseVector[Double]): Double = {
+    val diff = (weights.t * data) - label
+    axpy(diff, data, cumGradient)
+    diff * diff / 2.0
+  }
+}
