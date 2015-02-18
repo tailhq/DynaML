@@ -12,3 +12,4 @@ build/*.jar
 .settings
 .cache
 target/*
+.DS_Store
