@@ -6,6 +6,8 @@ Introduction
 
 Bayes learn is a scala library/repl for implementing and working with Probabilistic Graphical Models. The aim is to build a robust set of abstract classes and interfaces, so general graph based ML algorithms can be realized using the API.
 
+A good introduction to Probabilistic Graphical Models can be found [here](http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf) in [David Barber's](http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage) text book. The Gaussian model implemented so far corresponds to the one discussed in Chapter 18 of the book.
+
 Installation
 ============
 Prerequisites: Maven to build the executables.
