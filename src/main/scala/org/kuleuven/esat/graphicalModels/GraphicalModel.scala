@@ -1,7 +1,9 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg._
+import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.pgm.Edge
+import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.kernels.SVMKernel
 import org.kuleuven.esat.optimization.Optimizer
 
@@ -78,7 +80,8 @@ trait ParameterizedLearner[G, K, K2, T <: Tensor[K, Double], Q <: Tensor[K2, Dou
 abstract class LinearModel[T, K1, K2,
   P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R]
   extends GraphicalModel[T]
-  with ParameterizedLearner[T, K1, K2, P, Q, R] {
+  with ParameterizedLearner[T, K1, K2, P, Q, R]
+  with EvaluableModel[P, R] {
 
   var featureMap: (List[Q]) => List[Q] = (x) => x
   /**
@@ -88,6 +91,8 @@ abstract class LinearModel[T, K1, K2,
    *
    * */
   def predict(point: Q): R
+
+  def clearParameters(): Unit
 
   def getPredictors(): List[Q] = {
     val edges = this.getParamOutEdges.iterator()
@@ -111,4 +116,17 @@ abstract class LinearModel[T, K1, K2,
 
   def applyKernel(kernel: SVMKernel[DenseMatrix[Double]]): Unit = {}
 
+}
+
+/**
+ * An evaluable model is on in which
+ * there is a function taking in a csv
+ * reader object pointing to a test csv file
+ * and returns the appropriate [[Metrics]] object
+ *
+ * @tparam P The type of the model's Parameters
+ * @tparam R The type of the output value
+ * */
+trait EvaluableModel [P, R]{
+  def evaluate(reader: CSVReader, head: Boolean): Metrics[R]
 }

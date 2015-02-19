@@ -56,10 +56,11 @@ abstract class SVMKernel[T] extends Kernel with Serializable {
 
     data.map((point) => DenseVector.tabulate(decomposition._1.length) { (i) =>
       val eigenvalue = if(decomposition._1(i) != Double.NaN) decomposition._1(i) else 0.0
-      val eigenvector = decomposition._2(::, i)
+      val eigenvector = decomposition._2(::, i).map{i => if(i == Double.NaN) 0.0 else i}
       var sum: Double = 0
       prototypes.foreach((prototype) =>
-        sum += (1 / (REGULARIZER + math.sqrt(eigenvalue))) * this.evaluate(prototype, point)
+        sum += (1 / (REGULARIZER + math.sqrt(eigenvalue))) *
+          this.evaluate(prototype, point)
       )
       sum
     })

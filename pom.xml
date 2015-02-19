@@ -77,6 +77,22 @@
             <artifactId>jline</artifactId>
             <version>2.9.0-1</version>
         </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.11</artifactId>
+            <version>2.2.1</version>
+             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wookietreiber</groupId>
+            <artifactId>scala-chart_2.10</artifactId>
+            <version>0.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalaforge</groupId>
+            <artifactId>scalax</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -91,7 +107,7 @@
                     <execution>
                         <goals>
                             <goal>compile</goal>
-                            <goal>testCompile</goal>
+                            <!--<goal>testCompile</goal>-->
                         </goals>
                     </execution>
                 </executions>
@@ -101,6 +117,36 @@
                         <arg>-target:jvm-1.7</arg>
                     </args>
                 </configuration>
+            </plugin>
+
+            <!-- disable surefire -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>2.7</version>
+              <configuration>
+                <skipTests>true</skipTests>
+              </configuration>
+            </plugin>
+
+            <!-- enable scalatest -->
+            <plugin>
+              <groupId>org.scalatest</groupId>
+              <artifactId>scalatest-maven-plugin</artifactId>
+              <version>1.0</version>
+              <configuration>
+                <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                <junitxml>.</junitxml>
+                <filereports>WDF TestSuite.txt</filereports>
+              </configuration>
+              <executions>
+                <execution>
+                  <!--<id>test</id>
+                  <goals>
+                    <goal>test</goal>
+                  </goals>-->
+                </execution>
+              </executions>
             </plugin>
 
             <plugin>
