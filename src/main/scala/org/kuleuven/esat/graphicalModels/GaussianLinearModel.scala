@@ -6,7 +6,7 @@ import com.tinkerpop.blueprints.pgm.Edge
 import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory
 import com.tinkerpop.gremlin.scala.{ScalaVertex, ScalaEdge, ScalaGraph}
 import org.apache.log4j.{Priority, Logger}
-import org.kuleuven.esat.evaluation.BinaryClassificationMetrics
+import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.kernels.SVMKernel
 import org.kuleuven.esat.optimization._
 
@@ -23,22 +23,16 @@ import org.kuleuven.esat.optimization._
 private[graphicalModels] class GaussianLinearModel(
     override protected val g: ScalaGraph,
     override protected val nPoints: Int,
-    val task: String)
+    private val featuredims: Int,
+    implicit val task: String)
   extends LinearModel[ScalaGraph, Int, Int,
     DenseVector[Double], DenseVector[Double], Double] {
 
   private val logger = Logger.getLogger(this.getClass)
-  override protected var params =
-    g.getVertex("w")
-      .getProperty("slope")
-      .asInstanceOf[DenseVector[Double]]
-
-  private var maxIterations: Int = 100
-  private var learningRate: Double = 0.001
-
+  override implicit protected var params =
+    g.getVertex("w").getProperty("slope").asInstanceOf[DenseVector[Double]]
 
   override protected val optimizer = GaussianLinearModel.getOptimizer(task)
-
 
   def setMaxIterations(i: Int): this.type = {
     this.optimizer.setNumIterations(i)
@@ -50,16 +44,19 @@ private[graphicalModels] class GaussianLinearModel(
     this
   }
 
+  def setRegParam(reg: Double): this.type = {
+    this.optimizer.setRegParam(reg)
+    this
+  }
+
   override def parameters(): DenseVector[Double] =
     this.params
 
   def score(point: DenseVector[Double]): Double =
     GaussianLinearModel.score(this.params)(this.featureMap(List(point))(0))
 
-  override def predict(point: DenseVector[Double]): Double =task match {
-
+  override def predict(point: DenseVector[Double]): Double = task match {
     case "classification" => math.signum(this.score(point))
-
     case "regression" => this.score(point)
   }
 
@@ -96,12 +93,42 @@ private[graphicalModels] class GaussianLinearModel(
       vertex.setProperty("featureMap", newFeatures)
     }
   }
+
+  override def evaluate(reader: CSVReader, head: Boolean): Metrics[Double] =
+    GaussianLinearModel.evaluate(this.featureMap)(this.params)(reader, head)
+
+  /**
+   * Override the effect of appyling a kernel
+   * and return the model back to its default
+   * state i.e. the Identity Kernel
+   * */
+  override def clearParameters(): Unit = {
+    this.params = DenseVector.ones[Double](this.featuredims)
+    val it = this.getParamOutEdges().iterator()
+    while(it.hasNext) {
+      val outEdge = it.next()
+      val ynode = outEdge.getInVertex
+      val xnode = ynode.getInEdges("causes")
+        .iterator().next().getOutVertex
+      xnode.setProperty(
+        "featureMap",
+        xnode.getProperty("value")
+          .asInstanceOf[DenseVector[Double]]
+      )
+      this.g.getVertex("w").setProperty("slope", this.params)
+    }
+  }
 }
 
 object GaussianLinearModel {
 
   val logger = Logger.getLogger(this.getClass)
 
+  /**
+   * Factory method to create the appropriate
+   * optimization object required for the Gaussian
+   * model
+   * */
   def getOptimizer(task: String): GradientDescent = task match {
     case "classification" => new GradientDescent(
       new LeastSquaresSVMGradient(),
@@ -126,8 +153,14 @@ object GaussianLinearModel {
     params(0 to params.length-2) dot point +
     params(params.length-1)
 
-  def evaluate(params: DenseVector[Double])
-              (reader: CSVReader, head: Boolean): BinaryClassificationMetrics = {
+  /**
+   * The actual implementation of the evaluate
+   * feature.
+   * */
+  def evaluate(featureMap: (List[DenseVector[Double]]) => List[DenseVector[Double]])
+              (params: DenseVector[Double])
+              (reader: CSVReader, head: Boolean)
+              (implicit task: String): Metrics[Double] = {
     val lines = reader.iterator
     var index = 1
     var dim = 0
@@ -147,10 +180,11 @@ object GaussianLinearModel {
       val yv = line.apply(line.length - 1).toDouble
       val xv: DenseVector[Double] =
         DenseVector(line.slice(0, line.length - 1).toList.map{x => x.toDouble}.toArray)
-      (score(params)(xv), yv)
+      (score(params)(featureMap(List(xv))(0)), yv)
 
     }.toList
-    new BinaryClassificationMetrics(scoresAndLabels)
+
+    Metrics(task)(scoresAndLabels)
   }
 
   def apply(reader: CSVReader, head: Boolean, task: String): GaussianLinearModel = {
@@ -206,6 +240,6 @@ object GaussianLinearModel {
     g.getVertex("w").setProperty("slope", DenseVector.ones[Double](dim))
 
     logger.log(Priority.INFO, "Graph constructed, now building model object.")
-    new GaussianLinearModel(ScalaGraph.wrap(g), index, task)
+    new GaussianLinearModel(ScalaGraph.wrap(g), index, dim, task)
   }
 }

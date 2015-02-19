@@ -1,8 +1,21 @@
 package org.kuleuven.esat.evaluation
 
+import org.apache.log4j.{Priority, Logger}
+
 import scalax.chart.module.ChartFactories.XYLineChart
 
-class BinaryClassificationMetrics(val scoresAndLabels: List[(Double, Double)]){
+/**
+ * Class implementing the calculation
+ * of different binary classification
+ * performance metrics
+ *
+ * */
+
+class BinaryClassificationMetrics(
+    override protected val scoresAndLabels: List[(Double, Double)])
+  extends Metrics[Double]{
+
+  private val logger = Logger.getLogger(this.getClass)
 
   /**
    * A list of threshold values from
@@ -15,7 +28,7 @@ class BinaryClassificationMetrics(val scoresAndLabels: List[(Double, Double)]){
 
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
-    points.sliding(2).map(l => l(1)._1 - l(0)._1 * (l(1)._2 + l(0)._2)/2).sum
+    points.sliding(2).map(l => (l(1)._1 - l(0)._1) * (l(1)._2 + l(0)._2)/2).sum
 
   /**
    * Calculate the area under the Precision-Recall
@@ -99,22 +112,32 @@ class BinaryClassificationMetrics(val scoresAndLabels: List[(Double, Double)]){
    * Generate the PR, ROC and F1 measure
    * plots using Scala-Chart.
    * */
-  def generatePlots(dir: String): Unit = {
+  override def generatePlots(): Unit = {
     val roccurve = this.roc()
     val prcurve = this.pr()
     val fm = this.fMeasureByThreshold()
 
+    logger.log(Priority.INFO, "Generating ROC Plot")
     val chart1 = XYLineChart(roccurve,
       title = "Receiver Operating Characteristic", legend = true)
     chart1.show()
 
+    logger.log(Priority.INFO, "Generating PR Plot")
     val chart2 = XYLineChart(prcurve,
       title = "Precision Recall Curve", legend = true)
     chart2.show()
 
+    logger.log(Priority.INFO, "Generating F1 measure Plot")
     val chart3 = XYLineChart(fm,
       title = "F1 measure by threshold beta = 1", legend = true)
     chart3.show()
+  }
+
+  override def print(): Unit = {
+    logger.log(Priority.INFO, "Classification Model Performance")
+    logger.log(Priority.INFO, "============================")
+    logger.log(Priority.INFO, "Area under PR: " + areaUnderPR())
+    logger.log(Priority.INFO, "Area under ROC: " + areaUnderROC())
 
   }
 }
