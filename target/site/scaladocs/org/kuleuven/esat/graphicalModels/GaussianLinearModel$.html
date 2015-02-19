@@ -151,15 +151,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(reader:com.github.tototoshi.csv.CSVReader):org.kuleuven.esat.graphicalModels.GaussianLinearModel"></a>
-      <a id="apply(CSVReader):GaussianLinearModel"></a>
+      <a id="apply(reader:com.github.tototoshi.csv.CSVReader,head:Boolean,task:String):org.kuleuven.esat.graphicalModels.GaussianLinearModel"></a>
+      <a id="apply(CSVReader,Boolean,String):GaussianLinearModel"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="reader">reader: <span class="extype" name="com.github.tototoshi.csv.CSVReader">CSVReader</span></span>)</span><span class="result">: <span class="extype" name="org.kuleuven.esat.graphicalModels.GaussianLinearModel">GaussianLinearModel</span></span>
+        <span class="name">apply</span><span class="params">(<span name="reader">reader: <span class="extype" name="com.github.tototoshi.csv.CSVReader">CSVReader</span></span>, <span name="head">head: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="task">task: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.kuleuven.esat.graphicalModels.GaussianLinearModel">GaussianLinearModel</span></span>
       </span>
       </h4>
       
@@ -221,6 +221,20 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#evaluate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="evaluate(featureMap:List[breeze.linalg.DenseVector[Double]]=&gt;List[breeze.linalg.DenseVector[Double]])(params:breeze.linalg.DenseVector[Double])(reader:com.github.tototoshi.csv.CSVReader,head:Boolean)(implicittask:String):org.kuleuven.esat.evaluation.Metrics[Double]"></a>
+      <a id="evaluate((List[DenseVector[Double]])⇒List[DenseVector[Double]])(DenseVector[Double])(CSVReader,Boolean)(String):Metrics[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">evaluate</span><span class="params">(<span name="featureMap">featureMap: (<a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]) ⇒ <a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="params">(<span name="params">params: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="reader">reader: <span class="extype" name="com.github.tototoshi.csv.CSVReader">CSVReader</span></span>, <span name="head">head: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="task">task: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../evaluation/Metrics.html" class="extype" name="org.kuleuven.esat.evaluation.Metrics">Metrics</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The actual implementation of the evaluate
+feature.</p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -253,6 +267,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#getOptimizer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getOptimizer(task:String):org.kuleuven.esat.optimization.GradientDescent"></a>
+      <a id="getOptimizer(String):GradientDescent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOptimizer</span><span class="params">(<span name="task">task: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../optimization/GradientDescent.html" class="extype" name="org.kuleuven.esat.optimization.GradientDescent">GradientDescent</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Factory method to create the appropriate
+optimization object required for the Gaussian
+model
+</p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -331,6 +361,25 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#score" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="score(params:breeze.linalg.DenseVector[Double])(point:breeze.linalg.DenseVector[Double]):Double"></a>
+      <a id="score(DenseVector[Double])(DenseVector[Double]):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">score</span><span class="params">(<span name="params">params: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="point">point: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">A curried function which calculates the predicted
+value of the target variable using the parameters
+and the point in question.</p><div class="fullcomment"><div class="comment cmt"><p>A curried function which calculates the predicted
+value of the target variable using the parameters
+and the point in question.</p><p>This is used for the implementation of the method
+score in <span class="extype" name="GaussianLinearModel">GaussianLinearModel</span>
+</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
