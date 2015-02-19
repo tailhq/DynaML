@@ -1,3 +1,5 @@
+package org.kuleuven.esat
+
 import collection.mutable.Stack
 import org.scalatest._
 

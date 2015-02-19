@@ -4,20 +4,41 @@ import scalax.chart.module.ChartFactories.XYLineChart
 
 class BinaryClassificationMetrics(val scoresAndLabels: List[(Double, Double)]){
 
+  /**
+   * A list of threshold values from
+   * -1.0 to 1.0 in 100 steps. These
+   * will be used to measure the variation
+   * in precision, recall False Positive
+   * and False Negative values.
+   * */
   private val thresholds = (-100 to 100).map((x) => x.toDouble/100)
 
-  def areaUnderCurve(points: List[(Double, Double)]): Double = {
-    var sum = 0.0
-    sum
-  }
 
-  def areaUnderPR(): Double = 0.0
+  private def areaUnderCurve(points: List[(Double, Double)]): Double =
+    points.sliding(2).map(l => l(1)._1 - l(0)._1 * (l(1)._2 + l(0)._2)/2).sum
 
-  def areaUnderROC(): Double = 0.0
+  /**
+   * Calculate the area under the Precision-Recall
+   * curve.
+   * */
+  def areaUnderPR(): Double = areaUnderCurve(this.pr())
 
+  /**
+   * Calculate the area under the Receiver
+   * Operating Characteristic curve.
+   * */
+  def areaUnderROC(): Double = areaUnderCurve(this.roc())
 
+  /**
+   * Calculate the F1 metric by threshold, for a
+   * beta value of 1.0
+   * */
   def fMeasureByThreshold(): List[(Double, Double)] = fMeasureByThreshold(1.0)
 
+  /**
+   * Calculate the F1 metric by threshold, for an
+   * arbitrary beta value
+   * */
   def fMeasureByThreshold(beta: Double): List[(Double, Double)] = tpfpByThreshold().map((couple) => {
     val tp = couple._2._1
     val fp = couple._2._2
@@ -25,18 +46,39 @@ class BinaryClassificationMetrics(val scoresAndLabels: List[(Double, Double)]){
     (couple._1, (1 + betasq)*tp/((1 + betasq)*tp + betasq*(1-tp) + fp))
   })
 
+  /**
+   * Return the Precision-Recall curve, as a [[List]]
+   * of [[Tuple2]] (Recall, Precision).
+   * */
   def pr(): List[(Double, Double)] = recallByThreshold().zip(precisionByThreshold()).map((couple) =>
     (couple._1._2, couple._2._2)).sorted
 
+  /**
+   * Return the Recall-Threshold curve, as a [[List]]
+   * of [[Tuple2]] (Threshold, Recall).
+   * */
   def recallByThreshold(): List[(Double, Double)]  = tpfpByThreshold().map((point) => (point._1, point._2._1))
 
+  /**
+   * Return the Precision-Threshold curve, as a [[List]]
+   * of [[Tuple2]] (Threshold, Precision).
+   * */
   def precisionByThreshold(): List[(Double, Double)]  = tpfpByThreshold().map((point) =>
     (point._1, point._2._1/(point._2._1 + point._2._2)))
 
+  /**
+   * Return the Receiver Operating Characteristic
+   * curve, as a [[List]] of [[Tuple2]]
+   * (False Positive Rate, True Positive Rate).
+   * */
   def roc(): List[(Double, Double)] =
     tpfpByThreshold().map((point) => (point._2._2, point._2._1)).sorted
 
-
+  /**
+   * Return the True Positive and False Positive Rate
+   * with respect to the threshold, as a [[List]]
+   * of [[Tuple2]] (Threshold, (True Positive rate, False Positive Rate)).
+   * */
   def tpfpByThreshold(): List[(Double, (Double, Double))]  =
     this.thresholds.toList.map((th) => {
       var tp: Double = 0.0
@@ -53,13 +95,14 @@ class BinaryClassificationMetrics(val scoresAndLabels: List[(Double, Double)]){
       (th, (tp/count, fp/count))
     })
 
+  /**
+   * Generate the PR, ROC and F1 measure
+   * plots using Scala-Chart.
+   * */
   def generatePlots(dir: String): Unit = {
     val roccurve = this.roc()
     val prcurve = this.pr()
     val fm = this.fMeasureByThreshold()
-    val fm1 = this.fMeasureByThreshold(0.5)
-    val fm2 = this.fMeasureByThreshold(1.5)
-
 
     val chart1 = XYLineChart(roccurve,
       title = "Receiver Operating Characteristic", legend = true)
@@ -73,12 +116,5 @@ class BinaryClassificationMetrics(val scoresAndLabels: List[(Double, Double)]){
       title = "F1 measure by threshold beta = 1", legend = true)
     chart3.show()
 
-    val chart4 = XYLineChart(fm1,
-      title = "F1 measure by threshold beta = 0.5", legend = true)
-    chart4.show()
-
-    val chart5 = XYLineChart(fm2,
-      title = "F1 measure by threshold 0.5 beta = 1.5", legend = true)
-    chart5.show()
   }
 }
