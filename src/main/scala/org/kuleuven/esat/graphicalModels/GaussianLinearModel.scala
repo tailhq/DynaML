@@ -6,6 +6,7 @@ import com.tinkerpop.blueprints.pgm.Edge
 import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory
 import com.tinkerpop.gremlin.scala.{ScalaVertex, ScalaEdge, ScalaGraph}
 import org.apache.log4j.{Priority, Logger}
+import org.kuleuven.esat.evaluation.BinaryClassificationMetrics
 import org.kuleuven.esat.kernels.SVMKernel
 import org.kuleuven.esat.optimization._
 
@@ -52,8 +53,15 @@ private[graphicalModels] class GaussianLinearModel(
   override def parameters(): DenseVector[Double] =
     this.params
 
-  override def predict(point: DenseVector[Double]): Double =
-    GaussianLinearModel.predict(task)(this.params)(featureMap(List(point))(0))
+  def score(point: DenseVector[Double]): Double =
+    GaussianLinearModel.score(this.params)(this.featureMap(List(point))(0))
+
+  override def predict(point: DenseVector[Double]): Double =task match {
+
+    case "classification" => math.signum(this.score(point))
+
+    case "regression" => this.score(point)
+  }
 
   override def getParamOutEdges() = this.g.getVertex("w").getOutEdges()
 
@@ -63,7 +71,7 @@ private[graphicalModels] class GaussianLinearModel(
     val y = yV.getProperty("value").asInstanceOf[Double]
 
     val xV = yV.getInEdges("causes").iterator().next().getOutVertex
-    val x = xV.getProperty("value").asInstanceOf[DenseVector[Double]]
+    val x = xV.getProperty("featureMap").asInstanceOf[DenseVector[Double]]
     (x, y)
   }
 
@@ -85,7 +93,7 @@ private[graphicalModels] class GaussianLinearModel(
       //TODO: Comment here
       val mappedf = featureMap(List(featurex(0 to featurex.length - 2)))(0)
       val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(Array(1.0)))
-      vertex.setProperty("value", newFeatures)
+      vertex.setProperty("featureMap", newFeatures)
     }
   }
 }
@@ -104,19 +112,45 @@ object GaussianLinearModel {
       new SquaredL2Updater())
   }
 
-  def predict(task: String)
-             (params: DenseVector[Double])
-             (point: DenseVector[Double]): Double = task match {
+  /**
+   * A curried function which calculates the predicted
+   * value of the target variable using the parameters
+   * and the point in question.
+   *
+   * This is used for the implementation of the method
+   * score in [[GaussianLinearModel]]
+   * */
 
-    case "classification" => {
-      math.signum(params(0 to params.length-2) dot point +
-        params(params.length-1))
+  def score(params: DenseVector[Double])
+           (point: DenseVector[Double]): Double =
+    params(0 to params.length-2) dot point +
+    params(params.length-1)
+
+  def evaluate(params: DenseVector[Double])
+              (reader: CSVReader, head: Boolean): BinaryClassificationMetrics = {
+    val lines = reader.iterator
+    var index = 1
+    var dim = 0
+    if(head) {
+      dim = lines.next().length
     }
 
-    case "regression" => {
-      params(0 to params.length-2) dot point +
-        params(params.length-1)
-    }
+    logger.log(Priority.INFO, "Calculating test set predictions")
+
+    val scoresAndLabels = lines.map{line =>
+      //Parse line and extract features
+
+      if (dim == 0) {
+        dim = line.length
+      }
+
+      val yv = line.apply(line.length - 1).toDouble
+      val xv: DenseVector[Double] =
+        DenseVector(line.slice(0, line.length - 1).toList.map{x => x.toDouble}.toArray)
+      (score(params)(xv), yv)
+
+    }.toList
+    new BinaryClassificationMetrics(scoresAndLabels)
   }
 
   def apply(reader: CSVReader, head: Boolean, task: String): GaussianLinearModel = {
@@ -150,6 +184,7 @@ object GaussianLinearModel {
       * properties, etc
       * */
       g.addVertex(("x", index)).setProperty("value", xv)
+      g.getVertex(("x", index)).setProperty("featureMap", xv)
       g.getVertex(("x", index)).setProperty("variable", "data")
 
       g.addVertex(("y", index)).setProperty("value", yv)

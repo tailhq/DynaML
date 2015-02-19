@@ -83,6 +83,16 @@
             <version>2.2.1</version>
              <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.wookietreiber</groupId>
+            <artifactId>scala-chart_2.10</artifactId>
+            <version>0.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalaforge</groupId>
+            <artifactId>scalax</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
