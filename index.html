@@ -1,51 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=640">
-
-    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
-    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-
-    <script type="text/javascript" src="javascripts/modernizr.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $('#main_content').headsmart()
-      })
-    </script>
     <title>Bayeslearn by mandar2812</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
-    <a id="forkme_banner" href="https://github.com/mandar2812/bayeslearn">View on GitHub</a>
-    <div class="shell">
-
+    <div class="wrapper">
       <header>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <h1>Bayeslearn</h1>
-            <h2>Scala Library/REPL for working with Bayesian graphical models.</h2>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
+        <h1 class="header">Bayeslearn</h1>
+        <p class="header">Scala Library/REPL for working with Bayesian graphical models.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/mandar2812/bayeslearn/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/mandar2812/bayeslearn/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/mandar2812/bayeslearn">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/mandar2812">mandar2812</a></p>
+
+
       </header>
-
-      <section id="downloads">
-        <span class="inner">
-          <a href="https://github.com/mandar2812/bayeslearn/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/mandar2812/bayeslearn/tarball/master" class="tgz"><em>download</em> .TGZ</a>
-        </span>
-      </section>
-
-
-      <span class="banner-fix"></span>
-
-
-      <section id="main_content">
+      <section>
         <h1>
 <a id="bayes-learn" class="anchor" href="#bayes-learn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bayes Learn</h1>
 
@@ -80,14 +64,24 @@
 
 <p>You should get the following prompt.</p>
 
-<pre><code>  Welcome to Bayes Learn 
+<pre><code>      ___          ___       ___          ___          ___                   ___   ___          ___          ___          ___     
+     /\  \        /\  \     |\__\        /\  \        /\  \                 /\__\ /\  \        /\  \        /\  \        /\__\    
+    /::\  \      /::\  \    |:|  |      /::\  \      /::\  \               /:/  //::\  \      /::\  \      /::\  \      /::|  |   
+   /:/\:\  \    /:/\:\  \   |:|  |     /:/\:\  \    /:/\ \  \             /:/  //:/\:\  \    /:/\:\  \    /:/\:\  \    /:|:|  |   
+  /::\~\:\__\  /::\~\:\  \  |:|__|__  /::\~\:\  \  _\:\~\ \  \           /:/  //::\~\:\  \  /::\~\:\  \  /::\~\:\  \  /:/|:|  |__ 
+ /:/\:\ \:|__|/:/\:\ \:\__\ /::::\__\/:/\:\ \:\__\/\ \:\ \ \__\         /:/__//:/\:\ \:\__\/:/\:\ \:\__\/:/\:\ \:\__\/:/ |:| /\__\
+ \:\~\:\/:/  /\/__\:\/:/  //:/~~/~   \:\~\:\ \/__/\:\ \:\ \/__/         \:\  \\:\~\:\ \/__/\/__\:\/:/  /\/_|::\/:/  /\/__|:|/:/  /
+  \:\ \::/  /      \::/  //:/  /      \:\ \:\__\   \:\ \:\__\            \:\  \\:\ \:\__\       \::/  /    |:|::/  /     |:/:/  / 
+   \:\/:/  /       /:/  / \/__/        \:\ \/__/    \:\/:/  /             \:\  \\:\ \/__/       /:/  /     |:|\/__/      |::/  /  
+    \::/__/       /:/  /                \:\__\       \::/  /               \:\__\\:\__\        /:/  /      |:|  |        /:/  /   
+     ~~           \/__/                  \/__/        \/__/                 \/__/ \/__/        \/__/        \|__|        \/__/    
 
+Welcome to Bayes Learn v 0.11
+Interactive Scala shell
 
+STADIUS ESAT KU Leuven (2015)
 
-         \,,,/
-         (o o)
------oOOo-(_)-oOOo-----
-scala&gt; 
+bayeslearn&gt;
 
 </code></pre>
 
@@ -124,23 +118,13 @@ scala&gt;
 <h1>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
 
-<p>You can refer to the project <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still at its infacy and there will be many more improvements/tweaks in the future.</p>
+<p>You can refer to the project <a href="http://mandar2812.github.io/bayeslearn/">home page</a> or the <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still at its infacy and there will be many more improvements/tweaks in the future.</p>
       </section>
-
       <footer>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <p>this project by <a href="https://github.com/mandar2812">mandar2812</a> can be found on <a href="https://github.com/mandar2812/bayeslearn">GitHub</a></p>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
-        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
-        <span class="octocat"></span>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
-
     </div>
-
-    
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
   </body>
 </html>
