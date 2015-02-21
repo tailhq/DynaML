@@ -13,3 +13,4 @@ build/*.jar
 .cache
 target/*
 .DS_Store
+!target/site
