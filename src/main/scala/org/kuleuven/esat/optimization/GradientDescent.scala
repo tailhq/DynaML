@@ -120,6 +120,9 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
         this.updater,
         this.gradient,
         this.stepSize,
+        initialP,
+        ParamOutEdges,
+        xy,
         this.miniBatchFraction
       )
     }
@@ -144,18 +147,19 @@ object GradientDescent {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
+    val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
       val targets = POutEdges.iterator()
       while (targets.hasNext) {
         val (x, y) = xy(targets.next())
-        val (grad, _): (DenseVector[Double], Double) = gradient.compute(x, y, oldW)
-        newW = updater.compute(oldW, grad, stepSize, count, regParam)._1
-        oldW = newW
+        gradient.compute(x, y, oldW, cumGradient)
       }
+      newW = updater.compute(oldW, cumGradient,
+        stepSize, count, regParam)._1
+      oldW = newW
       count += 1
     }
-
     newW
   }
 
@@ -167,8 +171,29 @@ object GradientDescent {
       updater: Updater,
       gradient: Gradient,
       stepSize: Double,
+      initial: DenseVector[Double],
+      POutEdges: java.lang.Iterable[Edge],
+      xy: (Edge) => (DenseVector[Double], Double),
       miniBatchFraction: Double): DenseVector[Double] = {
-    DenseVector.zeros[Double](10)
+    var count = 1
+    var oldW: DenseVector[Double] = initial
+    var newW = oldW
+    val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
+    logger.log(Priority.INFO, "Training model using SGD")
+    while(count <= numIterations) {
+      val targets = POutEdges.iterator()
+      while (targets.hasNext) {
+        if(scala.util.Random.nextDouble() <= miniBatchFraction) {
+          val (x, y) = xy(targets.next())
+          gradient.compute(x, y, oldW, cumGradient)
+        }
+      }
+      newW = updater.compute(oldW, cumGradient,
+        stepSize, count, regParam)._1
+      oldW = newW
+      count += 1
+    }
+    newW
   }
 
 }

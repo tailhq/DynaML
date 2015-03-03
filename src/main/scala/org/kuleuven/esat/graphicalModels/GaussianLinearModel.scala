@@ -44,6 +44,12 @@ private[graphicalModels] class GaussianLinearModel(
     this
   }
 
+  def setBatchFraction(f: Double): this.type = {
+    assert(f >= 0.0 && f <= 1.0, "Mini-Batch Fraction should be between 0.0 and 1.0")
+    this.optimizer.setMiniBatchFraction(f)
+    this
+  }
+
   def setRegParam(reg: Double): this.type = {
     this.optimizer.setRegParam(reg)
     this

@@ -51,7 +51,7 @@ object bayesLearn extends App {
           "         \n     \\/__/     \\/__/         \\/__/         \\|__|         "+
           "\\/__/                 ")
 
-        echo("\nWelcome to Bayes Learn v 0.11\nInteractive Scala shell")
+        echo("\nWelcome to Bayes Learn v 0.12\nInteractive Scala shell")
         echo("STADIUS ESAT KU Leuven (2015)\n")
       }
     }
