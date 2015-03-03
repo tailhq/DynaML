@@ -114,7 +114,7 @@ abstract class LinearModel[T, K1, K2,
     res
   }
 
-  def applyKernel(kernel: SVMKernel[DenseMatrix[Double]]): Unit = {}
+  def applyKernel(kernel: SVMKernel[DenseMatrix[Double]], M: Int): Unit = {}
 
 }
 

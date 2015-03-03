@@ -138,6 +138,13 @@ class SVMKernelMatrix(
   (DenseVector[Double], DenseMatrix[Double]) = {
     logger.log(Priority.INFO, "Eigenvalue decomposition of the kernel matrix using JBlas.")
     val decomp = eig(this.kernel)
+    //TODO: Complete the code below
+    /*val threshold:Double = 2*dimension/(dimension+1)
+    var effectiveEigs = DenseMatrix.ones[Double](dimensions, dimensions)
+
+    for(i <- 0 to dimensions-1) {
+
+    }*/
     (decomp.eigenvalues, decomp.eigenvectors)
   }
 
