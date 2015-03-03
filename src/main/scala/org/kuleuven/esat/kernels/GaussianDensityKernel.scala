@@ -19,6 +19,8 @@ package org.kuleuven.esat.kernels
 
 import breeze.linalg.{DenseVector, norm}
 
+import scala.annotation.tailrec
+
 class GaussianDensityKernel
   extends DensityKernel
   with Serializable {
@@ -51,6 +53,7 @@ class GaussianDensityKernel
   * the Gaussian derivatives at a point x.
   * */
   private def hermite(n: Int, x: Double): Double = {
+    @tailrec
     def hermiteHelper(k: Int, x: Double, a: Double, b: Double): Double =
       k match {
         case 0 => a

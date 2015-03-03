@@ -4,6 +4,8 @@ import java.io.File
 import breeze.linalg.DenseVector
 import com.github.tototoshi.csv.{QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
 
+import scala.annotation.tailrec
+
 /**
  * A set of pre-processing utilities
  * and library functions.
@@ -40,6 +42,7 @@ package object utils {
    * */
   def getStats(data: List[DenseVector[Double]]):
   (DenseVector[Double], DenseVector[Double]) = {
+    @tailrec
     def getStatsRec(d: List[DenseVector[Double]],
                     m: DenseVector[Double],
                     s: DenseVector[Double],
