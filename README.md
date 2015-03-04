@@ -1,4 +1,7 @@
 # Bayes Learn
+
+[![Build Status](https://travis-ci.org/mandar2812/bayeslearn.svg?branch=branch-1.0)](https://travis-ci.org/mandar2812/bayeslearn)
+
 Scala Library/REPL for working with Bayesian graphical models.
 
 Introduction
