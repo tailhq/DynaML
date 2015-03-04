@@ -124,7 +124,7 @@ class GreedyEntropySelector(
       it += 1
     } while(math.abs(d) >= this.delta &&
       it <= this.MAX_ITERATIONS)
-    logger.log(Priority.INFO, "Working set obtained, now starting process of packaging it as an RDD")
+    logger.log(Priority.INFO, "Returning final prototype set")
     //Time to return the final working set
     data.filter((p) => workingset.contains(p))
   }
