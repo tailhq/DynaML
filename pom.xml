@@ -170,10 +170,6 @@
                                     <mainClass>org.kuleuven.esat.App</mainClass>
                                 </program>
                                 <program>
-                                    <name>run-Markov</name>
-                                    <mainClass>org.kuleuven.esat.AppMarkov</mainClass>
-                                </program>
-                                <program>
                                     <name>bayesLearn-repl</name>
                                     <mainClass>org.kuleuven.esat.bayesLearn</mainClass>
                                 </program>
