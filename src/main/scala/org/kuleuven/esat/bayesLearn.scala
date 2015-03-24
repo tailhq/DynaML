@@ -17,6 +17,8 @@ object bayesLearn extends App {
           intp.addImports("org.kuleuven.esat.graphicalModels._")
           intp.addImports("org.kuleuven.esat.utils")
           intp.addImports("org.kuleuven.esat.kernels._")
+          intp.addImports("org.neo4j.graphdb._")
+          intp.addImports("com.tinkerpop.blueprints.impls.neo4j2._")
         }
       }
 

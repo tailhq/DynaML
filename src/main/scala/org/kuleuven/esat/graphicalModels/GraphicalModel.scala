@@ -2,7 +2,7 @@ package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg._
 import com.github.tototoshi.csv.CSVReader
-import com.tinkerpop.blueprints.pgm.Edge
+import com.tinkerpop.blueprints.Edge
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.kernels.SVMKernel
 import org.kuleuven.esat.optimization.Optimizer

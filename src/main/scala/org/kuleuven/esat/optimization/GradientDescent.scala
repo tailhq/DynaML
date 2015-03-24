@@ -1,10 +1,9 @@
 package org.kuleuven.esat.optimization
 
 import breeze.linalg.DenseVector
-import com.tinkerpop.blueprints.pgm.Edge
-import com.tinkerpop.gremlin.scala.{ScalaEdge, ScalaVertex, ScalaGraph}
+import com.tinkerpop.blueprints.{Graph, Edge}
+import com.tinkerpop.gremlin.scala.{ScalaGraph}
 import org.apache.log4j.{Logger, Priority}
-import org.kuleuven.esat.graphicalModels.LinearModel
 
 /**
  * Implements Gradient Descent on the graph
@@ -12,7 +11,7 @@ import org.kuleuven.esat.graphicalModels.LinearModel
  * values of the model parameters.
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
-  extends Optimizer[ScalaGraph, Int, DenseVector[Double], DenseVector[Double], Double]{
+  extends Optimizer[Graph, Int, DenseVector[Double], DenseVector[Double], Double]{
   private var stepSize: Double = 1.0
   private var numIterations: Int = 100
   private var regParam: Double = 1.0
@@ -93,7 +92,7 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    *
    * */
   override def optimize(
-      g: ScalaGraph,
+      g: Graph,
       nPoints: Int,
       initialP: DenseVector[Double],
       ParamOutEdges: java.lang.Iterable[Edge],
@@ -134,7 +133,7 @@ object GradientDescent {
   private val logger = Logger.getLogger(this.getClass)
 
   def runSGD(
-      g: ScalaGraph,
+      g: Graph,
       nPoints: Int,
       regParam: Double,
       numIterations: Int,
@@ -164,7 +163,7 @@ object GradientDescent {
   }
 
   def runBatchSGD(
-      g: ScalaGraph,
+      g: Graph,
       nPoints: Int,
       regParam: Double,
       numIterations: Int,

@@ -2,9 +2,9 @@ package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.{DenseVector, DenseMatrix}
 import com.github.tototoshi.csv.CSVReader
-import com.tinkerpop.blueprints.pgm.Edge
-import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory
-import com.tinkerpop.gremlin.scala.{ScalaVertex, ScalaEdge, ScalaGraph}
+import com.tinkerpop.blueprints.{Graph, Direction, Edge}
+import com.tinkerpop.blueprints.impls.tg.{TinkerGraphFactory}
+import com.tinkerpop.gremlin.scala.{ScalaGraph, ScalaEdge, ScalaVertex}
 import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.kernels.{GaussianDensityKernel, SVMKernel}
@@ -23,19 +23,17 @@ import org.kuleuven.esat.utils
  */
 
 private[esat] class GaussianLinearModel(
-    override protected val g: ScalaGraph,
+    override protected val g: Graph,
     override protected val nPoints: Int,
     private val featuredims: Int,
     implicit val task: String)
-  extends LinearModel[ScalaGraph, Int, Int,
+  extends LinearModel[Graph, Int, Int,
     DenseVector[Double], DenseVector[Double], Double] {
 
   private val logger = Logger.getLogger(this.getClass)
 
   override implicit protected var params =
-    g.getVertex("w")
-      .getProperty("slope")
-      .asInstanceOf[DenseVector[Double]]
+    g.getVertex("w").getProperty("slope").asInstanceOf[DenseVector[Double]]
 
   override protected val optimizer = GaussianLinearModel.getOptimizer(task)
 
@@ -73,19 +71,20 @@ private[esat] class GaussianLinearModel(
     case "regression" => this.score(point)
   }
 
-  override def getParamOutEdges() = this.g.getVertex("w").getOutEdges()
+  override def getParamOutEdges() = this.g.getVertex("w").getEdges(Direction.OUT)
 
   override def getxyPair(ed: Edge): (DenseVector[Double], Double) = {
     val edge = ScalaEdge.wrap(ed)
-    val yV = ScalaVertex.wrap(edge.getInVertex)
+    val yV = ScalaVertex.wrap(edge.getVertex(Direction.IN))
     val y = yV.getProperty("value").asInstanceOf[Double]
 
-    val xV = yV.getInEdges("causes").iterator().next().getOutVertex
+    val xV = yV.getEdges(Direction.IN, "causes").iterator().next().getVertex(Direction.OUT)
     val x = xV.getProperty("featureMap").asInstanceOf[DenseVector[Double]]
     (x, y)
   }
 
-  override def applyKernel(kernel: SVMKernel[DenseMatrix[Double]], M: Int = npoints): Unit = {
+  override def applyKernel(kernel: SVMKernel[DenseMatrix[Double]],
+                           M: Int = npoints): Unit = {
     //Get the original features of the data
     val features = this.filter((_) => true)
     var points = features
@@ -99,13 +98,15 @@ private[esat] class GaussianLinearModel(
       val adjvarance:DenseVector[Double] = variance :/= npoints.toDouble
       val density = new GaussianDensityKernel
 
-      logger.log(Priority.INFO, "Using Silvermans rule of thumb to set bandwidth of density kernel")
+      logger.log(Priority.INFO,
+        "Using Silvermans rule of thumb to set bandwidth of density kernel")
       density.setBandwidth(DenseVector.tabulate[Double](featuredims - 1){
         i => 1.06*math.sqrt(adjvarance(i))/math.pow(npoints, 0.2)
       })
       val subsetsel = new GreedyEntropySelector(new QuadraticRenyiEntropy(density))
 
-      logger.log(Priority.INFO, "Building low rank appriximation to kernel matrix")
+      logger.log(Priority.INFO,
+        "Building low rank appriximation to kernel matrix")
       points = subsetsel.selectPrototypes(this, M)
     } else {
       points = features
@@ -120,9 +121,9 @@ private[esat] class GaussianLinearModel(
     this.g.getVertex("w").setProperty("slope", this.params)
     while (edges.hasNext) {
       //Get the predictor vertex corresponding to the edge
-      val vertex = edges.next().getInVertex
-        .getInEdges("causes").iterator()
-        .next().getOutVertex
+      val vertex = edges.next().getVertex(Direction.IN)
+        .getEdges(Direction.IN, "causes").iterator()
+        .next().getVertex(Direction.OUT)
 
       //Get the original features of the point
       val featurex = vertex.getProperty("value").asInstanceOf[DenseVector[Double]]
@@ -150,9 +151,9 @@ private[esat] class GaussianLinearModel(
     val it = this.getParamOutEdges().iterator()
     while(it.hasNext) {
       val outEdge = it.next()
-      val ynode = outEdge.getInVertex
-      val xnode = ynode.getInEdges("causes")
-        .iterator().next().getOutVertex
+      val ynode = outEdge.getVertex(Direction.IN)
+      val xnode = ynode.getEdges(Direction.IN,"causes")
+        .iterator().next().getVertex(Direction.OUT)
       xnode.setProperty(
         "featureMap",
         xnode.getProperty("value")
@@ -291,6 +292,6 @@ object GaussianLinearModel {
     g.getVertex("w").setProperty("slope", DenseVector.ones[Double](dim))
 
     logger.log(Priority.INFO, "Graph constructed, now building model object.")
-    new GaussianLinearModel(ScalaGraph.wrap(g), index-1, dim, task)
+    new GaussianLinearModel(g, index-1, dim, task)
   }
 }

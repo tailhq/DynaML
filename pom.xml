@@ -3,6 +3,20 @@
     <groupId>org.kuleuven.esat</groupId>
     <artifactId>bayesLearn</artifactId>
     <version>1.0</version>
+    <name>Bayes Learn</name>
+    <description>Scala Library/REPL for working with Bayesian graphical models.</description>
+    <url>http://mandar2812.github.io/bayeslearn/</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/mandar2812/bayeslearn</url>
+    </scm>
+
     <inceptionYear>2008</inceptionYear>
     <properties>
         <scala.version>2.10.4</scala.version>
@@ -54,8 +68,23 @@
         </dependency>
         <dependency>
             <groupId>com.tinkerpop.gremlin</groupId>
+            <artifactId>gremlin-java</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.michaelpollmeier</groupId>
             <artifactId>gremlin-scala</artifactId>
-            <version>1.5</version>
+            <version>2.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tinkerpop.blueprints</groupId>
+            <artifactId>blueprints-neo4j2-graph</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j</artifactId>
+            <version>2.1.7</version>
         </dependency>
         <dependency>
             <groupId>org.scalanlp</groupId>

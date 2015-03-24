@@ -63,7 +63,7 @@ class GreedyEntropySelector(
     val r = scala.util.Random
     var it: Int = 0
     logger.log(Priority.INFO, "Initializing the working set, by drawing randomly from the training set")
-    var workingset = r.shuffle(1 to data.npoints).slice(0, M).toList
+    var workingset = r.shuffle(1 to data.npoints).toList.slice(0, M)
 
     //All the elements not in the working set
     var newDataset = (1 to data.npoints).filter((p) => !workingset.contains(p))

@@ -1,7 +1,7 @@
 package org.kuleuven.esat.optimization
 
 import breeze.linalg.{Tensor}
-import com.tinkerpop.blueprints.pgm.Edge
+import com.tinkerpop.blueprints.Edge
 
 /**
  * Trait for optimization problem solvers.
