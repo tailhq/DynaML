@@ -3,6 +3,20 @@
     <groupId>org.kuleuven.esat</groupId>
     <artifactId>bayesLearn</artifactId>
     <version>0.12</version>
+    <name>Bayes Learn</name>
+    <description>Scala Library/REPL for working with Bayesian graphical models.</description>
+    <url>http://mandar2812.github.io/bayeslearn/</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/mandar2812/bayeslearn</url>
+    </scm>
+
     <inceptionYear>2008</inceptionYear>
     <properties>
         <scala.version>2.10.4</scala.version>
