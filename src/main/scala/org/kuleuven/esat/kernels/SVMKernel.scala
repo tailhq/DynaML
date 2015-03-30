@@ -1,6 +1,6 @@
 package org.kuleuven.esat.kernels
 
-import breeze.linalg.{eig, DenseVector, DenseMatrix}
+import breeze.linalg._
 import org.apache.log4j.{Priority, Logger}
 /**
  * Defines an abstract class outlines the basic
@@ -54,15 +54,14 @@ abstract class SVMKernel[T] extends Kernel with Serializable {
                     (data: List[DenseVector[Double]])
   : List[DenseVector[Double]] = {
 
-    data.map((point) => DenseVector.tabulate(decomposition._1.length) { (i) =>
-      val eigenvalue = if(decomposition._1(i) != Double.NaN) decomposition._1(i) else 0.0
-      val eigenvector = decomposition._2(::, i).map{i => if(i == Double.NaN) 0.0 else i}
-      var sum: Double = 0
-      prototypes.foreach((prototype) =>
-        sum += (1 / (REGULARIZER + math.sqrt(eigenvalue))) *
-          this.evaluate(prototype, point)
-      )
-      sum
+    data.map((point) => {
+      DenseVector.tabulate(decomposition._1.length) { (i) =>
+        val eigenvalue = if(decomposition._1(i) != Double.NaN) decomposition._1(i) else 0.0
+        val eigenvector = decomposition._2(::, i).map{i => if(i == Double.NaN) 0.0 else i}
+        var sum: Double = 0
+        val kernel = prototypes.map((p) => this.evaluate(p, point)).toArray
+        (1 / (REGULARIZER + math.sqrt(eigenvalue)))*(DenseVector(kernel).t * eigenvector)
+      }
     })
   }
 }
@@ -94,11 +93,13 @@ object SVMKernel {
   KernelMatrix[DenseMatrix[Double]] = {
 
     logger.log(Priority.INFO, "Constructing key-value representation of kernel matrix.")
-    logger.log(Priority.INFO, "Dimension: " + length + " x " + length)
+
 
     val kernel = DenseMatrix.tabulate[Double](length, length){
       (i, j) => eval(mappedData(i), mappedData(j))
     }
+
+    logger.log(Priority.INFO, "Dimension: " + kernel.rows + " x " + kernel.cols)
     new SVMKernelMatrix(kernel, length)
   }
 
@@ -138,14 +139,23 @@ class SVMKernelMatrix(
   (DenseVector[Double], DenseMatrix[Double]) = {
     logger.log(Priority.INFO, "Eigenvalue decomposition of the kernel matrix using JBlas.")
     val decomp = eig(this.kernel)
-    //TODO: Complete the code below
+    //TODO: Complete the code below to calculate the effective eigenvalues
     /*val threshold:Double = 2*dimension/(dimension+1)
     var effectiveEigs = DenseMatrix.ones[Double](dimensions, dimensions)
 
     for(i <- 0 to dimensions-1) {
 
     }*/
+
+    logger.log(Priority.INFO, "Eigenvalue stats: "
+      +min(decomp.eigenvalues)
+      +" =< lambda =< "
+      +max(decomp.eigenvalues)
+    )
+    //logger.log(Priority.INFO, "Raw Dump: "+decomp.eigenvalues.toString)
+    //logger.log(Priority.INFO, "Raw EigenVector Dump: \n"+decomp.eigenvectors.toString)
     (decomp.eigenvalues, decomp.eigenvectors)
+
   }
 
 }

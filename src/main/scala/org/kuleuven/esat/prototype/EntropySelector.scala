@@ -34,7 +34,7 @@ abstract class EntropySelector
   protected val MAX_ITERATIONS: Int
 }
 
-class GreedyEntropySelector(
+private[esat] class GreedyEntropySelector(
     m: EntropyMeasure,
     del: Double = 0.0001,
     max: Int = 5000)
@@ -48,7 +48,31 @@ class GreedyEntropySelector(
 
   override def selectPrototypes(
       data: GaussianLinearModel,
-      M: Int): List[DenseVector[Double]] = {
+      M: Int): List[DenseVector[Double]] =
+    data.filter((p) =>
+      GreedyEntropySelector.subsetSelection(data,
+        M,
+        this.measure,
+        this.delta,
+        this.MAX_ITERATIONS)
+        .contains(p)
+    )
+
+}
+
+object GreedyEntropySelector {
+  private val logger = Logger.getLogger(this.getClass)
+
+  def apply(
+    m: EntropyMeasure,
+    del: Double = 0.0001,
+    max: Int = 5000): GreedyEntropySelector =
+    new GreedyEntropySelector(m, del, max)
+
+  def subsetSelection(data: GaussianLinearModel,
+                      M: Int,
+                      measure: EntropyMeasure, delta: Double,
+                      MAX_ITERATIONS: Int): List[Int] = {
 
     /*
     * Draw an initial sample of M points
@@ -68,7 +92,7 @@ class GreedyEntropySelector(
     //All the elements not in the working set
     var newDataset = (1 to data.npoints).filter((p) => !workingset.contains(p))
     //Existing best value of the entropy
-    var oldEntropy: Double = this.measure.evaluate(data.filter((point) =>
+    var oldEntropy: Double = measure.evaluate(data.filter((point) =>
       workingset.contains(point)))
     //Store the value of entropy after an element swap
     var newEntropy: Double = 0.0
@@ -90,7 +114,7 @@ class GreedyEntropySelector(
       workingset = (workingset :+ point2).filter((p) => p != point1)
 
       //Calculate the new entropy
-      newEntropy = this.measure.evaluate(data.filter((p) =>
+      newEntropy = measure.evaluate(data.filter((p) =>
         workingset.contains(p)))
 
       /*
@@ -122,11 +146,11 @@ class GreedyEntropySelector(
       }
 
       it += 1
-    } while(math.abs(d) >= this.delta &&
-      it <= this.MAX_ITERATIONS)
+    } while(math.abs(d) >= delta &&
+      it <= MAX_ITERATIONS)
     logger.log(Priority.INFO, "Returning final prototype set")
     //Time to return the final working set
-    data.filter((p) => workingset.contains(p))
+    //data.filter((p) => workingset.contains(p))
+    workingset
   }
-
 }

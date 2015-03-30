@@ -18,8 +18,7 @@
 package org.kuleuven.esat.kernels
 
 import breeze.linalg.{DenseVector, norm}
-
-import scala.annotation.tailrec
+import org.kuleuven.esat.utils
 
 class GaussianDensityKernel
   extends DensityKernel
@@ -47,22 +46,6 @@ class GaussianDensityKernel
     exp(-1*pow(norm(normalizedbuff), 2)/2)/pow(sqrt(Pi * 2), b.size)
   }
 
-  /*
-  * Calculate the value of the hermite polynomials 
-  * tail recursively. This is needed to calculate 
-  * the Gaussian derivatives at a point x.
-  * */
-  private def hermite(n: Int, x: Double): Double = {
-    @tailrec
-    def hermiteHelper(k: Int, x: Double, a: Double, b: Double): Double =
-      k match {
-        case 0 => a
-        case 1 => b
-        case _ => hermiteHelper(k-1, x, b, x*b - (k-1)*a)
-      }
-    hermiteHelper(n, x, 1, x)
-  }
-
   def setBandwidth(b: DenseVector[Double]): Unit = {
     this.bandwidth = b
   }
@@ -78,7 +61,7 @@ class GaussianDensityKernel
    * @return The value of the nth derivative at the point x
    * */
   override def derivative(n: Int, x: Double): Double = {
-    (1/sqrt(2*Pi))*(1/pow(-1.0,n))*exp(-1*pow(x,2)/2)*hermite(n, x)
+    (1/sqrt(2*Pi))*(1/pow(-1.0,n))*exp(-1*pow(x,2)/2)*utils.hermite(n, x)
   }
 
 }

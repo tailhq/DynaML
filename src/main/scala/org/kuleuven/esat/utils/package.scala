@@ -60,4 +60,25 @@ package object utils {
       DenseVector.zeros[Double](data.head.length),
       data.length)
   }
+
+  /*
+  * Calculate the value of the hermite polynomials
+  * tail recursively. This is needed to calculate
+  * the Gaussian derivatives at a point x.
+  * */
+  def hermite(n: Int, x: Double): Double = {
+    @tailrec
+    def hermiteHelper(k: Int, x: Double, a: Double, b: Double): Double =
+      k match {
+        case 0 => a
+        case 1 => b
+        case _ => hermiteHelper(k-1, x, b, x*b - (k-1)*a)
+      }
+    hermiteHelper(n, x, 1, x)
+  }
+
+  @tailrec
+  def factorial(n: Int, accumulator: Long = 1): Long = {
+    if(n == 0) accumulator else factorial(n - 1, (accumulator * n))
+  }
 }
