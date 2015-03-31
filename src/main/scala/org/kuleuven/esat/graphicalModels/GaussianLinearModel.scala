@@ -93,6 +93,7 @@ private[esat] class GaussianLinearModel(
     this.featureMap = (points: List[DenseVector[Double]]) => {
       points.map((p) =>
         {
+          p :/= kernel.getBandwidth
           val n = norm(p, 2)
           DenseVector.tabulate[Double](M){i =>
             val lambda = math.pow(math.pow(2, i)*utils.factorial(i)*math.sqrt(math.Pi), 0.5)

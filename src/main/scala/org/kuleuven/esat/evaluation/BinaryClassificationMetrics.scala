@@ -26,7 +26,7 @@ class BinaryClassificationMetrics(
    * */
 
   private val bias: Double = scoresAndLabels.map{v => v._1}.sum/scoresAndLabels.length
-  private val thresholds = (-100 to 100).map((x) => (x.toDouble + bias)/100)
+  private val thresholds = (-1000 to 1000).map((x) => (x.toDouble + bias)/100)
 
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
