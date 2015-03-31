@@ -4,7 +4,7 @@ import breeze.linalg.{norm, DenseVector, DenseMatrix}
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph
 import com.tinkerpop.blueprints.{Graph, Direction, Edge}
-import com.tinkerpop.blueprints.impls.tg.{TinkerGraph, TinkerGraphFactory}
+import com.tinkerpop.blueprints.impls.tg.{TinkerGraphFactory}
 import com.tinkerpop.gremlin.scala.{ScalaEdge, ScalaVertex}
 import com.typesafe.config.ConfigFactory
 import org.apache.log4j.{Priority, Logger}

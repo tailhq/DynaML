@@ -2,7 +2,6 @@ package org.kuleuven.esat.optimization
 
 import breeze.linalg.DenseVector
 import com.tinkerpop.blueprints.{Graph, Edge}
-import com.tinkerpop.gremlin.scala.{ScalaGraph}
 import org.apache.log4j.{Logger, Priority}
 
 /**

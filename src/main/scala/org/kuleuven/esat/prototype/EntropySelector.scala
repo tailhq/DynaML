@@ -18,7 +18,6 @@
 package org.kuleuven.esat.prototype
 
 import breeze.linalg.DenseVector
-import com.tinkerpop.gremlin.scala.ScalaGraph
 import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.graphicalModels.GaussianLinearModel
 
