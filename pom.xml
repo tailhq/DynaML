@@ -22,6 +22,7 @@
         <connection>scm:git:git@github.com:mandar2812/bayeslearn.git</connection>
         <url>scm:git:git@github.com:mandar2812/bayeslearn.git</url>
         <developerConnection>scm:git:git@github.com:mandar2812/bayeslearn.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
     <distributionManagement>
         <repository>

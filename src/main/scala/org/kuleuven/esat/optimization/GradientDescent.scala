@@ -1,7 +1,7 @@
 package org.kuleuven.esat.optimization
 
 import breeze.linalg.DenseVector
-import com.tinkerpop.blueprints.{Graph, Edge}
+import com.tinkerpop.blueprints.{Edge}
 import org.apache.log4j.{Logger, Priority}
 
 /**
@@ -10,7 +10,7 @@ import org.apache.log4j.{Logger, Priority}
  * values of the model parameters.
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
-  extends Optimizer[Graph, Int, DenseVector[Double], DenseVector[Double], Double]{
+  extends Optimizer[Int, DenseVector[Double], DenseVector[Double], Double]{
   private var stepSize: Double = 1.0
   private var numIterations: Int = 100
   private var regParam: Double = 1.0
@@ -74,8 +74,6 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    * Find the optimum value of the parameters using
    * Gradient Descent.
    *
-   * @param g The plate model representing
-   *          the linear Gaussian network
    * @param nPoints The number of data points
    * @param initialP The initial value of the parameters
    *                 as a [[DenseVector]]
@@ -91,14 +89,12 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    *
    * */
   override def optimize(
-      g: Graph,
       nPoints: Int,
       initialP: DenseVector[Double],
       ParamOutEdges: java.lang.Iterable[Edge],
       xy: (Edge) => (DenseVector[Double], Double)): DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
-        g,
         nPoints,
         this.regParam,
         this.numIterations,
@@ -111,7 +107,6 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
       )
     } else {
       GradientDescent.runBatchSGD(
-        g,
         nPoints,
         this.regParam,
         this.numIterations,
@@ -132,7 +127,6 @@ object GradientDescent {
   private val logger = Logger.getLogger(this.getClass)
 
   def runSGD(
-      g: Graph,
       nPoints: Int,
       regParam: Double,
       numIterations: Int,
@@ -162,7 +156,6 @@ object GradientDescent {
   }
 
   def runBatchSGD(
-      g: Graph,
       nPoints: Int,
       regParam: Double,
       numIterations: Int,

@@ -19,14 +19,14 @@ package org.kuleuven.esat.prototype
 
 import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
-import org.kuleuven.esat.graphicalModels.GaussianLinearModel
+import org.kuleuven.esat.graphicalModels.KernelBayesianModel
 
 /**
  * Basic skeleton of an entropy based
  * subset selector
  */
 abstract class EntropySelector
-  extends SubsetSelector[GaussianLinearModel, DenseVector[Double]]
+  extends SubsetSelector[KernelBayesianModel, DenseVector[Double]]
   with Serializable {
   protected val measure: EntropyMeasure
   protected val delta: Double
@@ -46,17 +46,22 @@ private[esat] class GreedyEntropySelector(
   private val logger = Logger.getLogger(this.getClass)
 
   override def selectPrototypes(
-      data: GaussianLinearModel,
-      M: Int): List[DenseVector[Double]] =
-    data.filter((p) =>
-      GreedyEntropySelector.subsetSelection(data,
+      data: KernelBayesianModel,
+      M: Int): List[DenseVector[Double]] = {
+
+    val prototypeIndexes =
+      GreedyEntropySelector.subsetSelection(
+        data,
         M,
         this.measure,
         this.delta,
-        this.MAX_ITERATIONS)
-        .contains(p)
-    )
+        this.MAX_ITERATIONS
+      )
 
+    data.filter((p) =>
+      prototypeIndexes.contains(p)
+    )
+  }
 }
 
 object GreedyEntropySelector {
@@ -68,7 +73,7 @@ object GreedyEntropySelector {
     max: Int = 5000): GreedyEntropySelector =
     new GreedyEntropySelector(m, del, max)
 
-  def subsetSelection(data: GaussianLinearModel,
+  def subsetSelection(data: KernelBayesianModel,
                       M: Int,
                       measure: EntropyMeasure, delta: Double,
                       MAX_ITERATIONS: Int): List[Int] = {
@@ -149,7 +154,6 @@ object GreedyEntropySelector {
       it <= MAX_ITERATIONS)
     logger.log(Priority.INFO, "Returning final prototype set")
     //Time to return the final working set
-    //data.filter((p) => workingset.contains(p))
     workingset
   }
 }
