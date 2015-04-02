@@ -61,6 +61,22 @@ trait ParameterizedLearner[G, K, K2, T <: Tensor[K, Double], Q <: Tensor[K2, Dou
 
   def getxyPair(ed: Edge): (Q, R)
 
+  def setMaxIterations(i: Int): this.type = {
+    this.optimizer.setNumIterations(i)
+    this
+  }
+
+  def setBatchFraction(f: Double): this.type = {
+    assert(f >= 0.0 && f <= 1.0, "Mini-Batch Fraction should be between 0.0 and 1.0")
+    this.optimizer.setMiniBatchFraction(f)
+    this
+  }
+
+  def setLearningRate(alpha: Double): this.type = {
+    this.optimizer.setStepSize(alpha)
+    this
+  }
+
 }
 
 /**

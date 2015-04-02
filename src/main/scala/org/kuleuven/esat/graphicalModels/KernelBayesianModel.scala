@@ -21,6 +21,7 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
 import com.tinkerpop.blueprints.Direction
 import org.apache.log4j.{Logger, Priority}
 import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
+import org.kuleuven.esat.optimization.GradientDescent
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
 
@@ -30,9 +31,17 @@ import org.kuleuven.esat.utils
  */
 abstract class KernelBayesianModel extends
 KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
+
   protected val logger = Logger.getLogger(this.getClass)
 
+  override protected val optimizer: GradientDescent
+
   protected val featuredims: Int
+
+  def setRegParam(reg: Double): this.type = {
+    this.optimizer.setRegParam(reg)
+    this
+  }
 
   override def optimumSubset(M: Int): Unit = {
     //Get the original features of the data

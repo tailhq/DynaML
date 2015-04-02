@@ -11,36 +11,8 @@ import org.apache.log4j.{Logger, Priority}
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
   extends Optimizer[Int, DenseVector[Double], DenseVector[Double], Double]{
-  private var stepSize: Double = 1.0
-  private var numIterations: Int = 100
+
   private var regParam: Double = 1.0
-  private var miniBatchFraction: Double = 1.0
-
-  /**
-   * Set the initial step size of SGD for the first step. Default 1.0.
-   * In subsequent steps, the step size will decrease with stepSize/sqrt(t)
-   */
-  def setStepSize(step: Double): this.type = {
-    this.stepSize = step
-    this
-  }
-
-  /**
-   * Set fraction of data to be used for each SGD iteration.
-   * Default 1.0 (corresponding to deterministic/classical gradient descent)
-   */
-  def setMiniBatchFraction(fraction: Double): this.type = {
-    this.miniBatchFraction = fraction
-    this
-  }
-
-  /**
-   * Set the number of iterations for SGD. Default 100.
-   */
-  def setNumIterations(iters: Int): this.type = {
-    this.numIterations = iters
-    this
-  }
 
   /**
    * Set the regularization parameter. Default 0.0.

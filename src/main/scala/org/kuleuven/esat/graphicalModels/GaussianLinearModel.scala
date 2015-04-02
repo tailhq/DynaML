@@ -34,30 +34,6 @@ private[esat] class GaussianLinearModel(
 
   override protected val optimizer = GaussianLinearModel.getOptimizer(task)
 
-  def setMaxIterations(i: Int): this.type = {
-    this.optimizer.setNumIterations(i)
-    this
-  }
-
-  def setLearningRate(alpha: Double): this.type = {
-    this.optimizer.setStepSize(alpha)
-    this
-  }
-
-  def setBatchFraction(f: Double): this.type = {
-    assert(f >= 0.0 && f <= 1.0, "Mini-Batch Fraction should be between 0.0 and 1.0")
-    this.optimizer.setMiniBatchFraction(f)
-    this
-  }
-
-  def setRegParam(reg: Double): this.type = {
-    this.optimizer.setRegParam(reg)
-    this
-  }
-
-  override def parameters(): DenseVector[Double] =
-    this.params
-
   def score(point: DenseVector[Double]): Double =
     GaussianLinearModel.score(this.params)(this.featureMap(List(point))(0))
 
