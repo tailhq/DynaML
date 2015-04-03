@@ -1,5 +1,6 @@
 package org.kuleuven.esat.evaluation
 
+import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 
 /**
@@ -35,6 +36,8 @@ class RegressionMetrics(
     logger.log(Priority.INFO, "R^2: " + Rsq)
   }
 
+  override def kpi() = DenseVector(mae, rmse, Rsq)
+
 }
 
 object RegressionMetrics {
@@ -44,8 +47,8 @@ object RegressionMetrics {
     var SSres = 0.0
     var SStot = 0.0
     scoresAndLabels.foreach((couple) => {
-      SSres += math.pow(couple._1 - couple._2, 2)
-      SStot += math.pow(couple._2 - mean, 2)
+      SSres += math.pow(couple._2 - couple._1, 2)
+      SStot += (math.pow(couple._2 - couple._1, 2) + math.pow(couple._1 - mean, 2))
     })
     1 - (SSres/SStot)
   }

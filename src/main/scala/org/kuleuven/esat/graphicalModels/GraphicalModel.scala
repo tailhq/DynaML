@@ -197,13 +197,13 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
    * Tune the parameters of an RBF Kernel
    * so it best fits the data to be modeled.
    * */
-  def tuneRBFKernel(): Unit
+  def tuneRBFKernel(implicit task: String): Unit
 
   /**
    * Cross validate the model on the
    * data set.
    * */
-  def crossvalidate(): Double
+  def crossvalidate(folds: Int): (Double, Double, Double)
 
   /**
    * Get a subset of the data set defined

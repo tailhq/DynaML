@@ -1,5 +1,6 @@
 package org.kuleuven.esat.evaluation
 
+import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 
 import scalax.chart.module.ChartFactories.XYLineChart
@@ -142,4 +143,8 @@ class BinaryClassificationMetrics(
     logger.log(Priority.INFO, "Area under ROC: " + areaUnderROC())
 
   }
+
+  override def kpi() = DenseVector(areaUnderPR(),
+    areaUnderROC(),
+    fMeasureByThreshold().map((c) => c._2).max)
 }

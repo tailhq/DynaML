@@ -24,7 +24,7 @@ private[esat] class GaussianLinearModel(
     override protected val g: Graph,
     override protected val nPoints: Int,
     override protected val featuredims: Int,
-    implicit val task: String)
+    override implicit protected val task: String)
   extends KernelBayesianModel {
 
   override protected val logger = Logger.getLogger(this.getClass)

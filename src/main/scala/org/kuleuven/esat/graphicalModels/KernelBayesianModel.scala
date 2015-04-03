@@ -18,18 +18,23 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
-import com.tinkerpop.blueprints.Direction
+import com.fasterxml.jackson.databind.node.DoubleNode
+import com.github.tototoshi.csv.CSVReader
+import com.tinkerpop.blueprints.{Edge, Direction}
 import org.apache.log4j.{Logger, Priority}
+import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
 import org.kuleuven.esat.optimization.GradientDescent
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
 
+import scala.collection.JavaConversions
+
 /**
  * Abstract class implementing kernel feature map
  * extraction functions.
  */
-abstract class KernelBayesianModel extends
+abstract class KernelBayesianModel(implicit protected val task: String) extends
 KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
 
   protected val logger = Logger.getLogger(this.getClass)
@@ -44,14 +49,13 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
   }
 
   override def optimumSubset(M: Int): Unit = {
-    //Get the original features of the data
-    val features = this.filter((_) => true)
     points = (0 to this.npoints - 1).toList
     if(M < this.npoints) {
       logger.log(Priority.INFO, "Calculating sample variance of the data set")
 
+      //Get the original features of the data
       //Calculate the column means and variances
-      val (mean, variance) = utils.getStats(features)
+      val (mean, variance) = utils.getStats(this.filter((_) => true))
 
       //Use the adjusted value of the variance
       val adjvarance:DenseVector[Double] = variance :/= (npoints.toDouble - 1)
@@ -153,16 +157,89 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
         xnode.getProperty("value")
           .asInstanceOf[DenseVector[Double]]
       )
-      this.g.getVertex("w").setProperty("slope", this.params)
     }
+    this.g.getVertex("w").setProperty("slope", this.params)
   }
 
-  //TODO: Replace stub implementations with the real ones
-  override def crossvalidate(): Double = {
-    0.0
+  override def crossvalidate(folds: Int = 10): (Double, Double, Double) = {
+    //Create the folds as lists of integers
+    //which index the data points
+    this.optimizer.setRegParam(0.0001).setNumIterations(100)
+      .setStepSize(0.0001).setMiniBatchFraction(1.0)
+    var avg_metrics = DenseVector(0.0, 0.0, 0.0)
+    for( a <- 1 to folds){
+      //For the ath fold
+      //partition the data
+      //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
+      //as test and the rest as training
+      logger.log(Priority.INFO, "*** Fold: "+a+" ***")
+      logger.log(Priority.INFO, "Calculating test and training data for fold: "+a)
+      val test_data_fold = math.ceil((a-1)*this.nPoints/folds).toInt to
+        math.ceil(a*(this.nPoints-1)/folds).toInt
+
+      val (test, train) = (1 to this.npoints).partition((p) =>
+      {
+        p >= (a-1)*this.nPoints/folds & p <= a*(this.nPoints-1)/folds
+      })
+
+      val training_data = train.map((p) => this.g.getEdge(("w", ("y", p))))
+        .view.toIterable
+
+      val test_data = test.map((p) => this.g.getEdge(("w", ("y", p))))
+        .view.toIterable
+
+      logger.log(Priority.INFO, "Gradient Descent for fold: "+a)
+      val tempparams = this.optimizer.optimize((folds-1/folds)*this.npoints,
+        this.params,
+        JavaConversions.asJavaIterable(training_data),
+        this.getxyPair)
+      logger.log(Priority.INFO, "Parameters Learned")
+      logger.log(Priority.INFO, "Evaluating metrics for fold: "+a)
+      val metrics = KernelBayesianModel.evaluate(tempparams)(test_data)(this.getxyPair)(this.task)
+      val kpi = metrics.kpi()
+      avg_metrics :+= kpi
+    }
+    //run batch sgd on each fold
+    //and test
+    (avg_metrics(0)/folds.toDouble, avg_metrics(1)/folds.toDouble, avg_metrics(2)/folds.toDouble)
   }
 
-  override def tuneRBFKernel(): Unit = {
+  override def tuneRBFKernel(implicit task: String = this.task): Unit = {
     //Generate a grid of sigma values
+    val (samplemean, samplevariance) = utils.getStats(this.getPredictors())
+    logger.log(Priority.INFO, "Calculating grid for gamma values")
+    samplevariance :*= 1.0/(this.npoints.toDouble - 1)
+    val grid = (-5 to 5).map((n) =>
+    {
+      val sigma = math.sqrt(norm(samplevariance, 2))
+      sigma + sigma*(n.toDouble/10.0)
+    }).map((gamma) => {
+      logger.log(Priority.INFO, "Applying RBF Kernel for gamma = "+gamma)
+      this.applyKernel(new RBFKernel(gamma))
+      logger.log(Priority.INFO, "Crossvalidating for gamma = "+gamma)
+      val (a, b, c) = this.crossvalidate()
+      (c, gamma)
+    })
+    logger.log(Priority.INFO, "Grid: "+grid)
+    val max = grid.max
+    logger.log(Priority.INFO, "Best value of gamma: "+max._2+" metric value: "+max._1)
+    this.applyKernel(new RBFKernel(max._2))
+  }
+}
+
+object KernelBayesianModel {
+  val logger = Logger.getLogger(this.getClass)
+  def evaluate(params: DenseVector[Double])
+              (test_data_set: Iterable[Edge])
+              (xy: (Edge) => (DenseVector[Double], Double))
+              (task: String): Metrics[Double] = {
+    val scoresAndLabels = test_data_set.view
+      .map((e) => {
+      val scorepred = GaussianLinearModel.score(params) _
+      val (x,y) = xy(e)
+      (scorepred(x(0 to x.length - 2)), y)
+
+    })
+    Metrics(task)(scoresAndLabels.toList)
   }
 }
