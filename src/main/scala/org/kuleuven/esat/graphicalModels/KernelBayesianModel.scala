@@ -82,6 +82,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
   }
 
   override def applyFeatureMap(): Unit = {
+    logger.log(Priority.INFO, "Applying Feature map to data set")
     val edges = this.getParamOutEdges().iterator()
     this.g.getVertex("w").setProperty("slope", this.params)
     while (edges.hasNext) {
@@ -100,6 +101,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       //Set a new property in the vertex corresponding to the mapped features
       vertex.setProperty("featureMap", newFeatures)
     }
+    logger.log(Priority.INFO, "DONE: Applying Feature map to data set")
   }
 
   override def applyKernel(
