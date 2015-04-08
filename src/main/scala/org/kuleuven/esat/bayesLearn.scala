@@ -17,6 +17,8 @@ object bayesLearn extends App {
           intp.addImports("org.kuleuven.esat.graphicalModels._")
           intp.addImports("org.kuleuven.esat.utils")
           intp.addImports("org.kuleuven.esat.kernels._")
+          intp.addImports("org.neo4j.graphdb._")
+          intp.addImports("com.tinkerpop.blueprints.impls.neo4j2._")
         }
       }
 
@@ -51,7 +53,7 @@ object bayesLearn extends App {
           "         \n     \\/__/     \\/__/         \\/__/         \\|__|         "+
           "\\/__/                 ")
 
-        echo("\nWelcome to Bayes Learn v 0.12\nInteractive Scala shell")
+        echo("\nWelcome to Bayes Learn v 1.0\nInteractive Scala shell")
         echo("STADIUS ESAT KU Leuven (2015)\n")
       }
     }

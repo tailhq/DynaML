@@ -1,5 +1,6 @@
 package org.kuleuven.esat.evaluation
 
+import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 
 import scalax.chart.module.ChartFactories.XYLineChart
@@ -24,7 +25,9 @@ class BinaryClassificationMetrics(
    * in precision, recall False Positive
    * and False Negative values.
    * */
-  private val thresholds = (-100 to 100).map((x) => x.toDouble/100)
+
+  private val bias: Double = scoresAndLabels.map{v => v._1}.sum/scoresAndLabels.length
+  private val thresholds = (-1000 to 1000).map((x) => (x.toDouble + bias)/100)
 
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
@@ -140,4 +143,8 @@ class BinaryClassificationMetrics(
     logger.log(Priority.INFO, "Area under ROC: " + areaUnderROC())
 
   }
+
+  override def kpi() = DenseVector(areaUnderPR(),
+    areaUnderROC(),
+    fMeasureByThreshold().map((c) => c._2).max)
 }

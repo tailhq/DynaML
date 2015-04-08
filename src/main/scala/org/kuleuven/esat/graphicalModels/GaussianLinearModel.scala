@@ -1,15 +1,15 @@
 package org.kuleuven.esat.graphicalModels
 
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.DenseVector
 import com.github.tototoshi.csv.CSVReader
-import com.tinkerpop.blueprints.pgm.Edge
-import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory
-import com.tinkerpop.gremlin.scala.{ScalaVertex, ScalaEdge, ScalaGraph}
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph
+import com.tinkerpop.blueprints.{Graph, Direction, Edge}
+import com.tinkerpop.blueprints.impls.tg.TinkerGraphFactory
+import com.tinkerpop.gremlin.scala.{ScalaEdge, ScalaVertex}
+import com.typesafe.config.ConfigFactory
 import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.evaluation.Metrics
-import org.kuleuven.esat.kernels.SVMKernel
 import org.kuleuven.esat.optimization._
-
 
 /**
  * Linear Model with conditional probability
@@ -20,43 +20,19 @@ import org.kuleuven.esat.optimization._
  * as a means for L2 regularization.
  */
 
-private[graphicalModels] class GaussianLinearModel(
-    override protected val g: ScalaGraph,
+private[esat] class GaussianLinearModel(
+    override protected val g: Graph,
     override protected val nPoints: Int,
-    private val featuredims: Int,
-    implicit val task: String)
-  extends LinearModel[ScalaGraph, Int, Int,
-    DenseVector[Double], DenseVector[Double], Double] {
+    override protected val featuredims: Int,
+    override implicit protected val task: String)
+  extends KernelBayesianModel {
 
-  private val logger = Logger.getLogger(this.getClass)
+  override protected val logger = Logger.getLogger(this.getClass)
+
   override implicit protected var params =
     g.getVertex("w").getProperty("slope").asInstanceOf[DenseVector[Double]]
 
   override protected val optimizer = GaussianLinearModel.getOptimizer(task)
-
-  def setMaxIterations(i: Int): this.type = {
-    this.optimizer.setNumIterations(i)
-    this
-  }
-
-  def setLearningRate(alpha: Double): this.type = {
-    this.optimizer.setStepSize(alpha)
-    this
-  }
-
-  def setBatchFraction(f: Double): this.type = {
-    assert(f >= 0.0 && f <= 1.0, "Mini-Batch Fraction should be between 0.0 and 1.0")
-    this.optimizer.setMiniBatchFraction(f)
-    this
-  }
-
-  def setRegParam(reg: Double): this.type = {
-    this.optimizer.setRegParam(reg)
-    this
-  }
-
-  override def parameters(): DenseVector[Double] =
-    this.params
 
   def score(point: DenseVector[Double]): Double =
     GaussianLinearModel.score(this.params)(this.featureMap(List(point))(0))
@@ -66,68 +42,28 @@ private[graphicalModels] class GaussianLinearModel(
     case "regression" => this.score(point)
   }
 
-  override def getParamOutEdges() = this.g.getVertex("w").getOutEdges()
+  override def getParamOutEdges() = this.g.getVertex("w").getEdges(Direction.OUT)
 
   override def getxyPair(ed: Edge): (DenseVector[Double], Double) = {
     val edge = ScalaEdge.wrap(ed)
-    val yV = ScalaVertex.wrap(edge.getInVertex)
+    val yV = ScalaVertex.wrap(edge.getVertex(Direction.IN))
     val y = yV.getProperty("value").asInstanceOf[Double]
 
-    val xV = yV.getInEdges("causes").iterator().next().getOutVertex
+    val xV = yV.getEdges(Direction.IN, "causes").iterator().next().getVertex(Direction.OUT)
     val x = xV.getProperty("featureMap").asInstanceOf[DenseVector[Double]]
     (x, y)
-  }
-
-  override def applyKernel(kernel: SVMKernel[DenseMatrix[Double]]): Unit = {
-    //TODO: Comment here
-    val features = this.getPredictors().map((vector) => vector(0 to vector.length - 2))
-    val kernelMatrix =
-      kernel.buildKernelMatrix(features, features.length)
-    val decomposition = kernelMatrix.eigenDecomposition(features.length)
-    this.featureMap = kernel.featureMapping(decomposition)(features) _
-    val edges = this.getParamOutEdges().iterator()
-    this.params = DenseVector.ones[Double](decomposition._1.length + 1)
-    this.g.getVertex("w").setProperty("slope", this.params)
-    while (edges.hasNext) {
-      val vertex = edges.next().getInVertex
-        .getInEdges("causes").iterator()
-        .next().getOutVertex
-      val featurex = vertex.getProperty("value").asInstanceOf[DenseVector[Double]]
-      //TODO: Comment here
-      val mappedf = featureMap(List(featurex(0 to featurex.length - 2)))(0)
-      val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(Array(1.0)))
-      vertex.setProperty("featureMap", newFeatures)
-    }
   }
 
   override def evaluate(reader: CSVReader, head: Boolean): Metrics[Double] =
     GaussianLinearModel.evaluate(this.featureMap)(this.params)(reader, head)
 
-  /**
-   * Override the effect of appyling a kernel
-   * and return the model back to its default
-   * state i.e. the Identity Kernel
-   * */
-  override def clearParameters(): Unit = {
-    this.params = DenseVector.ones[Double](this.featuredims)
-    val it = this.getParamOutEdges().iterator()
-    while(it.hasNext) {
-      val outEdge = it.next()
-      val ynode = outEdge.getInVertex
-      val xnode = ynode.getInEdges("causes")
-        .iterator().next().getOutVertex
-      xnode.setProperty(
-        "featureMap",
-        xnode.getProperty("value")
-          .asInstanceOf[DenseVector[Double]]
-      )
-      this.g.getVertex("w").setProperty("slope", this.params)
-    }
-  }
+  override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
+    super.filter(fn).map((p) => p(0 to featuredims - 2))
+
 }
 
 object GaussianLinearModel {
-
+  val conf = ConfigFactory.load("conf/bayesLearn.conf")
   val logger = Logger.getLogger(this.getClass)
 
   /**
@@ -186,11 +122,18 @@ object GaussianLinearModel {
       val yv = line.apply(line.length - 1).toDouble
       val xv: DenseVector[Double] =
         DenseVector(line.slice(0, line.length - 1).toList.map{x => x.toDouble}.toArray)
+
       (score(params)(featureMap(List(xv))(0)), yv)
 
     }.toList
 
     Metrics(task)(scoresAndLabels)
+  }
+
+  @throws(classOf[Exception])
+  def apply(db: String, task: String): GaussianLinearModel = {
+    val g = new Neo4j2Graph(conf.getConfig("properties.db").getString("data.root")+db)
+    new GaussianLinearModel(g, 100, 10, task)
   }
 
   def apply(reader: CSVReader, head: Boolean, task: String): GaussianLinearModel = {
@@ -246,6 +189,6 @@ object GaussianLinearModel {
     g.getVertex("w").setProperty("slope", DenseVector.ones[Double](dim))
 
     logger.log(Priority.INFO, "Graph constructed, now building model object.")
-    new GaussianLinearModel(ScalaGraph.wrap(g), index, dim, task)
+    new GaussianLinearModel(g, index-1, dim, task)
   }
 }

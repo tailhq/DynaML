@@ -25,4 +25,6 @@ class RBFKernel(private var bandwidth: Double)
       length: Int): KernelMatrix[DenseMatrix[Double]] =
     SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
 
+  def getBandwidth: Double = this.bandwidth
+
 }

@@ -1,10 +1,8 @@
 package org.kuleuven.esat.optimization
 
 import breeze.linalg.DenseVector
-import com.tinkerpop.blueprints.pgm.Edge
-import com.tinkerpop.gremlin.scala.{ScalaEdge, ScalaVertex, ScalaGraph}
+import com.tinkerpop.blueprints.{Edge}
 import org.apache.log4j.{Logger, Priority}
-import org.kuleuven.esat.graphicalModels.LinearModel
 
 /**
  * Implements Gradient Descent on the graph
@@ -12,37 +10,9 @@ import org.kuleuven.esat.graphicalModels.LinearModel
  * values of the model parameters.
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
-  extends Optimizer[ScalaGraph, Int, DenseVector[Double], DenseVector[Double], Double]{
-  private var stepSize: Double = 1.0
-  private var numIterations: Int = 100
+  extends Optimizer[Int, DenseVector[Double], DenseVector[Double], Double]{
+
   private var regParam: Double = 1.0
-  private var miniBatchFraction: Double = 1.0
-
-  /**
-   * Set the initial step size of SGD for the first step. Default 1.0.
-   * In subsequent steps, the step size will decrease with stepSize/sqrt(t)
-   */
-  def setStepSize(step: Double): this.type = {
-    this.stepSize = step
-    this
-  }
-
-  /**
-   * Set fraction of data to be used for each SGD iteration.
-   * Default 1.0 (corresponding to deterministic/classical gradient descent)
-   */
-  def setMiniBatchFraction(fraction: Double): this.type = {
-    this.miniBatchFraction = fraction
-    this
-  }
-
-  /**
-   * Set the number of iterations for SGD. Default 100.
-   */
-  def setNumIterations(iters: Int): this.type = {
-    this.numIterations = iters
-    this
-  }
 
   /**
    * Set the regularization parameter. Default 0.0.
@@ -76,8 +46,6 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    * Find the optimum value of the parameters using
    * Gradient Descent.
    *
-   * @param g The plate model representing
-   *          the linear Gaussian network
    * @param nPoints The number of data points
    * @param initialP The initial value of the parameters
    *                 as a [[DenseVector]]
@@ -93,14 +61,12 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    *
    * */
   override def optimize(
-      g: ScalaGraph,
       nPoints: Int,
       initialP: DenseVector[Double],
       ParamOutEdges: java.lang.Iterable[Edge],
       xy: (Edge) => (DenseVector[Double], Double)): DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
-        g,
         nPoints,
         this.regParam,
         this.numIterations,
@@ -113,7 +79,6 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
       )
     } else {
       GradientDescent.runBatchSGD(
-        g,
         nPoints,
         this.regParam,
         this.numIterations,
@@ -134,7 +99,6 @@ object GradientDescent {
   private val logger = Logger.getLogger(this.getClass)
 
   def runSGD(
-      g: ScalaGraph,
       nPoints: Int,
       regParam: Double,
       numIterations: Int,
@@ -164,7 +128,6 @@ object GradientDescent {
   }
 
   def runBatchSGD(
-      g: ScalaGraph,
       nPoints: Int,
       regParam: Double,
       numIterations: Int,

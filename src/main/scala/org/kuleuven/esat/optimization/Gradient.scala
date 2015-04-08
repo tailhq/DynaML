@@ -189,8 +189,8 @@ class LeastSquaresSVMGradient extends Gradient {
       label: Double,
       weights: DenseVector[Double],
       cumGradient: DenseVector[Double]): Double = {
-    val diff = (weights.t * data) - label
-    axpy(diff, data, cumGradient)
+    val diff = 1 - label*(weights.t * data)
+    axpy(-1*label*diff, data, cumGradient)
     diff * diff / 2.0
   }
 }
