@@ -130,7 +130,7 @@ WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefL
 met.generatePlots
 ```
 
-![Image of Plot](https://drive.google.com/file/d/0BwmVAhMMfhhgSXV2WDNLRl9OSkE/view?usp=sharing)
+![Image of Plots](http://drive.google.com/uc?export=view&id=0BwmVAhMMfhhgSXV2WDNLRl9OSkE)
 
 * Kernel based models are highly sensitive to the hyperparameters so use `model.tuneRBFKernel` to find the best value of the kernel parameters. BayesLearn will carry out a grid search over various values of the hyperparameter and use 10-fold cross-validation to find an error estimates for each value of the hyperparameter chosen. 
 
