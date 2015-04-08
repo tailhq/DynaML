@@ -1,37 +1,28 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Bayeslearn by mandar2812</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Bayeslearn</h1>
-        <p class="header">Scala Library/REPL for working with Bayesian graphical models.</p>
+    <section class="page-header">
+      <h1 class="project-name">Bayeslearn</h1>
+      <h2 class="project-tagline">Scala Library/REPL for working with Bayesian graphical models.</h2>
+      <a href="https://github.com/mandar2812/bayeslearn" class="btn">View on GitHub</a>
+      <a href="https://github.com/mandar2812/bayeslearn/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/mandar2812/bayeslearn/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/mandar2812/bayeslearn/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/mandar2812/bayeslearn/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/mandar2812/bayeslearn">View On GitHub</a></li>
-        </ul>
-
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/mandar2812">mandar2812</a></p>
-
-
-      </header>
-      <section>
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="bayes-learn" class="anchor" href="#bayes-learn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bayes Learn</h1>
+
+<p><a href="https://travis-ci.org/mandar2812/bayeslearn"><img src="https://travis-ci.org/mandar2812/bayeslearn.svg?branch=master" alt="Build Status"></a></p>
 
 <p>Scala Library/REPL for working with Bayesian graphical models.</p>
 
@@ -64,7 +55,7 @@
 
 <p>You should get the following prompt.</p>
 
-<pre><code>       ___           ___           ___           ___           ___              
+<pre><code>      ___           ___           ___           ___           ___              
      /\  \         /\  \         |\__\         /\  \         /\  \             
     /::\  \       /::\  \        |:|  |       /::\  \       /::\  \            
    /:/\:\  \     /:/\:\  \       |:|  |      /:/\:\  \     /:/\ \  \           
@@ -87,12 +78,11 @@
     \:\__\    \:\__\         /:/  /       |:|  |         /:/  /                
      \/__/     \/__/         \/__/         \|__|         \/__/                 
 
-Welcome to Bayes Learn v 0.11
+Welcome to Bayes Learn v 1.0
 Interactive Scala shell
 STADIUS ESAT KU Leuven (2015)
 
 bayeslearn&gt;
-
 </code></pre>
 
 <h1>
@@ -104,38 +94,85 @@ bayeslearn&gt;
 <li>First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.</li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(utils.getCSVReader(<span class="pl-s1"><span class="pl-pds">"</span>data/challenge.txt<span class="pl-pds">"</span></span>, <span class="pl-c1">'<span class="pl-cce">\t</span>'</span>), <span class="pl-c1">true</span>, <span class="pl-s1"><span class="pl-pds">"</span>regression<span class="pl-pds">"</span></span>)</pre></div>
+<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(utils.getCSVReader(<span class="pl-s"><span class="pl-pds">"</span>data/ionosphere.csv<span class="pl-pds">"</span></span>, <span class="pl-c1">','</span>), <span class="pl-c1">false</span>, <span class="pl-s"><span class="pl-pds">"</span>classification<span class="pl-pds">"</span></span>)</pre></div>
 
 <ul>
-<li>We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model. Although the kernel feature extraction is experimental as of now.</li>
+<li>We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model.</li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">rbf</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">RBFKernel</span>(<span class="pl-c1">0.005</span>)
+<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">rbf</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">RBFKernel</span>(<span class="pl-c1">1.025</span>)
   model.applyKernel(rbf)</pre></div>
+
+<pre><code>15/04/08 16:18:27 INFO GaussianLinearModel: Calculating sample variance of the data set
+Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.BLAS &lt;clinit&gt;
+WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeSystemBLAS
+Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.BLAS &lt;clinit&gt;
+WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefBLAS
+15/04/08 16:18:27 INFO GaussianLinearModel: Using Silvermans rule of thumb to set bandwidth of density kernel
+15/04/08 16:18:27 INFO GaussianLinearModel: Std Deviation of the data: DenseVector(0.6618767091095631, 0.2153531017806649, 0.6301271799415376, 0.24541745830740389, 0.5431775259758828, 0.2946765619840614, 0.5211964641055545, 0.2761229821927304, 0.5577752837852287, 0.2845775306619974, 0.5479218770489251, 0.2645605240090495, 0.5548377593832784, 0.22456828710772916, 0.5447957151077759, 0.2610149610216883, 0.5376472009654502, 0.28306794461665225, 0.49930806466116906, 0.2771708644986171, 0.5102925100414256, 0.2926837740168661, 0.5044149749875603, 0.28672626576428256, 0.5628969922087946, 0.3188982068909329, 0.49719313771932133, 0.2858619900718872, 0.45806936986691993, 0.29055696674876463, 0.39475699812037596, 0.23682328160611926)
+15/04/08 16:18:27 INFO GaussianLinearModel: norm: 2.4059713445651982
+15/04/08 16:18:27 INFO GaussianLinearModel: Building low rank appriximation to kernel matrix
+15/04/08 16:18:27 INFO GreedyEntropySelector$: Initializing the working set, by drawing randomly from the training set
+15/04/08 16:18:27 INFO GreedyEntropySelector$: Starting iterative, entropy based greedy subset selection
+15/04/08 16:18:27 INFO GreedyEntropySelector$: Returning final prototype set
+15/04/08 16:18:27 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
+15/04/08 16:18:27 INFO SVMKernel$: Dimension: 17 x 17
+15/04/08 16:18:27 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
+Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.LAPACK &lt;clinit&gt;
+WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeSystemLAPACK
+Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.LAPACK &lt;clinit&gt;
+WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefLAPACK
+15/04/08 16:18:27 INFO SVMKernelMatrix: Eigenvalue stats: 0.020963349640349942 =&lt; lambda =&lt; 4.948104887300834
+15/04/08 16:18:27 INFO GaussianLinearModel: Applying Feature map to data set
+15/04/08 16:18:28 INFO GaussianLinearModel: DONE: Applying Feature map to data set
+</code></pre>
 
 <ul>
 <li>Now we can use Gradient Descent to learn the parameters w of the Bayesian model, with priors corresponding to zero mean and variance depending on the regularization parameter.</li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>  model.setMaxIterations(<span class="pl-c1">200</span>).setLearningRate(<span class="pl-c1">0.001</span>).learn</pre></div>
+<div class="highlight highlight-scala"><pre>  model.setRegParam(<span class="pl-c1">0.001</span>).setMaxIteartions(<span class="pl-c1">100</span>).setLearningRate(<span class="pl-c1">0.001</span>).setBatchFraction(<span class="pl-c1">1.0</span>).learn</pre></div>
 
 <ul>
-<li>We can now predict the value of the targer variable given a new point consisting of a Vector of features</li>
+<li><p>We can now predict the value of the targer variable given a new point consisting of a Vector of features using <code>model.predict()</code>.</p></li>
+<li><p>Evaluating models is easy in BayesLearn. You can create an evaluation object as follows. </p></li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">pred</span> <span class="pl-k">=</span> model.predict(<span class="pl-en">DenseVector</span>(<span class="pl-c1">0.68220219</span>, <span class="pl-c1">0.657091331</span>))</pre></div>
+<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">met</span> <span class="pl-k">=</span> model.evaluate(utils.getCSVReader(<span class="pl-s"><span class="pl-pds">"</span>data/ionosphereTest.csv<span class="pl-pds">"</span></span>, <span class="pl-c1">','</span>), <span class="pl-c1">false</span>)
+  met.print</pre></div>
+
+<ul>
+<li>The object <code>met</code> has a <code>print()</code> method which will dump some performance metrics in the shell. But you can also generate plots by using the <code>generatePlots()</code> method.</li>
+</ul>
+
+<pre><code>15/04/08 16:19:37 INFO BinaryClassificationMetrics: Classification Model Performance
+15/04/08 16:19:37 INFO BinaryClassificationMetrics: ============================
+15/04/08 16:19:37 INFO BinaryClassificationMetrics: Area under PR: 0.3313609467455621
+15/04/08 16:19:37 INFO BinaryClassificationMetrics: Area under ROC: 0.33136094674556216
+</code></pre>
+
+<div class="highlight highlight-scala"><pre>met.generatePlots</pre></div>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=0BwmVAhMMfhhgSXV2WDNLRl9OSkE" alt="Image of Plots"></p>
+
+<ul>
+<li>Kernel based models are highly sensitive to the hyperparameters so use <code>model.tuneRBFKernel</code> to find the best value of the kernel parameters. BayesLearn will carry out a grid search over various values of the hyperparameter and use 10-fold cross-validation to find an error estimates for each value of the hyperparameter chosen. </li>
+</ul>
 
 <h1>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
 
 <p>You can refer to the project <a href="http://mandar2812.github.io/bayeslearn/">home page</a> or the <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still at its infacy and there will be many more improvements/tweaks in the future.</p>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/mandar2812/bayeslearn">Bayeslearn</a> is maintained by <a href="https://github.com/mandar2812">mandar2812</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		          <script type="text/javascript">
+
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -148,3 +185,4 @@ bayeslearn&gt;
 
   </body>
 </html>
+
