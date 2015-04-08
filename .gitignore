@@ -14,3 +14,7 @@ build/*.jar
 target/*
 .DS_Store
 !target/site
+src
+conf
+data
+pom.xml
