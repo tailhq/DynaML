@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>GradientDescent - bayesLearn 0.1 API - org.kuleuven.esat.optimization.GradientDescent</title>
-          <meta name="description" content="GradientDescent - bayesLearn 0.1 API - org.kuleuven.esat.optimization.GradientDescent" />
-          <meta name="keywords" content="GradientDescent bayesLearn 0.1 API org.kuleuven.esat.optimization.GradientDescent" />
+          <title>GradientDescent - Bayes Learn 1.0-SNAPSHOT API - org.kuleuven.esat.optimization.GradientDescent</title>
+          <meta name="description" content="GradientDescent - Bayes Learn 1.0 - SNAPSHOT API - org.kuleuven.esat.optimization.GradientDescent" />
+          <meta name="keywords" content="GradientDescent Bayes Learn 1.0 SNAPSHOT API org.kuleuven.esat.optimization.GradientDescent" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -35,7 +35,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">GradientDescent</span><span class="result"> extends <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="com.tinkerpop.gremlin.scala.ScalaGraph">ScalaGraph</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">GradientDescent</span><span class="result"> extends <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4>
       
@@ -44,7 +44,7 @@ generated to calculate approximate optimal
 values of the model parameters.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="com.tinkerpop.gremlin.scala.ScalaGraph">ScalaGraph</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -285,6 +285,19 @@ values of the model parameters.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#miniBatchFraction" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="miniBatchFraction:Double"></a>
+      <a id="miniBatchFraction:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">miniBatchFraction</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -324,23 +337,35 @@ values of the model parameters.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#numIterations" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="numIterations:Int"></a>
+      <a id="numIterations:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">numIterations</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="org.kuleuven.esat.optimization.GradientDescent#optimize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="optimize(g:com.tinkerpop.gremlin.scala.ScalaGraph,nPoints:Int,initialP:breeze.linalg.DenseVector[Double],ParamOutEdges:Iterable[com.tinkerpop.blueprints.pgm.Edge],xy:com.tinkerpop.blueprints.pgm.Edge=&gt;(breeze.linalg.DenseVector[Double],Double)):breeze.linalg.DenseVector[Double]"></a>
-      <a id="optimize(ScalaGraph,Int,DenseVector[Double],Iterable[Edge],(Edge)⇒(DenseVector[Double],Double)):DenseVector[Double]"></a>
+      <a id="optimize(nPoints:Int,initialP:breeze.linalg.DenseVector[Double],ParamOutEdges:Iterable[com.tinkerpop.blueprints.Edge],xy:com.tinkerpop.blueprints.Edge=&gt;(breeze.linalg.DenseVector[Double],Double)):breeze.linalg.DenseVector[Double]"></a>
+      <a id="optimize(Int,DenseVector[Double],Iterable[Edge],(Edge)⇒(DenseVector[Double],Double)):DenseVector[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optimize</span><span class="params">(<span name="g">g: <span class="extype" name="com.tinkerpop.gremlin.scala.ScalaGraph">ScalaGraph</span></span>, <span name="nPoints">nPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="initialP">initialP: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="ParamOutEdges">ParamOutEdges: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="com.tinkerpop.blueprints.pgm.Edge">Edge</span>]</span>, <span name="xy">xy: (<span class="extype" name="com.tinkerpop.blueprints.pgm.Edge">Edge</span>) ⇒ (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="initialP">initialP: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="ParamOutEdges">ParamOutEdges: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>]</span>, <span name="xy">xy: (<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>) ⇒ (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Find the optimum value of the parameters using
 Gradient Descent.</p><div class="fullcomment"><div class="comment cmt"><p>Find the optimum value of the parameters using
 Gradient Descent.
-</p></div><dl class="paramcmts block"><dt class="param">g</dt><dd class="cmt"><p>The plate model representing
-         the linear Gaussian network</p></dd><dt class="param">nPoints</dt><dd class="cmt"><p>The number of data points</p></dd><dt class="param">initialP</dt><dd class="cmt"><p>The initial value of the parameters
+</p></div><dl class="paramcmts block"><dt class="param">nPoints</dt><dd class="cmt"><p>The number of data points</p></dd><dt class="param">initialP</dt><dd class="cmt"><p>The initial value of the parameters
                 as a <span class="extype" name="DenseVector">DenseVector</span></p></dd><dt class="param">ParamOutEdges</dt><dd class="cmt"><p>An <span class="extype" name="java.lang.Iterable">java.lang.Iterable</span> object
                      having all of the out edges of the
                      parameter node</p></dd><dt class="param">xy</dt><dd class="cmt"><p>A function which takes an edge and returns a
@@ -361,8 +386,8 @@ Gradient Descent.
       </h4>
       <p class="shortcomment cmt">Set the gradient function (of the loss function of one single data example)
 to be used for SGD.</p>
-    </li><li name="org.kuleuven.esat.optimization.GradientDescent#setMiniBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setMiniBatchFraction(fraction:Double):GradientDescent.this.type"></a>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#setMiniBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setMiniBatchFraction(fraction:Double):Optimizer.this.type"></a>
       <a id="setMiniBatchFraction(Double):GradientDescent.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -375,9 +400,9 @@ to be used for SGD.</p>
       </h4>
       <p class="shortcomment cmt">Set fraction of data to be used for each SGD iteration.</p><div class="fullcomment"><div class="comment cmt"><p>Set fraction of data to be used for each SGD iteration.
 Default 1.0 (corresponding to deterministic/classical gradient descent)
-</p></div></div>
-    </li><li name="org.kuleuven.esat.optimization.GradientDescent#setNumIterations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setNumIterations(iters:Int):GradientDescent.this.type"></a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#setNumIterations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setNumIterations(iters:Int):Optimizer.this.type"></a>
       <a id="setNumIterations(Int):GradientDescent.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -389,7 +414,7 @@ Default 1.0 (corresponding to deterministic/classical gradient descent)
       </span>
       </h4>
       <p class="shortcomment cmt">Set the number of iterations for SGD.</p><div class="fullcomment"><div class="comment cmt"><p>Set the number of iterations for SGD. Default 100.
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="org.kuleuven.esat.optimization.GradientDescent#setRegParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setRegParam(regParam:Double):GradientDescent.this.type"></a>
       <a id="setRegParam(Double):GradientDescent.this.type"></a>
@@ -404,8 +429,8 @@ Default 1.0 (corresponding to deterministic/classical gradient descent)
       </h4>
       <p class="shortcomment cmt">Set the regularization parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Set the regularization parameter. Default 0.0.
 </p></div></div>
-    </li><li name="org.kuleuven.esat.optimization.GradientDescent#setStepSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setStepSize(step:Double):GradientDescent.this.type"></a>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#setStepSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setStepSize(step:Double):Optimizer.this.type"></a>
       <a id="setStepSize(Double):GradientDescent.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -418,7 +443,7 @@ Default 1.0 (corresponding to deterministic/classical gradient descent)
       </h4>
       <p class="shortcomment cmt">Set the initial step size of SGD for the first step.</p><div class="fullcomment"><div class="comment cmt"><p>Set the initial step size of SGD for the first step. Default 1.0.
 In subsequent steps, the step size will decrease with stepSize/sqrt(t)
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="org.kuleuven.esat.optimization.GradientDescent#setUpdater" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setUpdater(updater:org.kuleuven.esat.optimization.Updater):GradientDescent.this.type"></a>
       <a id="setUpdater(Updater):GradientDescent.this.type"></a>
@@ -435,6 +460,19 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
 The updater is responsible to perform the update from the regularization term as well,
 and therefore determines what kind or regularization is used, if any.
 </p></div></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#stepSize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="stepSize:Double"></a>
+      <a id="stepSize:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stepSize</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -528,7 +566,7 @@ and therefore determines what kind or regularization is used, if any.
 
         <div id="inheritedMembers">
         <div class="parent" name="org.kuleuven.esat.optimization.Optimizer">
-              <h3>Inherited from <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="com.tinkerpop.gremlin.scala.ScalaGraph">ScalaGraph</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</h3>
+              <h3>Inherited from <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">

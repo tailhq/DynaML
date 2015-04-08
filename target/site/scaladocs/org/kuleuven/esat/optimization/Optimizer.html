@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Optimizer - bayesLearn 0.1 API - org.kuleuven.esat.optimization.Optimizer</title>
-          <meta name="description" content="Optimizer - bayesLearn 0.1 API - org.kuleuven.esat.optimization.Optimizer" />
-          <meta name="keywords" content="Optimizer bayesLearn 0.1 API org.kuleuven.esat.optimization.Optimizer" />
+          <title>Optimizer - Bayes Learn 1.0-SNAPSHOT API - org.kuleuven.esat.optimization.Optimizer</title>
+          <meta name="description" content="Optimizer - Bayes Learn 1.0 - SNAPSHOT API - org.kuleuven.esat.optimization.Optimizer" />
+          <meta name="keywords" content="Optimizer Bayes Learn 1.0 SNAPSHOT API org.kuleuven.esat.optimization.Optimizer" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -35,12 +35,12 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Optimizer</span><span class="tparams">[<span name="T">T</span>, <span name="K">K</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q</span>, <span name="R">R</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Optimizer</span><span class="tparams">[<span name="K">K</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q</span>, <span name="R">R</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Trait for optimization problem solvers.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the data set i.e. usually a graphical plate model</p></dd><dt class="tparam">K</dt><dd class="cmt"><p>The type indexing the Parameter vector, should be Int in
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>The type indexing the Parameter vector, should be Int in
           most cases.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the parameters of the model to be optimized.</p></dd><dt class="tparam">Q</dt><dd class="cmt"><p>The type of the predictor variable</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of the target variable
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -90,15 +90,15 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="org.kuleuven.esat.optimization.Optimizer#optimize" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="optimize(data:T,nPoints:Int,initialP:P,ParamOutEdges:Iterable[com.tinkerpop.blueprints.pgm.Edge],xy:com.tinkerpop.blueprints.pgm.Edge=&gt;(Q,R)):P"></a>
-      <a id="optimize(T,Int,P,Iterable[Edge],(Edge)⇒(Q,R)):P"></a>
+      <a id="optimize(nPoints:Int,initialP:P,ParamOutEdges:Iterable[com.tinkerpop.blueprints.Edge],xy:com.tinkerpop.blueprints.Edge=&gt;(Q,R)):P"></a>
+      <a id="optimize(Int,P,Iterable[Edge],(Edge)⇒(Q,R)):P"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optimize</span><span class="params">(<span name="data">data: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.T">T</span></span>, <span name="nPoints">nPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="initialP">initialP: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.P">P</span></span>, <span name="ParamOutEdges">ParamOutEdges: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="com.tinkerpop.blueprints.pgm.Edge">Edge</span>]</span>, <span name="xy">xy: (<span class="extype" name="com.tinkerpop.blueprints.pgm.Edge">Edge</span>) ⇒ (<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.R">R</span>)</span>)</span><span class="result">: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.P">P</span></span>
+        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="initialP">initialP: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.P">P</span></span>, <span name="ParamOutEdges">ParamOutEdges: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>]</span>, <span name="xy">xy: (<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>) ⇒ (<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.R">R</span>)</span>)</span><span class="result">: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.P">P</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Solve the convex optimization problem.</p>
@@ -288,6 +288,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#miniBatchFraction" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="miniBatchFraction:Double"></a>
+      <a id="miniBatchFraction:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">miniBatchFraction</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -327,6 +340,76 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#numIterations" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="numIterations:Int"></a>
+      <a id="numIterations:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">numIterations</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#setMiniBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setMiniBatchFraction(fraction:Double):Optimizer.this.type"></a>
+      <a id="setMiniBatchFraction(Double):Optimizer.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setMiniBatchFraction</span><span class="params">(<span name="fraction">fraction: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>.this.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Set fraction of data to be used for each SGD iteration.</p><div class="fullcomment"><div class="comment cmt"><p>Set fraction of data to be used for each SGD iteration.
+Default 1.0 (corresponding to deterministic/classical gradient descent)
+</p></div></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#setNumIterations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setNumIterations(iters:Int):Optimizer.this.type"></a>
+      <a id="setNumIterations(Int):Optimizer.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setNumIterations</span><span class="params">(<span name="iters">iters: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>.this.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Set the number of iterations for SGD.</p><div class="fullcomment"><div class="comment cmt"><p>Set the number of iterations for SGD. Default 100.
+</p></div></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#setStepSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setStepSize(step:Double):Optimizer.this.type"></a>
+      <a id="setStepSize(Double):Optimizer.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setStepSize</span><span class="params">(<span name="step">step: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>.this.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Set the initial step size of SGD for the first step.</p><div class="fullcomment"><div class="comment cmt"><p>Set the initial step size of SGD for the first step. Default 1.0.
+In subsequent steps, the step size will decrease with stepSize/sqrt(t)
+</p></div></div>
+    </li><li name="org.kuleuven.esat.optimization.Optimizer#stepSize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="stepSize:Double"></a>
+      <a id="stepSize:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stepSize</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

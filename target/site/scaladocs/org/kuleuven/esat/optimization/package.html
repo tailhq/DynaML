@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>optimization - bayesLearn 0.1 API - org.kuleuven.esat.optimization</title>
-          <meta name="description" content="optimization - bayesLearn 0.1 API - org.kuleuven.esat.optimization" />
-          <meta name="keywords" content="optimization bayesLearn 0.1 API org.kuleuven.esat.optimization" />
+          <title>optimization - Bayes Learn 1.0-SNAPSHOT API - org.kuleuven.esat.optimization</title>
+          <meta name="description" content="optimization - Bayes Learn 1.0 - SNAPSHOT API - org.kuleuven.esat.optimization" />
+          <meta name="keywords" content="optimization Bayes Learn 1.0 SNAPSHOT API org.kuleuven.esat.optimization" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -85,7 +85,7 @@
       </h4>
       <p class="comment cmt">Class used to compute the gradient for a loss function, given a single data point.</p>
     </li><li name="org.kuleuven.esat.optimization.GradientDescent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GradientDescentextendsOptimizer[com.tinkerpop.gremlin.scala.ScalaGraph,Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double]"></a>
+      <a id="GradientDescentextendsOptimizer[Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double]"></a>
       <a id="GradientDescent:GradientDescent"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -93,7 +93,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="GradientDescent.html"><span class="name">GradientDescent</span></a><span class="result"> extends <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="com.tinkerpop.gremlin.scala.ScalaGraph">ScalaGraph</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
+        <a href="GradientDescent.html"><span class="name">GradientDescent</span></a><span class="result"> extends <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4>
       <p class="comment cmt">Implements Gradient Descent on the graph
@@ -166,15 +166,15 @@ values of the model parameters.</p>
       <p class="comment cmt">Compute gradient and loss for a logistic loss function,
 as used in binary classification.</p>
     </li><li name="org.kuleuven.esat.optimization.Optimizer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Optimizer[T,K,P&lt;:breeze.linalg.Tensor[K,Double],Q,R]extendsSerializable"></a>
-      <a id="Optimizer[T,K,P&lt;:Tensor[K,Double],Q,R]:Optimizer[T,K,P,Q,R]"></a>
+      <a id="Optimizer[K,P&lt;:breeze.linalg.Tensor[K,Double],Q,R]extendsSerializable"></a>
+      <a id="Optimizer[K,P&lt;:Tensor[K,Double],Q,R]:Optimizer[K,P,Q,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Optimizer.html"><span class="name">Optimizer</span></a><span class="tparams">[<span name="T">T</span>, <span name="K">K</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q</span>, <span name="R">R</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Optimizer.html"><span class="name">Optimizer</span></a><span class="tparams">[<span name="K">K</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q</span>, <span name="R">R</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Trait for optimization problem solvers.</p>

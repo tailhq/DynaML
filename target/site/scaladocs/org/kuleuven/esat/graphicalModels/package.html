@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>graphicalModels - bayesLearn 0.1 API - org.kuleuven.esat.graphicalModels</title>
-          <meta name="description" content="graphicalModels - bayesLearn 0.1 API - org.kuleuven.esat.graphicalModels" />
-          <meta name="keywords" content="graphicalModels bayesLearn 0.1 API org.kuleuven.esat.graphicalModels" />
+          <title>graphicalModels - Bayes Learn 1.0-SNAPSHOT API - org.kuleuven.esat.graphicalModels</title>
+          <meta name="description" content="graphicalModels - Bayes Learn 1.0 - SNAPSHOT API - org.kuleuven.esat.graphicalModels" />
+          <meta name="keywords" content="graphicalModels Bayes Learn 1.0 SNAPSHOT API org.kuleuven.esat.graphicalModels" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -89,6 +89,33 @@ and returns the appropriate <span class="extype" name="Metrics">Metrics</span> o
       </h4>
       <p class="comment cmt">Basic Higher Level abstraction
 for graphical models.</p>
+    </li><li name="org.kuleuven.esat.graphicalModels.KernelBayesianModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelBayesianModelextendsLinearModel[com.tinkerpop.blueprints.Graph,Int,Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double]withKernelizedModel[breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]"></a>
+      <a id="KernelBayesianModel:KernelBayesianModel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelBayesianModel.html"><span class="name">KernelBayesianModel</span></a><span class="result"> extends <a href="LinearModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel">LinearModel</a>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>] with <a href="KernelizedModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel">KernelizedModel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Abstract class implementing kernel feature map
+extraction functions.</p>
+    </li><li name="org.kuleuven.esat.graphicalModels.KernelizedModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelizedModel[T&lt;:breeze.linalg.Tensor[K1,Double],Q&lt;:breeze.linalg.Tensor[K2,Double],R,K1,K2]extendsLinearModel[com.tinkerpop.blueprints.Graph,K1,K2,T,Q,R]"></a>
+      <a id="KernelizedModel[T&lt;:Tensor[K1,Double],Q&lt;:Tensor[K2,Double],R,K1,K2]:KernelizedModel[T,Q,R,K1,K2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelizedModel.html"><span class="name">KernelizedModel</span></a><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel.K1">K1</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel.K2">K2</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="R">R</span>, <span name="K1">K1</span>, <span name="K2">K2</span>]</span><span class="result"> extends <a href="LinearModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel">LinearModel</a>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel.K2">K2</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel.T">T</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel.R">R</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="org.kuleuven.esat.graphicalModels.LinearModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="LinearModel[T,K1,K2,P&lt;:breeze.linalg.Tensor[K1,Double],Q&lt;:breeze.linalg.Tensor[K2,Double],R]extendsGraphicalModel[T]withParameterizedLearner[T,K1,K2,P,Q,R]withEvaluableModel[P,R]"></a>
       <a id="LinearModel[T,K1,K2,P&lt;:Tensor[K1,Double],Q&lt;:Tensor[K2,Double],R]:LinearModel[T,K1,K2,P,Q,R]"></a>
@@ -133,6 +160,19 @@ Generalized Linear Model.</p>
       </span>
       <span class="symbol">
         <a href="GaussianLinearModel$.html"><span class="name">GaussianLinearModel</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="org.kuleuven.esat.graphicalModels.KernelBayesianModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KernelBayesianModel"></a>
+      <a id="KernelBayesianModel:KernelBayesianModel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelBayesianModel$.html"><span class="name">KernelBayesianModel</span></a>
       </span>
       </h4>
       
