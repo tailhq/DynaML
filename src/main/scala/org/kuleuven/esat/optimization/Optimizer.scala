@@ -2,6 +2,7 @@ package org.kuleuven.esat.optimization
 
 import breeze.linalg.{Tensor}
 import com.tinkerpop.blueprints.Edge
+import com.tinkerpop.frames.EdgeFrame
 
 /**
  * Trait for optimization problem solvers.
@@ -11,8 +12,10 @@ import com.tinkerpop.blueprints.Edge
  * @tparam P The type of the parameters of the model to be optimized.
  * @tparam Q The type of the predictor variable
  * @tparam R The type of the target variable
+ * @tparam S The type of the edge containing the
+ *           features and label.
  */
-trait Optimizer[K, P <: Tensor[K, Double], Q, R] extends Serializable {
+trait Optimizer[K, P <: Tensor[K, Double], Q, R, S] extends Serializable {
 
   protected var numIterations: Int = 100
 
@@ -24,8 +27,7 @@ trait Optimizer[K, P <: Tensor[K, Double], Q, R] extends Serializable {
    * Solve the convex optimization problem.
    */
   def optimize(nPoints: Int, initialP: P,
-               ParamOutEdges: java.lang.Iterable[Edge],
-               xy: (Edge) => (Q, R)): P
+               ParamOutEdges: java.lang.Iterable[S]): P
 
   /**
    * Set fraction of data to be used for each SGD iteration.

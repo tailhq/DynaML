@@ -101,6 +101,11 @@
             <version>2.5.0</version>
         </dependency>
         <dependency>
+            <groupId>com.tinkerpop</groupId>
+            <artifactId>frames</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
             <version>2.1.7</version>
@@ -140,6 +145,11 @@
             <groupId>org.scalaforge</groupId>
             <artifactId>scalax</artifactId>
             <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-pickling_2.10</artifactId>
+            <version>0.9.1</version>
         </dependency>
     </dependencies>
     <profiles>

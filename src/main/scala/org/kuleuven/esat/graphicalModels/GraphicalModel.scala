@@ -3,9 +3,14 @@ package org.kuleuven.esat.graphicalModels
 import breeze.linalg._
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.{Graph, Edge}
+import com.tinkerpop.frames.{EdgeFrame, FramedGraph}
 import org.kuleuven.esat.evaluation.Metrics
+import org.kuleuven.esat.graphUtils.{CausalEdge, Point}
 import org.kuleuven.esat.kernels.SVMKernel
 import org.kuleuven.esat.optimization.Optimizer
+import scala.pickling._
+import binary._
+import scala.collection.mutable
 
 
 /**
@@ -27,12 +32,15 @@ trait GraphicalModel[T] {
  * @tparam Q A Vector/Matrix representing the features of a point
  * @tparam R The type of the output of the predictive model
  *           i.e. A Real Number or a Vector of outputs.
+ * @tparam S The type of the edge containing the
+ *           features and label.
  *
  * */
-trait ParameterizedLearner[G, K, K2, T <: Tensor[K, Double], Q <: Tensor[K2, Double], R]
+trait ParameterizedLearner[G, K, K2, T <: Tensor[K, Double],
+Q <: Tensor[K2, Double], R, S]
   extends GraphicalModel[G] {
   protected var params: T
-  protected val optimizer: Optimizer[K, T, Q, R]
+  protected val optimizer: Optimizer[K, T, Q, R, S]
   protected val nPoints: Int
   def npoints = nPoints
   /**
@@ -42,10 +50,7 @@ trait ParameterizedLearner[G, K, K2, T <: Tensor[K, Double], Q <: Tensor[K2, Dou
    * graph.
    *
    * */
-  def learn(): Unit = {
-    this.params = optimizer.optimize(nPoints, this.params,
-      this.getParamOutEdges(), this.getxyPair)
-  }
+  def learn(): Unit
 
   /**
    * Get the value of the parameters
@@ -56,8 +61,6 @@ trait ParameterizedLearner[G, K, K2, T <: Tensor[K, Double], Q <: Tensor[K2, Dou
   def updateParameters(param: T): Unit = {
     this.params = param
   }
-
-  def getParamOutEdges(): java.lang.Iterable[Edge]
 
   def getxyPair(ed: Edge): (Q, R)
 
@@ -91,12 +94,14 @@ trait ParameterizedLearner[G, K, K2, T <: Tensor[K, Double], Q <: Tensor[K2, Dou
  * @tparam Q A Vector/Matrix representing the features of a point
  * @tparam R The type of the output of the predictive model
  *           i.e. A Real Number or a Vector of outputs.
+ * @tparam S The type of the edge containing the
+ *           features and label.
  * */
 
 abstract class LinearModel[T, K1, K2,
-  P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R]
+  P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, S]
   extends GraphicalModel[T]
-  with ParameterizedLearner[T, K1, K2, P, Q, R]
+  with ParameterizedLearner[T, K1, K2, P, Q, R, S]
   with EvaluableModel[P, R] {
 
   /**
@@ -109,25 +114,6 @@ abstract class LinearModel[T, K1, K2,
 
   def clearParameters(): Unit
 
-  def getPredictors(): List[Q] = {
-    val edges = this.getParamOutEdges.iterator()
-    var res = List[Q]()
-    while(edges.hasNext) {
-      val (features, _) = this.getxyPair(edges.next())
-      res = res.union(List(features))
-    }
-    res
-  }
-
-  def getTargets(): List[R] = {
-    val edges = this.getParamOutEdges.iterator()
-    var res = List[R]()
-    while(edges.hasNext) {
-      val (_, target) = this.getxyPair(edges.next())
-      res = res.union(List(target))
-    }
-    res
-  }
 }
 
 /**
@@ -144,7 +130,7 @@ trait EvaluableModel [P, R]{
 }
 
 trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
-  extends LinearModel[Graph, K1, K2, T, Q, R]{
+  extends LinearModel[FramedGraph[Graph], K1, K2, T, Q, R, CausalEdge[Array[Byte]]]{
 
   /**
    * This variable stores the indexes of the
@@ -158,6 +144,20 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
    * to an identity map.
    * */
   var featureMap: (List[Q]) => List[Q] = (x) => x
+
+  protected val vertexMaps: (mutable.HashMap[String, AnyRef],
+    mutable.HashMap[Int, AnyRef],
+    mutable.HashMap[Int, AnyRef])
+
+  protected val edgeMaps: (mutable.HashMap[Int, AnyRef],
+    mutable.HashMap[Int, AnyRef])
+
+  def getXYEdges(): java.lang.Iterable[CausalEdge[Array[Byte]]]
+
+  override def learn(): Unit = {
+    this.params = optimizer.optimize(nPoints, this.params,
+      this.getXYEdges())
+  }
 
   /**
    * Implements the changes in the model
@@ -214,11 +214,5 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
    * @return The list containing all the data points
    *         satisfying the filtering criterion.
    * */
-  def filter(fn : (Int) => Boolean): List[Q] =
-    (1 to nPoints).view.filter(fn).map{
-      i =>
-        this.g.getVertex(("x", i))
-          .getProperty("value")
-          .asInstanceOf[Q]
-    }.toList
+  def filter(fn : (Int) => Boolean): List[Q]
 }

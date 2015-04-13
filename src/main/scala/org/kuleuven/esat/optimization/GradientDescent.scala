@@ -1,8 +1,11 @@
 package org.kuleuven.esat.optimization
 
 import breeze.linalg.DenseVector
-import com.tinkerpop.blueprints.{Edge}
 import org.apache.log4j.{Logger, Priority}
+import org.kuleuven.esat.graphUtils.CausalEdge
+import scala.pickling._
+import binary._
+
 
 /**
  * Implements Gradient Descent on the graph
@@ -10,7 +13,8 @@ import org.apache.log4j.{Logger, Priority}
  * values of the model parameters.
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
-  extends Optimizer[Int, DenseVector[Double], DenseVector[Double], Double]{
+  extends Optimizer[Int, DenseVector[Double],
+    DenseVector[Double], Double, CausalEdge[Array[Byte]]]{
 
   private var regParam: Double = 1.0
 
@@ -52,9 +56,6 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    * @param ParamOutEdges An [[java.lang.Iterable]] object
    *                      having all of the out edges of the
    *                      parameter node
-   * @param xy A function which takes an edge and returns a
-   *           [[Tuple2]] of the form (x, y), x being the
-   *           predictor vector and y being the target.
    *
    * @return The value of the parameters as a [[DenseVector]]
    *
@@ -63,8 +64,7 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
   override def optimize(
       nPoints: Int,
       initialP: DenseVector[Double],
-      ParamOutEdges: java.lang.Iterable[Edge],
-      xy: (Edge) => (DenseVector[Double], Double)): DenseVector[Double] =
+      ParamOutEdges: java.lang.Iterable[CausalEdge[Array[Byte]]]): DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
         nPoints,
@@ -74,8 +74,7 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
         this.gradient,
         this.stepSize,
         initialP,
-        ParamOutEdges,
-        xy
+        ParamOutEdges
       )
     } else {
       GradientDescent.runBatchSGD(
@@ -87,7 +86,6 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
         this.stepSize,
         initialP,
         ParamOutEdges,
-        xy,
         this.miniBatchFraction
       )
     }
@@ -106,8 +104,7 @@ object GradientDescent {
       gradient: Gradient,
       stepSize: Double,
       initial: DenseVector[Double],
-      POutEdges: java.lang.Iterable[Edge],
-      xy: (Edge) => (DenseVector[Double], Double)): DenseVector[Double] = {
+      POutEdges: java.lang.Iterable[CausalEdge[Array[Byte]]]): DenseVector[Double] = {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
@@ -116,7 +113,10 @@ object GradientDescent {
     while(count <= numIterations) {
       val targets = POutEdges.iterator()
       while (targets.hasNext) {
-        val (x, y) = xy(targets.next())
+        val ed = targets.next()
+        val xarr = ed.getPoint().getFeatureMap().unpickle[Array[Double]]
+        val x = DenseVector(xarr)
+        val y = ed.getLabel().getValue()
         gradient.compute(x, y, oldW, cumGradient)
       }
       newW = updater.compute(oldW, cumGradient,
@@ -135,8 +135,7 @@ object GradientDescent {
       gradient: Gradient,
       stepSize: Double,
       initial: DenseVector[Double],
-      POutEdges: java.lang.Iterable[Edge],
-      xy: (Edge) => (DenseVector[Double], Double),
+      POutEdges: java.lang.Iterable[CausalEdge[Array[Byte]]],
       miniBatchFraction: Double): DenseVector[Double] = {
     var count = 1
     var oldW: DenseVector[Double] = initial
@@ -147,7 +146,9 @@ object GradientDescent {
       val targets = POutEdges.iterator()
       while (targets.hasNext) {
         if(scala.util.Random.nextDouble() <= miniBatchFraction) {
-          val (x, y) = xy(targets.next())
+          val ed = targets.next()
+          val x = DenseVector(ed.getPoint().getFeatureMap().unpickle[Array[Double]])
+          val y = ed.getLabel().getValue()
           gradient.compute(x, y, oldW, cumGradient)
         }
       }
