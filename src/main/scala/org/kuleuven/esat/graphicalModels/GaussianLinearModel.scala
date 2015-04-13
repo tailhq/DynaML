@@ -2,14 +2,18 @@ package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.DenseVector
 import com.github.tototoshi.csv.CSVReader
-import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph
-import com.tinkerpop.blueprints.{Graph, Direction, Edge}
-import com.tinkerpop.blueprints.impls.tg.TinkerGraphFactory
+import com.tinkerpop.blueprints.{GraphFactory, Graph, Direction, Edge}
+import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
 import com.tinkerpop.gremlin.scala.{ScalaEdge, ScalaVertex}
 import com.typesafe.config.ConfigFactory
 import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.optimization._
+import scala.collection.mutable
+import scala.pickling._
+import binary._
+import collection.JavaConversions._
+import org.kuleuven.esat.graphUtils._
 
 /**
  * Linear Model with conditional probability
@@ -21,16 +25,21 @@ import org.kuleuven.esat.optimization._
  */
 
 private[esat] class GaussianLinearModel(
-    override protected val g: Graph,
+    override protected val g: FramedGraph[Graph],
     override protected val nPoints: Int,
     override protected val featuredims: Int,
+    override protected val vertexMaps: (mutable.HashMap[String, AnyRef],
+        mutable.HashMap[Int, AnyRef],
+        mutable.HashMap[Int, AnyRef]),
+    override protected val edgeMaps: (mutable.HashMap[Int, AnyRef],
+      mutable.HashMap[Int, AnyRef]),
     override implicit protected val task: String)
   extends KernelBayesianModel {
 
   override protected val logger = Logger.getLogger(this.getClass)
 
   override implicit protected var params =
-    g.getVertex("w").getProperty("slope").asInstanceOf[DenseVector[Double]]
+    DenseVector.ones[Double](featuredims)
 
   override protected val optimizer = GaussianLinearModel.getOptimizer(task)
 
@@ -41,8 +50,6 @@ private[esat] class GaussianLinearModel(
     case "classification" => math.signum(this.score(point))
     case "regression" => this.score(point)
   }
-
-  override def getParamOutEdges() = this.g.getVertex("w").getEdges(Direction.OUT)
 
   override def getxyPair(ed: Edge): (DenseVector[Double], Double) = {
     val edge = ScalaEdge.wrap(ed)
@@ -63,6 +70,7 @@ private[esat] class GaussianLinearModel(
 }
 
 object GaussianLinearModel {
+  val manager: FramedGraphFactory = new FramedGraphFactory
   val conf = ConfigFactory.load("conf/bayesLearn.conf")
   val logger = Logger.getLogger(this.getClass)
 
@@ -130,14 +138,15 @@ object GaussianLinearModel {
     Metrics(task)(scoresAndLabels)
   }
 
-  @throws(classOf[Exception])
-  def apply(db: String, task: String): GaussianLinearModel = {
-    val g = new Neo4j2Graph(conf.getConfig("properties.db").getString("data.root")+db)
-    new GaussianLinearModel(g, 100, 10, task)
-  }
-
-  def apply(reader: CSVReader, head: Boolean, task: String): GaussianLinearModel = {
-    val g = TinkerGraphFactory.createTinkerGraph()
+    def apply(reader: CSVReader, head: Boolean, task: String): GaussianLinearModel = {
+    val graphconfig = Map("blueprints.graph" -> "com.tinkerpop.blueprints.impls.tg.TinkerGraph")
+    val wMap: mutable.HashMap[String, AnyRef] = mutable.HashMap()
+    val xMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
+    val yMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
+    val ceMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
+    val peMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
+    val g = GraphFactory.open(mapAsJavaMap(graphconfig))
+    val fg = manager.create(g)
     val lines = reader.iterator
     var index = 1
     var dim = 0
@@ -146,7 +155,10 @@ object GaussianLinearModel {
     }
 
     logger.log(Priority.INFO, "Creating graph for data set.")
-    g.addVertex("w").setProperty("variable", "parameter")
+    //g.addVertex("w").setProperty("variable", "parameter")
+    val pnode:Parameter[Array[Byte]] = fg.addVertex(null, classOf[Parameter[Array[Byte]]])
+    pnode.setSlope(Array.fill[Double](dim)(1.0).pickle.value)
+    wMap.put("w", pnode.asVertex().getId)
 
     while (lines.hasNext) {
       //Parse line and extract features
@@ -166,29 +178,34 @@ object GaussianLinearModel {
       * append to them their values
       * properties, etc
       * */
-      g.addVertex(("x", index)).setProperty("value", xv)
-      g.getVertex(("x", index)).setProperty("featureMap", xv)
-      g.getVertex(("x", index)).setProperty("variable", "data")
+      val xnode: Point[Array[Byte]] = fg.addVertex(("x", index), classOf[Point[Array[Byte]]])
+      xnode.setValue(xv.toArray.pickle.value)
+      xnode.setFeatureMap(xv.toArray.pickle.value)
+      xMap.put(index, xnode.asVertex().getId)
 
-      g.addVertex(("y", index)).setProperty("value", yv)
-      g.getVertex(("y", index)).setProperty("variable", "target")
+      val ynode: Label[Array[Byte]] = fg.addVertex(("y", index), classOf[Label[Array[Byte]]])
+      ynode.setValue(yv)
+      yMap.put(index, ynode.asVertex().getId)
 
       //Add edge between xi and yi
-      g.addEdge((("x", index), ("y", index)),
-        g.getVertex(("x", index)), g.getVertex(("y", index)),
-        "causes")
+      val ceEdge: CausalEdge[Array[Byte]] = fg.addEdge((1, index), xnode.asVertex(),
+        ynode.asVertex(), "causes",
+        classOf[CausalEdge[Array[Byte]]])
+      ceEdge.setRelation("causal")
+      ceMap.put(index, ceEdge.asEdge().getId)
 
       //Add edge between w and y_i
-      g.addEdge(("w", ("y", index)), g.getVertex("w"),
-        g.getVertex(("y", index)),
-        "controls")
+      val peEdge: ParamEdge[Array[Byte]] = fg.addEdge((2, index), pnode.asVertex(),
+        ynode.asVertex(), "controls", classOf[ParamEdge[Array[Byte]]])
+      peMap.put(index, peEdge.asEdge().getId)
 
       index += 1
     }
 
-    g.getVertex("w").setProperty("slope", DenseVector.ones[Double](dim))
-
+    //g.getVertex("w").setProperty("slope", Array.fill[Double](dim)(1.0).pickle.value)
+    val vMaps = (wMap, xMap, yMap)
+    val eMaps = (ceMap, peMap)
     logger.log(Priority.INFO, "Graph constructed, now building model object.")
-    new GaussianLinearModel(g, index-1, dim, task)
+    new GaussianLinearModel(fg, index-1, dim, vMaps, eMaps, task)
   }
 }
