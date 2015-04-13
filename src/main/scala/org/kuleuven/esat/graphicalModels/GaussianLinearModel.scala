@@ -155,7 +155,6 @@ object GaussianLinearModel {
     }
 
     logger.log(Priority.INFO, "Creating graph for data set.")
-    //g.addVertex("w").setProperty("variable", "parameter")
     val pnode:Parameter[Array[Byte]] = fg.addVertex(null, classOf[Parameter[Array[Byte]]])
     pnode.setSlope(Array.fill[Double](dim)(1.0).pickle.value)
     wMap.put("w", pnode.asVertex().getId)
@@ -202,7 +201,6 @@ object GaussianLinearModel {
       index += 1
     }
 
-    //g.getVertex("w").setProperty("slope", Array.fill[Double](dim)(1.0).pickle.value)
     val vMaps = (wMap, xMap, yMap)
     val eMaps = (ceMap, peMap)
     logger.log(Priority.INFO, "Graph constructed, now building model object.")

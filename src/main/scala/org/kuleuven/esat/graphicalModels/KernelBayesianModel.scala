@@ -53,7 +53,8 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
   override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
     (1 to nPoints).view.filter(fn).map{
       i => {
-        val point: Point[Array[Byte]] = this.g.getVertex(vertexMaps._2(i), classOf[Point[Array[Byte]]])
+        val point: Point[Array[Byte]] = this.g.getVertex(vertexMaps._2(i),
+          classOf[Point[Array[Byte]]])
         DenseVector(point.getValue().unpickle[Array[Double]])
       }
     }.toList
@@ -94,7 +95,8 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
   override def applyFeatureMap(): Unit = {
     logger.log(Priority.INFO, "Applying Feature map to data set")
     val edges = this.getXYEdges().iterator()
-    val pnode:Parameter[Array[Byte]] = this.g.getVertex(this.vertexMaps._1("w"), classOf[Parameter[Array[Byte]]])
+    val pnode:Parameter[Array[Byte]] = this.g.getVertex(this.vertexMaps._1("w"),
+      classOf[Parameter[Array[Byte]]])
     pnode.setSlope(this.params.toArray.pickle.value)
     while (edges.hasNext) {
       //Get the predictor vertex corresponding to the edge
@@ -163,7 +165,8 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       val xnode = outEdge.getPoint()
       xnode.setFeatureMap(xnode.getValue())
     }
-    val paramNode: Parameter[Array[Byte]] = this.g.getVertex(vertexMaps._1("w"), classOf[Parameter[Array[Byte]]])
+    val paramNode: Parameter[Array[Byte]] = this.g.getVertex(vertexMaps._1("w"),
+      classOf[Parameter[Array[Byte]]])
     paramNode.setSlope(this.params.toArray.pickle.value)
   }
 
@@ -187,12 +190,14 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       })
 
       val training_data = train.map((p) => {
-        val ed: CausalEdge[Array[Byte]] = this.g.getEdge(this.edgeMaps._1(p), classOf[CausalEdge[Array[Byte]]])
+        val ed: CausalEdge[Array[Byte]] = this.g.getEdge(this.edgeMaps._1(p),
+          classOf[CausalEdge[Array[Byte]]])
         ed
       }).view.toIterable
 
       val test_data = test.map((p) => {
-        val ed: CausalEdge[Array[Byte]] = this.g.getEdge(this.edgeMaps._1(p), classOf[CausalEdge[Array[Byte]]])
+        val ed: CausalEdge[Array[Byte]] = this.g.getEdge(this.edgeMaps._1(p),
+          classOf[CausalEdge[Array[Byte]]])
         ed
       }).view.toIterable
 
