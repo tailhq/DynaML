@@ -68,7 +68,8 @@ The `data/` directory contains a few sample data sets, we will be using them in 
 * First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.
 
 ```scala
-  val model = GaussianLinearModel(utils.getCSVReader("data/ionosphere.csv", ','), false, "classification")
+	val config = Map("file" -> "data/ionosphere.csv", "delim" -> ",", "head" -> "false", "task" -> "classification")
+	val model = GaussianLinearModel(config)
 ```
 
 * We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model.
@@ -114,8 +115,9 @@ WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefL
 * Evaluating models is easy in BayesLearn. You can create an evaluation object as follows. 
 
 ```scala
-  val met = model.evaluate(utils.getCSVReader("data/ionosphereTest.csv", ','), false)
-  met.print
+	val configtest = Map("file" -> "data/ionosphereTest.csv", "delim" -> ",", "head" -> "false")
+	val met = model.evaluate(configtest)
+	met.print
 ```
 
 * The object `met` has a `print()` method which will dump some performance metrics in the shell. But you can also generate plots by using the `generatePlots()` method.

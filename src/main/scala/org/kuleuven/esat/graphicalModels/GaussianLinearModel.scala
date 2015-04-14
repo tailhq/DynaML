@@ -9,6 +9,7 @@ import com.typesafe.config.ConfigFactory
 import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.optimization._
+import org.kuleuven.esat.utils
 import scala.collection.mutable
 import scala.pickling._
 import binary._
@@ -24,7 +25,7 @@ import org.kuleuven.esat.graphUtils._
  * as a means for L2 regularization.
  */
 
-private[esat] class GaussianLinearModel(
+class GaussianLinearModel(
     override protected val g: FramedGraph[Graph],
     override protected val nPoints: Int,
     override protected val featuredims: Int,
@@ -61,8 +62,20 @@ private[esat] class GaussianLinearModel(
     (x, y)
   }
 
-  override def evaluate(reader: CSVReader, head: Boolean): Metrics[Double] =
-    GaussianLinearModel.evaluate(this.featureMap)(this.params)(reader, head)
+  override def evaluate(config: Map[String, String]): Metrics[Double] = {
+    val file: String = config("file")
+    val delim: Char = config("delim").toCharArray()(0)
+    val head: Boolean = config("head") match {
+      case "true" => true
+      case "True" => true
+      case "false" => false
+      case "False" => false
+    }
+
+    GaussianLinearModel.evaluate(this.featureMap)(this.params)(
+      utils.getCSVReader(file, delim), head
+    )
+  }
 
   override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
     super.filter(fn).map((p) => p(0 to featuredims - 2))
@@ -101,7 +114,7 @@ object GaussianLinearModel {
   def score(params: DenseVector[Double])
            (point: DenseVector[Double]): Double =
     params(0 to params.length-2) dot point +
-    params(params.length-1)
+      params(params.length-1)
 
   /**
    * The actual implementation of the evaluate
@@ -138,18 +151,36 @@ object GaussianLinearModel {
     Metrics(task)(scoresAndLabels)
   }
 
-    def apply(reader: CSVReader, head: Boolean, task: String): GaussianLinearModel = {
+  def apply(implicit config: Map[String, String]): GaussianLinearModel = {
+
+    val file: String = config("file")
+    val delim: Char = config("delim").toCharArray()(0)
+
+    val head: Boolean = config("head") match {
+      case "true" => true
+      case "True" => true
+      case "false" => false
+      case "False" => false
+    }
+
+    val task: String = config("task")
+    val reader = utils.getCSVReader(file, delim)
+
     val graphconfig = Map("blueprints.graph" -> "com.tinkerpop.blueprints.impls.tg.TinkerGraph")
+
     val wMap: mutable.HashMap[String, AnyRef] = mutable.HashMap()
     val xMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
     val yMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
     val ceMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
     val peMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
+
     val g = GraphFactory.open(mapAsJavaMap(graphconfig))
     val fg = manager.create(g)
     val lines = reader.iterator
+
     var index = 1
     var dim = 0
+
     if(head) {
       dim = lines.next().length
     }

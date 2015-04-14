@@ -251,10 +251,6 @@
                             <repositoryLayout>flat</repositoryLayout>
                             <programs>
                                 <program>
-                                    <name>run-App</name>
-                                    <mainClass>org.kuleuven.esat.App</mainClass>
-                                </program>
-                                <program>
                                     <name>bayesLearn-repl</name>
                                     <mainClass>org.kuleuven.esat.bayesLearn</mainClass>
                                 </program>

@@ -126,7 +126,7 @@ abstract class LinearModel[T, K1, K2,
  * @tparam R The type of the output value
  * */
 trait EvaluableModel [P, R]{
-  def evaluate(reader: CSVReader, head: Boolean): Metrics[R]
+  def evaluate(config: Map[String, String]): Metrics[R]
 }
 
 trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
@@ -152,7 +152,7 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
   protected val edgeMaps: (mutable.HashMap[Int, AnyRef],
     mutable.HashMap[Int, AnyRef])
 
-  def getXYEdges(): java.lang.Iterable[CausalEdge[Array[Byte]]]
+  def getXYEdges(): Iterable[CausalEdge[Array[Byte]]]
 
   override def learn(): Unit = {
     this.params = optimizer.optimize(nPoints, this.params,

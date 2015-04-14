@@ -47,8 +47,8 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
     this
   }
 
-  override def getXYEdges() = this.g.getEdges("relation", "causal",
-    classOf[CausalEdge[Array[Byte]]])
+  override def getXYEdges() = JavaConversions.iterableAsScalaIterable(this.g.getEdges("relation", "causal",
+    classOf[CausalEdge[Array[Byte]]]))
 
   override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
     (1 to nPoints).view.filter(fn).map{
@@ -94,13 +94,13 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
 
   override def applyFeatureMap(): Unit = {
     logger.log(Priority.INFO, "Applying Feature map to data set")
-    val edges = this.getXYEdges().iterator()
+    val edges = this.getXYEdges()
     val pnode:Parameter[Array[Byte]] = this.g.getVertex(this.vertexMaps._1("w"),
       classOf[Parameter[Array[Byte]]])
     pnode.setSlope(this.params.toArray.pickle.value)
-    while (edges.hasNext) {
+    edges.foreach((edge) => {
       //Get the predictor vertex corresponding to the edge
-      val vertex: Point[Array[Byte]] = edges.next().getPoint()
+      val vertex: Point[Array[Byte]] = edge.getPoint()
 
       //Get the original features of the point
       val featurex = DenseVector(vertex.getValue().unpickle[Array[Double]])
@@ -110,7 +110,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(Array(1.0)))
       //Set a new property in the vertex corresponding to the mapped features
       vertex.setFeatureMap(newFeatures.toArray.pickle.value)
-    }
+    })
     logger.log(Priority.INFO, "DONE: Applying Feature map to data set")
   }
 
@@ -158,13 +158,12 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
   override def clearParameters(): Unit = {
     this.params = DenseVector.ones[Double](this.featuredims)
     this.featureMap = (x) => x
-    val it = this.getXYEdges().iterator()
-    while(it.hasNext) {
-      val outEdge = it.next()
+    val it = this.getXYEdges()
+    it.foreach((outEdge) => {
       val ynode = outEdge.getLabel()
       val xnode = outEdge.getPoint()
       xnode.setFeatureMap(xnode.getValue())
-    }
+    })
     val paramNode: Parameter[Array[Byte]] = this.g.getVertex(vertexMaps._1("w"),
       classOf[Parameter[Array[Byte]]])
     paramNode.setSlope(this.params.toArray.pickle.value)
@@ -204,7 +203,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       logger.log(Priority.INFO, "Gradient Descent for fold: "+a)
       val tempparams = this.optimizer.optimize((folds-1/folds)*this.npoints,
         this.params,
-        JavaConversions.asJavaIterable(training_data))
+        training_data)
       logger.log(Priority.INFO, "Parameters Learned")
       logger.log(Priority.INFO, "Evaluating metrics for fold: "+a)
       val metrics = KernelBayesianModel.evaluate(tempparams)(test_data)(this.task)
