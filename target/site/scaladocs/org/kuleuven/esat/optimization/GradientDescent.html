@@ -35,7 +35,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">GradientDescent</span><span class="result"> extends <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">GradientDescent</span><span class="result"> extends <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../graphUtils/CausalEdge.html" class="extype" name="org.kuleuven.esat.graphUtils.CausalEdge">CausalEdge</a>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]]]</span>
       </span>
       </h4>
       
@@ -44,7 +44,7 @@ generated to calculate approximate optimal
 values of the model parameters.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../graphUtils/CausalEdge.html" class="extype" name="org.kuleuven.esat.graphUtils.CausalEdge">CausalEdge</a>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]]], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -351,15 +351,15 @@ values of the model parameters.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="org.kuleuven.esat.optimization.GradientDescent#optimize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="optimize(nPoints:Int,initialP:breeze.linalg.DenseVector[Double],ParamOutEdges:Iterable[com.tinkerpop.blueprints.Edge],xy:com.tinkerpop.blueprints.Edge=&gt;(breeze.linalg.DenseVector[Double],Double)):breeze.linalg.DenseVector[Double]"></a>
-      <a id="optimize(Int,DenseVector[Double],Iterable[Edge],(Edge)⇒(DenseVector[Double],Double)):DenseVector[Double]"></a>
+      <a id="optimize(nPoints:Int,initialP:breeze.linalg.DenseVector[Double],ParamOutEdges:Iterable[org.kuleuven.esat.graphUtils.CausalEdge[Array[Byte]]]):breeze.linalg.DenseVector[Double]"></a>
+      <a id="optimize(Int,DenseVector[Double],Iterable[CausalEdge[Array[Byte]]]):DenseVector[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="initialP">initialP: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="ParamOutEdges">ParamOutEdges: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>]</span>, <span name="xy">xy: (<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>) ⇒ (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="initialP">initialP: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="ParamOutEdges">ParamOutEdges: <a href="../../../../scala/package.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[<a href="../graphUtils/CausalEdge.html" class="extype" name="org.kuleuven.esat.graphUtils.CausalEdge">CausalEdge</a>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]]]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Find the optimum value of the parameters using
@@ -368,9 +368,7 @@ Gradient Descent.
 </p></div><dl class="paramcmts block"><dt class="param">nPoints</dt><dd class="cmt"><p>The number of data points</p></dd><dt class="param">initialP</dt><dd class="cmt"><p>The initial value of the parameters
                 as a <span class="extype" name="DenseVector">DenseVector</span></p></dd><dt class="param">ParamOutEdges</dt><dd class="cmt"><p>An <span class="extype" name="java.lang.Iterable">java.lang.Iterable</span> object
                      having all of the out edges of the
-                     parameter node</p></dd><dt class="param">xy</dt><dd class="cmt"><p>A function which takes an edge and returns a
-          <span class="extype" name="Tuple2">Tuple2</span> of the form (x, y), x being the
-          predictor vector and y being the target.
+                     parameter node
 </p></dd><dt>returns</dt><dd class="cmt"><p>The value of the parameters as a <span class="extype" name="DenseVector">DenseVector</span></p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.kuleuven.esat.optimization.GradientDescent">GradientDescent</a> → <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="org.kuleuven.esat.optimization.GradientDescent#setGradient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="setGradient(gradient:org.kuleuven.esat.optimization.Gradient):GradientDescent.this.type"></a>
@@ -566,7 +564,7 @@ and therefore determines what kind or regularization is used, if any.
 
         <div id="inheritedMembers">
         <div class="parent" name="org.kuleuven.esat.optimization.Optimizer">
-              <h3>Inherited from <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</h3>
+              <h3>Inherited from <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../graphUtils/CausalEdge.html" class="extype" name="org.kuleuven.esat.graphUtils.CausalEdge">CausalEdge</a>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]]]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">

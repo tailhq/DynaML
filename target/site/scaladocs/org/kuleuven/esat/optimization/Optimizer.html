@@ -35,13 +35,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Optimizer</span><span class="tparams">[<span name="K">K</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q</span>, <span name="R">R</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Optimizer</span><span class="tparams">[<span name="K">K</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="S">S</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Trait for optimization problem solvers.
 </p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>The type indexing the Parameter vector, should be Int in
-          most cases.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the parameters of the model to be optimized.</p></dd><dt class="tparam">Q</dt><dd class="cmt"><p>The type of the predictor variable</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of the target variable
+          most cases.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the parameters of the model to be optimized.</p></dd><dt class="tparam">Q</dt><dd class="cmt"><p>The type of the predictor variable</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of the target variable</p></dd><dt class="tparam">S</dt><dd class="cmt"><p>The type of the edge containing the
+          features and label.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
@@ -90,15 +91,15 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="org.kuleuven.esat.optimization.Optimizer#optimize" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="optimize(nPoints:Int,initialP:P,ParamOutEdges:Iterable[com.tinkerpop.blueprints.Edge],xy:com.tinkerpop.blueprints.Edge=&gt;(Q,R)):P"></a>
-      <a id="optimize(Int,P,Iterable[Edge],(Edge)⇒(Q,R)):P"></a>
+      <a id="optimize(nPoints:Int,initialP:P,ParamOutEdges:Iterable[S]):P"></a>
+      <a id="optimize(Int,P,Iterable[S]):P"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="initialP">initialP: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.P">P</span></span>, <span name="ParamOutEdges">ParamOutEdges: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>]</span>, <span name="xy">xy: (<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>) ⇒ (<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.R">R</span>)</span>)</span><span class="result">: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.P">P</span></span>
+        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="initialP">initialP: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.P">P</span></span>, <span name="ParamOutEdges">ParamOutEdges: <a href="../../../../scala/package.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.S">S</span>]</span>)</span><span class="result">: <span class="extype" name="org.kuleuven.esat.optimization.Optimizer.P">P</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Solve the convex optimization problem.</p>

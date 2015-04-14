@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>GaussianLinearModel - Bayes Learn 1.0-SNAPSHOT API - org.kuleuven.esat.graphicalModels.GaussianLinearModel</title>
-          <meta name="description" content="GaussianLinearModel - Bayes Learn 1.0 - SNAPSHOT API - org.kuleuven.esat.graphicalModels.GaussianLinearModel" />
-          <meta name="keywords" content="GaussianLinearModel Bayes Learn 1.0 SNAPSHOT API org.kuleuven.esat.graphicalModels.GaussianLinearModel" />
+          <title>ParamEdge - Bayes Learn 1.0-SNAPSHOT API - org.kuleuven.esat.graphUtils.ParamEdge</title>
+          <meta name="description" content="ParamEdge - Bayes Learn 1.0 - SNAPSHOT API - org.kuleuven.esat.graphUtils.ParamEdge" />
+          <meta name="keywords" content="ParamEdge Bayes Learn 1.0 SNAPSHOT API org.kuleuven.esat.graphUtils.ParamEdge" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../index.html';
-            var hash = 'org.kuleuven.esat.graphicalModels.GaussianLinearModel$';
+            var hash = 'org.kuleuven.esat.graphUtils.ParamEdge';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -22,26 +22,29 @@
    	  </script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <a href="GaussianLinearModel.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
-        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.kuleuven">kuleuven</a>.<a href="../package.html" class="extype" name="org.kuleuven.esat">esat</a>.<a href="package.html" class="extype" name="org.kuleuven.esat.graphicalModels">graphicalModels</a></p>
-        <h1><a href="GaussianLinearModel.html" title="Go to companion">GaussianLinearModel</a></h1>
+        <img src="../../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.kuleuven">kuleuven</a>.<a href="../package.html" class="extype" name="org.kuleuven.esat">esat</a>.<a href="package.html" class="extype" name="org.kuleuven.esat.graphUtils">graphUtils</a></p>
+        <h1>ParamEdge</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">GaussianLinearModel</span>
+        <span class="name">ParamEdge</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="com.tinkerpop.frames.EdgeFrame">EdgeFrame</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Defines the <span class="extype" name="EdgeFrame">EdgeFrame</span> for the
+edges going out from the parameter
+node.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.tinkerpop.frames.EdgeFrame">EdgeFrame</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -59,7 +62,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.kuleuven.esat.graphicalModels.GaussianLinearModel"><span>GaussianLinearModel</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.kuleuven.esat.graphUtils.ParamEdge"><span>ParamEdge</span></li><li class="in" name="com.tinkerpop.frames.EdgeFrame"><span>EdgeFrame</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,10 +84,58 @@
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="com.tinkerpop.frames.EdgeFrame#asEdge" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="asEdge():com.tinkerpop.blueprints.Edge"></a>
+      <a id="asEdge():Edge"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asEdge</span><span class="params">()</span><span class="result">: <span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EdgeFrame</dd></dl></div>
+    </li><li name="org.kuleuven.esat.graphUtils.ParamEdge#getLabel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="getLabel():org.kuleuven.esat.graphUtils.Label[T]"></a>
+      <a id="getLabel():Label[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getLabel</span><span class="params">()</span><span class="result">: <a href="Label.html" class="extype" name="org.kuleuven.esat.graphUtils.Label">Label</a>[<span class="extype" name="org.kuleuven.esat.graphUtils.ParamEdge.T">T</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@InVertex</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="org.kuleuven.esat.graphUtils.ParamEdge#getParameter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="getParameter():org.kuleuven.esat.graphUtils.Parameter[T]"></a>
+      <a id="getParameter():Parameter[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getParameter</span><span class="params">()</span><span class="result">: <a href="Parameter.html" class="extype" name="org.kuleuven.esat.graphUtils.Parameter">Parameter</a>[<span class="extype" name="org.kuleuven.esat.graphUtils.ParamEdge.T">T</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@OutVertex</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -150,19 +201,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(implicitconfig:Map[String,String]):org.kuleuven.esat.graphicalModels.GaussianLinearModel"></a>
-      <a id="apply(Map[String,String]):GaussianLinearModel"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span class="implicit">implicit </span><span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="GaussianLinearModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GaussianLinearModel">GaussianLinearModel</a></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -195,19 +233,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#conf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="conf:com.typesafe.config.Config"></a>
-      <a id="conf:Config"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">conf</span><span class="result">: <span class="extype" name="com.typesafe.config.Config">Config</span></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -234,20 +259,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#evaluate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="evaluate(featureMap:List[breeze.linalg.DenseVector[Double]]=&gt;List[breeze.linalg.DenseVector[Double]])(params:breeze.linalg.DenseVector[Double])(reader:com.github.tototoshi.csv.CSVReader,head:Boolean)(implicittask:String):org.kuleuven.esat.evaluation.Metrics[Double]"></a>
-      <a id="evaluate((List[DenseVector[Double]])⇒List[DenseVector[Double]])(DenseVector[Double])(CSVReader,Boolean)(String):Metrics[Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">evaluate</span><span class="params">(<span name="featureMap">featureMap: (<a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]) ⇒ <a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="params">(<span name="params">params: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="reader">reader: <span class="extype" name="com.github.tototoshi.csv.CSVReader">CSVReader</span></span>, <span name="head">head: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="task">task: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../evaluation/Metrics.html" class="extype" name="org.kuleuven.esat.evaluation.Metrics">Metrics</a>[<span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">The actual implementation of the evaluate
-feature.</p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -280,22 +291,6 @@ feature.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#getOptimizer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getOptimizer(task:String):org.kuleuven.esat.optimization.GradientDescent"></a>
-      <a id="getOptimizer(String):GradientDescent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getOptimizer</span><span class="params">(<span name="task">task: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../optimization/GradientDescent.html" class="extype" name="org.kuleuven.esat.optimization.GradientDescent">GradientDescent</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Factory method to create the appropriate
-optimization object required for the Gaussian
-model
-</p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -322,32 +317,6 @@ model
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#logger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="logger:org.apache.log4j.Logger"></a>
-      <a id="logger:Logger"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">logger</span><span class="result">: <span class="extype" name="org.apache.log4j.Logger">Logger</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#manager" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="manager:com.tinkerpop.frames.FramedGraphFactory"></a>
-      <a id="manager:FramedGraphFactory"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">manager</span><span class="result">: <span class="extype" name="com.tinkerpop.frames.FramedGraphFactory">FramedGraphFactory</span></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -387,25 +356,6 @@ model
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.GaussianLinearModel#score" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="score(params:breeze.linalg.DenseVector[Double])(point:breeze.linalg.DenseVector[Double]):Double"></a>
-      <a id="score(DenseVector[Double])(DenseVector[Double]):Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">score</span><span class="params">(<span name="params">params: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="point">point: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">A curried function which calculates the predicted
-value of the target variable using the parameters
-and the point in question.</p><div class="fullcomment"><div class="comment cmt"><p>A curried function which calculates the predicted
-value of the target variable using the parameters
-and the point in question.</p><p>This is used for the implementation of the method
-score in <a href="GaussianLinearModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GaussianLinearModel">GaussianLinearModel</a>
-</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -498,7 +448,9 @@ score in <a href="GaussianLinearModel.html" class="extype" name="org.kuleuven.es
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="com.tinkerpop.frames.EdgeFrame">
+              <h3>Inherited from <span class="extype" name="com.tinkerpop.frames.EdgeFrame">EdgeFrame</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

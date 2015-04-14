@@ -35,7 +35,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">LinearModel</span><span class="tparams">[<span name="T">T</span>, <span name="K1">K1</span>, <span name="K2">K2</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K2">K2</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="R">R</span>]</span><span class="result"> extends <a href="GraphicalModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GraphicalModel">GraphicalModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>] with <a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K2">K2</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>] with <a href="EvaluableModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.EvaluableModel">EvaluableModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>]</span>
+        <span class="name">LinearModel</span><span class="tparams">[<span name="T">T</span>, <span name="K1">K1</span>, <span name="K2">K2</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K2">K2</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="R">R</span>, <span name="S">S</span>]</span><span class="result"> extends <a href="GraphicalModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GraphicalModel">GraphicalModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>] with <a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K2">K2</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.S">S</span>] with <a href="EvaluableModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.EvaluableModel">EvaluableModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>]</span>
       </span>
       </h4>
       
@@ -43,13 +43,14 @@
 Generalized Linear Model.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The underlying type of the graph
           ex. Gremlin, Neo4j etc</p></dd><dt class="tparam">K1</dt><dd class="cmt"><p>The type of indexing in the parameters</p></dd><dt class="tparam">K2</dt><dd class="cmt"><p>The type of indexing in the feature space.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>A Vector/Matrix of Doubles indexed using <span class="extype" name="K1">K1</span></p></dd><dt class="tparam">Q</dt><dd class="cmt"><p>A Vector/Matrix representing the features of a point</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of the output of the predictive model
-          i.e. A Real Number or a Vector of outputs.
+          i.e. A Real Number or a Vector of outputs.</p></dd><dt class="tparam">S</dt><dd class="cmt"><p>The type of the edge containing the
+          features and label.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="EvaluableModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.EvaluableModel">EvaluableModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>], <a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K2">K2</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>], <a href="GraphicalModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GraphicalModel">GraphicalModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>], <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="EvaluableModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.EvaluableModel">EvaluableModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>], <a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K2">K2</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.S">S</span>], <a href="GraphicalModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GraphicalModel">GraphicalModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>], <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="KernelBayesianModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelBayesianModel">KernelBayesianModel</a>, <a href="KernelizedModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel">KernelizedModel</a></div>
+          <div class="subClasses hiddenContent"><a href="GaussianLinearModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GaussianLinearModel">GaussianLinearModel</a>, <a href="KernelBayesianModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelBayesianModel">KernelBayesianModel</a>, <a href="KernelizedModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel">KernelizedModel</a></div>
         </div></div>
         
 
@@ -88,8 +89,8 @@ Generalized Linear Model.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.kuleuven.esat.graphicalModels.LinearModel#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():org.kuleuven.esat.graphicalModels.LinearModel[T,K1,K2,P,Q,R]"></a>
-      <a id="&lt;init&gt;:LinearModel[T,K1,K2,P,Q,R]"></a>
+      <a id="&lt;init&gt;():org.kuleuven.esat.graphicalModels.LinearModel[T,K1,K2,P,Q,R,S]"></a>
+      <a id="&lt;init&gt;:LinearModel[T,K1,K2,P,Q,R,S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -121,15 +122,15 @@ Generalized Linear Model.
       </h4>
       
     </li><li name="org.kuleuven.esat.graphicalModels.EvaluableModel#evaluate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="evaluate(reader:com.github.tototoshi.csv.CSVReader,head:Boolean):org.kuleuven.esat.evaluation.Metrics[R]"></a>
-      <a id="evaluate(CSVReader,Boolean):Metrics[R]"></a>
+      <a id="evaluate(config:Map[String,String]):org.kuleuven.esat.evaluation.Metrics[R]"></a>
+      <a id="evaluate(Map[String,String]):Metrics[R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">evaluate</span><span class="params">(<span name="reader">reader: <span class="extype" name="com.github.tototoshi.csv.CSVReader">CSVReader</span></span>, <span name="head">head: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../evaluation/Metrics.html" class="extype" name="org.kuleuven.esat.evaluation.Metrics">Metrics</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>]</span>
+        <span class="name">evaluate</span><span class="params">(<span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="../evaluation/Metrics.html" class="extype" name="org.kuleuven.esat.evaluation.Metrics">Metrics</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="EvaluableModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.EvaluableModel">EvaluableModel</a></dd></dl></div>
@@ -146,19 +147,6 @@ Generalized Linear Model.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GraphicalModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GraphicalModel">GraphicalModel</a></dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.ParameterizedLearner#getParamOutEdges" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="getParamOutEdges():Iterable[com.tinkerpop.blueprints.Edge]"></a>
-      <a id="getParamOutEdges():Iterable[Edge]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getParamOutEdges</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="com.tinkerpop.blueprints.Edge">Edge</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="org.kuleuven.esat.graphicalModels.ParameterizedLearner#getxyPair" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getxyPair(ed:com.tinkerpop.blueprints.Edge):(Q,R)"></a>
       <a id="getxyPair(Edge):(Q,R)"></a>
@@ -172,6 +160,25 @@ Generalized Linear Model.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+    </li><li name="org.kuleuven.esat.graphicalModels.ParameterizedLearner#learn" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="learn():Unit"></a>
+      <a id="learn():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">learn</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Learn the parameters
+of the model which
+are in a node of the
+graph.</p><div class="fullcomment"><div class="comment cmt"><p>Learn the parameters
+of the model which
+are in a node of the
+graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="org.kuleuven.esat.graphicalModels.ParameterizedLearner#nPoints" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="nPoints:Int"></a>
       <a id="nPoints:Int"></a>
@@ -186,15 +193,15 @@ Generalized Linear Model.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="org.kuleuven.esat.graphicalModels.ParameterizedLearner#optimizer" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="optimizer:org.kuleuven.esat.optimization.Optimizer[K,T,Q,R]"></a>
-      <a id="optimizer:Optimizer[K1,P,Q,R]"></a>
+      <a id="optimizer:org.kuleuven.esat.optimization.Optimizer[K,T,Q,R,S]"></a>
+      <a id="optimizer:Optimizer[K1,P,Q,R,S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">optimizer</span><span class="result">: <a href="../optimization/Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>]</span>
+        <span class="name">optimizer</span><span class="result">: <a href="../optimization/Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.S">S</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
@@ -386,32 +393,6 @@ point.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.LinearModel#getPredictors" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getPredictors():List[Q]"></a>
-      <a id="getPredictors():List[Q]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getPredictors</span><span class="params">()</span><span class="result">: <a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>]</span>
-      </span>
-      </h4>
-      
-    </li><li name="org.kuleuven.esat.graphicalModels.LinearModel#getTargets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getTargets():List[R]"></a>
-      <a id="getTargets():List[R]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getTargets</span><span class="params">()</span><span class="result">: <a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>]</span>
-      </span>
-      </h4>
-      
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -438,25 +419,6 @@ point.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.kuleuven.esat.graphicalModels.ParameterizedLearner#learn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="learn():Unit"></a>
-      <a id="learn():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">learn</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Learn the parameters
-of the model which
-are in a node of the
-graph.</p><div class="fullcomment"><div class="comment cmt"><p>Learn the parameters
-of the model which
-are in a node of the
-graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -672,7 +634,7 @@ of the model.
         <div class="parent" name="org.kuleuven.esat.graphicalModels.EvaluableModel">
               <h3>Inherited from <a href="EvaluableModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.EvaluableModel">EvaluableModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>]</h3>
             </div><div class="parent" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">
-              <h3>Inherited from <a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K2">K2</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>]</h3>
+              <h3>Inherited from <a href="ParameterizedLearner.html" class="extype" name="org.kuleuven.esat.graphicalModels.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K1">K1</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.K2">K2</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.P">P</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.Q">Q</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.R">R</span>, <span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.S">S</span>]</h3>
             </div><div class="parent" name="org.kuleuven.esat.graphicalModels.GraphicalModel">
               <h3>Inherited from <a href="GraphicalModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GraphicalModel">GraphicalModel</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel.T">T</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">

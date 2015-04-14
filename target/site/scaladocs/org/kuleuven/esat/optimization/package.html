@@ -85,7 +85,7 @@
       </h4>
       <p class="comment cmt">Class used to compute the gradient for a loss function, given a single data point.</p>
     </li><li name="org.kuleuven.esat.optimization.GradientDescent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GradientDescentextendsOptimizer[Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double]"></a>
+      <a id="GradientDescentextendsOptimizer[Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,org.kuleuven.esat.graphUtils.CausalEdge[Array[Byte]]]"></a>
       <a id="GradientDescent:GradientDescent"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -93,7 +93,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="GradientDescent.html"><span class="name">GradientDescent</span></a><span class="result"> extends <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
+        <a href="GradientDescent.html"><span class="name">GradientDescent</span></a><span class="result"> extends <a href="Optimizer.html" class="extype" name="org.kuleuven.esat.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../graphUtils/CausalEdge.html" class="extype" name="org.kuleuven.esat.graphUtils.CausalEdge">CausalEdge</a>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]]]</span>
       </span>
       </h4>
       <p class="comment cmt">Implements Gradient Descent on the graph
@@ -166,15 +166,15 @@ values of the model parameters.</p>
       <p class="comment cmt">Compute gradient and loss for a logistic loss function,
 as used in binary classification.</p>
     </li><li name="org.kuleuven.esat.optimization.Optimizer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Optimizer[K,P&lt;:breeze.linalg.Tensor[K,Double],Q,R]extendsSerializable"></a>
-      <a id="Optimizer[K,P&lt;:Tensor[K,Double],Q,R]:Optimizer[K,P,Q,R]"></a>
+      <a id="Optimizer[K,P&lt;:breeze.linalg.Tensor[K,Double],Q,R,S]extendsSerializable"></a>
+      <a id="Optimizer[K,P&lt;:Tensor[K,Double],Q,R,S]:Optimizer[K,P,Q,R,S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Optimizer.html"><span class="name">Optimizer</span></a><span class="tparams">[<span name="K">K</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q</span>, <span name="R">R</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Optimizer.html"><span class="name">Optimizer</span></a><span class="tparams">[<span name="K">K</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="org.kuleuven.esat.optimization.Optimizer.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="S">S</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Trait for optimization problem solvers.</p>

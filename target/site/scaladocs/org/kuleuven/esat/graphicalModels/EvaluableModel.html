@@ -49,7 +49,7 @@ and returns the appropriate <span class="extype" name="Metrics">Metrics</span> o
           <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="KernelBayesianModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelBayesianModel">KernelBayesianModel</a>, <a href="KernelizedModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel">KernelizedModel</a>, <a href="LinearModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel">LinearModel</a></div>
+          <div class="subClasses hiddenContent"><a href="GaussianLinearModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.GaussianLinearModel">GaussianLinearModel</a>, <a href="KernelBayesianModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelBayesianModel">KernelBayesianModel</a>, <a href="KernelizedModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.KernelizedModel">KernelizedModel</a>, <a href="LinearModel.html" class="extype" name="org.kuleuven.esat.graphicalModels.LinearModel">LinearModel</a></div>
         </div></div>
         
 
@@ -92,15 +92,15 @@ and returns the appropriate <span class="extype" name="Metrics">Metrics</span> o
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="org.kuleuven.esat.graphicalModels.EvaluableModel#evaluate" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="evaluate(reader:com.github.tototoshi.csv.CSVReader,head:Boolean):org.kuleuven.esat.evaluation.Metrics[R]"></a>
-      <a id="evaluate(CSVReader,Boolean):Metrics[R]"></a>
+      <a id="evaluate(config:Map[String,String]):org.kuleuven.esat.evaluation.Metrics[R]"></a>
+      <a id="evaluate(Map[String,String]):Metrics[R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">evaluate</span><span class="params">(<span name="reader">reader: <span class="extype" name="com.github.tototoshi.csv.CSVReader">CSVReader</span></span>, <span name="head">head: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../evaluation/Metrics.html" class="extype" name="org.kuleuven.esat.evaluation.Metrics">Metrics</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.EvaluableModel.R">R</span>]</span>
+        <span class="name">evaluate</span><span class="params">(<span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="../evaluation/Metrics.html" class="extype" name="org.kuleuven.esat.evaluation.Metrics">Metrics</a>[<span class="extype" name="org.kuleuven.esat.graphicalModels.EvaluableModel.R">R</span>]</span>
       </span>
       </h4>
       
