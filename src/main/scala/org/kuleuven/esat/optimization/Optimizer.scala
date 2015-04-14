@@ -27,7 +27,7 @@ trait Optimizer[K, P <: Tensor[K, Double], Q, R, S] extends Serializable {
    * Solve the convex optimization problem.
    */
   def optimize(nPoints: Int, initialP: P,
-               ParamOutEdges: java.lang.Iterable[S]): P
+               ParamOutEdges: Iterable[S]): P
 
   /**
    * Set fraction of data to be used for each SGD iteration.

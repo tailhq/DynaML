@@ -64,7 +64,7 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
   override def optimize(
       nPoints: Int,
       initialP: DenseVector[Double],
-      ParamOutEdges: java.lang.Iterable[CausalEdge[Array[Byte]]]): DenseVector[Double] =
+      ParamOutEdges: Iterable[CausalEdge[Array[Byte]]]): DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
         nPoints,
@@ -104,21 +104,19 @@ object GradientDescent {
       gradient: Gradient,
       stepSize: Double,
       initial: DenseVector[Double],
-      POutEdges: java.lang.Iterable[CausalEdge[Array[Byte]]]): DenseVector[Double] = {
+      POutEdges: Iterable[CausalEdge[Array[Byte]]]): DenseVector[Double] = {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
     val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
-      val targets = POutEdges.iterator()
-      while (targets.hasNext) {
-        val ed = targets.next()
+      POutEdges.foreach((ed) => {
         val xarr = ed.getPoint().getFeatureMap().unpickle[Array[Double]]
         val x = DenseVector(xarr)
         val y = ed.getLabel().getValue()
         gradient.compute(x, y, oldW, cumGradient)
-      }
+      })
       newW = updater.compute(oldW, cumGradient,
         stepSize, count, regParam)._1
       oldW = newW
@@ -135,7 +133,7 @@ object GradientDescent {
       gradient: Gradient,
       stepSize: Double,
       initial: DenseVector[Double],
-      POutEdges: java.lang.Iterable[CausalEdge[Array[Byte]]],
+      POutEdges: Iterable[CausalEdge[Array[Byte]]],
       miniBatchFraction: Double): DenseVector[Double] = {
     var count = 1
     var oldW: DenseVector[Double] = initial
@@ -143,15 +141,13 @@ object GradientDescent {
     val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
-      val targets = POutEdges.iterator()
-      while (targets.hasNext) {
+      POutEdges.foreach((ed) => {
         if(scala.util.Random.nextDouble() <= miniBatchFraction) {
-          val ed = targets.next()
           val x = DenseVector(ed.getPoint().getFeatureMap().unpickle[Array[Double]])
           val y = ed.getLabel().getValue()
           gradient.compute(x, y, oldW, cumGradient)
         }
-      }
+      })
       newW = updater.compute(oldW, cumGradient,
         stepSize, count, regParam)._1
       oldW = newW
