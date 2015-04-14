@@ -55,7 +55,7 @@
 
 <p>You should get the following prompt.</p>
 
-<pre><code>      ___           ___           ___           ___           ___              
+<pre><code>       ___           ___           ___           ___           ___              
      /\  \         /\  \         |\__\         /\  \         /\  \             
     /::\  \       /::\  \        |:|  |       /::\  \       /::\  \            
    /:/\:\  \     /:/\:\  \       |:|  |      /:/\:\  \     /:/\ \  \           
@@ -83,6 +83,7 @@ Interactive Scala shell
 STADIUS ESAT KU Leuven (2015)
 
 bayeslearn&gt;
+
 </code></pre>
 
 <h1>
@@ -94,7 +95,8 @@ bayeslearn&gt;
 <li>First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.</li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(utils.getCSVReader(<span class="pl-s"><span class="pl-pds">"</span>data/ionosphere.csv<span class="pl-pds">"</span></span>, <span class="pl-c1">','</span>), <span class="pl-c1">false</span>, <span class="pl-s"><span class="pl-pds">"</span>classification<span class="pl-pds">"</span></span>)</pre></div>
+<div class="highlight highlight-scala"><pre>    <span class="pl-k">val</span> <span class="pl-en">config</span> <span class="pl-k">=</span> <span class="pl-en">Map</span>(<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>data/ionosphere.csv<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>delim<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>task<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>classification<span class="pl-pds">"</span></span>)
+    <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(config)</pre></div>
 
 <ul>
 <li>We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model.</li>
@@ -138,8 +140,9 @@ WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefL
 <li><p>Evaluating models is easy in BayesLearn. You can create an evaluation object as follows. </p></li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">met</span> <span class="pl-k">=</span> model.evaluate(utils.getCSVReader(<span class="pl-s"><span class="pl-pds">"</span>data/ionosphereTest.csv<span class="pl-pds">"</span></span>, <span class="pl-c1">','</span>), <span class="pl-c1">false</span>)
-  met.print</pre></div>
+<div class="highlight highlight-scala"><pre>    <span class="pl-k">val</span> <span class="pl-en">configtest</span> <span class="pl-k">=</span> <span class="pl-en">Map</span>(<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>data/ionosphereTest.csv<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>delim<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>)
+    <span class="pl-k">val</span> <span class="pl-en">met</span> <span class="pl-k">=</span> model.evaluate(configtest)
+    met.print</pre></div>
 
 <ul>
 <li>The object <code>met</code> has a <code>print()</code> method which will dump some performance metrics in the shell. But you can also generate plots by using the <code>generatePlots()</code> method.</li>
@@ -162,7 +165,7 @@ WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefL
 <h1>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
 
-<p>You can refer to the project the <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still in rapid development and there will be many more improvements/tweaks in the future.</p>
+<p>You can refer to the project <a href="http://mandar2812.github.io/bayeslearn/">home page</a> or the <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still at its infacy and there will be many more improvements/tweaks in the future.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/mandar2812/bayeslearn">Bayeslearn</a> is maintained by <a href="https://github.com/mandar2812">mandar2812</a>.</span>
