@@ -9,10 +9,10 @@ import com.tinkerpop.frames.{Adjacency, VertexFrame, Property}
  */
 trait Parameter extends VertexFrame {
   @Property("slope")
-  def getSlope(): Array[Byte]
+  def getSlope(): Array[Double]
 
   @Property("slope")
-  def setSlope(slope: Array[Byte]): Unit
+  def setSlope(slope: Array[Double]): Unit
 
   @Adjacency(label = "controls", direction = Direction.OUT)
   def getControlledPointLabels(): java.lang.Iterable[Label]

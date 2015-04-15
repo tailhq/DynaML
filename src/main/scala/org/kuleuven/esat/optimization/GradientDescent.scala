@@ -4,7 +4,7 @@ import breeze.linalg.DenseVector
 import org.apache.log4j.{Logger, Priority}
 import org.kuleuven.esat.graphUtils.CausalEdge
 import scala.pickling._
-import binary._
+import json._
 
 
 /**
@@ -112,7 +112,7 @@ object GradientDescent {
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
       POutEdges.foreach((ed) => {
-        val xarr = ed.getPoint().getFeatureMap().unpickle[Array[Double]]
+        val xarr = ed.getPoint().getFeatureMap()
         val x = DenseVector(xarr)
         val y = ed.getLabel().getValue()
         gradient.compute(x, y, oldW, cumGradient)
@@ -143,7 +143,7 @@ object GradientDescent {
     while(count <= numIterations) {
       POutEdges.foreach((ed) => {
         if(scala.util.Random.nextDouble() <= miniBatchFraction) {
-          val x = DenseVector(ed.getPoint().getFeatureMap().unpickle[Array[Double]])
+          val x = DenseVector(ed.getPoint().getFeatureMap())
           val y = ed.getLabel().getValue()
           gradient.compute(x, y, oldW, cumGradient)
         }

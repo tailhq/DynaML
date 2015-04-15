@@ -11,9 +11,9 @@ import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.optimization._
 import org.kuleuven.esat.utils
-import scala.collection.{SeqView, mutable}
+import scala.collection.mutable
 import scala.pickling._
-import binary._
+import json._
 import collection.JavaConversions._
 import org.kuleuven.esat.graphUtils._
 
@@ -187,7 +187,8 @@ object GaussianLinearModel {
     val (file, delim, head, task) = readConfig(config)
     val reader = utils.getCSVReader(file, delim)
 
-    val graphconfig = Map("blueprints.graph" -> "com.tinkerpop.blueprints.impls.tg.TinkerGraph")
+    val graphconfig = Map("blueprints.graph" ->
+      "com.tinkerpop.blueprints.impls.tg.TinkerGraph")
 
     val wMap: mutable.HashMap[String, AnyRef] = mutable.HashMap()
     val xMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
@@ -202,7 +203,7 @@ object GaussianLinearModel {
 
     logger.log(Priority.INFO, "Creating graph for data set.")
     val pnode:Parameter = fg.addVertex(null, classOf[Parameter])
-    pnode.setSlope(Array.fill[Double](dim)(1.0).pickle.value)
+    pnode.setSlope(Array.fill[Double](dim)(1.0))
     wMap.put("w", pnode.asVertex().getId)
 
     points.foreach((couple) => {
@@ -214,8 +215,8 @@ object GaussianLinearModel {
       * properties, etc
       * */
       val xnode: Point = fg.addVertex(("x", index), classOf[Point])
-      xnode.setValue(xv.toArray.pickle.value)
-      xnode.setFeatureMap(xv.toArray.pickle.value)
+      xnode.setValue(xv.toArray)
+      xnode.setFeatureMap(xv.toArray)
       xMap.put(index, xnode.asVertex().getId)
 
       val ynode: Label = fg.addVertex(("y", index), classOf[Label])

@@ -26,7 +26,7 @@ import org.kuleuven.esat.optimization.GradientDescent
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
 import scala.pickling._
-import binary._
+import json._
 import scala.collection.JavaConversions
 
 /**
@@ -57,7 +57,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       i => {
         val point: Point = this.g.getVertex(vertexMaps._2(i),
           classOf[Point])
-        DenseVector(point.getValue().unpickle[Array[Double]])
+        DenseVector(point.getValue())
       }
     }.toList
 
@@ -99,19 +99,19 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
     val edges = this.getXYEdges()
     val pnode:Parameter = this.g.getVertex(this.vertexMaps._1("w"),
       classOf[Parameter])
-    pnode.setSlope(this.params.toArray.pickle.value)
+    pnode.setSlope(this.params.toArray)
     edges.foreach((edge) => {
       //Get the predictor vertex corresponding to the edge
       val vertex: Point = edge.getPoint()
 
       //Get the original features of the point
-      val featurex = DenseVector(vertex.getValue().unpickle[Array[Double]])
+      val featurex = DenseVector(vertex.getValue())
 
       //Get mapped features for the point
       val mappedf = featureMap(List(featurex(0 to featurex.length - 2)))(0)
       val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(Array(1.0)))
       //Set a new property in the vertex corresponding to the mapped features
-      vertex.setFeatureMap(newFeatures.toArray.pickle.value)
+      vertex.setFeatureMap(newFeatures.toArray)
     })
     logger.log(Priority.INFO, "DONE: Applying Feature map to data set")
   }
@@ -168,7 +168,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
     })
     val paramNode: Parameter = this.g.getVertex(vertexMaps._1("w"),
       classOf[Parameter])
-    paramNode.setSlope(this.params.toArray.pickle.value)
+    paramNode.setSlope(this.params.toArray)
   }
 
   override def crossvalidate(folds: Int = 10): (Double, Double, Double) = {
@@ -248,7 +248,7 @@ object KernelBayesianModel {
     var index: Int = 1
     val scoresAndLabels = test_data_set.map((e) => {
       val scorepred = GaussianLinearModel.score(params) _
-      val x = DenseVector(e.getPoint().getFeatureMap().unpickle[Array[Double]])
+      val x = DenseVector(e.getPoint().getFeatureMap())
       val y = e.getLabel().getValue()
       index += 1
       (scorepred(x(0 to x.length - 2)), y)
