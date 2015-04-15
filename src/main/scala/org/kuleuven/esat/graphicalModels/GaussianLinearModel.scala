@@ -71,6 +71,10 @@ class GaussianLinearModel(
   override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
     super.filter(fn).map((p) => p(0 to featuredims - 2))
 
+  /**
+   * Saves the underlying graph object
+   * as a graph json file.
+   * */
   def save(file: String): Unit =
     GaussianLinearModel.saveAsGraphJSON(this.g, file)
 
