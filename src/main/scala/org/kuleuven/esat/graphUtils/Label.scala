@@ -7,7 +7,7 @@ import com.tinkerpop.frames.{Adjacency, VertexFrame, Property}
  * Defines the [[VertexFrame]] for the
  * target label node in the graph.
  */
-trait Label[T] extends VertexFrame{
+trait Label extends VertexFrame{
   @Property("value")
   def getValue(): Double
 
@@ -15,5 +15,5 @@ trait Label[T] extends VertexFrame{
   def setValue(value: Double): Unit
 
   @Adjacency(label = "causes", direction = Direction.IN)
-  def getCausedByPoint(): java.lang.Iterable[Point[T]]
+  def getCausedByPoint(): java.lang.Iterable[Point]
 }

@@ -14,7 +14,7 @@ import binary._
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
   extends Optimizer[Int, DenseVector[Double],
-    DenseVector[Double], Double, CausalEdge[Array[Byte]]]{
+    DenseVector[Double], Double, CausalEdge]{
 
   private var regParam: Double = 1.0
 
@@ -64,7 +64,7 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
   override def optimize(
       nPoints: Int,
       initialP: DenseVector[Double],
-      ParamOutEdges: Iterable[CausalEdge[Array[Byte]]]): DenseVector[Double] =
+      ParamOutEdges: Iterable[CausalEdge]): DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
         nPoints,
@@ -104,7 +104,7 @@ object GradientDescent {
       gradient: Gradient,
       stepSize: Double,
       initial: DenseVector[Double],
-      POutEdges: Iterable[CausalEdge[Array[Byte]]]): DenseVector[Double] = {
+      POutEdges: Iterable[CausalEdge]): DenseVector[Double] = {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
@@ -133,7 +133,7 @@ object GradientDescent {
       gradient: Gradient,
       stepSize: Double,
       initial: DenseVector[Double],
-      POutEdges: Iterable[CausalEdge[Array[Byte]]],
+      POutEdges: Iterable[CausalEdge],
       miniBatchFraction: Double): DenseVector[Double] = {
     var count = 1
     var oldW: DenseVector[Double] = initial

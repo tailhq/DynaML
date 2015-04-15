@@ -62,8 +62,6 @@ Q <: Tensor[K2, Double], R, S]
     this.params = param
   }
 
-  def getxyPair(ed: Edge): (Q, R)
-
   def setMaxIterations(i: Int): this.type = {
     this.optimizer.setNumIterations(i)
     this
@@ -130,7 +128,7 @@ trait EvaluableModel [P, R]{
 }
 
 trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
-  extends LinearModel[FramedGraph[Graph], K1, K2, T, Q, R, CausalEdge[Array[Byte]]]{
+  extends LinearModel[FramedGraph[Graph], K1, K2, T, Q, R, CausalEdge]{
 
   /**
    * This variable stores the indexes of the
@@ -152,7 +150,7 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
   protected val edgeMaps: (mutable.HashMap[Int, AnyRef],
     mutable.HashMap[Int, AnyRef])
 
-  def getXYEdges(): Iterable[CausalEdge[Array[Byte]]]
+  def getXYEdges(): Iterable[CausalEdge]
 
   override def learn(): Unit = {
     this.params = optimizer.optimize(nPoints, this.params,

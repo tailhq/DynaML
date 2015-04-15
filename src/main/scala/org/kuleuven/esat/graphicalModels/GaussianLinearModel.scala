@@ -52,16 +52,6 @@ class GaussianLinearModel(
     case "regression" => this.score(point)
   }
 
-  override def getxyPair(ed: Edge): (DenseVector[Double], Double) = {
-    val edge = ScalaEdge.wrap(ed)
-    val yV = ScalaVertex.wrap(edge.getVertex(Direction.IN))
-    val y = yV.getProperty("value").asInstanceOf[Double]
-
-    val xV = yV.getEdges(Direction.IN, "causes").iterator().next().getVertex(Direction.OUT)
-    val x = xV.getProperty("featureMap").asInstanceOf[DenseVector[Double]]
-    (x, y)
-  }
-
   override def evaluate(config: Map[String, String]): Metrics[Double] = {
     val file: String = config("file")
     val delim: Char = config("delim").toCharArray()(0)
@@ -186,7 +176,7 @@ object GaussianLinearModel {
     }
 
     logger.log(Priority.INFO, "Creating graph for data set.")
-    val pnode:Parameter[Array[Byte]] = fg.addVertex(null, classOf[Parameter[Array[Byte]]])
+    val pnode:Parameter = fg.addVertex(null, classOf[Parameter])
     pnode.setSlope(Array.fill[Double](dim)(1.0).pickle.value)
     wMap.put("w", pnode.asVertex().getId)
 
@@ -208,25 +198,25 @@ object GaussianLinearModel {
       * append to them their values
       * properties, etc
       * */
-      val xnode: Point[Array[Byte]] = fg.addVertex(("x", index), classOf[Point[Array[Byte]]])
+      val xnode: Point = fg.addVertex(("x", index), classOf[Point])
       xnode.setValue(xv.toArray.pickle.value)
       xnode.setFeatureMap(xv.toArray.pickle.value)
       xMap.put(index, xnode.asVertex().getId)
 
-      val ynode: Label[Array[Byte]] = fg.addVertex(("y", index), classOf[Label[Array[Byte]]])
+      val ynode: Label = fg.addVertex(("y", index), classOf[Label])
       ynode.setValue(yv)
       yMap.put(index, ynode.asVertex().getId)
 
       //Add edge between xi and yi
-      val ceEdge: CausalEdge[Array[Byte]] = fg.addEdge((1, index), xnode.asVertex(),
+      val ceEdge: CausalEdge = fg.addEdge((1, index), xnode.asVertex(),
         ynode.asVertex(), "causes",
-        classOf[CausalEdge[Array[Byte]]])
+        classOf[CausalEdge])
       ceEdge.setRelation("causal")
       ceMap.put(index, ceEdge.asEdge().getId)
 
       //Add edge between w and y_i
-      val peEdge: ParamEdge[Array[Byte]] = fg.addEdge((2, index), pnode.asVertex(),
-        ynode.asVertex(), "controls", classOf[ParamEdge[Array[Byte]]])
+      val peEdge: ParamEdge = fg.addEdge((2, index), pnode.asVertex(),
+        ynode.asVertex(), "controls", classOf[ParamEdge])
       peMap.put(index, peEdge.asEdge().getId)
 
       index += 1

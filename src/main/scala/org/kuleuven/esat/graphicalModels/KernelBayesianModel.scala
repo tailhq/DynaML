@@ -47,14 +47,16 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
     this
   }
 
-  override def getXYEdges() = JavaConversions.iterableAsScalaIterable(this.g.getEdges("relation", "causal",
-    classOf[CausalEdge[Array[Byte]]]))
+  override def getXYEdges() =
+    JavaConversions.iterableAsScalaIterable(
+      this.g.getEdges("relation", "causal", classOf[CausalEdge])
+    )
 
   override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
     (1 to nPoints).view.filter(fn).map{
       i => {
-        val point: Point[Array[Byte]] = this.g.getVertex(vertexMaps._2(i),
-          classOf[Point[Array[Byte]]])
+        val point: Point = this.g.getVertex(vertexMaps._2(i),
+          classOf[Point])
         DenseVector(point.getValue().unpickle[Array[Double]])
       }
     }.toList
@@ -95,12 +97,12 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
   override def applyFeatureMap(): Unit = {
     logger.log(Priority.INFO, "Applying Feature map to data set")
     val edges = this.getXYEdges()
-    val pnode:Parameter[Array[Byte]] = this.g.getVertex(this.vertexMaps._1("w"),
-      classOf[Parameter[Array[Byte]]])
+    val pnode:Parameter = this.g.getVertex(this.vertexMaps._1("w"),
+      classOf[Parameter])
     pnode.setSlope(this.params.toArray.pickle.value)
     edges.foreach((edge) => {
       //Get the predictor vertex corresponding to the edge
-      val vertex: Point[Array[Byte]] = edge.getPoint()
+      val vertex: Point = edge.getPoint()
 
       //Get the original features of the point
       val featurex = DenseVector(vertex.getValue().unpickle[Array[Double]])
@@ -164,8 +166,8 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       val xnode = outEdge.getPoint()
       xnode.setFeatureMap(xnode.getValue())
     })
-    val paramNode: Parameter[Array[Byte]] = this.g.getVertex(vertexMaps._1("w"),
-      classOf[Parameter[Array[Byte]]])
+    val paramNode: Parameter = this.g.getVertex(vertexMaps._1("w"),
+      classOf[Parameter])
     paramNode.setSlope(this.params.toArray.pickle.value)
   }
 
@@ -189,14 +191,14 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       })
 
       val training_data = train.map((p) => {
-        val ed: CausalEdge[Array[Byte]] = this.g.getEdge(this.edgeMaps._1(p),
-          classOf[CausalEdge[Array[Byte]]])
+        val ed: CausalEdge = this.g.getEdge(this.edgeMaps._1(p),
+          classOf[CausalEdge])
         ed
       }).view.toIterable
 
       val test_data = test.map((p) => {
-        val ed: CausalEdge[Array[Byte]] = this.g.getEdge(this.edgeMaps._1(p),
-          classOf[CausalEdge[Array[Byte]]])
+        val ed: CausalEdge = this.g.getEdge(this.edgeMaps._1(p),
+          classOf[CausalEdge])
         ed
       }).view.toIterable
 
@@ -241,7 +243,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
 object KernelBayesianModel {
   val logger = Logger.getLogger(this.getClass)
   def evaluate(params: DenseVector[Double])
-              (test_data_set: Iterable[CausalEdge[Array[Byte]]])
+              (test_data_set: Iterable[CausalEdge])
               (task: String): Metrics[Double] = {
     val scoresAndLabels = test_data_set.view
       .map((e) => {

@@ -7,13 +7,13 @@ import com.tinkerpop.frames.{Adjacency, VertexFrame, Property}
  * Defines the [[VertexFrame]] for the
  * parameter node in the graph.
  */
-trait Parameter[T] extends VertexFrame {
+trait Parameter extends VertexFrame {
   @Property("slope")
-  def getSlope(): T
+  def getSlope(): Array[Byte]
 
   @Property("slope")
-  def setSlope(slope: T): Unit
+  def setSlope(slope: Array[Byte]): Unit
 
   @Adjacency(label = "controls", direction = Direction.OUT)
-  def getControlledPointLabels(): java.lang.Iterable[Label[T]]
+  def getControlledPointLabels(): java.lang.Iterable[Label]
 }

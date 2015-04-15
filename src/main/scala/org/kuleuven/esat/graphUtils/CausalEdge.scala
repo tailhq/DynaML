@@ -7,12 +7,12 @@ import com.tinkerpop.frames.{Property, OutVertex, InVertex, EdgeFrame}
  * edges going out from the input data
  * node.
  */
-trait CausalEdge[T] extends EdgeFrame {
+trait CausalEdge extends EdgeFrame {
   @OutVertex
-  def getPoint(): Point[T]
+  def getPoint(): Point
 
   @InVertex
-  def getLabel(): Label[T]
+  def getLabel(): Label
 
   @Property("relation")
   def getRelation(): String
