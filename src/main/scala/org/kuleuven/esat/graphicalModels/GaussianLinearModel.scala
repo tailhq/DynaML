@@ -2,6 +2,7 @@ package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.DenseVector
 import com.github.tototoshi.csv.CSVReader
+import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
 import com.tinkerpop.blueprints.{GraphFactory, Graph}
 import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
@@ -10,7 +11,7 @@ import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.optimization._
 import org.kuleuven.esat.utils
-import scala.collection.mutable
+import scala.collection.{SeqView, mutable}
 import scala.pickling._
 import binary._
 import collection.JavaConversions._
@@ -53,15 +54,7 @@ class GaussianLinearModel(
   }
 
   override def evaluate(config: Map[String, String]): Metrics[Double] = {
-    val file: String = config("file")
-    val delim: Char = config("delim").toCharArray()(0)
-    val head: Boolean = config("head") match {
-      case "true" => true
-      case "True" => true
-      case "false" => false
-      case "False" => false
-    }
-
+    val (file, delim, head, _) = GaussianLinearModel.readConfig(config)
     GaussianLinearModel.evaluate(this.featureMap)(this.params)(
       utils.getCSVReader(file, delim), head
     )
@@ -72,11 +65,16 @@ class GaussianLinearModel(
 
   /**
    * Saves the underlying graph object
-   * as a graph json file.
+   * in the given file format Supported
+   * formats include.
+   *
+   * 1) Graph JSON: "json"
+   * 2) GraphML: "xml"
    * */
-  def save(file: String): Unit =
-    GaussianLinearModel.saveAsGraphJSON(this.g, file)
-
+  def save(file: String, format: String = "json"): Unit = format match {
+    case "json" => GraphSONWriter.outputGraph(this.g, file)
+    case "xml" => GraphMLWriter.outputGraph(this.g, file)
+  }
 }
 
 object GaussianLinearModel {
@@ -121,50 +119,72 @@ object GaussianLinearModel {
               (params: DenseVector[Double])
               (reader: CSVReader, head: Boolean)
               (implicit task: String): Metrics[Double] = {
-    val lines = reader.iterator
-    var index = 1
-    var dim = 0
-    if(head) {
-      dim = lines.next().length
-    }
-
     logger.log(Priority.INFO, "Calculating test set predictions")
-
-    val scoresAndLabels = lines.map{line =>
-      //Parse line and extract features
-
-      if (dim == 0) {
-        dim = line.length
-      }
-
-      val yv = line.apply(line.length - 1).toDouble
-      val xv: DenseVector[Double] =
-        DenseVector(line.slice(0, line.length - 1).toList.map{x => x.toDouble}.toArray)
-
-      (score(params)(featureMap(List(xv))(0)), yv)
-
+    val (points, dim) = readCSV(reader, head)
+    var index = 1
+    val scoresAndLabels = points.map{couple =>
+      val yv = couple._2
+      val xv = couple._1
+      index += 1
+      (score(params)(featureMap(List(xv)).head), yv)
     }.toList
 
-    Metrics(task)(scoresAndLabels)
+    Metrics(task)(scoresAndLabels, index)
   }
 
-  def saveAsGraphJSON(g: Graph, file: String): Unit = {
-    GraphSONWriter.outputGraph(g, file)
+  def readCSV(reader: CSVReader, head: Boolean):
+  (Iterable[(DenseVector[Double], Double)], Int) = {
+    def stream = reader.toStream().toIterable
+    val dim = stream.head.length
+
+    def lines = if(head) {
+      stream.drop(1)
+    } else {
+      stream
+    }
+
+    (lines.map{parseLine}, dim)
+  }
+
+  def parseLine = {line : List[String] =>
+    //Parse line and extract features
+    val yv = line.apply(line.length - 1).toDouble
+    val xv: DenseVector[Double] =
+      DenseVector(line.slice(0, line.length - 1).map{x => x.toDouble}.toArray)
+
+    (xv, yv)
+  }
+
+  def readConfig(config: Map[String, String]): (String, Char, Boolean, String) = {
+
+    assert(config.isDefinedAt("file"), "File name must be Defined!")
+    val file: String = config("file")
+
+    val delim: Char = if(config.isDefinedAt("delim")) {
+      config("delim").toCharArray()(0)
+    } else {
+      ','
+    }
+
+    val head: Boolean = if(config.isDefinedAt("head")) {
+      config("head") match {
+        case "true" => true
+        case "True" => true
+        case "false" => false
+        case "False" => false
+      }
+    } else {
+      true
+    }
+
+    val task: String = if(config.isDefinedAt("task")) config("task") else ""
+
+    (file, delim, head, task)
   }
 
   def apply(implicit config: Map[String, String]): GaussianLinearModel = {
 
-    val file: String = config("file")
-    val delim: Char = config("delim").toCharArray()(0)
-
-    val head: Boolean = config("head") match {
-      case "true" => true
-      case "True" => true
-      case "false" => false
-      case "False" => false
-    }
-
-    val task: String = config("task")
+    val (file, delim, head, task) = readConfig(config)
     val reader = utils.getCSVReader(file, delim)
 
     val graphconfig = Map("blueprints.graph" -> "com.tinkerpop.blueprints.impls.tg.TinkerGraph")
@@ -175,35 +195,19 @@ object GaussianLinearModel {
     val ceMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
     val peMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
 
-    val g = GraphFactory.open(mapAsJavaMap(graphconfig))
-    val fg = manager.create(g)
-    val lines = reader.iterator
+    val fg = manager.create(GraphFactory.open(mapAsJavaMap(graphconfig)))
 
     var index = 1
-    var dim = 0
-
-    if(head) {
-      dim = lines.next().length
-    }
+    val (points, dim) = readCSV(reader, head)
 
     logger.log(Priority.INFO, "Creating graph for data set.")
     val pnode:Parameter = fg.addVertex(null, classOf[Parameter])
     pnode.setSlope(Array.fill[Double](dim)(1.0).pickle.value)
     wMap.put("w", pnode.asVertex().getId)
 
-    while (lines.hasNext) {
-      //Parse line and extract features
-      val line = lines.next()
-      if(dim == 0) {
-        dim = line.length
-      }
-
-      val yv = line.apply(line.length - 1).toDouble
-      val features = line.map((s) => s.toDouble).toArray
-      features.update(line.length - 1, 1.0)
-      val xv: DenseVector[Double] =
-        new DenseVector[Double](features)
-
+    points.foreach((couple) => {
+      val xv = DenseVector.vertcat[Double](couple._1, DenseVector(Array(1.0)))
+      val yv = couple._2
       /*
       * Create nodes xi and yi
       * append to them their values
@@ -231,7 +235,7 @@ object GaussianLinearModel {
       peMap.put(index, peEdge.asEdge().getId)
 
       index += 1
-    }
+    })
 
     val vMaps = (wMap, xMap, yMap)
     val eMaps = (ceMap, peMap)

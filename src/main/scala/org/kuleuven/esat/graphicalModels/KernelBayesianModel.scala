@@ -245,13 +245,14 @@ object KernelBayesianModel {
   def evaluate(params: DenseVector[Double])
               (test_data_set: Iterable[CausalEdge])
               (task: String): Metrics[Double] = {
-    val scoresAndLabels = test_data_set.view
-      .map((e) => {
+    var index: Int = 1
+    val scoresAndLabels = test_data_set.map((e) => {
       val scorepred = GaussianLinearModel.score(params) _
       val x = DenseVector(e.getPoint().getFeatureMap().unpickle[Array[Double]])
       val y = e.getLabel().getValue()
+      index += 1
       (scorepred(x(0 to x.length - 2)), y)
     })
-    Metrics(task)(scoresAndLabels.toList)
+    Metrics(task)(scoresAndLabels.toList, index)
   }
 }
