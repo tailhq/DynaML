@@ -13,10 +13,12 @@ import scalax.chart.module.ChartFactories.XYLineChart
  * */
 
 class BinaryClassificationMetrics(
-    override protected val scoresAndLabels: List[(Double, Double)])
+    override protected val scoresAndLabels: List[(Double, Double)],
+    val len: Int)
   extends Metrics[Double]{
 
   private val logger = Logger.getLogger(this.getClass)
+  val length = len
 
   /**
    * A list of threshold values from
@@ -26,7 +28,7 @@ class BinaryClassificationMetrics(
    * and False Negative values.
    * */
 
-  private val bias: Double = scoresAndLabels.map{v => v._1}.sum/scoresAndLabels.length
+  private val bias: Double = scoresAndLabels.map{v => v._1}.sum/length
   private val thresholds = (-1000 to 1000).map((x) => (x.toDouble + bias)/100)
 
 

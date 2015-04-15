@@ -14,9 +14,9 @@ trait Metrics[P] {
 
 object Metrics{
   def apply(task: String)
-           (scoresAndLabels: List[(Double, Double)])
+           (scoresAndLabels: List[(Double, Double)], length: Int)
   : Metrics[Double] = task match {
-    case "regression" => new RegressionMetrics(scoresAndLabels)
-    case "classification" => new BinaryClassificationMetrics(scoresAndLabels)
+    case "regression" => new RegressionMetrics(scoresAndLabels, length)
+    case "classification" => new BinaryClassificationMetrics(scoresAndLabels, length)
   }
 }

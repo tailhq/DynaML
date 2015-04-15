@@ -7,10 +7,10 @@ import com.tinkerpop.frames.{InVertex, OutVertex, EdgeFrame}
  * edges going out from the parameter
  * node.
  */
-trait ParamEdge[T] extends EdgeFrame {
+trait ParamEdge extends EdgeFrame {
   @OutVertex
-  def getParameter(): Parameter[T]
+  def getParameter(): Parameter
 
   @InVertex
-  def getLabel(): Label[T]
+  def getLabel(): Label
 }
