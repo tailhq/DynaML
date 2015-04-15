@@ -3,9 +3,8 @@ package org.kuleuven.esat.graphicalModels
 import breeze.linalg.DenseVector
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
-import com.tinkerpop.blueprints.{GraphFactory, Graph, Direction, Edge}
+import com.tinkerpop.blueprints.{GraphFactory, Graph}
 import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
-import com.tinkerpop.gremlin.scala.{ScalaEdge, ScalaVertex}
 import com.typesafe.config.ConfigFactory
 import org.apache.log4j.{Priority, Logger}
 import org.kuleuven.esat.evaluation.Metrics
