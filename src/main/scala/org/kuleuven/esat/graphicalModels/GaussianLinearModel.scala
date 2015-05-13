@@ -1,6 +1,7 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.DenseVector
+import breeze.numerics.sqrt
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
@@ -43,13 +44,15 @@ class GaussianLinearModel(
   override implicit protected var params =
     DenseVector.ones[Double](featuredims)
 
+  private val (mean, variance) = utils.getStats(this.filter(_ => true))
+
   override protected val optimizer = GaussianLinearModel.getOptimizer(task)
 
   def score(point: DenseVector[Double]): Double =
-    GaussianLinearModel.score(this.params)(this.featureMap(List(point))(0))
+    GaussianLinearModel.score(this.params)(this.featureMap(List((point - this.mean) :/= sqrt(this.variance))).head)
 
   override def predict(point: DenseVector[Double]): Double = task match {
-    case "classification" => math.signum(this.score(point))
+    case "classification" => math.tanh(this.score(point))
     case "regression" => this.score(point)
   }
 
@@ -74,6 +77,18 @@ class GaussianLinearModel(
   def save(file: String, format: String = "json"): Unit = format match {
     case "json" => GraphSONWriter.outputGraph(this.g, file)
     case "xml" => GraphMLWriter.outputGraph(this.g, file)
+  }
+
+  def normalizeData: this.type = {
+    logger.info("Rescaling data attributes")
+    val xMap = this.vertexMaps._2
+    (1 to this.nPoints).foreach{i =>
+      val xVertex: Point = this.g.getVertex(xMap(i), classOf[Point])
+      val vec: DenseVector[Double] =
+        (DenseVector(xVertex.getValue())(0 to featuredims - 2) - mean) :/= sqrt(variance)
+      xVertex.setValue(DenseVector.vertcat(vec, DenseVector(1.0)).toArray)
+    }
+    this
   }
 }
 
@@ -134,7 +149,7 @@ object GaussianLinearModel {
 
   def readCSV(reader: CSVReader, head: Boolean):
   (Iterable[(DenseVector[Double], Double)], Int) = {
-    def stream = reader.toStream().toIterable
+    val stream = reader.toStream().toIterable
     val dim = stream.head.length
 
     def lines = if(head) {
@@ -241,6 +256,6 @@ object GaussianLinearModel {
     val vMaps = (wMap, xMap, yMap)
     val eMaps = (ceMap, peMap)
     logger.log(Priority.INFO, "Graph constructed, now building model object.")
-    new GaussianLinearModel(fg, index-1, dim, vMaps, eMaps, task)
+    new GaussianLinearModel(fg, index-1, dim, vMaps, eMaps, task).normalizeData
   }
 }

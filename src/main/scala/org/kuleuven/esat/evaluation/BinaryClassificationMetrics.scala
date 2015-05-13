@@ -28,9 +28,7 @@ class BinaryClassificationMetrics(
    * and False Negative values.
    * */
 
-  private val bias: Double = scoresAndLabels.map{v => v._1}.sum/length
-  private val thresholds = (-1000 to 1000).map((x) => (x.toDouble + bias)/100)
-
+  private val thresholds = (-1000 to 1000).map(_.toDouble/1000)
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
     points.sliding(2).map(l => (l(1)._1 - l(0)._1) * (l(1)._2 + l(0)._2)/2).sum

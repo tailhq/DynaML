@@ -59,7 +59,7 @@ abstract class SVMKernel[T] extends Kernel with Serializable {
         val eigenvalue = if(decomposition._1(i) != Double.NaN) decomposition._1(i) else 0.0
         val eigenvector = decomposition._2(::, i).map{i => if(i == Double.NaN) 0.0 else i}
         val kernel = prototypes.map((p) => this.evaluate(p, point)).toArray
-        (1 / (REGULARIZER + math.sqrt(eigenvalue)))*(DenseVector(kernel).t * eigenvector)
+        (1 / (REGULARIZER + math.sqrt(eigenvalue)))*(DenseVector(kernel) dot eigenvector)
       }
     })
   }

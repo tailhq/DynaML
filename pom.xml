@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.kuleuven.esat</groupId>
     <artifactId>bayesLearn</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <name>Bayes Learn</name>
     <description>Scala Library/REPL for working with Bayesian graphical models.</description>
     <url>http://mandar2812.github.io/bayeslearn/</url>
@@ -35,7 +35,6 @@
     <properties>
         <scala.version>2.10.4</scala.version>
     </properties>
-
     <repositories>
         <repository>
             <id>scala-tools.org</id>
@@ -43,7 +42,6 @@
             <url>http://scala-tools.org/repo-releases</url>
         </repository>
     </repositories>
-
     <pluginRepositories>
         <pluginRepository>
             <id>scala-tools.org</id>
@@ -51,7 +49,6 @@
             <url>http://scala-tools.org/repo-releases</url>
         </pluginRepository>
     </pluginRepositories>
-
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -106,6 +103,11 @@
             <version>2.5.0</version>
         </dependency>
         <dependency>
+            <groupId>com.thinkaurelius.titan</groupId>
+            <artifactId>titan-all</artifactId>
+            <version>0.5.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
             <version>2.1.7</version>
@@ -150,6 +152,16 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-pickling_2.10</artifactId>
             <version>0.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.11</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_2.11</artifactId>
+            <version>1.3.1</version>
         </dependency>
     </dependencies>
     <profiles>
@@ -257,7 +269,7 @@
                         <goals><goal>assemble</goal></goals>
                         <phase>package</phase>
                         <configuration>
-                            <!--<extraJvmArguments>-Xmx1600m</extraJvmArguments>-->
+                            <extraJvmArguments>-Xmx1600m</extraJvmArguments>
                             <extraJvmArguments>
                                 -Dlog4j.configuration=file://${basedir}/conf/log4j.properties
                             </extraJvmArguments>

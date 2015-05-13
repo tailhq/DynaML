@@ -14,7 +14,7 @@ import json._
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
   extends Optimizer[Int, DenseVector[Double],
-    DenseVector[Double], Double, CausalEdge]{
+    DenseVector[Double], Double, Iterable[CausalEdge]]{
 
   private var regParam: Double = 1.0
 
@@ -61,10 +61,9 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    *
    *
    * */
-  override def optimize(
-      nPoints: Int,
-      initialP: DenseVector[Double],
-      ParamOutEdges: Iterable[CausalEdge]): DenseVector[Double] =
+  override def optimize(nPoints: Int, initialP: DenseVector[Double],
+                        ParamOutEdges: Iterable[CausalEdge])
+  : DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
         nPoints,
@@ -108,9 +107,10 @@ object GradientDescent {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
-    val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
+
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
+      val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
       POutEdges.foreach((ed) => {
         val xarr = ed.getPoint().getFeatureMap()
         val x = DenseVector(xarr)
@@ -138,9 +138,9 @@ object GradientDescent {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
-    val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
+      val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
       POutEdges.foreach((ed) => {
         if(scala.util.Random.nextDouble() <= miniBatchFraction) {
           val x = DenseVector(ed.getPoint().getFeatureMap())

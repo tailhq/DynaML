@@ -15,7 +15,7 @@ import com.tinkerpop.frames.EdgeFrame
  * @tparam S The type of the edge containing the
  *           features and label.
  */
-trait Optimizer[K, P <: Tensor[K, Double], Q, R, S] extends Serializable {
+trait Optimizer[K, P, Q, R, S] extends Serializable {
 
   protected var numIterations: Int = 100
 
@@ -26,8 +26,7 @@ trait Optimizer[K, P <: Tensor[K, Double], Q, R, S] extends Serializable {
   /**
    * Solve the convex optimization problem.
    */
-  def optimize(nPoints: Int, initialP: P,
-               ParamOutEdges: Iterable[S]): P
+  def optimize(nPoints: Int, initialP: P, ParamOutEdges: S): P
 
   /**
    * Set fraction of data to be used for each SGD iteration.

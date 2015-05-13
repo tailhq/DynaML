@@ -5,10 +5,20 @@ import breeze.linalg.max
 
 import scala.math._
 
+trait BasicUpdater[P] {
+  def compute(
+      weightsOld: P,
+      gradient: P,
+      stepSize: Double,
+      iter: Int,
+      regParam: Double): (P, Double)
+}
+
 /**
  * 
  */
-abstract class Updater {
+abstract class Updater
+  extends BasicUpdater[DenseVector[Double]]{
   def compute(
       weightsOld: DenseVector[Double],
       gradient: DenseVector[Double],

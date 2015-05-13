@@ -25,10 +25,8 @@ trait GraphicalModel[T] {
 /**
  * Skeleton of Parameterized Graphical Model
  * @tparam G The type of the underlying graph.
- * @tparam K The type of indexing on the parameters
- * @tparam K2 The type of indexing on the feature vectors.
- * @tparam T The type of the parameters i.e. [[DenseVector]] or
- *           [[breeze.linalg.DenseMatrix]]
+ * @tparam K The type of indexing on the feature vectors.
+ * @tparam T The type of the parameters
  * @tparam Q A Vector/Matrix representing the features of a point
  * @tparam R The type of the output of the predictive model
  *           i.e. A Real Number or a Vector of outputs.
@@ -36,13 +34,10 @@ trait GraphicalModel[T] {
  *           features and label.
  *
  * */
-trait ParameterizedLearner[G, K, K2, T <: Tensor[K, Double],
-Q <: Tensor[K2, Double], R, S]
+trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
   extends GraphicalModel[G] {
   protected var params: T
   protected val optimizer: Optimizer[K, T, Q, R, S]
-  protected val nPoints: Int
-  def npoints = nPoints
   /**
    * Learn the parameters
    * of the model which
@@ -84,8 +79,8 @@ Q <: Tensor[K2, Double], R, S]
  * Represents skeleton of a
  * Generalized Linear Model.
  *
- * @tparam T The underlying type of the graph
- *           ex. Gremlin, Neo4j etc
+ * @tparam T The underlying type of the data structure
+ *           ex. Gremlin, Neo4j, Spark RDD etc
  * @tparam K1 The type of indexing in the parameters
  * @tparam K2 The type of indexing in the feature space.
  * @tparam P A Vector/Matrix of Doubles indexed using [[K1]]
@@ -99,7 +94,7 @@ Q <: Tensor[K2, Double], R, S]
 abstract class LinearModel[T, K1, K2,
   P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, S]
   extends GraphicalModel[T]
-  with ParameterizedLearner[T, K1, K2, P, Q, R, S]
+  with ParameterizedLearner[T, K2, P, Q, R, S]
   with EvaluableModel[P, R] {
 
   /**
@@ -128,7 +123,10 @@ trait EvaluableModel [P, R]{
 }
 
 trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
-  extends LinearModel[FramedGraph[Graph], K1, K2, T, Q, R, CausalEdge]{
+  extends LinearModel[FramedGraph[Graph], K1, K2, T, Q, R, Iterable[CausalEdge]]{
+
+  protected val nPoints: Int
+  def npoints = nPoints
 
   /**
    * This variable stores the indexes of the
@@ -141,7 +139,7 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
    * defined by the kernel applied, this is initialized
    * to an identity map.
    * */
-  var featureMap: (List[Q]) => List[Q] = (x) => x
+  var featureMap: (List[Q]) => List[Q] = identity
 
   protected val vertexMaps: (mutable.HashMap[String, AnyRef],
     mutable.HashMap[Int, AnyRef],
@@ -153,8 +151,7 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
   def getXYEdges(): Iterable[CausalEdge]
 
   override def learn(): Unit = {
-    this.params = optimizer.optimize(nPoints, this.params,
-      this.getXYEdges())
+    this.params = optimizer.optimize(nPoints, this.params, this.getXYEdges())
   }
 
   /**

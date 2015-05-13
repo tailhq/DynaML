@@ -108,8 +108,8 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       val featurex = DenseVector(vertex.getValue())
 
       //Get mapped features for the point
-      val mappedf = featureMap(List(featurex(0 to featurex.length - 2)))(0)
-      val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(Array(1.0)))
+      val mappedf = featureMap(List(featurex(0 to featurex.length - 2))).head
+      val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(1.0))
       //Set a new property in the vertex corresponding to the mapped features
       vertex.setFeatureMap(newFeatures.toArray)
     })
@@ -203,9 +203,8 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       }).view.toIterable
 
       logger.log(Priority.INFO, "Gradient Descent for fold: "+a)
-      val tempparams = this.optimizer.optimize((folds-1/folds)*this.npoints,
-        this.params,
-        training_data)
+      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints,
+        this.params, training_data)
       logger.log(Priority.INFO, "Parameters Learned")
       logger.log(Priority.INFO, "Evaluating metrics for fold: "+a)
       val metrics = KernelBayesianModel.evaluate(tempparams)(test_data)(this.task)
