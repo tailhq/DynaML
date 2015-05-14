@@ -28,9 +28,7 @@ extends Optimizer[Int, DenseVector[Double],
   /**
    * Solve the convex optimization problem.
    */
-  override def optimize(nPoints: Int,
-                        initialP: DenseVector[Double],
-                        ParamOutEdges: RDD[LabeledPoint])
+  override def optimize(nPoints: Long, initialP: DenseVector[Double], ParamOutEdges: RDD[LabeledPoint])
   : DenseVector[Double] =
     GradientDescentSpark.runBatchSGD(
     nPoints,
@@ -50,7 +48,7 @@ object GradientDescentSpark {
   private val logger = Logger.getLogger(this.getClass)
 
   def runBatchSGD(
-                   nPoints: Int,
+                   nPoints: Long,
                    regParam: Double,
                    numIterations: Int,
                    updater: Updater,

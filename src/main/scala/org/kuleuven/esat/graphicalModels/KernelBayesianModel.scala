@@ -84,7 +84,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
         i => 1.06*math.sqrt(adjvarance(i))/math.pow(npoints, 0.2)
       })
       logger.log(Priority.INFO,
-        "Building low rank appriximation to kernel matrix")
+        "Building low rank approximation to kernel matrix")
 
       points = GreedyEntropySelector.subsetSelection(this,
         M,
@@ -203,8 +203,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       }).view.toIterable
 
       logger.log(Priority.INFO, "Gradient Descent for fold: "+a)
-      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints,
-        this.params, training_data)
+      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints, this.params, training_data)
       logger.log(Priority.INFO, "Parameters Learned")
       logger.log(Priority.INFO, "Evaluating metrics for fold: "+a)
       val metrics = KernelBayesianModel.evaluate(tempparams)(test_data)(this.task)

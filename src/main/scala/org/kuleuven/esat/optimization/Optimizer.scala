@@ -26,7 +26,7 @@ trait Optimizer[K, P, Q, R, S] extends Serializable {
   /**
    * Solve the convex optimization problem.
    */
-  def optimize(nPoints: Int, initialP: P, ParamOutEdges: S): P
+  def optimize(nPoints: Long, initialP: P, ParamOutEdges: S): P
 
   /**
    * Set fraction of data to be used for each SGD iteration.

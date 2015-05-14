@@ -3,9 +3,6 @@ package org.kuleuven.esat.optimization
 import breeze.linalg.DenseVector
 import org.apache.log4j.{Logger, Priority}
 import org.kuleuven.esat.graphUtils.CausalEdge
-import scala.pickling._
-import json._
-
 
 /**
  * Implements Gradient Descent on the graph
@@ -61,8 +58,7 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    *
    *
    * */
-  override def optimize(nPoints: Int, initialP: DenseVector[Double],
-                        ParamOutEdges: Iterable[CausalEdge])
+  override def optimize(nPoints: Long, initialP: DenseVector[Double], ParamOutEdges: Iterable[CausalEdge])
   : DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
@@ -96,7 +92,7 @@ object GradientDescent {
   private val logger = Logger.getLogger(this.getClass)
 
   def runSGD(
-      nPoints: Int,
+      nPoints: Long,
       regParam: Double,
       numIterations: Int,
       updater: Updater,
@@ -126,7 +122,7 @@ object GradientDescent {
   }
 
   def runBatchSGD(
-      nPoints: Int,
+      nPoints: Long,
       regParam: Double,
       numIterations: Int,
       updater: Updater,
