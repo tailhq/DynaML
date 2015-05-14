@@ -25,11 +25,11 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
     new SquaredL2Updater())
 
 
+  protected var featuredims: Int = data.first()._2.features.size
+
   override protected var params: DenseVector[Double] = DenseVector.ones(featuredims+1)
 
   override protected val g: RDD[(Long, LabeledPoint)] = data
-
-  protected var featuredims: Int = data.first()._2.features.size
 
   protected val _nPoints = data.count()
 
@@ -77,7 +77,7 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
 }
 
 object LSSVMSparkModel {
-    
+
   def predict(params: DenseVector[Double])
              (point: LabeledPoint)
              (implicit _task: String): (Double, Double) = {
