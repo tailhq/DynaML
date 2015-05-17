@@ -118,6 +118,7 @@ trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R,
   extends LinearModel[G, K1, K2, T, Q, R, L]{
 
   protected val nPoints: Int
+
   def npoints = nPoints
 
   /**
@@ -133,13 +134,13 @@ trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R,
    * */
   var featureMap: (List[Q]) => List[Q] = identity
 
-  def getXYEdges(): L
+  def getXYEdges: L
 
   /**
    * Implements the changes in the model
    * after application of a given kernel.
    *
-   * It calculates two things
+   * It calculates
    *
    * 1) Eigen spectrum of the kernel
    *

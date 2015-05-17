@@ -9,6 +9,7 @@ import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.graphicalModels.{GaussianLinearModel, LinearModel}
+import org.kuleuven.esat.kernels.Kernel
 import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
 
@@ -38,6 +39,9 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
 
   def npoints = _nPoints
 
+  var featureMap: DenseVector[Double] => DenseVector[Double]
+  = identity
+
   /**
    * Predict the value of the
    * target variable given a
@@ -62,9 +66,12 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
         val vec = DenseVector(point._2.features.toArray)
         val ans = vec - meanb.value
         ans :/= sqrt(varianceb.value)
-        new LabeledPoint(point._2.label,
-          Vectors.dense(DenseVector.vertcat(ans,
-            DenseVector(1.0)).toArray)
+        new LabeledPoint(
+          point._2.label,
+          Vectors.dense(DenseVector.vertcat(
+            featureMap(ans),
+            DenseVector(1.0))
+            .toArray)
         )
       })
     )
@@ -82,13 +89,24 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
   override def evaluate(config: Map[String, String]) = {
     val sc = g.context
     val (file, delim, head, _) = GaussianLinearModel.readConfig(config)
-    val test_data = sc.textFile(file).map(line => line split delim)
-      .filter(vector => vector.head forall Character.isDigit)
+    val csv = sc.textFile(file).map(line => line split delim)
       .map(_.map(_.toDouble)).map(vector => LabeledPoint(vector(vector.length-1), 
       Vectors.dense(vector.slice(0, vector.length-1))))
-    
+
+    val test_data = head match {
+      case true =>
+        csv.mapPartitionsWithIndex { (idx, iter) => if (idx == 0) iter.drop(1) else iter }
+      case false =>
+        csv
+    }
+
+    val mapPoint = (p: LabeledPoint) => new LabeledPoint(p.label,
+        Vectors.dense(featureMap(DenseVector(p.features.toArray)).toArray))
+
+    val predictLabel = LSSVMSparkModel.predict(params)(_task) _
+
     val results = test_data.map(point =>
-      LSSVMSparkModel.predict(params)(point)(_task))
+      predictLabel(mapPoint(point)))
       .collect()
     Metrics(_task)(results.toList, results.length)
   }
@@ -128,8 +146,8 @@ object LSSVMSparkModel {
     data.zipWithIndex().map((p) => (p._2, p._1))
 
   def predict(params: DenseVector[Double])
-             (point: LabeledPoint)
-             (implicit _task: String): (Double, Double) = {
+             (_task: String)
+             (point: LabeledPoint): (Double, Double) = {
     val margin: Double = predictSparkVector(params)(point.features)(_task)
     val loss = point.label - margin
     (margin, math.pow(loss, 2))
@@ -166,5 +184,10 @@ object LSSVMSparkModel {
     case "regression" => new GradientDescentSpark(
       new LeastSquaresGradient(),
       new SquaredL2Updater())
+  }
+
+  def kernelize(model: LSSVMSparkModel)(kernel: Kernel = null): KernelSparkModel = {
+    //First, calculate a maximum entropy subset
+    new KernelSparkModel(model.g.map{_._2}, model._task)
   }
 }
