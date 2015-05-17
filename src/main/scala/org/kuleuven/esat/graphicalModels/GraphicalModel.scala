@@ -1,17 +1,9 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg._
-import com.github.tototoshi.csv.CSVReader
-import com.tinkerpop.blueprints.{Graph, Edge}
-import com.tinkerpop.frames.{EdgeFrame, FramedGraph}
 import org.kuleuven.esat.evaluation.Metrics
-import org.kuleuven.esat.graphUtils.{CausalEdge, Point}
 import org.kuleuven.esat.kernels.SVMKernel
 import org.kuleuven.esat.optimization.Optimizer
-import scala.pickling._
-import binary._
-import scala.collection.mutable
-
 
 /**
  * Basic Higher Level abstraction
@@ -122,8 +114,8 @@ trait EvaluableModel [P, R]{
   def evaluate(config: Map[String, String]): Metrics[R]
 }
 
-trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
-  extends LinearModel[FramedGraph[Graph], K1, K2, T, Q, R, Iterable[CausalEdge]]{
+trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
+  extends LinearModel[G, K1, K2, T, Q, R, L]{
 
   protected val nPoints: Int
   def npoints = nPoints
@@ -141,18 +133,7 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
    * */
   var featureMap: (List[Q]) => List[Q] = identity
 
-  protected val vertexMaps: (mutable.HashMap[String, AnyRef],
-    mutable.HashMap[Int, AnyRef],
-    mutable.HashMap[Int, AnyRef])
-
-  protected val edgeMaps: (mutable.HashMap[Int, AnyRef],
-    mutable.HashMap[Int, AnyRef])
-
-  def getXYEdges(): Iterable[CausalEdge]
-
-  override def learn(): Unit = {
-    this.params = optimizer.optimize(nPoints, this.params, this.getXYEdges())
-  }
+  def getXYEdges(): L
 
   /**
    * Implements the changes in the model
@@ -179,35 +160,4 @@ trait KernelizedModel[T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K
    * with the maximum entropy.
    * */
   def optimumSubset(M: Int): Unit
-
-  /**
-   * Apply the feature map calculated by
-   * the using the Kernel to the data points
-   * and store the mapped features in the respective
-   * data nodes.
-   * */
-  def applyFeatureMap(): Unit
-
-  /**
-   * Tune the parameters of an RBF Kernel
-   * so it best fits the data to be modeled.
-   * */
-  def tuneRBFKernel(implicit task: String): Unit
-
-  /**
-   * Cross validate the model on the
-   * data set.
-   * */
-  def crossvalidate(folds: Int): (Double, Double, Double)
-
-  /**
-   * Get a subset of the data set defined
-   * as a filter operation on the raw data set.
-   *
-   * @param fn A function which takes a data point
-   *           and returns a boolean value.
-   * @return The list containing all the data points
-   *         satisfying the filtering criterion.
-   * */
-  def filter(fn : (Int) => Boolean): List[Q]
 }

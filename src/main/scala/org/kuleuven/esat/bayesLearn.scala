@@ -15,13 +15,11 @@ object bayesLearn extends App {
         intp.beQuietDuring {
           intp.addImports("breeze.linalg._")
           intp.addImports("org.kuleuven.esat.graphicalModels._")
+          intp.addImports("org.kuleuven.esat.svm._")
           intp.addImports("org.kuleuven.esat.utils")
           intp.addImports("org.kuleuven.esat.kernels._")
-          intp.addImports("org.neo4j.graphdb._")
-          intp.addImports("com.tinkerpop.blueprints.impls.neo4j2._")
-          intp.addImports("scala.pickling._")
-          intp.addImports("json._")
-          intp.addImports("binary._")
+          intp.addImports("org.apache.spark.SparkContext")
+          intp.addImports("org.apache.spark.SparkConf")
         }
       }
 

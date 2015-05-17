@@ -15,7 +15,7 @@ class GradientDescentSpark (private val gradient: Gradient,
 extends Optimizer[Int, DenseVector[Double],
   DenseVector[Double], Double, RDD[LabeledPoint]]{
 
-  private var regParam: Double = 1.0
+  private var regParam: Double = 0.001
 
   /**
    * Set the regularization parameter. Default 0.0.
@@ -28,7 +28,9 @@ extends Optimizer[Int, DenseVector[Double],
   /**
    * Solve the convex optimization problem.
    */
-  override def optimize(nPoints: Long, initialP: DenseVector[Double], ParamOutEdges: RDD[LabeledPoint])
+  override def optimize(nPoints: Long,
+                        initialP: DenseVector[Double],
+                        ParamOutEdges: RDD[LabeledPoint])
   : DenseVector[Double] =
     GradientDescentSpark.runBatchSGD(
     nPoints,
@@ -65,7 +67,8 @@ object GradientDescentSpark {
 
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
-      val cumGradient = sc.accumulator(DenseVector.zeros[Double](initial.length))(new VectorAccumulator())
+      val cumGradient =
+        sc.accumulator(DenseVector.zeros[Double](initial.length))(new VectorAccumulator())
       val wb = sc.broadcast(oldW)
       POutEdges sample(withReplacement = false, fraction = miniBatchFraction) foreach
         ((ed) => {

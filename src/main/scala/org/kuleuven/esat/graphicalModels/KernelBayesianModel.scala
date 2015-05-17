@@ -18,6 +18,8 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
+import com.tinkerpop.blueprints.Graph
+import com.tinkerpop.frames.FramedGraph
 import org.apache.log4j.{Logger, Priority}
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.graphUtils.{Parameter, CausalEdge, Point}
@@ -25,22 +27,32 @@ import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
 import org.kuleuven.esat.optimization.GradientDescent
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
-import scala.pickling._
-import json._
 import scala.collection.JavaConversions
+import scala.collection.mutable
 
 /**
  * Abstract class implementing kernel feature map
  * extraction functions.
  */
 abstract class KernelBayesianModel(implicit protected val task: String) extends
-KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
+KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], DenseVector[Double], Double, Int, Int] {
 
   protected val logger = Logger.getLogger(this.getClass)
 
   override protected val optimizer: GradientDescent
 
   protected val featuredims: Int
+
+  protected val vertexMaps: (mutable.HashMap[String, AnyRef],
+    mutable.HashMap[Int, AnyRef],
+    mutable.HashMap[Int, AnyRef])
+
+  protected val edgeMaps: (mutable.HashMap[Int, AnyRef],
+    mutable.HashMap[Int, AnyRef])
+
+  override def learn(): Unit = {
+    this.params = optimizer.optimize(nPoints, this.params, this.getXYEdges())
+  }
 
   def setRegParam(reg: Double): this.type = {
     this.optimizer.setRegParam(reg)
@@ -52,7 +64,16 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
       this.g.getEdges("relation", "causal", classOf[CausalEdge])
     )
 
-  override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
+  /**
+   * Get a subset of the data set defined
+   * as a filter operation on the raw data set.
+   *
+   * @param fn A function which takes a data point
+   *           and returns a boolean value.
+   * @return The list containing all the data points
+   *         satisfying the filtering criterion.
+   * */
+  def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
     (1 to nPoints).view.filter(fn).map{
       i => {
         val point: Point = this.g.getVertex(vertexMaps._2(i),
@@ -94,7 +115,13 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
     }
   }
 
-  override def applyFeatureMap(): Unit = {
+  /**
+   * Apply the feature map calculated by
+   * the using the Kernel to the data points
+   * and store the mapped features in the respective
+   * data nodes.
+   * */
+  def applyFeatureMap(): Unit = {
     logger.log(Priority.INFO, "Applying Feature map to data set")
     val edges = this.getXYEdges()
     val pnode:Parameter = this.g.getVertex(this.vertexMaps._1("w"),
@@ -171,7 +198,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
     paramNode.setSlope(this.params.toArray)
   }
 
-  override def crossvalidate(folds: Int = 10): (Double, Double, Double) = {
+  def crossvalidate(folds: Int = 10): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
     this.optimizer.setRegParam(0.0001).setNumIterations(100)
@@ -215,7 +242,7 @@ KernelizedModel[DenseVector[Double], DenseVector[Double], Double, Int, Int] {
     (avg_metrics(0)/folds.toDouble, avg_metrics(1)/folds.toDouble, avg_metrics(2)/folds.toDouble)
   }
 
-  override def tuneRBFKernel(implicit task: String = this.task): Unit = {
+  def tuneRBFKernel(implicit task: String = this.task): Unit = {
     //Generate a grid of sigma values
     val (samplemean, samplevariance) = utils.getStats(this.filter(_ => true))
     logger.log(Priority.INFO, "Calculating grid for gamma values")

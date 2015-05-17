@@ -17,7 +17,7 @@ class RBFKernel(private var bandwidth: Double)
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
     val diff = x - y
-    Math.exp(-1*Math.pow(norm(diff, 2), 2)/(2*Math.pow(bandwidth, 2)))
+    Math.exp(-1*math.pow(norm(diff, 2), 2)/(2*math.pow(bandwidth, 2)))
   }
 
   override def buildKernelMatrix(

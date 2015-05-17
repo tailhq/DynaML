@@ -1,41 +1,43 @@
 package org.kuleuven.esat.svm
 
 import breeze.linalg.DenseVector
-import org.apache.spark.SparkContext
+import breeze.numerics.sqrt
+import org.apache.spark.mllib.stat.Statistics
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.graphicalModels.{GaussianLinearModel, LinearModel}
-import org.kuleuven.esat.optimization.{SquaredL2Updater, LeastSquaresSVMGradient, GradientDescentSpark, Optimizer}
+import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
 
 /**
  * Implementation of the Least Squares SVM
  * using Apache Spark RDDs
  */
-class LSSVMSparkModel(data: RDD[(Long, LabeledPoint)], task: String) extends
+class LSSVMSparkModel(data: RDD[LabeledPoint], task: String) extends
 LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
-  DenseVector[Double], Double, RDD[LabeledPoint]]{
+  DenseVector[Double], Double, RDD[LabeledPoint]] with Serializable {
 
-  override protected val optimizer: Optimizer[Int,
-    DenseVector[Double], DenseVector[Double], Double,
-    RDD[LabeledPoint]] = new GradientDescentSpark(
-    new LeastSquaresSVMGradient(),
-    new SquaredL2Updater())
+  override protected val optimizer = LSSVMSparkModel.getOptimizer(task)
 
-
-  protected var featuredims: Int = data.first()._2.features.size
-
-  override protected var params: DenseVector[Double] = DenseVector.ones(featuredims+1)
-
-  override protected val g: RDD[(Long, LabeledPoint)] = data
+  override protected val g = LSSVMSparkModel.indexedRDD(data)
 
   protected val _nPoints = data.count()
 
   protected val _task = task
 
-  protected val _data = data
+  protected var featuredims: Int = g.first()._2.features.size
+
+  override protected var params: DenseVector[Double] = DenseVector.ones(featuredims+1)
+
+  val colStats = Statistics.colStats(g.map(_._2.features))
+
+  def dimensions = featuredims
+
+  def npoints = _nPoints
+
   /**
    * Predict the value of the
    * target variable given a
@@ -53,15 +55,32 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
    *
    **/
   override def learn(): Unit = {
-    params = this.optimizer.optimize(_nPoints, params, this.data.map(_._2))
+    val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
+    val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
+    params = this.optimizer.optimize(_nPoints, params,
+      this.g.map(point => {
+        val vec = DenseVector(point._2.features.toArray)
+        val ans = vec - meanb.value
+        ans :/= sqrt(varianceb.value)
+        new LabeledPoint(point._2.label,
+          Vectors.dense(DenseVector.vertcat(ans,
+            DenseVector(1.0)).toArray)
+        )
+      })
+    )
   }
 
   override def clearParameters: Unit = {
     params = DenseVector.ones[Double](featuredims+1)
   }
+
+  def setRegParam(l: Double): this.type = {
+    this.optimizer.setRegParam(l)
+    this
+  }
   
   override def evaluate(config: Map[String, String]) = {
-    val sc = _data.context
+    val sc = g.context
     val (file, delim, head, _) = GaussianLinearModel.readConfig(config)
     val test_data = sc.textFile(file).map(line => line split delim)
       .filter(vector => vector.head forall Character.isDigit)
@@ -77,6 +96,36 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
 }
 
 object LSSVMSparkModel {
+
+  def apply(implicit config: Map[String, String], sc: SparkContext): LSSVMSparkModel = {
+    val (file, delim, head, task) = GaussianLinearModel.readConfig(config)
+    val csv = sc.textFile(file).map(line => line split delim)
+      .map(_.map(_.toDouble)).map(vector => {
+      val label = vector(vector.length-1)
+      vector(vector.length-1) = 1.0
+      LabeledPoint(label, Vectors.dense(vector.slice(0, vector.length - 1)))
+    }).cache()
+
+    val data = head match {
+      case true =>
+        csv.mapPartitionsWithIndex { (idx, iter) => if (idx == 0) iter.drop(1) else iter }
+      case false =>
+        csv
+    }
+
+    new LSSVMSparkModel(data, task)
+  }
+
+  /**
+   * Returns an indexed [[RDD]] from a non indexed [[RDD]] of [[T]]
+   *
+   * @param data : An [[RDD]] of [[T]]
+   *
+   * @return An (Int, T) Key-Value RDD indexed
+   *         from 0 to data.count() - 1
+   * */
+  def indexedRDD[T](data: RDD[T]): RDD[(Long, T)] =
+    data.zipWithIndex().map((p) => (p._2, p._1))
 
   def predict(params: DenseVector[Double])
              (point: LabeledPoint)
@@ -103,4 +152,19 @@ object LSSVMSparkModel {
                 (point: Vector)
                 (implicit _task: String): Double =
   predictBDV(params)(DenseVector(point.toArray))(_task)
+
+  /**
+   * Factory method to create the appropriate
+   * optimization object required for the Gaussian
+   * model
+   * */
+  def getOptimizer(task: String): GradientDescentSpark = task match {
+    case "classification" => new GradientDescentSpark(
+      new LeastSquaresSVMGradient(),
+      new SquaredL2Updater())
+
+    case "regression" => new GradientDescentSpark(
+      new LeastSquaresGradient(),
+      new SquaredL2Updater())
+  }
 }
