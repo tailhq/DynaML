@@ -113,7 +113,7 @@ object GradientDescent {
         val y = ed.getLabel().getValue()
         gradient.compute(x, y, oldW, cumGradient)
       })
-      newW = updater.compute(oldW, cumGradient,
+      newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
         stepSize, count, regParam)._1
       oldW = newW
       count += 1
@@ -144,7 +144,7 @@ object GradientDescent {
           gradient.compute(x, y, oldW, cumGradient)
         }
       })
-      newW = updater.compute(oldW, cumGradient,
+      newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
         stepSize, count, regParam)._1
       oldW = newW
       count += 1

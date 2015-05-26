@@ -24,5 +24,6 @@ class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 }
 
 object KernelSparkModel {
-  def apply(data: RDD[LabeledPoint], task: String): KernelSparkModel = new KernelSparkModel(data, task)
+  def apply(data: RDD[LabeledPoint], task: String): KernelSparkModel =
+    new KernelSparkModel(data, task)
 }
