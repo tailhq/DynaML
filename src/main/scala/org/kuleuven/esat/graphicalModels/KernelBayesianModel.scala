@@ -18,6 +18,7 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
+import breeze.numerics.sigmoid
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
 import org.apache.log4j.{Logger, Priority}
@@ -198,19 +199,17 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], D
     paramNode.setSlope(this.params.toArray)
   }
 
-  def crossvalidate(folds: Int = 10): (Double, Double, Double) = {
+  def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
-    this.optimizer.setRegParam(0.0001).setNumIterations(100)
-      .setStepSize(0.0001).setMiniBatchFraction(1.0)
+    this.optimizer.setRegParam(reg).setNumIterations(50)
+      .setStepSize(0.001).setMiniBatchFraction(1.0)
     var avg_metrics = DenseVector(0.0, 0.0, 0.0)
     for( a <- 1 to folds){
       //For the ath fold
       //partition the data
       //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
       //as test and the rest as training
-      logger.log(Priority.INFO, "*** Fold: "+a+" ***")
-      logger.log(Priority.INFO, "Calculating test and training data for fold: "+a)
 
       val (test, train) = (1 to this.npoints).partition((p) =>
       {
@@ -229,39 +228,49 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], D
         ed
       }).view.toIterable
 
-      logger.log(Priority.INFO, "Gradient Descent for fold: "+a)
-      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints, this.params, training_data)
-      logger.log(Priority.INFO, "Parameters Learned")
-      logger.log(Priority.INFO, "Evaluating metrics for fold: "+a)
+      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints,
+        this.params,
+        training_data)
       val metrics = KernelBayesianModel.evaluate(tempparams)(test_data)(this.task)
       val kpi = metrics.kpi()
       avg_metrics :+= kpi
     }
     //run batch sgd on each fold
     //and test
-    (avg_metrics(0)/folds.toDouble, avg_metrics(1)/folds.toDouble, avg_metrics(2)/folds.toDouble)
+    (avg_metrics(0)/folds.toDouble,
+      avg_metrics(1)/folds.toDouble,
+      avg_metrics(2)/folds.toDouble)
   }
 
-  def tuneRBFKernel(implicit task: String = this.task): Unit = {
+  def tuneRBFKernel(prot: Int = math.sqrt(this.nPoints.toDouble).toInt,
+                    task: String = this.task): Unit = {
     //Generate a grid of sigma values
     val (samplemean, samplevariance) = utils.getStats(this.filter(_ => true))
     logger.log(Priority.INFO, "Calculating grid for gamma values")
     samplevariance :*= 1.0/(this.npoints.toDouble - 1)
-    val grid = (-5 to 5).map((n) =>
-    {
-      val sigma = math.sqrt(norm(samplevariance, 2))
-      sigma + sigma*(n.toDouble/10.0)
-    }).map((gamma) => {
-      logger.log(Priority.INFO, "Applying RBF Kernel for gamma = "+gamma)
-      this.applyKernel(new RBFKernel(gamma))
-      logger.log(Priority.INFO, "Crossvalidating for gamma = "+gamma)
-      val (a, b, c) = this.crossvalidate()
-      (c, gamma)
+    val sigma = norm(samplevariance, 2)
+    val sigmagrid = (-3 to 3).map(i => {
+      math.exp(i.toDouble)*sigma
     })
-    logger.log(Priority.INFO, "Grid: "+grid)
+
+    val gammagrid = (0 to 5).map(i => {
+      1.05*sigmoid(i.toDouble)
+    })
+
+    val grid = (for{s <- sigmagrid; g <- gammagrid} yield (s,g)).groupBy((c) => c._1).map((hyper) => {
+      this.applyKernel(new RBFKernel(hyper._1), prot)
+      hyper._2.map((sigmaAndGamma) => {
+        logger.log(Priority.INFO, "sigma = "+hyper._1+" gamma = "+hyper._2)
+        val (a, b, c) = this.crossvalidate(4, sigmaAndGamma._2)
+        (c, sigmaAndGamma)
+      })
+    }).flatten
+
     val max = grid.max
-    logger.log(Priority.INFO, "Best value of gamma: "+max._2+" metric value: "+max._1)
-    this.applyKernel(new RBFKernel(max._2))
+    logger.log(Priority.INFO, "Best value of sigma: "+max._2._1+" gamma: "+max._2._2)
+    this.applyKernel(new RBFKernel(max._2._1), prot)
+    this.setRegParam(max._2._2).setMaxIterations(50).setBatchFraction(1.0)
+    this.learn()
   }
 }
 

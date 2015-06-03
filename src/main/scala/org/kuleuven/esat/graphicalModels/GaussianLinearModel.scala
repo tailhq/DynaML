@@ -1,7 +1,7 @@
 package org.kuleuven.esat.graphicalModels
 
-import breeze.linalg.DenseVector
-import breeze.numerics.sqrt
+import breeze.linalg.{cholesky, inv, DenseMatrix, DenseVector}
+import breeze.numerics.{sigmoid, sqrt}
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
@@ -44,12 +44,16 @@ class GaussianLinearModel(
   override implicit protected var params =
     DenseVector.ones[Double](featuredims)
 
-  private val (mean, variance) = utils.getStats(this.filter(_ => true))
+  private val (mean, variance) = utils.getStatsMult(this.filter(_ => true))
 
   override protected val optimizer = GaussianLinearModel.getOptimizer(task)
 
+  private val sigmaInverse: DenseMatrix[Double] = inv(cholesky(variance))
+
+  private val rescale = GaussianLinearModel.scaleAttributes(this.mean, sigmaInverse) _
+
   def score(point: DenseVector[Double]): Double =
-    GaussianLinearModel.score(this.params)(this.featureMap(List((point - this.mean) :/= sqrt(this.variance))).head)
+    GaussianLinearModel.score(this.params)(this.featureMap(List(rescale(point))).head)
 
   override def predict(point: DenseVector[Double]): Double = task match {
     case "classification" => math.tanh(this.score(point))
@@ -85,7 +89,7 @@ class GaussianLinearModel(
     (1 to this.nPoints).foreach{i =>
       val xVertex: Point = this.g.getVertex(xMap(i), classOf[Point])
       val vec: DenseVector[Double] =
-        (DenseVector(xVertex.getValue())(0 to featuredims - 2) - mean) :/= sqrt(variance)
+        rescale(DenseVector(xVertex.getValue())(0 to featuredims - 2))
       xVertex.setValue(DenseVector.vertcat(vec, DenseVector(1.0)).toArray)
     }
     this
@@ -96,6 +100,16 @@ object GaussianLinearModel {
   val manager: FramedGraphFactory = new FramedGraphFactory
   val conf = ConfigFactory.load("conf/bayesLearn.conf")
   val logger = Logger.getLogger(this.getClass)
+
+  /**
+   * Factory function to rescale attributes
+   * given a vector of means and the Cholesky
+   * factorization of the inverse variance matrix
+   *
+   * */
+  def scaleAttributes(mean: DenseVector[Double],
+                      sigmaInverse: DenseMatrix[Double])(x: DenseVector[Double])
+  : DenseVector[Double] = sigmaInverse * (x - mean)
 
   /**
    * Factory method to create the appropriate

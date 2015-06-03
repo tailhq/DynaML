@@ -1,7 +1,7 @@
 package org.kuleuven.esat
 
 import java.io.File
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.{QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
 
 import scala.annotation.tailrec
@@ -81,4 +81,41 @@ package object utils {
   def factorial(n: Int, accumulator: Long = 1): Long = {
     if(n == 0) accumulator else factorial(n - 1, (accumulator * n))
   }
+
+  /**
+   * Get the mean and variance of a data set
+   * which is a [[List]] of [[DenseVector]].
+   *
+   * @param data The data set.
+   *
+   * @return A [[Tuple2]] containing the mean
+   *         and variance * n-1.
+   *
+   * */
+
+  def getStatsMult(data: List[DenseVector[Double]]):
+  (DenseVector[Double], DenseMatrix[Double]) = {
+    def getStatsRec(d: List[DenseVector[Double]],
+                    m: DenseVector[Double],
+                    s: DenseMatrix[Double],
+                    i: Int):
+    (DenseVector[Double], DenseMatrix[Double]) = d match {
+      case Nil => {
+        m :/= i.toDouble
+        s :/= i.toDouble
+        //val m1: DenseVector[Double] = m/i.toDouble
+        (m, s - (m*m.t))
+      }
+      case x :: rest => {
+        getStatsRec(rest, m + x,
+          s + x*x.t,
+          i + 1)
+      }
+    }
+
+    getStatsRec(data.tail, data.head,
+      data.head * data.head.t,
+      1)
+  }
+
 }

@@ -28,7 +28,10 @@ class BinaryClassificationMetrics(
    * and False Negative values.
    * */
 
-  private val thresholds = (-1000 to 1000).map(_.toDouble/1000)
+  private val thresholds = List.tabulate(400)(i => {
+    scoresAndLabels.map(_._1).min +
+      i.toDouble*((scoresAndLabels.map(_._1).max.toInt -
+        scoresAndLabels.map(_._1).min.toInt + 1)/100.0)})
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
     points.sliding(2).map(l => (l(1)._1 - l(0)._1) * (l(1)._2 + l(0)._2)/2).sum
@@ -102,9 +105,9 @@ class BinaryClassificationMetrics(
       var count: Double = 0.0
       this.scoresAndLabels.foreach((couple) => {
         count += 1.0
-        if(math.signum(couple._1 - th) == couple._2) {
+        if(math.signum(couple._1 - th) == couple._2 && couple._2 == 1.0) {
           tp += 1.0
-        } else {
+        } else if(math.signum(couple._1 - th) == 1.0 && couple._2 == -1.0) {
           fp += 1.0
         }
       })
