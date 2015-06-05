@@ -30,6 +30,7 @@ import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector
 import org.kuleuven.esat.utils
 import scala.collection.JavaConversions
 import scala.collection.mutable
+import scala.util.Random
 
 /**
  * Abstract class implementing kernel feature map
@@ -80,9 +81,12 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       i => {
         val point: Point = this.g.getVertex(vertexMaps._2(i),
           classOf[Point])
-        DenseVector(point.getValue())
+        DenseVector(point.getValue())(0 to -2)
       }
     }.toList
+
+  def filterLabels(fn: (Int) => Boolean): List[Double] = this.getXYEdges()
+    .map(_.getLabel().getValue()).toList
 
   override def optimumSubset(M: Int): Unit = {
     points = (0 to this.npoints - 1).toList
@@ -109,7 +113,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
         M,
         new QuadraticRenyiEntropy(density),
         0.0001,
-        2000)
+        100)
     }
   }
 
@@ -133,7 +137,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       val featurex = DenseVector(vertex.getValue())
 
       //Get mapped features for the point
-      val mappedf = featureMap(List(featurex(0 to featurex.length - 2))).head
+      val mappedf = featureMap(List(featurex(0 to -2))).head
       val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(1.0))
       //Set a new property in the vertex corresponding to the mapped features
       vertex.setFeatureMap(newFeatures.toArray)
@@ -199,19 +203,16 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
   def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
-    this.optimizer.setRegParam(reg).setNumIterations(5)
+    this.optimizer.setRegParam(reg).setNumIterations(1)
       .setStepSize(0.001).setMiniBatchFraction(1.0)
-    var avg_metrics = DenseVector(0.0, 0.0, 0.0)
-    for( a <- 1 to folds){
+    val shuffle = Random.shuffle((1 to this.npoints).toList)
+    val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
       //For the ath fold
       //partition the data
       //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
       //as test and the rest as training
-
-      val (test, train) = (1 to this.npoints).partition((p) =>
-      {
-        p >= (a-1)*this.nPoints/folds & p <= a*(this.nPoints-1)/folds
-      })
+      val test = shuffle.slice((a-1)*this.nPoints/folds, a*this.nPoints/folds)
+      val train = shuffle.filter(!test.contains(_))
 
       val training_data = train.map((p) => {
         val ed: CausalEdge = this.g.getEdge(this.edgeMaps._1(p),
@@ -226,17 +227,17 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       }).view.toIterable
 
       val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints,
-        this.params,
+        DenseVector.ones[Double](this.params.length),
         training_data)
-      val metrics = KernelBayesianModel.evaluate(tempparams)(test_data)(this.task)
-      val kpi = metrics.kpi()
-      avg_metrics :+= kpi
-    }
+      val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
+      val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
+      res
+    }.reduce(_+_)
     //run batch sgd on each fold
     //and test
-    (avg_metrics(0)/folds.toDouble,
-      avg_metrics(1)/folds.toDouble,
-      avg_metrics(2)/folds.toDouble)
+    (avg_metrics(0),
+      avg_metrics(1),
+      avg_metrics(2))
   }
 
   def tuneRBFKernel(prot: Int = math.sqrt(this.nPoints.toDouble).toInt,
@@ -247,40 +248,27 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     logger.info("Calculating grid for gamma values")
     //samplevariance :*= 1.0/(this.npoints.toDouble - 1)
     //val sigma = norm(samplevariance, 2)
-    val sigmagrid = List.tabulate(30)((i) => 0.1+i.toDouble/10.0)
+    val sigmagrid = List.tabulate(30)((i) => (i+1).toDouble/10.0)
 
     val gammagrid = List.tabulate(30)((i) => i.toDouble/10.0)
 
     val grid = (for{s <- sigmagrid; g <- gammagrid} yield (s,g)).groupBy((c) => c._1).map((hyper) => {
       this.applyKernel(new RBFKernel(hyper._1), prot)
       hyper._2.map((sigmaAndGamma) => {
-        logger.info("sigma = "+hyper._1+" gamma = "+hyper._2)
+        logger.info("sigma = "+sigmaAndGamma._1+" gamma = "+sigmaAndGamma._2)
         val (a, b, c) = this.crossvalidate(folds, sigmaAndGamma._2)
         (c, sigmaAndGamma)
       })
     }).flatten
     logger.info("Grid: \n"+grid.toList)
-    val max = grid.max
-    logger.log(Priority.INFO, "Best value of sigma: "+max._2._1+" gamma: "+max._2._2)
-    this.applyKernel(new RBFKernel(max._2._1), prot)
-    this.setRegParam(max._2._2).setMaxIterations(5).setBatchFraction(1.0)
+    val maximum = grid.max
+    logger.log(Priority.INFO, "Best value: "+maximum)
+    this.applyKernel(new RBFKernel(maximum._2._1), prot)
+    this.setRegParam(maximum._2._2).setMaxIterations(10).setBatchFraction(1.0)
     this.learn()
   }
-}
 
-object KernelBayesianModel {
-  val logger = Logger.getLogger(this.getClass)
-  def evaluate(params: DenseVector[Double])
-              (test_data_set: Iterable[CausalEdge])
-              (task: String): Metrics[Double] = {
-    var index: Int = 1
-    val scoresAndLabels = test_data_set.map((e) => {
-      val scorepred = GaussianLinearModel.score(params) _
-      val x = DenseVector(e.getPoint().getFeatureMap())
-      val y = e.getLabel().getValue()
-      index += 1
-      (scorepred(x(0 to x.length - 2)), y)
-    })
-    Metrics(task)(scoresAndLabels.toList, index)
-  }
+  def evaluateFold(params: DenseVector[Double])
+                  (test_data_set: Iterable[CausalEdge])
+                  (task: String): Metrics[Double]
 }

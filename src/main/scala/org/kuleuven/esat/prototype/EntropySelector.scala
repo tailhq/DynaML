@@ -150,7 +150,7 @@ object GreedyEntropySelector {
         workingset = (workingset :+ point1).filter((p) => p != point2)
       }
 
-
+      logger.info("Iteration: "+it)
     } while(math.abs(d/oldEntropy) >= delta &&
       it <= MAX_ITERATIONS)
     logger.log(Priority.INFO, "Returning final prototype set")

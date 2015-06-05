@@ -128,7 +128,7 @@ class BinaryClassificationMetrics(
     val roccurve = this.roc()
     val prcurve = this.pr()
     val fm = this.fMeasureByThreshold()
-
+    implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
     logger.log(Priority.INFO, "Generating ROC Plot")
     val chart1 = XYAreaChart(roccurve,
       title = "Receiver Operating Characteristic", legend = true)

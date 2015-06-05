@@ -52,14 +52,19 @@ class GaussianLinearModel(
 
   private val sigmaInverse: DenseMatrix[Double] = inv(cholesky(variance))
 
-  private val rescale = GaussianLinearModel.scaleAttributes(this.mean, sigmaInverse) _
+  val rescale = GaussianLinearModel.scaleAttributes(this.mean, sigmaInverse) _
 
-  def score(point: DenseVector[Double]): Double =
-    GaussianLinearModel.score(this.params)(this.featureMap(List(rescale(point))).head)
+  def score(point: DenseVector[Double]): Double = {
+    val rescaled = rescale(point)
+    val phi = featureMap(List(rescaled)).head
+    val phic = DenseVector.vertcat(phi, DenseVector(1.0))
+    params dot phic
+  }
+
 
   override def predict(point: DenseVector[Double]): Double = task match {
     case "classification" => sigmoid(this.score(point))
-    case "regression" => label_mean(0) + math.sqrt(label_var(0,0))*this.score(point)
+    case "regression" => /*label_mean(0) + math.sqrt(label_var(0,0))**/this.score(point)
   }
 
   override def evaluate(config: Map[String, String]): Metrics[Double] = {
@@ -71,7 +76,7 @@ class GaussianLinearModel(
     val scoreFunction = task match {
       case "classification" => this.score _
       case "regression" => (x: DenseVector[Double]) => {
-        label_mean(0) + math.sqrt(label_var(0,0))*this.score(x)
+        /*label_mean(0) + math.sqrt(label_var(0,0))**/this.score(x)
       }
     }
 
@@ -82,12 +87,6 @@ class GaussianLinearModel(
 
     Metrics(task)(scoresAndLabels, index)
   }
-
-  override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
-    super.filter(fn).map((p) => p(0 to featuredims - 2))
-
-  def filterLabels(fn: (Int) => Boolean): List[Double] = this.getXYEdges()
-    .map(_.getLabel().getValue()).toList
 
   /**
    * Saves the underlying graph object
@@ -106,18 +105,47 @@ class GaussianLinearModel(
     logger.info("Rescaling data attributes")
     val xMap = this.vertexMaps._2
     val yMap = this.vertexMaps._3
-    (1 to this.nPoints).foreach{i =>
-      val xVertex: Point = this.g.getVertex(xMap(i), classOf[Point])
+
+    this.getXYEdges().foreach((edge) => {
+      val xVertex: Point = edge.getPoint()
       val vec: DenseVector[Double] =
-        rescale(DenseVector(xVertex.getValue())(0 to featuredims - 2))
+        rescale(DenseVector(xVertex.getValue())(0 to -2))
       xVertex.setValue(DenseVector.vertcat(vec, DenseVector(1.0)).toArray)
-      /*if(this.task == "regression") {
-        val yVertex = this.g.getVertex(yMap(i), classOf[Label])
-        val yv = (yVertex.getValue() - label_mean(0)) /
-          math.sqrt(label_var(0,0)/(this.nPoints-1))
-      }*/
-    }
+
+    })
     this
+  }
+
+  def GetStatistics(): Unit = {
+    logger.info("Feature Statistics: \n")
+    logger.info("Mean: "+this.mean)
+    logger.info("Co-variance: \n"+this.variance)
+
+    logger.info("Label Statistics: \n")
+    logger.info("Mean: "+label_mean(0))
+    logger.info("Variance: "+label_var(0,0))
+  }
+
+  override def evaluateFold(params: DenseVector[Double])
+                           (test_data_set: Iterable[CausalEdge])
+                           (task: String): Metrics[Double] = {
+    var index: Int = 1
+    val scorepred: (DenseVector[Double]) => Double = params dot _
+    val scoreFunction = task match {
+      case "classification" => scorepred
+      case "regression" => (x: DenseVector[Double]) => {
+        /*label_mean(0) + math.sqrt(label_var(0,0))**/scorepred(x)
+      }
+    }
+
+    val scoresAndLabels = test_data_set.map((e) => {
+
+      val x = DenseVector(e.getPoint().getFeatureMap())
+      val y = e.getLabel().getValue()
+      index += 1
+      (scoreFunction(x), y)
+    })
+    Metrics(task)(scoresAndLabels.toList, index)
   }
 }
 
@@ -150,43 +178,6 @@ object GaussianLinearModel {
       new LeastSquaresGradient(),
       new SquaredL2Updater())
   }*/
-
-  /**
-   * A curried function which calculates the predicted
-   * value of the target variable using the parameters
-   * and the point in question.
-   *
-   * This is used for the implementation of the method
-   * score in [[GaussianLinearModel]]
-   * */
-
-  def score(params: DenseVector[Double])
-           (point: DenseVector[Double]): Double =
-    params(0 to params.length-2) dot point +
-      params(params.length-1)
-
-  /**
-   * The actual implementation of the evaluate
-   * feature.
-   * */
-  def evaluate(featureMap: (List[DenseVector[Double]]) => List[DenseVector[Double]])
-              (params: DenseVector[Double])
-              (reader: CSVReader, head: Boolean)
-              (implicit task: String): Metrics[Double] = {
-    logger.log(Priority.INFO, "Calculating test set predictions")
-    val (points, dim) = readCSV(reader, head)
-    var index = 1
-    val scoreFunction = score(params) _
-
-    val scoresAndLabels = points.map{couple =>
-      val yv = couple._2
-      val xv = featureMap(List(couple._1)).head
-      index += 1
-      (scoreFunction(xv), yv)
-    }.toList
-
-    Metrics(task)(scoresAndLabels, index)
-  }
 
   def readCSV(reader: CSVReader, head: Boolean):
   (Iterable[(DenseVector[Double], Double)], Int) = {

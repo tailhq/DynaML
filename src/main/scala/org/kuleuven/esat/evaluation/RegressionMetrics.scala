@@ -3,7 +3,7 @@ package org.kuleuven.esat.evaluation
 import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 
-import scalax.chart.module.ChartFactories.{XYLineChart, XYAreaChart}
+import scalax.chart.module.ChartFactories.{XYBarChart, XYLineChart, XYAreaChart}
 
 /**
  * Class implementing the calculation
@@ -33,6 +33,8 @@ class RegressionMetrics(
 
   def residuals() = this.scoresAndLabels.map((s) => (s._1 - s._2, s._2))
 
+  def scores_and_labels() = this.scoresAndLabels
+
   override def print(): Unit = {
     logger.log(Priority.INFO, "Regression Model Performance")
     logger.log(Priority.INFO, "============================")
@@ -45,10 +47,11 @@ class RegressionMetrics(
   override def kpi() = DenseVector(mae, rmse, Rsq)
 
   override def generatePlots(): Unit = {
-    val roccurve = this.residuals()
+    implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
+    val roccurve = this.residuals().map(c => (c._2, c._1))
 
     logger.log(Priority.INFO, "Generating Plot of Residuals")
-    val chart1 = XYAreaChart(roccurve,
+    val chart1 = XYBarChart(roccurve,
       title = "Residuals", legend = true)
 
     chart1.show()
