@@ -89,7 +89,7 @@ package object utils {
    * @param data The data set.
    *
    * @return A [[Tuple2]] containing the mean
-   *         and variance * n-1.
+   *         and variance.
    *
    * */
 

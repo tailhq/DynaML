@@ -25,7 +25,7 @@ import org.apache.log4j.{Logger, Priority}
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.graphUtils.{Parameter, CausalEdge, Point}
 import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
-import org.kuleuven.esat.optimization.GradientDescent
+import org.kuleuven.esat.optimization.{ConjugateGradient, GradientDescent}
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
 import scala.collection.JavaConversions
@@ -36,11 +36,12 @@ import scala.collection.mutable
  * extraction functions.
  */
 abstract class KernelBayesianModel(implicit protected val task: String) extends
-KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], DenseVector[Double], Double, Int, Int] {
+KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
+  DenseVector[Double], DenseVector[Double], Double, Int, Int] {
 
   protected val logger = Logger.getLogger(this.getClass)
 
-  override protected val optimizer: GradientDescent
+  override protected val optimizer: ConjugateGradient
 
   protected val featuredims: Int
 
@@ -86,7 +87,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], D
   override def optimumSubset(M: Int): Unit = {
     points = (0 to this.npoints - 1).toList
     if(M < this.npoints) {
-      logger.log(Priority.INFO, "Calculating sample variance of the data set")
+      logger.info("Calculating sample variance of the data set")
 
       //Get the original features of the data
       //Calculate the column means and variances
@@ -96,17 +97,13 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], D
       val adjvarance:DenseVector[Double] = variance :/= (npoints.toDouble - 1)
       val density = new GaussianDensityKernel
 
-      logger.log(Priority.INFO,
-        "Using Silvermans rule of thumb to set bandwidth of density kernel")
-      logger.log(Priority.INFO,
-        "Std Deviation of the data: "+adjvarance.toString())
-      logger.log(Priority.INFO,
-        "norm: "+norm(adjvarance))
+      logger.info("Using Silvermans rule of thumb to set bandwidth of density kernel")
+      logger.info("Std Deviation of the data: "+adjvarance.toString())
+      logger.info("norm: "+norm(adjvarance))
       density.setBandwidth(DenseVector.tabulate[Double](featuredims - 1){
         i => 1.06*math.sqrt(adjvarance(i))/math.pow(npoints, 0.2)
       })
-      logger.log(Priority.INFO,
-        "Building low rank approximation to kernel matrix")
+      logger.info("Building low rank approximation to kernel matrix")
 
       points = GreedyEntropySelector.subsetSelection(this,
         M,
@@ -123,7 +120,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], D
    * data nodes.
    * */
   def applyFeatureMap(): Unit = {
-    logger.log(Priority.INFO, "Applying Feature map to data set")
+    logger.info("Applying Feature map to data set")
     val edges = this.getXYEdges()
     val pnode:Parameter = this.g.getVertex(this.vertexMaps._1("w"),
       classOf[Parameter])
@@ -141,7 +138,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], D
       //Set a new property in the vertex corresponding to the mapped features
       vertex.setFeatureMap(newFeatures.toArray)
     })
-    logger.log(Priority.INFO, "DONE: Applying Feature map to data set")
+    logger.info("DONE: Applying Feature map to data set")
   }
 
   override def applyKernel(
@@ -202,7 +199,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], D
   def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
-    this.optimizer.setRegParam(reg).setNumIterations(50)
+    this.optimizer.setRegParam(reg).setNumIterations(5)
       .setStepSize(0.001).setMiniBatchFraction(1.0)
     var avg_metrics = DenseVector(0.0, 0.0, 0.0)
     for( a <- 1 to folds){
@@ -243,33 +240,30 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge], DenseVector[Double], D
   }
 
   def tuneRBFKernel(prot: Int = math.sqrt(this.nPoints.toDouble).toInt,
+                    folds: Int,
                     task: String = this.task): Unit = {
     //Generate a grid of sigma values
-    val (samplemean, samplevariance) = utils.getStats(this.filter(_ => true))
-    logger.log(Priority.INFO, "Calculating grid for gamma values")
-    samplevariance :*= 1.0/(this.npoints.toDouble - 1)
-    val sigma = norm(samplevariance, 2)
-    val sigmagrid = (-3 to 3).map(i => {
-      math.exp(i.toDouble)*sigma
-    })
+    //val (samplemean, samplevariance) = utils.getStats(this.filter(_ => true))
+    logger.info("Calculating grid for gamma values")
+    //samplevariance :*= 1.0/(this.npoints.toDouble - 1)
+    //val sigma = norm(samplevariance, 2)
+    val sigmagrid = List.tabulate(30)((i) => 0.1+i.toDouble/10.0)
 
-    val gammagrid = (0 to 5).map(i => {
-      1.05*sigmoid(i.toDouble)
-    })
+    val gammagrid = List.tabulate(30)((i) => i.toDouble/10.0)
 
     val grid = (for{s <- sigmagrid; g <- gammagrid} yield (s,g)).groupBy((c) => c._1).map((hyper) => {
       this.applyKernel(new RBFKernel(hyper._1), prot)
       hyper._2.map((sigmaAndGamma) => {
-        logger.log(Priority.INFO, "sigma = "+hyper._1+" gamma = "+hyper._2)
-        val (a, b, c) = this.crossvalidate(4, sigmaAndGamma._2)
+        logger.info("sigma = "+hyper._1+" gamma = "+hyper._2)
+        val (a, b, c) = this.crossvalidate(folds, sigmaAndGamma._2)
         (c, sigmaAndGamma)
       })
     }).flatten
-
+    logger.info("Grid: \n"+grid.toList)
     val max = grid.max
     logger.log(Priority.INFO, "Best value of sigma: "+max._2._1+" gamma: "+max._2._2)
     this.applyKernel(new RBFKernel(max._2._1), prot)
-    this.setRegParam(max._2._2).setMaxIterations(50).setBatchFraction(1.0)
+    this.setRegParam(max._2._2).setMaxIterations(5).setBatchFraction(1.0)
     this.learn()
   }
 }

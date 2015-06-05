@@ -3,6 +3,8 @@ package org.kuleuven.esat.evaluation
 import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 
+import scalax.chart.module.ChartFactories.{XYLineChart, XYAreaChart}
+
 /**
  * Class implementing the calculation
  * of regression performance evaluation
@@ -29,6 +31,8 @@ class RegressionMetrics(
 
   val Rsq: Double = RegressionMetrics.computeRsq(scoresAndLabels, length)
 
+  def residuals() = this.scoresAndLabels.map((s) => (s._1 - s._2, s._2))
+
   override def print(): Unit = {
     logger.log(Priority.INFO, "Regression Model Performance")
     logger.log(Priority.INFO, "============================")
@@ -39,6 +43,16 @@ class RegressionMetrics(
   }
 
   override def kpi() = DenseVector(mae, rmse, Rsq)
+
+  override def generatePlots(): Unit = {
+    val roccurve = this.residuals()
+
+    logger.log(Priority.INFO, "Generating Plot of Residuals")
+    val chart1 = XYAreaChart(roccurve,
+      title = "Residuals", legend = true)
+
+    chart1.show()
+  }
 
 }
 

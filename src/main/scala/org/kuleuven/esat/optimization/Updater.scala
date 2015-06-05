@@ -5,7 +5,7 @@ import breeze.linalg.max
 
 import scala.math._
 
-trait BasicUpdater[P] {
+trait BasicUpdater[P] extends Serializable {
   def compute(
       weightsOld: P,
       gradient: P,
@@ -107,6 +107,7 @@ class SquaredL2Updater extends Updater {
     val thisIterStepSize = stepSize / math.sqrt(iter)
     val weights: DenseVector[Double] = weightsOld
     weights :*= (1.0 - thisIterStepSize * regParam)
+    weights(weights.length-1) = weightsOld(weightsOld.length-1)
     axpy(-thisIterStepSize, gradient, weights)
     val mag = norm(weights, 2.0)
 

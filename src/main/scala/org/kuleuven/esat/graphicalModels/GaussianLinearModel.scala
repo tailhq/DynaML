@@ -46,6 +46,8 @@ class GaussianLinearModel(
 
   private val (mean, variance) = utils.getStatsMult(this.filter(_ => true))
 
+  private val (label_mean, label_var) = utils.getStatsMult(this.filterLabels(_ => true).map(i => DenseVector(i)))
+
   override protected val optimizer = GaussianLinearModel.getOptimizer(task)
 
   private val sigmaInverse: DenseMatrix[Double] = inv(cholesky(variance))
@@ -56,19 +58,36 @@ class GaussianLinearModel(
     GaussianLinearModel.score(this.params)(this.featureMap(List(rescale(point))).head)
 
   override def predict(point: DenseVector[Double]): Double = task match {
-    case "classification" => math.tanh(this.score(point))
-    case "regression" => this.score(point)
+    case "classification" => sigmoid(this.score(point))
+    case "regression" => label_mean(0) + math.sqrt(label_var(0,0))*this.score(point)
   }
 
   override def evaluate(config: Map[String, String]): Metrics[Double] = {
     val (file, delim, head, _) = GaussianLinearModel.readConfig(config)
-    GaussianLinearModel.evaluate(this.featureMap)(this.params)(
-      utils.getCSVReader(file, delim), head
-    )
+    logger.log(Priority.INFO, "Calculating test set predictions")
+    val reader = utils.getCSVReader(file, delim)
+    val (points, dim) = GaussianLinearModel.readCSV(reader, head)
+    var index = 1
+    val scoreFunction = task match {
+      case "classification" => this.score _
+      case "regression" => (x: DenseVector[Double]) => {
+        label_mean(0) + math.sqrt(label_var(0,0))*this.score(x)
+      }
+    }
+
+    val scoresAndLabels = points.map{couple =>
+      index += 1
+      (scoreFunction(couple._1), couple._2)
+    }.toList
+
+    Metrics(task)(scoresAndLabels, index)
   }
 
   override def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
     super.filter(fn).map((p) => p(0 to featuredims - 2))
+
+  def filterLabels(fn: (Int) => Boolean): List[Double] = this.getXYEdges()
+    .map(_.getLabel().getValue()).toList
 
   /**
    * Saves the underlying graph object
@@ -86,11 +105,17 @@ class GaussianLinearModel(
   def normalizeData: this.type = {
     logger.info("Rescaling data attributes")
     val xMap = this.vertexMaps._2
+    val yMap = this.vertexMaps._3
     (1 to this.nPoints).foreach{i =>
       val xVertex: Point = this.g.getVertex(xMap(i), classOf[Point])
       val vec: DenseVector[Double] =
         rescale(DenseVector(xVertex.getValue())(0 to featuredims - 2))
       xVertex.setValue(DenseVector.vertcat(vec, DenseVector(1.0)).toArray)
+      /*if(this.task == "regression") {
+        val yVertex = this.g.getVertex(yMap(i), classOf[Label])
+        val yv = (yVertex.getValue() - label_mean(0)) /
+          math.sqrt(label_var(0,0)/(this.nPoints-1))
+      }*/
     }
     this
   }
@@ -116,7 +141,7 @@ object GaussianLinearModel {
    * optimization object required for the Gaussian
    * model
    * */
-  def getOptimizer(task: String): GradientDescent = task match {
+  def getOptimizer(task: String): ConjugateGradient = new ConjugateGradient /*task match {
     case "classification" => new GradientDescent(
       new LeastSquaresSVMGradient(),
       new SquaredL2Updater())
@@ -124,7 +149,7 @@ object GaussianLinearModel {
     case "regression" => new GradientDescent(
       new LeastSquaresGradient(),
       new SquaredL2Updater())
-  }
+  }*/
 
   /**
    * A curried function which calculates the predicted
@@ -151,11 +176,13 @@ object GaussianLinearModel {
     logger.log(Priority.INFO, "Calculating test set predictions")
     val (points, dim) = readCSV(reader, head)
     var index = 1
+    val scoreFunction = score(params) _
+
     val scoresAndLabels = points.map{couple =>
       val yv = couple._2
-      val xv = couple._1
+      val xv = featureMap(List(couple._1)).head
       index += 1
-      (score(params)(featureMap(List(xv)).head), yv)
+      (scoreFunction(xv), yv)
     }.toList
 
     Metrics(task)(scoresAndLabels, index)

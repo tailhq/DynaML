@@ -36,7 +36,7 @@ abstract class EntropySelector
 private[esat] class GreedyEntropySelector(
     m: EntropyMeasure,
     del: Double = 0.0001,
-    max: Int = 5000)
+    max: Int = 1000)
   extends EntropySelector
   with Serializable {
 
@@ -138,6 +138,7 @@ object GreedyEntropySelector {
         * */
         oldEntropy = newEntropy
         newDataset = (newDataset :+ point1).filter((p) => p != point2)
+        it += 1
       } else {
         /*
         * No improvement in entropy
@@ -149,8 +150,8 @@ object GreedyEntropySelector {
         workingset = (workingset :+ point1).filter((p) => p != point2)
       }
 
-      it += 1
-    } while(math.abs(d) >= delta &&
+
+    } while(math.abs(d/oldEntropy) >= delta &&
       it <= MAX_ITERATIONS)
     logger.log(Priority.INFO, "Returning final prototype set")
     //Time to return the final working set

@@ -3,7 +3,7 @@ package org.kuleuven.esat.evaluation
 import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 
-import scalax.chart.module.ChartFactories.XYLineChart
+import scalax.chart.module.ChartFactories.{XYAreaChart, XYLineChart}
 
 /**
  * Class implementing the calculation
@@ -28,10 +28,15 @@ class BinaryClassificationMetrics(
    * and False Negative values.
    * */
 
-  private val thresholds = List.tabulate(400)(i => {
+  private val thresholds = List.tabulate(100)(i => {
     scoresAndLabels.map(_._1).min +
       i.toDouble*((scoresAndLabels.map(_._1).max.toInt -
         scoresAndLabels.map(_._1).min.toInt + 1)/100.0)})
+
+  val positives = this.scoresAndLabels.filter(_._2 == 1.0)
+  val negatives = this.scoresAndLabels.filter(_._2 == -1.0)
+
+  def scores_and_labels = this.scoresAndLabels
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
     points.sliding(2).map(l => (l(1)._1 - l(0)._1) * (l(1)._2 + l(0)._2)/2).sum
@@ -100,18 +105,19 @@ class BinaryClassificationMetrics(
    * */
   def tpfpByThreshold(): List[(Double, (Double, Double))]  =
     this.thresholds.toList.map((th) => {
-      var tp: Double = 0.0
-      var fp: Double = 0.0
-      var count: Double = 0.0
-      this.scoresAndLabels.foreach((couple) => {
-        count += 1.0
-        if(math.signum(couple._1 - th) == couple._2 && couple._2 == 1.0) {
-          tp += 1.0
-        } else if(math.signum(couple._1 - th) == 1.0 && couple._2 == -1.0) {
-          fp += 1.0
-        }
-      })
-      (th, (tp/count, fp/count))
+      val true_positive = if(positives.length > 0) {
+        positives.count(p =>
+          math.signum(p._1 - th) == 1.0)
+          .toDouble/positives.length
+      } else {0.0}
+
+      val false_positive = if(negatives.length > 0) {
+        negatives.count(p =>
+          math.signum(p._1 - th) == 1.0)
+          .toDouble/negatives.length
+      } else {0.0}
+
+      (th, (true_positive, false_positive))
     })
 
   /**
@@ -124,12 +130,13 @@ class BinaryClassificationMetrics(
     val fm = this.fMeasureByThreshold()
 
     logger.log(Priority.INFO, "Generating ROC Plot")
-    val chart1 = XYLineChart(roccurve,
+    val chart1 = XYAreaChart(roccurve,
       title = "Receiver Operating Characteristic", legend = true)
+
     chart1.show()
 
     logger.log(Priority.INFO, "Generating PR Plot")
-    val chart2 = XYLineChart(prcurve,
+    val chart2 = XYAreaChart(prcurve,
       title = "Precision Recall Curve", legend = true)
     chart2.show()
 
@@ -148,6 +155,6 @@ class BinaryClassificationMetrics(
   }
 
   override def kpi() = DenseVector(areaUnderPR(),
-    areaUnderROC(),
-    fMeasureByThreshold().map((c) => c._2).max)
+    fMeasureByThreshold().map((c) => c._2).max,
+    areaUnderROC())
 }

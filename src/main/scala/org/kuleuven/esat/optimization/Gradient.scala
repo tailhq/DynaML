@@ -96,8 +96,7 @@ class LogisticGradient extends Gradient {
 /**
  * Compute gradient and loss for a Least-squared loss function, as used in linear regression.
  * This is correct for the averaged least squares loss function (mean squared error)
- *              L = 1/2n ||A weights-y||**2
- * See also the documentation for the precise formulation.
+ *              L = 1/2 ||weights . phi(x) - y||**2
  */
 
 class LeastSquaresGradient extends Gradient {
@@ -105,10 +104,10 @@ class LeastSquaresGradient extends Gradient {
       data: DenseVector[Double],
       label: Double, weights: DenseVector[Double])
   : (DenseVector[Double], Double) = {
-    val diff = (weights.t * data) - label
+    val diff = label - (weights.t * data)//(weights.t * data) - label
     val loss = diff * diff / 2.0
     val gradient = data.copy
-    gradient :*= diff
+    gradient :*= -1*diff
     (gradient, loss)
   }
 
@@ -117,8 +116,8 @@ class LeastSquaresGradient extends Gradient {
       label: Double,
       weights: DenseVector[Double],
       cumGradient: DenseVector[Double]): Double = {
-    val diff = (weights.t * data) - label
-    axpy(diff, data, cumGradient)
+    val diff = label - (weights.t * data)
+    axpy(-1*diff, data, cumGradient)
     diff * diff / 2.0
   }
 }
@@ -177,7 +176,7 @@ class LeastSquaresSVMGradient extends Gradient {
       data: DenseVector[Double],
       label: Double, weights: DenseVector[Double])
   : (DenseVector[Double], Double) = {
-    val diff = 1 - label*(weights.t * data)
+    val diff = 1.0 - label*(weights dot data)
     val loss = diff * diff / 2.0
     val gradient = data.copy
     gradient :*= -1*label*diff

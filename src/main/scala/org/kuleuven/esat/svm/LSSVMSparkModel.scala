@@ -59,6 +59,7 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
    *
    **/
   override def learn(): Unit = {
+    val featureMapb = g.context.broadcast(featureMap)
     val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
     val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
     params = this.optimizer.optimize(_nPoints, params,
@@ -69,7 +70,7 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
         new LabeledPoint(
           point._2.label,
           Vectors.dense(DenseVector.vertcat(
-            featureMap(ans),
+            featureMapb.value(ans),
             DenseVector(1.0))
             .toArray)
         )
@@ -103,11 +104,13 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
     val mapPoint = (p: LabeledPoint) => new LabeledPoint(p.label,
         Vectors.dense(featureMap(DenseVector(p.features.toArray)).toArray))
 
-    val predictLabel = LSSVMSparkModel.predict(params)(_task) _
+    val predict = LSSVMSparkModel.scoreSparkVector(params) _
+    val mapPointb = sc.broadcast(mapPoint)
+    val predictb = sc.broadcast(predict)
+    val results = test_data.map(point => {
+      (predictb.value(mapPointb.value(point).features), point.label)
+    }).collect()
 
-    val results = test_data.map(point =>
-      predictLabel(mapPoint(point)))
-      .collect()
     Metrics(_task)(results.toList, results.length)
   }
 
@@ -151,6 +154,13 @@ object LSSVMSparkModel {
     val margin: Double = predictSparkVector(params)(point.features)(_task)
     val loss = point.label - margin
     (margin, math.pow(loss, 2))
+  }
+
+  def scoreSparkVector(params: DenseVector[Double])
+                      (point: Vector): Double = {
+    params dot DenseVector.vertcat(
+      DenseVector(point.toArray),
+      DenseVector(1.0))
   }
 
   def predictBDV(params: DenseVector[Double])
