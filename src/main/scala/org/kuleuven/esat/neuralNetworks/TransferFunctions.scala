@@ -19,7 +19,7 @@ object TransferFunctions {
    * Sigmoid/Logistic function
    *
    * */
-  val logsig = sigmoid _
+  val logsig = (x:Double) => sigmoid(x)
 
   /**
    * Identity Function
