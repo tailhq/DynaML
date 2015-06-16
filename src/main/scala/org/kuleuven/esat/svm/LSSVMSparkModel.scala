@@ -1,7 +1,8 @@
 package org.kuleuven.esat.svm
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{inv, cholesky, DenseMatrix, DenseVector}
 import breeze.numerics.sqrt
+import org.apache.log4j.Logger
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
@@ -12,6 +13,7 @@ import org.kuleuven.esat.graphicalModels.{GaussianLinearModel, LinearModel}
 import org.kuleuven.esat.kernels.Kernel
 import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
+import org.kuleuven.esat.utils
 
 /**
  * Implementation of the Least Squares SVM
@@ -49,7 +51,7 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
    *
    **/
   override def predict(point: DenseVector[Double]): Double =
-    LSSVMSparkModel.predictBDV(params)(point)(_task)
+    LSSVMSparkModel.predictBDV(params)(_task)(point)
 
   /**
    * Learn the parameters
@@ -65,8 +67,8 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
     params = this.optimizer.optimize(_nPoints, params,
       this.g.map(point => {
         val vec = DenseVector(point._2.features.toArray)
-        val ans = vec - meanb.value
-        ans :/= sqrt(varianceb.value)
+        val ans = vec - meanb.value(0 to -1)
+        ans :/= sqrt(varianceb.value(0 to -1))
         new LabeledPoint(
           point._2.label,
           Vectors.dense(DenseVector.vertcat(
@@ -101,22 +103,40 @@ LinearModel[RDD[(Long, LabeledPoint)], Int, Int, DenseVector[Double],
         csv
     }
 
-    val mapPoint = (p: LabeledPoint) => new LabeledPoint(p.label,
-        Vectors.dense(featureMap(DenseVector(p.features.toArray)).toArray))
+    val mapPoint = (p: Vector) => Vectors.dense(featureMap(DenseVector(p.toArray)).toArray)
 
     val predict = LSSVMSparkModel.scoreSparkVector(params) _
     val mapPointb = sc.broadcast(mapPoint)
     val predictb = sc.broadcast(predict)
     val results = test_data.map(point => {
-      (predictb.value(mapPointb.value(point).features), point.label)
+      (predictb.value(mapPointb.value(point.features)), point.label)
     }).collect()
 
     Metrics(_task)(results.toList, results.length)
   }
 
+  def GetStatistics(): Unit = {
+    println("Feature Statistics: \n")
+    println("Mean: "+this.colStats.mean)
+    println("Variance: \n"+this.colStats.variance)
+
+    //println("Label Statistics: \n")
+    //println("Mean: "+label_mean)
+    //println("Variance: "+label_var)
+  }
+
 }
 
 object LSSVMSparkModel {
+
+  def scaleAttributes(mean: DenseVector[Double],
+                      sigmaInverse: DenseMatrix[Double])(x: DenseVector[Double])
+  : DenseVector[Double] = {
+    DenseVector.tabulate[Double](mean.length)((i) => {
+      (x(i) - mean(i)) / math.sqrt(sigmaInverse(i,i))
+    })
+    //sigmaInverse * (x - mean)
+  }
 
   def apply(implicit config: Map[String, String], sc: SparkContext): LSSVMSparkModel = {
     val (file, delim, head, task) = GaussianLinearModel.readConfig(config)
@@ -125,7 +145,7 @@ object LSSVMSparkModel {
       val label = vector(vector.length-1)
       vector(vector.length-1) = 1.0
       LabeledPoint(label, Vectors.dense(vector.slice(0, vector.length - 1)))
-    }).cache()
+    })
 
     val data = head match {
       case true =>
@@ -164,8 +184,8 @@ object LSSVMSparkModel {
   }
 
   def predictBDV(params: DenseVector[Double])
-             (point: DenseVector[Double])
-             (implicit _task: String): Double = {
+                (_task: String)
+                (point: DenseVector[Double]): Double = {
     val margin: Double = params dot DenseVector.vertcat(
       point,
       DenseVector(1.0))
@@ -179,7 +199,7 @@ object LSSVMSparkModel {
   def predictSparkVector(params: DenseVector[Double])
                 (point: Vector)
                 (implicit _task: String): Double =
-  predictBDV(params)(DenseVector(point.toArray))(_task)
+  predictBDV(params)(_task)(DenseVector(point.toArray))
 
   /**
    * Factory method to create the appropriate

@@ -3,6 +3,8 @@ package org.kuleuven.esat
 import java.io.File
 import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.{QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
+import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.rdd.RDD
 
 import scala.annotation.tailrec
 
@@ -116,6 +118,27 @@ package object utils {
     getStatsRec(data.tail, data.head,
       data.head * data.head.t,
       1)
+  }
+
+  def getStatsRDD(data: RDD[LabeledPoint]):
+  (Double, Double,
+    DenseVector[Double],
+    DenseMatrix[Double]) = {
+    val (lm, ls, m, s) = data.map((p) => {
+      val label = p.label
+      val features = DenseVector(p.features.toArray)
+      (label, label*label, features, features*features.t)
+    }).reduce((a,b) => {
+      (a._1 + b._1, a._2 + b._2, a._3 + b._3, a._4 + b._4)
+    })
+    val count = data.count().toDouble
+    val labelMean = lm/count
+    val labelVar = (ls/count) - labelMean*labelMean
+    m :/= count
+    s :/= count
+    val featuresCov = s - m*m.t
+
+    (labelMean, labelVar, m, featuresCov)
   }
 
 }

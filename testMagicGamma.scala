@@ -5,15 +5,17 @@ import org.kuleuven.esat.svm.LSSVMSparkModel
  * @author mandar2812
  */
 
-val config = Map("file" -> "data/magicgamma.csv", "delim" -> ",",
+val config = Map("file" -> "data/ripley.csv", "delim" -> ",",
   "head" -> "false",
   "task" -> "classification")
 
-val configtest = Map("file" -> "data/magicgammatest.csv",
+val configtest = Map("file" -> "data/ripleytest.csv",
   "delim" -> ",",
   "head" -> "false")
 
 val conf = new SparkConf().setAppName("Magicgamma").setMaster("local[4]")
+
+conf.registerKryoClasses(Array(classOf[LSSVMSparkModel]))
 
 val sc = new SparkContext(conf)
 

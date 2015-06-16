@@ -254,7 +254,9 @@
                         <goals><goal>assemble</goal></goals>
                         <phase>package</phase>
                         <configuration>
-                            <extraJvmArguments>-Xmx1600m</extraJvmArguments>
+                            <extraJvmArguments>-XX:+UseG1GC</extraJvmArguments>
+                            <extraJvmArguments>-Xmx2.6g</extraJvmArguments>
+                            <extraJvmArguments>-XX:MaxPermSize=1g</extraJvmArguments>
                             <extraJvmArguments>
                                 -Dlog4j.configuration=file://${basedir}/conf/log4j.properties
                             </extraJvmArguments>
