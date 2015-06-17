@@ -18,6 +18,8 @@
 package org.kuleuven.esat.prototype
 
 import breeze.linalg.DenseVector
+import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.kernels.DensityKernel
 
 /**
@@ -44,4 +46,8 @@ abstract class EntropyMeasure extends Measure[DenseVector[Double]] with Serializ
   def entropy(data: List[DenseVector[Double]]): Double
 
   override def evaluate(data: List[DenseVector[Double]]): Double = this.entropy(data)
+
+  def entropy[K](data: RDD[(K, LabeledPoint)]): Double
+
+  def evaluate[K](data: RDD[(K, LabeledPoint)]): Double = this.entropy[K](data)
 }

@@ -51,18 +51,13 @@ abstract class SVMKernel[T] extends Kernel with Serializable {
    **/
   def featureMapping(decomposition: (DenseVector[Double], DenseMatrix[Double]))
                     (prototypes: List[DenseVector[Double]])
-                    (data: List[DenseVector[Double]])
-  : List[DenseVector[Double]] = {
-
-    data.map((point) => {
-      DenseVector.tabulate(decomposition._1.length) { (i) =>
-        val eigenvalue = if(decomposition._1(i) != Double.NaN) decomposition._1(i) else 0.0
-        val eigenvector = decomposition._2(::, i).map{i => if(i == Double.NaN) 0.0 else i}
-        val kernel = prototypes.map((p) => this.evaluate(p, point)).toArray
-        (1 / (REGULARIZER + math.sqrt(eigenvalue)))*(DenseVector(kernel) dot eigenvector)
-      }
-    })
-  }
+                    (data: DenseVector[Double])
+  : DenseVector[Double] = DenseVector.tabulate(decomposition._1.length) { (i) =>
+    val eigenvalue = if(decomposition._1(i) != Double.NaN) decomposition._1(i) else 0.0
+    val eigenvector = decomposition._2(::, i).map{i => if(i == Double.NaN) 0.0 else i}
+    val kernel = prototypes.map((p) => this.evaluate(p, data)).toArray
+    (1 / (REGULARIZER + math.sqrt(eigenvalue)))*(DenseVector(kernel) dot eigenvector)
+    }
 }
 
 /**

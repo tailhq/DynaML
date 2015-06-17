@@ -77,7 +77,7 @@ object GradientDescentSpark {
           val (g, _) = gradb.value.compute(features, label, wb.value)
           cumGradient += g
         })
-      newW = updater.compute(oldW, cumGradient.value,
+      newW = updater.compute(oldW, cumGradient.value / nPoints.toDouble,
         stepSize, count, regParam)._1
       oldW = newW
       count += 1

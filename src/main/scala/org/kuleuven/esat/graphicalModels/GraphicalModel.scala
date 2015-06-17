@@ -117,7 +117,7 @@ trait EvaluableModel [P, R]{
 trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
   extends LinearModel[G, K1, K2, T, Q, R, L]{
 
-  protected val nPoints: Int
+  protected val nPoints: Long
 
   def npoints = nPoints
 
@@ -125,14 +125,14 @@ trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R,
    * This variable stores the indexes of the
    * prototype points of the data set.
    * */
-  protected var points: List[Int] = List()
+  protected var points: List[Long] = List()
 
   /**
    * The non linear feature mapping implicitly
    * defined by the kernel applied, this is initialized
    * to an identity map.
    * */
-  var featureMap: (List[Q]) => List[Q] = identity
+  var featureMap: (Q) => Q = identity
 
   def getXYEdges: L
 

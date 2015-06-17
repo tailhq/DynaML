@@ -29,13 +29,13 @@ import org.kuleuven.esat.graphUtils._
 
 class GaussianLinearModel(
     override protected val g: FramedGraph[Graph],
-    override protected val nPoints: Int,
+    override protected val nPoints: Long,
     override protected val featuredims: Int,
     override protected val vertexMaps: (mutable.HashMap[String, AnyRef],
-        mutable.HashMap[Int, AnyRef],
-        mutable.HashMap[Int, AnyRef]),
-    override protected val edgeMaps: (mutable.HashMap[Int, AnyRef],
-      mutable.HashMap[Int, AnyRef]),
+        mutable.HashMap[Long, AnyRef],
+        mutable.HashMap[Long, AnyRef]),
+    override protected val edgeMaps: (mutable.HashMap[Long, AnyRef],
+      mutable.HashMap[Long, AnyRef]),
     override implicit protected val task: String)
   extends KernelBayesianModel {
 
@@ -56,7 +56,7 @@ class GaussianLinearModel(
 
   def score(point: DenseVector[Double]): Double = {
     val rescaled = rescale(point)
-    val phi = featureMap(List(rescaled)).head
+    val phi = featureMap(rescaled)
     val phic = DenseVector.vertcat(phi, DenseVector(1.0))
     params dot phic
   }
@@ -238,10 +238,10 @@ object GaussianLinearModel {
       "com.tinkerpop.blueprints.impls.tg.TinkerGraph")
 
     val wMap: mutable.HashMap[String, AnyRef] = mutable.HashMap()
-    val xMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
-    val yMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
-    val ceMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
-    val peMap: mutable.HashMap[Int, AnyRef] = mutable.HashMap()
+    val xMap: mutable.HashMap[Long, AnyRef] = mutable.HashMap()
+    val yMap: mutable.HashMap[Long, AnyRef] = mutable.HashMap()
+    val ceMap: mutable.HashMap[Long, AnyRef] = mutable.HashMap()
+    val peMap: mutable.HashMap[Long, AnyRef] = mutable.HashMap()
 
     val fg = manager.create(GraphFactory.open(mapAsJavaMap(graphconfig)))
 

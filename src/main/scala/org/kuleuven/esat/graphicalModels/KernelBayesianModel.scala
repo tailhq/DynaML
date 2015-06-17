@@ -47,11 +47,11 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
   protected val featuredims: Int
 
   protected val vertexMaps: (mutable.HashMap[String, AnyRef],
-    mutable.HashMap[Int, AnyRef],
-    mutable.HashMap[Int, AnyRef])
+    mutable.HashMap[Long, AnyRef],
+    mutable.HashMap[Long, AnyRef])
 
-  protected val edgeMaps: (mutable.HashMap[Int, AnyRef],
-    mutable.HashMap[Int, AnyRef])
+  protected val edgeMaps: (mutable.HashMap[Long, AnyRef],
+    mutable.HashMap[Long, AnyRef])
 
   override def learn(): Unit = {
     this.params = optimizer.optimize(nPoints, this.params, this.getXYEdges())
@@ -76,8 +76,8 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
    * @return The list containing all the data points
    *         satisfying the filtering criterion.
    * */
-  def filter(fn : (Int) => Boolean): List[DenseVector[Double]] =
-    (1 to nPoints).view.filter(fn).map{
+  def filter(fn : (Long) => Boolean): List[DenseVector[Double]] =
+    (1L to nPoints).view.filter(fn).map{
       i => {
         val point: Point = this.g.getVertex(vertexMaps._2(i),
           classOf[Point])
@@ -85,11 +85,11 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       }
     }.toList
 
-  def filterLabels(fn: (Int) => Boolean): List[Double] = this.getXYEdges()
+  def filterLabels(fn: (Long) => Boolean): List[Double] = this.getXYEdges()
     .map(_.getLabel().getValue()).toList
 
   override def optimumSubset(M: Int): Unit = {
-    points = (0 to this.npoints - 1).toList
+    points = (0L to this.npoints - 1).toList
     if(M < this.npoints) {
       logger.info("Calculating sample variance of the data set")
 
@@ -137,7 +137,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       val featurex = DenseVector(vertex.getValue())
 
       //Get mapped features for the point
-      val mappedf = featureMap(List(featurex(0 to -2))).head
+      val mappedf = featureMap(featurex(0 to -2))
       val newFeatures = DenseVector.vertcat[Double](mappedf, DenseVector(1.0))
       //Set a new property in the vertex corresponding to the mapped features
       vertex.setFeatureMap(newFeatures.toArray)
@@ -162,25 +162,6 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     this.applyFeatureMap()
   }
 
-  def applyRBFKernel(
-      kernel: RBFKernel,
-      M: Int = math.sqrt(npoints).toInt): Unit = {
-    this.featureMap = (points: List[DenseVector[Double]]) => {
-      points.map((p) =>
-      {
-        p :/= kernel.getBandwidth
-        val n = norm(p, 2)
-        DenseVector.tabulate[Double](M){i =>
-          val lambda = math.pow(math.pow(2, i)*utils.factorial(i)*math.sqrt(math.Pi), 0.5)
-          math.exp(-n*n)*utils.hermite(i, n)/lambda
-        }
-      }
-      )
-    }
-    this.params = DenseVector.ones[Double](M + 1)
-    this.applyFeatureMap()
-  }
-
   /**
    * Override the effect of appyling a kernel
    * and return the model back to its default
@@ -188,7 +169,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
    * */
   override def clearParameters(): Unit = {
     this.params = DenseVector.ones[Double](this.featuredims)
-    this.featureMap = (x) => x
+    this.featureMap = identity
     val it = this.getXYEdges()
     it.foreach((outEdge) => {
       val ynode = outEdge.getLabel()
@@ -205,13 +186,13 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     //which index the data points
     this.optimizer.setRegParam(reg).setNumIterations(1)
       .setStepSize(0.001).setMiniBatchFraction(1.0)
-    val shuffle = Random.shuffle((1 to this.npoints).toList)
+    val shuffle = Random.shuffle((1L to this.npoints).toList)
     val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
       //For the ath fold
       //partition the data
       //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
       //as test and the rest as training
-      val test = shuffle.slice((a-1)*this.nPoints/folds, a*this.nPoints/folds)
+      val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
       val train = shuffle.filter(!test.contains(_))
 
       val training_data = train.map((p) => {

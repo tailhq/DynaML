@@ -1,15 +1,16 @@
 import org.apache.spark.{SparkConf, SparkContext}
+import org.kuleuven.esat.kernels.RBFKernel
 import org.kuleuven.esat.svm.LSSVMSparkModel
 
 /**
  * @author mandar2812
  */
 
-val config = Map("file" -> "data/ripley.csv", "delim" -> ",",
+val config = Map("file" -> "data/magicgamma.csv", "delim" -> ",",
   "head" -> "false",
   "task" -> "classification")
 
-val configtest = Map("file" -> "data/ripleytest.csv",
+val configtest = Map("file" -> "data/magicgammatest.csv",
   "delim" -> ",",
   "head" -> "false")
 
@@ -21,10 +22,13 @@ val sc = new SparkContext(conf)
 
 val model = LSSVMSparkModel(config, sc)
 
-model.setRegParam(0.5).setLearningRate(0.001).setMaxIterations(10).learn()
+model.applyKernel(new RBFKernel(120.0), 150)
+model.setRegParam(1.5).setLearningRate(0.001).setMaxIterations(5).learn()
 
 val met = model.evaluate(configtest)
 
+model.unpersist
+
 met.print()
 
-met.generatePlots()
+//met.generatePlots()

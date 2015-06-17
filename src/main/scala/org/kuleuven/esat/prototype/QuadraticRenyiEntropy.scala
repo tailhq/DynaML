@@ -17,6 +17,9 @@
 package org.kuleuven.esat.prototype
 
 import breeze.linalg.DenseVector
+import org.apache.spark.mllib.linalg.Vectors
+import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.kernels.DensityKernel
 
 /**
@@ -46,10 +49,19 @@ class QuadraticRenyiEntropy(dist: DensityKernel)
    * */
 
   override def entropy(data: List[DenseVector[Double]]): Double = {
-    val dim = data(0).length
+    val dim = data.head.length
     val root_two: breeze.linalg.Vector[Double] = DenseVector.fill(dim, sqrt(2))
     val product = for(i <- data.view; j <- data.view) yield (i, j)
     -1*log_e(product.map((couple) =>
       density.eval((couple._1 - couple._2) :/ root_two)).sum)
+  }
+
+  override def entropy[K](data: RDD[(K, LabeledPoint)]): Double = {
+    val dim = data.first()._2.features.size
+    -1*log_e(data.cartesian(data).map((couple) =>{
+      val point1: DenseVector[Double] = DenseVector(couple._1._2.features.toArray) / sqrt(2.0)
+      val point2: DenseVector[Double] = DenseVector(couple._2._2.features.toArray) / sqrt(2.0)
+      density.eval(point1 - point2)
+    }).reduce((a,b) => a + b))
   }
 }
