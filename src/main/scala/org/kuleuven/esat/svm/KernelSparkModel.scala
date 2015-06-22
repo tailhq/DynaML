@@ -1,6 +1,7 @@
 package org.kuleuven.esat.svm
 
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
+import breeze.numerics.sqrt
 import org.apache.log4j.Logger
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.stat.Statistics
@@ -78,9 +79,17 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
     if(M != this.prototypes.length) {
       this.optimumSubset(M)
     }
+
     var features_of_points: List[DenseVector[Double]] = List()
+    val (mean, variance) = (DenseVector(colStats.mean.toArray),
+      DenseVector(colStats.variance.toArray))
+
+    val scalingFunc = KernelSparkModel.scalePrototype(mean, variance) _
+
+    val scaledPrototypes = prototypes map scalingFunc
+
     val kernelMatrix =
-      kernel.buildKernelMatrix(prototypes, M)
+      kernel.buildKernelMatrix(scaledPrototypes, M)
     val decomposition = kernelMatrix.eigenDecomposition(M)
 
     var selectedEigenVectors: List[DenseMatrix[Double]] = List()
@@ -91,7 +100,7 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
       // L1(u) >= 2M/(1+M)
       val u = decomposition._2(::, p)
       if(math.pow(norm(u,1), 2.0) >= 2.0*M/(1.0+M.toDouble)) {
-        features_of_points :+= prototypes(p)
+        features_of_points :+= scaledPrototypes(p)
         selectedEigenvalues :+= decomposition._1(p)
         selectedEigenVectors :+= u.toDenseMatrix
       }
@@ -108,4 +117,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 }
 
 object KernelSparkModel {
+  def scalePrototype(mean: DenseVector[Double],
+                     variance: DenseVector[Double])
+                    (prototype: DenseVector[Double]): DenseVector[Double] =
+    (prototype - mean)/sqrt(variance)
 }
