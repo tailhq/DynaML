@@ -3,7 +3,6 @@ package org.kuleuven.esat.optimization
 import breeze.linalg._
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
-import org.kuleuven.esat.graphUtils.CausalEdge
 
 /**
  * @author mandar2812

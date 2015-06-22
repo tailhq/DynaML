@@ -24,22 +24,9 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
 
   override protected val optimizer = LSSVMSparkModel.getOptimizer(task)
 
-  //override protected val g = LSSVMSparkModel.indexedRDD(data)
-
-  //protected val _nPoints = data.count()
-
-  //protected val _task = task
-
-  //protected var featuredims: Int = g.first()._2.features.size
-
   override protected var params: DenseVector[Double] = DenseVector.ones(featuredims+1)
 
-  //val colStats = Statistics.colStats(g.map(_._2.features))
-
   def dimensions = featuredims
-
-  //def npoints = _nPoints
-
 
   /**
    * Predict the value of the
