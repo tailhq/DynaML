@@ -1,19 +1,15 @@
 package org.kuleuven.esat.svm
 
-import breeze.linalg.{inv, cholesky, DenseMatrix, DenseVector}
+import breeze.linalg.DenseVector
 import breeze.numerics.sqrt
-import org.apache.log4j.Logger
-import org.apache.spark.mllib.stat.Statistics
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.SparkContext
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.evaluation.Metrics
-import org.kuleuven.esat.graphicalModels.{GaussianLinearModel, LinearModel}
-import org.kuleuven.esat.kernels.Kernel
+import org.kuleuven.esat.graphicalModels.GaussianLinearModel
 import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
-import org.kuleuven.esat.utils
 
 /**
  * Implementation of the Least Squares SVM
@@ -93,8 +89,13 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     val predict = LSSVMSparkModel.scoreSparkVector(params) _
     val mapPointb = sc.broadcast(mapPoint)
     val predictb = sc.broadcast(predict)
+    val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
+    val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
     val results = test_data.map(point => {
-      (predictb.value(mapPointb.value(point.features)), point.label)
+      val vec = DenseVector(point.features.toArray)
+      val ans = vec - meanb.value
+      ans :/= sqrt(varianceb.value)
+      (predictb.value(mapPointb.value(Vectors.dense(ans.toArray))), point.label)
     }).collect()
 
     Metrics(task)(results.toList, results.length)
@@ -116,13 +117,12 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
 
 object LSSVMSparkModel {
 
-  def scaleAttributes(mean: DenseVector[Double],
-                      sigmaInverse: DenseMatrix[Double])(x: DenseVector[Double])
-  : DenseVector[Double] = {
-    DenseVector.tabulate[Double](mean.length)((i) => {
-      (x(i) - mean(i)) / math.sqrt(sigmaInverse(i,i))
-    })
-    //sigmaInverse * (x - mean)
+  def scaleAttributes(mean: Vector,
+                      variance: Vector)(x: Vector)
+  : Vector = {
+    val ans = DenseVector(x.toArray) - DenseVector(mean.toArray)
+    ans :/= sqrt(DenseVector(variance.toArray))
+    Vectors.dense(ans.toArray)
   }
 
   def apply(implicit config: Map[String, String], sc: SparkContext): LSSVMSparkModel = {
