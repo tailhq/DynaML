@@ -25,7 +25,7 @@ object TestMagicGamma {
     val model = LSSVMSparkModel(config, sc)
 
     val nProt = if(prototypes > 0) prototypes else math.sqrt(model.npoints.toDouble).toInt
-    model.applyKernel(new RBFKernel(100.0), nProt)
+    model.applyKernel(new RBFKernel(1.2), nProt)
     model.setRegParam(1.5).setLearningRate(0.001).setMaxIterations(5).learn()
 
     val met = model.evaluate(configtest)

@@ -80,7 +80,6 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
       this.optimumSubset(M)
     }
 
-    var features_of_points: List[DenseVector[Double]] = List()
     val (mean, variance) = (DenseVector(colStats.mean.toArray),
       DenseVector(colStats.variance.toArray))
 
@@ -97,10 +96,9 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
     (0 until M).foreach((p) => {
       //Check the Girolami criterion
-      // L1(u) >= 2M/(1+M)
+      // (1.u)^2 >= 2M/(1+M)
       val u = decomposition._2(::, p)
       if(math.pow(norm(u,1), 2.0) >= 2.0*M/(1.0+M.toDouble)) {
-        features_of_points :+= scaledPrototypes(p)
         selectedEigenvalues :+= decomposition._1(p)
         selectedEigenVectors :+= u.toDenseMatrix
       }
@@ -110,8 +108,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
     val decomp = (DenseVector(selectedEigenvalues.toArray),
       DenseMatrix.vertcat(selectedEigenVectors:_*).t)
 
-    this.featureMap = kernel.featureMapping(decomp)(features_of_points)
-    this.params = DenseVector.ones[Double](decomposition._1.length + 1)
+    this.featureMap = kernel.featureMapping(decomp)(scaledPrototypes)
+    this.params = DenseVector.ones[Double](decomp._1.length + 1)
   }
 
 }
