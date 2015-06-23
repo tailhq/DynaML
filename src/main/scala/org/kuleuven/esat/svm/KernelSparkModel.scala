@@ -97,6 +97,7 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
     (0 until M).foreach((p) => {
       //Check the Girolami criterion
       // (1.u)^2 >= 2M/(1+M)
+      //This increases parsimony
       val u = decomposition._2(::, p)
       if(math.pow(norm(u,1), 2.0) >= 2.0*M/(1.0+M.toDouble)) {
         selectedEigenvalues :+= decomposition._1(p)
@@ -104,7 +105,7 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
       }
 
     })
-
+    logger.info("Selected Components: "+selectedEigenvalues.length)
     val decomp = (DenseVector(selectedEigenvalues.toArray),
       DenseMatrix.vertcat(selectedEigenVectors:_*).t)
 
