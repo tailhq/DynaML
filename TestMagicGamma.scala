@@ -26,7 +26,7 @@ object TestMagicGamma {
 
     val nProt = if(prototypes > 0) prototypes else math.sqrt(model.npoints.toDouble).toInt
     model.applyKernel(new RBFKernel(1.2), nProt)
-    model.setRegParam(1.5).setLearningRate(0.001).setMaxIterations(5).learn()
+    model.setRegParam(2.0).setMaxIterations(4).learn()
 
     val met = model.evaluate(configtest)
 

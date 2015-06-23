@@ -21,7 +21,9 @@ class PolynomialKernel(
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    Math.pow(x dot y + this.offset, this.degree)
+    Math.pow((x.t * y) + this.offset, this.degree)/(Math.pow((x.t * x) + this.offset,
+      this.degree.toDouble/2.0) * Math.pow((y.t * y) + this.offset,
+      this.degree.toDouble/2.0))
 
   override def buildKernelMatrix(
       mappedData: List[DenseVector[Double]],
