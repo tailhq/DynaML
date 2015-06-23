@@ -1,7 +1,5 @@
 package org.kuleuven.esat.optimization
 
-import breeze.linalg.DenseVector
-
 /**
  * @author mandar2812, datum: 23/6/15.
  *
@@ -14,9 +12,14 @@ trait GloballyOptimizable {
 
   /**
    * Stores the names of the hyper-parameters
-   *
    * */
   var hyper_parameters: List[String]
+
+  /**
+   * A Map which stores the current state of
+   * the system.
+   * */
+  var current_state: Map[String, Double]
 
   /**
    * Calculates the energy of the configuration,
@@ -26,8 +29,10 @@ trait GloballyOptimizable {
    * is minimized.
    *
    * @param h The value of the hyper-parameters in the configuration space
+   * @param options Optional parameters about configuration
    * @return Configuration Energy E(h)
    * */
-  def energy(h: DenseVector[Double]): Double
+  def energy(h: Map[String, Double],
+             options: Map[String, AnyRef] = Map()): Double
 
 }
