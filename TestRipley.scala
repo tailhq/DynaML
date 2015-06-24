@@ -20,17 +20,23 @@ object TestRipley {
     val gs = new GridSearch(model)
 
     val (optModel, optConfig) = kernel match {
-      case "RBF" => gs.optimize(Map("RegParam" -> 0.5, "bandwidth" -> 1.0),
+      case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
         Map("kernel" -> "RBF"))
 
-      case "Polynomial" => gs.optimize(Map("RegParam" -> 0.5, "degree" -> 1.0, "offset" -> 1.0),
+      case "Polynomial" => gs.optimize(Map("degree" -> 1.0, "offset" -> 1.0, "RegParam" -> 0.5),
         Map("kernel" -> "Polynomial"))
     }
+
+    optModel.setMaxIterations(5).learn()
 
     val met = optModel.evaluate(configtest)
 
     met.print()
 
     met.generatePlots()
+
+    println(optModel.parameters())
+
+    println(optModel.parameters().length)
   }
 }

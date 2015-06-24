@@ -82,7 +82,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       //the kernel
       val kernh = h.filter((couple) => kern.hyper_parameters.contains(couple._1))
       val kerncs = current_state.filter((couple) => kern.hyper_parameters.contains(couple._1))
-      if(kernh sameElements kerncs) {
+      if(!(kernh sameElements kerncs)) {
         this.applyKernel(kern)
       }
     }
