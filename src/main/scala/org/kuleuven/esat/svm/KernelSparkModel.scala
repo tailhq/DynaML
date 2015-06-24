@@ -7,7 +7,7 @@ import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.graphicalModels.KernelizedModel
-import org.kuleuven.esat.kernels.{SVMKernel, GaussianDensityKernel}
+import org.kuleuven.esat.kernels.{PolynomialKernel, RBFKernel, SVMKernel, GaussianDensityKernel}
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
 
@@ -51,9 +51,21 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
    * @param options Optional parameters about configuration
    * @return Configuration Energy E(h)
    **/
-  override def energy(h: Map[String, Double], options: Map[String, AnyRef]): Double = {
+  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
     //set the kernel paramters if options is defined
-    //
+    //then set model parameters and cross validate
+
+    if(options.contains("kernel")) {
+      val kern = options("kernel") match {
+        case "RBF" => new RBFKernel(1.0).setHyperParameters(h)
+        case "Polynomial" => new PolynomialKernel(2, 1.0).setHyperParameters(h)
+      }
+      //check if h and this.hyper_parameters have the same kernel params
+      this.applyKernel(kern)
+      this.setRegParam(h("RegParam"))
+
+    }
+
     0.0
   }
 
@@ -66,6 +78,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
   override def getXYEdges: RDD[LabeledPoint] = data
 
   def getRegParam: Double
+
+  def setRegParam(l: Double): this.type
 
   override def optimumSubset(M: Int): Unit = {
     points = (0L to this.npoints - 1).toList

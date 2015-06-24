@@ -29,4 +29,11 @@ class RBFKernel(private var bandwidth: Double)
 
   def getBandwidth: Double = this.bandwidth
 
+  override def setHyperParameters(h: Map[String, Double]) = {
+    assert(hyper_parameters.forall(h contains _),
+      "All hyper parameters must be contained in the arguments")
+    this.bandwidth = h("bandwidth")
+    this
+  }
+
 }

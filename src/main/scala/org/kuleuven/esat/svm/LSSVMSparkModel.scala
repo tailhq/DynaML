@@ -65,7 +65,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     params = DenseVector.ones[Double](featuredims+1)
   }
 
-  def setRegParam(l: Double): this.type = {
+  override def setRegParam(l: Double): this.type = {
     this.optimizer.setRegParam(l)
     this
   }

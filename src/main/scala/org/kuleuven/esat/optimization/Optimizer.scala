@@ -17,7 +17,7 @@ import com.tinkerpop.frames.EdgeFrame
  */
 trait Optimizer[K, P, Q, R, S] extends Serializable {
 
-  protected var numIterations: Int = 100
+  protected var numIterations: Int = 5
 
   protected var miniBatchFraction: Double = 1.0
 

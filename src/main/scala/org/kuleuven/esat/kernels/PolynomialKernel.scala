@@ -31,4 +31,12 @@ class PolynomialKernel(
       mappedData: List[DenseVector[Double]],
       length: Int): KernelMatrix[DenseMatrix[Double]] =
     SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
+
+  override def setHyperParameters(h: Map[String, Double]) = {
+    assert(hyper_parameters.forall(h contains _),
+      "All hyper parameters must be contained in the arguments")
+    this.degree = h("degree").toInt
+    this.offset = h("offset")
+    this
+  }
 }

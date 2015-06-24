@@ -12,7 +12,7 @@ abstract class SVMKernel[T] extends Kernel with Serializable {
 
   val hyper_parameters: List[String]
 
-  def setHyperParameters(h: Map[String, Double]): Unit = {}
+  def setHyperParameters(h: Map[String, Double]): this.type = this
 
   /**
    * Build the kernel matrix of the prototype vectors

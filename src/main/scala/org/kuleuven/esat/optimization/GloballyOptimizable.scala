@@ -33,6 +33,6 @@ trait GloballyOptimizable {
    * @return Configuration Energy E(h)
    * */
   def energy(h: Map[String, Double],
-             options: Map[String, AnyRef] = Map()): Double
+             options: Map[String, String] = Map()): Double
 
 }

@@ -24,7 +24,7 @@ import com.tinkerpop.frames.FramedGraph
 import org.apache.log4j.{Logger, Priority}
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.graphUtils.{Parameter, CausalEdge, Point}
-import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
+import org.kuleuven.esat.kernels.{PolynomialKernel, RBFKernel, SVMKernel, GaussianDensityKernel}
 import org.kuleuven.esat.optimization.{ConjugateGradient, GradientDescent}
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
@@ -59,10 +59,30 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
    * @param options Optional parameters about configuration
    * @return Configuration Energy E(h)
    **/
-  override def energy(h: Map[String, Double], options: Map[String, AnyRef]): Double = {
+  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
     //set the kernel paramters if options is defined
-    //
-    0.0
+    //then set model parameters and cross validate
+
+    if(options.contains("kernel")) {
+      val kern = options("kernel") match {
+        case "RBF" => new RBFKernel(1.0).setHyperParameters(h)
+        case "Polynomial" => new PolynomialKernel(2, 1.0).setHyperParameters(h)
+      }
+      //check if h and this.current_state have the same kernel params
+      //calculate kernParam(h)
+      //calculate kernParam(current_state)
+      //if both differ in any way then apply
+      //the kernel
+      val kernh = h.filter((couple) => kern.hyper_parameters.contains(couple._1))
+      val kerncs = current_state.filter((couple) => kern.hyper_parameters.contains(couple._1))
+      if(kernh sameElements kerncs) {
+        this.applyKernel(kern)
+      }
+    }
+
+    val (_,_,e) = this.crossvalidate(4, h("RegParam"))
+
+    1.0-e
   }
 
   protected val featuredims: Int
