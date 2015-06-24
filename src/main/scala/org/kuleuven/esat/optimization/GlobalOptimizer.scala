@@ -11,6 +11,6 @@ trait GlobalOptimizer[T <: GloballyOptimizable] {
   val system: T
 
   def optimize(initialConfig: Map[String, Double],
-               options: Map[String, AnyRef]): Unit
+               options: Map[String, String]): (T, Map[String, Double])
 
 }

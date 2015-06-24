@@ -61,6 +61,7 @@ class GaussianLinearModel(
     params dot phic
   }
 
+  override def getRegParam: Double = this.optimizer.getRegParam
 
   override def predict(point: DenseVector[Double]): Double = task match {
     case "classification" => sigmoid(this.score(point))

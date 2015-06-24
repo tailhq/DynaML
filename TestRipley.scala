@@ -1,4 +1,5 @@
 import org.kuleuven.esat.graphicalModels.GaussianLinearModel
+import org.kuleuven.esat.optimization.GridSearch
 
 /**
  * @author mandar2812
@@ -15,9 +16,13 @@ object TestRipley {
 
     val model = GaussianLinearModel(config)
 
-    model.tuneRBFKernel(folds = 8)
+    //model.tuneRBFKernel(folds = 8)
+    val gs = new GridSearch(model)
 
-    val met = model.evaluate(configtest)
+    val (optModel, optConfig) = gs.optimize(Map("RegParam" -> 0.5, "bandwidth" -> 1.0),
+      Map("kernel" -> "RBF"))
+
+    val met = optModel.evaluate(configtest)
 
     met.print()
 

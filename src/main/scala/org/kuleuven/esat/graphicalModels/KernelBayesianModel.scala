@@ -44,9 +44,16 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
 
   override protected val optimizer: ConjugateGradient
 
+  def setRegParam(reg: Double): this.type = {
+    this.optimizer.setRegParam(reg)
+    this
+  }
+
+  def getRegParam: Double
+
   override protected var hyper_parameters: List[String] = List("RegParam")
 
-  override protected var current_state: Map[String, Double] = Map("RegParam" -> this.getRegParam)
+  override protected var current_state: Map[String, Double] = Map("RegParam" -> 1.0)
 
   /**
    * Calculates the energy of the configuration,
@@ -79,7 +86,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
         this.applyKernel(kern)
       }
     }
-
+    current_state = h
     val (_,_,e) = this.crossvalidate(4, h("RegParam"))
 
     1.0-e
@@ -97,13 +104,6 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
   override def learn(): Unit = {
     this.params = optimizer.optimize(nPoints, this.params, this.getXYEdges())
   }
-
-  def setRegParam(reg: Double): this.type = {
-    this.optimizer.setRegParam(reg)
-    this
-  }
-
-  def getRegParam = this.optimizer.getRegParam
 
   override def getXYEdges() =
     JavaConversions.iterableAsScalaIterable(
