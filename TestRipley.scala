@@ -27,6 +27,9 @@ object TestRipley {
 
       case "Exponential" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
         Map("kernel" -> "Exponential"))
+
+      case "Laplacian" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
+        Map("kernel" -> "Laplacian"))
     }
 
     optModel.setMaxIterations(5).learn()

@@ -2,7 +2,7 @@ package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg._
 import org.kuleuven.esat.evaluation.Metrics
-import org.kuleuven.esat.kernels.{ExponentialKernel, PolynomialKernel, RBFKernel, SVMKernel}
+import org.kuleuven.esat.kernels._
 import org.kuleuven.esat.optimization.{GloballyOptimizable, Optimizer}
 
 /**
@@ -185,6 +185,7 @@ abstract class KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Do
         case "RBF" => new RBFKernel(1.0).setHyperParameters(h)
         case "Polynomial" => new PolynomialKernel(2, 1.0).setHyperParameters(h)
         case "Exponential" => new ExponentialKernel(1.0).setHyperParameters(h)
+        case "Laplacian" => new LaplacianKernel(1.0).setHyperParameters(h)
       }
       //check if h and this.current_state have the same kernel params
       //calculate kernParam(h)
