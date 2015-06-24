@@ -16,7 +16,6 @@ object TestRipley {
 
     val model = GaussianLinearModel(config)
 
-    //model.tuneRBFKernel(folds = 8)
     val gs = new GridSearch(model)
 
     val (optModel, optConfig) = kernel match {
@@ -25,6 +24,9 @@ object TestRipley {
 
       case "Polynomial" => gs.optimize(Map("degree" -> 1.0, "offset" -> 1.0, "RegParam" -> 0.5),
         Map("kernel" -> "Polynomial"))
+
+      case "Exponential" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
+        Map("kernel" -> "Exponential"))
     }
 
     optModel.setMaxIterations(5).learn()
@@ -34,9 +36,5 @@ object TestRipley {
     met.print()
 
     met.generatePlots()
-
-    println(optModel.parameters())
-
-    println(optModel.parameters().length)
   }
 }
