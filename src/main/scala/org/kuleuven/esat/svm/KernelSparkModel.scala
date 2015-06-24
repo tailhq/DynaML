@@ -40,35 +40,6 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
   override protected var current_state: Map[String, Double] = Map("RegParam" -> this.getRegParam)
 
-  /**
-   * Calculates the energy of the configuration,
-   * in most global optimization algorithms
-   * we aim to find an approximate value of
-   * the hyper-parameters such that this function
-   * is minimized.
-   *
-   * @param h The value of the hyper-parameters in the configuration space
-   * @param options Optional parameters about configuration
-   * @return Configuration Energy E(h)
-   **/
-  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
-    //set the kernel paramters if options is defined
-    //then set model parameters and cross validate
-
-    if(options.contains("kernel")) {
-      val kern = options("kernel") match {
-        case "RBF" => new RBFKernel(1.0).setHyperParameters(h)
-        case "Polynomial" => new PolynomialKernel(2, 1.0).setHyperParameters(h)
-      }
-      //check if h and this.hyper_parameters have the same kernel params
-      this.applyKernel(kern)
-      this.setRegParam(h("RegParam"))
-
-    }
-
-    0.0
-  }
-
   protected var featuredims: Int = g.first()._2.features.size
 
   protected var prototypes: List[DenseVector[Double]] = List()
@@ -148,6 +119,10 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
     this.featureMap = kernel.featureMapping(decomp)(scaledPrototypes)
     this.params = DenseVector.ones[Double](decomp._1.length + 1)
+  }
+
+  override def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
+    (0.0, 0.0, 0.0)
   }
 
 }

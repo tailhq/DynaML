@@ -2,7 +2,7 @@ package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg._
 import org.kuleuven.esat.evaluation.Metrics
-import org.kuleuven.esat.kernels.SVMKernel
+import org.kuleuven.esat.kernels.{PolynomialKernel, RBFKernel, SVMKernel}
 import org.kuleuven.esat.optimization.{GloballyOptimizable, Optimizer}
 
 /**
@@ -114,7 +114,7 @@ trait EvaluableModel [P, R]{
   def evaluate(config: Map[String, String]): Metrics[R]
 }
 
-trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
+abstract class KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
   extends LinearModel[G, K1, K2, T, Q, R, L] with GloballyOptimizable {
 
   protected val nPoints: Long
@@ -153,7 +153,8 @@ trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R,
    *          in order to approximate the kernel
    *          matrix.
    * */
-  def applyKernel(kernel: SVMKernel[DenseMatrix[Double]], M: Int): Unit = {}
+  def applyKernel(kernel: SVMKernel[DenseMatrix[Double]],
+                  M: Int = math.sqrt(nPoints).toInt): Unit = {}
 
   /**
    * Calculate an approximation to
@@ -161,4 +162,44 @@ trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R,
    * with the maximum entropy.
    * */
   def optimumSubset(M: Int): Unit
+
+  def crossvalidate(folds: Int, reg: Double): (Double, Double, Double)
+
+  /**
+   * Calculates the energy of the configuration,
+   * in most global optimization algorithms
+   * we aim to find an approximate value of
+   * the hyper-parameters such that this function
+   * is minimized.
+   *
+   * @param h The value of the hyper-parameters in the configuration space
+   * @param options Optional parameters about configuration
+   * @return Configuration Energy E(h)
+   **/
+  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
+    //set the kernel paramters if options is defined
+    //then set model parameters and cross validate
+
+    if(options.contains("kernel")) {
+      val kern = options("kernel") match {
+        case "RBF" => new RBFKernel(1.0).setHyperParameters(h)
+        case "Polynomial" => new PolynomialKernel(2, 1.0).setHyperParameters(h)
+      }
+      //check if h and this.current_state have the same kernel params
+      //calculate kernParam(h)
+      //calculate kernParam(current_state)
+      //if both differ in any way then apply
+      //the kernel
+      val kernh = h.filter((couple) => kern.hyper_parameters.contains(couple._1))
+      val kerncs = current_state.filter((couple) => kern.hyper_parameters.contains(couple._1))
+      if(!(kernh sameElements kerncs)) {
+        this.applyKernel(kern)
+      }
+    }
+    current_state = h
+    val (_,_,e) = this.crossvalidate(4, h("RegParam"))
+
+    1.0-e
+  }
+
 }

@@ -55,43 +55,6 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
 
   override protected var current_state: Map[String, Double] = Map("RegParam" -> 1.0)
 
-  /**
-   * Calculates the energy of the configuration,
-   * in most global optimization algorithms
-   * we aim to find an approximate value of
-   * the hyper-parameters such that this function
-   * is minimized.
-   *
-   * @param h The value of the hyper-parameters in the configuration space
-   * @param options Optional parameters about configuration
-   * @return Configuration Energy E(h)
-   **/
-  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
-    //set the kernel paramters if options is defined
-    //then set model parameters and cross validate
-
-    if(options.contains("kernel")) {
-      val kern = options("kernel") match {
-        case "RBF" => new RBFKernel(1.0).setHyperParameters(h)
-        case "Polynomial" => new PolynomialKernel(2, 1.0).setHyperParameters(h)
-      }
-      //check if h and this.current_state have the same kernel params
-      //calculate kernParam(h)
-      //calculate kernParam(current_state)
-      //if both differ in any way then apply
-      //the kernel
-      val kernh = h.filter((couple) => kern.hyper_parameters.contains(couple._1))
-      val kerncs = current_state.filter((couple) => kern.hyper_parameters.contains(couple._1))
-      if(!(kernh sameElements kerncs)) {
-        this.applyKernel(kern)
-      }
-    }
-    current_state = h
-    val (_,_,e) = this.crossvalidate(4, h("RegParam"))
-
-    1.0-e
-  }
-
   protected val featuredims: Int
 
   protected val vertexMaps: (mutable.HashMap[String, AnyRef],
@@ -224,7 +187,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     paramNode.setSlope(this.params.toArray)
   }
 
-  def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
+  override def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
     this.optimizer.setRegParam(reg).setNumIterations(1)
