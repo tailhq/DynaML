@@ -13,13 +13,13 @@ trait GloballyOptimizable {
   /**
    * Stores the names of the hyper-parameters
    * */
-  var hyper_parameters: List[String]
+  protected var hyper_parameters: List[String]
 
   /**
    * A Map which stores the current state of
    * the system.
    * */
-  var current_state: Map[String, Double]
+  protected var current_state: Map[String, Double]
 
   /**
    * Calculates the energy of the configuration,

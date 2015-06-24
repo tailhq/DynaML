@@ -44,6 +44,27 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
 
   override protected val optimizer: ConjugateGradient
 
+  override protected var hyper_parameters: List[String] = List("RegParam")
+
+  override protected var current_state: Map[String, Double] = Map("RegParam" -> this.getRegParam)
+
+  /**
+   * Calculates the energy of the configuration,
+   * in most global optimization algorithms
+   * we aim to find an approximate value of
+   * the hyper-parameters such that this function
+   * is minimized.
+   *
+   * @param h The value of the hyper-parameters in the configuration space
+   * @param options Optional parameters about configuration
+   * @return Configuration Energy E(h)
+   **/
+  override def energy(h: Map[String, Double], options: Map[String, AnyRef]): Double = {
+    //set the kernel paramters if options is defined
+    //
+    0.0
+  }
+
   protected val featuredims: Int
 
   protected val vertexMaps: (mutable.HashMap[String, AnyRef],
@@ -61,6 +82,8 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     this.optimizer.setRegParam(reg)
     this
   }
+
+  def getRegParam = this.optimizer.getRegParam
 
   override def getXYEdges() =
     JavaConversions.iterableAsScalaIterable(

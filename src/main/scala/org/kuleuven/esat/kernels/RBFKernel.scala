@@ -11,7 +11,9 @@ class RBFKernel(private var bandwidth: Double)
   extends SVMKernel[DenseMatrix[Double]]
   with Serializable {
 
-  def setBandwidth(d: Double): Unit = {
+  override val hyper_parameters = List("bandwidth")
+
+  def setbandwidth(d: Double): Unit = {
     this.bandwidth = d
   }
 

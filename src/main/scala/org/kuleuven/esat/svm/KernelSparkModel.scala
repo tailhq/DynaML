@@ -36,6 +36,27 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
   override protected val nPoints: Long = colStats.count
 
+  override protected var hyper_parameters: List[String] = List("RegParam")
+
+  override protected var current_state: Map[String, Double] = Map("RegParam" -> this.getRegParam)
+
+  /**
+   * Calculates the energy of the configuration,
+   * in most global optimization algorithms
+   * we aim to find an approximate value of
+   * the hyper-parameters such that this function
+   * is minimized.
+   *
+   * @param h The value of the hyper-parameters in the configuration space
+   * @param options Optional parameters about configuration
+   * @return Configuration Energy E(h)
+   **/
+  override def energy(h: Map[String, Double], options: Map[String, AnyRef]): Double = {
+    //set the kernel paramters if options is defined
+    //
+    0.0
+  }
+
   protected var featuredims: Int = g.first()._2.features.size
 
   protected var prototypes: List[DenseVector[Double]] = List()
@@ -43,6 +64,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
   val logger = Logger.getLogger(this.getClass)
 
   override def getXYEdges: RDD[LabeledPoint] = data
+
+  def getRegParam: Double
 
   override def optimumSubset(M: Int): Unit = {
     points = (0L to this.npoints - 1).toList

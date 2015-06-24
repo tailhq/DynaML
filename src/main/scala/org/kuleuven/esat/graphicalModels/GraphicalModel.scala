@@ -3,7 +3,7 @@ package org.kuleuven.esat.graphicalModels
 import breeze.linalg._
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.kernels.SVMKernel
-import org.kuleuven.esat.optimization.Optimizer
+import org.kuleuven.esat.optimization.{GloballyOptimizable, Optimizer}
 
 /**
  * Basic Higher Level abstraction
@@ -115,7 +115,7 @@ trait EvaluableModel [P, R]{
 }
 
 trait KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
-  extends LinearModel[G, K1, K2, T, Q, R, L]{
+  extends LinearModel[G, K1, K2, T, Q, R, L] with GloballyOptimizable {
 
   protected val nPoints: Long
 

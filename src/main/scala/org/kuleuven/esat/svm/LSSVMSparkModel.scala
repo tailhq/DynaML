@@ -69,6 +69,8 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     this.optimizer.setRegParam(l)
     this
   }
+
+  override def getRegParam = this.optimizer.getRegParam
   
   override def evaluate(config: Map[String, String]) = {
     val sc = g.context

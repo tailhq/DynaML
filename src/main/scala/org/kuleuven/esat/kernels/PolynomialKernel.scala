@@ -12,11 +12,13 @@ class PolynomialKernel(
   extends SVMKernel[DenseMatrix[Double]]
   with Serializable{
 
-  def setDegree(d: Int): Unit = {
+  override val hyper_parameters = List("degree", "offset")
+  
+  def setdegree(d: Int): Unit = {
     this.degree = d
   }
 
-  def setOffset(o: Int): Unit = {
+  def setoffset(o: Int): Unit = {
     this.offset = o
   }
 

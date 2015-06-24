@@ -10,6 +10,10 @@ abstract class SVMKernel[T] extends Kernel with Serializable {
 
   private var REGULARIZER: Double = 0.00
 
+  val hyper_parameters: List[String]
+
+  def setHyperParameters(h: Map[String, Double]): Unit = {}
+
   /**
    * Build the kernel matrix of the prototype vectors
    *

@@ -5,7 +5,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.{QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
-
+import scala.reflect.runtime.{universe => ru}
 import scala.annotation.tailrec
 
 /**
@@ -141,4 +141,5 @@ package object utils {
     (labelMean, labelVar, m, featuresCov)
   }
 
+  def getTypeTag[T: ru.TypeTag](obj: T) = ru.typeTag[T]
 }

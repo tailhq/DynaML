@@ -19,6 +19,8 @@ class ConjugateGradientSpark extends Optimizer[Int, DenseVector[Double],
     this
   }
 
+  def getRegParam = this.regParam
+
   /**
    * Find the optimum value of the parameters using
    * Gradient Descent.
