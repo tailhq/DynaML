@@ -5,7 +5,7 @@ import org.kuleuven.esat.optimization.GridSearch
  * @author mandar2812
  */
 object TestRipley {
-  def apply(): Unit = {
+  def apply(kernel: String): Unit = {
     val config = Map("file" -> "data/ripley.csv", "delim" -> ",",
       "head" -> "false",
       "task" -> "classification")
@@ -19,8 +19,13 @@ object TestRipley {
     //model.tuneRBFKernel(folds = 8)
     val gs = new GridSearch(model)
 
-    val (optModel, optConfig) = gs.optimize(Map("RegParam" -> 0.5, "bandwidth" -> 1.0),
-      Map("kernel" -> "RBF"))
+    val (optModel, optConfig) = kernel match {
+      case "RBF" => gs.optimize(Map("RegParam" -> 0.5, "bandwidth" -> 1.0),
+        Map("kernel" -> "RBF"))
+
+      case "Polynomial" => gs.optimize(Map("RegParam" -> 0.5, "degree" -> 1.0, "offset" -> 1.0),
+        Map("kernel" -> "Polynomial"))
+    }
 
     val met = optModel.evaluate(configtest)
 
