@@ -24,8 +24,6 @@
 
 <p><a href="https://travis-ci.org/mandar2812/bayeslearn"><img src="https://travis-ci.org/mandar2812/bayeslearn.svg?branch=master" alt="Build Status"></a></p>
 
-<p><img src="https://lh6.googleusercontent.com/8sS5eh3BbCmx5zjIT91OKWDl6eTtlxIDU1s6r-bPypvBUGPHgXICsQa_zKUw_7pj6dAGCQ62HPk9gec=w1293-h561" alt="Logo"></p>
-
 <h1>
 <a id="aim" class="anchor" href="#aim" aria-hidden="true"><span class="octicon octicon-link"></span></a>Aim</h1>
 
@@ -37,7 +35,7 @@
 
 <p>Currently Bayes Learn has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. LS-SVM is equivalent to ridge regression/Tikhonov regularization, for further background consider <a href="https://en.wikipedia.org/wiki/Least_squares_support_vector_machine">Wikipedia</a> or the <a href="http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511">book</a>.   </p>
 
-<p>A good general introduction to Probabilistic Models for Machine Learning can be found <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf">here</a> in <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage">David Barber's</a> text book. The Gaussian model implemented so far corresponds to the one discussed in Chapter 18 of the book.</p>
+<p>A good general introduction to Probabilistic Models for Machine Learning can be found <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf">here</a> in <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage">David Barber's</a> text book. The LS-SVM is equivalent to the class of models discussed in Chapter 18 (Bayesian Linear Models) of the book.</p>
 
 <h1>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h1>
@@ -147,7 +145,7 @@ bayeslearn&gt;
 
 <div class="highlight highlight-scala"><pre>met.generatePlots</pre></div>
 
-<p><img src="https://lh3.googleusercontent.com/2QxkVnOYzHVJXaBV7EAlkuNuSul14cMGcIyN_pCva-xIV8_B4CO16IXCZZl9lE9WRkRwyiJfZQJ8Fp4=w1291-h561-rw" alt="Image of Plots"></p>
+<p><img src="https://lh6.googleusercontent.com/Gu5FAbpMth4uztAJznoVRtT7gmwQWRuUM4w8jZ0kUuJKpQTnJros6iVD1I4bqqY6hTGUtMNWOSNlj4c=w1291-h561-rw" alt="Image of Plots"></p>
 
 <ul>
 <li><p>Although kernel based models allow great flexibility in modeling non linear behavior in data, they are highly sensitive to the values of their hyper-parameters. For example if we use a Radial Basis Function (RBF) Kernel, it is a non trivial problem to find the best values of the kernel bandwidth and the regularization constant.</p></li>
