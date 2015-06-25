@@ -57,9 +57,6 @@ object ConjugateGradient {
             x: DenseVector[Double],
             epsilon: Double,
             MAX_ITERATIONS: Int): DenseVector[Double] = {
-    println("A rows: "+A.rows)
-    println("A cols: "+A.cols)
-    println(x.length)
     val residual = b - (A*x)
     val p = residual
     var count = 1.0
