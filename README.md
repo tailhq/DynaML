@@ -123,7 +123,7 @@ bayeslearn>
 met.generatePlots
 ```
 
-![Image of Plots](https://lh6.googleusercontent.com/Gu5FAbpMth4uztAJznoVRtT7gmwQWRuUM4w8jZ0kUuJKpQTnJros6iVD1I4bqqY6hTGUtMNWOSNlj4c=w1291-h561-rw
+![Image of Plots](https://lh6.googleusercontent.com/Gu5FAbpMth4uztAJznoVRtT7gmwQWRuUM4w8jZ0kUuJKpQTnJros6iVD1I4bqqY6hTGUtMNWOSNlj4c=w1291-h561-rw)
 
 * Although kernel based models allow great flexibility in modeling non linear behavior in data, they are highly sensitive to the values of their hyper-parameters. For example if we use a Radial Basis Function (RBF) Kernel, it is a non trivial problem to find the best values of the kernel bandwidth and the regularization constant.
 
