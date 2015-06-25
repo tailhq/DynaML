@@ -34,7 +34,11 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
   override protected val g = LSSVMSparkModel.indexedRDD(data)
 
-  protected var processed_g = g.map((point) => {
+  protected var processed_g = {
+    val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
+    val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
+    val featureMapb = g.context.broadcast(featureMap)
+    g.map((point) => {
     val vec = DenseVector(point._2.features.toArray)
     val ans = vec - meanb.value
     ans :/= sqrt(varianceb.value)
@@ -46,6 +50,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
         DenseVector(1.0))
         .toArray)
     ))
+  })
+  }
 
   val colStats = Statistics.colStats(g.map(_._2.features))
 
