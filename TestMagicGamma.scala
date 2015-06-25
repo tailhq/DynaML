@@ -12,7 +12,8 @@ object TestMagicGamma {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String): Unit = {
     val config = Map("file" -> "data/magicgamma.csv", "delim" -> ",",
       "head" -> "false",
-      "task" -> "classification")
+      "task" -> "classification",
+      "parallelism" -> nCores.toString)
 
     val configtest = Map("file" -> "data/magicgammatest.csv",
       "delim" -> ",",
