@@ -64,7 +64,7 @@ class CoupledSimulatedAnnealing[G, H, M <: KernelizedModel[G, H, DenseVector[Dou
                         options: Map[String, String] = Map()) = {
 
     //create grid
-    val iTemp = 10.0
+    val iTemp = 1.0
     var accTemp = iTemp
     var mutTemp = iTemp
     //one list for each key in initialConfig
