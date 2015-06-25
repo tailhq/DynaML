@@ -112,8 +112,6 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
 
   def unpersist: Unit = {
     this.processed_g.unpersist()
-    this.g.unpersist()
-    data.unpersist()
     this.g.context.stop()
   }
 

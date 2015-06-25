@@ -20,6 +20,27 @@ DenseVector[Double], Double, Int, Int]](model: M)
 
   override val system = model
 
+  private var step: Double = 0.3
+
+  private var gridsize: Int = 5
+
+  private var logarithmicScale = false
+
+  def setLogScale(t: Boolean) = {
+    logarithmicScale = t
+    this
+  }
+
+  def setGridSize(s: Int) = {
+    this.gridsize = s
+    this
+  }
+
+  def setStepSize(s: Double) = {
+    this.step = s
+    this
+  }
+
   override def optimize(initialConfig: Map[String, Double],
                         options: Map[String, String] = Map()) = {
 
@@ -27,8 +48,11 @@ DenseVector[Double], Double, Int, Int]](model: M)
 
     //one list for each key in initialConfig
     val hyper_params = initialConfig.keys.toList
+    val scaleFunc = if(logarithmicScale) (i: Int) => math.exp((i+1).toDouble*step) else
+      (i: Int) => (i+1).toDouble*step
+
     val gridvecs = initialConfig.map((keyValue) => {
-      (keyValue._1, List.tabulate(30)((i) => (i+1).toDouble/10.0))
+      (keyValue._1, List.tabulate(gridsize)(scaleFunc))
     })
 
     val grid = utils.combine(gridvecs.map(_._2)).map(x => DenseVector(x.toArray))

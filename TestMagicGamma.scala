@@ -28,9 +28,10 @@ object TestMagicGamma {
     val model = LSSVMSparkModel(config, sc)
 
     val nProt = if(prototypes > 0) prototypes else math.sqrt(model.npoints.toDouble).toInt
-    //model.applyKernel(new RBFKernel(1.2), nProt)
 
-    val gs = new GridSearch[RDD[(Long, LabeledPoint)], RDD[LabeledPoint], model.type](model)
+    val gs = new GridSearch[RDD[(Long, LabeledPoint)],
+      RDD[LabeledPoint], model.type](model).setGridSize(3)
+      .setStepSize(0.35).setLogScale(true)
 
     val (optModel, optConfig) = kernel match {
       case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
@@ -50,7 +51,6 @@ object TestMagicGamma {
 
     val met = optModel.evaluate(configtest)
 
-    model.unpersist
     optModel.unpersist
 
     met.print()
