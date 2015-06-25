@@ -12,7 +12,7 @@
   <body>
     <section class="page-header">
       <h1 class="project-name">Bayeslearn</h1>
-      <h2 class="project-tagline">Scala Library/REPL for working with Bayesian graphical models.</h2>
+      <h2 class="project-tagline">Scala Library/REPL for scalable Machine Learning</h2>
       <a href="https://github.com/mandar2812/bayeslearn" class="btn">View on GitHub</a>
       <a href="https://github.com/mandar2812/bayeslearn/zipball/master" class="btn">Download .zip</a>
       <a href="https://github.com/mandar2812/bayeslearn/tarball/master" class="btn">Download .tar.gz</a>
@@ -26,19 +26,23 @@
 
 <p><img src="https://lh6.googleusercontent.com/8sS5eh3BbCmx5zjIT91OKWDl6eTtlxIDU1s6r-bPypvBUGPHgXICsQa_zKUw_7pj6dAGCQ62HPk9gec=w1293-h561" alt="Logo"></p>
 
-<p>Scala Library/REPL for working with Bayesian graphical models.</p>
-
 <h1>
-<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
+<a id="aim" class="anchor" href="#aim" aria-hidden="true"><span class="octicon octicon-link"></span></a>Aim</h1>
 
-<p>Bayes learn is a scala library/repl for implementing and working with Probabilistic Graphical Models. The aim is to build a robust set of abstract classes and interfaces, so general graph based ML algorithms can be realized using the API.</p>
+<p>Bayes Learn is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.</p>
 
-<p>A good introduction to Probabilistic Graphical Models can be found <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf">here</a> in <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage">David Barber's</a> text book. The Gaussian model implemented so far corresponds to the one discussed in Chapter 18 of the book.</p>
+<p>The aim is to build a robust set of abstract classes and interfaces, which can be extended easily to implement advanced models for small and large scale applications.</p>
+
+<p>But the library can also be used as an educational/research tool for multi scale data analysis. </p>
+
+<p>Currently Bayes Learn has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. LS-SVM is equivalent to ridge regression/Tikhonov regularization, for further background consider <a href="https://en.wikipedia.org/wiki/Least_squares_support_vector_machine">Wikipedia</a> or the <a href="http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511">book</a>.   </p>
+
+<p>A good general introduction to Probabilistic Models for Machine Learning can be found <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf">here</a> in <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage">David Barber's</a> text book. The Gaussian model implemented so far corresponds to the one discussed in Chapter 18 of the book.</p>
 
 <h1>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h1>
 
-<p>Prerequisites: Maven to build the executables.</p>
+<p>Prerequisites: Maven</p>
 
 <ul>
 <li>Clone this repository</li>
@@ -80,7 +84,7 @@
     \:\__\    \:\__\         /:/  /       |:|  |         /:/  /                
      \/__/     \/__/         \/__/         \|__|         \/__/                 
 
-Welcome to Bayes Learn v 1.0
+Welcome to Bayes Learn v 1.2
 Interactive Scala shell
 STADIUS ESAT KU Leuven (2015)
 
@@ -91,13 +95,13 @@ bayeslearn&gt;
 <h1>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h1>
 
-<p>The <code>data/</code> directory contains a few sample data sets, we will be using them in the following example.</p>
+<p>The <code>data/</code> directory contains a few sample data sets, and the root directory also has example scripts which can be executed in the shell.</p>
 
 <ul>
-<li>First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.</li>
+<li>First we create a linear classification model on a csv data set. We will assume that the last column in each line of the file is the target value, and we build an LS-SVM model.</li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>    <span class="pl-k">val</span> <span class="pl-en">config</span> <span class="pl-k">=</span> <span class="pl-en">Map</span>(<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>data/ionosphere.csv<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>delim<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>task<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>classification<span class="pl-pds">"</span></span>)
+<div class="highlight highlight-scala"><pre>    <span class="pl-k">val</span> <span class="pl-en">config</span> <span class="pl-k">=</span> <span class="pl-en">Map</span>(<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>data/ripley.csv<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>delim<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>task<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>classification<span class="pl-pds">"</span></span>)
     <span class="pl-k">val</span> <span class="pl-en">model</span> <span class="pl-k">=</span> <span class="pl-en">GaussianLinearModel</span>(config)</pre></div>
 
 <ul>
@@ -107,42 +111,27 @@ bayeslearn&gt;
 <div class="highlight highlight-scala"><pre>  <span class="pl-k">val</span> <span class="pl-en">rbf</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">RBFKernel</span>(<span class="pl-c1">1.025</span>)
   model.applyKernel(rbf)</pre></div>
 
-<pre><code>15/04/08 16:18:27 INFO GaussianLinearModel: Calculating sample variance of the data set
-Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.BLAS &lt;clinit&gt;
-WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeSystemBLAS
-Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.BLAS &lt;clinit&gt;
-WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefBLAS
-15/04/08 16:18:27 INFO GaussianLinearModel: Using Silvermans rule of thumb to set bandwidth of density kernel
-15/04/08 16:18:27 INFO GaussianLinearModel: Std Deviation of the data: DenseVector(0.6618767091095631, 0.2153531017806649, 0.6301271799415376, 0.24541745830740389, 0.5431775259758828, 0.2946765619840614, 0.5211964641055545, 0.2761229821927304, 0.5577752837852287, 0.2845775306619974, 0.5479218770489251, 0.2645605240090495, 0.5548377593832784, 0.22456828710772916, 0.5447957151077759, 0.2610149610216883, 0.5376472009654502, 0.28306794461665225, 0.49930806466116906, 0.2771708644986171, 0.5102925100414256, 0.2926837740168661, 0.5044149749875603, 0.28672626576428256, 0.5628969922087946, 0.3188982068909329, 0.49719313771932133, 0.2858619900718872, 0.45806936986691993, 0.29055696674876463, 0.39475699812037596, 0.23682328160611926)
-15/04/08 16:18:27 INFO GaussianLinearModel: norm: 2.4059713445651982
-15/04/08 16:18:27 INFO GaussianLinearModel: Building low rank appriximation to kernel matrix
-15/04/08 16:18:27 INFO GreedyEntropySelector$: Initializing the working set, by drawing randomly from the training set
-15/04/08 16:18:27 INFO GreedyEntropySelector$: Starting iterative, entropy based greedy subset selection
-15/04/08 16:18:27 INFO GreedyEntropySelector$: Returning final prototype set
-15/04/08 16:18:27 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
-15/04/08 16:18:27 INFO SVMKernel$: Dimension: 17 x 17
-15/04/08 16:18:27 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
-Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.LAPACK &lt;clinit&gt;
-WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeSystemLAPACK
-Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.LAPACK &lt;clinit&gt;
-WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefLAPACK
-15/04/08 16:18:27 INFO SVMKernelMatrix: Eigenvalue stats: 0.020963349640349942 =&lt; lambda =&lt; 4.948104887300834
-15/04/08 16:18:27 INFO GaussianLinearModel: Applying Feature map to data set
-15/04/08 16:18:28 INFO GaussianLinearModel: DONE: Applying Feature map to data set
+<pre><code>15/06/25 22:30:57 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
+15/06/25 22:30:57 INFO SVMKernel$: Dimension: 13 x 13
+15/06/25 22:30:57 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
+15/06/25 22:30:57 INFO SVMKernelMatrix: Eigenvalue stats: 0.09797818213131776 =&lt; lambda =&lt; 3.178218421049352
+15/06/25 22:30:57 INFO GaussianLinearModel: Applying Feature map to data set
+15/06/25 22:30:57 INFO GaussianLinearModel: DONE: Applying Feature map to data set
+bayeslearn&gt;
 </code></pre>
 
 <ul>
-<li>Now we can use Gradient Descent to learn the parameters w of the Bayesian model, with priors corresponding to zero mean and variance depending on the regularization parameter.</li>
+<li>Now we can solve the optimization problem posed by the LS-SVM in the parameter space. Since the LS-SVM problem is equivalent to ridge regression, we have to specify a regularization constant.</li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>  model.setRegParam(<span class="pl-c1">0.001</span>).setMaxIteartions(<span class="pl-c1">100</span>).setLearningRate(<span class="pl-c1">0.001</span>).setBatchFraction(<span class="pl-c1">1.0</span>).learn</pre></div>
+<div class="highlight highlight-scala"><pre>  model.setRegParam(<span class="pl-c1">1.5</span>).learn</pre></div>
 
 <ul>
-<li><p>We can now predict the value of the targer variable given a new point consisting of a Vector of features using <code>model.predict()</code>.</p></li>
-<li><p>Evaluating models is easy in BayesLearn. You can create an evaluation object as follows. </p></li>
+<li><p>We can now predict the value of the target variable given a new point consisting of a Vector of features using <code>model.predict()</code>.</p></li>
+<li><p>Evaluating models is easy in Bayes Learn. You can create an evaluation object as follows. </p></li>
 </ul>
 
-<div class="highlight highlight-scala"><pre>    <span class="pl-k">val</span> <span class="pl-en">configtest</span> <span class="pl-k">=</span> <span class="pl-en">Map</span>(<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>data/ionosphereTest.csv<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>delim<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>)
+<div class="highlight highlight-scala"><pre>    <span class="pl-k">val</span> <span class="pl-en">configtest</span> <span class="pl-k">=</span> <span class="pl-en">Map</span>(<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>data/ripleytest.csv<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>delim<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>)
     <span class="pl-k">val</span> <span class="pl-en">met</span> <span class="pl-k">=</span> model.evaluate(configtest)
     met.print</pre></div>
 
@@ -150,24 +139,55 @@ WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefL
 <li>The object <code>met</code> has a <code>print()</code> method which will dump some performance metrics in the shell. But you can also generate plots by using the <code>generatePlots()</code> method.</li>
 </ul>
 
-<pre><code>15/04/08 16:19:37 INFO BinaryClassificationMetrics: Classification Model Performance
-15/04/08 16:19:37 INFO BinaryClassificationMetrics: ============================
-15/04/08 16:19:37 INFO BinaryClassificationMetrics: Area under PR: 0.3313609467455621
-15/04/08 16:19:37 INFO BinaryClassificationMetrics: Area under ROC: 0.33136094674556216
+<pre><code>15/06/25 22:35:06 INFO BinaryClassificationMetrics: Classification Model Performance
+15/06/25 22:35:06 INFO BinaryClassificationMetrics: ============================
+15/06/25 22:35:06 INFO BinaryClassificationMetrics: Area under PR: NaN
+15/06/25 22:35:06 INFO BinaryClassificationMetrics: Area under ROC: 0.8160130718954248
 </code></pre>
 
 <div class="highlight highlight-scala"><pre>met.generatePlots</pre></div>
 
-<p><img src="http://drive.google.com/uc?export=view&amp;id=0BwmVAhMMfhhgSXV2WDNLRl9OSkE" alt="Image of Plots"></p>
+<p><img src="https://lh3.googleusercontent.com/2QxkVnOYzHVJXaBV7EAlkuNuSul14cMGcIyN_pCva-xIV8_B4CO16IXCZZl9lE9WRkRwyiJfZQJ8Fp4=w1291-h561-rw" alt="Image of Plots"></p>
 
 <ul>
-<li>Kernel based models are highly sensitive to the hyperparameters so use <code>model.tuneRBFKernel</code> to find the best value of the kernel parameters. BayesLearn will carry out a grid search over various values of the hyperparameter and use 10-fold cross-validation to find an error estimates for each value of the hyperparameter chosen. </li>
+<li><p>Although kernel based models allow great flexibility in modeling non linear behavior in data, they are highly sensitive to the values of their hyper-parameters. For example if we use a Radial Basis Function (RBF) Kernel, it is a non trivial problem to find the best values of the kernel bandwidth and the regularization constant.</p></li>
+<li><p>In order to find the best hyper-parameters for a general kernel based supervised learning model, we use methods in gradient free global optimization. This is relevant because the cost (objective) function for the hyper-parameters is not smooth in general. In fact in most common scenarios the objective function is defined in terms of some kind of cross validation performance.</p></li>
+<li><p>Bayes Learn has a robust global optimization API, currently Coupled Simulated Annealing and Grid Search algorithms are implemented, the API in the package <code>org.kuleven.esat.optimization</code> can be extended to implement any general gradient or gradient free optimization methods.</p></li>
+<li><p>Lets tune an RBF kernel on the Ripley data.</p></li>
 </ul>
+
+<div class="highlight highlight-scala"><pre><span class="pl-k">import</span> <span class="pl-v">com.tinkerpop.blueprints.</span><span class="pl-v">Graph</span>
+<span class="pl-k">import</span> <span class="pl-v">com.tinkerpop.frames.</span><span class="pl-v">FramedGraph</span>
+<span class="pl-k">import</span> <span class="pl-v">org.kuleuven.esat.graphUtils.</span><span class="pl-v">CausalEdge</span>
+<span class="pl-k">val</span> (optModel, optConfig) <span class="pl-k">=</span> <span class="pl-en">KernelizedModel</span>.getOptimizedModel[<span class="pl-en">FramedGraph</span>[<span class="pl-en">Graph</span>],
+      <span class="pl-en">Iterable</span>[<span class="pl-en">CausalEdge</span>], model.type](model, <span class="pl-s"><span class="pl-pds">"</span>csa<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>RBF<span class="pl-pds">"</span></span>, <span class="pl-c1">13</span>, <span class="pl-c1">7</span>, <span class="pl-c1">0.3</span>, <span class="pl-c1">true</span>)</pre></div>
+
+<p>We see a long list of logs which end in something like the snippet below, the Coupled Simulated Annealing model, gives us a set of hyper-parameters and their values. </p>
+
+<pre><code>optModel: org.kuleuven.esat.graphicalModels.GaussianLinearModel = org.kuleuven.esat.graphicalModels.GaussianLinearModel@6adcc6d9
+optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -&gt; 4.292522306297284, RegParam -&gt; 7.56099893666852)
+</code></pre>
+
+<p>To inspect the performance of this kernel model on an independent test set, we can use the <code>model.evaluate()</code> function. But before that we must train this 'optimized' kernel model on the training set.</p>
+
+<div class="highlight highlight-scala"><pre>optModel.setMaxIterations(<span class="pl-c1">2</span>).learn()
+<span class="pl-k">val</span> <span class="pl-en">met</span> <span class="pl-k">=</span> optModel.evaluate(configtest)
+met.print()
+met.generatePlots()</pre></div>
+
+<p>And the evaluation results follow ...</p>
+
+<pre><code>15/06/25 23:49:32 INFO BinaryClassificationMetrics: Classification Model Performance
+15/06/25 23:49:32 INFO BinaryClassificationMetrics: ============================
+15/06/25 23:49:32 INFO BinaryClassificationMetrics: Area under PR: NaN
+15/06/25 23:49:32 INFO BinaryClassificationMetrics: Area under ROC: 0.8696078431372549
+</code></pre>
 
 <h1>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
 
-<p>You can refer to the project <a href="http://mandar2812.github.io/bayeslearn/">home page</a> or the <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still at its infacy and there will be many more improvements/tweaks in the future.</p>
+<p>You can refer to the project <a href="http://mandar2812.github.io/bayeslearn/">home page</a> or the <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/mandar2812/bayeslearn">Bayeslearn</a> is maintained by <a href="https://github.com/mandar2812">mandar2812</a>.</span>
