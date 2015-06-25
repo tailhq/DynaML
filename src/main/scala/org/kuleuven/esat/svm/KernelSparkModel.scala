@@ -34,6 +34,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
   override protected val g = LSSVMSparkModel.indexedRDD(data)
 
+  protected var processed_g = g
+
   val colStats = Statistics.colStats(g.map(_._2.features))
 
   override protected val nPoints: Long = colStats.count
@@ -94,6 +96,10 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
       this.optimumSubset(M)
     }
 
+    if(this.processed_g.first()._2.features.size > featuredims) {
+      this.processed_g.unpersist()
+    }
+
     val (mean, variance) = (DenseVector(colStats.mean.toArray),
       DenseVector(colStats.variance.toArray))
 
@@ -126,6 +132,23 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
     this.featureMap = kernel.featureMapping(decomp)(scaledPrototypes)
     this.params = DenseVector.ones[Double](effectivedims)
+    val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
+    val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
+    val featureMapb = g.context.broadcast(featureMap)
+    this.processed_g = g.map((point) => {
+      val vec = DenseVector(point._2.features.toArray)
+      val ans = vec - meanb.value
+      ans :/= sqrt(varianceb.value)
+
+      (point._1, new LabeledPoint(
+        point._2.label,
+        Vectors.dense(DenseVector.vertcat(
+          featureMapb.value(ans),
+          DenseVector(1.0))
+          .toArray)
+      ))
+    }).cache()
+
   }
 
   override def trainTest(test: List[Long]) = {
@@ -133,21 +156,10 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
     val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
     val featureMapb = g.context.broadcast(featureMap)
 
-    val training_data = this.g.filter((keyValue) =>
-      !test.contains(keyValue._1)).map((point) => {
-      val vec = DenseVector(point._2.features.toArray)
-      val ans = vec - meanb.value
-      ans :/= sqrt(varianceb.value)
-      new LabeledPoint(
-        point._2.label,
-        Vectors.dense(DenseVector.vertcat(
-          featureMapb.value(ans),
-          DenseVector(1.0))
-          .toArray)
-      )
-    })
+    val training_data = this.processed_g.filter((keyValue) =>
+      !test.contains(keyValue._1)).map(_._2)
 
-    val test_data = this.g.filter((keyValue) =>
+    val test_data = this.processed_g.filter((keyValue) =>
       test.contains(keyValue._1)).map(_._2)
     (training_data, test_data)
   }

@@ -57,9 +57,9 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
           .toArray)
       )
     })
-    trainingData.cache()
+    //trainingData.cache()
     params = this.optimizer.optimize(nPoints, trainingData, params)
-    trainingData.unpersist()
+    //trainingData.unpersist()
   }
 
   override def clearParameters: Unit = {
@@ -111,6 +111,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
   }
 
   def unpersist: Unit = {
+    this.processed_g.unpersist()
     this.g.unpersist()
     data.unpersist()
     this.g.context.stop()
@@ -119,24 +120,13 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
   override def evaluateFold(params: DenseVector[Double])
                            (test_data_set: RDD[LabeledPoint])
                            (task: String): Metrics[Double] = {
-    val sc = g.context
+    val sc = test_data_set.context
     var index: Int = 1
 
-    val mapPoint = (p: Vector) => Vectors.dense(featureMap(DenseVector(p.toArray)).toArray)
-    val predict = LSSVMSparkModel.scoreSparkVector(params) _
-
-    val mapPointb = sc.broadcast(mapPoint)
-    val predictb = sc.broadcast(predict)
-    val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
-    val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
-
+    val paramsb = sc.broadcast(params)
     val scoresAndLabels = test_data_set.map((e) => {
-      val vec = DenseVector(e.features.toArray)
-      val ans = vec - meanb.value
-      ans :/= sqrt(varianceb.value)
-      val y = e.label
       index += 1
-      (predictb.value(mapPointb.value(Vectors.dense(ans.toArray))), y)
+      (paramsb.value dot DenseVector(e.features.toArray), e.label)
     }).collect()
     Metrics(task)(scoresAndLabels.toList, index)
   }

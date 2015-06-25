@@ -26,7 +26,9 @@ class ConjugateGradient extends RegularizedOptimizer[Int, DenseVector[Double],
    *
    *
    * */
-  override def optimize(nPoints: Long, ParamOutEdges: Iterable[CausalEdge], initialP: DenseVector[Double]): DenseVector[Double] = {
+  override def optimize(nPoints: Long,
+                        ParamOutEdges: Iterable[CausalEdge],
+                        initialP: DenseVector[Double]): DenseVector[Double] = {
 
     val dims = initialP.length
     //Cast as problem of form A.w = b
