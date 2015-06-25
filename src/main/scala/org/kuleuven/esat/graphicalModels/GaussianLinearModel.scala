@@ -1,7 +1,7 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.{cholesky, inv, DenseMatrix, DenseVector}
-import breeze.numerics.{sigmoid, sqrt}
+import breeze.numerics.sigmoid
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
@@ -13,8 +13,6 @@ import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.optimization._
 import org.kuleuven.esat.utils
 import scala.collection.mutable
-import scala.pickling._
-import json._
 import collection.JavaConversions._
 import org.kuleuven.esat.graphUtils._
 

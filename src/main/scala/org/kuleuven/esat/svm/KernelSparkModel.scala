@@ -7,11 +7,9 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.rdd.RDD
-import org.kuleuven.esat.graphUtils.CausalEdge
 import org.kuleuven.esat.graphicalModels.KernelizedModel
-import org.kuleuven.esat.kernels.{PolynomialKernel, RBFKernel, SVMKernel, GaussianDensityKernel}
+import org.kuleuven.esat.kernels.{SVMKernel, GaussianDensityKernel}
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
-import org.kuleuven.esat.utils
 
 /**
  * Implementation of the Fixed Size

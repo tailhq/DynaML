@@ -7,7 +7,6 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.evaluation.Metrics
-import org.kuleuven.esat.graphUtils.CausalEdge
 import org.kuleuven.esat.graphicalModels.GaussianLinearModel
 import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
@@ -57,9 +56,8 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
           .toArray)
       )
     })
-    //trainingData.cache()
     params = this.optimizer.optimize(nPoints, trainingData, params)
-    //trainingData.unpersist()
+
   }
 
   override def clearParameters: Unit = {

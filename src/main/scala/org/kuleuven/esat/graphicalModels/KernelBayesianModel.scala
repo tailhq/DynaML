@@ -18,14 +18,12 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
-import breeze.numerics.sigmoid
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
 import org.apache.log4j.{Logger, Priority}
-import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.graphUtils.{Parameter, CausalEdge, Point}
-import org.kuleuven.esat.kernels.{PolynomialKernel, RBFKernel, SVMKernel, GaussianDensityKernel}
-import org.kuleuven.esat.optimization.{ConjugateGradient, GradientDescent}
+import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
+import org.kuleuven.esat.optimization.{ConjugateGradient}
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
 import scala.collection.JavaConversions
