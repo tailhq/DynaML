@@ -174,6 +174,7 @@ object GreedyEntropySelector {
 
     val r = scala.util.Random
     var it: Int = 0
+    var it2: Int = 0
     logger.log(Priority.INFO, "Initializing the working set, by drawing randomly from the training set")
     var workingset = r.shuffle[Long, IndexedSeq](1L to data.npoints).toList.slice(0, M)
 
@@ -223,6 +224,7 @@ object GreedyEntropySelector {
         oldEntropy = newEntropy
         newDataset = (newDataset :+ point1).filter((p) => p != point2)
         it += 1
+        it2 = 0
       } else {
         /*
         * No improvement in entropy
@@ -232,11 +234,12 @@ object GreedyEntropySelector {
         * it is.
         * */
         workingset = (workingset :+ point1).filter((p) => p != point2)
+        it2 += 1
       }
 
       logger.info("Iteration: "+it)
     } while(math.abs(d/oldEntropy) >= delta &&
-      it <= MAX_ITERATIONS)
+      it <= MAX_ITERATIONS && it2 <= MAX_ITERATIONS)
     logger.log(Priority.INFO, "Returning final prototype set")
     //Time to return the final working set
     workingset
