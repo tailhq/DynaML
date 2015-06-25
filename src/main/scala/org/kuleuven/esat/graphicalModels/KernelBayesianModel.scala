@@ -129,7 +129,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
    * and store the mapped features in the respective
    * data nodes.
    * */
-  def applyFeatureMap(): Unit = {
+  override def applyFeatureMap(): Unit = {
     logger.info("Applying Feature map to data set")
     val edges = this.getXYEdges()
     val pnode:Parameter = this.g.getVertex(this.vertexMaps._1("w"),

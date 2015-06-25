@@ -203,6 +203,8 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
                   (test_data_set: L)
                   (task: String): Metrics[Double]
 
+  def applyFeatureMap: Unit
+
   /**
    * Calculates the energy of the configuration,
    * in most global optimization algorithms
@@ -237,6 +239,7 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
       if(!(kernh sameElements kerncs)) {
         this.applyKernel(kern, nprototypes)
       }
+      this.applyFeatureMap
     }
     current_state = h
     val (_,_,e) = this.crossvalidate(4, h("RegParam"))
