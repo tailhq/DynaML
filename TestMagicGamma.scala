@@ -9,7 +9,8 @@ import org.kuleuven.esat.svm.LSSVMSparkModel
  */
 
 object TestMagicGamma {
-  def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String): Unit = {
+  def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
+            grid: Int = 7, step: Double = 0.3, logscale: Boolean = false): Unit = {
     val config = Map("file" -> "data/magicgamma.csv", "delim" -> ",",
       "head" -> "false",
       "task" -> "classification",
@@ -30,8 +31,8 @@ object TestMagicGamma {
     val nProt = if(prototypes > 0) prototypes else math.sqrt(model.npoints.toDouble).toInt
 
     val gs = new GridSearch[RDD[(Long, LabeledPoint)],
-      RDD[LabeledPoint], model.type](model).setGridSize(3)
-      .setStepSize(0.35).setLogScale(true)
+      RDD[LabeledPoint], model.type](model).setGridSize(grid)
+      .setStepSize(step).setLogScale(logscale)
 
     val (optModel, optConfig) = kernel match {
       case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
