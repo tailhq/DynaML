@@ -42,7 +42,7 @@ object TestMagicGamma {
 
     val (optModel, optConfig) = kernel match {
       case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "RBF", "subset" -> "100"))
+        Map("kernel" -> "RBF", "subset" -> prototypes.toString))
 
       case "Polynomial" => gs.optimize(Map("degree" -> 1.0, "offset" -> 1.0, "RegParam" -> 0.5),
         Map("kernel" -> "Polynomial", "subset" -> prototypes.toString))
@@ -67,7 +67,7 @@ object TestMagicGamma {
     val perf = met.kpi()
     val row = Seq(kernel, prototypes.toString, globalOptMethod,
       grid.toString, step.toString, scale,
-      perf(0), perf(1), perf(2))
+      perf(0), perf(1), perf(2), optConfig.toString)
 
     val writer = CSVWriter.open(new File("data/resultsMagicGamma.csv"), append = true)
     writer.writeRow(row)
