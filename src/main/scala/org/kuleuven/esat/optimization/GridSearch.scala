@@ -20,11 +20,11 @@ DenseVector[Double], Double, Int, Int]](model: M)
 
   override val system = model
 
-  private var step: Double = 0.3
+  protected var step: Double = 0.3
 
-  private var gridsize: Int = 5
+  protected var gridsize: Int = 3
 
-  private var logarithmicScale = false
+  protected var logarithmicScale = false
 
   def setLogScale(t: Boolean) = {
     logarithmicScale = t

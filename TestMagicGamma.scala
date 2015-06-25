@@ -4,7 +4,7 @@ import com.github.tototoshi.csv.CSVWriter
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
-import org.kuleuven.esat.optimization.GridSearch
+import org.kuleuven.esat.optimization.{CoupledSimulatedAnnealing, GridSearch}
 import org.kuleuven.esat.svm.LSSVMSparkModel
 
 /**
@@ -38,6 +38,10 @@ object TestMagicGamma {
       case "gs" => new GridSearch[RDD[(Long, LabeledPoint)],
         RDD[LabeledPoint], model.type](model).setGridSize(grid)
         .setStepSize(step).setLogScale(logscale)
+
+      case "csa" => new CoupledSimulatedAnnealing[RDD[(Long, LabeledPoint)],
+        RDD[LabeledPoint], model.type](model).setGridSize(grid)
+        .setStepSize(step).setLogScale(logscale).setMaxIterations(5)
     }
 
     val (optModel, optConfig) = kernel match {
