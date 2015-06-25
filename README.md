@@ -1,19 +1,23 @@
-# Bayes Learn      
+# Bayes Learn
 
 [![Build Status](https://travis-ci.org/mandar2812/bayeslearn.svg?branch=master)](https://travis-ci.org/mandar2812/bayeslearn)
 
-Scala Library/REPL for working with Bayesian graphical models.
-
-Introduction
+Aim
 ============
 
-Bayes learn is a scala library/repl for implementing and working with Probabilistic Graphical Models. The aim is to build a robust set of abstract classes and interfaces, so general graph based ML algorithms can be realized using the API.
+Bayes Learn is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.
 
-A good introduction to Probabilistic Graphical Models can be found [here](http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf) in [David Barber's](http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage) text book. The Gaussian model implemented so far corresponds to the one discussed in Chapter 18 of the book.
+The aim is to build a robust set of abstract classes and interfaces, which can be extended easily to implement advanced models for small and large scale applications.
+
+But the library can also be used as an educational/research tool for multi scale data analysis. 
+
+Currently Bayes Learn has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. LS-SVM is equivalent to ridge regression/Tikhonov regularization, for further background consider [Wikipedia](https://en.wikipedia.org/wiki/Least_squares_support_vector_machine) or the [book] (http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511).   
+
+A good general introduction to Probabilistic Models for Machine Learning can be found [here](http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf) in [David Barber's](http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage) text book. The LS-SVM is equivalent to the class of models discussed in Chapter 18 (Bayesian Linear Models) of the book.
 
 Installation
 ============
-Prerequisites: Maven to build the executables.
+Prerequisites: Maven
 
 * Clone this repository
 * Run the following.
@@ -30,7 +34,7 @@ Prerequisites: Maven to build the executables.
   You should get the following prompt.
   
 ```
-      ___           ___           ___           ___           ___              
+       ___           ___           ___           ___           ___              
      /\  \         /\  \         |\__\         /\  \         /\  \             
     /::\  \       /::\  \        |:|  |       /::\  \       /::\  \            
    /:/\:\  \     /:/\:\  \       |:|  |      /:/\:\  \     /:/\ \  \           
@@ -53,22 +57,24 @@ Prerequisites: Maven to build the executables.
     \:\__\    \:\__\         /:/  /       |:|  |         /:/  /                
      \/__/     \/__/         \/__/         \|__|         \/__/                 
 
-Welcome to Bayes Learn v 1.0
+Welcome to Bayes Learn v 1.2
 Interactive Scala shell
 STADIUS ESAT KU Leuven (2015)
 
 bayeslearn>
+  
 ```
 
 Getting Started
 ===============
 
-The `data/` directory contains a few sample data sets, we will be using them in the following example.
+The `data/` directory contains a few sample data sets, and the root directory also has example scripts which can be executed in the shell.
 
-* First we create a linear Gaussian Bayesian model using a csv data set. We will assume that the last column in each line of the file is the target variable, and we build a Bayesian regression model with additive Gaussian noise.
+* First we create a linear classification model on a csv data set. We will assume that the last column in each line of the file is the target value, and we build an LS-SVM model.
 
 ```scala
-  val model = GaussianLinearModel(utils.getCSVReader("data/ionosphere.csv", ','), false, "classification")
+	val config = Map("file" -> "data/ripley.csv", "delim" -> ",", "head" -> "false", "task" -> "classification")
+	val model = GaussianLinearModel(config)
 ```
 
 * We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model.
@@ -79,61 +85,87 @@ The `data/` directory contains a few sample data sets, we will be using them in 
 ```
 
 ```
-15/04/08 16:18:27 INFO GaussianLinearModel: Calculating sample variance of the data set
-Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.BLAS <clinit>
-WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeSystemBLAS
-Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.BLAS <clinit>
-WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefBLAS
-15/04/08 16:18:27 INFO GaussianLinearModel: Using Silvermans rule of thumb to set bandwidth of density kernel
-15/04/08 16:18:27 INFO GaussianLinearModel: Std Deviation of the data: DenseVector(0.6618767091095631, 0.2153531017806649, 0.6301271799415376, 0.24541745830740389, 0.5431775259758828, 0.2946765619840614, 0.5211964641055545, 0.2761229821927304, 0.5577752837852287, 0.2845775306619974, 0.5479218770489251, 0.2645605240090495, 0.5548377593832784, 0.22456828710772916, 0.5447957151077759, 0.2610149610216883, 0.5376472009654502, 0.28306794461665225, 0.49930806466116906, 0.2771708644986171, 0.5102925100414256, 0.2926837740168661, 0.5044149749875603, 0.28672626576428256, 0.5628969922087946, 0.3188982068909329, 0.49719313771932133, 0.2858619900718872, 0.45806936986691993, 0.29055696674876463, 0.39475699812037596, 0.23682328160611926)
-15/04/08 16:18:27 INFO GaussianLinearModel: norm: 2.4059713445651982
-15/04/08 16:18:27 INFO GaussianLinearModel: Building low rank appriximation to kernel matrix
-15/04/08 16:18:27 INFO GreedyEntropySelector$: Initializing the working set, by drawing randomly from the training set
-15/04/08 16:18:27 INFO GreedyEntropySelector$: Starting iterative, entropy based greedy subset selection
-15/04/08 16:18:27 INFO GreedyEntropySelector$: Returning final prototype set
-15/04/08 16:18:27 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
-15/04/08 16:18:27 INFO SVMKernel$: Dimension: 17 x 17
-15/04/08 16:18:27 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
-Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.LAPACK <clinit>
-WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeSystemLAPACK
-Apr 08, 2015 4:18:27 PM com.github.fommil.netlib.LAPACK <clinit>
-WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefLAPACK
-15/04/08 16:18:27 INFO SVMKernelMatrix: Eigenvalue stats: 0.020963349640349942 =< lambda =< 4.948104887300834
-15/04/08 16:18:27 INFO GaussianLinearModel: Applying Feature map to data set
-15/04/08 16:18:28 INFO GaussianLinearModel: DONE: Applying Feature map to data set
+15/06/25 22:30:57 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
+15/06/25 22:30:57 INFO SVMKernel$: Dimension: 13 x 13
+15/06/25 22:30:57 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
+15/06/25 22:30:57 INFO SVMKernelMatrix: Eigenvalue stats: 0.09797818213131776 =< lambda =< 3.178218421049352
+15/06/25 22:30:57 INFO GaussianLinearModel: Applying Feature map to data set
+15/06/25 22:30:57 INFO GaussianLinearModel: DONE: Applying Feature map to data set
+bayeslearn>
 ```
 
-* Now we can use Gradient Descent to learn the parameters w of the Bayesian model, with priors corresponding to zero mean and variance depending on the regularization parameter.
+* Now we can solve the optimization problem posed by the LS-SVM in the parameter space. Since the LS-SVM problem is equivalent to ridge regression, we have to specify a regularization constant.
 
 ```scala
-  model.setRegParam(0.001).setMaxIteartions(100).setLearningRate(0.001).setBatchFraction(1.0).learn
+  model.setRegParam(1.5).learn
 ```
 
-* We can now predict the value of the targer variable given a new point consisting of a Vector of features using `model.predict()`.
+* We can now predict the value of the target variable given a new point consisting of a Vector of features using `model.predict()`.
 
-* Evaluating models is easy in BayesLearn. You can create an evaluation object as follows. 
+* Evaluating models is easy in Bayes Learn. You can create an evaluation object as follows. 
 
 ```scala
-  val met = model.evaluate(utils.getCSVReader("data/ionosphereTest.csv", ','), false)
-  met.print
+	val configtest = Map("file" -> "data/ripleytest.csv", "delim" -> ",", "head" -> "false")
+	val met = model.evaluate(configtest)
+	met.print
 ```
 
 * The object `met` has a `print()` method which will dump some performance metrics in the shell. But you can also generate plots by using the `generatePlots()` method.
+
 ```
-15/04/08 16:19:37 INFO BinaryClassificationMetrics: Classification Model Performance
-15/04/08 16:19:37 INFO BinaryClassificationMetrics: ============================
-15/04/08 16:19:37 INFO BinaryClassificationMetrics: Area under PR: 0.3313609467455621
-15/04/08 16:19:37 INFO BinaryClassificationMetrics: Area under ROC: 0.33136094674556216
+15/06/25 22:35:06 INFO BinaryClassificationMetrics: Classification Model Performance
+15/06/25 22:35:06 INFO BinaryClassificationMetrics: ============================
+15/06/25 22:35:06 INFO BinaryClassificationMetrics: Area under PR: NaN
+15/06/25 22:35:06 INFO BinaryClassificationMetrics: Area under ROC: 0.8160130718954248
 ```
 
 ```scala
 met.generatePlots
 ```
 
-![Image of Plots](http://drive.google.com/uc?export=view&id=0BwmVAhMMfhhgSXV2WDNLRl9OSkE)
+![Image of Plots](https://lh3.googleusercontent.com/_5_3y0lkD2lDETqw8RHfUzdFJOO4CLn4jreI5iaWu51vyERoy4F5VzROzhZJM2sYnDPh3VuYAZBKNOM=w1291-h561-rw)
 
-* Kernel based models are highly sensitive to the hyperparameters so use `model.tuneRBFKernel` to find the best value of the kernel parameters. BayesLearn will carry out a grid search over various values of the hyperparameter and use 10-fold cross-validation to find an error estimates for each value of the hyperparameter chosen. 
+* Although kernel based models allow great flexibility in modeling non linear behavior in data, they are highly sensitive to the values of their hyper-parameters. For example if we use a Radial Basis Function (RBF) Kernel, it is a non trivial problem to find the best values of the kernel bandwidth and the regularization constant.
+
+* In order to find the best hyper-parameters for a general kernel based supervised learning model, we use methods in gradient free global optimization. This is relevant because the cost (objective) function for the hyper-parameters is not smooth in general. In fact in most common scenarios the objective function is defined in terms of some kind of cross validation performance.
+
+* Bayes Learn has a robust global optimization API, currently Coupled Simulated Annealing and Grid Search algorithms are implemented, the API in the package ```org.kuleven.esat.optimization``` can be extended to implement any general gradient or gradient free optimization methods.
+
+* Lets tune an RBF kernel on the Ripley data.
+
+```scala
+import com.tinkerpop.blueprints.Graph
+import com.tinkerpop.frames.FramedGraph
+import org.kuleuven.esat.graphUtils.CausalEdge
+val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph],
+      Iterable[CausalEdge], model.type](model, "csa",
+      "RBF", 13, 7, 0.3, true)
+```
+
+We see a long list of logs which end in something like the snippet below, the Coupled Simulated Annealing model, gives us a set of hyper-parameters and their values. 
+```
+optModel: org.kuleuven.esat.graphicalModels.GaussianLinearModel = org.kuleuven.esat.graphicalModels.GaussianLinearModel@6adcc6d9
+optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -> 4.292522306297284, RegParam -> 7.56099893666852)
+```
+
+To inspect the performance of this kernel model on an independent test set, we can use the ```model.evaluate()``` function. But before that we must train this 'optimized' kernel model on the training set.
+
+```scala
+optModel.setMaxIterations(2).learn()
+val met = optModel.evaluate(configtest)
+met.print()
+met.generatePlots()
+```
+
+And the evaluation results follow ...
+
+```
+15/06/25 23:49:32 INFO BinaryClassificationMetrics: Classification Model Performance
+15/06/25 23:49:32 INFO BinaryClassificationMetrics: ============================
+15/06/25 23:49:32 INFO BinaryClassificationMetrics: Area under PR: NaN
+15/06/25 23:49:32 INFO BinaryClassificationMetrics: Area under ROC: 0.8696078431372549
+```
 
 Documentation
 =============
-You can refer to the project [home page](http://mandar2812.github.io/bayeslearn/) or the [documentation](http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package) for getting started with Bayes Learn. Bear in mind that this is still at its infacy and there will be many more improvements/tweaks in the future.
+You can refer to the project [home page](http://mandar2812.github.io/bayeslearn/) or the [documentation](http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package) for getting started with Bayes Learn. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
