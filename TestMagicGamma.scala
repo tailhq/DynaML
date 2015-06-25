@@ -1,3 +1,6 @@
+import java.io.File
+
+import com.github.tototoshi.csv.CSVWriter
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -10,7 +13,8 @@ import org.kuleuven.esat.svm.LSSVMSparkModel
 
 object TestMagicGamma {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
-            grid: Int = 7, step: Double = 0.3, logscale: Boolean = false): Unit = {
+            globalOptMethod: String = "gs", grid: Int = 7,
+            step: Double = 0.3, logscale: Boolean = false): Unit = {
     val config = Map("file" -> "data/magicgamma.csv", "delim" -> ",",
       "head" -> "false",
       "task" -> "classification",
@@ -30,9 +34,11 @@ object TestMagicGamma {
 
     val nProt = if(prototypes > 0) prototypes else math.sqrt(model.npoints.toDouble).toInt
 
-    val gs = new GridSearch[RDD[(Long, LabeledPoint)],
-      RDD[LabeledPoint], model.type](model).setGridSize(grid)
-      .setStepSize(step).setLogScale(logscale)
+    val gs = globalOptMethod match {
+      case "gs" => new GridSearch[RDD[(Long, LabeledPoint)],
+        RDD[LabeledPoint], model.type](model).setGridSize(grid)
+        .setStepSize(step).setLogScale(logscale)
+    }
 
     val (optModel, optConfig) = kernel match {
       case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
@@ -55,6 +61,17 @@ object TestMagicGamma {
     optModel.unpersist
 
     met.print()
+    println("Optimal Configuration: "+optConfig)
+    val scale = if(logscale) "log" else "linear"
+
+    val perf = met.kpi()
+    val row = Seq(kernel, prototypes.toString, globalOptMethod,
+      grid.toString, step.toString, scale,
+      perf(0), perf(1), perf(2))
+
+    val writer = CSVWriter.open(new File("data/resultsMagicGamma.csv"), append = true)
+    writer.writeRow(row)
+    writer.close()
 
   }
 }
