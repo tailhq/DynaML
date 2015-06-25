@@ -3,9 +3,11 @@ package org.kuleuven.esat.svm
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
 import breeze.numerics.sqrt
 import org.apache.log4j.Logger
+import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.rdd.RDD
+import org.kuleuven.esat.graphUtils.CausalEdge
 import org.kuleuven.esat.graphicalModels.KernelizedModel
 import org.kuleuven.esat.kernels.{PolynomialKernel, RBFKernel, SVMKernel, GaussianDensityKernel}
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
@@ -27,7 +29,7 @@ import org.kuleuven.esat.utils
  */
 abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
   extends KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],
-    DenseVector[Double], DenseVector[Double], Double, Int, Int]
+    DenseVector[Double], DenseVector[Double], Double, Int, Int](task)
   with Serializable {
 
   override protected val g = LSSVMSparkModel.indexedRDD(data)
@@ -38,9 +40,11 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
   override protected var hyper_parameters: List[String] = List("RegParam")
 
-  override protected var current_state: Map[String, Double] = Map("RegParam" -> this.getRegParam)
+  override protected var current_state: Map[String, Double] = Map("RegParam" -> 1.0)
 
   protected var featuredims: Int = g.first()._2.features.size
+
+  protected var effectivedims: Int = featuredims + 1
 
   protected var prototypes: List[DenseVector[Double]] = List()
 
@@ -51,6 +55,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
   def getRegParam: Double
 
   def setRegParam(l: Double): this.type
+
+  override def initParams() = DenseVector.ones[Double](effectivedims)
 
   override def optimumSubset(M: Int): Unit = {
     points = (0L to this.npoints - 1).toList
@@ -114,15 +120,36 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
     })
     logger.info("Selected Components: "+selectedEigenvalues.length)
+    effectivedims = selectedEigenvalues.length + 1
     val decomp = (DenseVector(selectedEigenvalues.toArray),
       DenseMatrix.vertcat(selectedEigenVectors:_*).t)
 
     this.featureMap = kernel.featureMapping(decomp)(scaledPrototypes)
-    this.params = DenseVector.ones[Double](decomp._1.length + 1)
+    this.params = DenseVector.ones[Double](effectivedims)
   }
 
-  override def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
-    (0.0, 0.0, 0.0)
+  override def trainTest(test: List[Long]) = {
+    val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
+    val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
+    val featureMapb = g.context.broadcast(featureMap)
+
+    val training_data = this.g.filter((keyValue) =>
+      !test.contains(keyValue._1)).map((point) => {
+      val vec = DenseVector(point._2.features.toArray)
+      val ans = vec - meanb.value
+      ans :/= sqrt(varianceb.value)
+      new LabeledPoint(
+        point._2.label,
+        Vectors.dense(DenseVector.vertcat(
+          featureMapb.value(ans),
+          DenseVector(1.0))
+          .toArray)
+      )
+    })
+
+    val test_data = this.g.filter((keyValue) =>
+      test.contains(keyValue._1)).map(_._2)
+    (training_data, test_data)
   }
 
 }

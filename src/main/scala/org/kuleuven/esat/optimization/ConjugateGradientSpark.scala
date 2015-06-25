@@ -7,17 +7,8 @@ import org.apache.spark.rdd.RDD
 /**
  * @author mandar2812
  */
-class ConjugateGradientSpark extends Optimizer[Int, DenseVector[Double],
+class ConjugateGradientSpark extends RegularizedOptimizer[Int, DenseVector[Double],
   DenseVector[Double], Double, RDD[LabeledPoint]]{
-  private var regParam: Double = 1.0
-
-  /**
-   * Set the regularization parameter. Default 0.0.
-   */
-  def setRegParam(regParam: Double): this.type = {
-    this.regParam = regParam
-    this
-  }
 
   def getRegParam = this.regParam
 
@@ -37,8 +28,8 @@ class ConjugateGradientSpark extends Optimizer[Int, DenseVector[Double],
    *
    * */
   override def optimize(nPoints: Long,
-                        initialP: DenseVector[Double],
-                        ParamOutEdges: RDD[LabeledPoint]): DenseVector[Double] = {
+                        ParamOutEdges: RDD[LabeledPoint],
+                        initialP: DenseVector[Double]): DenseVector[Double] = {
 
     val dims = initialP.length
     //Cast as problem of form A.w = b

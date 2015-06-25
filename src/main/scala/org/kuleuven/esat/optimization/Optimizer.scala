@@ -17,6 +17,17 @@ import com.tinkerpop.frames.EdgeFrame
  */
 trait Optimizer[K, P, Q, R, S] extends Serializable {
 
+  /**
+   * Solve the convex optimization problem.
+   */
+  def optimize(nPoints: Long, ParamOutEdges: S, initialP: P): P
+}
+
+abstract class RegularizedOptimizer[K, P, Q, R, S]
+  extends Optimizer[K, P, Q, R, S] with Serializable {
+
+  protected var regParam: Double = 1.0
+
   protected var numIterations: Int = 5
 
   protected var miniBatchFraction: Double = 1.0
@@ -24,9 +35,12 @@ trait Optimizer[K, P, Q, R, S] extends Serializable {
   protected var stepSize: Double = 1.0
 
   /**
-   * Solve the convex optimization problem.
+   * Set the regularization parameter. Default 0.0.
    */
-  def optimize(nPoints: Long, initialP: P, ParamOutEdges: S): P
+  def setRegParam(regParam: Double): this.type = {
+    this.regParam = regParam
+    this
+  }
 
   /**
    * Set fraction of data to be used for each SGD iteration.

@@ -10,18 +10,8 @@ import org.kuleuven.esat.graphUtils.CausalEdge
  * values of the model parameters.
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
-  extends Optimizer[Int, DenseVector[Double],
+  extends RegularizedOptimizer[Int, DenseVector[Double],
     DenseVector[Double], Double, Iterable[CausalEdge]]{
-
-  private var regParam: Double = 1.0
-
-  /**
-   * Set the regularization parameter. Default 0.0.
-   */
-  def setRegParam(regParam: Double): this.type = {
-    this.regParam = regParam
-    this
-  }
 
   /**
    * Set the gradient function (of the loss function of one single data example)
@@ -58,7 +48,7 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    *
    *
    * */
-  override def optimize(nPoints: Long, initialP: DenseVector[Double], ParamOutEdges: Iterable[CausalEdge])
+  override def optimize(nPoints: Long, ParamOutEdges: Iterable[CausalEdge], initialP: DenseVector[Double])
   : DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(

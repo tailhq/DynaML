@@ -7,6 +7,7 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.evaluation.Metrics
+import org.kuleuven.esat.graphUtils.CausalEdge
 import org.kuleuven.esat.graphicalModels.GaussianLinearModel
 import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
@@ -57,7 +58,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
       )
     })
     trainingData.cache()
-    params = this.optimizer.optimize(nPoints, params, trainingData)
+    params = this.optimizer.optimize(nPoints, trainingData, params)
     trainingData.unpersist()
   }
 
@@ -87,12 +88,12 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     }
 
     val mapPoint = (p: Vector) => Vectors.dense(featureMap(DenseVector(p.toArray)).toArray)
-
     val predict = LSSVMSparkModel.scoreSparkVector(params) _
     val mapPointb = sc.broadcast(mapPoint)
     val predictb = sc.broadcast(predict)
     val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
     val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
+
     val results = test_data.map(point => {
       val vec = DenseVector(point.features.toArray)
       val ans = vec - meanb.value
@@ -113,6 +114,31 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     this.g.unpersist()
     data.unpersist()
     this.g.context.stop()
+  }
+
+  override def evaluateFold(params: DenseVector[Double])
+                           (test_data_set: RDD[LabeledPoint])
+                           (task: String): Metrics[Double] = {
+    val sc = g.context
+    var index: Int = 1
+
+    val mapPoint = (p: Vector) => Vectors.dense(featureMap(DenseVector(p.toArray)).toArray)
+    val predict = LSSVMSparkModel.scoreSparkVector(params) _
+
+    val mapPointb = sc.broadcast(mapPoint)
+    val predictb = sc.broadcast(predict)
+    val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
+    val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
+
+    val scoresAndLabels = test_data_set.map((e) => {
+      val vec = DenseVector(e.features.toArray)
+      val ans = vec - meanb.value
+      ans :/= sqrt(varianceb.value)
+      val y = e.label
+      index += 1
+      (predictb.value(mapPointb.value(Vectors.dense(ans.toArray))), y)
+    }).collect()
+    Metrics(task)(scoresAndLabels.toList, index)
   }
 
 }

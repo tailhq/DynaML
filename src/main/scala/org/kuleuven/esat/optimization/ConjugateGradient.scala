@@ -6,17 +6,8 @@ import org.kuleuven.esat.graphUtils.CausalEdge
 /**
  * @author mandar2812
  */
-class ConjugateGradient extends Optimizer[Int, DenseVector[Double],
+class ConjugateGradient extends RegularizedOptimizer[Int, DenseVector[Double],
   DenseVector[Double], Double, Iterable[CausalEdge]]{
-  private var regParam: Double = 1.0
-
-  /**
-   * Set the regularization parameter. Default 0.0.
-   */
-  def setRegParam(regParam: Double): this.type = {
-    this.regParam = regParam
-    this
-  }
 
   def getRegParam = this.regParam
 
@@ -35,9 +26,7 @@ class ConjugateGradient extends Optimizer[Int, DenseVector[Double],
    *
    *
    * */
-  override def optimize(nPoints: Long,
-                        initialP: DenseVector[Double],
-                        ParamOutEdges: Iterable[CausalEdge]): DenseVector[Double] = {
+  override def optimize(nPoints: Long, ParamOutEdges: Iterable[CausalEdge], initialP: DenseVector[Double]): DenseVector[Double] = {
 
     val dims = initialP.length
     //Cast as problem of form A.w = b
@@ -68,6 +57,9 @@ object ConjugateGradient {
             x: DenseVector[Double],
             epsilon: Double,
             MAX_ITERATIONS: Int): DenseVector[Double] = {
+    println("A rows: "+A.rows)
+    println("A cols: "+A.cols)
+    println(x.length)
     val residual = b - (A*x)
     val p = residual
     var count = 1.0

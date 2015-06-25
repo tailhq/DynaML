@@ -36,9 +36,9 @@ import scala.util.Random
  * Abstract class implementing kernel feature map
  * extraction functions.
  */
-abstract class KernelBayesianModel(implicit protected val task: String) extends
+abstract class KernelBayesianModel(implicit override protected val task: String) extends
 KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
-  DenseVector[Double], DenseVector[Double], Double, Int, Int] {
+  DenseVector[Double], DenseVector[Double], Double, Int, Int](task) {
 
   protected val logger = Logger.getLogger(this.getClass)
 
@@ -65,7 +65,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     mutable.HashMap[Long, AnyRef])
 
   override def learn(): Unit = {
-    this.params = optimizer.optimize(nPoints, this.params, this.getXYEdges())
+    this.params = optimizer.optimize(nPoints, this.getXYEdges(), this.params)
   }
 
   override def getXYEdges() =
@@ -187,6 +187,24 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     paramNode.setSlope(this.params.toArray)
   }
 
+  override def initParams() = DenseVector.ones[Double](this.points.length+1)
+
+  override def trainTest(test: List[Long]) = {
+    val training_data = (1L to this.npoints).filter(!test.contains(_))
+      .map((p) => {
+      val ed: CausalEdge = this.g.getEdge(this.edgeMaps._1(p),
+        classOf[CausalEdge])
+      ed
+    }).view.toIterable
+
+    val test_data = test.map((p) => {
+      val ed: CausalEdge = this.g.getEdge(this.edgeMaps._1(p),
+        classOf[CausalEdge])
+      ed
+    }).view.toIterable
+    (training_data, test_data)
+  }
+
   override def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
@@ -199,23 +217,9 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
       //as test and the rest as training
       val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
-      val train = shuffle.filter(!test.contains(_))
+      val(training_data, test_data) = this.trainTest(test)
 
-      val training_data = train.map((p) => {
-        val ed: CausalEdge = this.g.getEdge(this.edgeMaps._1(p),
-          classOf[CausalEdge])
-        ed
-      }).view.toIterable
-
-      val test_data = test.map((p) => {
-        val ed: CausalEdge = this.g.getEdge(this.edgeMaps._1(p),
-          classOf[CausalEdge])
-        ed
-      }).view.toIterable
-
-      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints,
-        DenseVector.ones[Double](this.params.length),
-        training_data)
+      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints, training_data, DenseVector.ones[Double](this.params.length))
       val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
       val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
       res
@@ -255,7 +259,4 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     this.learn()
   }
 
-  def evaluateFold(params: DenseVector[Double])
-                  (test_data_set: Iterable[CausalEdge])
-                  (task: String): Metrics[Double]
 }

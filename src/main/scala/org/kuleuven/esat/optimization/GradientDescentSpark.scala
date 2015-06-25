@@ -12,25 +12,13 @@ import org.apache.spark.rdd.RDD
  */
 class GradientDescentSpark (private val gradient: Gradient,
                             private val updater: Updater)
-extends Optimizer[Int, DenseVector[Double],
+extends RegularizedOptimizer[Int, DenseVector[Double],
   DenseVector[Double], Double, RDD[LabeledPoint]]{
-
-  private var regParam: Double = 0.001
-
-  /**
-   * Set the regularization parameter. Default 0.0.
-   */
-  def setRegParam(regParam: Double): this.type = {
-    this.regParam = regParam
-    this
-  }
 
   /**
    * Solve the convex optimization problem.
    */
-  override def optimize(nPoints: Long,
-                        initialP: DenseVector[Double],
-                        ParamOutEdges: RDD[LabeledPoint])
+  override def optimize(nPoints: Long, ParamOutEdges: RDD[LabeledPoint], initialP: DenseVector[Double])
   : DenseVector[Double] =
     GradientDescentSpark.runBatchSGD(
     nPoints,

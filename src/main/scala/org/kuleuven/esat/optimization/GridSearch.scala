@@ -11,8 +11,8 @@ import org.kuleuven.esat.utils
  * An implementation of Grid Search
  * global optimization for Kernel Models
  */
-class GridSearch[G, H](model: KernelizedModel[G, H, DenseVector[Double],
-  DenseVector[Double], Double, Int, Int])
+class GridSearch[G, H, M <: KernelizedModel[G, H, DenseVector[Double],
+DenseVector[Double], Double, Int, Int]](model: M)
   extends GlobalOptimizer[KernelizedModel[G, H, DenseVector[Double],
     DenseVector[Double], Double, Int, Int]]{
 

@@ -2,8 +2,11 @@ package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg._
 import org.kuleuven.esat.evaluation.Metrics
+import org.kuleuven.esat.graphUtils.CausalEdge
 import org.kuleuven.esat.kernels._
-import org.kuleuven.esat.optimization.{GloballyOptimizable, Optimizer}
+import org.kuleuven.esat.optimization.{RegularizedOptimizer, GloballyOptimizable, Optimizer}
+
+import scala.util.Random
 
 /**
  * Basic Higher Level abstraction
@@ -29,7 +32,7 @@ trait GraphicalModel[T] {
 trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
   extends GraphicalModel[G] {
   protected var params: T
-  protected val optimizer: Optimizer[K, T, Q, R, S]
+  protected val optimizer: RegularizedOptimizer[K, T, Q, R, S]
   /**
    * Learn the parameters
    * of the model which
@@ -64,6 +67,8 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
     this.optimizer.setStepSize(alpha)
     this
   }
+
+  def initParams(): T
 
 }
 
@@ -114,7 +119,8 @@ trait EvaluableModel [P, R]{
   def evaluate(config: Map[String, String]): Metrics[R]
 }
 
-abstract class KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, K1, K2]
+abstract class KernelizedModel[G, L, T <: Tensor[K1, Double],
+Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
   extends LinearModel[G, K1, K2, T, Q, R, L] with GloballyOptimizable {
 
   protected val nPoints: Long
@@ -163,7 +169,37 @@ abstract class KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Do
    * */
   def optimumSubset(M: Int): Unit
 
-  def crossvalidate(folds: Int, reg: Double): (Double, Double, Double)
+  def trainTest(test: List[Long]): (L,L)
+
+  def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {
+    //Create the folds as lists of integers
+    //which index the data points
+    this.optimizer.setRegParam(reg).setNumIterations(2)
+      .setStepSize(0.001).setMiniBatchFraction(1.0)
+    val shuffle = Random.shuffle((1L to this.npoints).toList)
+    val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
+      //For the ath fold
+      //partition the data
+      //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
+      //as test and the rest as training
+      val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
+      val(training_data, test_data) = this.trainTest(test)
+
+      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints, training_data, this.initParams())
+      val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
+      val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
+      res
+    }.reduce(_+_)
+    //run batch sgd on each fold
+    //and test
+    (avg_metrics(0),
+      avg_metrics(1),
+      avg_metrics(2))
+  }
+
+  def evaluateFold(params: T)
+                  (test_data_set: L)
+                  (task: String): Metrics[Double]
 
   /**
    * Calculates the energy of the configuration,
@@ -192,10 +228,12 @@ abstract class KernelizedModel[G, L, T <: Tensor[K1, Double], Q <: Tensor[K2, Do
       //calculate kernParam(current_state)
       //if both differ in any way then apply
       //the kernel
+      val nprototypes = if(options.contains("subset")) options("subset").toInt
+      else math.sqrt(this.npoints).toInt
       val kernh = h.filter((couple) => kern.hyper_parameters.contains(couple._1))
       val kerncs = current_state.filter((couple) => kern.hyper_parameters.contains(couple._1))
       if(!(kernh sameElements kerncs)) {
-        this.applyKernel(kern)
+        this.applyKernel(kern, nprototypes)
       }
     }
     current_state = h

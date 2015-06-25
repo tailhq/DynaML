@@ -1,3 +1,6 @@
+import com.tinkerpop.blueprints.Graph
+import com.tinkerpop.frames.FramedGraph
+import org.kuleuven.esat.graphUtils.CausalEdge
 import org.kuleuven.esat.graphicalModels.GaussianLinearModel
 import org.kuleuven.esat.optimization.GridSearch
 
@@ -17,7 +20,7 @@ object TestHousing {
 
     val model = GaussianLinearModel(config)
 
-    val gs = new GridSearch(model)
+    val gs = new GridSearch[FramedGraph[Graph], Iterable[CausalEdge], model.type](model)
 
     val (optModel, optConfig) = kernel match {
       case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
