@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/mandar2812/bayeslearn.svg?branch=master)](https://travis-ci.org/mandar2812/bayeslearn)
 
-![Logo](https://lh6.googleusercontent.com/8sS5eh3BbCmx5zjIT91OKWDl6eTtlxIDU1s6r-bPypvBUGPHgXICsQa_zKUw_7pj6dAGCQ62HPk9gec=w1293-h561)
-
 Aim
 ============
 
