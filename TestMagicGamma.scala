@@ -4,7 +4,7 @@ import com.github.tototoshi.csv.CSVWriter
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
-import org.kuleuven.esat.optimization.{CoupledSimulatedAnnealing, GridSearch}
+import org.kuleuven.esat.graphicalModels.KernelizedModel
 import org.kuleuven.esat.svm.LSSVMSparkModel
 
 /**
@@ -32,31 +32,18 @@ object TestMagicGamma {
 
     val model = LSSVMSparkModel(config, sc)
 
-    val nProt = if(prototypes > 0) prototypes else math.sqrt(model.npoints.toDouble).toInt
-
-    val gs = globalOptMethod match {
-      case "gs" => new GridSearch[RDD[(Long, LabeledPoint)],
-        RDD[LabeledPoint], model.type](model).setGridSize(grid)
-        .setStepSize(step).setLogScale(logscale)
-
-      case "csa" => new CoupledSimulatedAnnealing[RDD[(Long, LabeledPoint)],
-        RDD[LabeledPoint], model.type](model).setGridSize(grid)
-        .setStepSize(step).setLogScale(logscale).setMaxIterations(5)
+    val nProt = if (kernel == "Linear") {
+      model.npoints.toInt
+    } else {
+      if(prototypes > 0)
+        prototypes
+      else
+        math.sqrt(model.npoints.toDouble).toInt
     }
 
-    val (optModel, optConfig) = kernel match {
-      case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "RBF", "subset" -> prototypes.toString))
-
-      case "Polynomial" => gs.optimize(Map("degree" -> 1.0, "offset" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "Polynomial", "subset" -> prototypes.toString))
-
-      case "Exponential" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "Exponential", "subset" -> prototypes.toString))
-
-      case "Laplacian" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "Laplacian", "subset" -> prototypes.toString))
-    }
+    val (optModel, optConfig) = KernelizedModel.getOptimizedModel[RDD[(Long, LabeledPoint)],
+      RDD[LabeledPoint], model.type](model, globalOptMethod,
+        kernel, nProt, grid, step, logscale)
 
     optModel.setMaxIterations(2).learn()
 

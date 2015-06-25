@@ -1,10 +1,12 @@
 package org.kuleuven.esat.graphicalModels
 
 import breeze.linalg._
+import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.graphUtils.CausalEdge
 import org.kuleuven.esat.kernels._
-import org.kuleuven.esat.optimization.{RegularizedOptimizer, GloballyOptimizable, Optimizer}
+import org.kuleuven.esat.optimization._
 
 import scala.util.Random
 
@@ -242,4 +244,35 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
     1.0-e
   }
 
+}
+
+object KernelizedModel {
+  def getOptimizedModel[G, H, M <: KernelizedModel[G, H, DenseVector[Double],
+    DenseVector[Double], Double, Int, Int]](model: M, globalOptMethod: String,
+                                            kernel: String, prototypes: Int, grid: Int,
+                                            step: Double, logscale: Boolean = true) = {
+    val gs = globalOptMethod match {
+      case "gs" => new GridSearch[G, H, model.type](model).setGridSize(grid)
+        .setStepSize(step).setLogScale(logscale)
+
+      case "csa" => new CoupledSimulatedAnnealing[G, H, model.type](model).setGridSize(grid)
+        .setStepSize(step).setLogScale(logscale).setMaxIterations(5)
+    }
+
+    kernel match {
+      case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
+        Map("kernel" -> "RBF", "subset" -> prototypes.toString))
+
+      case "Polynomial" => gs.optimize(Map("degree" -> 1.0, "offset" -> 1.0, "RegParam" -> 0.5),
+        Map("kernel" -> "Polynomial", "subset" -> prototypes.toString))
+
+      case "Exponential" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
+        Map("kernel" -> "Exponential", "subset" -> prototypes.toString))
+
+      case "Laplacian" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
+        Map("kernel" -> "Laplacian", "subset" -> prototypes.toString))
+
+      case "Linear" => gs.optimize(Map("RegParam" -> 0.5))
+    }
+  }
 }
