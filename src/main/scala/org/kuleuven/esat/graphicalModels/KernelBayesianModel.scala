@@ -23,7 +23,7 @@ import com.tinkerpop.frames.FramedGraph
 import org.apache.log4j.{Logger, Priority}
 import org.kuleuven.esat.graphUtils.{Parameter, CausalEdge, Point}
 import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
-import org.kuleuven.esat.optimization.{ConjugateGradient}
+import org.kuleuven.esat.optimization.ConjugateGradient
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 import org.kuleuven.esat.utils
 import scala.collection.JavaConversions
