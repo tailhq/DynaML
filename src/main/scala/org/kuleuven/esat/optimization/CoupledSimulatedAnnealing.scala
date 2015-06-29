@@ -10,7 +10,7 @@ import scala.util.Random
 /**
  * @author mandar datum 25/6/15.
  *
- * Implementation of the CSA algorithm
+ * Implementation of the Coupled Simulated Annealing algorithm
  * for global optimization.
  */
 class CoupledSimulatedAnnealing[G, H, M <: KernelizedModel[G, H, DenseVector[Double],
