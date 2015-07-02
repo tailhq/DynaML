@@ -186,8 +186,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
       test_data.unpersist()
       res
     }.reduce(_+_)
-    //run batch sgd on each fold
-    //and test
+
+    this.processed_g.unpersist(blocking = true)
     (avg_metrics(0),
       avg_metrics(1),
       avg_metrics(2))
