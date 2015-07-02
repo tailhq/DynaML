@@ -11,6 +11,8 @@ import org.kuleuven.esat.graphicalModels.KernelizedModel
 import org.kuleuven.esat.kernels.{SVMKernel, GaussianDensityKernel}
 import org.kuleuven.esat.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
 
+import scala.util.Random
+
 /**
  * Implementation of the Fixed Size
  * Kernel based LS SVM
@@ -157,7 +159,38 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
     val test_data = this.processed_g.filter((keyValue) =>
       test.contains(keyValue._1)).map(_._2)
+
+    training_data.cache()
+    test_data.cache()
     (training_data, test_data)
+  }
+
+  override def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {
+    //Create the folds as lists of integers
+    //which index the data points
+    this.optimizer.setRegParam(reg).setNumIterations(2)
+      .setStepSize(0.001).setMiniBatchFraction(1.0)
+    val shuffle = Random.shuffle((1L to this.npoints).toList)
+    val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
+      //For the ath fold
+      //partition the data
+      //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
+      //as test and the rest as training
+      val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
+      val(training_data, test_data) = this.trainTest(test)
+
+      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints, training_data, this.initParams())
+      val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
+      val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
+      training_data.unpersist()
+      test_data.unpersist()
+      res
+    }.reduce(_+_)
+    //run batch sgd on each fold
+    //and test
+    (avg_metrics(0),
+      avg_metrics(1),
+      avg_metrics(2))
   }
 
 }
