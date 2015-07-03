@@ -4,6 +4,8 @@ import breeze.linalg._
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 
+import scala.util.Random
+
 /**
  * @author mandar2812
  */
@@ -35,7 +37,9 @@ class ConjugateGradientSpark extends RegularizedOptimizer[Int, DenseVector[Doubl
     //Cast as problem of form A.w = b
     //A = Phi^T . Phi + I_dims*regParam
     //b = Phi^T . Y
-    val (a,b): (DenseMatrix[Double], DenseVector[Double]) = ParamOutEdges.map((edge) => {
+    val (a,b): (DenseMatrix[Double], DenseVector[Double]) =
+      ParamOutEdges.filter((_) => Random.nextDouble() <= this.miniBatchFraction)
+        .map((edge) => {
       val phi = DenseVector(edge.features.toArray)
       val label = edge.label
       val phiY: DenseVector[Double] = phi * label

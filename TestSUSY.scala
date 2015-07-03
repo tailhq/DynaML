@@ -13,7 +13,7 @@ import org.kuleuven.esat.svm.LSSVMSparkModel
 object TestSUSY {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false): Unit = {
+            step: Double = 0.3, logscale: Boolean = false, frac: Double): Unit = {
 
     val config = Map(
       "file" -> "/esat/smcdata/guests/mandar/susy.csv",
@@ -44,9 +44,12 @@ object TestSUSY {
         math.sqrt(model.npoints.toDouble).toInt
     }
 
+    model.setBatchFraction(frac)
     val (optModel, optConfig) = KernelizedModel.getOptimizedModel[RDD[(Long, LabeledPoint)],
       RDD[LabeledPoint], model.type](model, globalOptMethod,
         kernel, nProt, grid, step, logscale)
+
+    model.setBatchFraction(1.0)
 
     optModel.setMaxIterations(2).learn()
 

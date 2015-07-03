@@ -15,7 +15,7 @@ import scala.util.Random
  * for graphical models.
  *
  */
-trait GraphicalModel[T] {
+trait Model[T] {
   protected val g: T
 }
 
@@ -32,7 +32,7 @@ trait GraphicalModel[T] {
  *
  * */
 trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
-  extends GraphicalModel[G] {
+  extends Model[G] {
   protected var params: T
   protected val optimizer: RegularizedOptimizer[K, T, Q, R, S]
   /**
@@ -92,7 +92,7 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
 
 abstract class LinearModel[T, K1, K2,
   P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, S]
-  extends GraphicalModel[T]
+  extends Model[T]
   with ParameterizedLearner[T, K2, P, Q, R, S]
   with EvaluableModel[P, R] {
 

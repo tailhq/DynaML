@@ -58,6 +58,12 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
   def setRegParam(l: Double): this.type
 
+  def setMiniBatchFraction(f: Double): this.type = {
+    assert(f <= 1.0 && f >= 0.0, "Mini Batch Fraction must be between 0 and 1.0")
+    this.optimizer.setMiniBatchFraction(f)
+    this
+  }
+
   override def initParams() = DenseVector.ones[Double](effectivedims)
 
   override def optimumSubset(M: Int): Unit = {

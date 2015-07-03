@@ -28,7 +28,7 @@ abstract class RegularizedOptimizer[K, P, Q, R, S]
 
   protected var regParam: Double = 1.0
 
-  protected var numIterations: Int = 5
+  protected var numIterations: Int = 3
 
   protected var miniBatchFraction: Double = 1.0
 
