@@ -2,7 +2,7 @@ package org.kuleuven.esat.optimization
 
 import breeze.linalg.DenseVector
 import org.apache.log4j.Logger
-import org.kuleuven.esat.graphicalModels.KernelizedModel
+import org.kuleuven.esat.models.KernelizedModel
 import org.kuleuven.esat.utils
 
 /**

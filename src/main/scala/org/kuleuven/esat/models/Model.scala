@@ -1,10 +1,7 @@
-package org.kuleuven.esat.graphicalModels
+package org.kuleuven.esat.models
 
 import breeze.linalg._
-import org.apache.spark.mllib.regression.LabeledPoint
-import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.evaluation.Metrics
-import org.kuleuven.esat.graphUtils.CausalEdge
 import org.kuleuven.esat.kernels._
 import org.kuleuven.esat.optimization._
 
@@ -12,16 +9,15 @@ import scala.util.Random
 
 /**
  * Basic Higher Level abstraction
- * for graphical models.
- *
+ * for Machine Learning models.
  */
 trait Model[T] {
   protected val g: T
 }
 
 /**
- * Skeleton of Parameterized Graphical Model
- * @tparam G The type of the underlying graph.
+ * Skeleton of Parameterized Model
+ * @tparam G The type of the underlying data.
  * @tparam K The type of indexing on the feature vectors.
  * @tparam T The type of the parameters
  * @tparam Q A Vector/Matrix representing the features of a point
@@ -76,7 +72,7 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
 
 /**
  * Represents skeleton of a
- * Generalized Linear Model.
+ * Linear Model.
  *
  * @tparam T The underlying type of the data structure
  *           ex. Gremlin, Neo4j, Spark RDD etc

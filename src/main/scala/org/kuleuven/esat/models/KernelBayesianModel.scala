@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.kuleuven.esat.graphicalModels
+package org.kuleuven.esat.models
 
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
 import com.tinkerpop.blueprints.Graph

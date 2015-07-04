@@ -1,4 +1,4 @@
-package org.kuleuven.esat.graphicalModels
+package org.kuleuven.esat.models
 
 import breeze.linalg.{cholesky, inv, DenseMatrix, DenseVector}
 import breeze.numerics.sigmoid

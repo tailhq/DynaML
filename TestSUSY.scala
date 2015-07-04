@@ -4,7 +4,7 @@ import com.github.tototoshi.csv.CSVWriter
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkContext, SparkConf}
-import org.kuleuven.esat.graphicalModels.KernelizedModel
+import org.kuleuven.esat.models.KernelizedModel
 import org.kuleuven.esat.svm.LSSVMSparkModel
 
 /**

@@ -3,7 +3,7 @@ import com.github.tototoshi.csv.CSVWriter
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
 import org.kuleuven.esat.graphUtils.CausalEdge
-import org.kuleuven.esat.graphicalModels.{KernelizedModel, GaussianLinearModel}
+import org.kuleuven.esat.models.{KernelizedModel, GaussianLinearModel}
 
 /**
  * @author mandar2812

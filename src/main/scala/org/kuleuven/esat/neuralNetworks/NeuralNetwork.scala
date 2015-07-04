@@ -2,7 +2,7 @@ package org.kuleuven.esat.neuralNetworks
 
 import breeze.linalg.{DenseVector, DenseMatrix}
 import breeze.numerics.sigmoid
-import org.kuleuven.esat.graphicalModels.ParameterizedLearner
+import org.kuleuven.esat.models.ParameterizedLearner
 
 /**
  * Top level trait defining

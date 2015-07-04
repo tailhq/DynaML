@@ -7,7 +7,7 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.kuleuven.esat.evaluation.Metrics
-import org.kuleuven.esat.graphicalModels.GaussianLinearModel
+import org.kuleuven.esat.models.GaussianLinearModel
 import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
 

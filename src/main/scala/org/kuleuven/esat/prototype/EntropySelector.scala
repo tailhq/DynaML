@@ -21,7 +21,7 @@ import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
-import org.kuleuven.esat.graphicalModels.KernelBayesianModel
+import org.kuleuven.esat.models.KernelBayesianModel
 
 /**
  * Basic skeleton of an entropy based
