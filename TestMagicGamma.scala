@@ -1,11 +1,13 @@
 import java.io.File
 
+import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.CSVWriter
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
+import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel}
 import org.kuleuven.esat.models.KernelizedModel
-import org.kuleuven.esat.svm.LSSVMSparkModel
+import org.kuleuven.esat.svm.{KernelSparkModel, LSSVMSparkModel}
 
 /**
  * @author mandar2812
@@ -26,7 +28,12 @@ object TestMagicGamma {
 
     val conf = new SparkConf().setAppName("Magicgamma").setMaster("local["+nCores+"]")
 
-    conf.registerKryoClasses(Array(classOf[LSSVMSparkModel]))
+    conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
+      classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],
+        DenseVector[Double], DenseVector[Double], Double, Int, Int]],
+      classOf[SVMKernel[DenseMatrix[Double]]], classOf[RBFKernel],
+      classOf[DenseVector[Double]],
+      classOf[DenseMatrix[Double]]))
 
     val sc = new SparkContext(conf)
 

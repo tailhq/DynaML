@@ -32,7 +32,10 @@ object TestSUSY {
     val conf = new SparkConf().setAppName("SUSY").setMaster("local["+nCores+"]")
 
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
-      classOf[KernelizedModel], classOf[SVMKernel], classOf[RBFKernel], classOf[DenseVector[Double]],
+      classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],
+        DenseVector[Double], DenseVector[Double], Double, Int, Int]],
+      classOf[SVMKernel[DenseMatrix[Double]]], classOf[RBFKernel],
+      classOf[DenseVector[Double]],
       classOf[DenseMatrix[Double]]))
 
     val sc = new SparkContext(conf)
