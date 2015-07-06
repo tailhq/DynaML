@@ -144,7 +144,7 @@ object LSSVMSparkModel {
     val minPartitions = if(config.isDefinedAt("parallelism")) config("parallelism").toInt
     else 2
 
-    val csv = sc.textFile(file, minPartitions).map(line => line split delim)
+    val csv = sc.textFile(file, 3*minPartitions).map(line => line split delim)
       .map(_.map(_.toDouble)).map(vector => {
       val label = vector(vector.length-1)
       vector(vector.length-1) = 1.0
