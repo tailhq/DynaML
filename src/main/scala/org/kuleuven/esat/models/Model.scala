@@ -174,6 +174,8 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
     this.optimizer.setRegParam(reg).setNumIterations(2)
       .setStepSize(0.001).setMiniBatchFraction(1.0)
     val shuffle = Random.shuffle((1L to this.npoints).toList)
+    //run batch sgd on each fold
+    //and test
     val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
       //For the ath fold
       //partition the data
@@ -187,8 +189,7 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
       val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
       res
     }.reduce(_+_)
-    //run batch sgd on each fold
-    //and test
+
     (avg_metrics(0),
       avg_metrics(1),
       avg_metrics(2))

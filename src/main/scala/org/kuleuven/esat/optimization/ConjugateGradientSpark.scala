@@ -3,6 +3,7 @@ package org.kuleuven.esat.optimization
 import breeze.linalg._
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
+import org.kuleuven.esat.svm.LSSVMSparkModel
 
 import scala.util.Random
 
@@ -32,24 +33,10 @@ class ConjugateGradientSpark extends RegularizedOptimizer[Int, DenseVector[Doubl
   override def optimize(nPoints: Long,
                         ParamOutEdges: RDD[LabeledPoint],
                         initialP: DenseVector[Double]): DenseVector[Double] = {
+    val (a,b) = LSSVMSparkModel.getFeatureMatrix(nPoints, ParamOutEdges,
+      initialP, this.miniBatchFraction, this.regParam)
 
-    val dims = initialP.length
-    //Cast as problem of form A.w = b
-    //A = Phi^T . Phi + I_dims*regParam
-    //b = Phi^T . Y
-    val (a,b): (DenseMatrix[Double], DenseVector[Double]) =
-      ParamOutEdges.filter((_) => Random.nextDouble() <= this.miniBatchFraction)
-        .map((edge) => {
-      val phi = DenseVector(edge.features.toArray)
-      val label = edge.label
-      val phiY: DenseVector[Double] = phi * label
-      (phi*phi.t, phiY)
-    }).reduce((couple1, couple2) => {
-      (couple1._1+couple2._1, couple1._2+couple2._2)
-    })
-    val A = a + (DenseMatrix.eye[Double](dims)*regParam)
-
-    ConjugateGradient.runCG(A, b, initialP, 0.0001, this.numIterations)
+    ConjugateGradient.runCG(a, b, initialP, 0.0001, this.numIterations)
   }
 }
 

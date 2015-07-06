@@ -28,6 +28,8 @@ object TestMagicGamma {
 
     val conf = new SparkConf().setAppName("Magicgamma").setMaster("local["+nCores+"]")
 
+    conf.set("spark.executor.memory", "3g")
+
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
       classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],
         DenseVector[Double], DenseVector[Double], Double, Int, Int]],

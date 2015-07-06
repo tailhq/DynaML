@@ -1,6 +1,6 @@
 package org.kuleuven.esat.svm
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.sqrt
 import org.apache.spark.SparkContext
 import org.apache.spark.mllib.linalg.Vectors
@@ -10,6 +10,8 @@ import org.kuleuven.esat.evaluation.Metrics
 import org.kuleuven.esat.models.GaussianLinearModel
 import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
+
+import scala.util.Random
 
 /**
  * Implementation of the Least Squares SVM
@@ -127,6 +129,45 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     Metrics(task)(scoresAndLabels.toList, index)
   }
 
+  override def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {
+    //Create the folds as lists of integers
+    //which index the data points
+    this.optimizer.setRegParam(reg).setNumIterations(2)
+      .setStepSize(0.001).setMiniBatchFraction(1.0)
+    val shuffle = Random.shuffle((1L to this.npoints).toList)
+
+    val (featureMatrix,b) = LSSVMSparkModel.getFeatureMatrix(npoints, processed_g.map(_._2),
+      this.initParams(), 1.0, reg)
+
+    val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
+      //For the ath fold
+      //partition the data
+      //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
+      //as test and the rest as training
+      val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
+      val test_data = processed_g.filter((keyValue) =>
+        test.contains(keyValue._1)).map(_._2)
+
+      val (a_folda, b_folda) = LSSVMSparkModel.getFeatureMatrix(npoints,
+        test_data,
+        this.initParams(),
+        1.0, reg)
+
+      val featureMatrix_a = featureMatrix - a_folda
+      val bias = b - b_folda
+      val tempparams = ConjugateGradientSpark.runCG(featureMatrix_a,
+        bias, this.initParams(), 0.001, 3)
+      val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
+      val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
+      res
+    }.reduce(_+_)
+
+    this.processed_g.unpersist(blocking = true)
+    (avg_metrics(0),
+      avg_metrics(1),
+      avg_metrics(2))
+  }
+
 }
 
 object LSSVMSparkModel {
@@ -144,7 +185,7 @@ object LSSVMSparkModel {
     val minPartitions = if(config.isDefinedAt("parallelism")) config("parallelism").toInt
     else 2
 
-    val csv = sc.textFile(file, 3*minPartitions).map(line => line split delim)
+    val csv = sc.textFile(file/*, 3*minPartitions*/).map(line => line split delim)
       .map(_.map(_.toDouble)).map(vector => {
       val label = vector(vector.length-1)
       vector(vector.length-1) = 1.0
@@ -219,5 +260,27 @@ object LSSVMSparkModel {
       new LeastSquaresGradient(),
       new SquaredL2Updater())
   }*/
+
+  def getFeatureMatrix(nPoints: Long,
+                       ParamOutEdges: RDD[LabeledPoint],
+                       initialP: DenseVector[Double],
+                       frac: Double, regParam: Double) = {
+    val dims = initialP.length
+    //Cast as problem of form A.w = b
+    //A = Phi^T . Phi + I_dims*regParam
+    //b = Phi^T . Y
+    val (a,b): (DenseMatrix[Double], DenseVector[Double]) =
+      ParamOutEdges.filter((_) => Random.nextDouble() <= frac)
+        .map((edge) => {
+        val phi = DenseVector(edge.features.toArray)
+        val label = edge.label
+        val phiY: DenseVector[Double] = phi * label
+        (phi*phi.t, phiY)
+      }).reduce((couple1, couple2) => {
+        (couple1._1+couple2._1, couple1._2+couple2._2)
+      })
+    a + (DenseMatrix.eye[Double](dims)*regParam)
+    (a,b)
+  }
 
 }

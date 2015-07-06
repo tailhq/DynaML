@@ -255,7 +255,7 @@
                         <phase>package</phase>
                         <configuration>
                             <extraJvmArguments>-XX:+UseG1GC</extraJvmArguments>
-                            <extraJvmArguments>-Xmx2.6g</extraJvmArguments>
+                            <extraJvmArguments>-Xmx5g</extraJvmArguments>
                             <extraJvmArguments>-XX:MaxPermSize=1g</extraJvmArguments>
                             <extraJvmArguments>
                                 -Dlog4j.configuration=file://${basedir}/conf/log4j.properties
