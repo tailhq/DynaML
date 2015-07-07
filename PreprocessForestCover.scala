@@ -16,8 +16,7 @@ object GzFileIterator {
   def apply(file: java.io.File, encoding: String): BufferedReader = {
     new BufferedReader(
       new InputStreamReader(
-        new GZIPInputStream(
-          new FileInputStream(file)), encoding))
+        new FileInputStream(file), encoding))
   }
 }
 
