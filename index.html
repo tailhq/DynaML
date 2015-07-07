@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Bayeslearn by mandar2812</title>
+    <title>DynaML by mandar2812</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -11,29 +11,29 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Bayeslearn</h1>
+      <h1 class="project-name">DynaML</h1>
       <h2 class="project-tagline">Scala Library/REPL for scalable Machine Learning</h2>
-      <a href="https://github.com/mandar2812/bayeslearn" class="btn">View on GitHub</a>
-      <a href="https://github.com/mandar2812/bayeslearn/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/mandar2812/bayeslearn/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="https://github.com/mandar2812/DynaML" class="btn">View on GitHub</a>
+      <a href="https://github.com/mandar2812/DynaML/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/mandar2812/DynaML/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
     <section class="main-content">
       <h1>
-<a id="bayes-learn" class="anchor" href="#bayes-learn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bayes Learn</h1>
+<a id="dynaml" class="anchor" href="#dynaml" aria-hidden="true"><span class="octicon octicon-link"></span></a>DynaML</h1>
 
 <p><a href="https://travis-ci.org/mandar2812/bayeslearn"><img src="https://travis-ci.org/mandar2812/bayeslearn.svg?branch=master" alt="Build Status"></a></p>
 
 <h1>
 <a id="aim" class="anchor" href="#aim" aria-hidden="true"><span class="octicon octicon-link"></span></a>Aim</h1>
 
-<p>Bayes Learn is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.</p>
+<p>DynaML is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.</p>
 
 <p>The aim is to build a robust set of abstract classes and interfaces, which can be extended easily to implement advanced models for small and large scale applications.</p>
 
 <p>But the library can also be used as an educational/research tool for multi scale data analysis. </p>
 
-<p>Currently Bayes Learn has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. LS-SVM is equivalent to ridge regression/Tikhonov regularization, for further background consider <a href="https://en.wikipedia.org/wiki/Least_squares_support_vector_machine">Wikipedia</a> or the <a href="http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511">book</a>.   </p>
+<p>Currently DynaML has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. LS-SVM is equivalent to ridge regression/Tikhonov regularization, for further background consider <a href="https://en.wikipedia.org/wiki/Least_squares_support_vector_machine">Wikipedia</a> or the <a href="http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511">book</a>.   </p>
 
 <p>A good general introduction to Probabilistic Models for Machine Learning can be found <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf">here</a> in <a href="http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage">David Barber's</a> text book. The LS-SVM is equivalent to the class of models discussed in Chapter 18 (Bayesian Linear Models) of the book.</p>
 
@@ -59,35 +59,19 @@
 
 <p>You should get the following prompt.</p>
 
-<pre><code>       ___           ___           ___           ___           ___              
-     /\  \         /\  \         |\__\         /\  \         /\  \             
-    /::\  \       /::\  \        |:|  |       /::\  \       /::\  \            
-   /:/\:\  \     /:/\:\  \       |:|  |      /:/\:\  \     /:/\ \  \           
-  /::\~\:\__\   /::\~\:\  \      |:|__|__   /::\~\:\  \   _\:\~\ \  \          
- /:/\:\ \:|__| /:/\:\ \:\__\     /::::\__\ /:/\:\ \:\__\ /\ \:\ \ \__\         
- \:\~\:\/:/  / \/__\:\/:/  /    /:/~~/~    \:\~\:\ \/__/ \:\ \:\ \/__/         
-  \:\ \::/  /       \::/  /    /:/  /       \:\ \:\__\    \:\ \:\__\           
-   \:\/:/  /        /:/  /     \/__/         \:\ \/__/     \:\/:/  /           
-    \::/__/        /:/  /                     \:\__\        \::/  /            
-     ~~            \/__/                       \/__/         \/__/             
-      ___       ___           ___           ___           ___                  
-     /\__\     /\  \         /\  \         /\  \         /\__\                 
-    /:/  /    /::\  \       /::\  \       /::\  \       /::|  |                
-   /:/  /    /:/\:\  \     /:/\:\  \     /:/\:\  \     /:|:|  |                
-  /:/  /    /::\~\:\  \   /::\~\:\  \   /::\~\:\  \   /:/|:|  |__              
- /:/__/    /:/\:\ \:\__\ /:/\:\ \:\__\ /:/\:\ \:\__\ /:/ |:| /\__\             
- \:\  \    \:\~\:\ \/__/ \/__\:\/:/  / \/_|::\/:/  / \/__|:|/:/  /             
-  \:\  \    \:\ \:\__\        \::/  /     |:|::/  /      |:/:/  /              
-   \:\  \    \:\ \/__/        /:/  /      |:|\/__/       |::/  /               
-    \:\__\    \:\__\         /:/  /       |:|  |         /:/  /                
-     \/__/     \/__/         \/__/         \|__|         \/__/                 
+<pre><code>    ___       ___       ___       ___       ___       ___   
+   /\  \     /\__\     /\__\     /\  \     /\__\     /\__\  
+  /::\  \   |::L__L   /:| _|_   /::\  \   /::L_L_   /:/  /  
+ /:/\:\__\  |:::\__\ /::|/\__\ /::\:\__\ /:/L:\__\ /:/__/   
+ \:\/:/  /  /:;;/__/ \/|::/  / \/\::/  / \/_/:/  / \:\  \   
+  \::/  /   \/__/      |:/  /    /:/  /    /:/  /   \:\__\  
+   \/__/               \/__/     \/__/     \/__/     \/__/  
 
-Welcome to Bayes Learn v 1.2
+Welcome to DynaML v 1.2
 Interactive Scala shell
 STADIUS ESAT KU Leuven (2015)
 
-bayeslearn&gt;
-
+DynaML&gt;
 </code></pre>
 
 <h1>
@@ -115,7 +99,7 @@ bayeslearn&gt;
 15/06/25 22:30:57 INFO SVMKernelMatrix: Eigenvalue stats: 0.09797818213131776 =&lt; lambda =&lt; 3.178218421049352
 15/06/25 22:30:57 INFO GaussianLinearModel: Applying Feature map to data set
 15/06/25 22:30:57 INFO GaussianLinearModel: DONE: Applying Feature map to data set
-bayeslearn&gt;
+DynaML&gt;
 </code></pre>
 
 <ul>
@@ -126,7 +110,7 @@ bayeslearn&gt;
 
 <ul>
 <li><p>We can now predict the value of the target variable given a new point consisting of a Vector of features using <code>model.predict()</code>.</p></li>
-<li><p>Evaluating models is easy in Bayes Learn. You can create an evaluation object as follows. </p></li>
+<li><p>Evaluating models is easy in DynaML. You can create an evaluation object as follows. </p></li>
 </ul>
 
 <div class="highlight highlight-scala"><pre>    <span class="pl-k">val</span> <span class="pl-en">configtest</span> <span class="pl-k">=</span> <span class="pl-en">Map</span>(<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>data/ripleytest.csv<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>delim<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>)
@@ -145,12 +129,12 @@ bayeslearn&gt;
 
 <div class="highlight highlight-scala"><pre>met.generatePlots</pre></div>
 
-<p><img src="https://camo.githubusercontent.com/e8902578de11c1b8c77dc5da8f018bc6e8766bf1/68747470733a2f2f6c68332e676f6f676c6575736572636f6e74656e742e636f6d2f5f355f3379306c6b44326c444554717738524866557a64464a4f4f34434c6e346a72654935696157753531767945526f79344635567a524f7a685a4a4d3273596e44506833567559415a424b4e4f4d3d77313239312d683536312d7277" alt="Image of Plots"></p>
+<p><img src="https://lh3.googleusercontent.com/_5_3y0lkD2lDETqw8RHfUzdFJOO4CLn4jreI5iaWu51vyERoy4F5VzROzhZJM2sYnDPh3VuYAZBKNOM=w1291-h561-rw" alt="Image of Plots"></p>
 
 <ul>
 <li><p>Although kernel based models allow great flexibility in modeling non linear behavior in data, they are highly sensitive to the values of their hyper-parameters. For example if we use a Radial Basis Function (RBF) Kernel, it is a non trivial problem to find the best values of the kernel bandwidth and the regularization constant.</p></li>
 <li><p>In order to find the best hyper-parameters for a general kernel based supervised learning model, we use methods in gradient free global optimization. This is relevant because the cost (objective) function for the hyper-parameters is not smooth in general. In fact in most common scenarios the objective function is defined in terms of some kind of cross validation performance.</p></li>
-<li><p>Bayes Learn has a robust global optimization API, currently Coupled Simulated Annealing and Grid Search algorithms are implemented, the API in the package <code>org.kuleven.esat.optimization</code> can be extended to implement any general gradient or gradient free optimization methods.</p></li>
+<li><p>DynaML has a robust global optimization API, currently Coupled Simulated Annealing and Grid Search algorithms are implemented, the API in the package <code>org.kuleven.esat.optimization</code> can be extended to implement any general gradient or gradient free optimization methods.</p></li>
 <li><p>Lets tune an RBF kernel on the Ripley data.</p></li>
 </ul>
 
@@ -185,10 +169,10 @@ met.generatePlots()</pre></div>
 <h1>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
 
-<p>You can refer to the project <a href="http://mandar2812.github.io/bayeslearn/">home page</a> or the <a href="http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package">documentation</a> for getting started with Bayes Learn. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.</p>
+<p>You can refer to the project <a href="http://mandar2812.github.io/DynaML/">home page</a> or the <a href="http://mandar2812.github.io/DynaML/target/site/scaladocs/index.html#package">documentation</a> for getting started with DynaML. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/mandar2812/bayeslearn">Bayeslearn</a> is maintained by <a href="https://github.com/mandar2812">mandar2812</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/mandar2812/DynaML">DynaML</a> is maintained by <a href="https://github.com/mandar2812">mandar2812</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
