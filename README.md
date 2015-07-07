@@ -152,4 +152,4 @@ And the evaluation results follow ...
 
 Documentation
 =============
-You can refer to the project [home page](http://mandar2812.github.io/bayeslearn/) or the [documentation](http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package) for getting started with DynaML. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
+You can refer to the project [home page](http://mandar2812.github.io/DynaML/) or the [documentation](http://mandar2812.github.io/DynaML/target/site/scaladocs/index.html#package) for getting started with DynaML. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
