@@ -14,7 +14,7 @@ object DynaML extends App {
       addThunk {
         intp.beQuietDuring {
           intp.addImports("breeze.linalg._")
-          intp.addImports("org.kuleuven.esat.graphicalModels._")
+          intp.addImports("org.kuleuven.esat.models._")
           intp.addImports("org.kuleuven.esat.svm._")
           intp.addImports("org.kuleuven.esat.utils")
           intp.addImports("org.kuleuven.esat.kernels._")
