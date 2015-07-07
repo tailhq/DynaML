@@ -7,7 +7,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkContext, SparkConf}
 import org.kuleuven.esat.kernels.{RBFKernel, SVMKernel}
 import org.kuleuven.esat.models.KernelizedModel
-import org.kuleuven.esat.svm.{KernelSparkModel, LSSVMSparkModel}
+import org.kuleuven.esat.models.svm.{KernelSparkModel, LSSVMSparkModel}
 
 /**
  * @author mandar2812 on 1/7/15.

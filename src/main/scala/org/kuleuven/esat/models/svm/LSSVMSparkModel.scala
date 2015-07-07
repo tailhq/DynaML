@@ -1,4 +1,4 @@
-package org.kuleuven.esat.svm
+package org.kuleuven.esat.models.svm
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.sqrt

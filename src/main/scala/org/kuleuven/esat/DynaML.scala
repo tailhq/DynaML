@@ -15,7 +15,7 @@ object DynaML extends App {
         intp.beQuietDuring {
           intp.addImports("breeze.linalg._")
           intp.addImports("org.kuleuven.esat.models._")
-          intp.addImports("org.kuleuven.esat.svm._")
+          intp.addImports("org.kuleuven.esat.models.svm._")
           intp.addImports("org.kuleuven.esat.utils")
           intp.addImports("org.kuleuven.esat.kernels._")
           intp.addImports("org.apache.spark.SparkContext")

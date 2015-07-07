@@ -1,4 +1,4 @@
-package org.kuleuven.esat.neuralNetworks
+package org.kuleuven.esat.models.neuralnets
 
 import breeze.linalg.{DenseVector, DenseMatrix}
 import breeze.numerics.sigmoid
