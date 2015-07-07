@@ -6,7 +6,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
-import org.kuleuven.esat.evaluation.Metrics
+import org.kuleuven.esat.evaluation.{MetricsSpark, Metrics}
 import org.kuleuven.esat.models.GaussianLinearModel
 import org.kuleuven.esat.optimization._
 import org.apache.spark.mllib.linalg.Vector
@@ -99,9 +99,9 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
       val ans = vec - meanb.value
       ans :/= sqrt(varianceb.value)
       (predictb.value(mapPointb.value(Vectors.dense(ans.toArray))), point.label)
-    }).collect()
+    })
 
-    Metrics(task)(results.toList, results.length)
+    MetricsSpark(task)(results, results.count())
   }
 
   def GetStatistics(): Unit = {
@@ -124,9 +124,10 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     val paramsb = sc.broadcast(params)
     val scoresAndLabels = test_data_set.map((e) => {
       index += 1
-      (paramsb.value dot DenseVector(e.features.toArray), e.label)
-    }).collect()
-    Metrics(task)(scoresAndLabels.toList, index)
+      val sco: Double = paramsb.value dot DenseVector(e.features.toArray)
+      (sco, e.label)
+    })
+    MetricsSpark(task)(scoresAndLabels, index)
   }
 
   override def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {

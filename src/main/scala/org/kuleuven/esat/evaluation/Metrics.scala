@@ -1,6 +1,7 @@
 package org.kuleuven.esat.evaluation
 
 import breeze.linalg.DenseVector
+import org.apache.spark.rdd.RDD
 
 /**
  * Abstract trait for metrics
@@ -18,5 +19,14 @@ object Metrics{
   : Metrics[Double] = task match {
     case "regression" => new RegressionMetrics(scoresAndLabels, length)
     case "classification" => new BinaryClassificationMetrics(scoresAndLabels, length)
+  }
+}
+
+object MetricsSpark {
+  def apply(task: String)
+           (scoresAndLabels: RDD[(Double, Double)], length: Long)
+  : Metrics[Double] = task match {
+    case "regression" => new RegressionMetricsSpark(scoresAndLabels, length)
+    case "classification" => new BinaryClassificationMetricsSpark(scoresAndLabels, length)
   }
 }
