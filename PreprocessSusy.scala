@@ -31,11 +31,22 @@ object PreprocessSusy {
 
     println("Outputting train and test csv files ...")
     while(line != null) {
+
+      val row = line.split(',').reverse
+      val procrow = Array.tabulate(row.length)((i) => {
+        if(i == row.length-1) {
+          val label = if(row(i).toDouble == 1.0) row(i).toDouble else -1.0
+          label.toString
+        } else {
+          row(i)
+        }
+      })
+
       if(Random.nextDouble() <= 0.9)
       {
-        writer.writeRow(line.split(',').reverse)
+        writer.writeRow(procrow)
       } else {
-        writert.writeRow(line.split(',').reverse)
+        writert.writeRow(procrow)
       }
       line = iterator.readLine()
     }
