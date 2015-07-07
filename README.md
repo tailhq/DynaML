@@ -1,6 +1,6 @@
 # DynaML
 
-[![Build Status](https://travis-ci.org/mandar2812/bayeslearn.svg?branch=master)](https://travis-ci.org/mandar2812/bayeslearn)
+[![Build Status](https://travis-ci.org/mandar2812/DynaML.svg?branch=branch-1.0)](https://travis-ci.org/mandar2812/DynaML)
 
 Aim
 ============
