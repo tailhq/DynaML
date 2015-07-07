@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.kuleuven.esat</groupId>
-    <artifactId>bayesLearn</artifactId>
+    <artifactId>DynaML</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <name>Bayes Learn</name>
+    <name>DynaML</name>
     <description>Scala Library/REPL for working with Bayesian graphical models.</description>
     <url>http://mandar2812.github.io/bayeslearn/</url>
     <parent>
@@ -263,8 +263,8 @@
                             <repositoryLayout>flat</repositoryLayout>
                             <programs>
                                 <program>
-                                    <name>bayesLearn-repl</name>
-                                    <mainClass>org.kuleuven.esat.bayesLearn</mainClass>
+                                    <name>DynaML</name>
+                                    <mainClass>org.kuleuven.esat.DynaML</mainClass>
                                 </program>
                             </programs>
                             <assembleDirectory>${project.build.directory}</assembleDirectory>
