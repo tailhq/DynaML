@@ -1,17 +1,17 @@
-# Bayes Learn
+# DynaML
 
 [![Build Status](https://travis-ci.org/mandar2812/bayeslearn.svg?branch=master)](https://travis-ci.org/mandar2812/bayeslearn)
 
 Aim
 ============
 
-Bayes Learn is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.
+DynaML is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.
 
 The aim is to build a robust set of abstract classes and interfaces, which can be extended easily to implement advanced models for small and large scale applications.
 
 But the library can also be used as an educational/research tool for multi scale data analysis. 
 
-Currently Bayes Learn has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. LS-SVM is equivalent to ridge regression/Tikhonov regularization, for further background consider [Wikipedia](https://en.wikipedia.org/wiki/Least_squares_support_vector_machine) or the [book] (http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511).   
+Currently DynaML has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. LS-SVM is equivalent to ridge regression/Tikhonov regularization, for further background consider [Wikipedia](https://en.wikipedia.org/wiki/Least_squares_support_vector_machine) or the [book] (http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511).   
 
 A good general introduction to Probabilistic Models for Machine Learning can be found [here](http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf) in [David Barber's](http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage) text book. The LS-SVM is equivalent to the class of models discussed in Chapter 18 (Bayesian Linear Models) of the book.
 
@@ -57,7 +57,7 @@ Prerequisites: Maven
     \:\__\    \:\__\         /:/  /       |:|  |         /:/  /                
      \/__/     \/__/         \/__/         \|__|         \/__/                 
 
-Welcome to Bayes Learn v 1.2
+Welcome to DynaML v 1.2
 Interactive Scala shell
 STADIUS ESAT KU Leuven (2015)
 
@@ -102,7 +102,7 @@ bayeslearn>
 
 * We can now predict the value of the target variable given a new point consisting of a Vector of features using `model.predict()`.
 
-* Evaluating models is easy in Bayes Learn. You can create an evaluation object as follows. 
+* Evaluating models is easy in DynaML. You can create an evaluation object as follows. 
 
 ```scala
 	val configtest = Map("file" -> "data/ripleytest.csv", "delim" -> ",", "head" -> "false")
@@ -129,7 +129,7 @@ met.generatePlots
 
 * In order to find the best hyper-parameters for a general kernel based supervised learning model, we use methods in gradient free global optimization. This is relevant because the cost (objective) function for the hyper-parameters is not smooth in general. In fact in most common scenarios the objective function is defined in terms of some kind of cross validation performance.
 
-* Bayes Learn has a robust global optimization API, currently Coupled Simulated Annealing and Grid Search algorithms are implemented, the API in the package ```org.kuleven.esat.optimization``` can be extended to implement any general gradient or gradient free optimization methods.
+* DynaML has a robust global optimization API, currently Coupled Simulated Annealing and Grid Search algorithms are implemented, the API in the package ```org.kuleven.esat.optimization``` can be extended to implement any general gradient or gradient free optimization methods.
 
 * Lets tune an RBF kernel on the Ripley data.
 
@@ -168,4 +168,4 @@ And the evaluation results follow ...
 
 Documentation
 =============
-You can refer to the project [home page](http://mandar2812.github.io/bayeslearn/) or the [documentation](http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package) for getting started with Bayes Learn. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
+You can refer to the project [home page](http://mandar2812.github.io/bayeslearn/) or the [documentation](http://mandar2812.github.io/bayeslearn/target/site/scaladocs/index.html#package) for getting started with DynaML. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
