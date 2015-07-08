@@ -18,7 +18,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseVector, norm}
-import org.kuleuven.esat.utils
+import io.github.mandar2812.dynaml.utils
 
 class GaussianDensityKernel
   extends DensityKernel
