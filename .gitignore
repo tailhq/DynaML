@@ -16,3 +16,4 @@ target/*
 release.properties
 *.log
 data/results*
+_site
