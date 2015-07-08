@@ -140,14 +140,14 @@ bayeslearn&gt;
 
 <div class="highlight highlight-scala"><pre><span class="pl-k">import</span> <span class="pl-v">com.tinkerpop.blueprints.</span><span class="pl-v">Graph</span>
 <span class="pl-k">import</span> <span class="pl-v">com.tinkerpop.frames.</span><span class="pl-v">FramedGraph</span>
-<span class="pl-k">import</span> <span class="pl-v">org.kuleuven.esat.graphUtils.</span><span class="pl-v">CausalEdge</span>
+<span class="pl-k">import</span> <span class="pl-v">io.github.mandar2812.dynaml.graphUtils.</span><span class="pl-v">CausalEdge</span>
 <span class="pl-k">val</span> (optModel, optConfig) <span class="pl-k">=</span> <span class="pl-en">KernelizedModel</span>.getOptimizedModel[<span class="pl-en">FramedGraph</span>[<span class="pl-en">Graph</span>],
       <span class="pl-en">Iterable</span>[<span class="pl-en">CausalEdge</span>], model.type](model, <span class="pl-s"><span class="pl-pds">"</span>csa<span class="pl-pds">"</span></span>,
       <span class="pl-s"><span class="pl-pds">"</span>RBF<span class="pl-pds">"</span></span>, <span class="pl-c1">13</span>, <span class="pl-c1">7</span>, <span class="pl-c1">0.3</span>, <span class="pl-c1">true</span>)</pre></div>
 
 <p>We see a long list of logs which end in something like the snippet below, the Coupled Simulated Annealing model, gives us a set of hyper-parameters and their values. </p>
 
-<pre><code>optModel: org.kuleuven.esat.graphicalModels.GaussianLinearModel = org.kuleuven.esat.graphicalModels.GaussianLinearModel@6adcc6d9
+<pre><code>optModel: io.github.mandar2812.dynaml.models.GaussianLinearModel = io.github.mandar2812.dynaml.models.GaussianLinearModel@6adcc6d9
 optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -&gt; 4.292522306297284, RegParam -&gt; 7.56099893666852)
 </code></pre>
 
