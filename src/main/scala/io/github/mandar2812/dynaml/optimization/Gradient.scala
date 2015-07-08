@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg._
-import org.kuleuven.esat.utils
+import io.github.mandar2812.dynaml.utils
 
 trait GeneralGradient {
   def compute(

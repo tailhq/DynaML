@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.optimization
 import breeze.linalg._
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
-import org.kuleuven.esat.models.svm.LSSVMSparkModel
+import io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel
 
 import scala.util.Random
 
