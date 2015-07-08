@@ -120,7 +120,7 @@ met.generatePlots
 ```scala
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
-import org.kuleuven.esat.graphUtils.CausalEdge
+import io.github.mandar2812.dynaml.graphUtils.CausalEdge
 val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph],
       Iterable[CausalEdge], model.type](model, "csa",
       "RBF", 13, 7, 0.3, true)
@@ -128,7 +128,7 @@ val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph]
 
 We see a long list of logs which end in something like the snippet below, the Coupled Simulated Annealing model, gives us a set of hyper-parameters and their values. 
 ```
-optModel: org.kuleuven.esat.graphicalModels.GaussianLinearModel = org.kuleuven.esat.graphicalModels.GaussianLinearModel@6adcc6d9
+optModel: io.github.mandar2812.dynaml.models.GaussianLinearModel = io.github.mandar2812.dynaml.models.GaussianLinearModel@6adcc6d9
 optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -> 4.292522306297284, RegParam -> 7.56099893666852)
 ```
 
