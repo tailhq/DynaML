@@ -26,7 +26,7 @@ object PreprocessAdult {
 
       val row = line.split(',').map(_.trim)
       val label = if(row.last == ">50K") 1.0 else -1.0
-      val procrow = row.filter(new ExtendedString(_).isNumber) ++ Array(label.toString)
+      val procrow = Array(row(0), row(2), row(4), row(10), row(11), row(12), label.toString)
 
       if(Random.nextDouble() <= 0.9)
       {
