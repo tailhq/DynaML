@@ -15,11 +15,24 @@ import io.github.mandar2812.dynaml.models.svm.{KernelSparkModel, LSSVMSparkModel
  * @author mandar2812 on 1/7/15.
  */
 object TestForestCover {
+
+  def main(args: Array[String]) = {
+
+    val prot = args(0).toInt
+    val kern = args(1)
+    val go = args(2)
+    val grid = args(3).toInt
+    val step = args(4).toDouble
+
+    TestForestCover(4, prot, kern, go,
+      grid, step, true, 1.0)
+  }
+
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
             step: Double = 0.3, logscale: Boolean = false, frac: Double): Unit = {
 
-    val dataRoot = "data/" //"/esat/smcdata/guests/mandar/"
+    val dataRoot = "s3://fsscala/" //"/esat/smcdata/guests/mandar/"
     val trainfile = dataRoot+"cover.csv"
     val testfile = dataRoot+"covertest.csv"
 
@@ -35,7 +48,7 @@ object TestForestCover {
       "delim" -> ",",
       "head" -> "false")
 
-    val conf = new SparkConf().setAppName("Forest Cover").setMaster("local["+nCores+"]")
+    val conf = new SparkConf().setAppName("Forest Cover")//.setMaster("local["+nCores+"]")
 
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
       classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],
@@ -66,7 +79,6 @@ object TestForestCover {
 
     val met = optModel.evaluate(configtest)
 
-    optModel.unpersist
 
     met.print()
     println("Optimal Configuration: "+optConfig)
@@ -77,9 +89,10 @@ object TestForestCover {
       grid.toString, step.toString, scale,
       perf(0), perf(1), perf(2), optConfig.toString)
 
-    val writer = CSVWriter.open(new File("data/resultsForestCover.csv"), append = true)
+    val writer = CSVWriter.open(new File("resultsForestCover.csv"), append = true)
     writer.writeRow(row)
     writer.close()
+    optModel.unpersist
 
   }
 }
