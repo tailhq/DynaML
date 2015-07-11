@@ -60,7 +60,7 @@ object TestMagicGamma {
 
     val met = optModel.evaluate(configtest)
 
-    optModel.unpersist
+
 
     met.print()
     println("Optimal Configuration: "+optConfig)
@@ -74,6 +74,6 @@ object TestMagicGamma {
     val writer = CSVWriter.open(new File("data/resultsMagicGamma.csv"), append = true)
     writer.writeRow(row)
     writer.close()
-
+    optModel.unpersist
   }
 }

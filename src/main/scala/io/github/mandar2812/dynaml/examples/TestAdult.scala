@@ -66,7 +66,7 @@ object TestAdult {
 
     val met = optModel.evaluate(configtest)
 
-    optModel.unpersist
+
 
     met.print()
     println("Optimal Configuration: "+optConfig)
@@ -80,6 +80,6 @@ object TestAdult {
     val writer = CSVWriter.open(new File("data/resultsAdult.csv"), append = true)
     writer.writeRow(row)
     writer.close()
-
+    optModel.unpersist
   }
 }
