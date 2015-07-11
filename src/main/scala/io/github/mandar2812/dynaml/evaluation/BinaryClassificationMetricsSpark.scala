@@ -107,7 +107,7 @@ class BinaryClassificationMetricsSpark(protected val scores: RDD[(Double, Double
    * (False Positive Rate, True Positive Rate).
    * */
   def roc(): List[(Double, Double)] =
-    tpfpByThreshold().map((point) => (point._2._2, point._2._1))
+    tpfpByThreshold().map((point) => (point._2._2, point._2._1)).sorted
 
   /**
    * Return the True Positive and False Positive Rate
