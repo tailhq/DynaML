@@ -45,9 +45,6 @@ class BinaryClassificationMetricsSpark(protected val scores: RDD[(Double, Double
       i.toDouble*((scMax.toInt -
         scMin.toInt + 1)/100.0)})
 
-  val positives = this.scores.filter(_._2 == 1.0)
-  val negatives = this.scores.filter(_._2 == -1.0)
-
   def scores_and_labels = this.scoresAndLabels
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
@@ -119,23 +116,33 @@ class BinaryClassificationMetricsSpark(protected val scores: RDD[(Double, Double
    * */
   def tpfpByThreshold(): List[(Double, (Double, Double))]  =
   {
-    val pos = positives.count()
-    val neg = negatives.count()
-    this.thresholds.toList.map((th) => {
-      val true_positive = if(pos > 0) {
-        positives.filter(p =>
-          math.signum(p._1 - th) == 1.0).count()
-          .toDouble/pos.toDouble
-      } else {0.0}
+    val positives = scores.context.accumulator(0.0, "positives")
+    val negatives = scores.context.accumulator(0.0, "negatives")
+    val ths = scores.context.broadcast(thresholds.length)
+    val thres = scores.context.broadcast(thresholds)
+    val (tp, fp) = this.scores.map((sl) =>{
 
-      val false_positive = if(neg > 0) {
-        negatives.filter(p =>
-          math.signum(p._1 - th) == 1.0).count()
-          .toDouble/neg.toDouble
-      } else {0.0}
+      val (tpv, fpv): (DenseVector[Double], DenseVector[Double]) =
+        if(sl._2 == 1.0) {
+          positives += 1.0
+          (DenseVector.tabulate(ths.value)(i => {
+            if(math.signum(sl._1 - thres.value(i)) == sl._2) 1.0 else 0.0
+          }), DenseVector.zeros(ths.value))
 
-      (th, (true_positive, false_positive))
+        } else {
+          negatives += 1.0
+          (DenseVector.zeros(ths.value), DenseVector.tabulate(ths.value)(i => {
+            if(math.signum(sl._1 - thres.value(i)) == 1.0) 1.0 else 0.0
+          }))
+        }
+      (tpv,fpv)
+    }).reduce((c1, c2) => {
+      (c1._1+c2._1, c1._2+c2._2)
     })
+
+    List.tabulate(thresholds.length){t => {
+      (thresholds(t), (tp(t)/positives.value, fp(t)/negatives.value))
+    }}
   }
 
   /**
