@@ -36,9 +36,9 @@ class BinaryClassificationMetricsSpark(protected val scores: RDD[(Double, Double
    * and False Negative values.
    * */
 
-  private val scMin = scores.min()._1
-
-  private val scMax = scores.max()._1
+  private val (scMin, scMax) = scores.map(s => {(s._1,s._1)}).reduce((couple1, couple2) => {
+    (math.max(couple1._1, couple2._1), math.min(couple1._2, couple2._2))
+  })
 
   private val thresholds = List.tabulate(100)(i => {
     scMin +
