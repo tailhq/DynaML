@@ -85,7 +85,7 @@ object TestSUSY {
       grid.toString, step.toString, scale,
       perf(0), perf(1), perf(2), optConfig.toString)
 
-    val writer = CSVWriter.open(new File("data/resultsSUSY.csv"), append = true)
+    val writer = CSVWriter.open(new File(root+"resultsSUSY.csv"), append = true)
     writer.writeRow(row)
     writer.close()
     optModel.unpersist
