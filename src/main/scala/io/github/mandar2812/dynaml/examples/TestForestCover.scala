@@ -4,6 +4,7 @@ import java.io.File
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.CSVWriter
+import io.github.mandar2812.dynaml.examples.TestForestCover
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -23,16 +24,18 @@ object TestForestCover {
     val go = args(2)
     val grid = args(3).toInt
     val step = args(4).toDouble
+    val root = args(5)
 
     TestForestCover(4, prot, kern, go,
-      grid, step, true, 1.0)
+      grid, step, true, 1.0,
+      dataRoot = root)
   }
 
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false, frac: Double): Unit = {
+            step: Double = 0.3, logscale: Boolean = false, frac: Double,
+            dataRoot: String = "data/"): Unit = {
 
-    val dataRoot = "s3://fsscala/" //"/esat/smcdata/guests/mandar/"
     val trainfile = dataRoot+"cover.csv"
     val testfile = dataRoot+"covertest.csv"
 
@@ -48,7 +51,7 @@ object TestForestCover {
       "delim" -> ",",
       "head" -> "false")
 
-    val conf = new SparkConf().setAppName("Forest Cover")//.setMaster("local["+nCores+"]")
+    val conf = new SparkConf().setAppName("Forest Cover").setMaster("local["+nCores+"]")
 
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
       classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],
