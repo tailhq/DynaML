@@ -30,7 +30,7 @@ object PreprocessSusy {
     val writert = CSVWriter.open(args+"susytest.csv")
 
     println("Outputting train and test csv files ...")
-    while(line != null) {
+    while(line != null || line != "\n") {
 
       val row = line.split(',').reverse
       val procrow = Array.tabulate(row.length)((i) => {

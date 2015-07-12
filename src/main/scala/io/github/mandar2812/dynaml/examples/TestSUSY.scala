@@ -15,19 +15,33 @@ import org.apache.spark.{SparkConf, SparkContext}
  * @author mandar2812 on 1/7/15.
  */
 object TestSUSY {
+  def main(args: Array[String]) = {
+
+    val prot = args(0).toInt
+    val kern = args(1)
+    val go = args(2)
+    val grid = args(3).toInt
+    val step = args(4).toDouble
+    val dataRoot = args(5)
+    TestSUSY(4, prot, kern, go,
+      grid, step, true, 1.0, dataRoot)
+  }
+
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false, frac: Double): Unit = {
+            step: Double = 0.3, logscale: Boolean = false, frac: Double, root: String): Unit = {
 
+    val trainFile = root+"susy.csv"
+    val testFile = root+"susytest.csv"
     val config = Map(
-      "file" -> "/esat/smcdata/guests/mandar/susy.csv",
+      "file" -> trainFile,
       "delim" -> ",",
       "head" -> "false",
       "task" -> "classification",
       "parallelism" -> nCores.toString
     )
 
-    val configtest = Map("file" -> "/esat/smcdata/guests/mandar/susytest.csv",
+    val configtest = Map("file" -> testFile,
       "delim" -> ",",
       "head" -> "false")
 
