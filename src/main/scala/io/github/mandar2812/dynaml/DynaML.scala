@@ -35,7 +35,6 @@ object DynaML extends App {
           " \\/__/     \\/__/     \\/__/  ")
 
         echo("\nWelcome to DynaML v 1.2\nInteractive Scala shell")
-        echo("STADIUS ESAT KU Leuven (2015)\n")
       }
     }
     val settings = new Settings
