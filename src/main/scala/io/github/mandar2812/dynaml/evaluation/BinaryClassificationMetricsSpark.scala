@@ -139,12 +139,8 @@ class BinaryClassificationMetricsSpark(protected val scores: RDD[(Double, Double
     }).reduce((c1, c2) => {
       (c1._1+c2._1, c1._2+c2._2)
     })
-    val pos = positives.value
-    val neg = negatives.value
-    ths.destroy()
-    thres.destroy()
     List.tabulate(thresholds.length){t => {
-      (thresholds(t), (tp(t)/pos.toDouble, fp(t)/neg.toDouble))
+      (thresholds(t), (tp(t)/positives.value, fp(t)/negatives.value))
     }}
   }
 

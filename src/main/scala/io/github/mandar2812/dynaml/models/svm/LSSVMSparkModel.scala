@@ -252,15 +252,7 @@ object LSSVMSparkModel {
    * optimization object required for the Gaussian
    * model
    * */
-  def getOptimizer(task: String): ConjugateGradientSpark = new ConjugateGradientSpark /*task match {
-    case "classification" => new GradientDescentSpark(
-      new LeastSquaresSVMGradient(),
-      new SquaredL2Updater())
-
-    case "regression" => new GradientDescentSpark(
-      new LeastSquaresGradient(),
-      new SquaredL2Updater())
-  }*/
+  def getOptimizer(task: String): ConjugateGradientSpark = new ConjugateGradientSpark
 
   def getFeatureMatrix(nPoints: Long,
                        ParamOutEdges: RDD[LabeledPoint],

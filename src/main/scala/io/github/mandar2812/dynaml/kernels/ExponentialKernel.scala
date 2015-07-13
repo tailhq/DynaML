@@ -18,7 +18,7 @@ with Serializable {
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    math.exp(beta*(x dot y)/(norm(x,2)*norm(y,2)))
+    math.exp(beta*(x.t * y)/(norm(x,2)*norm(y,2)))
 
   override def buildKernelMatrix(mappedData: List[DenseVector[Double]],
                                  length: Int): KernelMatrix[DenseMatrix[Double]] =
