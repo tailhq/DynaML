@@ -26,10 +26,10 @@ Prerequisites: Maven
   mvn package
 ```
 
-* Make sure you give execution permission to `bayeslearn-repl` in the `target/bin` directory.
+* Make sure you give execution permission to `DynaML` in the `target/bin` directory.
 ```shell
-  chmod +x target/bin/bayesLearn-repl
-  target/bin/bayesLearn-repl
+  chmod +x target/bin/DynaML
+  target/bin/DynaML
 ```
   You should get the following prompt.
   
