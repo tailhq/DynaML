@@ -147,7 +147,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
       //as test and the rest as training
       val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
       val test_data = processed_g.filter((keyValue) =>
-        test.contains(keyValue._1)).map(_._2)
+        test.contains(keyValue._1)).map(_._2).cache()
 
       val (a_folda, b_folda) = LSSVMSparkModel.getFeatureMatrix(npoints,
         test_data,

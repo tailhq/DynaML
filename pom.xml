@@ -279,7 +279,7 @@
                             <programs>
                                 <program>
                                     <name>DynaML</name>
-                                    <mainClass>org.kuleuven.esat.DynaML</mainClass>
+                                    <mainClass>io.github.mandar2812.dynaml.DynaML</mainClass>
                                 </program>
                             </programs>
                             <assembleDirectory>${project.build.directory}</assembleDirectory>

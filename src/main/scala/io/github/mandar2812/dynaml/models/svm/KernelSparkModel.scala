@@ -10,6 +10,7 @@ import org.apache.spark.rdd.RDD
 import io.github.mandar2812.dynaml.models.KernelizedModel
 import io.github.mandar2812.dynaml.kernels.{SVMKernel, GaussianDensityKernel}
 import io.github.mandar2812.dynaml.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
+import org.apache.spark.storage.StorageLevel
 
 import scala.util.Random
 
@@ -156,7 +157,7 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
           DenseVector(1.0))
           .toArray)
       ))
-    }).cache()
+    }).persist(StorageLevel.MEMORY_AND_DISK)
   }
 
   override def trainTest(test: List[Long]) = {
@@ -166,8 +167,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
     val test_data = this.processed_g.filter((keyValue) =>
       test.contains(keyValue._1)).map(_._2)
 
-    training_data.cache()
-    test_data.cache()
+    training_data.persist(StorageLevel.MEMORY_AND_DISK)
+    test_data.persist(StorageLevel.MEMORY_AND_DISK)
     (training_data, test_data)
   }
 
