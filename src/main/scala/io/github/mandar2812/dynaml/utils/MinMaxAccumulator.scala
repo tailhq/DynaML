@@ -5,7 +5,7 @@ import org.apache.spark.AccumulatorParam
 
 object MinMaxAccumulator extends AccumulatorParam[DenseVector[Double]] {
   def zero(initialValue: DenseVector[Double]): DenseVector[Double] = {
-    DenseVector(Double.PositiveInfinity, Double.NegativeInfinity)
+    DenseVector(Double.MaxValue, Double.MinValue)
   }
 
   def addInPlace(v1: DenseVector[Double], v2: DenseVector[Double]): DenseVector[Double] = {

@@ -91,7 +91,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     val mapPoint = (p: Vector) => Vectors.dense(featureMap(DenseVector(p.toArray)).toArray)
     val predict = LSSVMSparkModel.scoreSparkVector(params) _
 
-    val minmaxacc = sc.accumulator(DenseVector(Double.PositiveInfinity, Double.NegativeInfinity),
+    val minmaxacc = sc.accumulator(DenseVector(Double.MaxValue, Double.MinValue),
       "Min Max Score acc")(MinMaxAccumulator)
 
     val mapPointb = sc.broadcast(mapPoint)
@@ -134,7 +134,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     var index: Int = 1
 
     val paramsb = sc.broadcast(params)
-    val minmaxacc = sc.accumulator(DenseVector(Double.PositiveInfinity, Double.NegativeInfinity),
+    val minmaxacc = sc.accumulator(DenseVector(Double.MaxValue, Double.MinValue),
       "Min Max Score acc")(MinMaxAccumulator)
     val scoresAndLabels = test_data_set.map((e) => {
       index += 1
