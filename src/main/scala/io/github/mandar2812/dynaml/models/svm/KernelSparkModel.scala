@@ -90,7 +90,7 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
       logger.info("Building low rank approximation to kernel matrix")
 
       prototypes = GreedyEntropySelector.subsetSelectionQRE(this.g,
-        new QuadraticRenyiEntropy(density), M, 25, 0.0001)
+        new QuadraticRenyiEntropy(density), M, 50, 0.0001)
     }
   }
 
@@ -155,7 +155,7 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
           DenseVector(1.0))
           .toArray)
       ))
-    }).cache()
+    }).persist(StorageLevel.MEMORY_ONLY_SER)
   }
 
   override def trainTest(test: List[Long]) = {

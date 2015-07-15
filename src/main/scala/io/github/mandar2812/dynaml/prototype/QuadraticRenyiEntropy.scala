@@ -52,8 +52,11 @@ class QuadraticRenyiEntropy(dist: DensityKernel)
     val dim = data.head.length
     val root_two: breeze.linalg.Vector[Double] = DenseVector.fill(dim, sqrt(2))
     val product = for(i <- data.view; j <- data.view) yield (i, j)
-    -1*log_e(product.map((couple) =>
-      density.eval((couple._1 - couple._2) :/ root_two)).sum)
+    -1*log_e(product.map((couple) => {
+      val point1: DenseVector[Double] = couple._1 / sqrt(2.0)
+      val point2: DenseVector[Double] = couple._2 / sqrt(2.0)
+      density.eval(point1 - point2)
+    }).sum)
   }
 
   override def entropy[K](data: RDD[(K, LabeledPoint)]): Double = {
@@ -71,16 +74,17 @@ class QuadraticRenyiEntropy(dist: DensityKernel)
                         remove: DenseVector[Double]): Double = {
     val dim = data.head.length
     val expEntropy = math.exp(-1.0*entropy)
-    val root_two: breeze.linalg.Vector[Double] = DenseVector.fill(dim, sqrt(2))
 
     val product1 = for(i <- data.view) yield (remove, i)
-    val subtractEnt = product1.map((couple) =>
-      density.eval((couple._1 - couple._2) :/ root_two)).sum
+    val subtractEnt = 2*product1.map((couple) => {
+      density.eval((couple._1 - couple._2) / sqrt(2.0))
+    }).sum - density.eval(DenseVector.zeros(dim))
 
     val product2 = for(i <- data.view) yield (add, i)
-    val addEnt = product2.map((couple) =>
-      density.eval((couple._1 - couple._2) :/ root_two)).sum -
-      density.eval((add - remove) :/ root_two)
+    val addEnt = 2*product2.map((couple) => {
+      density.eval((couple._1 - couple._2) / sqrt(2.0))
+    }).sum - 2*density.eval((add - remove) / sqrt(2.0)) +
+      density.eval(DenseVector.zeros(dim))
 
     -1.0*log_e(expEntropy + addEnt - subtractEnt) - entropy
   }

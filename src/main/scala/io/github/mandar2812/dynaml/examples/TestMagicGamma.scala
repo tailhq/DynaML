@@ -37,7 +37,8 @@ object TestMagicGamma {
         DenseVector[Double], DenseVector[Double], Double, Int, Int]],
       classOf[SVMKernel[DenseMatrix[Double]]], classOf[RBFKernel],
       classOf[DenseVector[Double]],
-      classOf[DenseMatrix[Double]]))
+      classOf[DenseMatrix[Double]],
+      classOf[org.apache.log4j.Logger]))
 
     val sc = new SparkContext(conf)
 

@@ -1,13 +1,7 @@
 package io.github.mandar2812.dynaml.evaluation
 
 import breeze.linalg.DenseVector
-import org.apache.log4j.Logger
-import org.apache.log4j.Logger
-import org.apache.log4j.Priority
 import org.apache.log4j.{Priority, Logger}
-import org.apache.spark.mllib.rdd.RDDFunctions
-import org.apache.spark.rdd.RDD
-import org.apache.spark.rdd.RDD
 import org.apache.spark.rdd.RDD
 
 import scalax.chart.module.ChartFactories.{XYAreaChart, XYLineChart}
@@ -19,8 +13,9 @@ import scalax.chart.module.ChartFactories.{XYAreaChart, XYLineChart}
  *
  * */
 
-class BinaryClassificationMetricsSpark(protected val scores: RDD[(Double, Double)],
-                                       val len: Long, minmax: (Double, Double))
+class BinaryClassificationMetricsSpark(
+  protected val scores: RDD[(Double, Double)],
+  val len: Long, minmax: (Double, Double))
   extends Metrics[Double]{
 
   override protected val scoresAndLabels = List()

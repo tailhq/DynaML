@@ -91,7 +91,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     val mapPoint = (p: Vector) => Vectors.dense(featureMap(DenseVector(p.toArray)).toArray)
     val predict = LSSVMSparkModel.scoreSparkVector(params) _
 
-    val minmaxacc = sc.accumulator((Double.PositiveInfinity, Double.NegativeInfinity),
+    val minmaxacc = sc.accumulator(DenseVector(Double.PositiveInfinity, Double.NegativeInfinity),
       "Min Max Score acc")(MinMaxAccumulator)
 
     val mapPointb = sc.broadcast(mapPoint)
@@ -108,12 +108,12 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
 
       val sco = predictb.value(mapPointb.value(Vectors.dense(ans.toArray)))
 
-      minmaxacc.add((sco, sco))
+      minmaxacc += DenseVector(sco, sco)
 
       (sco, point.label)
     })
-
-    MetricsSpark(task)(results, results.count(), minmaxacc.value)
+    val minmax = minmaxacc.value
+    MetricsSpark(task)(results, results.count(), (minmax(0), minmax(1)))
   }
 
   def GetStatistics(): Unit = {
@@ -134,16 +134,16 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     var index: Int = 1
 
     val paramsb = sc.broadcast(params)
-    val minmaxacc = sc.accumulator((Double.PositiveInfinity, Double.NegativeInfinity),
+    val minmaxacc = sc.accumulator(DenseVector(Double.PositiveInfinity, Double.NegativeInfinity),
       "Min Max Score acc")(MinMaxAccumulator)
     val scoresAndLabels = test_data_set.map((e) => {
       index += 1
       val sco: Double = paramsb.value dot DenseVector(e.features.toArray)
-      minmaxacc.add((sco, sco))
+      minmaxacc += DenseVector(sco, sco)
       (sco, e.label)
     })
-
-    MetricsSpark(task)(scoresAndLabels, index, minmaxacc.value)
+    val minmax = minmaxacc.value
+    MetricsSpark(task)(scoresAndLabels, index, (minmax(0), minmax(1)))
   }
 
   override def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {
@@ -265,7 +265,7 @@ object LSSVMSparkModel {
 
   /**
    * Factory method to create the appropriate
-   * optimization object required for the Gaussian
+   * optimization object required for the LSSVM
    * model
    * */
   def getOptimizer(task: String): ConjugateGradientSpark = new ConjugateGradientSpark
@@ -280,11 +280,13 @@ object LSSVMSparkModel {
     //b = Phi^T . Y
     val (a,b): (DenseMatrix[Double], DenseVector[Double]) =
       ParamOutEdges.filter((_) => Random.nextDouble() <= frac)
-        .map((edge) => {
-        val phi = DenseVector(edge.features.toArray)
-        val label = edge.label
-        val phiY: DenseVector[Double] = phi * label
-        (phi*phi.t, phiY)
+        .mapPartitions((edges) => {
+        edges.map((edge) => {
+          val phi = DenseVector(edge.features.toArray)
+          val label = edge.label
+          val phiY: DenseVector[Double] = phi * label
+          (phi*phi.t, phiY)
+        })
       }).reduce((couple1, couple2) => {
         (couple1._1+couple2._1, couple1._2+couple2._2)
       })
