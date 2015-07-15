@@ -4,7 +4,6 @@ import java.io.File
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.CSVWriter
-import io.github.mandar2812.dynaml.examples.TestForestCover
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
