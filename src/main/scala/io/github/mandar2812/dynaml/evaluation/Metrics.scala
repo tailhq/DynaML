@@ -24,9 +24,11 @@ object Metrics{
 
 object MetricsSpark {
   def apply(task: String)
-           (scoresAndLabels: RDD[(Double, Double)], length: Long)
+           (scoresAndLabels: RDD[(Double, Double)],
+            length: Long,
+            minmax: (Double, Double))
   : Metrics[Double] = task match {
     case "regression" => new RegressionMetricsSpark(scoresAndLabels, length)
-    case "classification" => new BinaryClassificationMetricsSpark(scoresAndLabels, length)
+    case "classification" => new BinaryClassificationMetricsSpark(scoresAndLabels, length, minmax)
   }
 }

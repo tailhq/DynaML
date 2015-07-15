@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.models.svm
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.sqrt
+import io.github.mandar2812.dynaml.utils.MinMaxAccumulator
 import org.apache.spark.SparkContext
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
@@ -89,19 +90,30 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
 
     val mapPoint = (p: Vector) => Vectors.dense(featureMap(DenseVector(p.toArray)).toArray)
     val predict = LSSVMSparkModel.scoreSparkVector(params) _
+
+    val minmaxacc = sc.accumulator((Double.PositiveInfinity, Double.NegativeInfinity),
+      "Min Max Score acc")(MinMaxAccumulator)
+
     val mapPointb = sc.broadcast(mapPoint)
     val predictb = sc.broadcast(predict)
+
     val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
     val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
+
 
     val results = test_data.map(point => {
       val vec = DenseVector(point.features.toArray)
       val ans = vec - meanb.value
       ans :/= sqrt(varianceb.value)
-      (predictb.value(mapPointb.value(Vectors.dense(ans.toArray))), point.label)
+
+      val sco = predictb.value(mapPointb.value(Vectors.dense(ans.toArray)))
+
+      minmaxacc.add((sco, sco))
+
+      (sco, point.label)
     })
 
-    MetricsSpark(task)(results, results.count())
+    MetricsSpark(task)(results, results.count(), minmaxacc.value)
   }
 
   def GetStatistics(): Unit = {
@@ -122,12 +134,16 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     var index: Int = 1
 
     val paramsb = sc.broadcast(params)
+    val minmaxacc = sc.accumulator((Double.PositiveInfinity, Double.NegativeInfinity),
+      "Min Max Score acc")(MinMaxAccumulator)
     val scoresAndLabels = test_data_set.map((e) => {
       index += 1
       val sco: Double = paramsb.value dot DenseVector(e.features.toArray)
+      minmaxacc.add((sco, sco))
       (sco, e.label)
     })
-    MetricsSpark(task)(scoresAndLabels, index)
+
+    MetricsSpark(task)(scoresAndLabels, index, minmaxacc.value)
   }
 
   override def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {

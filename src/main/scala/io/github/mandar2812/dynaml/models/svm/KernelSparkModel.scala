@@ -155,7 +155,7 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
           DenseVector(1.0))
           .toArray)
       ))
-    }).persist(StorageLevel.MEMORY_AND_DISK)
+    }).cache()
   }
 
   override def trainTest(test: List[Long]) = {
