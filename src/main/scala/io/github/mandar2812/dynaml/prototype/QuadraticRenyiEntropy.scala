@@ -64,4 +64,24 @@ class QuadraticRenyiEntropy(dist: DensityKernel)
       density.eval(point1 - point2)
     }).reduce((a,b) => a + b))
   }
+
+  def entropyDifference(entropy: Double,
+                        data: List[DenseVector[Double]],
+                        add: DenseVector[Double],
+                        remove: DenseVector[Double]): Double = {
+    val dim = data.head.length
+    val expEntropy = math.exp(-1.0*entropy)
+    val root_two: breeze.linalg.Vector[Double] = DenseVector.fill(dim, sqrt(2))
+
+    val product1 = for(i <- data.view) yield (remove, i)
+    val subtractEnt = product1.map((couple) =>
+      density.eval((couple._1 - couple._2) :/ root_two)).sum
+
+    val product2 = for(i <- data.view) yield (add, i)
+    val addEnt = product2.map((couple) =>
+      density.eval((couple._1 - couple._2) :/ root_two)).sum -
+      density.eval((add - remove) :/ root_two)
+
+    -1.0*log_e(expEntropy + addEnt - subtractEnt) - entropy
+  }
 }
