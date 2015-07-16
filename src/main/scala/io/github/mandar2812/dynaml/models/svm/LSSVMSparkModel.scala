@@ -199,10 +199,11 @@ object LSSVMSparkModel {
 
   def apply(implicit config: Map[String, String], sc: SparkContext): LSSVMSparkModel = {
     val (file, delim, head, task) = GaussianLinearModel.readConfig(config)
-    val minPartitions = if(config.isDefinedAt("parallelism")) config("parallelism").toInt
+    val minPartitions = if(config.contains("parallelism") &&
+      config.contains("executors")) 4*config("parallelism").toInt * config("executors").toInt
     else 2
 
-    val csv = sc.textFile(file/*, 3*minPartitions*/).map(line => line split delim)
+    val csv = sc.textFile(file, minPartitions).map(line => line split delim)
       .map(_.map(_.toDouble)).map(vector => {
       val label = vector(vector.length-1)
       vector(vector.length-1) = 1.0

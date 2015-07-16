@@ -24,16 +24,17 @@ object TestForestCover {
     val grid = args(3).toInt
     val step = args(4).toDouble
     val root = args(5)
-
-    TestForestCover(4, prot, kern, go,
-      grid, step, true, 1.0,
-      dataRoot = root)
+    val ex = args(6).toInt
+    val cores = args(7).toInt
+    TestForestCover(cores, prot, kern, go,
+      grid, step, false, 1.0,
+      dataRoot = root, ex)
   }
 
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
             step: Double = 0.3, logscale: Boolean = false, frac: Double,
-            dataRoot: String = "data/"): Unit = {
+            dataRoot: String = "data/", executors: Int = 1): Unit = {
 
     val trainfile = dataRoot+"cover.csv"
     val testfile = dataRoot+"covertest.csv"
@@ -43,7 +44,8 @@ object TestForestCover {
       "delim" -> ",",
       "head" -> "false",
       "task" -> "classification",
-      "parallelism" -> nCores.toString
+      "parallelism" -> nCores.toString,
+      "executors" -> executors.toString
     )
 
     val configtest = Map("file" -> testfile,

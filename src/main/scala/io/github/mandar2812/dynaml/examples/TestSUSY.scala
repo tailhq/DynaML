@@ -23,13 +23,17 @@ object TestSUSY {
     val grid = args(3).toInt
     val step = args(4).toDouble
     val dataRoot = args(5)
-    TestSUSY(4, prot, kern, go,
-      grid, step, true, 1.0, dataRoot)
+    val ex = args(6).toInt
+    val cores = args(7).toInt
+    TestSUSY(cores, prot, kern, go,
+      grid, step, false, 1.0, dataRoot,
+      ex)
   }
 
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false, frac: Double, root: String): Unit = {
+            step: Double = 0.3, logscale: Boolean = false, frac: Double,
+            root: String, executors: Int = 4): Unit = {
 
     val trainFile = root+"susy.csv"
     val testFile = root+"susytest.csv"
@@ -38,7 +42,8 @@ object TestSUSY {
       "delim" -> ",",
       "head" -> "false",
       "task" -> "classification",
-      "parallelism" -> nCores.toString
+      "parallelism" -> nCores.toString,
+      "executors" -> executors.toString
     )
 
     val configtest = Map("file" -> testFile,

@@ -18,11 +18,13 @@ import io.github.mandar2812.dynaml.models.svm.{KernelSparkModel, LSSVMSparkModel
 object TestMagicGamma {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false): Unit = {
+            step: Double = 0.3, logscale: Boolean = false,
+            dataRoot: String = "data/", executors: Int = 1): Unit = {
     val config = Map("file" -> "data/magicgamma.csv", "delim" -> ",",
       "head" -> "false",
       "task" -> "classification",
-      "parallelism" -> nCores.toString)
+      "parallelism" -> nCores.toString,
+      "executors" -> executors.toString)
 
     val configtest = Map("file" -> "data/magicgammatest.csv",
       "delim" -> ",",
@@ -30,7 +32,7 @@ object TestMagicGamma {
 
     val conf = new SparkConf().setAppName("Magicgamma").setMaster("local["+nCores+"]")
 
-    conf.set("spark.executor.memory", "3g")
+    //conf.set("spark.executor.memory", "3g")
 
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
       classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],

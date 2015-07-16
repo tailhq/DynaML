@@ -116,7 +116,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       points = GreedyEntropySelector.subsetSelection(this,
         M,
         new QuadraticRenyiEntropy(density),
-        0.0001,
+        0.000001,
         100)
     }
   }
@@ -217,7 +217,9 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
       val(training_data, test_data) = this.trainTest(test)
 
-      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints, training_data, DenseVector.ones[Double](this.params.length))
+      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints,
+        training_data,
+        DenseVector.ones[Double](this.params.length))
       val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
       val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
       res
