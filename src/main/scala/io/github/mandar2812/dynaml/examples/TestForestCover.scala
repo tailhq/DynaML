@@ -34,7 +34,7 @@ object TestForestCover {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
             step: Double = 0.3, logscale: Boolean = false, frac: Double,
-            dataRoot: String = "data/", executors: Int = 1): Unit = {
+            dataRoot: String = "data/", executors: Int = 1, local: Boolean = false): Unit = {
 
     val trainfile = dataRoot+"cover.csv"
     val testfile = dataRoot+"covertest.csv"
@@ -53,6 +53,10 @@ object TestForestCover {
       "head" -> "false")
 
     val conf = new SparkConf().setAppName("Forest Cover")
+
+    if(local) {
+      conf.setMaster("local["+nCores.toString+"]")
+    }
 
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
       classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],

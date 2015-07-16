@@ -33,7 +33,7 @@ object TestSUSY {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
             step: Double = 0.3, logscale: Boolean = false, frac: Double,
-            root: String, executors: Int = 4): Unit = {
+            root: String, executors: Int = 1, local: Boolean = false): Unit = {
 
     val trainFile = root+"susy.csv"
     val testFile = root+"susytest.csv"
@@ -51,6 +51,10 @@ object TestSUSY {
       "head" -> "false")
 
     val conf = new SparkConf().setAppName("SUSY")
+
+    if(local) {
+      conf.setMaster("local["+nCores.toString+"]")
+    }
 
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
       classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],
