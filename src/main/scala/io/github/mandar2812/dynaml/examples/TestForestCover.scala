@@ -28,13 +28,14 @@ object TestForestCover {
     val cores = args(7).toInt
     TestForestCover(cores, prot, kern, go,
       grid, step, false, 1.0,
-      dataRoot = root, ex)
+      dataRoot = root, executors = ex, false)
   }
 
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
             step: Double = 0.3, logscale: Boolean = false, frac: Double,
-            dataRoot: String = "data/", executors: Int = 1, local: Boolean = false): Unit = {
+            dataRoot: String = "data/", executors: Int = 1,
+            local: Boolean = false): Unit = {
 
     val trainfile = dataRoot+"cover.csv"
     val testfile = dataRoot+"covertest.csv"
