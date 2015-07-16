@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg._
-import io.github.mandar2812.dynaml.graphUtils.CausalEdge
+import io.github.mandar2812.dynaml.graphutils.CausalEdge
 
 /**
  * @author mandar2812

@@ -21,7 +21,7 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
 import org.apache.log4j.{Logger, Priority}
-import io.github.mandar2812.dynaml.graphUtils.{Parameter, CausalEdge, Point}
+import io.github.mandar2812.dynaml.graphutils.{Parameter, CausalEdge, Point}
 import io.github.mandar2812.dynaml.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient
 import io.github.mandar2812.dynaml.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}

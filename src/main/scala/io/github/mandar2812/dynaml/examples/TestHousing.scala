@@ -2,7 +2,7 @@ package io.github.mandar2812.dynaml.examples
 
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
-import io.github.mandar2812.dynaml.graphUtils.CausalEdge
+import io.github.mandar2812.dynaml.graphutils.CausalEdge
 import io.github.mandar2812.dynaml.models.GaussianLinearModel
 import io.github.mandar2812.dynaml.optimization.GridSearch
 

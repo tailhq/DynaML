@@ -8,14 +8,14 @@ import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
 import com.tinkerpop.blueprints.{GraphFactory, Graph}
 import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
 import com.typesafe.config.ConfigFactory
-import io.github.mandar2812.dynaml.graphUtils.{ParamEdge, CausalEdge, Label, Parameter}
+import io.github.mandar2812.dynaml.graphutils.{ParamEdge, CausalEdge, Label, Parameter}
 import org.apache.log4j.{Priority, Logger}
 import io.github.mandar2812.dynaml.evaluation.Metrics
 import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.utils
 import scala.collection.mutable
 import collection.JavaConversions._
-import io.github.mandar2812.dynaml.graphUtils._
+import io.github.mandar2812.dynaml.graphutils._
 
 /**
  * Linear Model with conditional probability

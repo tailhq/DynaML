@@ -119,7 +119,7 @@ met.generatePlots
 ```scala
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
-import io.github.mandar2812.dynaml.graphUtils.CausalEdge
+import io.github.mandar2812.dynaml.graphutils.CausalEdge
 val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph],
       Iterable[CausalEdge], model.type](model, "csa",
       "RBF", 13, 7, 0.3, true)

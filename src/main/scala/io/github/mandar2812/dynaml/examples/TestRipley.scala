@@ -5,7 +5,7 @@ import java.io.File
 import com.github.tototoshi.csv.CSVWriter
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
-import io.github.mandar2812.dynaml.graphUtils.CausalEdge
+import io.github.mandar2812.dynaml.graphutils.CausalEdge
 import io.github.mandar2812.dynaml.models.{GaussianLinearModel, KernelizedModel}
 
 /**

@@ -1,4 +1,4 @@
-package io.github.mandar2812.dynaml.graphUtils
+package io.github.mandar2812.dynaml.graphutils
 
 import com.tinkerpop.frames.{InVertex, OutVertex, EdgeFrame}
 
