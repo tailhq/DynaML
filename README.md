@@ -44,7 +44,6 @@ Prerequisites: Maven
 
 Welcome to DynaML v 1.2
 Interactive Scala shell
-STADIUS ESAT KU Leuven (2015)
 
 DynaML>
 ```
