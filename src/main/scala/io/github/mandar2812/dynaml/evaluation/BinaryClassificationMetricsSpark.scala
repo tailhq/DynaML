@@ -31,9 +31,7 @@ class BinaryClassificationMetricsSpark(
    * and False Negative values.
    * */
 
-  private val (scMin, scMax) = minmax/*scores.map(s => {(s._1,s._1)}).reduce((couple1, couple2) => {
-    (math.min(couple1._1, couple2._1), math.max(couple1._2, couple2._2))
-  })*/
+  private val (scMin, scMax) = minmax
 
   private val thresholds = List.tabulate(100)(i => {
     scMin +

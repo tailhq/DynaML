@@ -94,6 +94,7 @@ object GreedyEntropySelector {
     // Existing best value of the entropy
     var oldEntropy: Double = measure.evaluate(workingset.map(_._2.features.toArray)
       .map(DenseVector(_)).toList)
+    var newEntropy = oldEntropy
     var d: Double = Double.NegativeInfinity
     var rand: Int = 0
     logger.info("Starting iterative, entropy based greedy subset selection")
@@ -108,6 +109,13 @@ object GreedyEntropySelector {
 
       val point2 = newDataset.takeSample(false, 1).apply(0)
 
+      workingset -= point1
+      workingset += point2
+      workingsetIndices -= point1._1
+      workingsetIndices += point2._1
+
+      newEntropy = measure.evaluate(workingset.map(p =>
+        DenseVector(p._2.features.toArray)).toList)
 
       /*
       * Calculate the change in entropy,
@@ -115,9 +123,9 @@ object GreedyEntropySelector {
       * swap, otherwise revert to existing
       * working set.
       * */
-      d = measure.entropyDifference(oldEntropy, workingset.map(_._2.features.toArray)
+      d = newEntropy - oldEntropy/*measure.entropyDifference(oldEntropy, workingset.map(_._2.features.toArray)
         .map(DenseVector(_)).toList, DenseVector(point2._2.features.toArray),
-        DenseVector(workingset(rand)._2.features.toArray))
+        DenseVector(workingset(rand)._2.features.toArray))*/
 
       if(d > 0) {
         /*
@@ -126,13 +134,14 @@ object GreedyEntropySelector {
         * as it is and update the
         * variable 'newDataset'
         * */
-        workingset -= point1
-        workingset += point2
-        workingsetIndices -= point1._1
-        workingsetIndices += point2._1
         it += 1
         oldEntropy += d
         newDataset = data.filter((p) => !workingsetIndices.contains(p._1))
+      } else {
+        workingset += point1
+        workingset -= point2
+        workingsetIndices += point1._1
+        workingsetIndices -= point2._1
       }
 
     } while(math.abs(d) >= delta &&
