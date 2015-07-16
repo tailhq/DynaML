@@ -45,7 +45,7 @@ object TestSUSY {
       "delim" -> ",",
       "head" -> "false")
 
-    val conf = new SparkConf().setAppName("SUSY").setMaster("yarn-client")
+    val conf = new SparkConf().setAppName("SUSY")
 
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
       classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],

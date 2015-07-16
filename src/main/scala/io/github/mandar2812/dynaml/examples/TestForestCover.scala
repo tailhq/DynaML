@@ -50,7 +50,7 @@ object TestForestCover {
       "delim" -> ",",
       "head" -> "false")
 
-    val conf = new SparkConf().setAppName("Forest Cover").setMaster("yarn-client")
+    val conf = new SparkConf().setAppName("Forest Cover")
 
     conf.registerKryoClasses(Array(classOf[LSSVMSparkModel], classOf[KernelSparkModel],
       classOf[KernelizedModel[RDD[(Long, LabeledPoint)], RDD[LabeledPoint],
