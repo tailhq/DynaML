@@ -96,6 +96,7 @@ object GreedyEntropySelector {
       .map(DenseVector(_)).toList)
     var newEntropy = oldEntropy
     var d: Double = Double.NegativeInfinity
+    var last_pos_d = Double.PositiveInfinity
     var rand: Int = 0
     logger.info("Starting iterative, entropy based greedy subset selection")
     do {
@@ -126,7 +127,7 @@ object GreedyEntropySelector {
       d = newEntropy - oldEntropy/*measure.entropyDifference(oldEntropy, workingset.map(_._2.features.toArray)
         .map(DenseVector(_)).toList, DenseVector(point2._2.features.toArray),
         DenseVector(workingset(rand)._2.features.toArray))*/
-
+      it += 1
       if(d > 0) {
         /*
         * Improvement in entropy so
@@ -134,8 +135,9 @@ object GreedyEntropySelector {
         * as it is and update the
         * variable 'newDataset'
         * */
-        it += 1
+
         oldEntropy += d
+        last_pos_d = d
         newDataset = data.filter((p) => !workingsetIndices.contains(p._1))
       } else {
         workingset += point1
@@ -144,7 +146,7 @@ object GreedyEntropySelector {
         workingsetIndices -= point2._1
       }
 
-    } while(math.abs(d) >= delta &&
+    } while(last_pos_d >= delta &&
       it <= MAX_ITERATIONS)
     logger.info("Working set obtained, now starting process of packaging it as an RDD")
     // Time to return the final working set

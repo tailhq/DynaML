@@ -90,7 +90,7 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
       logger.info("Building low rank approximation to kernel matrix")
 
       prototypes = GreedyEntropySelector.subsetSelectionQRE(this.g,
-        new QuadraticRenyiEntropy(density), M, 50, 0.0001)
+        new QuadraticRenyiEntropy(density), M, 50, 0.00001)
     }
   }
 

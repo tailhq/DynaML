@@ -88,14 +88,11 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
         csv
     }
 
-    val mapPoint = (p: Vector) => Vectors.dense(featureMap(DenseVector(p.toArray)).toArray)
-    val predict = LSSVMSparkModel.scoreSparkVector(params) _
-
+    val paramsb = sc.broadcast(params)
     val minmaxacc = sc.accumulator(DenseVector(Double.MaxValue, Double.MinValue),
       "Min Max Score acc")(MinMaxAccumulator)
 
-    val mapPointb = sc.broadcast(mapPoint)
-    val predictb = sc.broadcast(predict)
+    val featureMapbroadcast = sc.broadcast(featureMap)
 
     val meanb = g.context.broadcast(DenseVector(colStats.mean.toArray))
     val varianceb = g.context.broadcast(DenseVector(colStats.variance.toArray))
@@ -106,7 +103,8 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
       val ans = vec - meanb.value
       ans :/= sqrt(varianceb.value)
 
-      val sco = predictb.value(mapPointb.value(Vectors.dense(ans.toArray)))
+      val sco: Double = paramsb.value dot
+        DenseVector.vertcat(featureMapbroadcast.value(ans), DenseVector(1.0))
 
       minmaxacc += DenseVector(sco, sco)
 
