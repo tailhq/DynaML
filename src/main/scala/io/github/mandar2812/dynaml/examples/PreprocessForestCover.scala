@@ -28,7 +28,7 @@ object PreprocessForestCover {
       val row = line.split(',')
       val procrow = Array.tabulate(row.length)((i) => {
         if(i == row.length-1) {
-          val label = if(row(i).toDouble <= 4.0) 1.0 else -1.0
+          val label = if(row(i).toDouble == 2.0) 1.0 else -1.0
           label.toString
         } else {
           row(i)

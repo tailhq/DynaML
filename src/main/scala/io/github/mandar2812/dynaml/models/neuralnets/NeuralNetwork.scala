@@ -1,7 +1,6 @@
 package io.github.mandar2812.dynaml.models.neuralnets
 
 import breeze.linalg.{DenseVector, DenseMatrix}
-import breeze.numerics.sigmoid
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 
 /**
