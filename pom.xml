@@ -4,8 +4,8 @@
     <artifactId>dynaml</artifactId>
     <version>1.2-SNAPSHOT</version>
     <name>DynaML</name>
-    <description>Scala Library/REPL for working with Bayesian graphical models.</description>
-    <url>http://mandar2812.github.io/bayeslearn/</url>
+    <description>Scala Library/REPL for scalable Machine Learning</description>
+    <url>http://mandar2812.github.io/DynaML/</url>
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
@@ -19,9 +19,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git@github.com:mandar2812/bayeslearn.git</connection>
-        <url>scm:git:git@github.com:mandar2812/bayeslearn.git</url>
-        <developerConnection>scm:git:git@github.com:mandar2812/bayeslearn.git</developerConnection>
+        <connection>scm:git:git@github.com:mandar2812/DynaML.git</connection>
+        <url>scm:git:git@github.com:mandar2812/DynaML.git</url>
+        <developerConnection>scm:git:git@github.com:mandar2812/DynaML.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <distributionManagement>
@@ -34,6 +34,7 @@
     <inceptionYear>2015</inceptionYear>
     <properties>
         <scala.version>2.10.4</scala.version>
+        <dynaml.version>${project.version}</dynaml.version>
     </properties>
     <repositories>
         <repository>
@@ -180,6 +181,12 @@
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>conf</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.scala-tools</groupId>

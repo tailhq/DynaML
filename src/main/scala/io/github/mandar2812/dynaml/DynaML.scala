@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml
 
-import java.io.{CharArrayWriter, PrintWriter}
+import java.io.{FileInputStream, CharArrayWriter, PrintWriter}
+import java.util.Properties
 import scala.tools.nsc.interpreter.ILoop
 import scala.tools.nsc.Settings
 
@@ -25,6 +26,8 @@ object DynaML extends App {
       }
 
       override def printWelcome() {
+        val prop = new Properties()
+        prop.load(getClass.getClassLoader.getResourceAsStream("dynaml.properties"))
         echo("    ___       ___       ___       ___       ___       ___ "+
           "  \n   /\\  \\     /\\__\\     /\\__\\     /\\  \\     /\\__\\ "+
           "    /\\__\\  \n  /::\\  \\   |::L__L   /:| _|_   /::\\  \\   /::L_L_ "+
@@ -33,8 +36,8 @@ object DynaML extends App {
           " / \\/_/:/  / \\:\\  \\   \n  \\::/  /   \\/__/      |:/  /    /:/ "+
           " /    /:/  /   \\:\\__\\  \n   \\/__/               \\/__/    "+
           " \\/__/     \\/__/     \\/__/  ")
-
-        echo("\nWelcome to DynaML v 1.2\nInteractive Scala shell")
+        val version = prop.getProperty("dynaml.version")
+        echo("\nWelcome to DynaML v "+version+"\nInteractive Scala shell")
       }
     }
     val settings = new Settings

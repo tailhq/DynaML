@@ -151,7 +151,7 @@ class GaussianLinearModel(
 
 object GaussianLinearModel {
   val manager: FramedGraphFactory = new FramedGraphFactory
-  val conf = ConfigFactory.load("conf/bayesLearn.conf")
+  //val conf = ConfigFactory.load("conf/dynaml.conf")
   val logger = Logger.getLogger(this.getClass)
 
   /**
