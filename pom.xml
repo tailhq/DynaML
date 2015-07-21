@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.mandar2812</groupId>
     <artifactId>dynaml</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <name>DynaML</name>
     <description>Scala Library/REPL for scalable Machine Learning</description>
     <url>http://mandar2812.github.io/DynaML/</url>
