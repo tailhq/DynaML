@@ -171,7 +171,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
       val featureMatrix_a = featureMatrix - a_folda
       val bias = b - b_folda
       val tempparams = ConjugateGradientSpark.runCG(featureMatrix_a,
-        bias, this.initParams(), 0.001, 3)
+        bias, this.initParams(), 0.001, 35)
       val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
       val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
       res

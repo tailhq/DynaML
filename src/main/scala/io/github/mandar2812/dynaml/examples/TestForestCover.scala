@@ -84,7 +84,7 @@ object TestForestCover {
       RDD[LabeledPoint], model.type](model, globalOptMethod,
         kernel, nProt, grid, step, logscale)
 
-    optModel.setMaxIterations(2).learn()
+    optModel.setMaxIterations(35).learn()
 
     val met = optModel.evaluate(configtest)
 
