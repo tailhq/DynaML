@@ -173,7 +173,7 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
   def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
-    this.optimizer.setRegParam(reg).setNumIterations(2)
+    this.optimizer.setRegParam(reg).setNumIterations(40)
       .setStepSize(0.001).setMiniBatchFraction(1.0)
     val shuffle = Random.shuffle((1L to this.npoints).toList)
     //run batch sgd on each fold
