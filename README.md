@@ -57,7 +57,7 @@ The `data/` directory contains a few sample data sets, and the root directory al
 
 ```scala
 	val config = Map("file" -> "data/ripley.csv", "delim" -> ",", "head" -> "false", "task" -> "classification")
-	val model = GaussianLinearModel(config)
+	val model = LSSVMModel(config)
 ```
 
 * We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model.
@@ -68,13 +68,14 @@ The `data/` directory contains a few sample data sets, and the root directory al
 ```
 
 ```
-15/06/25 22:30:57 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
-15/06/25 22:30:57 INFO SVMKernel$: Dimension: 13 x 13
-15/06/25 22:30:57 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
-15/06/25 22:30:57 INFO SVMKernelMatrix: Eigenvalue stats: 0.09797818213131776 =< lambda =< 3.178218421049352
-15/06/25 22:30:57 INFO GaussianLinearModel: Applying Feature map to data set
-15/06/25 22:30:57 INFO GaussianLinearModel: DONE: Applying Feature map to data set
-bayeslearn>
+15/08/03 19:07:42 INFO GreedyEntropySelector$: Returning final prototype set
+15/08/03 19:07:42 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
+15/08/03 19:07:42 INFO SVMKernel$: Dimension: 13 x 13
+15/08/03 19:07:42 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
+15/08/03 19:07:42 INFO SVMKernelMatrix: Eigenvalue stats: 0.09104374173019622 =< lambda =< 3.110068839504519
+15/08/03 19:07:42 INFO LSSVMModel: Applying Feature map to data set
+15/08/03 19:07:42 INFO LSSVMModel: DONE: Applying Feature map to data set
+DynaML>
 ```
 
 * Now we can solve the optimization problem posed by the LS-SVM in the parameter space. Since the LS-SVM problem is equivalent to ridge regression, we have to specify a regularization constant.
@@ -96,10 +97,10 @@ bayeslearn>
 * The object `met` has a `print()` method which will dump some performance metrics in the shell. But you can also generate plots by using the `generatePlots()` method.
 
 ```
-15/06/25 22:35:06 INFO BinaryClassificationMetrics: Classification Model Performance
-15/06/25 22:35:06 INFO BinaryClassificationMetrics: ============================
-15/06/25 22:35:06 INFO BinaryClassificationMetrics: Area under PR: NaN
-15/06/25 22:35:06 INFO BinaryClassificationMetrics: Area under ROC: 0.8160130718954248
+15/08/03 19:08:40 INFO BinaryClassificationMetrics: Classification Model Performance
+15/08/03 19:08:40 INFO BinaryClassificationMetrics: ============================
+15/08/03 19:08:40 INFO BinaryClassificationMetrics: Accuracy: 0.6172839506172839
+15/08/03 19:08:40 INFO BinaryClassificationMetrics: Area under ROC: 0.2019607843137254
 ```
 
 ```scala
@@ -127,8 +128,8 @@ val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph]
 
 We see a long list of logs which end in something like the snippet below, the Coupled Simulated Annealing model, gives us a set of hyper-parameters and their values. 
 ```
-optModel: io.github.mandar2812.dynaml.models.svm.LSSVMModel = io.github.mandar2812.dynaml.models.svm.LSSVMModel@6adcc6d9
-optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -> 4.292522306297284, RegParam -> 7.56099893666852)
+optModel: io.github.mandar2812.dynaml.models.svm.LSSVMModel = io.github.mandar2812.dynaml.models.svm.LSSVMModel@3662a98a
+optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -> 3.824956165264642, RegParam -> 12.303758608075587)
 ```
 
 To inspect the performance of this kernel model on an independent test set, we can use the ```model.evaluate()``` function. But before that we must train this 'optimized' kernel model on the training set.
@@ -143,10 +144,10 @@ met.generatePlots()
 And the evaluation results follow ...
 
 ```
-15/06/25 23:49:32 INFO BinaryClassificationMetrics: Classification Model Performance
-15/06/25 23:49:32 INFO BinaryClassificationMetrics: ============================
-15/06/25 23:49:32 INFO BinaryClassificationMetrics: Area under PR: NaN
-15/06/25 23:49:32 INFO BinaryClassificationMetrics: Area under ROC: 0.8696078431372549
+15/08/03 19:10:13 INFO BinaryClassificationMetrics: Classification Model Performance
+15/08/03 19:10:13 INFO BinaryClassificationMetrics: ============================
+15/08/03 19:10:13 INFO BinaryClassificationMetrics: Accuracy: 0.8765432098765432
+15/08/03 19:10:13 INFO BinaryClassificationMetrics: Area under ROC: 0.9143790849673203
 ```
 
 Documentation
