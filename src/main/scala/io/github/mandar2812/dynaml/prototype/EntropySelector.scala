@@ -1,10 +1,10 @@
 package io.github.mandar2812.dynaml.prototype
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel
 import org.apache.log4j.{Priority, Logger}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
-import io.github.mandar2812.dynaml.models.KernelBayesianModel
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -13,7 +13,7 @@ import scala.collection.mutable.ArrayBuffer
  * subset selector
  */
 abstract class EntropySelector
-  extends SubsetSelector[KernelBayesianModel, DenseVector[Double]]
+  extends SubsetSelector[KernelLSSVMModel, DenseVector[Double]]
   with Serializable {
   protected val measure: EntropyMeasure
   protected val delta: Double
@@ -33,7 +33,7 @@ private[dynaml] class GreedyEntropySelector(
   private val logger = Logger.getLogger(this.getClass)
 
   override def selectPrototypes(
-      data: KernelBayesianModel,
+      data: KernelLSSVMModel,
       M: Int): List[DenseVector[Double]] = {
 
     val prototypeIndexes =
@@ -153,7 +153,7 @@ object GreedyEntropySelector {
     workingset.map(i => DenseVector(i._2.features.toArray)).toList
   }
 
-  def subsetSelection(data: KernelBayesianModel,
+  def subsetSelection(data: KernelLSSVMModel,
                       M: Int,
                       measure: EntropyMeasure, delta: Double,
                       MAX_ITERATIONS: Int): List[Long] = {

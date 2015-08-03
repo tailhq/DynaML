@@ -15,26 +15,27 @@
  * limitations under the License.
  */
 
-package io.github.mandar2812.dynaml.models
+package io.github.mandar2812.dynaml.models.svm
 
-import breeze.linalg.{DenseMatrix, norm, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, norm}
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
-import org.apache.log4j.{Logger, Priority}
-import io.github.mandar2812.dynaml.graphutils.{Parameter, CausalEdge, Point}
-import io.github.mandar2812.dynaml.kernels.{RBFKernel, SVMKernel, GaussianDensityKernel}
+import io.github.mandar2812.dynaml.graphutils.{CausalEdge, Parameter, Point}
+import io.github.mandar2812.dynaml.kernels.{GaussianDensityKernel, RBFKernel, SVMKernel}
+import io.github.mandar2812.dynaml.models.KernelizedModel
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient
-import io.github.mandar2812.dynaml.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
+import io.github.mandar2812.dynaml.prototype.{GreedyEntropySelector, QuadraticRenyiEntropy}
 import io.github.mandar2812.dynaml.utils
-import scala.collection.JavaConversions
-import scala.collection.mutable
+import org.apache.log4j.{Logger, Priority}
+
+import scala.collection.{JavaConversions, mutable}
 import scala.util.Random
 
 /**
  * Abstract class implementing kernel feature map
  * extraction functions.
  */
-abstract class KernelBayesianModel(implicit override protected val task: String) extends
+abstract class KernelLSSVMModel(implicit override protected val task: String) extends
 KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
   DenseVector[Double], DenseVector[Double], Double, Int, Int](task) {
 

@@ -120,6 +120,9 @@ class BinaryClassificationMetrics(
       (th, (true_positive, false_positive))
     })
 
+  def accuracyByThreshold(): List[(Double, Double)] = tpfpByThreshold().map((t) => (t._1,
+    (t._2._1*positives.length + (1.0-t._2._2)*negatives.length)/scoresAndLabels.length))
+
   /**
    * Generate the PR, ROC and F1 measure
    * plots using Scala-Chart.
@@ -154,7 +157,7 @@ class BinaryClassificationMetrics(
 
   }
 
-  override def kpi() = DenseVector(areaUnderPR(),
+  override def kpi() = DenseVector(accuracyByThreshold().map((c) => c._2).max,
     fMeasureByThreshold().map((c) => c._2).max,
     areaUnderROC())
 }

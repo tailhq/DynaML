@@ -127,7 +127,7 @@ val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph]
 
 We see a long list of logs which end in something like the snippet below, the Coupled Simulated Annealing model, gives us a set of hyper-parameters and their values. 
 ```
-optModel: io.github.mandar2812.dynaml.models.GaussianLinearModel = io.github.mandar2812.dynaml.models.GaussianLinearModel@6adcc6d9
+optModel: io.github.mandar2812.dynaml.models.svm.LSSVMModel = io.github.mandar2812.dynaml.models.svm.LSSVMModel@6adcc6d9
 optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -> 4.292522306297284, RegParam -> 7.56099893666852)
 ```
 

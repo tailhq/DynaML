@@ -4,15 +4,15 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
  * Standard Polynomial SVM Kernel
- * of the form K(Xi,Xj) = (Xi^T * Xj + d)^r
+ * of the form K(Xi,Xj) = (Xi^T * Xj + 1.0)^r
  */
 class PolynomialKernel(
-    private var degree: Int,
-    private var offset: Double)
+    private var degree: Int = 2,
+    private var offset: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
   with Serializable{
 
-  override val hyper_parameters = List("degree", "offset")
+  override val hyper_parameters = List("degree")
   
   def setdegree(d: Int): Unit = {
     this.degree = d
@@ -36,7 +36,7 @@ class PolynomialKernel(
     assert(hyper_parameters.forall(h contains _),
       "All hyper parameters must be contained in the arguments")
     this.degree = math.ceil(h("degree")).toInt
-    this.offset = h("offset")
+    //this.offset = h("offset")
     this
   }
 }

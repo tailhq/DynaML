@@ -7,7 +7,7 @@ import breeze.linalg.{norm, DenseMatrix, DenseVector}
  * K(Xi,Xj) = exp(-||Xi - Xj||**2/2*bandwidth**2)
  */
 
-class RBFKernel(private var bandwidth: Double)
+class RBFKernel(private var bandwidth: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
   with Serializable {
 

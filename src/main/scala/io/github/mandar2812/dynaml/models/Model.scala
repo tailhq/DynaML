@@ -220,10 +220,10 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
 
     if(options.contains("kernel")) {
       val kern = options("kernel") match {
-        case "RBF" => new RBFKernel(1.0).setHyperParameters(h)
-        case "Polynomial" => new PolynomialKernel(2, 1.0).setHyperParameters(h)
-        case "Exponential" => new ExponentialKernel(1.0).setHyperParameters(h)
-        case "Laplacian" => new LaplacianKernel(1.0).setHyperParameters(h)
+        case "RBF" => new RBFKernel().setHyperParameters(h)
+        case "Polynomial" => new PolynomialKernel().setHyperParameters(h)
+        case "Exponential" => new ExponentialKernel().setHyperParameters(h)
+        case "Laplacian" => new LaplacianKernel().setHyperParameters(h)
       }
       //check if h and this.current_state have the same kernel params
       //calculate kernParam(h)
@@ -264,7 +264,7 @@ object KernelizedModel {
       case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
         Map("kernel" -> "RBF", "subset" -> prototypes.toString))
 
-      case "Polynomial" => gs.optimize(Map("degree" -> 1.0, "offset" -> 1.0, "RegParam" -> 0.5),
+      case "Polynomial" => gs.optimize(Map("degree" -> 1.0, /*"offset" -> 1.0,*/ "RegParam" -> 0.5),
         Map("kernel" -> "Polynomial", "subset" -> prototypes.toString))
 
       case "Exponential" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),

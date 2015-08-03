@@ -38,6 +38,10 @@ class BinaryClassificationMetricsSpark(
       i.toDouble*((scMax.toInt -
         scMin.toInt + 1)/100.0)})
 
+  private var num_positives = 0.0
+  private var num_negatives = 0.0
+  private var tpfpList: List[(Double, (Double, Double))] = List()
+
   def scores_and_labels = this.scoresAndLabels
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
@@ -67,12 +71,15 @@ class BinaryClassificationMetricsSpark(
    * Calculate the F1 metric by threshold, for an
    * arbitrary beta value
    * */
-  def fMeasureByThreshold(beta: Double): List[(Double, Double)] = tpfpByThreshold().map((couple) => {
-    val tp = couple._2._1
-    val fp = couple._2._2
-    val betasq = math.pow(beta, 2.0)
-    (couple._1, (1 + betasq)*tp/((1 + betasq)*tp + betasq*(1-tp) + fp))
-  })
+  def fMeasureByThreshold(beta: Double): List[(Double, Double)] = {
+    val tpfpbuf = if(tpfpList.isEmpty) tpfpByThreshold() else tpfpList
+    tpfpbuf.map((couple) => {
+      val tp = couple._2._1
+      val fp = couple._2._2
+      val betasq = math.pow(beta, 2.0)
+      (couple._1, (1 + betasq)*tp/((1 + betasq)*tp + betasq*(1-tp) + fp))
+    })
+  }
 
   /**
    * Return the Precision-Recall curve, as a [[List]]
@@ -85,22 +92,29 @@ class BinaryClassificationMetricsSpark(
    * Return the Recall-Threshold curve, as a [[List]]
    * of [[Tuple2]] (Threshold, Recall).
    * */
-  def recallByThreshold(): List[(Double, Double)]  = tpfpByThreshold().map((point) => (point._1, point._2._1))
+  def recallByThreshold(): List[(Double, Double)]  = {
+    val tpfpbuf = if(tpfpList.isEmpty) tpfpByThreshold() else tpfpList
+    tpfpbuf.map((point) => (point._1, point._2._1))
+  }
 
   /**
    * Return the Precision-Threshold curve, as a [[List]]
    * of [[Tuple2]] (Threshold, Precision).
    * */
-  def precisionByThreshold(): List[(Double, Double)]  = tpfpByThreshold().map((point) =>
-    (point._1, point._2._1/(point._2._1 + point._2._2)))
+  def precisionByThreshold(): List[(Double, Double)]  = {
+    val tpfpbuf = if(tpfpList.isEmpty) tpfpByThreshold() else tpfpList
+    tpfpbuf.map((point) => (point._1, point._2._1/(point._2._1 + point._2._2)))
+  }
 
   /**
    * Return the Receiver Operating Characteristic
    * curve, as a [[List]] of [[Tuple2]]
    * (False Positive Rate, True Positive Rate).
    * */
-  def roc(): List[(Double, Double)] =
-    tpfpByThreshold().map((point) => (point._2._2, point._2._1)).sorted
+  def roc(): List[(Double, Double)] = {
+    val tpfpbuf = if(tpfpList.isEmpty) tpfpByThreshold() else tpfpList
+    tpfpbuf.map((point) => (point._2._2, point._2._1)).sorted
+  }
 
   /**
    * Return the True Positive and False Positive Rate
@@ -132,9 +146,17 @@ class BinaryClassificationMetricsSpark(
     }).reduce((c1, c2) => {
       (c1._1+c2._1, c1._2+c2._2)
     })
+    this.num_positives = positives.value
+    this.num_negatives = negatives.value
     List.tabulate(thresholds.length){t => {
       (thresholds(t), (tp(t)/positives.value, fp(t)/negatives.value))
     }}
+  }
+
+  def accuracyByThreshold(): List[(Double, Double)] = {
+    val tpfpbuf = if(tpfpList.isEmpty) tpfpByThreshold() else tpfpList
+    tpfpbuf.map((t) => (t._1,
+      (t._2._1*num_positives + (1.0-t._2._2)*num_negatives)/length.toDouble))
   }
 
   /**
@@ -171,7 +193,9 @@ class BinaryClassificationMetricsSpark(
 
   }
 
-  override def kpi() = DenseVector(areaUnderPR(),
+  override def kpi() = {
+    this.tpfpList = this.tpfpByThreshold()
+    DenseVector(accuracyByThreshold().map((c) => c._2).max,
     fMeasureByThreshold().map((c) => c._2).max,
-    areaUnderROC())
+    areaUnderROC())}
 }

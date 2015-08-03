@@ -8,7 +8,6 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import io.github.mandar2812.dynaml.evaluation.{MetricsSpark, Metrics}
-import io.github.mandar2812.dynaml.models.GaussianLinearModel
 import io.github.mandar2812.dynaml.optimization._
 import org.apache.spark.mllib.linalg.Vector
 
@@ -76,7 +75,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
   
   override def evaluate(config: Map[String, String]) = {
     val sc = g.context
-    val (file, delim, head, _) = GaussianLinearModel.readConfig(config)
+    val (file, delim, head, _) = LSSVMModel.readConfig(config)
     val csv = sc.textFile(file).map(line => line split delim)
       .map(_.map(_.toDouble)).map(vector => LabeledPoint(vector(vector.length-1), 
       Vectors.dense(vector.slice(0, vector.length-1))))
@@ -196,7 +195,7 @@ object LSSVMSparkModel {
   }
 
   def apply(implicit config: Map[String, String], sc: SparkContext): LSSVMSparkModel = {
-    val (file, delim, head, task) = GaussianLinearModel.readConfig(config)
+    val (file, delim, head, task) = LSSVMModel.readConfig(config)
     val minPartitions = if(config.contains("parallelism") &&
       config.contains("executors")) 2*config("parallelism").toInt * config("executors").toInt
     else 2

@@ -3,10 +3,8 @@ package io.github.mandar2812.dynaml.examples
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
 import io.github.mandar2812.dynaml.graphutils.CausalEdge
-import io.github.mandar2812.dynaml.models.{KernelizedModel, GaussianLinearModel}
-import io.github.mandar2812.dynaml.optimization.GridSearch
-import org.apache.spark.mllib.regression.LabeledPoint
-import org.apache.spark.rdd.RDD
+import io.github.mandar2812.dynaml.models.KernelizedModel
+import io.github.mandar2812.dynaml.models.svm.LSSVMModel
 
 /**
  * @author mandar2812 on 22/6/15.
@@ -26,7 +24,7 @@ object TestHousing {
 
 
 
-    val model = GaussianLinearModel(config)
+    val model = LSSVMModel(config)
 
     val nProt = if (kernel == "Linear") {
       model.npoints.toInt

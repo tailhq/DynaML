@@ -1,21 +1,20 @@
-package io.github.mandar2812.dynaml.models
+package io.github.mandar2812.dynaml.models.svm
 
-import breeze.linalg.{cholesky, inv, DenseMatrix, DenseVector}
+import breeze.linalg._
 import breeze.numerics.sigmoid
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
-import com.tinkerpop.blueprints.{GraphFactory, Graph}
+import com.tinkerpop.blueprints.{Graph, GraphFactory}
 import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
-import com.typesafe.config.ConfigFactory
-import io.github.mandar2812.dynaml.graphutils.{ParamEdge, CausalEdge, Label, Parameter}
-import org.apache.log4j.{Priority, Logger}
 import io.github.mandar2812.dynaml.evaluation.Metrics
+import io.github.mandar2812.dynaml.graphutils.{CausalEdge, Label, ParamEdge, Parameter, _}
 import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.utils
+import org.apache.log4j.{Logger, Priority}
+
+import scala.collection.JavaConversions._
 import scala.collection.mutable
-import collection.JavaConversions._
-import io.github.mandar2812.dynaml.graphutils._
 
 /**
  * Linear Model with conditional probability
@@ -26,7 +25,7 @@ import io.github.mandar2812.dynaml.graphutils._
  * as a means for L2 regularization.
  */
 
-class GaussianLinearModel(
+class LSSVMModel(
     override protected val g: FramedGraph[Graph],
     override protected val nPoints: Long,
     override protected val featuredims: Int,
@@ -36,7 +35,7 @@ class GaussianLinearModel(
     override protected val edgeMaps: (mutable.HashMap[Long, AnyRef],
       mutable.HashMap[Long, AnyRef]),
     override implicit protected val task: String)
-  extends KernelBayesianModel {
+  extends KernelLSSVMModel {
 
   override protected val logger = Logger.getLogger(this.getClass)
 
@@ -47,11 +46,11 @@ class GaussianLinearModel(
 
   private val (label_mean, label_var) = utils.getStatsMult(this.filterLabels(_ => true).map(i => DenseVector(i)))
 
-  override protected val optimizer = GaussianLinearModel.getOptimizer(task)
+  override protected val optimizer = LSSVMModel.getOptimizer(task)
 
   private val sigmaInverse: DenseMatrix[Double] = inv(cholesky(variance))
 
-  val rescale = GaussianLinearModel.scaleAttributes(this.mean, sigmaInverse) _
+  val rescale = LSSVMModel.scaleAttributes(this.mean, sigmaInverse) _
 
   def score(point: DenseVector[Double]): Double = {
     val rescaled = rescale(point)
@@ -68,10 +67,10 @@ class GaussianLinearModel(
   }
 
   override def evaluate(config: Map[String, String]): Metrics[Double] = {
-    val (file, delim, head, _) = GaussianLinearModel.readConfig(config)
+    val (file, delim, head, _) = LSSVMModel.readConfig(config)
     logger.log(Priority.INFO, "Calculating test set predictions")
     val reader = utils.getCSVReader(file, delim)
-    val (points, dim) = GaussianLinearModel.readCSV(reader, head)
+    val (points, dim) = LSSVMModel.readCSV(reader, head)
     var index = 1
     val scoreFunction = task match {
       case "classification" => this.score _
@@ -149,7 +148,7 @@ class GaussianLinearModel(
   }
 }
 
-object GaussianLinearModel {
+object LSSVMModel {
   val manager: FramedGraphFactory = new FramedGraphFactory
   //val conf = ConfigFactory.load("conf/dynaml.conf")
   val logger = Logger.getLogger(this.getClass)
@@ -229,7 +228,7 @@ object GaussianLinearModel {
     (file, delim, head, task)
   }
 
-  def apply(implicit config: Map[String, String]): GaussianLinearModel = {
+  def apply(implicit config: Map[String, String]): LSSVMModel = {
 
     val (file, delim, head, task) = readConfig(config)
     val reader = utils.getCSVReader(file, delim)
@@ -288,6 +287,6 @@ object GaussianLinearModel {
     val vMaps = (wMap, xMap, yMap)
     val eMaps = (ceMap, peMap)
     logger.log(Priority.INFO, "Graph constructed, now building model object.")
-    new GaussianLinearModel(fg, index-1, dim, vMaps, eMaps, task).normalizeData
+    new LSSVMModel(fg, index-1, dim, vMaps, eMaps, task).normalizeData
   }
 }

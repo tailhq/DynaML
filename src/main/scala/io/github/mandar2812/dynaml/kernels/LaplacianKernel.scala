@@ -7,8 +7,9 @@ import breeze.linalg.{norm, DenseVector, DenseMatrix}
  *
  * K(x,y) = exp(beta*(x.y))
  */
-class LaplacianKernel(be: Double) extends SVMKernel[DenseMatrix[Double]]
-with Serializable {
+class LaplacianKernel(be: Double = 1.0)
+  extends SVMKernel[DenseMatrix[Double]]
+  with Serializable {
   override val hyper_parameters = List("beta")
 
   private var beta: Double = be

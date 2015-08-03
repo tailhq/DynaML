@@ -22,10 +22,10 @@ class RegressionMetricsSpark(protected val scores: RDD[(Double, Double)],
   val length = len
 
   val rmse: Double = math.sqrt(scores.map((p) =>
-    math.pow((p._1 - p._2)/p._2, 2)/length).sum)
+    math.pow(p._1 - p._2, 2)/length).sum)
 
   val mae: Double = scores.map((p) =>
-    math.abs((p._1 - p._2)/p._2)/length).sum
+    math.abs(p._1 - p._2)/length).sum
 
   val rmsle: Double = math.sqrt(scores.map((p) =>
     math.pow(math.log(1 + math.abs(p._1)) - math.log(math.abs(p._2) + 1),
