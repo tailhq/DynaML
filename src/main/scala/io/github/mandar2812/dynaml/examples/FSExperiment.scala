@@ -26,7 +26,7 @@ object FSExperiment {
     List("gs", "csa").foreach((globalOpt) => {
       List(50, 100, 200, 300, 500).foreach((prototypes) => {
         List("RBF", "Polynomial", "Laplacian", "Linear").foreach((kern) => {
-          List(2, 3).foreach((gridSize) => {
+          List((2, 0.55), (3, 0.45), (4, 0.35)).foreach((gridSize) => {
             val perfs: ML[DenseVector[Double]] = ML()
             var times: ML[Double] = ML()
             (1 to trials).toList.foreach((trial) => {
@@ -34,25 +34,25 @@ object FSExperiment {
                 case "ForestCover" => {
                   val t0 = System.currentTimeMillis().toDouble
                   perfs += TestForestCover(nCores,
-                    prototypes, kern,
-                    globalOpt, grid = gridSize,
-                    frac = 1.0, dataRoot = root, local = true)/trials.toDouble
+                    prototypes, kern, globalOpt,
+                    grid = gridSize._1, step = gridSize._2,
+                    frac = 1.0, dataRoot = root, local = true,
+                    logscale = true)
                   times += System.currentTimeMillis().toDouble - t0
                 }
                 case "Adult" => {
                   val t0 = System.currentTimeMillis().toDouble
-                  perfs += TestAdult(nCores,
-                    prototypes, kern,
-                    globalOpt, grid = gridSize,
-                    frac = 1.0)/trials.toDouble
+                  perfs += TestAdult(nCores, prototypes, kern,
+                    globalOpt, grid = gridSize._1, step = gridSize._2,
+                    frac = 1.0, logscale = true)
                   times += System.currentTimeMillis().toDouble - t0
                 }
                 case "MagicGamma" => {
                   val t0 = System.currentTimeMillis().toDouble
                   perfs += TestMagicGamma(nCores,
                     prototypes, kern,
-                    globalOpt, grid = gridSize,
-                    dataRoot = root)/trials.toDouble
+                    globalOpt, grid = gridSize._1, step = gridSize._2,
+                    dataRoot = root, logscale = true)
                   times += System.currentTimeMillis().toDouble - t0
                 }
               }
