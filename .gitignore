@@ -17,3 +17,6 @@ release.properties
 *.log
 data/results*
 _site
+data/MagicGamma.csv
+data/Adult.csv
+data/ForestCover.csv

@@ -52,8 +52,8 @@ package object utils {
     (DenseVector[Double], DenseVector[Double]) = d match {
       case Nil => (m, s)
       case x :: rest => {
-        getStatsRec(rest, m + (x - m):/=i.toDouble,
-          s + ((x - m) :* (x - (m + (x - m):/=i.toDouble))),
+        getStatsRec(rest, m + (x - m)/i.toDouble,
+          s + ((x - m) :* (x - (m + (x - m)/i.toDouble))),
           i - 1)
       }
     }
