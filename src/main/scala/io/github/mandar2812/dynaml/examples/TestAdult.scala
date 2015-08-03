@@ -17,7 +17,8 @@ import io.github.mandar2812.dynaml.models.svm.{KernelSparkModel, LSSVMSparkModel
 object TestAdult {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false, frac: Double): Unit = {
+            step: Double = 0.45, logscale: Boolean = false,
+            frac: Double): DenseVector[Double] = {
 
     val dataRoot = "data/" //"/esat/smcdata/guests/mandar/"
     val trainfile = dataRoot+"adult.csv"
@@ -81,5 +82,6 @@ object TestAdult {
     writer.writeRow(row)
     writer.close()
     optModel.unpersist
+    perf
   }
 }

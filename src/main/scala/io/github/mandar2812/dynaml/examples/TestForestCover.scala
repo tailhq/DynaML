@@ -26,16 +26,16 @@ object TestForestCover {
     val root = args(5)
     val ex = args(6).toInt
     val cores = args(7).toInt
-    TestForestCover(cores, prot, kern, go,
+    val ans = TestForestCover(cores, prot, kern, go,
       grid, step, false, 1.0,
       dataRoot = root, executors = ex, false)
   }
 
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false, frac: Double,
+            step: Double = 0.45, logscale: Boolean = false, frac: Double,
             dataRoot: String = "data/", executors: Int = 1,
-            local: Boolean = false): Unit = {
+            local: Boolean = false): DenseVector[Double] = {
 
     val trainfile = dataRoot+"cover.csv"
     val testfile = dataRoot+"covertest.csv"
@@ -102,6 +102,6 @@ object TestForestCover {
     writer.writeRow(row)
     writer.close()
     optModel.unpersist
-
+    perf
   }
 }

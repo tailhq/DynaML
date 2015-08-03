@@ -18,8 +18,8 @@ import io.github.mandar2812.dynaml.models.svm.{KernelSparkModel, LSSVMSparkModel
 object TestMagicGamma {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false,
-            dataRoot: String = "data/", executors: Int = 1): Unit = {
+            step: Double = 0.45, logscale: Boolean = false,
+            dataRoot: String = "data/", executors: Int = 1): DenseVector[Double] = {
     val config = Map("file" -> "data/magicgamma.csv", "delim" -> ",",
       "head" -> "false",
       "task" -> "classification",
@@ -78,5 +78,6 @@ object TestMagicGamma {
     writer.writeRow(row)
     writer.close()
     optModel.unpersist
+    perf
   }
 }
