@@ -188,7 +188,7 @@ class BinaryClassificationMetricsSpark(
   override def print(): Unit = {
     logger.log(Priority.INFO, "Classification Model Performance")
     logger.log(Priority.INFO, "============================")
-    logger.log(Priority.INFO, "Area under PR: " + areaUnderPR())
+    logger.log(Priority.INFO, "Accuracy: " + accuracyByThreshold().map((c) => c._2).max)
     logger.log(Priority.INFO, "Area under ROC: " + areaUnderROC())
 
   }
