@@ -36,7 +36,7 @@ object FSExperiment {
                   perfs += TestForestCover(nCores,
                     prototypes, kern,
                     globalOpt, grid = gridSize,
-                    frac = 1.0, dataRoot = root)/trials.toDouble
+                    frac = 1.0, dataRoot = root, local = true)/trials.toDouble
                   times += System.currentTimeMillis().toDouble - t0
                 }
                 case "Adult" => {
