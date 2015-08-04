@@ -32,11 +32,12 @@ object TestSUSY {
 
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false, frac: Double,
-            root: String, executors: Int = 1, local: Boolean = false): Unit = {
+            step: Double = 0.45, logscale: Boolean = false, 
+            frac: Double, dataRoot: String, executors: Int = 1,
+            local: Boolean = false): DenseVector[Double] = {
 
-    val trainFile = root+"susy.csv"
-    val testFile = root+"susytest.csv"
+    val trainFile = dataRoot+"susy.csv"
+    val testFile = dataRoot+"susytest.csv"
     val config = Map(
       "file" -> trainFile,
       "delim" -> ",",
@@ -94,10 +95,10 @@ object TestSUSY {
       grid.toString, step.toString, scale,
       perf(0), perf(1), perf(2), optConfig.toString)
 
-    val writer = CSVWriter.open(new File(root+"resultsSUSY.csv"), append = true)
+    val writer = CSVWriter.open(new File(dataRoot+"resultsSUSY.csv"), append = true)
     writer.writeRow(row)
     writer.close()
     optModel.unpersist
-
+    perf
   }
 }

@@ -40,6 +40,15 @@ object FSExperiment {
                     logscale = true)
                   times += System.currentTimeMillis().toDouble/1000.0 - t0
                 }
+                case "HiggsSUSY" => {
+                  val t0 = System.currentTimeMillis().toDouble/1000.0
+                  perfs += TestSUSY(nCores,
+                    prototypes, kern, globalOpt,
+                    grid = gridSize._1, step = gridSize._2,
+                    frac = 1.0, dataRoot = root, local = true,
+                    logscale = true)
+                  times += System.currentTimeMillis().toDouble/1000.0 - t0
+                }
                 case "Adult" => {
                   val t0 = System.currentTimeMillis().toDouble/1000.0
                   perfs += TestAdult(nCores, prototypes, kern,

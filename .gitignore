@@ -20,3 +20,4 @@ _site
 data/MagicGamma.csv
 data/Adult.csv
 data/ForestCover.csv
+data/*Res.csv
