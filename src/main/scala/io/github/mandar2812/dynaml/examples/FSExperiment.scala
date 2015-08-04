@@ -21,7 +21,8 @@ import scala.collection.mutable.{MutableList => ML}
 object FSExperiment {
   def apply(nCores: Int = 4, trials: Int,
             data: String = "ForestCover",
-            root: String = "data/"): Unit = {
+            root: String = "data/",
+            factor: Int = 2): Unit = {
     val writer = CSVWriter.open(new File(root+data+"Res.csv"), append = true)
     List("gs", "csa").foreach((globalOpt) => {
       List(50, 100, 200, 300, 500).foreach((prototypes) => {
@@ -37,7 +38,7 @@ object FSExperiment {
                     prototypes, kern, globalOpt,
                     grid = gridSize._1, step = gridSize._2,
                     frac = 1.0, dataRoot = root, local = true,
-                    logscale = true)
+                    logscale = true, paraFactor = factor)
                   times += System.currentTimeMillis().toDouble/1000.0 - t0
                 }
                 case "HiggsSUSY" => {
@@ -46,14 +47,14 @@ object FSExperiment {
                     prototypes, kern, globalOpt,
                     grid = gridSize._1, step = gridSize._2,
                     frac = 1.0, dataRoot = root, local = true,
-                    logscale = true)
+                    logscale = true, paraFactor = factor)
                   times += System.currentTimeMillis().toDouble/1000.0 - t0
                 }
                 case "Adult" => {
                   val t0 = System.currentTimeMillis().toDouble/1000.0
                   perfs += TestAdult(nCores, prototypes, kern,
                     globalOpt, grid = gridSize._1, step = gridSize._2,
-                    frac = 1.0, logscale = true)
+                    frac = 1.0, logscale = true, paraFactor = factor)
                   times += System.currentTimeMillis().toDouble/1000.0 - t0
                 }
                 case "MagicGamma" => {
@@ -61,7 +62,7 @@ object FSExperiment {
                   perfs += TestMagicGamma(nCores,
                     prototypes, kern,
                     globalOpt, grid = gridSize._1, step = gridSize._2,
-                    dataRoot = root, logscale = true)
+                    dataRoot = root, logscale = true, paraFactor = factor)
                   times += System.currentTimeMillis().toDouble/1000.0 - t0
                 }
               }

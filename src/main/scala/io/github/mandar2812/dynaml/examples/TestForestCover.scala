@@ -28,14 +28,15 @@ object TestForestCover {
     val cores = args(7).toInt
     val ans = TestForestCover(cores, prot, kern, go,
       grid, step, false, 1.0,
-      dataRoot = root, executors = ex, false)
+      dataRoot = root, executors = ex,
+      local = false)
   }
 
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
             step: Double = 0.45, logscale: Boolean = false, frac: Double,
             dataRoot: String = "data/", executors: Int = 1,
-            local: Boolean = false): DenseVector[Double] = {
+            local: Boolean = false, paraFactor: Int = 2): DenseVector[Double] = {
 
     val trainfile = dataRoot+"cover.csv"
     val testfile = dataRoot+"covertest.csv"
@@ -46,7 +47,8 @@ object TestForestCover {
       "head" -> "false",
       "task" -> "classification",
       "parallelism" -> nCores.toString,
-      "executors" -> executors.toString
+      "executors" -> executors.toString,
+      "factor" -> paraFactor.toString
     )
 
     val configtest = Map("file" -> testfile,

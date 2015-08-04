@@ -25,7 +25,7 @@ object TestSUSY {
     val dataRoot = args(5)
     val ex = args(6).toInt
     val cores = args(7).toInt
-    TestSUSY(cores, prot, kern, go,
+    val ans = TestSUSY(cores, prot, kern, go,
       grid, step, false, 1.0, dataRoot,
       ex)
   }
@@ -34,7 +34,7 @@ object TestSUSY {
             globalOptMethod: String = "gs", grid: Int = 7,
             step: Double = 0.45, logscale: Boolean = false, 
             frac: Double, dataRoot: String, executors: Int = 1,
-            local: Boolean = false): DenseVector[Double] = {
+            local: Boolean = false, paraFactor: Int = 2): DenseVector[Double] = {
 
     val trainFile = dataRoot+"susy.csv"
     val testFile = dataRoot+"susytest.csv"
@@ -44,7 +44,8 @@ object TestSUSY {
       "head" -> "false",
       "task" -> "classification",
       "parallelism" -> nCores.toString,
-      "executors" -> executors.toString
+      "executors" -> executors.toString,
+      "factor" -> paraFactor.toString
     )
 
     val configtest = Map("file" -> testFile,

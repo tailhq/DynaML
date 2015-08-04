@@ -115,8 +115,8 @@ object GreedyEntropySelector {
       workingsetIndices -= point1._1
       workingsetIndices += point2._1
 
-      newEntropy = measure.evaluate(workingset.map(p =>
-        DenseVector(p._2.features.toArray)).toList)
+      /*newEntropy = measure.evaluate(workingset.map(p =>
+        DenseVector(p._2.features.toArray)).toList)*/
 
       /*
       * Calculate the change in entropy,
@@ -124,9 +124,11 @@ object GreedyEntropySelector {
       * swap, otherwise revert to existing
       * working set.
       * */
-      d = newEntropy - oldEntropy/*measure.entropyDifference(oldEntropy, workingset.map(_._2.features.toArray)
+      /*newEntropy - oldEntropy*/
+      d = measure.entropyDifference(oldEntropy, workingset.map(_._2.features.toArray)
         .map(DenseVector(_)).toList, DenseVector(point2._2.features.toArray),
-        DenseVector(workingset(rand)._2.features.toArray))*/
+        DenseVector(workingset(rand)._2.features.toArray))
+
       it += 1
       if(d > 0) {
         /*

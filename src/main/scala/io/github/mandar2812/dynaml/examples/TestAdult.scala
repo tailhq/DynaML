@@ -18,7 +18,8 @@ object TestAdult {
   def apply(nCores: Int = 4, prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
             step: Double = 0.45, logscale: Boolean = false,
-            frac: Double, executors: Int = 1): DenseVector[Double] = {
+            frac: Double, executors: Int = 1,
+            paraFactor: Int = 2): DenseVector[Double] = {
 
     val dataRoot = "data/" //"/esat/smcdata/guests/mandar/"
     val trainfile = dataRoot+"adult.csv"
@@ -30,7 +31,8 @@ object TestAdult {
       "head" -> "false",
       "task" -> "classification",
       "parallelism" -> nCores.toString,
-      "executors" -> executors.toString
+      "executors" -> executors.toString,
+      "factor" -> paraFactor.toString
     )
 
     val configtest = Map("file" -> testfile,
