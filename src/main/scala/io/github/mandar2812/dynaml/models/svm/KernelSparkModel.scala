@@ -41,10 +41,6 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
 
   override protected val nPoints: Long = colStats.count
 
-  override protected var hyper_parameters: List[String] = List("RegParam")
-
-  override protected var current_state: Map[String, Double] = Map("RegParam" -> 1.0)
-
   protected var featuredims: Int = g.first()._2.features.size
 
   protected var effectivedims: Int = featuredims + 1

@@ -127,22 +127,25 @@ class BinaryClassificationMetricsSpark(
     val negatives = scores.context.accumulator(0.0, "negatives")
     val ths = scores.context.broadcast(thresholds.length)
     val thres = scores.context.broadcast(thresholds)
-    val (tp, fp) = this.scores.map((sl) =>{
+    val (tp, fp) = this.scores.mapPartitions((scoresAndLabels) =>{
+      Seq(scoresAndLabels.map((sl) => {
+        val (tpv, fpv): (DenseVector[Double], DenseVector[Double]) =
+          if(sl._2 == 1.0) {
+            positives += 1.0
+            (DenseVector.tabulate(ths.value)(i => {
+              if(math.signum(sl._1 - thres.value(i)) == sl._2) 1.0 else 0.0
+            }), DenseVector.zeros(ths.value))
 
-      val (tpv, fpv): (DenseVector[Double], DenseVector[Double]) =
-        if(sl._2 == 1.0) {
-          positives += 1.0
-          (DenseVector.tabulate(ths.value)(i => {
-            if(math.signum(sl._1 - thres.value(i)) == sl._2) 1.0 else 0.0
-          }), DenseVector.zeros(ths.value))
-
-        } else {
-          negatives += 1.0
-          (DenseVector.zeros(ths.value), DenseVector.tabulate(ths.value)(i => {
-            if(math.signum(sl._1 - thres.value(i)) == 1.0) 1.0 else 0.0
-          }))
-        }
-      (tpv,fpv)
+          } else {
+            negatives += 1.0
+            (DenseVector.zeros(ths.value), DenseVector.tabulate(ths.value)(i => {
+              if(math.signum(sl._1 - thres.value(i)) == 1.0) 1.0 else 0.0
+            }))
+          }
+        (tpv,fpv)
+      }).reduce((c1, c2) => {
+        (c1._1+c2._1, c1._2+c2._2)
+      })).toIterator
     }).reduce((c1, c2) => {
       (c1._1+c2._1, c1._2+c2._2)
     })

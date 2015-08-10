@@ -73,7 +73,7 @@ class CoupledSimulatedAnnealing[G, H, M <: KernelizedModel[G, H, DenseVector[Dou
       (i: Int) => (i+1).toDouble*step
 
     val gridvecs = initialConfig.map((keyValue) => {
-      (keyValue._1, List.tabulate(gridsize)(scaleFunc))
+      (keyValue._1, List.tabulate[Double](gridsize)(scaleFunc))
     })
 
     val grid = utils.combine(gridvecs.map(_._2)).map(x => DenseVector(x.toArray))

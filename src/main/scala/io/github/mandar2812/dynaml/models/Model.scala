@@ -122,6 +122,10 @@ abstract class KernelizedModel[G, L, T <: Tensor[K1, Double],
 Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
   extends LinearModel[G, K1, K2, T, Q, R, L] with GloballyOptimizable {
 
+  override protected var hyper_parameters: List[String] = List("RegParam")
+
+  override protected var current_state: Map[String, Double] = Map("RegParam" -> 1.0)
+
   protected val nPoints: Long
 
   def npoints = nPoints
@@ -170,7 +174,8 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
 
   def trainTest(test: List[Long]): (L,L)
 
-  def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {
+  def crossvalidate(folds: Int, reg: Double,
+                    optionalStateFlag: Boolean = false): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
     this.optimizer.setRegParam(reg).setNumIterations(40)
@@ -186,7 +191,8 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
       val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
       val(training_data, test_data) = this.trainTest(test)
 
-      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints, training_data, this.initParams())
+      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints,
+        training_data, this.initParams())
       val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
       val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
       res
@@ -217,7 +223,7 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
   override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
     //set the kernel paramters if options is defined
     //then set model parameters and cross validate
-
+    var kernelflag = true
     if(options.contains("kernel")) {
       val kern = options("kernel") match {
         case "RBF" => new RBFKernel().setHyperParameters(h)
@@ -236,12 +242,13 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
       val kerncs = current_state.filter((couple) => kern.hyper_parameters.contains(couple._1))
       if(!(kernh sameElements kerncs)) {
         this.applyKernel(kern, nprototypes)
+        kernelflag = false
       }
     }
     this.applyFeatureMap
-    current_state = h
-    val (_,_,e) = this.crossvalidate(4, h("RegParam"))
 
+    val (_,_,e) = this.crossvalidate(4, h("RegParam"), optionalStateFlag = kernelflag)
+    current_state = h
     1.0-e
   }
 

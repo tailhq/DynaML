@@ -24,6 +24,8 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
 
   override protected var params: DenseVector[Double] = DenseVector.ones(featuredims+1)
 
+  private var featureMatricesCache: (DenseMatrix[Double], DenseVector[Double]) = (null, null)
+
   def dimensions = featuredims
 
   /**
@@ -143,15 +145,21 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     MetricsSpark(task)(scoresAndLabels, index, (minmax(0), minmax(1)))
   }
 
-  override def crossvalidate(folds: Int, reg: Double): (Double, Double, Double) = {
+  override def crossvalidate(folds: Int, reg: Double,
+                             optionalStateFlag: Boolean = false): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
-    this.optimizer.setRegParam(reg).setNumIterations(2)
-      .setStepSize(0.001).setMiniBatchFraction(1.0)
+    /*this.optimizer.setRegParam(reg).setNumIterations(2)
+      .setStepSize(0.001).setMiniBatchFraction(1.0)*/
     val shuffle = Random.shuffle((1L to this.npoints).toList)
 
-    val (featureMatrix,b) = LSSVMSparkModel.getFeatureMatrix(npoints, processed_g.map(_._2),
-      this.initParams(), 1.0, reg)
+    if(!optionalStateFlag || featureMatricesCache == (null, null)) {
+      featureMatricesCache = LSSVMSparkModel.getFeatureMatrix(npoints, processed_g.map(_._2),
+        this.initParams(), 1.0, reg)
+    } else {
+      featureMatricesCache._1 :-= (DenseMatrix.eye[Double](effectivedims)*current_state("RegParam"))
+      featureMatricesCache._1 :+= (DenseMatrix.eye[Double](effectivedims)*reg)
+    }
 
     val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
       //For the ath fold
@@ -167,8 +175,8 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
         this.initParams(),
         1.0, reg)
 
-      val featureMatrix_a = featureMatrix - a_folda
-      val bias = b - b_folda
+      val featureMatrix_a = featureMatricesCache._1 - a_folda
+      val bias = featureMatricesCache._2 - b_folda
       val tempparams = ConjugateGradientSpark.runCG(featureMatrix_a,
         bias, this.initParams(), 0.001, 35)
       val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
@@ -280,12 +288,14 @@ object LSSVMSparkModel {
     val (a,b): (DenseMatrix[Double], DenseVector[Double]) =
       ParamOutEdges.filter((_) => Random.nextDouble() <= frac)
         .mapPartitions((edges) => {
-        edges.map((edge) => {
+        Seq(edges.map((edge) => {
           val phi = DenseVector(edge.features.toArray)
           val label = edge.label
           val phiY: DenseVector[Double] = phi * label
           (phi*phi.t, phiY)
-        })
+        }).reduce((couple1, couple2) => {
+          (couple1._1+couple2._1, couple1._2+couple2._2)
+        })).toIterator
       }).reduce((couple1, couple2) => {
         (couple1._1+couple2._1, couple1._2+couple2._2)
       })

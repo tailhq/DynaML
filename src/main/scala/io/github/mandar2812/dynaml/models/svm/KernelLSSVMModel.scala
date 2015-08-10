@@ -50,10 +50,6 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
 
   def getRegParam: Double
 
-  override protected var hyper_parameters: List[String] = List("RegParam")
-
-  override protected var current_state: Map[String, Double] = Map("RegParam" -> 1.0)
-
   protected val featuredims: Int
 
   protected val vertexMaps: (mutable.HashMap[String, AnyRef],
@@ -204,7 +200,8 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     (training_data, test_data)
   }
 
-  override def crossvalidate(folds: Int = 10, reg: Double = 0.001): (Double, Double, Double) = {
+  override def crossvalidate(folds: Int = 10, reg: Double = 0.001,
+                             optionalStateFlag: Boolean = false): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
     this.optimizer.setRegParam(reg).setNumIterations(1)
