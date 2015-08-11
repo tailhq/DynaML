@@ -27,10 +27,9 @@ object FSExperiment {
 
     def Experiment(kern: String, prototypes: Int = 100):Unit = {
 
-
       List("gs", "csa").foreach((globalOpt) => {
 
-        List((2, 0.55), (3, 0.45), (4, 0.35)).foreach((gridSize) => {
+        List((2, 0.55), (3, 0.45)).foreach((gridSize) => {
           val perfs: ML[DenseVector[Double]] = ML()
           var times: ML[Double] = ML()
           (1 to trials).toList.foreach((trial) => {
@@ -80,21 +79,15 @@ object FSExperiment {
             avg_time(0), math.sqrt(var_time(0)/(trials.toDouble-1.0)))
           writer.writeRow(row)
         })
-
-
       })
-
-
-
-
     }
 
 
-    List("RBF", "Polynomial", "Laplacian", "Linear").foreach((kern) => {
+    List("Linear", "RBF", "Exponential", "Laplacian").foreach((kern) => {
       if(kern == "Linear") {
         Experiment("Linear")
       } else {
-        List(50, 100, 200, 300, 500).foreach((prototypes) => {
+        List(300, 500, 1000).foreach((prototypes) => {
           Experiment(kern, prototypes)
         })
       }
