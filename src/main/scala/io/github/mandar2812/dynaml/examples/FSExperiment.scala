@@ -83,11 +83,12 @@ object FSExperiment {
     }
 
 
-    List("Linear", "RBF", "Exponential", "Laplacian").foreach((kern) => {
+    List("RationalQuadratic", "Cauchy",
+      "Laplacian", "RBF", "Linear").foreach((kern) => {
       if(kern == "Linear") {
         Experiment("Linear")
       } else {
-        List(300, 500, 1000).foreach((prototypes) => {
+        List(50, 100, 200).foreach((prototypes) => {
           Experiment(kern, prototypes)
         })
       }
