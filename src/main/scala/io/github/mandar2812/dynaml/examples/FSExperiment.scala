@@ -22,7 +22,9 @@ object FSExperiment {
   def apply(nCores: Int = 4, trials: Int,
             data: String = "ForestCover",
             root: String = "data/",
-            factor: Int = 2): Unit = {
+            factor: Int = 2,
+            kernels: List[String] = List("RationalQuadratic", "Cauchy",
+              "Laplacian", "RBF", "Linear")): Unit = {
     val writer = CSVWriter.open(new File(root+data+"Res.csv"), append = true)
 
     def Experiment(kern: String, prototypes: Int = 100):Unit = {
@@ -83,8 +85,7 @@ object FSExperiment {
     }
 
 
-    List("RationalQuadratic", "Cauchy",
-      "Laplacian", "RBF", "Linear").foreach((kern) => {
+    kernels.foreach((kern) => {
       if(kern == "Linear") {
         Experiment("Linear")
       } else {
