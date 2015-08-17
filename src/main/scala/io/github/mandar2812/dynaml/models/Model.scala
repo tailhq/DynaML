@@ -261,13 +261,14 @@ object KernelizedModel {
   def getOptimizedModel[G, H, M <: KernelizedModel[G, H, DenseVector[Double],
     DenseVector[Double], Double, Int, Int]](model: M, globalOptMethod: String,
                                             kernel: String, prototypes: Int, grid: Int,
-                                            step: Double, logscale: Boolean = true) = {
+                                            step: Double, logscale: Boolean = true,
+                                            csaIt: Int = 5) = {
     val gs = globalOptMethod match {
       case "gs" => new GridSearch[G, H, model.type](model).setGridSize(grid)
         .setStepSize(step).setLogScale(logscale)
 
       case "csa" => new CoupledSimulatedAnnealing[G, H, model.type](model).setGridSize(grid)
-        .setStepSize(step).setLogScale(logscale).setMaxIterations(5)
+        .setStepSize(step).setLogScale(logscale).setMaxIterations(csaIt)
     }
 
     kernel match {

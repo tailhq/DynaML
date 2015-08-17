@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.models.svm
 
 import breeze.linalg._
-import breeze.numerics.sigmoid
+import breeze.numerics.{sqrt, sigmoid}
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
@@ -42,10 +42,6 @@ class LSSVMModel(
   override implicit protected var params =
     DenseVector.ones[Double](featuredims)
 
-  private val (mean, variance) = utils.getStatsMult(this.filter(_ => true))
-
-  private val (label_mean, label_var) = utils.getStatsMult(this.filterLabels(_ => true).map(i => DenseVector(i)))
-
   override protected val optimizer = LSSVMModel.getOptimizer(task)
 
   private val sigmaInverse: DenseMatrix[Double] = inv(cholesky(variance))
@@ -63,7 +59,7 @@ class LSSVMModel(
 
   override def predict(point: DenseVector[Double]): Double = task match {
     case "classification" => sigmoid(this.score(point))
-    case "regression" => /*label_mean(0) + math.sqrt(label_var(0,0))**/this.score(point)
+    case "regression" => this.score(point)
   }
 
   override def evaluate(config: Map[String, String]): Metrics[Double] = {
@@ -75,7 +71,7 @@ class LSSVMModel(
     val scoreFunction = task match {
       case "classification" => this.score _
       case "regression" => (x: DenseVector[Double]) => {
-        /*label_mean(0) + math.sqrt(label_var(0,0))**/this.score(x)
+        this.score(x)
       }
     }
 
@@ -107,8 +103,9 @@ class LSSVMModel(
 
     this.getXYEdges().foreach((edge) => {
       val xVertex: Point = edge.getPoint()
+      val xvec: DenseVector[Double] = DenseVector(xVertex.getValue())
       val vec: DenseVector[Double] =
-        rescale(DenseVector(xVertex.getValue())(0 to -2))
+        rescale(xvec(0 to -2))
       xVertex.setValue(DenseVector.vertcat(vec, DenseVector(1.0)).toArray)
 
     })
@@ -133,7 +130,7 @@ class LSSVMModel(
     val scoreFunction = task match {
       case "classification" => scorepred
       case "regression" => (x: DenseVector[Double]) => {
-        /*label_mean(0) + math.sqrt(label_var(0,0))**/scorepred(x)
+        scorepred(x)
       }
     }
 
@@ -150,7 +147,6 @@ class LSSVMModel(
 
 object LSSVMModel {
   val manager: FramedGraphFactory = new FramedGraphFactory
-  //val conf = ConfigFactory.load("conf/dynaml.conf")
   val logger = Logger.getLogger(this.getClass)
 
   /**
@@ -168,15 +164,7 @@ object LSSVMModel {
    * optimization object required for the Gaussian
    * model
    * */
-  def getOptimizer(task: String): ConjugateGradient = new ConjugateGradient /*task match {
-    case "classification" => new GradientDescent(
-      new LeastSquaresSVMGradient(),
-      new SquaredL2Updater())
-
-    case "regression" => new GradientDescent(
-      new LeastSquaresGradient(),
-      new SquaredL2Updater())
-  }*/
+  def getOptimizer(task: String): ConjugateGradient = new ConjugateGradient
 
   def readCSV(reader: CSVReader, head: Boolean):
   (Iterable[(DenseVector[Double], Double)], Int) = {

@@ -41,6 +41,12 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
 
   protected val logger = Logger.getLogger(this.getClass)
 
+  protected val (mean, variance) = utils.getStatsMult(this.filter(_ => true))
+
+  protected val (label_mean, label_var) = utils.getStatsMult(this.filterLabels(_ => true).map(i => DenseVector(i)))
+
+  protected var (phi_mean, phi_var) = (mean, variance)
+
   override protected val optimizer: ConjugateGradient
 
   def setRegParam(reg: Double): this.type = {
@@ -83,6 +89,15 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
         val point: Point = this.g.getVertex(vertexMaps._2(i),
           classOf[Point])
         DenseVector(point.getValue())(0 to -2)
+      }
+    }.toList
+
+  def filterFeatures(fn : (Long) => Boolean): List[DenseVector[Double]] =
+    (1L to nPoints).view.filter(fn).map{
+      i => {
+        val point: Point = this.g.getVertex(vertexMaps._2(i),
+          classOf[Point])
+        DenseVector(point.getFeatureMap())(0 to -2)
       }
     }.toList
 
@@ -204,7 +219,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
                              optionalStateFlag: Boolean = false): (Double, Double, Double) = {
     //Create the folds as lists of integers
     //which index the data points
-    this.optimizer.setRegParam(reg).setNumIterations(1)
+    this.optimizer.setRegParam(reg).setNumIterations(this.params.length)
       .setStepSize(0.001).setMiniBatchFraction(1.0)
     val shuffle = Random.shuffle((1L to this.npoints).toList)
     val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
@@ -253,7 +268,7 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
     val maximum = grid.max
     logger.log(Priority.INFO, "Best value: "+maximum)
     this.applyKernel(new RBFKernel(maximum._2._1), prot)
-    this.setRegParam(maximum._2._2).setMaxIterations(10).setBatchFraction(1.0)
+    this.setRegParam(maximum._2._2).setMaxIterations(35).setBatchFraction(1.0)
     this.learn()
   }
 

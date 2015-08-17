@@ -299,8 +299,11 @@ object LSSVMSparkModel {
       }).reduce((couple1, couple2) => {
         (couple1._1+couple2._1, couple1._2+couple2._2)
       })
-    a + (DenseMatrix.eye[Double](dims)*regParam)
-    (a,b)
+
+    val smoother:DenseMatrix[Double] = DenseMatrix.eye[Double](dims)/regParam
+    smoother(-1,-1) = 0.0
+    val A = a + smoother
+    (A,b)
   }
 
 }

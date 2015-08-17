@@ -13,7 +13,7 @@ import io.github.mandar2812.dynaml.models.svm.LSSVMModel
 object TestHousing {
   def apply(prototypes: Int = 1, kernel: String,
             globalOptMethod: String = "gs", grid: Int = 7,
-            step: Double = 0.3, logscale: Boolean = false): Unit = {
+            step: Double = 0.3, logscale: Boolean = false, csaIt: Int = 5): Unit = {
     val config = Map("file" -> "data/bostonhousing.csv", "delim" -> ",",
       "head" -> "false",
       "task" -> "regression")
@@ -37,9 +37,9 @@ object TestHousing {
 
     val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph],
       Iterable[CausalEdge], model.type](model, globalOptMethod,
-        kernel, nProt, grid, step, logscale)
+        kernel, nProt, grid, step, logscale, csaIt)
 
-    optModel.setMaxIterations(40).learn()
+    optModel.learn()
 
     val met = optModel.evaluate(configtest)
 

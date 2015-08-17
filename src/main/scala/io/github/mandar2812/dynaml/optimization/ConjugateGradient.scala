@@ -42,7 +42,9 @@ class ConjugateGradient extends RegularizedOptimizer[Int, DenseVector[Double],
     }).reduce((couple1, couple2) => {
       (couple1._1+couple2._1, couple1._2+couple2._2)
     })
-    val A = a + (DenseMatrix.eye[Double](dims)*regParam)
+    val smoother:DenseMatrix[Double] = DenseMatrix.eye[Double](dims)/regParam
+    smoother(-1,-1) = 0.0
+    val A = a + smoother
 
     ConjugateGradient.runCG(A, b, initialP, 0.0001, this.numIterations)
   }
