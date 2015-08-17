@@ -2,6 +2,8 @@ package io.github.mandar2812.dynaml.evaluation
 
 import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
+import org.apache.spark.Accumulator
+import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 
 import scalax.chart.module.ChartFactories.{XYBarChart, XYLineChart, XYAreaChart}
@@ -21,18 +23,9 @@ class RegressionMetricsSpark(protected val scores: RDD[(Double, Double)],
   private val logger = Logger.getLogger(this.getClass)
   val length = len
 
-  val rmse: Double = math.sqrt(scores.map((p) =>
-    math.pow(p._1 - p._2, 2)/length).sum)
-
-  val mae: Double = scores.map((p) =>
-    math.abs(p._1 - p._2)/length).sum
-
-  val rmsle: Double = math.sqrt(scores.map((p) =>
-    math.pow(math.log(1 + math.abs(p._1)) - math.log(math.abs(p._2) + 1),
-      2)/length).sum)
-
-  val Rsq: Double = RegressionMetricsSpark.computeRsq(scores, length)
-
+  val (mae, rmse, rsq, rmsle):(Double, Double, Double, Double) = 
+    RegressionMetricsSpark.computeKPIs(scores, length)
+  
   def residuals() = this.scores.map((s) => (s._1 - s._2, s._2))
 
   def scores_and_labels() = this.scoresAndLabels
@@ -43,10 +36,10 @@ class RegressionMetricsSpark(protected val scores: RDD[(Double, Double)],
     logger.log(Priority.INFO, "MAE: " + mae)
     logger.log(Priority.INFO, "RMSE: " + rmse)
     logger.log(Priority.INFO, "RMSLE: " + rmsle)
-    logger.log(Priority.INFO, "R^2: " + Rsq)
+    logger.log(Priority.INFO, "R^2: " + rsq)
   }
 
-  override def kpi() = DenseVector(mae, rmse, Rsq)
+  override def kpi() = DenseVector(mae, rmse, rsq)
 
   override def generatePlots(): Unit = {
     implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
@@ -62,15 +55,30 @@ class RegressionMetricsSpark(protected val scores: RDD[(Double, Double)],
 }
 
 object RegressionMetricsSpark {
-  def computeRsq(scoresAndLabels: RDD[(Double, Double)], size: Long): Double = {
 
-    val mean: Double = scoresAndLabels.map{coup => coup._2}.sum/size
-    var SSres = 0.0
-    var SStot = 0.0
-    scoresAndLabels.foreach((couple) => {
-      SSres += math.pow(couple._2 - couple._1, 2)
-      SStot += math.pow(couple._2 - mean, 2)
-    })
-    1 - (SSres/SStot)
-  }
+  def computeKPIs(scoresAndLabels: RDD[(Double, Double)], size: Long)
+  : (Double, Double, Double, Double) = {
+    val mean: Accumulator[Double] = scoresAndLabels.context.accumulator(0.0, "mean")
+
+    val err:DenseVector[Double] = scoresAndLabels.map((sc) => {
+      val diff = sc._1 - sc._2
+      mean += sc._2
+      val difflog = math.pow(math.log(1 + math.abs(sc._1)) - math.log(math.abs(sc._2) + 1),
+        2)
+      DenseVector(math.abs(diff), math.pow(diff, 2.0), difflog)
+    }).reduce((a,b) => a+b)
+
+    val SS_res = err(1)
+
+    val mu: Broadcast[Double] = scoresAndLabels.context.broadcast(mean.value/size.toDouble)
+
+    val SS_tot = scoresAndLabels.map((sc) => math.pow(sc._2 - mu.value, 2.0)).sum()
+
+    val rmse = math.sqrt(SS_res/size.toDouble)
+    val mae = err(0)/size.toDouble
+    val rsq = if(1/SS_tot != Double.NaN) 1 - (SS_res/SS_tot) else 0.0
+    val rmsle = err(2)/size.toDouble
+    (mae, rmse, rsq, rmsle)
+  } 
+  
 }

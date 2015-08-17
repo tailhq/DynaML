@@ -35,8 +35,9 @@ class ConjugateGradientSpark extends RegularizedOptimizer[Int, DenseVector[Doubl
                         initialP: DenseVector[Double]): DenseVector[Double] = {
     val (a,b) = LSSVMSparkModel.getFeatureMatrix(nPoints, ParamOutEdges,
       initialP, this.miniBatchFraction, this.regParam)
-
-    ConjugateGradient.runCG(a, b, initialP, 0.0001, this.numIterations)
+    val smoother:DenseMatrix[Double] = DenseMatrix.eye[Double](initialP.length)/this.regParam
+    smoother(-1,-1) = 0.0
+    ConjugateGradient.runCG(a+smoother, b, initialP, 0.0001, this.numIterations)
   }
 }
 

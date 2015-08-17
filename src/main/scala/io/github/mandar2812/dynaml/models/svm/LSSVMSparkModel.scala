@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.models.svm
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.sqrt
 import io.github.mandar2812.dynaml.utils.MinMaxAccumulator
-import org.apache.spark.SparkContext
+import org.apache.spark.{Accumulator, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
@@ -130,7 +130,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
                            (test_data_set: RDD[LabeledPoint])
                            (task: String): Metrics[Double] = {
     val sc = test_data_set.context
-    var index: Int = 1
+    var index: Accumulator[Long] = sc.accumulator(1)
 
     val paramsb = sc.broadcast(params)
     val minmaxacc = sc.accumulator(DenseVector(Double.MaxValue, Double.MinValue),
@@ -142,7 +142,7 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
       (sco, e.label)
     })
     val minmax = minmaxacc.value
-    MetricsSpark(task)(scoresAndLabels, index, (minmax(0), minmax(1)))
+    MetricsSpark(task)(scoresAndLabels, index.value, (minmax(0), minmax(1)))
   }
 
   override def crossvalidate(folds: Int, reg: Double,
@@ -156,9 +156,18 @@ class LSSVMSparkModel(data: RDD[LabeledPoint], task: String)
     if(!optionalStateFlag || featureMatricesCache == (null, null)) {
       featureMatricesCache = LSSVMSparkModel.getFeatureMatrix(npoints, processed_g.map(_._2),
         this.initParams(), 1.0, reg)
+
+      val smoother:DenseMatrix[Double] = DenseMatrix.eye[Double](effectivedims)/reg
+      smoother(-1,-1) = 0.0
+      featureMatricesCache._1 :+= smoother
     } else {
-      featureMatricesCache._1 :-= (DenseMatrix.eye[Double](effectivedims)*current_state("RegParam"))
-      featureMatricesCache._1 :+= (DenseMatrix.eye[Double](effectivedims)*reg)
+      val smoother_old:DenseMatrix[Double] = DenseMatrix.eye[Double](effectivedims)/current_state("RegParam")
+      smoother_old(-1,-1) = 0.0
+      val smoother_new:DenseMatrix[Double] = DenseMatrix.eye[Double](effectivedims)/reg
+      smoother_new(-1,-1) = 0.0
+
+      featureMatricesCache._1 :-= smoother_old
+      featureMatricesCache._1 :+= smoother_new
     }
 
     val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
@@ -300,10 +309,9 @@ object LSSVMSparkModel {
         (couple1._1+couple2._1, couple1._2+couple2._2)
       })
 
-    val smoother:DenseMatrix[Double] = DenseMatrix.eye[Double](dims)/regParam
-    smoother(-1,-1) = 0.0
-    val A = a + smoother
-    (A,b)
+    (a,b)
   }
+
+
 
 }
