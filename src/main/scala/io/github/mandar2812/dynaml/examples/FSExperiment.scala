@@ -36,6 +36,15 @@ object FSExperiment {
           var times: ML[Double] = ML()
           (1 to trials).toList.foreach((trial) => {
             data match {
+              case "Delve" => {
+                val t0 = System.currentTimeMillis().toDouble/1000.0
+                perfs += TestDelve(nCores,
+                  prototypes, kern, globalOpt,
+                  grid = gridSize._1, step = gridSize._2,
+                  frac = 1.0, logscale = true, paraFactor = factor)
+                times += System.currentTimeMillis().toDouble/1000.0 - t0
+              }
+
               case "ForestCover" => {
                 val t0 = System.currentTimeMillis().toDouble/1000.0
                 perfs += TestForestCover(nCores,
