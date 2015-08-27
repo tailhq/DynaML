@@ -3,7 +3,7 @@ layout: page
 title: About
 ---
 
-##Affliations
+###Affliations
 
 DynaML is proud to be a part of the *Mozilla Science* Collaborate [platform](https://www.mozillascience.org/projects/dynaml)
 
