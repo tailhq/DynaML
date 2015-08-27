@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>utils - DynaML 1.2 API - io.github.mandar2812.dynaml.utils</title>
+          <meta name="description" content="utils - DynaML 1.2 API - io.github.mandar2812.dynaml.utils" />
+          <meta name="keywords" content="utils DynaML 1.2 API io.github.mandar2812.dynaml.utils" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'io.github.mandar2812.dynaml.utils.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a></p>
+        <h1>utils</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">utils</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A set of pre-processing utilities
+and library functions.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="io.github.mandar2812.dynaml.utils"><span>utils</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.utils.MinMaxAccumulator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MinMaxAccumulator"></a>
+      <a id="MinMaxAccumulator:MinMaxAccumulator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MinMaxAccumulator$.html"><span class="name">MinMaxAccumulator</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.AccumulatorParam">AccumulatorParam</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#combine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="combine[A](xs:Traversable[Traversable[A]]):Seq[Seq[A]]"></a>
+      <a id="combine[A](Traversable[Traversable[A]]):Seq[Seq[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">combine</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="../../../../../scala/package.html#Traversable[+A]=Traversable[A]" class="extmbr" name="scala.Traversable">Traversable</a>[<a href="../../../../../scala/package.html#Traversable[+A]=Traversable[A]" class="extmbr" name="scala.Traversable">Traversable</a>[<span class="extype" name="io.github.mandar2812.dynaml.utils.combine.A">A</span>]]</span>)</span><span class="result">: <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="io.github.mandar2812.dynaml.utils.combine.A">A</span>]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#factorial" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="factorial(n:Int,accumulator:Long):Long"></a>
+      <a id="factorial(Int,Long):Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">factorial</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="accumulator">accumulator: <span class="extype" name="scala.Long">Long</span> = <span class="symbol">1</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@tailrec</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.utils.package#getCSVReader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getCSVReader(file:String,delim:Char):com.github.tototoshi.csv.CSVReader"></a>
+      <a id="getCSVReader(String,Char):CSVReader"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getCSVReader</span><span class="params">(<span name="file">file: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="delim">delim: <span class="extype" name="scala.Char">Char</span></span>)</span><span class="result">: <span class="extype" name="com.github.tototoshi.csv.CSVReader">CSVReader</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Get a <span class="extype" name="CSVReader">CSVReader</span> object from a file name and delimiter
+character.</p><div class="fullcomment"><div class="comment cmt"><p>Get a <span class="extype" name="CSVReader">CSVReader</span> object from a file name and delimiter
+character.
+</p></div><dl class="paramcmts block"><dt class="param">file</dt><dd class="cmt"><p>The file pathname as a String</p></dd><dt class="param">delim</dt><dd class="cmt"><p>The delimiter character used
+             to split the csv file.</p></dd><dt>returns</dt><dd class="cmt"><p>A <span class="extype" name="CSVReader">CSVReader</span> object which can be
+        iterated for each line.
+</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.utils.package#getStats" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getStats(data:List[breeze.linalg.DenseVector[Double]]):(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])"></a>
+      <a id="getStats(List[DenseVector[Double]]):(DenseVector[Double],DenseVector[Double])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getStats</span><span class="params">(<span name="data">data: <a href="../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Get the mean and variance of a data set
+which is a <span class="extype" name="List">List</span> of <span class="extype" name="DenseVector">DenseVector</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Get the mean and variance of a data set
+which is a <span class="extype" name="List">List</span> of <span class="extype" name="DenseVector">DenseVector</span>.
+</p></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The data set.
+</p></dd><dt>returns</dt><dd class="cmt"><p>A <span class="extype" name="Tuple2">Tuple2</span> containing the mean
+        and variance * n-1.</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.utils.package#getStatsMult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getStatsMult(data:List[breeze.linalg.DenseVector[Double]]):(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double])"></a>
+      <a id="getStatsMult(List[DenseVector[Double]]):(DenseVector[Double],DenseMatrix[Double])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getStatsMult</span><span class="params">(<span name="data">data: <a href="../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Get the mean and variance of a data set
+which is a <span class="extype" name="List">List</span> of <span class="extype" name="DenseVector">DenseVector</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Get the mean and variance of a data set
+which is a <span class="extype" name="List">List</span> of <span class="extype" name="DenseVector">DenseVector</span>.
+</p></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The data set.
+</p></dd><dt>returns</dt><dd class="cmt"><p>A <span class="extype" name="Tuple2">Tuple2</span> containing the mean
+        and variance.</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.utils.package#getStatsRDD" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getStatsRDD(data:org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint]):(Double,Double,breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double])"></a>
+      <a id="getStatsRDD(RDD[LabeledPoint]):(Double,Double,DenseVector[Double],DenseMatrix[Double])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getStatsRDD</span><span class="params">(<span name="data">data: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]</span>)</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])</span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#getTypeTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getTypeTag[T](obj:T)(implicitevidence$1:reflect.runtime.universe.TypeTag[T]):reflect.runtime.universe.TypeTag[T]"></a>
+      <a id="getTypeTag[T](T)(scala.reflect.api.JavaUniverse.TypeTag[T]):scala.reflect.api.JavaUniverse.TypeTag[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getTypeTag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="obj">obj: <span class="extype" name="io.github.mandar2812.dynaml.utils.getTypeTag.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.utils.getTypeTag.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.utils.getTypeTag.T">T</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#hermite" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="hermite(n:Int,x:Double):Double"></a>
+      <a id="hermite(Int,Double):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hermite</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="x">x: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#log1pExp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="log1pExp:Double=&gt;Double"></a>
+      <a id="log1pExp:(Double)⇒Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">log1pExp</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+    </body>
+      </html>
