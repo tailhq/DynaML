@@ -18,5 +18,4 @@ src
 conf
 data
 pom.xml
-_site/
-_site/target/*.jar
+Gemfile.lock
