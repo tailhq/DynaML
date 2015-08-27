@@ -1,134 +1,155 @@
-# Lanyon
+# DynaML
 
-Lanyon is an unassuming [Jekyll](http://jekyllrb.com) theme that places content first by tucking away navigation in a hidden drawer. It's based on [Poole](http://getpoole.com), the Jekyll butler.
+[![Build Status](https://travis-ci.org/mandar2812/DynaML.svg?branch=branch-1.0)](https://travis-ci.org/mandar2812/DynaML)
 
-![Lanyon](https://f.cloud.github.com/assets/98681/1825266/be03f014-71b0-11e3-9539-876e61530e24.png)
-![Lanyon with open sidebar](https://f.cloud.github.com/assets/98681/1825267/be04a914-71b0-11e3-966f-8afe9894c729.png)
+Aim
+============
 
+DynaML is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.
 
-## Contents
+The aim is to build a robust set of abstract classes and interfaces, which can be extended easily to implement advanced models for small and large scale applications.
 
-- [Usage](#usage)
-- [Options](#options)
-  - [Sidebar menu](#sidebar-menu)
-  - [Themes](#themes)
-  - [Reverse layout](#reverse-layout)
-- [Development](#development)
-- [Author](#author)
-- [License](#license)
+But the library can also be used as an educational/research tool for multi scale data analysis. 
 
+Currently DynaML has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. LS-SVM is equivalent to ridge regression/Tikhonov regularization, for further background consider [Wikipedia](https://en.wikipedia.org/wiki/Least_squares_support_vector_machine) or the [book] (http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511).   
 
-## Usage
+A good general introduction to Probabilistic Models for Machine Learning can be found [here](http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/131214.pdf) in [David Barber's](http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage) text book. The LS-SVM is equivalent to the class of models discussed in Chapter 18 (Bayesian Linear Models) of the book.
 
-Lanyon is a theme built on top of [Poole](https://github.com/poole/poole), which provides a fully furnished Jekyll setup—just download and start the Jekyll server. See [the Poole usage guidelines](https://github.com/poole/poole#usage) for how to install and use Jekyll.
+Installation
+============
+Prerequisites: Maven
 
-
-## Options
-
-Lanyon includes some customizable options, typically applied via classes on the `<body>` element.
-
-
-### Sidebar menu
-
-Create a list of nav links in the sidebar by assigning each Jekyll page the correct layout in the page's [front-matter](http://jekyllrb.com/docs/frontmatter/).
-
-```
----
-layout: page
-title: About
----
+* Clone this repository
+* Run the following.
+```shell
+  mvn clean compile
+  mvn package
 ```
 
-**Why require a specific layout?** Jekyll will return *all* pages, including the `atom.xml`, and with an alphabetical sort order. To ensure the first link is *Home*, we exclude the `index.html` page from this list by specifying the `page` layout.
+* Make sure you give execution permission to `DynaML` in the `target/bin` directory.
+```shell
+  chmod +x target/bin/DynaML
+  target/bin/DynaML
+```
+  You should get the following prompt.
+  
+```
+    ___       ___       ___       ___       ___       ___   
+   /\  \     /\__\     /\__\     /\  \     /\__\     /\__\  
+  /::\  \   |::L__L   /:| _|_   /::\  \   /::L_L_   /:/  /  
+ /:/\:\__\  |:::\__\ /::|/\__\ /::\:\__\ /:/L:\__\ /:/__/   
+ \:\/:/  /  /:;;/__/ \/|::/  / \/\::/  / \/_/:/  / \:\  \   
+  \::/  /   \/__/      |:/  /    /:/  /    /:/  /   \:\__\  
+   \/__/               \/__/     \/__/     \/__/     \/__/  
 
+Welcome to DynaML v 1.2
+Interactive Scala shell
 
-### Themes
-
-Lanyon ships with eight optional themes based on the [base16 color scheme](https://github.com/chriskempson/base16). Apply a theme to change the color scheme (mostly applies to sidebar and links).
-
-![Lanyon with red theme](https://f.cloud.github.com/assets/98681/1825270/be065110-71b0-11e3-9ed8-9b8de753a4af.png)
-![Lanyon with red theme and open sidebar](https://f.cloud.github.com/assets/98681/1825269/be05ec20-71b0-11e3-91ea-a9138ef07186.png)
-
-There are eight themes available at this time.
-
-![Available theme classes](https://f.cloud.github.com/assets/98681/1817044/e5b0ec06-6f68-11e3-83d7-acd1942797a1.png)
-
-To use a theme, add any one of the available theme classes to the `<body>` element in the `default.html` layout, like so:
-
-```html
-<body class="theme-base-08">
-  ...
-</body>
+DynaML>
 ```
 
-To create your own theme, look to the Themes section of [included CSS file](https://github.com/poole/lanyon/blob/master/public/css/lanyon.css). Copy any existing theme (they're only a few lines of CSS), rename it, and change the provided colors.
+Getting Started
+===============
 
+The `data/` directory contains a few sample data sets, and the root directory also has example scripts which can be executed in the shell.
 
-### Reverse layout
+* First we create a linear classification model on a csv data set. We will assume that the last column in each line of the file is the target value, and we build an LS-SVM model.
 
-![Lanyon with reverse layout](https://f.cloud.github.com/assets/98681/1825265/be03f2e4-71b0-11e3-89f1-360705524495.png)
-![Lanyon with reverse layout and open sidebar](https://f.cloud.github.com/assets/98681/1825268/be056174-71b0-11e3-88c8-5055bca4307f.png)
-
-Reverse the page orientation with a single class.
-
-```html
-<body class="layout-reverse">
-  ...
-</body>
+```scala
+	val config = Map("file" -> "data/ripley.csv", "delim" -> ",", "head" -> "false", "task" -> "classification")
+	val model = LSSVMModel(config)
 ```
 
+* We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model.
 
-### Sidebar overlay instead of push
-
-Make the sidebar overlap the viewport content with a single class:
-
-```html
-<body class="sidebar-overlay">
-  ...
-</body>
+```scala
+  val rbf = new RBFKernel(1.025)
+  model.applyKernel(rbf)
 ```
 
-This will keep the content stationary and slide in the sidebar over the side content. It also adds a `box-shadow` based outline to the toggle for contrast against backgrounds, as well as a `box-shadow` on the sidebar for depth.
-
-It's also available for a reversed layout when you add both classes:
-
-```html
-<body class="layout-reverse sidebar-overlay">
-  ...
-</body>
+```
+15/08/03 19:07:42 INFO GreedyEntropySelector$: Returning final prototype set
+15/08/03 19:07:42 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
+15/08/03 19:07:42 INFO SVMKernel$: Dimension: 13 x 13
+15/08/03 19:07:42 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
+15/08/03 19:07:42 INFO SVMKernelMatrix: Eigenvalue stats: 0.09104374173019622 =< lambda =< 3.110068839504519
+15/08/03 19:07:42 INFO LSSVMModel: Applying Feature map to data set
+15/08/03 19:07:42 INFO LSSVMModel: DONE: Applying Feature map to data set
+DynaML>
 ```
 
-### Sidebar open on page load
+* Now we can solve the optimization problem posed by the LS-SVM in the parameter space. Since the LS-SVM problem is equivalent to ridge regression, we have to specify a regularization constant.
 
-Show an open sidebar on page load by modifying the `<input>` to add the `checked` boolean attribute:
-
-```html
-<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" checked>
+```scala
+  model.setRegParam(1.5).learn
 ```
 
-Using Liquid you can also conditionally show the sidebar open on a per-page basis. For example, here's how you could have it open on the homepage only:
+* We can now predict the value of the target variable given a new point consisting of a Vector of features using `model.predict()`.
 
-```html
-<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" {% if page.title =="Home" %}checked{% endif %}>
+* Evaluating models is easy in DynaML. You can create an evaluation object as follows. 
+
+```scala
+	val configtest = Map("file" -> "data/ripleytest.csv", "delim" -> ",", "head" -> "false")
+	val met = model.evaluate(configtest)
+	met.print
 ```
 
-## Development
+* The object `met` has a `print()` method which will dump some performance metrics in the shell. But you can also generate plots by using the `generatePlots()` method.
 
-Lanyon has two branches, but only one is used for active development.
+```
+15/08/03 19:08:40 INFO BinaryClassificationMetrics: Classification Model Performance
+15/08/03 19:08:40 INFO BinaryClassificationMetrics: ============================
+15/08/03 19:08:40 INFO BinaryClassificationMetrics: Accuracy: 0.6172839506172839
+15/08/03 19:08:40 INFO BinaryClassificationMetrics: Area under ROC: 0.2019607843137254
+```
 
-- `master` for development.  **All pull requests should be to submitted against `master`.**
-- `gh-pages` for our hosted site, which includes our analytics tracking code. **Please avoid using this branch.**
+```scala
+met.generatePlots
+```
 
+![Image of Plots](https://lh3.googleusercontent.com/_5_3y0lkD2lDETqw8RHfUzdFJOO4CLn4jreI5iaWu51vyERoy4F5VzROzhZJM2sYnDPh3VuYAZBKNOM=w1291-h561-rw)
 
-## Author
+* Although kernel based models allow great flexibility in modeling non linear behavior in data, they are highly sensitive to the values of their hyper-parameters. For example if we use a Radial Basis Function (RBF) Kernel, it is a non trivial problem to find the best values of the kernel bandwidth and the regularization constant.
 
-**Mark Otto**
-- <https://github.com/mdo>
-- <https://twitter.com/mdo>
+* In order to find the best hyper-parameters for a general kernel based supervised learning model, we use methods in gradient free global optimization. This is relevant because the cost (objective) function for the hyper-parameters is not smooth in general. In fact in most common scenarios the objective function is defined in terms of some kind of cross validation performance.
 
+* DynaML has a robust global optimization API, currently Coupled Simulated Annealing and Grid Search algorithms are implemented, the API in the package ```org.kuleven.esat.optimization``` can be extended to implement any general gradient or gradient free optimization methods.
 
-## License
+* Lets tune an RBF kernel on the Ripley data.
 
-Open sourced under the [MIT license](LICENSE.md).
+```scala
+import com.tinkerpop.blueprints.Graph
+import com.tinkerpop.frames.FramedGraph
+import io.github.mandar2812.dynaml.graphutils.CausalEdge
+val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph],
+      Iterable[CausalEdge], model.type](model, "csa",
+      "RBF", 13, 7, 0.3, true)
+```
 
-<3
+We see a long list of logs which end in something like the snippet below, the Coupled Simulated Annealing model, gives us a set of hyper-parameters and their values. 
+```
+optModel: io.github.mandar2812.dynaml.models.svm.LSSVMModel = io.github.mandar2812.dynaml.models.svm.LSSVMModel@3662a98a
+optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -> 3.824956165264642, RegParam -> 12.303758608075587)
+```
+
+To inspect the performance of this kernel model on an independent test set, we can use the ```model.evaluate()``` function. But before that we must train this 'optimized' kernel model on the training set.
+
+```scala
+optModel.setMaxIterations(2).learn()
+val met = optModel.evaluate(configtest)
+met.print()
+met.generatePlots()
+```
+
+And the evaluation results follow ...
+
+```
+15/08/03 19:10:13 INFO BinaryClassificationMetrics: Classification Model Performance
+15/08/03 19:10:13 INFO BinaryClassificationMetrics: ============================
+15/08/03 19:10:13 INFO BinaryClassificationMetrics: Accuracy: 0.8765432098765432
+15/08/03 19:10:13 INFO BinaryClassificationMetrics: Area under ROC: 0.9143790849673203
+```
+
+Documentation
+=============
+You can refer to the project [home page](http://mandar2812.github.io/DynaML/) or the [documentation](http://mandar2812.github.io/DynaML/target/site/scaladocs/index.html#package) for getting started with DynaML. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
