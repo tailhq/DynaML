@@ -84,4 +84,62 @@ object ConjugateGradient {
     }
     x
   }
+
+  /**
+   * Solves for X in A.X = B (where A is symmetric +ve semi-definite)
+   * iteratively using the Conjugate Gradient
+   * algorithm.
+   * */
+  def runMultiCG(A: DenseMatrix[Double],
+                 b: DenseMatrix[Double],
+                 x: DenseMatrix[Double],
+                 epsilon: Double,
+                 MAX_ITERATIONS: Int): DenseMatrix[Double] = {
+    val residual:DenseMatrix[Double] = b - (A*x)
+    val p = residual
+    var count = 1.0
+
+    var alphaVec = DenseVector.tabulate[Double](x.cols)(i => {
+      math.pow(norm(residual(::,i), 2), 2)/(p(::,i).t * (A*p(::, i)))
+    })
+    var alpha = DenseMatrix.tabulate[Double](x.cols, x.cols)((i,j) => {
+      alphaVec(j)
+    })
+
+    var betaVec = DenseVector.zeros[Double](x.cols)
+    var beta = DenseMatrix.tabulate[Double](x.cols, x.cols)((i,j) => {
+      betaVec(j)
+    })
+
+    while(count <= MAX_ITERATIONS) {
+      //update x
+      x :+= (alpha :* p)
+
+      //before updating residual, calculate norm (required for beta)
+      val de = DenseVector.tabulate[Double](x.cols)(i => math.pow(norm(residual(::, i), 2), 2))
+      //update residual
+      residual :-= (alpha :* (A*p))
+
+      //calculate beta
+      betaVec = DenseVector.tabulate[Double](x.cols)(i => math.pow(norm(residual(::,i), 2), 2)/de(i))
+      beta = DenseMatrix.tabulate[Double](x.cols, x.cols)((i,j) => {
+        betaVec(j)
+      })
+
+      //update p
+      p :*= beta
+      p :+= residual
+
+      //update alpha
+      alphaVec = DenseVector.tabulate[Double](x.cols)(i => {
+        math.pow(norm(residual(::,i), 2), 2)/(p(::,i).t * (A*p(::, i)))
+      })
+      alpha = DenseMatrix.tabulate[Double](x.cols, x.cols)((i,j) => {
+        alphaVec(j)
+      })
+
+      count += 1
+    }
+    x
+  }
 }
