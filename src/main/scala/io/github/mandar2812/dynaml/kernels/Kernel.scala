@@ -3,13 +3,22 @@ package io.github.mandar2812.dynaml.kernels
 import breeze.linalg.DenseVector
 
 /**
+ * Defines a base class for kernels
+ * defined on arbitrary objects.
+ * */
+abstract class AbstractKernel[T] {
+  def evaluate(x: T, y: T): Double
+}
+
+
+/**
  * Declares a trait Kernel which would serve
  * as a base trait for all classes implementing
  * Machine Learning Kernels.
  *
  **/
 
-trait Kernel {
+trait Kernel extends AbstractKernel[DenseVector[Double]]{
 
   /**
    * Evaluates the value of the kernel given two
@@ -21,5 +30,5 @@ trait Kernel {
    * @return the value of the Kernel function.
    *
    * */
-  def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double
+  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double
 }
