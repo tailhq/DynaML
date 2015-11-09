@@ -30,7 +30,7 @@ GaussianProcessModel[FramedGraph[Graph], DenseVector[Double], Double, Multivaria
    *             storing the values of the input patters.
    **/
   override def predictiveDistribution[U <: Seq[DenseVector[Double]]](test: U): MultivariateGaussian = {
-    val trainKernelMat
+
     new MultivariateGaussian(DenseVector(0.0), DenseMatrix(0.0))
   }
 
@@ -42,7 +42,7 @@ GaussianProcessModel[FramedGraph[Graph], DenseVector[Double], Double, Multivaria
     **/
   override def predictionWithErrorBars[U <: Seq[DenseVector[Double]]](testData: U, confidence: Double):
   Seq[(DenseVector[Double], Double, Double, Double)] = {
-
+    
 
     Seq()
   }
