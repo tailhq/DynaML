@@ -14,8 +14,13 @@ import io.github.mandar2812.dynaml.kernels.{SVMKernel, AbstractKernel}
  *
  */
 class GPRegressionModel(cov: SVMKernel[DenseMatrix[Double]], data: FramedGraph[Graph]) extends
-GaussianProcessModel[FramedGraph[Graph], DenseVector[Double], Double]{
+GaussianProcessModel[FramedGraph[Graph], DenseVector[Double], Double, MultivariateGaussian]{
+
   override val mean: (DenseVector[Double]) => Double = _ => 0.0
+
+  override val covariance: SVMKernel[DenseMatrix[Double]] = cov
+
+  override protected val g: FramedGraph[Graph] = data
 
   /**
    * Calculates posterior predictive distribution for
@@ -25,17 +30,27 @@ GaussianProcessModel[FramedGraph[Graph], DenseVector[Double], Double]{
    *             storing the values of the input patters.
    **/
   override def predictiveDistribution[U <: Seq[DenseVector[Double]]](test: U): MultivariateGaussian = {
-
+    val trainKernelMat
     new MultivariateGaussian(DenseVector(0.0), DenseMatrix(0.0))
   }
 
   /**
-   * Returns a prediction with error bars for a test set.
-   **/
-  override def test[U <: Seq[(DenseVector[Double], Double)],
-                    V <: Seq[(DenseVector[Double], Double,
-                      Double, Double, Double)]](test: U): V = ???
+    * Draw three predictions from the posterior predictive distribution
+    * 1) Mean or MAP estimate Y
+    * 2) Y- : The lower error bar estimate (mean - )
+    * 3) Y+ : The upper error bar.
+    **/
+  override def predictionWithErrorBars[U <: Seq[DenseVector[Double]]](testData: U, confidence: Double):
+  Seq[(DenseVector[Double], Double, Double, Double)] = {
 
-  override val covariance: SVMKernel[DenseMatrix[Double]] = cov
-  override protected val g: FramedGraph[Graph] = data
+
+    Seq()
+  }
+
+  /**
+    * Convert from the underlying data structure to
+    * Seq[(I, Y)] where I is the index set of the GP
+    * and Y is the value/label type.
+    **/
+  override def dataAsSeq(data: FramedGraph[Graph]): Seq[(DenseVector[Double], Double)] = ???
 }
