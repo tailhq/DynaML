@@ -44,7 +44,7 @@ abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T] {
     * 2) Y- : The lower error bar estimate (mean - )
     * 3) Y+ : The upper error bar.
     * */
-  def predictionWithErrorBars[U <: Seq[I]](testData: U, confidence: Double): Seq[(I, Y, Y, Y)]
+  def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int): Seq[(I, Y, Y, Y)]
 
   /**
     * Convert from the underlying data structure to
@@ -66,7 +66,7 @@ abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T] {
   def test(testData: T): Seq[(I, Y, Y, Y, Y)] = {
 
     //Calculate the posterior predictive distribution for the test points.
-    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 0.95)
+    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 2)
     //Collate the test data with the predictions and error bars
     dataAsSeq(testData).zip(predictionWithError).map(i => (i._1._1, i._1._2,
       i._2._2, i._2._3, i._2._4))

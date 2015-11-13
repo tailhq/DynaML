@@ -83,7 +83,7 @@ object SVMKernel {
       eval: (T, T) =>  Double):
   KernelMatrix[DenseMatrix[Double]] = {
 
-    logger.log(Priority.INFO, "Constructing key-value representation of kernel matrix.")
+    logger.log(Priority.INFO, "Constructing kernel matrix.")
 
 
     val kernel = DenseMatrix.tabulate[Double](length, length){
@@ -92,6 +92,18 @@ object SVMKernel {
 
     logger.log(Priority.INFO, "Dimension: " + kernel.rows + " x " + kernel.cols)
     new SVMKernelMatrix(kernel, length)
+  }
+
+  def crossKernelMatrix[S <: Seq[T], T](data1: S, data2: S,
+                                        eval: (T, T) =>  Double)
+  : DenseMatrix[Double] = {
+
+    logger.log(Priority.INFO, "Constructing cross kernel matrix.")
+    logger.log(Priority.INFO, "Dimension: " + data1.length + " x " + data2.length)
+
+    DenseMatrix.tabulate[Double](data1.length, data2.length){
+      (i, j) => eval(data1(i), data2(j))
+    }
   }
 
 }
@@ -105,6 +117,9 @@ abstract class LocalSVMKernel extends SVMKernel[DenseMatrix[Double]] {
     mappedData: S,
     length: Int): KernelMatrix[DenseMatrix[Double]] =
     SVMKernel.buildSVMKernelMatrix[S, DenseVector[Double]](mappedData, length, this.evaluate)
+
+  override def buildCrossKernelMatrix[S <: Seq[DenseVector[Double]]](dataset1: S, dataset2: S) =
+    SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 }
 
 /**

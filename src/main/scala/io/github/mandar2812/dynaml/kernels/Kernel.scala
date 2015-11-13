@@ -23,6 +23,8 @@ abstract class AbstractKernel[T, V] {
 trait CovarianceFunction[T, V, M] extends AbstractKernel[T, V] {
   def buildKernelMatrix[S <: Seq[T]](mappedData: S,
                                      length: Int): KernelMatrix[M]
+
+  def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): M
 }
 
 /**
