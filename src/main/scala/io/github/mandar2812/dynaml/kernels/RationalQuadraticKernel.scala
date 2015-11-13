@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{norm, DenseVector, DenseMatrix}
+import breeze.linalg.{norm, DenseVector}
 
 /**
  * @author mandar2812
@@ -8,7 +8,7 @@ import breeze.linalg.{norm, DenseVector, DenseMatrix}
  * K(x,y) = 1 - ||x-y||**2/(||x-y||**2 + c**2)
  */
 class RationalQuadraticKernel(si: Double = 1.0)
-  extends SVMKernel[DenseMatrix[Double]]
+  extends LocalSVMKernel
   with Serializable {
   override val hyper_parameters = List("c")
 
@@ -20,10 +20,6 @@ class RationalQuadraticKernel(si: Double = 1.0)
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
     1 - math.pow(norm(x-y, 2), 2)/(math.pow(norm(x-y, 2), 2) + c)
-
-  override def buildKernelMatrix(mappedData: List[DenseVector[Double]],
-                                 length: Int): KernelMatrix[DenseMatrix[Double]] =
-    SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
 
   override def setHyperParameters(h: Map[String, Double]) = {
     assert(hyper_parameters.forall(h contains _),

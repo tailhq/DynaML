@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.models.gp
 
-import io.github.mandar2812.dynaml.kernels.AbstractKernel
+import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, AbstractKernel}
 import io.github.mandar2812.dynaml.models.Model
 
 
@@ -10,9 +10,11 @@ import io.github.mandar2812.dynaml.models.Model
  * @tparam T The underlying data structure storing the training & test data.
  * @tparam I The type of the index set (i.e. Double for time series, DenseVector for GP regression)
  * @tparam Y The type of the output label
+ * @tparam K The type of value returned by the covariance kernel function
+ * @tparam M The underlying data structure of the kernel Matrix
  * @tparam W Implementing class of the posterior distribution
- */
-abstract class GaussianProcessModel[T, I, Y, W] extends Model[T] {
+ **/
+abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T] {
 
   /**
    * Mean Function: Takes a member of the index set (input)
@@ -25,7 +27,7 @@ abstract class GaussianProcessModel[T, I, Y, W] extends Model[T] {
    * Underlying covariance function of the
    * Gaussian Processes.
    * */
-  val covariance: AbstractKernel[I]
+  val covariance: CovarianceFunction[I, K, M]
 
   /** Calculates posterior predictive distribution for
   * a particular set of test data points.

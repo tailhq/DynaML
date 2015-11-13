@@ -2,25 +2,30 @@ package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.MultivariateGaussian
-import com.tinkerpop.blueprints.Graph
-import com.tinkerpop.frames.FramedGraph
-import io.github.mandar2812.dynaml.kernels.{SVMKernel, AbstractKernel}
+import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, AbstractKernel}
 
 /**
  * Gaussian Process Regression Model
  * Performs gp/spline smoothing/regression
  * with vector inputs and a singular scalar output.
- *
- *
  */
-class GPRegressionModel(cov: SVMKernel[DenseMatrix[Double]], data: FramedGraph[Graph]) extends
-GaussianProcessModel[FramedGraph[Graph], DenseVector[Double], Double, MultivariateGaussian]{
+abstract class GPRegressionModel[T](
+  cov: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  data: T) extends
+GaussianProcessModel[T, DenseVector[Double], Double,
+  Double, DenseMatrix[Double], MultivariateGaussian]{
 
+  /**
+   * The GP is taken to be zero mean, or centered.
+   * This is ensured by standardization of the data
+   * before being used for further processing.
+   *
+   * */
   override val mean: (DenseVector[Double]) => Double = _ => 0.0
 
-  override val covariance: SVMKernel[DenseMatrix[Double]] = cov
+  override val covariance: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] = cov
 
-  override protected val g: FramedGraph[Graph] = data
+  override protected val g: T = data
 
   /**
    * Calculates posterior predictive distribution for
@@ -31,6 +36,8 @@ GaussianProcessModel[FramedGraph[Graph], DenseVector[Double], Double, Multivaria
    **/
   override def predictiveDistribution[U <: Seq[DenseVector[Double]]](test: U): MultivariateGaussian = {
 
+    //Calculate the kernel matrix on the training data
+    //Calculate the predictive mean and co-variance
     new MultivariateGaussian(DenseVector(0.0), DenseMatrix(0.0))
   }
 
@@ -42,15 +49,8 @@ GaussianProcessModel[FramedGraph[Graph], DenseVector[Double], Double, Multivaria
     **/
   override def predictionWithErrorBars[U <: Seq[DenseVector[Double]]](testData: U, confidence: Double):
   Seq[(DenseVector[Double], Double, Double, Double)] = {
-    
 
     Seq()
   }
 
-  /**
-    * Convert from the underlying data structure to
-    * Seq[(I, Y)] where I is the index set of the GP
-    * and Y is the value/label type.
-    **/
-  override def dataAsSeq(data: FramedGraph[Graph]): Seq[(DenseVector[Double], Double)] = ???
 }

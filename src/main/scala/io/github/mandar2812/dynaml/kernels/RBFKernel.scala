@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{norm, DenseMatrix, DenseVector}
+import breeze.linalg.{norm, DenseVector}
 
 /**
  * Standard RBF Kernel of the form
@@ -8,7 +8,7 @@ import breeze.linalg.{norm, DenseMatrix, DenseVector}
  */
 
 class RBFKernel(private var bandwidth: Double = 1.0)
-  extends SVMKernel[DenseMatrix[Double]]
+  extends LocalSVMKernel
   with Serializable {
 
   override val hyper_parameters = List("bandwidth")
@@ -21,11 +21,6 @@ class RBFKernel(private var bandwidth: Double = 1.0)
     val diff = x - y
     Math.exp(-1*math.pow(norm(diff, 2), 2)/(2*math.pow(bandwidth, 2)))
   }
-
-  override def buildKernelMatrix(
-      mappedData: List[DenseVector[Double]],
-      length: Int): KernelMatrix[DenseMatrix[Double]] =
-    SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
 
   def getBandwidth: Double = this.bandwidth
 

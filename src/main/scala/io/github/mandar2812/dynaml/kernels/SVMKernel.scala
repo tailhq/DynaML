@@ -6,28 +6,15 @@ import org.apache.log4j.{Priority, Logger}
  * Defines an abstract class outlines the basic
  * functionality requirements of an SVM Kernel
  */
-abstract class SVMKernel[T] extends Kernel with Serializable {
+abstract class SVMKernel[M] extends
+CovarianceFunction[DenseVector[Double], Double, M]
+with Serializable {
 
   private var REGULARIZER: Double = 0.00
 
   val hyper_parameters: List[String]
 
   def setHyperParameters(h: Map[String, Double]): this.type = this
-
-  /**
-   * Build the kernel matrix of the prototype vectors
-   *
-   * @param mappedData The prototype vectors/points
-   *
-   * @param length The number of points
-   *
-   * @return A [[KernelMatrix]] object
-   *
-   *
-   **/
-  def buildKernelMatrix(
-      mappedData: List[DenseVector[Double]],
-      length: Int): KernelMatrix[T]
 
   /**
    * Builds an approximate nonlinear feature map
@@ -90,10 +77,10 @@ object SVMKernel {
    * @return An [[SVMKernelMatrix]] object.
    *
    * */
-  def buildSVMKernelMatrix(
-      mappedData: List[DenseVector[Double]],
+  def buildSVMKernelMatrix[S <: Seq[T], T](
+      mappedData: S,
       length: Int,
-      eval: (DenseVector[Double], DenseVector[Double]) =>  Double):
+      eval: (T, T) =>  Double):
   KernelMatrix[DenseMatrix[Double]] = {
 
     logger.log(Priority.INFO, "Constructing key-value representation of kernel matrix.")
@@ -107,6 +94,17 @@ object SVMKernel {
     new SVMKernelMatrix(kernel, length)
   }
 
+}
+
+/**
+  * Kernels with a locally stored matrix in the form
+  * of a breeze [[DenseMatrix]] instance.
+  * */
+abstract class LocalSVMKernel extends SVMKernel[DenseMatrix[Double]] {
+  override def buildKernelMatrix[S <: Seq[DenseVector[Double]]](
+    mappedData: S,
+    length: Int): KernelMatrix[DenseMatrix[Double]] =
+    SVMKernel.buildSVMKernelMatrix[S, DenseVector[Double]](mappedData, length, this.evaluate)
 }
 
 /**
