@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.models.gp
 
-import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, AbstractKernel}
+import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.models.Model
 
 

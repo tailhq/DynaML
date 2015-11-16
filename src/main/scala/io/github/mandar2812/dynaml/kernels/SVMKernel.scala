@@ -10,8 +10,6 @@ abstract class SVMKernel[M] extends
 CovarianceFunction[DenseVector[Double], Double, M]
 with Serializable {
 
-  private var REGULARIZER: Double = 0.00
-
   val hyper_parameters: List[String]
 
   def setHyperParameters(h: Map[String, Double]): this.type = this
@@ -48,11 +46,6 @@ with Serializable {
     val buff: Transpose[DenseVector[Double]] = kernel.t * decomposition._2
     val lambda: DenseVector[Double] = decomposition._1.map(lam => 1/math.sqrt(lam))
     val ans = buff.t
-    /*DenseVector.tabulate(decomposition._1.length) { (i) =>
-      val eigenvalue = if(decomposition._1(i) != Double.NaN) decomposition._1(i) else 0.0
-      val eigenvector = decomposition._2(::, i).map{i => if(i == Double.NaN) 0.0 else i}
-      (1 / (REGULARIZER + math.sqrt(eigenvalue)))*(kernel dot eigenvector)
-    }*/
     ans :* lambda
   }
 }

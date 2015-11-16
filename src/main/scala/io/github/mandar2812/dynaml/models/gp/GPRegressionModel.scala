@@ -2,14 +2,22 @@ package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.MultivariateGaussian
-import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, AbstractKernel}
+import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient
 
 /**
- * Gaussian Process Regression Model
- * Performs gp/spline smoothing/regression
- * with vector inputs and a singular scalar output.
- */
+  * Single-Output Gaussian Process Regression Model
+  * Performs gp/spline smoothing/regression with
+  * vector inputs and a singular scalar output.
+  *
+  * @tparam T The data structure holding the training data.
+  *
+  * @tparam I The index set over which the Gaussian Process
+  *           is defined.
+  *           e.g  1) I = Double when implementing GP time series
+  *                2) I = DenseVector when implementing GP regression
+  *
+  */
 abstract class GPRegressionModel[T, I](
   cov: CovarianceFunction[I, Double, DenseMatrix[Double]],
   data: T, num: Int) extends
