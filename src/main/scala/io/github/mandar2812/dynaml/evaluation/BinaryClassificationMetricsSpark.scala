@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.evaluation
 
 import breeze.linalg.DenseVector
+import com.quantifind.charts.Highcharts._
 import org.apache.log4j.{Priority, Logger}
 import org.apache.spark.rdd.RDD
 
@@ -172,7 +173,7 @@ class BinaryClassificationMetricsSpark(
     val fm = this.fMeasureByThreshold()
     implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
     logger.log(Priority.INFO, "Generating ROC Plot")
-    val chart1 = XYAreaChart(roccurve,
+    /*val chart1 = XYAreaChart(roccurve,
       title = "Receiver Operating Characteristic", legend = true)
 
     chart1.show()
@@ -185,7 +186,11 @@ class BinaryClassificationMetricsSpark(
     logger.log(Priority.INFO, "Generating F1 measure Plot")
     val chart3 = XYLineChart(fm,
       title = "F1 measure by threshold beta = 1", legend = true)
-    chart3.show()
+    chart3.show()*/
+    areaspline(roccurve.map(_._1), roccurve.map(_._2))
+    title("Receiver Operating Characteristic")
+    xAxis("False Positives")
+    yAxis("True Positives")
   }
 
   override def print(): Unit = {

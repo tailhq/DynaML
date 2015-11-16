@@ -39,7 +39,7 @@ class LSSVMModel(
 
   override protected val logger = Logger.getLogger(this.getClass)
 
-  override implicit protected var params =
+  override protected var params: DenseVector[Double] =
     DenseVector.ones[Double](featuredims)
 
   override protected val optimizer = LSSVMModel.getOptimizer(task)

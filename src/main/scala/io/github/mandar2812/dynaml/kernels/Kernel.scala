@@ -28,3 +28,12 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
 
   def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): M
 }
+
+abstract class CompositeCovariance[T, V, M]
+  extends CovarianceFunction[T, V, M] {
+  val components: List[CovarianceFunction[T, V, M]]
+  override def setHyperParameters(h: Map[String, Double]) = {
+    components.foreach(_.setHyperParameters(h))
+    this
+  }
+}
