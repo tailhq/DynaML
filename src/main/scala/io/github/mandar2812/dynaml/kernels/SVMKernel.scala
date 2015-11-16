@@ -10,10 +10,6 @@ abstract class SVMKernel[M] extends
 CovarianceFunction[DenseVector[Double], Double, M]
 with Serializable {
 
-  val hyper_parameters: List[String]
-
-  def setHyperParameters(h: Map[String, Double]): this.type = this
-
   /**
    * Builds an approximate nonlinear feature map
    * which corresponds to an SVM Kernel. This is

@@ -7,7 +7,7 @@ import breeze.linalg.DenseVector
  * implement various Multivariate Density
  * Kernels.
  */
-trait DensityKernel extends Kernel with Serializable  {
+trait DensityKernel extends Kernel[DenseVector[Double], Double] with Serializable  {
   protected val mu: Double
   protected val r: Double
 
