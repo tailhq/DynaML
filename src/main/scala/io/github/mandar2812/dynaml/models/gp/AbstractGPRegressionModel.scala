@@ -18,7 +18,7 @@ import io.github.mandar2812.dynaml.optimization.ConjugateGradient
   *                2) I = DenseVector when implementing GP regression
   *
   */
-abstract class GPRegressionModel[T, I](
+abstract class AbstractGPRegressionModel[T, I](
   cov: CovarianceFunction[I, Double, DenseMatrix[Double]],
   data: T, num: Int) extends
 GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double], MultivariateGaussian]{

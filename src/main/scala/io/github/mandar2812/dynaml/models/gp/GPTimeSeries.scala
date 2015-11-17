@@ -8,8 +8,9 @@ import io.github.mandar2812.dynaml.kernels.CovarianceFunction
   * Created by mandar on 16/11/15.
   */
 class GPTimeSeries(cov: CovarianceFunction[Double, Double, DenseMatrix[Double]],
-                   trainingdata: Seq[(Double, Double)]) extends
-  GPRegressionModel[Seq[(Double, Double)],Double](cov, trainingdata, trainingdata.length){
+                   trainingdata: Seq[(Double, Double)])
+  extends AbstractGPRegressionModel[Seq[(Double, Double)],Double](cov, trainingdata,
+    trainingdata.length){
   /**
     * Convert from the underlying data structure to
     * Seq[(I, Y)] where I is the index set of the GP
@@ -24,7 +25,7 @@ object GPTimeSeries {
                     processFunc: Seq[String] => (Double, Double),
                     fraction: Double = 0.75):
   (Seq[(Double, Double)], Seq[(Double, Double)]) = {
-    assert(columns.length == missingValues.length || missingValues.length == 0,
+    assert(columns.length == missingValues.length || missingValues.isEmpty,
       "Missing values must be of equal number to features")
     val stream = file.iterator
     val trLength = (length*fraction).toInt
