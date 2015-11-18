@@ -160,14 +160,40 @@ package object utils {
     pattern.replaceAllIn(input, replace)
   }
 
-  def strReplace(fileName: String, destination: String)
-                (findStringRegex: String, replaceString: String): Unit = {
+  def strReplace(fileName: String)
+                (findStringRegex: String, replaceString: String)
+  : Stream[String] = Source.fromFile(new File(fileName))
+    .getLines().toStream
+    .map(replace(findStringRegex)(replaceString))
+
+  def writeToFile(lines: Stream[String])(destination: String): Unit = {
     val writer = new BufferedWriter(new FileWriter(new File(destination)))
-    val lines = Source.fromFile(new File(fileName)).getLines().toStream
-    val processFunc = replace(findStringRegex)(replaceString) _
     lines.foreach(line => {
-      writer.write(processFunc(line)+"\n")
+      writer.write(line+"\n")
     })
     writer.close()
+  }
+
+  def transformData(lines: Stream[String])(transform: (String) => String): Stream[String] =
+  lines.map(transform)
+
+  def extractColumns(lines: Stream[String], sep: String,
+  columns: List[Int], naStrings:Map[Int, String]): Stream[String] = {
+    val tFunc = (line: String) => {
+      val fields = line.split(sep)
+
+      val newFields:List[String] = columns.map(col => {
+        if (!naStrings.contains(col) || fields(col) != naStrings(col)) fields(col)
+        else ""
+      })
+
+      val newLine = newFields.foldLeft("")(
+        (str1, str2) => str1+sep+str2
+      )
+
+      newLine.tail
+    }
+
+    transformData(lines)(tFunc)
   }
 }
