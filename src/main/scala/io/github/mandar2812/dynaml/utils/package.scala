@@ -1,12 +1,16 @@
 package io.github.mandar2812.dynaml
 
-import java.io.File
+import java.io.{FileWriter, BufferedWriter, File}
 import breeze.linalg.{DenseMatrix, DenseVector}
-import com.github.tototoshi.csv.{QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
+import com.github.tototoshi.csv.{CSVWriter, QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
+import scala.io.Source
 import scala.reflect.runtime.{universe => ru}
 import scala.annotation.tailrec
+import scala.util.matching.Regex
+import sys.process._
+import java.net.URL
 
 /**
  * A set of pre-processing utilities
@@ -147,4 +151,23 @@ package object utils {
     xs.foldLeft(Seq(Seq.empty[A])) {
       (x, y) => for (a <- x.view; b <- y) yield a :+ b
     }
+
+  def downloadURL(url: String, saveAs: String): Unit =
+    new URL(url) #> new File(saveAs) !!
+
+  def replace(find: String)(replace: String)(input: String): String = {
+    val pattern = new Regex(find)
+    pattern.replaceAllIn(input, replace)
+  }
+
+  def strReplace(fileName: String, destination: String)
+                (findStringRegex: String, replaceString: String): Unit = {
+    val writer = new BufferedWriter(new FileWriter(new File(destination)))
+    val lines = Source.fromFile(new File(fileName)).getLines().toStream
+    val processFunc = replace(findStringRegex)(replaceString) _
+    lines.foreach(line => {
+      writer.write(processFunc(line)+"\n")
+    })
+    writer.close()
+  }
 }
