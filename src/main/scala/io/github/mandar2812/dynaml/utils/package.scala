@@ -160,13 +160,15 @@ package object utils {
     pattern.replaceAllIn(input, replace)
   }
 
+  def textFileToStream(fileName: String): Stream[String] =
+    Source.fromFile(new File(fileName)).getLines().toStream
+
   def strReplace(fileName: String)
                 (findStringRegex: String, replaceString: String)
-  : Stream[String] = Source.fromFile(new File(fileName))
-    .getLines().toStream
+  : Stream[String] = textFileToStream(fileName)
     .map(replace(findStringRegex)(replaceString))
 
-  def writeToFile(lines: Stream[String])(destination: String): Unit = {
+  def writeToFile(destination: String)(lines: Stream[String]): Unit = {
     val writer = new BufferedWriter(new FileWriter(new File(destination)))
     lines.foreach(line => {
       writer.write(line+"\n")
@@ -197,3 +199,4 @@ package object utils {
     transformData(lines)(tFunc)
   }
 }
+

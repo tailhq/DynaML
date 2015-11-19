@@ -22,6 +22,7 @@ object DynaML extends App {
           intp.addImports("io.github.mandar2812.dynaml.examples._")
           intp.addImports("org.apache.spark.SparkContext")
           intp.addImports("org.apache.spark.SparkConf")
+          intp.addImports("io.github.mandar2812.dynaml.pipes._")
         }
       }
 
