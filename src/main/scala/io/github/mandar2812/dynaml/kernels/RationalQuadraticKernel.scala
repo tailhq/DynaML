@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{norm, DenseVector}
+import breeze.linalg.{DenseMatrix, norm, DenseVector}
 
 /**
  * @author mandar2812
@@ -8,7 +8,8 @@ import breeze.linalg.{norm, DenseVector}
  * K(x,y) = 1 - ||x-y||**2/(||x-y||**2 + c**2)
  */
 class RationalQuadraticKernel(si: Double = 1.0)
-  extends LocalSVMKernel
+  extends SVMKernel[DenseMatrix[Double]]
+  with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
   override val hyper_parameters = List("c")
 

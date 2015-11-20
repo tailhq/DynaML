@@ -102,12 +102,12 @@ object ConjugateGradient {
     var alphaVec = DenseVector.tabulate[Double](x.cols)(i => {
       math.pow(norm(residual(::,i), 2), 2)/(p(::,i).t * (A*p(::, i)))
     })
-    var alpha = DenseMatrix.tabulate[Double](x.cols, x.cols)((i,j) => {
+    var alpha = DenseMatrix.tabulate[Double](x.rows, x.cols)((i,j) => {
       alphaVec(j)
     })
 
     var betaVec = DenseVector.zeros[Double](x.cols)
-    var beta = DenseMatrix.tabulate[Double](x.cols, x.cols)((i,j) => {
+    var beta = DenseMatrix.tabulate[Double](x.rows, x.cols)((i,j) => {
       betaVec(j)
     })
 
@@ -122,7 +122,7 @@ object ConjugateGradient {
 
       //calculate beta
       betaVec = DenseVector.tabulate[Double](x.cols)(i => math.pow(norm(residual(::,i), 2), 2)/de(i))
-      beta = DenseMatrix.tabulate[Double](x.cols, x.cols)((i,j) => {
+      beta = DenseMatrix.tabulate[Double](x.rows, x.cols)((i,j) => {
         betaVec(j)
       })
 
@@ -134,7 +134,7 @@ object ConjugateGradient {
       alphaVec = DenseVector.tabulate[Double](x.cols)(i => {
         math.pow(norm(residual(::,i), 2), 2)/(p(::,i).t * (A*p(::, i)))
       })
-      alpha = DenseMatrix.tabulate[Double](x.cols, x.cols)((i,j) => {
+      alpha = DenseMatrix.tabulate[Double](x.rows, x.cols)((i,j) => {
         alphaVec(j)
       })
 

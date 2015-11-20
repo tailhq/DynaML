@@ -176,7 +176,7 @@ package object utils {
     writer.close()
   }
 
-  def transformData(lines: Stream[String])(transform: (String) => String): Stream[String] =
+  def transformData(transform: (String) => String)(lines: Stream[String]): Stream[String] =
   lines.map(transform)
 
   def extractColumns(lines: Stream[String], sep: String,
@@ -196,7 +196,7 @@ package object utils {
       newLine.tail
     }
 
-    transformData(lines)(tFunc)
+    transformData(tFunc)(lines)
   }
 }
 

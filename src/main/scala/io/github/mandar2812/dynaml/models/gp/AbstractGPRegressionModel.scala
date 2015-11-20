@@ -1,9 +1,10 @@
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.{inv, DenseMatrix, DenseVector}
 import breeze.stats.distributions.MultivariateGaussian
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient
+import org.apache.log4j.Logger
 
 /**
   * Single-Output Gaussian Process Regression Model
@@ -21,7 +22,10 @@ import io.github.mandar2812.dynaml.optimization.ConjugateGradient
 abstract class AbstractGPRegressionModel[T, I](
   cov: CovarianceFunction[I, Double, DenseMatrix[Double]],
   data: T, num: Int) extends
-GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double], MultivariateGaussian]{
+GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
+  (DenseVector[Double], DenseMatrix[Double])]{
+
+  private val logger = Logger.getLogger(this.getClass)
 
   /**
    * The GP is taken to be zero mean, or centered.
@@ -44,8 +48,10 @@ GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double], MultivariateGaus
    * @param test A Sequence or Sequence like data structure
    *             storing the values of the input patters.
    **/
-  override def predictiveDistribution[U <: Seq[I]](test: U): MultivariateGaussian = {
+  override def predictiveDistribution[U <: Seq[I]](test: U):
+  (DenseVector[Double], DenseMatrix[Double]) = {
 
+    logger.info("Calculating posterior predictive distribution")
     //Calculate the kernel matrix on the training data
     val training = dataAsIndexSeq(g)
     val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
@@ -54,14 +60,19 @@ GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double], MultivariateGaus
     val crossKernel = covariance.buildCrossKernelMatrix(training, test)
 
     //Calculate the predictive mean and co-variance
-    val meanBuff = ConjugateGradient.runCG(kernelTraining, trainingLabels,
-      DenseVector.ones[Double](test.length), 0.0001, 50)
+    /*val meanBuff = ConjugateGradient.runCG(kernelTraining, trainingLabels,
+      DenseVector.ones[Double](training.length), 0.0001, 20)
+
+    logger.info("Predictive Mean: \n"+crossKernel.t * meanBuff)
+
     val CovBuff = ConjugateGradient.runMultiCG(kernelTraining,
       crossKernel, DenseMatrix.ones[Double](training.length, test.length),
-      0.0001, 50)
+      0.0001, 20)
 
-    new MultivariateGaussian(crossKernel.t * meanBuff,
-      kernelTest - (crossKernel.t * CovBuff))
+    logger.info("Predictive Co-variance: \n"+(kernelTest - (crossKernel.t * CovBuff)))
+    (crossKernel.t * meanBuff, kernelTest - (crossKernel.t * CovBuff))*/
+    val inverse = inv(kernelTraining)
+    (crossKernel.t * (inverse * trainingLabels), kernelTest - (crossKernel.t * (inverse * crossKernel)))
   }
 
   /**
@@ -72,9 +83,12 @@ GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double], MultivariateGaus
     **/
   override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int):
   Seq[(I, Double, Double, Double)] = {
+
     val posterior = predictiveDistribution(testData)
-    val stdDev = (1 to testData.length).map(i => math.sqrt(posterior.covariance(i-1, i-1)))
-    val mean = posterior.mean.toArray.toSeq
+    val stdDev = (1 to testData.length).map(i => math.sqrt(posterior._2(i-1, i-1)))
+    val mean = posterior._1.toArray.toSeq
+
+    logger.info("Generating error bars")
     val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
   }

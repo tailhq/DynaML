@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{norm, DenseVector}
+import breeze.linalg.{DenseMatrix, norm, DenseVector}
 
 /**
  * Standard RBF Kernel of the form
@@ -8,7 +8,8 @@ import breeze.linalg.{norm, DenseVector}
  */
 
 class RBFKernel(private var bandwidth: Double = 1.0)
-  extends LocalSVMKernel
+  extends SVMKernel[DenseMatrix[Double]]
+  with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
 
   override val hyper_parameters = List("bandwidth")
@@ -31,4 +32,14 @@ class RBFKernel(private var bandwidth: Double = 1.0)
     this
   }
 
+}
+
+class RBFCovFunc(private var bandwidth: Double)
+  extends LocalSVMKernel[Double] {
+  override val hyper_parameters: List[String] = List("bandwidth")
+
+  override def evaluate(x: Double, y: Double): Double = {
+    val diff = x - y
+    Math.exp(-1*math.pow(diff, 2)/(2*math.pow(bandwidth, 2)))
+  }
 }

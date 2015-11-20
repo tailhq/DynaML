@@ -57,6 +57,12 @@ class RegressionMetrics(
     chart1.show()*/
     histogram(roccurve, numBins = 20)
     title("Histogram of Regression Residuals")
+
+    logger.info("Generating plot of goodness of fit")
+    regression(scoresAndLabels)
+    title("Goodness of fit")
+    xAxis("Predicted Value")
+    yAxis("Actual Value")
   }
 
 }

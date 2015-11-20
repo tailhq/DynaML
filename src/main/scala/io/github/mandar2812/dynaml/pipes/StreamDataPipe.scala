@@ -38,5 +38,5 @@ trait StreamSideEffectPipe[I] extends StreamDataPipe[I, Unit, Unit] {
 }
 
 object StreamDataPipe {
-  
+
 }

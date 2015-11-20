@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
  * Standard Polynomial SVM Kernel
@@ -9,7 +9,8 @@ import breeze.linalg.DenseVector
 class PolynomialKernel(
     private var degree: Int = 2,
     private var offset: Double = 1.0)
-  extends LocalSVMKernel
+  extends SVMKernel[DenseMatrix[Double]]
+  with LocalSVMKernel[DenseVector[Double]]
   with Serializable{
 
   override val hyper_parameters = List("degree")

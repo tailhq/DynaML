@@ -98,11 +98,11 @@
             <artifactId>breeze_2.10</artifactId> <!-- or 2.11 -->
             <version>0.10</version>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>org.scalanlp</groupId>
             <artifactId>breeze-natives_2.10</artifactId>
             <version>0.10</version>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>com.github.tototoshi</groupId>
             <artifactId>scala-csv_2.10</artifactId>

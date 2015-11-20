@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.models.gp
 
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.models.Model
+import org.apache.log4j.Logger
 
 
 /**
@@ -15,6 +16,8 @@ import io.github.mandar2812.dynaml.models.Model
  * @tparam W Implementing class of the posterior distribution
  **/
 abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T] {
+
+  private val logger = Logger.getLogger(this.getClass)
 
   /**
    * Mean Function: Takes a member of the index set (input)
@@ -61,10 +64,11 @@ abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T] {
   def dataAsIndexSeq(data: T): Seq[I] = dataAsSeq(data).map(_._1)
 
   /**
-   * Returns a prediction with error bars for a test set of indexes and labels.
-   * */
+    * Returns a prediction with error bars for a test set of indexes and labels.
+    * (Index, Actual Value, Prediction, Lower Bar, Higher Bar)
+    * */
   def test(testData: T): Seq[(I, Y, Y, Y, Y)] = {
-
+    logger.info("Generating predictions for test set")
     //Calculate the posterior predictive distribution for the test points.
     val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 2)
     //Collate the test data with the predictions and error bars
