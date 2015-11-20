@@ -39,7 +39,14 @@ GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
 
   override protected val g: T = data
 
+  var noiseLevel: Double = 1.0
+
   val npoints = num
+
+  def setNoiseLevel(n: Double): this.type = {
+    noiseLevel = n
+    this
+  }
 
   /**
    * Calculates posterior predictive distribution for
@@ -71,7 +78,8 @@ GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
 
     logger.info("Predictive Co-variance: \n"+(kernelTest - (crossKernel.t * CovBuff)))
     (crossKernel.t * meanBuff, kernelTest - (crossKernel.t * CovBuff))*/
-    val inverse = inv(kernelTraining)
+    //val kernelMat = kernelTraining + DenseMatrix.eye[Double](training.length) * math.pow(noiseLevel, 2)
+    val inverse = inv(kernelTraining + DenseMatrix.eye[Double](training.length) * math.pow(noiseLevel, 2))
     (crossKernel.t * (inverse * trainingLabels), kernelTest - (crossKernel.t * (inverse * crossKernel)))
   }
 

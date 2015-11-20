@@ -2,7 +2,7 @@ package io.github.mandar2812.dynaml
 
 import java.io.{FileWriter, BufferedWriter, File}
 import breeze.linalg.{DenseMatrix, DenseVector}
-import com.github.tototoshi.csv.{CSVWriter, QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
+import com.github.tototoshi.csv.{QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import scala.io.Source

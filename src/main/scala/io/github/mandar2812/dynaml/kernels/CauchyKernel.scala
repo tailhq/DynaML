@@ -29,3 +29,12 @@ class CauchyKernel(si: Double = 1.0)
     this
   }
 }
+
+class CauchyCovFunc(private var sigma: Double)
+  extends LocalSVMKernel[Double] {
+  override val hyper_parameters: List[String] = List("bandwidth")
+
+  override def evaluate(x: Double, y: Double): Double = {
+    1/(1 + math.pow((x-y)/sigma, 2))
+  }
+}
