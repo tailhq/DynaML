@@ -44,6 +44,8 @@ object TestHousing {
     val met = optModel.evaluate(configtest)
 
     met.print()
+
+    met.generatePlots()
   }
 }
 

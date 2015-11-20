@@ -1,12 +1,16 @@
 package io.github.mandar2812.dynaml
 
-import java.io.File
+import java.io.{FileWriter, BufferedWriter, File}
 import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.{QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
+import scala.io.Source
 import scala.reflect.runtime.{universe => ru}
 import scala.annotation.tailrec
+import scala.util.matching.Regex
+import sys.process._
+import java.net.URL
 
 /**
  * A set of pre-processing utilities
@@ -147,4 +151,52 @@ package object utils {
     xs.foldLeft(Seq(Seq.empty[A])) {
       (x, y) => for (a <- x.view; b <- y) yield a :+ b
     }
+
+  def downloadURL(url: String, saveAs: String): Unit =
+    new URL(url) #> new File(saveAs) !!
+
+  def replace(find: String)(replace: String)(input: String): String = {
+    val pattern = new Regex(find)
+    pattern.replaceAllIn(input, replace)
+  }
+
+  def textFileToStream(fileName: String): Stream[String] =
+    Source.fromFile(new File(fileName)).getLines().toStream
+
+  def strReplace(fileName: String)
+                (findStringRegex: String, replaceString: String)
+  : Stream[String] = textFileToStream(fileName)
+    .map(replace(findStringRegex)(replaceString))
+
+  def writeToFile(destination: String)(lines: Stream[String]): Unit = {
+    val writer = new BufferedWriter(new FileWriter(new File(destination)))
+    lines.foreach(line => {
+      writer.write(line+"\n")
+    })
+    writer.close()
+  }
+
+  def transformData(transform: (String) => String)(lines: Stream[String]): Stream[String] =
+  lines.map(transform)
+
+  def extractColumns(lines: Stream[String], sep: String,
+  columns: List[Int], naStrings:Map[Int, String]): Stream[String] = {
+    val tFunc = (line: String) => {
+      val fields = line.split(sep)
+
+      val newFields:List[String] = columns.map(col => {
+        if (!naStrings.contains(col) || fields(col) != naStrings(col)) fields(col)
+        else ""
+      })
+
+      val newLine = newFields.foldLeft("")(
+        (str1, str2) => str1+sep+str2
+      )
+
+      newLine.tail
+    }
+
+    transformData(tFunc)(lines)
+  }
 }
+

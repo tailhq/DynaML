@@ -10,6 +10,7 @@ class PolynomialKernel(
     private var degree: Int = 2,
     private var offset: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
+  with LocalSVMKernel[DenseVector[Double]]
   with Serializable{
 
   override val hyper_parameters = List("degree")
@@ -26,11 +27,6 @@ class PolynomialKernel(
     Math.pow((x.t * y) + this.offset, this.degree)/(Math.pow((x.t * x) + this.offset,
       this.degree.toDouble/2.0) * Math.pow((y.t * y) + this.offset,
       this.degree.toDouble/2.0))
-
-  override def buildKernelMatrix(
-      mappedData: List[DenseVector[Double]],
-      length: Int): KernelMatrix[DenseMatrix[Double]] =
-    SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
 
   override def setHyperParameters(h: Map[String, Double]) = {
     assert(hyper_parameters.forall(h contains _),

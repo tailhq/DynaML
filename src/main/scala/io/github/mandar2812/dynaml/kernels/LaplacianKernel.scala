@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{norm, DenseVector, DenseMatrix}
+import breeze.linalg.{DenseMatrix, norm, DenseVector}
 
 /**
  * Implementation of the Normalized Exponential Kernel
@@ -9,6 +9,7 @@ import breeze.linalg.{norm, DenseVector, DenseMatrix}
  */
 class LaplacianKernel(be: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
+  with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
   override val hyper_parameters = List("beta")
 
@@ -20,10 +21,6 @@ class LaplacianKernel(be: Double = 1.0)
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
     math.exp(-1.0*beta*norm(x - y, 1)/(norm(x,1)*norm(y,1)))
-
-  override def buildKernelMatrix(mappedData: List[DenseVector[Double]],
-                                 length: Int): KernelMatrix[DenseMatrix[Double]] =
-    SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
 
   override def setHyperParameters(h: Map[String, Double]) = {
     assert(hyper_parameters.forall(h contains _),

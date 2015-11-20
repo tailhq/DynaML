@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.evaluation
 import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 
-import scalax.chart.module.ChartFactories.{XYBarChart, XYLineChart, XYAreaChart}
+import com.quantifind.charts.Highcharts._
 
 /**
  * Class implementing the calculation
@@ -48,13 +48,21 @@ class RegressionMetrics(
 
   override def generatePlots(): Unit = {
     implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
-    val roccurve = this.residuals().map(c => (c._2, c._1))
+    val roccurve = this.residuals().map(_._1)
 
     logger.log(Priority.INFO, "Generating Plot of Residuals")
-    val chart1 = XYBarChart(roccurve,
+    /*val chart1 = XYBarChart(roccurve,
       title = "Residuals", legend = true)
 
-    chart1.show()
+    chart1.show()*/
+    histogram(roccurve, numBins = 20)
+    title("Histogram of Regression Residuals")
+
+    logger.info("Generating plot of goodness of fit")
+    regression(scoresAndLabels)
+    title("Goodness of fit")
+    xAxis("Predicted Value")
+    yAxis("Actual Value")
   }
 
 }

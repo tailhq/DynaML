@@ -6,28 +6,9 @@ import org.apache.log4j.{Priority, Logger}
  * Defines an abstract class outlines the basic
  * functionality requirements of an SVM Kernel
  */
-abstract class SVMKernel[T] extends Kernel with Serializable {
-
-  private var REGULARIZER: Double = 0.00
-
-  val hyper_parameters: List[String]
-
-  def setHyperParameters(h: Map[String, Double]): this.type = this
-
-  /**
-   * Build the kernel matrix of the prototype vectors
-   *
-   * @param mappedData The prototype vectors/points
-   *
-   * @param length The number of points
-   *
-   * @return A [[KernelMatrix]] object
-   *
-   *
-   **/
-  def buildKernelMatrix(
-      mappedData: List[DenseVector[Double]],
-      length: Int): KernelMatrix[T]
+abstract class SVMKernel[M] extends
+CovarianceFunction[DenseVector[Double], Double, M]
+with Serializable {
 
   /**
    * Builds an approximate nonlinear feature map
@@ -61,11 +42,6 @@ abstract class SVMKernel[T] extends Kernel with Serializable {
     val buff: Transpose[DenseVector[Double]] = kernel.t * decomposition._2
     val lambda: DenseVector[Double] = decomposition._1.map(lam => 1/math.sqrt(lam))
     val ans = buff.t
-    /*DenseVector.tabulate(decomposition._1.length) { (i) =>
-      val eigenvalue = if(decomposition._1(i) != Double.NaN) decomposition._1(i) else 0.0
-      val eigenvector = decomposition._2(::, i).map{i => if(i == Double.NaN) 0.0 else i}
-      (1 / (REGULARIZER + math.sqrt(eigenvalue)))*(kernel dot eigenvector)
-    }*/
     ans :* lambda
   }
 }
@@ -90,13 +66,13 @@ object SVMKernel {
    * @return An [[SVMKernelMatrix]] object.
    *
    * */
-  def buildSVMKernelMatrix(
-      mappedData: List[DenseVector[Double]],
+  def buildSVMKernelMatrix[S <: Seq[T], T](
+      mappedData: S,
       length: Int,
-      eval: (DenseVector[Double], DenseVector[Double]) =>  Double):
+      eval: (T, T) =>  Double):
   KernelMatrix[DenseMatrix[Double]] = {
 
-    logger.log(Priority.INFO, "Constructing key-value representation of kernel matrix.")
+    logger.log(Priority.INFO, "Constructing kernel matrix.")
 
 
     val kernel = DenseMatrix.tabulate[Double](length, length){
@@ -107,6 +83,32 @@ object SVMKernel {
     new SVMKernelMatrix(kernel, length)
   }
 
+  def crossKernelMatrix[S <: Seq[T], T](data1: S, data2: S,
+                                        eval: (T, T) =>  Double)
+  : DenseMatrix[Double] = {
+
+    logger.log(Priority.INFO, "Constructing cross kernel matrix.")
+    logger.log(Priority.INFO, "Dimension: " + data1.length + " x " + data2.length)
+
+    DenseMatrix.tabulate[Double](data1.length, data2.length){
+      (i, j) => eval(data1(i), data2(j))
+    }
+  }
+
+}
+
+/**
+  * Kernels with a locally stored matrix in the form
+  * of a breeze [[DenseMatrix]] instance.
+  * */
+trait LocalSVMKernel[Index] extends CovarianceFunction[Index, Double, DenseMatrix[Double]] {
+  override def buildKernelMatrix[S <: Seq[Index]](
+    mappedData: S,
+    length: Int): KernelMatrix[DenseMatrix[Double]] =
+    SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
+
+  override def buildCrossKernelMatrix[S <: Seq[Index]](dataset1: S, dataset2: S) =
+    SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 }
 
 /**
