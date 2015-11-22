@@ -55,7 +55,7 @@ class RegressionMetrics(
       title = "Residuals", legend = true)
 
     chart1.show()*/
-    histogram(roccurve, numBins = 20)
+    histogram(roccurve)
     title("Histogram of Regression Residuals")
 
     logger.info("Generating plot of goodness of fit")
