@@ -29,3 +29,11 @@ class RationalQuadraticKernel(si: Double = 1.0)
     this
   }
 }
+
+class RationalQuadraticCovFunc(private var c: Double)
+  extends LocalSVMKernel[Double] {
+  override val hyper_parameters: List[String] = List("c")
+
+  override def evaluate(x: Double, y: Double): Double =
+    1 - math.pow(x-y, 2)/(math.pow(x-y, 2) + c)
+}

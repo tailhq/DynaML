@@ -29,3 +29,13 @@ class LaplacianKernel(be: Double = 1.0)
     this
   }
 }
+
+class LaplaceCovFunc(private var beta: Double)
+  extends LocalSVMKernel[Double] {
+  override val hyper_parameters: List[String] = List("beta")
+
+  override def evaluate(x: Double, y: Double): Double = {
+    val diff = math.abs(x - y)
+    math.exp(-1.0*diff/beta)
+  }
+}

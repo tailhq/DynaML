@@ -22,11 +22,13 @@ object TestOmniTS {
           new RBFCovFunc(bandwidth)
         case "Cauchy" =>
           new CauchyCovFunc(bandwidth)
-        /*case "Laplacian" =>
-          new LaplacianKernel(bandwidth)
+        case "Laplacian" =>
+          new LaplaceCovFunc(bandwidth)
         case "RationalQuadratic" =>
-          new RationalQuadraticKernel(bandwidth)*/
+          new RationalQuadraticCovFunc(bandwidth)
         case "FBM" => new FBMCovFunction(bandwidth)
+        case "Wave" => new WaveCovFunc(bandwidth)
+        case "Identity" => new IdentityCovFunc
       }
     //val vectorizeRecordPipe = StreamDataPipe((tup: (DenseVector[Double], Double)) =>
     //DenseVector(tup._1.toArray ++ Array(tup._2)))
@@ -44,18 +46,18 @@ object TestOmniTS {
 
     val filterMissingValues = (lines: Stream[String]) => lines.filter(line => !line.contains(",,"))
 
-    val extractDstTimeSeries = (lines: Stream[String]) => lines.map{line =>
-      val splits = line.split(",")
-      val timestamp = splits(1).toDouble * 24 + splits(2).toDouble
-      (timestamp, splits(3).toDouble)
-    }
-
     val extractTrainingFeatures = (l: Stream[String]) =>
       utils.extractColumns(l, ",", List(0,1,2,column),
         Map(16 -> "999.9", 21 -> "999.9",
           24 -> "9999.", 23 -> "999.9",
           40 -> "99999", 22 -> "9999999.",
           25 -> "999.9"))
+
+    val extractTimeSeries = (lines: Stream[String]) => lines.map{line =>
+      val splits = line.split(",")
+      val timestamp = splits(1).toDouble * 24 + splits(2).toDouble
+      (timestamp, splits(3).toDouble)
+    }
 
     val splitTrainingTest = (data: Stream[(Double, Double)]) => {
       (data.take(num_training), data.take(num_training+num_test).takeRight(num_test))
@@ -74,7 +76,7 @@ object TestOmniTS {
         val normalizationFunc = (point: (Double, Double)) => {
 
           val normPoint = (DenseVector(point._1, point._2) - mean) :/ stdDev
-          (normPoint(0), normPoint(1))
+          (point._1, normPoint(1))
         }
 
         ((trainTest._1.map(normalizationFunc),
@@ -85,21 +87,23 @@ object TestOmniTS {
       (trainTest: ((Stream[(Double, Double)],
         Stream[(Double, Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPTimeSeries(kernel, trainTest._1._1.toSeq)
+        val model = new GPTimeSeries(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
         val res = model.test(trainTest._1._2.toSeq)
         val scoresAndLabelsPipe =
-          DataPipe(
-            (res: Seq[(Double, Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2)).toList) > DataPipe((list: List[(Double, Double)]) =>
-            list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
-              l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
+          DataPipe((res: Seq[(Double, Double, Double, Double, Double)]) =>
+            res.map(i => (i._3, i._2)).toList) >
+            DataPipe((list: List[(Double, Double)]) =>
+              list.map{l => (l._1*trainTest._2._2(1) + trainTest._2._1(1),
+                l._2*trainTest._2._2(1) + trainTest._2._1(1))}
+            )
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res)
 
         val metrics = new RegressionMetrics(scoresAndLabels,
           scoresAndLabels.length)
 
-        println(scoresAndLabels)
+        //println(scoresAndLabels)
+        metrics.print()
         metrics.generatePlots()
       }
 
@@ -107,7 +111,7 @@ object TestOmniTS {
       DataPipe(replaceWhiteSpaces) >
       DataPipe(extractTrainingFeatures) >
       StreamDataPipe((line: String) => !line.contains(",,")) >
-      DataPipe(extractDstTimeSeries) >
+      DataPipe(extractTimeSeries) >
       DataPipe(splitTrainingTest) >
       DataPipe(normalizeData) >
       DataPipe(modelTrainTest)

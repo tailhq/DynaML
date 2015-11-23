@@ -29,3 +29,11 @@ class WaveKernel(th: Double = 1.0)
     this
   }
 }
+
+class WaveCovFunc(private var theta: Double)
+  extends LocalSVMKernel[Double] {
+  override val hyper_parameters: List[String] = List("theta")
+
+  override def evaluate(x: Double, y: Double): Double =
+    if (x-y != 0) math.sin(math.pow(x-y,2)/theta)*(theta/math.pow(x-y,2)) else 1.0
+}

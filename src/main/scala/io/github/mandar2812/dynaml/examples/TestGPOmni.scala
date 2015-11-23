@@ -87,7 +87,7 @@ object TestGPOmni {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPRegression(kernel, trainTest._1._1.toSeq)
+        val model = new GPRegression(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
         val res = model.test(trainTest._1._2.toSeq)
         val scoresAndLabelsPipe =
           DataPipe(
@@ -101,7 +101,8 @@ object TestGPOmni {
         val metrics = new RegressionMetrics(scoresAndLabels,
           scoresAndLabels.length)
 
-        println(scoresAndLabels)
+        //println(scoresAndLabels)
+        metrics.print()
         metrics.generatePlots()
       }
 
