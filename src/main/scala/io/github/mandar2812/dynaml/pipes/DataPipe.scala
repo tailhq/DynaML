@@ -42,7 +42,8 @@ trait SideEffectPipe[I] extends DataPipe[I, Unit] {
 }
 
 object DataPipe {
-  def apply[S,D](func: (S) => D): DataPipe[S, D] = {
+  def apply[S,D](func: (S) => D):
+  DataPipe[S, D] = {
     new DataPipe[S,D] {
       def run(data: S) = func(data)
     }
@@ -55,13 +56,15 @@ object DataPipe {
     }
   }
 
-  def apply[S, D1, D2](func: (S) => (D1, D2)): BifurcationPipe[S, D1, D2] = {
+  def apply[S, D1, D2](func: (S) => (D1, D2)):
+  BifurcationPipe[S, D1, D2] = {
     new BifurcationPipe[S, D1, D2] {
       def run(data: S) = func(data)
     }
   }
 
-  def apply[S](func: (S) => Unit): SideEffectPipe[S] = {
+  def apply[S](func: (S) => Unit):
+  SideEffectPipe[S] = {
     new SideEffectPipe[S] {
       def run(data: S) = func(data)
     }

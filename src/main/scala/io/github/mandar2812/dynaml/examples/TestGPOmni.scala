@@ -11,7 +11,7 @@ import io.github.mandar2812.dynaml.utils
   * Created by mandar on 19/11/15.
   */
 object TestGPOmni {
-  def apply (year: Int = 2006, kern: String = "RBF",
+  def apply (year: Int = 2006, yeartest: Int = 2007, kern: String = "RBF",
             bandwidth: Double = 0.5, noise: Double = 0.0,
             num_training: Int = 200, num_test: Int = 50,
             columns: List[Int] = List(40,16,21,23,24,22,25)): Unit = {
@@ -29,11 +29,6 @@ object TestGPOmni {
         case "FBM" => new FBMKernel(bandwidth)
         case "Student" => new TStudentKernel(bandwidth)
       }
-    //val vectorizeRecordPipe = StreamDataPipe((tup: (DenseVector[Double], Double)) =>
-    //DenseVector(tup._1.toArray ++ Array(tup._2)))
-    //val identityPipe = DataPipe(identity[(DenseVector[Double], Double)])
-    //val parallelPipe = DataPipe(vectorizeRecordPipe, identityPipe)
-    //val normalizePipe = DataPipe((l: Stream[DenseVector[Double]]) => utils.getStats(l.toList))
 
     //Load Omni data into a stream
     //Extract the time and Dst values
@@ -115,12 +110,28 @@ object TestGPOmni {
         val split = line.split(",")
         (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
       }) >
-      /*DataPipe(extractDstTimeSeries) >*/
       DataPipe(splitTrainingTest) >
       DataPipe(normalizeData) >
       DataPipe(modelTrainTest)
 
-    processpipe.run("data/omni2_"+year+".csv")
+    val preProcessPipe = DataPipe(utils.textFileToStream _) >
+      DataPipe(replaceWhiteSpaces) >
+      DataPipe(extractTrainingFeatures) >
+      StreamDataPipe((line: String) => !line.contains(",,")) >
+      StreamDataPipe((line: String) => {
+        val split = line.split(",")
+        (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
+      })
+
+    val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
+      DataPipe((data: (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)])) => {
+        (data._1.take(num_training), data._2.takeRight(num_test))
+      }) >
+      DataPipe(normalizeData) >
+      DataPipe(modelTrainTest)
+
+
+    trainTestPipe.run(("data/omni2_"+year+".csv", "data/omni2_"+yeartest+".csv"))
 
   }
 
