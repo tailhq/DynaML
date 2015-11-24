@@ -29,6 +29,7 @@ object TestOmniTS {
         case "FBM" => new FBMCovFunction(bandwidth)
         case "Wave" => new WaveCovFunc(bandwidth)
         case "Identity" => new IdentityCovFunc
+        case "Student" => new TStudentCovFunc(bandwidth)
       }
     //val vectorizeRecordPipe = StreamDataPipe((tup: (DenseVector[Double], Double)) =>
     //DenseVector(tup._1.toArray ++ Array(tup._2)))

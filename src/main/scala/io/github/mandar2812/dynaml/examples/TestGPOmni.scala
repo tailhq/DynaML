@@ -11,7 +11,7 @@ import io.github.mandar2812.dynaml.utils
   * Created by mandar on 19/11/15.
   */
 object TestGPOmni {
-  def apply(year: Int = 2006, kern: String = "RBF",
+  def apply (year: Int = 2006, kern: String = "RBF",
             bandwidth: Double = 0.5, noise: Double = 0.0,
             num_training: Int = 200, num_test: Int = 50,
             columns: List[Int] = List(40,16,21,23,24,22,25)): Unit = {
@@ -27,6 +27,7 @@ object TestGPOmni {
         case "RationalQuadratic" =>
           new RationalQuadraticKernel(bandwidth)
         case "FBM" => new FBMKernel(bandwidth)
+        case "Student" => new TStudentKernel(bandwidth)
       }
     //val vectorizeRecordPipe = StreamDataPipe((tup: (DenseVector[Double], Double)) =>
     //DenseVector(tup._1.toArray ++ Array(tup._2)))
