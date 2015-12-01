@@ -16,7 +16,7 @@ class FBMCovFunction(private var hurst: Double)
   }
 }
 
-class FBMKernel(private var hurst: Double)
+class FBMKernel(private var hurst: Double = 0.75)
   extends SVMKernel[DenseMatrix[Double]]
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable {

@@ -38,24 +38,14 @@ object TestGPOmni {
 
     val replaceWhiteSpaces = (s: Stream[String]) => s.map(utils.replace("\\s+")(","))
 
-    val filterMissingValues = (lines: Stream[String]) => lines.filter(line => !line.contains(",,"))
-
-    val extractDstTimeSeries = (lines: Stream[String]) => lines.map{line =>
-      val splits = line.split(",")
-      val timestamp = splits(1).toDouble * 24 + splits(2).toDouble
-      (timestamp, splits(3).toDouble)
-    }
-
     val extractTrainingFeatures = (l: Stream[String]) =>
       utils.extractColumns(l, ",", columns,
         Map(16 -> "999.9", 21 -> "999.9",
           24 -> "9999.", 23 -> "999.9",
           40 -> "99999", 22 -> "9999999.",
-          25 -> "999.9"))
+          25 -> "999.9", 28 -> "99.99",
+          27 -> "9.999", 39 -> "999"))
 
-    val splitTrainingTest = (data: Stream[(DenseVector[Double], Double)]) => {
-      (data.take(num_training), data.take(num_training+num_test).takeRight(num_test))
-    }
 
     val normalizeData =
       (trainTest: (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)])) => {
@@ -102,18 +92,6 @@ object TestGPOmni {
         metrics.generatePlots()
       }
 
-    val processpipe = DataPipe(utils.textFileToStream _) >
-      DataPipe(replaceWhiteSpaces) >
-      DataPipe(extractTrainingFeatures) >
-      StreamDataPipe((line: String) => !line.contains(",,")) >
-      StreamDataPipe((line: String) => {
-        val split = line.split(",")
-        (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
-      }) >
-      DataPipe(splitTrainingTest) >
-      DataPipe(normalizeData) >
-      DataPipe(modelTrainTest)
-
     val preProcessPipe = DataPipe(utils.textFileToStream _) >
       DataPipe(replaceWhiteSpaces) >
       DataPipe(extractTrainingFeatures) >
@@ -124,7 +102,8 @@ object TestGPOmni {
       })
 
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
-      DataPipe((data: (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)])) => {
+      DataPipe((data: (Stream[(DenseVector[Double], Double)],
+        Stream[(DenseVector[Double], Double)])) => {
         (data._1.take(num_training), data._2.takeRight(num_test))
       }) >
       DataPipe(normalizeData) >

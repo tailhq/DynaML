@@ -72,14 +72,14 @@ object SVMKernel {
       eval: (T, T) =>  Double):
   KernelMatrix[DenseMatrix[Double]] = {
 
-    logger.log(Priority.INFO, "Constructing kernel matrix.")
+    logger.info("Constructing kernel matrix.")
 
 
     val kernel = DenseMatrix.tabulate[Double](length, length){
       (i, j) => eval(mappedData(i), mappedData(j))
     }
 
-    logger.log(Priority.INFO, "Dimension: " + kernel.rows + " x " + kernel.cols)
+    logger.info("Dimension: " + kernel.rows + " x " + kernel.cols)
     new SVMKernelMatrix(kernel, length)
   }
 
@@ -87,8 +87,8 @@ object SVMKernel {
                                         eval: (T, T) =>  Double)
   : DenseMatrix[Double] = {
 
-    logger.log(Priority.INFO, "Constructing cross kernel matrix.")
-    logger.log(Priority.INFO, "Dimension: " + data1.length + " x " + data2.length)
+    logger.info("Constructing cross kernel matrix.")
+    logger.info("Dimension: " + data1.length + " x " + data2.length)
 
     DenseMatrix.tabulate[Double](data1.length, data2.length){
       (i, j) => eval(data1(i), data2(j))
@@ -101,7 +101,7 @@ object SVMKernel {
   * Kernels with a locally stored matrix in the form
   * of a breeze [[DenseMatrix]] instance.
   * */
-trait LocalSVMKernel[Index] extends CovarianceFunction[Index, Double, DenseMatrix[Double]] {
+trait LocalSVMKernel[Index] extends ScalarKernel[Index, DenseMatrix[Double]] {
   override def buildKernelMatrix[S <: Seq[Index]](
     mappedData: S,
     length: Int): KernelMatrix[DenseMatrix[Double]] =

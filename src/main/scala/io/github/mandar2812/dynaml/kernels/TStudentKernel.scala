@@ -1,12 +1,11 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{norm, DenseVector, DenseMatrix}
-import breeze.numerics.Bessel
 
 /**
   * Created by mandar on 23/11/15.
   */
-class TStudentKernel(private var d: Double)
+class TStudentKernel(private var d: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
