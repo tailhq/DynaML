@@ -12,25 +12,22 @@ class TStudentKernel(private var d: Double = 1.0)
 
   override val hyper_parameters = List("d")
 
+  state = Map("d" -> d)
+
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
     val diff = x - y
-    1.0/(1.0 + math.pow(norm(diff, 2), d))
+    1.0/(1.0 + math.pow(norm(diff, 2), state("d")))
   }
 
-  def getD: Double = this.d
+  def getD: Double = state("d")
 
-  override def setHyperParameters(h: Map[String, Double]) = {
-    assert(hyper_parameters.forall(h contains _),
-      "All hyper parameters must be contained in the arguments")
-    //this.nu = h("nu")
-    this.d = h("d")
-    this
-  }
 }
 
 class TStudentCovFunc(private var d: Double) extends LocalSVMKernel[Double] {
-  override val hyper_parameters: List[String] = List("hurst")
+  override val hyper_parameters: List[String] = List("d")
+
+  state = Map("d" -> d)
 
   override def evaluate(x: Double, y: Double): Double =
-    1.0/(1.0 + math.pow(math.abs(x-y), d))
+    1.0/(1.0 + math.pow(math.abs(x-y), state("d")))
 }

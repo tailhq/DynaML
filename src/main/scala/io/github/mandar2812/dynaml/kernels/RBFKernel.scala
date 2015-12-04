@@ -14,23 +14,19 @@ class RBFKernel(private var bandwidth: Double = 1.0)
 
   override val hyper_parameters = List("bandwidth")
 
+  state = Map("bandwidth" -> bandwidth)
+
   def setbandwidth(d: Double): Unit = {
+    this.state += ("bandwidth" -> d)
     this.bandwidth = d
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
     val diff = x - y
-    Math.exp(-1*math.pow(norm(diff, 2), 2)/(2*math.pow(bandwidth, 2)))
+    Math.exp(-1*math.pow(norm(diff, 2), 2)/(2*math.pow(this.state("bandwidth"), 2)))
   }
 
   def getBandwidth: Double = this.bandwidth
-
-  override def setHyperParameters(h: Map[String, Double]) = {
-    assert(hyper_parameters.forall(h contains _),
-      "All hyper parameters must be contained in the arguments")
-    this.bandwidth = h("bandwidth")
-    this
-  }
 
 }
 
@@ -38,8 +34,10 @@ class RBFCovFunc(private var bandwidth: Double)
   extends LocalSVMKernel[Double] {
   override val hyper_parameters: List[String] = List("bandwidth")
 
+  state = Map("bandwidth" -> bandwidth)
+
   override def evaluate(x: Double, y: Double): Double = {
     val diff = x - y
-    Math.exp(-1*math.pow(diff, 2)/(2*math.pow(bandwidth, 2)))
+    Math.exp(-1*math.pow(diff, 2)/(2*math.pow(this.state("bandwidth"), 2)))
   }
 }

@@ -101,7 +101,7 @@ object SVMKernel {
   * Kernels with a locally stored matrix in the form
   * of a breeze [[DenseMatrix]] instance.
   * */
-trait LocalSVMKernel[Index] extends ScalarKernel[Index, DenseMatrix[Double]] {
+trait LocalSVMKernel[Index] extends LocalScalarKernel[Index] {
   override def buildKernelMatrix[S <: Seq[Index]](
     mappedData: S,
     length: Int): KernelMatrix[DenseMatrix[Double]] =

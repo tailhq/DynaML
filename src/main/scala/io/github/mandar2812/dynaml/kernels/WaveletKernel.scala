@@ -16,6 +16,7 @@ class WaveletKernel(func: (Double) => Double)(private var scale: Double)
 
   def setscale(d: Double): Unit = {
     this.scale = d
+    state += ("scale" -> d)
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
@@ -24,21 +25,17 @@ class WaveletKernel(func: (Double) => Double)(private var scale: Double)
     (0 to x.length).map(i => mother(math.abs(x(i)-y(i))/scale)).product
   }
 
-  def getscale: Double = this.scale
+  def getscale: Double = state("scale")
 
-  override def setHyperParameters(h: Map[String, Double]) = {
-    assert(hyper_parameters.forall(h contains _),
-      "All hyper parameters must be contained in the arguments")
-    this.scale = h("scale")
-    this
-  }
 
 }
 
 class WaveletCovFunc(func: (Double) => Double)(private var scale: Double) extends LocalSVMKernel[Double] {
-  override val hyper_parameters: List[String] = List("bandwidth")
+  override val hyper_parameters: List[String] = List("scale")
 
   val mother: (Double) => Double = func
 
-  override def evaluate(x: Double, y: Double): Double = mother(math.abs(x-y)/scale)
+  state = Map("scale" -> scale)
+
+  override def evaluate(x: Double, y: Double): Double = mother(math.abs(x-y)/state("scale"))
 }

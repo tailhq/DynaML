@@ -13,27 +13,26 @@ class RationalQuadraticKernel(si: Double = 1.0)
   with Serializable {
   override val hyper_parameters = List("c")
 
+  state = Map("c" -> si)
+
   private var c: Double = si
 
   def setc(b: Double): Unit = {
     this.c = b
+    state += ("c" -> b)
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    1 - math.pow(norm(x-y, 2), 2)/(math.pow(norm(x-y, 2), 2) + c)
+    1 - math.pow(norm(x-y, 2), 2)/(math.pow(norm(x-y, 2), 2) + state("c"))
 
-  override def setHyperParameters(h: Map[String, Double]) = {
-    assert(hyper_parameters.forall(h contains _),
-      "All hyper parameters must be contained in the arguments")
-    this.c = h("c")
-    this
-  }
 }
 
 class RationalQuadraticCovFunc(private var c: Double)
   extends LocalSVMKernel[Double] {
   override val hyper_parameters: List[String] = List("c")
 
+  state = Map("c" -> c)
+
   override def evaluate(x: Double, y: Double): Double =
-    1 - math.pow(x-y, 2)/(math.pow(x-y, 2) + c)
+    1 - math.pow(x-y, 2)/(math.pow(x-y, 2) + state("c"))
 }

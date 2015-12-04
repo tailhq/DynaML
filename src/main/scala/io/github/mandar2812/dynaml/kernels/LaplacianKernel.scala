@@ -13,29 +13,28 @@ class LaplacianKernel(be: Double = 1.0)
   with Serializable {
   override val hyper_parameters = List("beta")
 
+  state = Map("beta" -> be)
+
   private var beta: Double = be
 
   def setbeta(b: Double): Unit = {
     this.beta = b
+    state += ("beta" -> b)
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
     math.exp(-1.0*beta*norm(x - y, 1)/(norm(x,1)*norm(y,1)))
 
-  override def setHyperParameters(h: Map[String, Double]) = {
-    assert(hyper_parameters.forall(h contains _),
-      "All hyper parameters must be contained in the arguments")
-    this.beta = h("beta")
-    this
-  }
 }
 
 class LaplaceCovFunc(private var beta: Double)
   extends LocalSVMKernel[Double] {
   override val hyper_parameters: List[String] = List("beta")
 
+  state = Map("beta" -> beta)
+
   override def evaluate(x: Double, y: Double): Double = {
     val diff = math.abs(x - y)
-    math.exp(-1.0*diff/beta)
+    math.exp(-1.0*diff/state("beta"))
   }
 }

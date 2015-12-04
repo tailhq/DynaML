@@ -14,9 +14,12 @@ class PolynomialKernel(
   with Serializable{
 
   override val hyper_parameters = List("degree")
-  
+
+  state = Map("degree" -> degree)
+
   def setdegree(d: Int): Unit = {
     this.degree = d
+    state += ("degree" -> d.toDouble)
   }
 
   def setoffset(o: Int): Unit = {
@@ -24,15 +27,8 @@ class PolynomialKernel(
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    Math.pow((x.t * y) + this.offset, this.degree)/(Math.pow((x.t * x) + this.offset,
-      this.degree.toDouble/2.0) * Math.pow((y.t * y) + this.offset,
-      this.degree.toDouble/2.0))
+    Math.pow((x.t * y) + this.offset, state("degree"))/(Math.pow((x.t * x) + this.offset,
+      state("degree")/2.0) * Math.pow((y.t * y) + this.offset,
+      state("degree")/2.0))
 
-  override def setHyperParameters(h: Map[String, Double]) = {
-    assert(hyper_parameters.forall(h contains _),
-      "All hyper parameters must be contained in the arguments")
-    this.degree = math.ceil(h("degree")).toInt
-    //this.offset = h("offset")
-    this
-  }
 }

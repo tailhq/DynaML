@@ -13,19 +13,17 @@ class ExponentialKernel(be: Double = 1.0)
   with Serializable {
   override val hyper_parameters = List("beta")
 
+  state = Map("beta" -> be)
+
   private var beta: Double = be
 
   def setbeta(b: Double): Unit = {
+    state += ("beta" -> b)
     this.beta = b
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    math.exp(beta*(x.t * y)/(norm(x,2)*norm(y,2)))
+    math.exp(state("beta")*(x.t * y)/(norm(x,2)*norm(y,2)))
 
-  override def setHyperParameters(h: Map[String, Double]) = {
-    assert(hyper_parameters.forall(h contains _),
-      "All hyper parameters must be contained in the arguments")
-    this.beta = h("beta")
-    this
-  }
+
 }
