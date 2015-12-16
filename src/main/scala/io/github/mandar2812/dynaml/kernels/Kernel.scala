@@ -24,7 +24,7 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
 
   val hyper_parameters: List[String]
 
-  var state: Map[String, Double] = Map()//hyper_parameters.map(key => (key, 1.0)).toMap
+  var state: Map[String, Double] = Map()
 
   def setHyperParameters(h: Map[String, Double]): this.type = {
     assert(hyper_parameters.forall(h contains _),
