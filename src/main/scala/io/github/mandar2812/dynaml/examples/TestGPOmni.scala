@@ -28,6 +28,7 @@ object TestGPOmni {
           new RationalQuadraticKernel(bandwidth)
         case "FBM" => new FBMKernel(bandwidth)
         case "Student" => new TStudentKernel(bandwidth)
+        case "Anova" => new AnovaKernel(bandwidth)
       }
 
     //Load Omni data into a stream

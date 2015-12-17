@@ -19,7 +19,7 @@ class CauchyKernel(si: Double = 1.0)
 
   def setsigma(b: Double): Unit = {
     this.sigma = b
-    state += ("sigma" -> si)
+    state += ("sigma" -> b)
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =

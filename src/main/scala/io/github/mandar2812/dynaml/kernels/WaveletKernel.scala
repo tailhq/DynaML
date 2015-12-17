@@ -21,8 +21,7 @@ class WaveletKernel(func: (Double) => Double)(private var scale: Double)
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
     val diff = x - y
-    //Math.exp(-1*math.pow(norm(diff, 2), 2)/(2*math.pow(bandwidth, 2)))
-    (0 to x.length).map(i => mother(math.abs(x(i)-y(i))/scale)).product
+    diff.map(i => mother(math.abs(i)/scale)).toArray.product
   }
 
   def getscale: Double = state("scale")
@@ -30,7 +29,8 @@ class WaveletKernel(func: (Double) => Double)(private var scale: Double)
 
 }
 
-class WaveletCovFunc(func: (Double) => Double)(private var scale: Double) extends LocalSVMKernel[Double] {
+class WaveletCovFunc(func: (Double) => Double)(private var scale: Double)
+  extends LocalSVMKernel[Double] {
   override val hyper_parameters: List[String] = List("scale")
 
   val mother: (Double) => Double = func
