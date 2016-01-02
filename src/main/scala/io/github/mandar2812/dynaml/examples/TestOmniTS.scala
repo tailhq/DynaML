@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.examples
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.gp.{GPTimeSeries, GPRegression}
+import io.github.mandar2812.dynaml.models.gp.GPTimeSeries
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 
@@ -37,11 +37,6 @@ object TestOmniTS {
         case "Wavelet" =>
           new WaveletCovFunc((x) => math.cos(1.75*x)*math.exp(-1.0*x*x/2.0))(bandwidth)
       }
-    //val vectorizeRecordPipe = StreamDataPipe((tup: (DenseVector[Double], Double)) =>
-    //DenseVector(tup._1.toArray ++ Array(tup._2)))
-    //val identityPipe = DataPipe(identity[(DenseVector[Double], Double)])
-    //val parallelPipe = DataPipe(vectorizeRecordPipe, identityPipe)
-    //val normalizePipe = DataPipe((l: Stream[DenseVector[Double]]) => utils.getStats(l.toList))
 
     //Load Omni data into a stream
     //Extract the time and Dst values
@@ -79,11 +74,12 @@ object TestOmniTS {
         val stdDev: DenseVector[Double] = variance.map(v =>
           math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
 
+        val timeStart = trainTest._1.map(_._1).min
 
         val normalizationFunc = (point: (Double, Double)) => {
 
           val normPoint = (DenseVector(point._1, point._2) - mean) :/ stdDev
-          (point._1, normPoint(1))
+          (point._1 - timeStart, normPoint(1))
         }
 
         ((trainTest._1.map(normalizationFunc),
