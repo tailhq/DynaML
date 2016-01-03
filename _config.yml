@@ -6,7 +6,7 @@ kramdown:
 #
 # Use of `relative_permalinks` ensures post links from the index work properly.
 permalink:           pretty
-relative_permalinks: true
+#relative_permalinks: true
 
 # Setup
 title:               DynaML
@@ -25,3 +25,5 @@ author:
 
 # Custom vars
 version:             1.2
+
+gems: [jekyll-paginate]

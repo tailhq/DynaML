@@ -1,6 +1,7 @@
 ---
 layout: page
 title: About
+noToc: true
 ---
 
 Affliations
