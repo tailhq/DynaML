@@ -10,7 +10,7 @@ relative_permalinks: true
 
 # Setup
 title:               DynaML
-tagline:             'A Scala ML library'
+tagline:             'A Scala Machine Learning library'
 description:         'Library/repl for working with complex scalable ML algorithms'
 url:                 https://mandar2812.github.com/DynaML
 baseurl:             '/DynaML'
