@@ -35,7 +35,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">SVMKernel</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">SVMKernel</span><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.M">M</span>] with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -43,10 +43,10 @@
 functionality requirements of an SVM Kernel
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>, <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.M">M</span>], <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="ExponentialKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.ExponentialKernel">ExponentialKernel</a>, <a href="LaplacianKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LaplacianKernel">LaplacianKernel</a>, <a href="PolynomialKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.PolynomialKernel">PolynomialKernel</a>, <a href="RBFKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.RBFKernel">RBFKernel</a></div>
+          <div class="subClasses hiddenContent"><a href="AnovaKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.AnovaKernel">AnovaKernel</a>, <a href="CauchyKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CauchyKernel">CauchyKernel</a>, <a href="ExponentialKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.ExponentialKernel">ExponentialKernel</a>, <a href="FBMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.FBMKernel">FBMKernel</a>, <a href="LaplacianKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LaplacianKernel">LaplacianKernel</a>, <a href="PolynomialKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.PolynomialKernel">PolynomialKernel</a>, <a href="RBFKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.RBFKernel">RBFKernel</a>, <a href="RationalQuadraticKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.RationalQuadraticKernel">RationalQuadraticKernel</a>, <a href="TStudentKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.TStudentKernel">TStudentKernel</a>, <a href="WaveKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.WaveKernel">WaveKernel</a>, <a href="WaveletKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.WaveletKernel">WaveletKernel</a></div>
         </div></div>
         
 
@@ -64,7 +64,7 @@ functionality requirements of an SVM Kernel
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.kernels.SVMKernel"><span>SVMKernel</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="io.github.mandar2812.dynaml.kernels.Kernel"><span>Kernel</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.kernels.SVMKernel"><span>SVMKernel</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction"><span>CovarianceFunction</span></li><li class="in" name="io.github.mandar2812.dynaml.kernels.Kernel"><span>Kernel</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -85,8 +85,8 @@ functionality requirements of an SVM Kernel
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():io.github.mandar2812.dynaml.kernels.SVMKernel[T]"></a>
-      <a id="&lt;init&gt;:SVMKernel[T]"></a>
+      <a id="&lt;init&gt;():io.github.mandar2812.dynaml.kernels.SVMKernel[M]"></a>
+      <a id="&lt;init&gt;:SVMKernel[M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -104,25 +104,34 @@ functionality requirements of an SVM Kernel
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#buildKernelMatrix" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="buildKernelMatrix(mappedData:List[breeze.linalg.DenseVector[Double]],length:Int):io.github.mandar2812.dynaml.kernels.KernelMatrix[T]"></a>
-      <a id="buildKernelMatrix(List[DenseVector[Double]],Int):KernelMatrix[T]"></a>
+              <ol><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#buildCrossKernelMatrix" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="buildCrossKernelMatrix[S&lt;:Seq[T]](dataset1:S,dataset2:S):M"></a>
+      <a id="buildCrossKernelMatrix[S&lt;:Seq[DenseVector[Double]]](S,S):M"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildKernelMatrix</span><span class="params">(<span name="mappedData">mappedData: <a href="../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="length">length: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="KernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelMatrix">KernelMatrix</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.T">T</span>]</span>
+        <span class="name">buildCrossKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>]</span><span class="params">(<span name="dataset1">dataset1: <span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.buildCrossKernelMatrix.S">S</span></span>, <span name="dataset2">dataset2: <span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.buildCrossKernelMatrix.S">S</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.M">M</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Build the kernel matrix of the prototype vectors
-</p><div class="fullcomment"><div class="comment cmt"><p>Build the kernel matrix of the prototype vectors
-</p></div><dl class="paramcmts block"><dt class="param">mappedData</dt><dd class="cmt"><p>The prototype vectors/points
-</p></dd><dt class="param">length</dt><dd class="cmt"><p>The number of points
-</p></dd><dt>returns</dt><dd class="cmt"><p>A <a href="KernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelMatrix">KernelMatrix</a> object</p></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#buildKernelMatrix" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="buildKernelMatrix[S&lt;:Seq[T]](mappedData:S,length:Int):io.github.mandar2812.dynaml.kernels.KernelMatrix[M]"></a>
+      <a id="buildKernelMatrix[S&lt;:Seq[DenseVector[Double]]](S,Int):KernelMatrix[M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">buildKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>]</span><span class="params">(<span name="mappedData">mappedData: <span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.buildKernelMatrix.S">S</span></span>, <span name="length">length: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="KernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelMatrix">KernelMatrix</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.M">M</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.Kernel#evaluate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="evaluate(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):Double"></a>
+      <a id="evaluate(x:T,y:T):V"></a>
       <a id="evaluate(DenseVector[Double],DenseVector[Double]):Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -133,13 +142,8 @@ functionality requirements of an SVM Kernel
         <span class="name">evaluate</span><span class="params">(<span name="x">x: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Evaluates the value of the kernel given two
-vectorial parameters
-</p><div class="fullcomment"><div class="comment cmt"><p>Evaluates the value of the kernel given two
-vectorial parameters
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>a local Vector.</p></dd><dt class="param">y</dt><dd class="cmt"><p>a local Vector.
-</p></dd><dt>returns</dt><dd class="cmt"><p>the value of the Kernel function.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#hyper_parameters" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#hyper_parameters" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="hyper_parameters:List[String]"></a>
       <a id="hyper_parameters:List[String]"></a>
       <h4 class="signature">
@@ -151,7 +155,7 @@ vectorial parameters
         <span class="name">hyper_parameters</span><span class="result">: <a href="../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -404,8 +408,8 @@ the Eigen Decomposition.</p><p>phi_i(x) = (1/sqrt(eigenvalue(i)))*Sum(k, 1, m, K
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#setHyperParameters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="setHyperParameters(h:Map[String,Double]):SVMKernel.this.type"></a>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#setHyperParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setHyperParameters(h:Map[String,Double]):CovarianceFunction.this.type"></a>
       <a id="setHyperParameters(Map[String,Double]):SVMKernel.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -416,7 +420,20 @@ the Eigen Decomposition.</p><p>phi_i(x) = (1/sqrt(eigenvalue(i)))*Sum(k, 1, m, K
         <span class="name">setHyperParameters</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>.this.type</span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#state" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="state:Map[String,Double]"></a>
+      <a id="state:Map[String,Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">state</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -513,8 +530,10 @@ the Eigen Decomposition.</p><p>phi_i(x) = (1/sqrt(eigenvalue(i)))*Sum(k, 1, m, K
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">
+              <h3>Inherited from <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.M">M</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.kernels.Kernel">
-              <h3>Inherited from <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></h3>
+              <h3>Inherited from <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

@@ -385,19 +385,19 @@ application of the kernel
       </h4>
       
     </li><li name="io.github.mandar2812.dynaml.models.KernelizedModel#crossvalidate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="crossvalidate(folds:Int,reg:Double):(Double,Double,Double)"></a>
-      <a id="crossvalidate(Int,Double):(Double,Double,Double)"></a>
+      <a id="crossvalidate(folds:Int,reg:Double,optionalStateFlag:Boolean):(Double,Double,Double)"></a>
+      <a id="crossvalidate(Int,Double,Boolean):(Double,Double,Double)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">crossvalidate</span><span class="params">(<span name="folds">folds: <span class="extype" name="scala.Int">Int</span></span>, <span name="reg">reg: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)</span>
+        <span class="name">crossvalidate</span><span class="params">(<span name="folds">folds: <span class="extype" name="scala.Int">Int</span></span>, <span name="reg">reg: <span class="extype" name="scala.Double">Double</span></span>, <span name="optionalStateFlag">optionalStateFlag: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel#current_state" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.KernelizedModel#current_state" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="current_state:Map[String,Double]"></a>
       <a id="current_state:Map[String,Double]"></a>
       <h4 class="signature">
@@ -412,7 +412,7 @@ application of the kernel
       <p class="shortcomment cmt">A Map which stores the current state of
 the system.</p><div class="fullcomment"><div class="comment cmt"><p>A Map which stores the current state of
 the system.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel">KernelSparkModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel#effectivedims" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="effectivedims:Int"></a>
       <a id="effectivedims:Int"></a>
@@ -577,7 +577,7 @@ to an identity map.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel#hyper_parameters" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.KernelizedModel#hyper_parameters" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hyper_parameters:List[String]"></a>
       <a id="hyper_parameters:List[String]"></a>
       <h4 class="signature">
@@ -591,7 +591,7 @@ to an identity map.
       </h4>
       <p class="shortcomment cmt">Stores the names of the hyper-parameters
 </p><div class="fullcomment"><div class="comment cmt"><p>Stores the names of the hyper-parameters
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel">KernelSparkModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel#initParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="initParams():breeze.linalg.DenseVector[Double]"></a>
       <a id="initParams():DenseVector[Double]"></a>

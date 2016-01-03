@@ -165,15 +165,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#buildSVMKernelMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="buildSVMKernelMatrix(mappedData:List[breeze.linalg.DenseVector[Double]],length:Int,eval:(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])=&gt;Double):io.github.mandar2812.dynaml.kernels.KernelMatrix[breeze.linalg.DenseMatrix[Double]]"></a>
-      <a id="buildSVMKernelMatrix(List[DenseVector[Double]],Int,(DenseVector[Double],DenseVector[Double])⇒Double):KernelMatrix[DenseMatrix[Double]]"></a>
+      <a id="buildSVMKernelMatrix[S&lt;:Seq[T],T](mappedData:S,length:Int,eval:(T,T)=&gt;Double):io.github.mandar2812.dynaml.kernels.KernelMatrix[breeze.linalg.DenseMatrix[Double]]"></a>
+      <a id="buildSVMKernelMatrix[S&lt;:Seq[T],T](S,Int,(T,T)⇒Double):KernelMatrix[DenseMatrix[Double]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildSVMKernelMatrix</span><span class="params">(<span name="mappedData">mappedData: <a href="../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="length">length: <span class="extype" name="scala.Int">Int</span></span>, <span name="eval">eval: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="KernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelMatrix">KernelMatrix</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">buildSVMKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildSVMKernelMatrix.T">T</span>]</span>, <span name="T">T</span>]</span><span class="params">(<span name="mappedData">mappedData: <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildSVMKernelMatrix.S">S</span></span>, <span name="length">length: <span class="extype" name="scala.Int">Int</span></span>, <span name="eval">eval: (<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildSVMKernelMatrix.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildSVMKernelMatrix.T">T</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="KernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelMatrix">KernelMatrix</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">This function constructs an <a href="SVMKernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernelMatrix">SVMKernelMatrix</a>
@@ -200,6 +200,19 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#crossKernelMatrix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="crossKernelMatrix[S&lt;:Seq[T],T](data1:S,data2:S,eval:(T,T)=&gt;Double):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="crossKernelMatrix[S&lt;:Seq[T],T](S,S,(T,T)⇒Double):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">crossKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.crossKernelMatrix.T">T</span>]</span>, <span name="T">T</span>]</span><span class="params">(<span name="data1">data1: <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.crossKernelMatrix.S">S</span></span>, <span name="data2">data2: <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.crossKernelMatrix.S">S</span></span>, <span name="eval">eval: (<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.crossKernelMatrix.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.crossKernelMatrix.T">T</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>

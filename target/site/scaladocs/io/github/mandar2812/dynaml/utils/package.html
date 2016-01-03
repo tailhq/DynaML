@@ -113,6 +113,32 @@ and library functions.
       </span>
       </h4>
       
+    </li><li name="io.github.mandar2812.dynaml.utils.package#downloadURL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="downloadURL(url:String,saveAs:String):Unit"></a>
+      <a id="downloadURL(String,String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">downloadURL</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="saveAs">saveAs: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#extractColumns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="extractColumns(lines:Stream[String],sep:String,columns:List[Int],naStrings:Map[Int,String]):Stream[String]"></a>
+      <a id="extractColumns(Stream[String],String,List[Int],Map[Int,String]):Stream[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">extractColumns</span><span class="params">(<span name="lines">lines: <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="sep">sep: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="columns">columns: <a href="../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="naStrings">naStrings: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="io.github.mandar2812.dynaml.utils.package#factorial" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="factorial(n:Int,accumulator:Long):Long"></a>
       <a id="factorial(Int,Long):Long"></a>
@@ -233,6 +259,71 @@ which is a <span class="extype" name="List">List</span> of <span class="extype" 
       </span>
       <span class="symbol">
         <span class="name">log1pExp</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#replace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="replace(find:String)(replace:String)(input:String):String"></a>
+      <a id="replace(String)(String)(String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">replace</span><span class="params">(<span name="find">find: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="replace">replace: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#strReplace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="strReplace(fileName:String)(findStringRegex:String,replaceString:String):Stream[String]"></a>
+      <a id="strReplace(String)(String,String):Stream[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">strReplace</span><span class="params">(<span name="fileName">fileName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="findStringRegex">findStringRegex: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="replaceString">replaceString: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#textFileToStream" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="textFileToStream(fileName:String):Stream[String]"></a>
+      <a id="textFileToStream(String):Stream[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textFileToStream</span><span class="params">(<span name="fileName">fileName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#transformData" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="transformData(transform:String=&gt;String)(lines:Stream[String]):Stream[String]"></a>
+      <a id="transformData((String)⇒String)(Stream[String]):Stream[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transformData</span><span class="params">(<span name="transform">transform: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="lines">lines: <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.utils.package#writeToFile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="writeToFile(destination:String)(lines:Stream[String]):Unit"></a>
+      <a id="writeToFile(String)(Stream[String]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeToFile</span><span class="params">(<span name="destination">destination: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="lines">lines: <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
