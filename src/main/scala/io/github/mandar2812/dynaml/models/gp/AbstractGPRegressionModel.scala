@@ -1,9 +1,8 @@
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{inv, DenseMatrix, DenseVector}
-import breeze.stats.distributions.MultivariateGaussian
+import breeze.linalg.{det, inv, DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
-import io.github.mandar2812.dynaml.optimization.ConjugateGradient
+import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import org.apache.log4j.Logger
 
 /**
@@ -23,7 +22,8 @@ abstract class AbstractGPRegressionModel[T, I](
   cov: CovarianceFunction[I, Double, DenseMatrix[Double]],
   data: T, num: Int) extends
 GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
-  (DenseVector[Double], DenseMatrix[Double])]{
+  (DenseVector[Double], DenseMatrix[Double])]
+with GloballyOptimizable {
 
   private val logger = Logger.getLogger(this.getClass)
 
@@ -48,6 +48,41 @@ GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
     this
   }
 
+  override protected var hyper_parameters: List[String] =
+    cov.hyper_parameters :+ "noiseLevel"
+
+  override protected var current_state: Map[String, Double] =
+    cov.state + (("noiseLevel", noiseLevel))
+
+
+  /**
+    * Calculates the energy of the configuration,
+    * in most global optimization algorithms
+    * we aim to find an approximate value of
+    * the hyper-parameters such that this function
+    * is minimized.
+    *
+    * @param h The value of the hyper-parameters in the configuration space
+    * @param options Optional parameters about configuration
+    * @return Configuration Energy E(h)
+    *
+    * In this particular case E(h) = -log p(Y|X,h)
+    * also known as log likelihood.
+    **/
+  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
+
+    this.setNoiseLevel(h("noiseLevel"))
+    covariance.setHyperParameters(h)
+
+    val training = dataAsIndexSeq(g)
+    val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
+
+    val kernelTraining: DenseMatrix[Double] =
+      covariance.buildKernelMatrix(training, npoints).getKernelMatrix()
+
+    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining, noiseLevel)
+  }
+
   /**
    * Calculates posterior predictive distribution for
    * a particular set of test data points.
@@ -67,20 +102,9 @@ GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
     val crossKernel = covariance.buildCrossKernelMatrix(training, test)
 
     //Calculate the predictive mean and co-variance
-    /*val meanBuff = ConjugateGradient.runCG(kernelTraining, trainingLabels,
-      DenseVector.ones[Double](training.length), 0.0001, 20)
-
-    logger.info("Predictive Mean: \n"+crossKernel.t * meanBuff)
-
-    val CovBuff = ConjugateGradient.runMultiCG(kernelTraining,
-      crossKernel, DenseMatrix.ones[Double](training.length, test.length),
-      0.0001, 20)
-
-    logger.info("Predictive Co-variance: \n"+(kernelTest - (crossKernel.t * CovBuff)))
-    (crossKernel.t * meanBuff, kernelTest - (crossKernel.t * CovBuff))*/
-    //val kernelMat = kernelTraining + DenseMatrix.eye[Double](training.length) * math.pow(noiseLevel, 2)
-    val inverse = inv(kernelTraining + DenseMatrix.eye[Double](training.length) * math.pow(noiseLevel, 2))
-    (crossKernel.t * (inverse * trainingLabels), kernelTest - (crossKernel.t * (inverse * crossKernel)))
+    val inverse = inv(kernelTraining + DenseMatrix.eye[Double](training.length) * noiseLevel)
+    (crossKernel.t * (inverse * trainingLabels),
+      kernelTest - (crossKernel.t * (inverse * crossKernel)))
   }
 
   /**
@@ -101,4 +125,19 @@ GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
   }
 
+}
+
+object AbstractGPRegressionModel {
+
+  def logLikelihood(trainingData: DenseVector[Double],
+                    kernelMatrix: DenseMatrix[Double],
+                    noise: Double): Double = {
+
+    val kernelTraining: DenseMatrix[Double] =
+      kernelMatrix + DenseMatrix.eye[Double](trainingData.length) * noise
+    val Kinv = inv(kernelTraining)
+
+    0.5*(trainingData.t * (Kinv * trainingData) + math.log(det(kernelTraining)) +
+      trainingData.length*math.log(2*math.Pi))
+  }
 }

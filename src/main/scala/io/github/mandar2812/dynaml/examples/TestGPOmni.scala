@@ -70,6 +70,8 @@ object TestGPOmni {
           trainTest._2.map(normalizationFunc)), (mean, stdDev))
     }
 
+    //function to train and test a GP Regression model
+    //accepts training and test splits separately.
     val modelTrainTest =
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
@@ -91,6 +93,7 @@ object TestGPOmni {
         //println(scoresAndLabels)
         metrics.print()
         metrics.generatePlots()
+
       }
 
     val preProcessPipe = DataPipe(utils.textFileToStream _) >
@@ -102,6 +105,37 @@ object TestGPOmni {
         (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
       })
 
+    /*
+    * Create the final pipe composed as follows
+    *
+    * train, test
+    *   |       |
+    *   |-------|
+    *   |       |
+    *   v       v
+    * p_train, p_test : pre-process
+    *   |       |
+    *   |-------|
+    *   |       |
+    *   v       v
+    * s_train, s_test : sub-sample
+    *   |       |
+    *   |-------|
+    *   |       |
+    *   v       v
+    * norm_tr, norm_te : mean center and standardize
+    *   |       |
+    *   |-------|
+    *   |       |
+    *   v       v
+    *   |       |
+    *  |-----------------|
+    *  | Train and test  |
+    *  | model. Output   |
+    *  | graphs, metrics |
+    *  |_________________|
+    *
+    * */
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
       DataPipe((data: (Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)])) => {
