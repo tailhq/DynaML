@@ -13,9 +13,8 @@ import scala.util.Random
  * Implementation of the Coupled Simulated Annealing algorithm
  * for global optimization.
  */
-class CoupledSimulatedAnnealing[G, H, M <: KernelizedModel[G, H, DenseVector[Double],
-  DenseVector[Double], Double, Int, Int]](model: M)
-  extends GridSearch[G, H, M](model: M){
+class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
+  extends GridSearch[M](model: M){
 
   protected var MAX_ITERATIONS: Int = 10
 
@@ -69,14 +68,17 @@ class CoupledSimulatedAnnealing[G, H, M <: KernelizedModel[G, H, DenseVector[Dou
     var mutTemp = iTemp
     //one list for each key in initialConfig
     val hyper_params = initialConfig.keys.toList
-    val scaleFunc = if(logarithmicScale) (i: Int) => math.exp((i+1).toDouble*step) else
-      (i: Int) => (i+1).toDouble*step
+
+    def scaleFunc(param: String) = if(logarithmicScale)
+      (i: Int) => {initialConfig(param)*math.exp((i+1).toDouble*step)}
+    else
+      (i: Int) => initialConfig(param) - (i+1).toDouble*step
 
     val gridvecs = initialConfig.map((keyValue) => {
-      (keyValue._1, List.tabulate[Double](gridsize)(scaleFunc))
+      (keyValue._1, List.tabulate(gridsize)(scaleFunc(keyValue._1)))
     })
 
-    val grid = utils.combine(gridvecs.map(_._2)).map(x => DenseVector(x.toArray))
+    val grid = utils.combine(gridvecs.values).map(x => DenseVector(x.toArray))
 
     val energyLandscape = grid.map((config) => {
       val configMap = List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap

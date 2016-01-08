@@ -48,6 +48,13 @@ with GloballyOptimizable {
     this
   }
 
+  def setState(s: Map[String, Double]): this.type ={
+    covariance.setHyperParameters(s)
+    noiseLevel = s("noiseLevel")
+    current_state = cov.state + (("noiseLevel", noiseLevel))
+    this
+  }
+
   override protected var hyper_parameters: List[String] =
     cov.hyper_parameters :+ "noiseLevel"
 

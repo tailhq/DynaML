@@ -4,6 +4,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.GPRegression
+import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 
@@ -11,10 +12,11 @@ import io.github.mandar2812.dynaml.utils
   * Created by mandar on 19/11/15.
   */
 object TestGPOmni {
-  def apply (year: Int = 2006, yeartest: Int = 2007, kern: String = "RBF",
-            bandwidth: Double = 0.5, noise: Double = 0.0,
-            num_training: Int = 200, num_test: Int = 50,
-            columns: List[Int] = List(40,16,21,23,24,22,25)): Unit = {
+  def apply (year: Int = 2006, yeartest: Int = 2007,
+             kern: String = "RBF", bandwidth: Double = 0.5,
+             noise: Double = 0.0, num_training: Int = 200,
+             num_test: Int = 50, columns: List[Int] = List(40,16,21,23,24,22,25),
+             grid: Int = 5, step: Double = 0.2): Unit = {
 
     val kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] =
       kern match {
@@ -70,6 +72,16 @@ object TestGPOmni {
           trainTest._2.map(normalizationFunc)), (mean, stdDev))
     }
 
+    val preProcessPipe = DataPipe(utils.textFileToStream _) >
+      DataPipe(replaceWhiteSpaces) >
+      DataPipe(extractTrainingFeatures) >
+      StreamDataPipe((line: String) => !line.contains(",,")) >
+      StreamDataPipe((line: String) => {
+        val split = line.split(",")
+        (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
+      })
+
+
     //function to train and test a GP Regression model
     //accepts training and test splits separately.
     val modelTrainTest =
@@ -77,6 +89,16 @@ object TestGPOmni {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
         val model = new GPRegression(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+
+        val gs = new GridSearch[model.type](model)
+          .setGridSize(grid)
+          .setStepSize(step)
+          .setLogScale(false)
+
+        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise))
+
+        model.setState(conf)
+
         val res = model.test(trainTest._1._2.toSeq)
         val scoresAndLabelsPipe =
           DataPipe(
@@ -95,15 +117,6 @@ object TestGPOmni {
         metrics.generatePlots()
 
       }
-
-    val preProcessPipe = DataPipe(utils.textFileToStream _) >
-      DataPipe(replaceWhiteSpaces) >
-      DataPipe(extractTrainingFeatures) >
-      StreamDataPipe((line: String) => !line.contains(",,")) >
-      StreamDataPipe((line: String) => {
-        val split = line.split(",")
-        (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
-      })
 
     /*
     * Create the final pipe composed as follows
@@ -130,9 +143,10 @@ object TestGPOmni {
     *   v       v
     *   |       |
     *  |-----------------|
-    *  | Train and test  |
-    *  | model. Output   |
-    *  | graphs, metrics |
+    *  | Train, tune and |
+    *  | test the model. |
+    *  | Output graphs,  |
+    *  | metrics         |
     *  |_________________|
     *
     * */

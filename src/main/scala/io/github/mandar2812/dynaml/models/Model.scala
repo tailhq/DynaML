@@ -264,10 +264,10 @@ object KernelizedModel {
                                             step: Double, logscale: Boolean = true,
                                             csaIt: Int = 5) = {
     val gs = globalOptMethod match {
-      case "gs" => new GridSearch[G, H, model.type](model).setGridSize(grid)
+      case "gs" => new GridSearch[model.type](model).setGridSize(grid)
         .setStepSize(step).setLogScale(logscale)
 
-      case "csa" => new CoupledSimulatedAnnealing[G, H, model.type](model).setGridSize(grid)
+      case "csa" => new CoupledSimulatedAnnealing[model.type](model).setGridSize(grid)
         .setStepSize(step).setLogScale(logscale).setMaxIterations(csaIt)
     }
 

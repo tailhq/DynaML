@@ -2,7 +2,6 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
 import org.apache.log4j.Logger
-import io.github.mandar2812.dynaml.models.KernelizedModel
 import io.github.mandar2812.dynaml.utils
 
 /**
@@ -11,10 +10,8 @@ import io.github.mandar2812.dynaml.utils
  * An implementation of Grid Search
  * global optimization for Kernel Models
  */
-class GridSearch[G, H, M <: KernelizedModel[G, H, DenseVector[Double],
-DenseVector[Double], Double, Int, Int]](model: M)
-  extends GlobalOptimizer[KernelizedModel[G, H, DenseVector[Double],
-    DenseVector[Double], Double, Int, Int]]{
+class GridSearch[M <: GloballyOptimizable](model: M)
+  extends GlobalOptimizer[M]{
 
   protected val logger = Logger.getLogger(this.getClass)
 
@@ -48,14 +45,17 @@ DenseVector[Double], Double, Int, Int]](model: M)
 
     //one list for each key in initialConfig
     val hyper_params = initialConfig.keys.toList
-    val scaleFunc = if(logarithmicScale) (i: Int) => math.exp((i+1).toDouble*step) else
-      (i: Int) => (i+1).toDouble*step
+
+    def scaleFunc(param: String) = if(logarithmicScale)
+      (i: Int) => {initialConfig(param)*math.exp((i+1).toDouble*step)}
+    else
+      (i: Int) => initialConfig(param) - (i+1).toDouble*step
 
     val gridvecs = initialConfig.map((keyValue) => {
-      (keyValue._1, List.tabulate(gridsize)(scaleFunc))
+      (keyValue._1, List.tabulate(gridsize)(scaleFunc(keyValue._1)))
     })
 
-    val grid = utils.combine(gridvecs.map(_._2)).map(x => DenseVector(x.toArray))
+    val grid = utils.combine(gridvecs.values).map(x => DenseVector(x.toArray))
 
     val energyLandscape = grid.map((config) => {
       val configMap = List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
