@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.evaluation
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.{Priority, Logger}
 
 import com.quantifind.charts.Highcharts._
@@ -31,32 +32,44 @@ class RegressionMetrics(
 
   val Rsq: Double = RegressionMetrics.computeRsq(scoresAndLabels, length)
 
-  def residuals() = this.scoresAndLabels.map((s) => (s._1 - s._2, s._2))
+  val sigma: Double =
+    math.sqrt(utils.getStats(this.residuals().map(i => DenseVector(i._1)))._2(0)/(length - 1.0))
+
+  def residuals() = this.scoresAndLabels.map((s) => (s._1 - s._2, s._1))
 
   def scores_and_labels() = this.scoresAndLabels
 
   override def print(): Unit = {
-    logger.log(Priority.INFO, "Regression Model Performance")
-    logger.log(Priority.INFO, "============================")
-    logger.log(Priority.INFO, "MAE: " + mae)
-    logger.log(Priority.INFO, "RMSE: " + rmse)
-    logger.log(Priority.INFO, "RMSLE: " + rmsle)
-    logger.log(Priority.INFO, "R^2: " + Rsq)
+    logger.info("Regression Model Performance")
+    logger.info("============================")
+    logger.info("MAE: " + mae)
+    logger.info("RMSE: " + rmse)
+    logger.info("RMSLE: " + rmsle)
+    logger.info("R^2: " + Rsq)
+    logger.info("Std Dev of Residuals: " + sigma)
   }
 
   override def kpi() = DenseVector(mae, rmse, Rsq)
 
   override def generatePlots(): Unit = {
     implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
-    val roccurve = this.residuals().map(_._1)
+    val roccurve = this.residuals()
 
     logger.log(Priority.INFO, "Generating Plot of Residuals")
     /*val chart1 = XYBarChart(roccurve,
       title = "Residuals", legend = true)
 
     chart1.show()*/
-    histogram(roccurve)
+    histogram(roccurve.map(_._1))
     title("Histogram of Regression Residuals")
+    xAxis("Residual Value Range")
+    yAxis("Number of Samples")
+
+    logger.info("Generating plot of residuals vs labels")
+    scatter(roccurve.map(i => (i._2/sigma, i._1)))
+    title("Scatter Plot of Standardized Residuals")
+    xAxis("Predicted Value")
+    yAxis("Residual")
 
     logger.info("Generating plot of goodness of fit")
     regression(scoresAndLabels)

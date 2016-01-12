@@ -4,9 +4,11 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.GPRegression
-import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GridSearch}
+import io.github.mandar2812.dynaml.optimization.GridSearch
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
+
+import scala.util.Random
 
 /**
   * Created by mandar on 19/11/15.
@@ -16,7 +18,8 @@ object TestGPOmni {
              kern: String = "RBF", bandwidth: Double = 0.5,
              noise: Double = 0.0, num_training: Int = 200,
              num_test: Int = 50, columns: List[Int] = List(40,16,21,23,24,22,25),
-             grid: Int = 5, step: Double = 0.2): Unit = {
+             grid: Int = 5, step: Double = 0.2,
+             randomSample: Boolean = false): Unit = {
 
     val kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] =
       kern match {
@@ -153,7 +156,11 @@ object TestGPOmni {
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
       DataPipe((data: (Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)])) => {
-        (data._1.take(num_training), data._2.takeRight(num_test))
+        if(!randomSample)
+          (data._1.take(num_training), data._2.takeRight(num_test))
+        else
+          (data._1.filter(_ => Random.nextDouble() <= num_training/data._1.size.toDouble),
+            data._2.filter(_ => Random.nextDouble() <= num_test/data._2.size.toDouble))
       }) >
       DataPipe(normalizeData) >
       DataPipe(modelTrainTest)
