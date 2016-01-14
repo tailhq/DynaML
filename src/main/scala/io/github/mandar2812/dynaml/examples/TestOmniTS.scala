@@ -4,6 +4,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.GPTimeSeries
+import io.github.mandar2812.dynaml.optimization.GridSearch
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 
@@ -14,7 +15,8 @@ object TestOmniTS {
   def apply(year: Int = 2006, kern: String = "RBF",
             bandwidth: Double = 0.5, noise: Double = 0.0,
             num_training: Int = 200, num_test: Int = 50,
-            column: Int = 40): Unit = {
+            column: Int = 40, grid: Int = 5,
+            step: Double = 0.2): Unit = {
 
     val kernel: CovarianceFunction[Double, Double, DenseMatrix[Double]] =
       kern match {
@@ -36,6 +38,8 @@ object TestOmniTS {
           new TStudentCovFunc(bandwidth)
         case "Wavelet" =>
           new WaveletCovFunc((x) => math.cos(1.75*x)*math.exp(-1.0*x*x/2.0))(bandwidth)
+        case "Periodic" =>
+          new PeriodicCovFunc(bandwidth, bandwidth)
       }
 
     //Load Omni data into a stream
@@ -91,6 +95,16 @@ object TestOmniTS {
         Stream[(Double, Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
         val model = new GPTimeSeries(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+
+        val gs = new GridSearch[model.type](model)
+          .setGridSize(grid)
+          .setStepSize(step)
+          .setLogScale(false)
+
+        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise))
+
+        model.setState(conf)
+
         val res = model.test(trainTest._1._2.toSeq)
         val scoresAndLabelsPipe =
           DataPipe((res: Seq[(Double, Double, Double, Double, Double)]) =>
