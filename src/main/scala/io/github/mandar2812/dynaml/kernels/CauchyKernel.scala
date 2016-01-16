@@ -25,6 +25,9 @@ class CauchyKernel(si: Double = 1.0)
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
     1/(1 + math.pow(norm(x-y, 2)/state("sigma"), 2))
 
+  override def gradient(x: DenseVector[Double], y: DenseVector[Double]): Map[String, Double] = {
+    Map("sigma" -> 2.0*math.pow(evaluate(x,y),2)*math.pow(norm(x-y, 2), 2)/math.pow(state("sigma"), 3))
+  }
 }
 
 class CauchyCovFunc(private var sigma: Double)
@@ -35,5 +38,9 @@ class CauchyCovFunc(private var sigma: Double)
 
   override def evaluate(x: Double, y: Double): Double = {
     1/(1 + math.pow((x-y)/state("sigma"), 2))
+  }
+
+  override def gradient(x: Double, y: Double): Map[String, Double] = {
+    Map("sigma" -> 2.0*math.pow(evaluate(x,y),2)*math.pow(x-y, 2)/math.pow(state("sigma"), 3))
   }
 }

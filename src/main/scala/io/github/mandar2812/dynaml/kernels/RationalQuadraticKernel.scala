@@ -25,6 +25,13 @@ class RationalQuadraticKernel(si: Double = 1.0)
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
     1 - math.pow(norm(x-y, 2), 2)/(math.pow(norm(x-y, 2), 2) + state("c"))
 
+  override def gradient(x: DenseVector[Double], y: DenseVector[Double]): Map[String, Double] = {
+    Map("c" ->
+      2.0*math.pow(norm(x-y, 2), 2)*state("c")/
+        math.pow(math.pow(norm(x-y, 2), 2) + math.pow(state("c"), 2), 2)
+    )
+  }
+
 }
 
 class RationalQuadraticCovFunc(private var c: Double)
@@ -35,4 +42,11 @@ class RationalQuadraticCovFunc(private var c: Double)
 
   override def evaluate(x: Double, y: Double): Double =
     1 - math.pow(x-y, 2)/(math.pow(x-y, 2) + state("c"))
+
+  override def gradient(x: Double, y: Double): Map[String, Double] = {
+    Map("c" ->
+      2.0*math.pow(x-y, 2)*state("c")/
+        math.pow(math.pow(x-y, 2) + math.pow(state("c"), 2), 2)
+    )
+  }
 }
