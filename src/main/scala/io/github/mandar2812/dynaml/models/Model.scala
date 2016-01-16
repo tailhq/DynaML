@@ -297,3 +297,33 @@ object KernelizedModel {
     }
   }
 }
+
+trait SubsampledDualLSSVM[G, L] extends
+KernelizedModel[G, L, DenseVector[Double], DenseVector[Double],
+  Double, Int, Int]{
+
+  var kernel :SVMKernel[DenseMatrix[Double]] = null
+
+  var (feature_a, b): (DenseMatrix[Double], DenseVector[Double]) = (null, null)
+
+  protected var effectivedims:Int
+
+  override def applyKernel(kern: SVMKernel[DenseMatrix[Double]],
+                           M: Int = this.points.length):Unit = {
+    if(M != this.points.length) {
+      this.optimumSubset(M)
+    }
+    this.params = DenseVector.fill(M+1)(1.0)
+    effectivedims = M+1
+    kernel = kern
+  }
+
+  override def applyFeatureMap: Unit = {}
+
+  override def learn(): Unit = {
+    this.params =ConjugateGradient.runCG(feature_a, b,
+      this.initParams(), 0.0001,
+      this.params.length)
+  }
+
+}
