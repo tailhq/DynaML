@@ -35,4 +35,18 @@ trait GloballyOptimizable {
   def energy(h: Map[String, Double],
              options: Map[String, String] = Map()): Double
 
+  /**
+    * Calculates the gradient energy of the configuration and
+    * subtracts this from the current value of h to yield a new
+    * hyper-parameter configuration.
+    *
+    * Over ride this function if you aim to implement a gradient based
+    * hyper-parameter optimization routine like ML-II
+    *
+    * @param h The value of the hyper-parameters in the configuration space
+    * @return Gradient of the objective function as a Map
+    * */
+  def gradEnergy(h: Map[String, Double])
+  : Map[String, Double] = Map()
+
 }

@@ -35,7 +35,7 @@ class RegressionMetrics(
   val sigma: Double =
     math.sqrt(utils.getStats(this.residuals().map(i => DenseVector(i._1)))._2(0)/(length - 1.0))
 
-  def residuals() = this.scoresAndLabels.map((s) => (s._1 - s._2, s._1))
+  def residuals() = this.scoresAndLabels.map((s) => (s._2 - s._1, s._1))
 
   def scores_and_labels() = this.scoresAndLabels
 
@@ -66,7 +66,7 @@ class RegressionMetrics(
     yAxis("Number of Samples")
 
     logger.info("Generating plot of residuals vs labels")
-    scatter(roccurve.map(i => (i._2/sigma, i._1)))
+    scatter(roccurve.map(i => (i._2, i._1)))
     title("Scatter Plot of Standardized Residuals")
     xAxis("Predicted Value")
     yAxis("Residual")

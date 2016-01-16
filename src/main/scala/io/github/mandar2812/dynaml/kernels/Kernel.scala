@@ -35,6 +35,8 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
     this
   }
 
+  def gradient(x: T, y: T): Map[String, V]
+
   def buildKernelMatrix[S <: Seq[T]](mappedData: S,
                                      length: Int): KernelMatrix[M]
 
@@ -55,16 +57,22 @@ abstract class CompositeCovariance[T, V, M]
   *
   * */
 trait LocalScalarKernel[Index] extends CovarianceFunction[Index, Double, DenseMatrix[Double]] {
+
+  def gradient(x: Index, y: Index): Map[String, Double] = hyper_parameters.map((_, 0.0)).toMap
+
   def +(otherKernel: LocalScalarKernel[Index]): CompositeCovariance[Index, Double, DenseMatrix[Double]] = {
 
     val firstKernelHyp = this.hyper_parameters
 
-    val firstKern = this.evaluate _
+    val firstKern = this
 
     new CompositeCovariance[Index, Double, DenseMatrix[Double]] {
       override val hyper_parameters = firstKernelHyp ++ otherKernel.hyper_parameters
 
-      override def evaluate(x: Index, y: Index) = firstKern(x,y) + otherKernel.evaluate(x,y)
+      override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) + otherKernel.evaluate(x,y)
+
+      def gradient(x: Index, y: Index): Map[String, Double] =
+        firstKern.gradient(x, y) ++ otherKernel.gradient(x,y)
 
       override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
         SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
@@ -85,6 +93,8 @@ trait LocalScalarKernel[Index] extends CovarianceFunction[Index, Double, DenseMa
       override val hyper_parameters = firstKernelHyp ++ otherKernel.hyper_parameters
 
       override def evaluate(x: Index, y: Index) = firstKern(x,y) * otherKernel.evaluate(x,y)
+
+      def gradient(x: Index, y: Index): Map[String, Double] = hyper_parameters.map((_, 0.0)).toMap
 
       override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
         SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)

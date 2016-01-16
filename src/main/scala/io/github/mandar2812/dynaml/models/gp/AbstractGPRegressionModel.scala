@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{det, inv, DenseMatrix, DenseVector}
+import breeze.linalg._
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import org.apache.log4j.Logger
@@ -21,7 +21,7 @@ import org.apache.log4j.Logger
 abstract class AbstractGPRegressionModel[T, I](
   cov: CovarianceFunction[I, Double, DenseMatrix[Double]],
   data: T, num: Int) extends
-GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
+  GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
   (DenseVector[Double], DenseMatrix[Double])]
 with GloballyOptimizable {
 
@@ -88,6 +88,45 @@ with GloballyOptimizable {
       covariance.buildKernelMatrix(training, npoints).getKernelMatrix()
 
     AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining, noiseLevel)
+  }
+
+  /**
+    * Calculates the gradient energy of the configuration and
+    * subtracts this from the current value of h to yield a new
+    * hyper-parameter configuration.
+    *
+    * Over ride this function if you aim to implement a gradient based
+    * hyper-parameter optimization routine like ML-II
+    *
+    * @param h The value of the hyper-parameters in the configuration space
+    * @return Gradient of the objective function (marginal likelihood) as a Map
+    **/
+  override def gradEnergy(h: Map[String, Double]): Map[String, Double] = {
+
+    this.setNoiseLevel(h("noiseLevel"))
+    covariance.setHyperParameters(h)
+
+    val training = dataAsIndexSeq(g)
+    val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
+
+    val inverse = inv(covariance.buildKernelMatrix(training, npoints).getKernelMatrix() +
+      DenseMatrix.eye[Double](npoints) * noiseLevel)
+
+    val hParams = covariance.hyper_parameters :+ "noiseLevel"
+    val alpha = inverse * trainingLabels
+    hParams.map(h => {
+      //build kernel derivative matrix
+      val kernelDerivative =
+        if(h == "noiseLevel")
+          DenseMatrix.eye[Double](npoints)
+        else
+          DenseMatrix.tabulate[Double](npoints, npoints){(i,j) => {
+            covariance.gradient(training(i), training(j))(h)
+          }}
+      //Calculate gradient for the hyper parameter h
+      val grad: DenseMatrix[Double] = (alpha*alpha.t - inverse)*kernelDerivative
+      (h, trace(grad))
+    }).toMap
   }
 
   /**

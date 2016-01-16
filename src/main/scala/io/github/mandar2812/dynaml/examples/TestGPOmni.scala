@@ -4,7 +4,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.GPRegression
-import io.github.mandar2812.dynaml.optimization.GridSearch
+import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 
@@ -19,7 +19,7 @@ object TestGPOmni {
              noise: Double = 0.0, num_training: Int = 200,
              num_test: Int = 50, columns: List[Int] = List(40,16,21,23,24,22,25),
              grid: Int = 5, step: Double = 0.2,
-             randomSample: Boolean = false): Unit = {
+             randomSample: Boolean = false, globalOpt: String = "ML"): Unit = {
 
     val kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] =
       kern match {
@@ -93,12 +93,19 @@ object TestGPOmni {
         (DenseVector[Double], DenseVector[Double]))) => {
         val model = new GPRegression(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
 
-        val gs = new GridSearch[model.type](model)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setLogScale(false)
+        val gs = globalOpt match {
+          case "GS" => new GridSearch[model.type](model)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setLogScale(false)
 
-        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise))
+          case "ML" => new GPMLOptimizer[DenseVector[Double],
+            Seq[(DenseVector[Double], Double)],
+            GPRegression](model)
+        }
+
+        val startConf = kernel.state ++ Map("noiseLevel" -> noise)
+        val (_, conf) = gs.optimize(startConf)
 
         model.setState(conf)
 
