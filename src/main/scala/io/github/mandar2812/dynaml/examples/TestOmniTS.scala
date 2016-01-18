@@ -3,8 +3,8 @@ package io.github.mandar2812.dynaml.examples
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.gp.GPTimeSeries
-import io.github.mandar2812.dynaml.optimization.GridSearch
+import io.github.mandar2812.dynaml.models.gp.{GPRegression, GPTimeSeries}
+import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 
@@ -12,11 +12,26 @@ import io.github.mandar2812.dynaml.utils
   * Created by mandar on 22/11/15.
   */
 object TestOmniTS {
+
+  def apply(year: Int, kernel: CovarianceFunction[Double, Double, DenseMatrix[Double]],
+            bandwidth: Double, noise: Double,
+            num_training: Int, num_test: Int,
+            column: Int, grid: Int,
+            step: Double, globalOpt: String,
+            stepSize: Double,
+            maxIt: Int): Unit =
+    runExperiment(year, kernel, bandwidth, noise,
+      num_training, num_test, column, grid, step, globalOpt,
+      Map("tolerance" -> "0.0001",
+        "step" -> stepSize.toString,
+        "maxIterations" -> maxIt.toString))
+
   def apply(year: Int = 2006, kern: String = "RBF",
             bandwidth: Double = 0.5, noise: Double = 0.0,
             num_training: Int = 200, num_test: Int = 50,
             column: Int = 40, grid: Int = 5,
-            step: Double = 0.2): Unit = {
+            step: Double = 0.2, globalOpt: String,
+            stepSize: Double, maxIt: Int): Unit = {
 
     val kernel: CovarianceFunction[Double, Double, DenseMatrix[Double]] =
       kern match {
@@ -42,6 +57,20 @@ object TestOmniTS {
           new PeriodicCovFunc(bandwidth, bandwidth)
       }
 
+    runExperiment(year, kernel, bandwidth, noise, num_training,
+      num_test, column, grid, step, globalOpt,
+      Map("tolerance" -> "0.0001",
+        "step" -> stepSize.toString,
+        "maxIterations" -> maxIt.toString))
+  }
+
+  def runExperiment(year: Int = 2006,
+                    kernel: CovarianceFunction[Double, Double, DenseMatrix[Double]],
+                    bandwidth: Double = 0.5, noise: Double = 0.0,
+                    num_training: Int = 200, num_test: Int = 50,
+                    column: Int = 40, grid: Int = 5,
+                    step: Double = 0.2, globalOpt: String = "ML",
+                    opt: Map[String, String]): Unit = {
     //Load Omni data into a stream
     //Extract the time and Dst values
     //separate data into training and test
@@ -96,12 +125,17 @@ object TestOmniTS {
         (DenseVector[Double], DenseVector[Double]))) => {
         val model = new GPTimeSeries(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
 
-        val gs = new GridSearch[model.type](model)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setLogScale(false)
+        val gs = globalOpt match {
+          case "GS" => new GridSearch[model.type](model)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setLogScale(false)
 
-        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise))
+          case "ML" => new GPMLOptimizer[Double,
+            Seq[(Double, Double)],
+            GPTimeSeries](model)
+        }
+        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise), opt)
 
         model.setState(conf)
 
@@ -134,6 +168,7 @@ object TestOmniTS {
       DataPipe(modelTrainTest)
 
     processpipe.run("data/omni2_"+year+".csv")
+
 
   }
 }

@@ -4,8 +4,8 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
 
 /**
  * @author mandar2812
- * Cauchy Kernel given by the expression
- * K(x,y) = 1 - ||x-y||**2/(||x-y||**2 + theta**2)
+ * Wave Kernel given by the expression
+ * K(x,y) = sin(||x-y||**2/theta)*(theta/||x-y||**2)
  */
 class WaveKernel(th: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
@@ -25,6 +25,12 @@ class WaveKernel(th: Double = 1.0)
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
     if (norm(x-y,2) != 0) math.sin(norm(x-y,2)/state("theta"))*(state("theta")/norm(x-y,2)) else 1.0
 
+  override def gradient(x: DenseVector[Double],
+                        y: DenseVector[Double]): Map[String, Double] = {
+    val diff = norm(x-y, 2)
+    Map("theta" -> (-1.0*math.cos(diff/state("theta")) + math.sin(diff/state("theta"))/diff))
+  }
+
 }
 
 class WaveCovFunc(private var theta: Double)
@@ -35,4 +41,9 @@ class WaveCovFunc(private var theta: Double)
 
   override def evaluate(x: Double, y: Double): Double =
     if (x-y != 0) math.sin(math.pow(x-y,2)/state("theta"))*(state("theta")/math.pow(x-y,2)) else 1.0
+
+  override def gradient(x: Double, y: Double): Map[String, Double] = {
+    val diff = math.pow(x-y, 2)
+    Map("theta" -> (-1.0*math.cos(diff/state("theta")) + math.sin(diff/state("theta"))/diff))
+  }
 }

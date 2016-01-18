@@ -14,12 +14,19 @@ import scala.util.Random
   * Created by mandar on 19/11/15.
   */
 object TestGPOmni {
-  def apply (year: Int = 2006, yeartest: Int = 2007,
-             kern: String = "RBF", bandwidth: Double = 0.5,
-             noise: Double = 0.0, num_training: Int = 200,
-             num_test: Int = 50, columns: List[Int] = List(40,16,21,23,24,22,25),
-             grid: Int = 5, step: Double = 0.2,
-             randomSample: Boolean = false, globalOpt: String = "ML"): Unit = {
+  def apply (kern: String = "RBF",
+             year: Int = 2006,
+             yeartest: Int = 2007,
+             bandwidth: Double = 0.5,
+             noise: Double = 0.0,
+             num_training: Int = 200,
+             num_test: Int = 50,
+             columns: List[Int] = List(40,16,21,23,24,22,25),
+             grid: Int = 5,
+             step: Double = 0.2,
+             randomSample: Boolean = false,
+             globalOpt: String = "ML",
+             stepSize: Double, maxIt: Int): Unit = {
 
     val kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] =
       kern match {
@@ -35,6 +42,44 @@ object TestGPOmni {
         case "Student" => new TStudentKernel(bandwidth)
         case "Anova" => new AnovaKernel(bandwidth)
       }
+
+      runExperiment(year, yeartest, kernel, bandwidth,
+        noise, num_training, num_test, columns,
+        grid, step, globalOpt, randomSample,
+        Map("tolerance" -> "0.0001",
+        "step" -> stepSize.toString,
+        "maxIterations" -> maxIt.toString))
+
+  }
+
+  def apply (kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+             year: Int, yeartest: Int,
+             bandwidth: Double,
+             noise: Double, num_training: Int,
+             num_test: Int, columns: List[Int],
+             grid: Int, step: Double,
+             randomSample: Boolean,
+             globalOpt: String,
+             stepSize: Double,
+             maxIt: Int): Unit = {
+
+    runExperiment(year, yeartest, kernel, bandwidth,
+      noise, num_training, num_test, columns,
+      grid, step, globalOpt, randomSample,
+      Map("tolerance" -> "0.0001",
+        "step" -> stepSize.toString,
+        "maxIterations" -> maxIt.toString))
+
+  }
+
+  def runExperiment(year: Int = 2006, yeartest: Int = 2007,
+                    kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+                    bandwidth: Double = 0.5, noise: Double = 0.0,
+                    num_training: Int = 200, num_test: Int = 50,
+                    columns: List[Int] = List(40,16,21,23,24,22,25),
+                    grid: Int = 5, step: Double = 0.2,
+                    globalOpt: String = "ML", randomSample: Boolean = false,
+                    opt: Map[String, String]): Unit = {
 
     //Load Omni data into a stream
     //Extract the time and Dst values
@@ -73,7 +118,7 @@ object TestGPOmni {
 
         ((trainTest._1.map(normalizationFunc),
           trainTest._2.map(normalizationFunc)), (mean, stdDev))
-    }
+      }
 
     val preProcessPipe = DataPipe(utils.textFileToStream _) >
       DataPipe(replaceWhiteSpaces) >
@@ -105,17 +150,17 @@ object TestGPOmni {
         }
 
         val startConf = kernel.state ++ Map("noiseLevel" -> noise)
-        val (_, conf) = gs.optimize(startConf)
+        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise), opt)
 
         model.setState(conf)
 
         val res = model.test(trainTest._1._2.toSeq)
         val scoresAndLabelsPipe =
           DataPipe(
-          (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-          res.map(i => (i._3, i._2)).toList) > DataPipe((list: List[(Double, Double)]) =>
-              list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
-                l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
+            (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
+              res.map(i => (i._3, i._2)).toList) > DataPipe((list: List[(Double, Double)]) =>
+            list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
+              l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res)
 
@@ -174,7 +219,6 @@ object TestGPOmni {
 
 
     trainTestPipe.run(("data/omni2_"+year+".csv", "data/omni2_"+yeartest+".csv"))
-
   }
 
 }
