@@ -124,18 +124,31 @@
       </h4>
       <p class="comment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CoupledSimulatedAnnealing[G,H,M&lt;:io.github.mandar2812.dynaml.models.KernelizedModel[G,H,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]]extendsGridSearch[G,H,M]"></a>
-      <a id="CoupledSimulatedAnnealing[G,H,M&lt;:KernelizedModel[G,H,DenseVector[Double],DenseVector[Double],Double,Int,Int]]:CoupledSimulatedAnnealing[G,H,M]"></a>
+      <a id="CoupledSimulatedAnnealing[M&lt;:io.github.mandar2812.dynaml.optimization.GloballyOptimizable]extendsGridSearch[M]"></a>
+      <a id="CoupledSimulatedAnnealing[M&lt;:GloballyOptimizable]:CoupledSimulatedAnnealing[M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="CoupledSimulatedAnnealing.html"><span class="name">CoupledSimulatedAnnealing</span></a><span class="tparams">[<span name="G">G</span>, <span name="H">H</span>, <span name="M">M &lt;: <a href="../models/KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]</span>]</span><span class="result"> extends <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
+        <a href="CoupledSimulatedAnnealing.html"><span class="name">CoupledSimulatedAnnealing</span></a><span class="tparams">[<span name="M">M &lt;: <a href="GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>]</span><span class="result"> extends <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
       </span>
       </h4>
       <p class="comment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GPMLOptimizer[I,T,M&lt;:io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[T,I]]extendsGlobalOptimizer[M]"></a>
+      <a id="GPMLOptimizer[I,T,M&lt;:AbstractGPRegressionModel[T,I]]:GPMLOptimizer[I,T,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GPMLOptimizer.html"><span class="name">GPMLOptimizer</span></a><span class="tparams">[<span name="I">I</span>, <span name="T">T</span>, <span name="M">M &lt;: <a href="../models/gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.I">I</span>]</span>]</span><span class="result"> extends <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Created by mandar on 16/1/16.</p>
     </li><li name="io.github.mandar2812.dynaml.optimization.GeneralGradient" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="GeneralGradientextendsAnyRef"></a>
       <a id="GeneralGradient:GeneralGradient"></a>
@@ -219,15 +232,15 @@ values of the model parameters.</p>
 spark RDD
 </p>
     </li><li name="io.github.mandar2812.dynaml.optimization.GridSearch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GridSearch[G,H,M&lt;:io.github.mandar2812.dynaml.models.KernelizedModel[G,H,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]]extendsGlobalOptimizer[io.github.mandar2812.dynaml.models.KernelizedModel[G,H,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]]"></a>
-      <a id="GridSearch[G,H,M&lt;:KernelizedModel[G,H,DenseVector[Double],DenseVector[Double],Double,Int,Int]]:GridSearch[G,H,M]"></a>
+      <a id="GridSearch[M&lt;:io.github.mandar2812.dynaml.optimization.GloballyOptimizable]extendsGlobalOptimizer[M]"></a>
+      <a id="GridSearch[M&lt;:GloballyOptimizable]:GridSearch[M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="GridSearch.html"><span class="name">GridSearch</span></a><span class="tparams">[<span name="G">G</span>, <span name="H">H</span>, <span name="M">M &lt;: <a href="../models/KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.H">H</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]</span>]</span><span class="result"> extends <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<a href="../models/KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.H">H</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]]</span>
+        <a href="GridSearch.html"><span class="name">GridSearch</span></a><span class="tparams">[<span name="M">M &lt;: <a href="GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>]</span><span class="result"> extends <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span>]</span>
       </span>
       </h4>
       <p class="comment cmt"></p>

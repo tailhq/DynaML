@@ -44,7 +44,7 @@
           <div class="superTypes hiddenContent"><a href="../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a>, <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K1">K1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K2">K2</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.L">L</span>], <a href="EvaluableModel.html" class="extype" name="io.github.mandar2812.dynaml.models.EvaluableModel">EvaluableModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.R">R</span>], <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K2">K2</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.L">L</span>], <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.G">G</span>], <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="svm/KernelLSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel">KernelLSSVMModel</a>, <a href="svm/KernelSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel">KernelSparkModel</a>, <a href="svm/LSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMModel">LSSVMModel</a>, <a href="svm/LSSVMSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel">LSSVMSparkModel</a></div>
+          <div class="subClasses hiddenContent"><a href="svm/KernelLSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel">KernelLSSVMModel</a>, <a href="svm/KernelSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel">KernelSparkModel</a>, <a href="svm/LSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMModel">LSSVMModel</a>, <a href="svm/LSSVMSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel">LSSVMSparkModel</a>, <a href="svm/SDLSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.SDLSSVMModel">SDLSSVMModel</a>, <a href="SubsampledDualLSSVM.html" class="extype" name="io.github.mandar2812.dynaml.models.SubsampledDualLSSVM">SubsampledDualLSSVM</a></div>
         </div></div>
         
 
@@ -544,6 +544,26 @@ to an identity map.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable#gradEnergy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="gradEnergy(h:Map[String,Double]):Map[String,Double]"></a>
+      <a id="gradEnergy(Map[String,Double]):Map[String,Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gradEnergy</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Calculates the gradient energy of the configuration and
+subtracts this from the current value of h to yield a new
+hyper-parameter configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the gradient energy of the configuration and
+subtracts this from the current value of h to yield a new
+hyper-parameter configuration.</p><p>Over ride this function if you aim to implement a gradient based
+hyper-parameter optimization routine like ML-II
+</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt>returns</dt><dd class="cmt"><p>Gradient of the objective function as a Map
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>

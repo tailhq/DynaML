@@ -35,13 +35,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">CoupledSimulatedAnnealing</span><span class="tparams">[<span name="G">G</span>, <span name="H">H</span>, <span name="M">M &lt;: <a href="../models/KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]</span>]</span><span class="result"> extends <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
+        <span class="name">CoupledSimulatedAnnealing</span><span class="tparams">[<span name="M">M &lt;: <a href="GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>]</span><span class="result"> extends <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>], <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<a href="../models/KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]], <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>], <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>], <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -80,8 +80,8 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(model:M):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[G,H,M]"></a>
-      <a id="&lt;init&gt;:CoupledSimulatedAnnealing[G,H,M]"></a>
+      <a id="&lt;init&gt;(model:M):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[M]"></a>
+      <a id="&lt;init&gt;:CoupledSimulatedAnnealing[M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -439,54 +439,54 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a> → <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing#setGridSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setGridSize(s:Int):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[G,H,M]"></a>
-      <a id="setGridSize(Int):CoupledSimulatedAnnealing[G,H,M]"></a>
+      <a id="setGridSize(s:Int):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[M]"></a>
+      <a id="setGridSize(Int):CoupledSimulatedAnnealing[M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setGridSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
+        <span class="name">setGridSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a> → <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing#setLogScale" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setLogScale(t:Boolean):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[G,H,M]"></a>
-      <a id="setLogScale(Boolean):CoupledSimulatedAnnealing[G,H,M]"></a>
+      <a id="setLogScale(t:Boolean):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[M]"></a>
+      <a id="setLogScale(Boolean):CoupledSimulatedAnnealing[M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setLogScale</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
+        <span class="name">setLogScale</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a> → <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing#setMaxIterations" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="setMaxIterations(m:Int):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[G,H,M]"></a>
-      <a id="setMaxIterations(Int):CoupledSimulatedAnnealing[G,H,M]"></a>
+      <a id="setMaxIterations(m:Int):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[M]"></a>
+      <a id="setMaxIterations(Int):CoupledSimulatedAnnealing[M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setMaxIterations</span><span class="params">(<span name="m">m: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
+        <span class="name">setMaxIterations</span><span class="params">(<span name="m">m: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
       </span>
       </h4>
       
     </li><li name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing#setStepSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setStepSize(s:Double):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[G,H,M]"></a>
-      <a id="setStepSize(Double):CoupledSimulatedAnnealing[G,H,M]"></a>
+      <a id="setStepSize(s:Double):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[M]"></a>
+      <a id="setStepSize(Double):CoupledSimulatedAnnealing[M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setStepSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
+        <span class="name">setStepSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a> → <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a></dd></dl></div>
@@ -609,9 +609,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.optimization.GridSearch">
-              <h3>Inherited from <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</h3>
+              <h3>Inherited from <a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">
-              <h3>Inherited from <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<a href="../models/KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.H">H</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]]</h3>
+              <h3>Inherited from <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing.M">M</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
