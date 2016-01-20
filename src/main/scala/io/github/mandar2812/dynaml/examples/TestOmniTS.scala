@@ -86,7 +86,8 @@ object TestOmniTS {
         Map(16 -> "999.9", 21 -> "999.9",
           24 -> "9999.", 23 -> "999.9",
           40 -> "99999", 22 -> "9999999.",
-          25 -> "999.9"))
+          25 -> "999.9", 28 -> "99.99",
+          27 -> "9.999", 39 -> "999"))
 
     val extractTimeSeries = (lines: Stream[String]) => lines.map{line =>
       val splits = line.split(",")

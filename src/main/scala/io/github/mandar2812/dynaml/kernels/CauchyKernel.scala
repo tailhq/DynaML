@@ -32,7 +32,7 @@ class CauchyKernel(si: Double = 1.0)
 
 class CauchyCovFunc(private var sigma: Double)
   extends LocalSVMKernel[Double] {
-  override val hyper_parameters: List[String] = List("bandwidth")
+  override val hyper_parameters: List[String] = List("sigma")
 
   state = Map("sigma" -> sigma)
 

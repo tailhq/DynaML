@@ -99,7 +99,8 @@ trait LocalScalarKernel[Index] extends CovarianceFunction[Index, Double, DenseMa
       state = firstKern.state ++ otherKernel.state
 
       def gradient(x: Index, y: Index): Map[String, Double] =
-        firstKern.gradient(x, y) ++ otherKernel.gradient(x,y)
+        firstKern.gradient(x, y).map((couple) => (couple._1, couple._2*otherKernel.evaluate(x,y))) ++
+          otherKernel.gradient(x,y).map((couple) => (couple._1, couple._2*firstKern.evaluate(x,y)))
 
       override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
         SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
