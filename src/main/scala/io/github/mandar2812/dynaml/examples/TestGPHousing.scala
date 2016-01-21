@@ -96,7 +96,7 @@ object TestGPHousing {
 
           val normPoint = (extendedpoint - mean) :/ stdDev
           val length = normPoint.length
-          (normPoint(0 until length), normPoint(-1))
+          (normPoint(0 until length-1), normPoint(-1))
         }
 
         ((trainTest._1.map(normalizationFunc),

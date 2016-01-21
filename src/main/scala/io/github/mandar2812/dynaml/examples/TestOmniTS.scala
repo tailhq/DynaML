@@ -1,5 +1,7 @@
 package io.github.mandar2812.dynaml.examples
 
+import java.text.{DateFormat, SimpleDateFormat}
+
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
@@ -35,6 +37,8 @@ object TestOmniTS {
 
     val kernel: CovarianceFunction[Double, Double, DenseMatrix[Double]] =
       kern match {
+        case "SE" =>
+          new SECovFunc(bandwidth, bandwidth)
         case "RBF" =>
           new RBFCovFunc(bandwidth)
         case "Cauchy" =>
@@ -78,8 +82,6 @@ object TestOmniTS {
     //create RegressionMetrics instance and produce plots
 
     val replaceWhiteSpaces = (s: Stream[String]) => s.map(utils.replace("\\s+")(","))
-
-    val filterMissingValues = (lines: Stream[String]) => lines.filter(line => !line.contains(",,"))
 
     val extractTrainingFeatures = (l: Stream[String]) =>
       utils.extractColumns(l, ",", List(0,1,2,column),
