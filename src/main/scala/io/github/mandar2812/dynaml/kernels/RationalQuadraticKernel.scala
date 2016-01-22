@@ -4,7 +4,7 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
 
 /**
  * @author mandar2812
- * Cauchy Kernel given by the expression
+ * Rational Quadratic Kernel given by the expression
  * K(x,y) = 1 - ||x-y||**2/(||x-y||**2 + c**2)
  */
 class RationalQuadraticKernel(si: Double = 1.0)

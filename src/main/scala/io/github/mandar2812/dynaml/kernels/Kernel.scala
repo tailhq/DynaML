@@ -43,8 +43,8 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
   def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): M
 }
 
-abstract class CompositeCovariance[T, V, M]
-  extends CovarianceFunction[T, V, M] {
+abstract class CompositeCovariance[T]
+  extends LocalScalarKernel[T] {
 
 }
 
@@ -56,24 +56,23 @@ abstract class CompositeCovariance[T, V, M]
   * create new valid scalar kernel functions.
   *
   * */
-trait LocalScalarKernel[Index] extends CovarianceFunction[Index, Double, DenseMatrix[Double]] {
+trait LocalScalarKernel[Index] extends
+CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
   def gradient(x: Index, y: Index): Map[String, Double] = hyper_parameters.map((_, 0.0)).toMap
 
-  def +(otherKernel: LocalScalarKernel[Index]): CompositeCovariance[Index, Double, DenseMatrix[Double]] = {
-
-    val firstKernelHyp = this.hyper_parameters
+  def +[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] = {
 
     val firstKern = this
 
-    new CompositeCovariance[Index, Double, DenseMatrix[Double]] {
-      override val hyper_parameters = firstKernelHyp ++ otherKernel.hyper_parameters
+    new CompositeCovariance[Index] {
+      override val hyper_parameters = firstKern.hyper_parameters ++ otherKernel.hyper_parameters
 
       override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) + otherKernel.evaluate(x,y)
 
       state = firstKern.state ++ otherKernel.state
 
-      def gradient(x: Index, y: Index): Map[String, Double] =
+      override def gradient(x: Index, y: Index): Map[String, Double] =
         firstKern.gradient(x, y) ++ otherKernel.gradient(x,y)
 
       override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
@@ -85,20 +84,18 @@ trait LocalScalarKernel[Index] extends CovarianceFunction[Index, Double, DenseMa
     }
   }
 
-  def *(otherKernel: LocalScalarKernel[Index]): CompositeCovariance[Index, Double, DenseMatrix[Double]] = {
-
-    val firstKernelHyp = this.hyper_parameters
+  def *[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] = {
 
     val firstKern = this
 
-    new CompositeCovariance[Index, Double, DenseMatrix[Double]] {
-      override val hyper_parameters = firstKernelHyp ++ otherKernel.hyper_parameters
+    new CompositeCovariance[Index] {
+      override val hyper_parameters = firstKern.hyper_parameters ++ otherKernel.hyper_parameters
 
       override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) * otherKernel.evaluate(x,y)
 
       state = firstKern.state ++ otherKernel.state
 
-      def gradient(x: Index, y: Index): Map[String, Double] =
+      override def gradient(x: Index, y: Index): Map[String, Double] =
         firstKern.gradient(x, y).map((couple) => (couple._1, couple._2*otherKernel.evaluate(x,y))) ++
           otherKernel.gradient(x,y).map((couple) => (couple._1, couple._2*firstKern.evaluate(x,y)))
 

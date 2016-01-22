@@ -52,7 +52,7 @@ class RegressionMetrics(
   override def kpi() = DenseVector(mae, rmse, Rsq)
 
   override def generatePlots(): Unit = {
-    implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
+    //implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
     val roccurve = this.residuals()
 
     logger.log(Priority.INFO, "Generating Plot of Residuals")
