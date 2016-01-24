@@ -16,20 +16,20 @@ import org.apache.log4j.Logger
 object TestOmniAR {
 
   def apply(year: Int, kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            delta: Int, bandwidth: Double, noise: Double,
+            delta: Int, stepAhead: Int, bandwidth: Double, noise: Double,
             num_training: Int, num_test: Int,
             column: Int, grid: Int,
             step: Double, globalOpt: String,
             stepSize: Double,
             maxIt: Int): Unit =
-    runExperiment(year, kernel, delta, bandwidth, noise,
+    runExperiment(year, kernel, delta, stepAhead, bandwidth, noise,
       num_training, num_test, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString))
 
   def apply(year: Int = 2006, kern: String = "RBF",
-            delta: Int = 2, bandwidth: Double = 0.5, noise: Double = 0.0,
+            delta: Int = 2, stepAhead: Int, bandwidth: Double = 0.5, noise: Double = 0.0,
             num_training: Int = 200, num_test: Int = 50,
             column: Int = 40, grid: Int = 5,
             step: Double = 0.2, globalOpt: String,
@@ -49,7 +49,8 @@ object TestOmniAR {
         case "Student" => new TStudentKernel(bandwidth)
         case "Anova" => new AnovaKernel(bandwidth)
       }
-    runExperiment(year, kernel, delta, bandwidth, noise, num_training,
+    runExperiment(year, kernel, delta, stepAhead,
+      bandwidth, noise, num_training,
       num_test, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
@@ -58,7 +59,8 @@ object TestOmniAR {
 
   def runExperiment(year: Int = 2006,
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    deltaT: Int = 2, bandwidth: Double = 0.5, noise: Double = 0.0,
+                    deltaT: Int = 2, stepPred: Int = 3,
+                    bandwidth: Double = 0.5, noise: Double = 0.0,
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
@@ -158,7 +160,6 @@ object TestOmniAR {
           scoresAndLabels.length)
 
 
-        logger.info("Printing One Step Ahead (OSA) Performance Metrics")
         metrics.print()
         metrics.generatePlots()
 
@@ -169,20 +170,41 @@ object TestOmniAR {
         legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
         unhold()
 
-
-        /*logger.info("Printing Model Predicted Output (MPO) Performance Metrics")
         //Now test the Model Predicted Output and its performance.
-        val mpo = model.modelPredictedOutput(trainTest._1._2.length) _
-        val predictedOutput = mpo(trainTest._1._2.head._1)
-          .map(_._1)
-        val outputs = trainTest._1._2.map(_._2).toList
+        val mpo = model.modelPredictedOutput(stepPred) _
+        val testData = trainTest._1._2
+
+
+        val predictedOutput:List[Double] = testData.grouped(stepPred).map((partition) => {
+          val preds = mpo(partition.head._1).map(_._1)
+          if(preds.length == partition.length) {
+            preds.toList
+          } else {
+            preds.take(partition.length).toList
+          }
+        }).foldRight(List[Double]())(_++_)
+
+        val outputs = testData.map(_._2).toList
 
         val res2 = predictedOutput zip outputs
+        val scoresAndLabels2 = deNormalize.run(res2.toList)
 
-        val mpoMetrics = new RegressionMetrics(deNormalize.run(res2.toList),
-          res2.length)
+        val mpoMetrics = new RegressionMetrics(scoresAndLabels2,
+          scoresAndLabels2.length)
+
+        logger.info("Printing One Step Ahead (OSA) Performance Metrics")
+        metrics.print()
+        logger.info("Printing Model Predicted Output (MPO) Performance Metrics")
         mpoMetrics.print()
-        mpoMetrics.generatePlots()*/
+        mpoMetrics.generatePlots()
+        //Plotting time series prediction comparisons
+        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
+        hold()
+        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
+        line((1 to scoresAndLabels2.length).toList, scoresAndLabels2.map(_._1))
+        legend(List("Time Series", "Predicted Time Series (one hour ahead)",
+          "Predicted Time Series ("+stepPred+" hours ahead)"))
+        unhold()
 
       }
 
