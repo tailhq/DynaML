@@ -3,11 +3,12 @@ package io.github.mandar2812.dynaml.examples
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.gp.GPRegression
+import io.github.mandar2812.dynaml.models.gp.{GPNarxModel, GPRegression}
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 import com.quantifind.charts.Highcharts._
+import org.apache.log4j.Logger
 
 /**
   * Created by mandar on 22/11/15.
@@ -67,7 +68,7 @@ object TestOmniAR {
     //separate data into training and test
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
-
+    val logger = Logger.getLogger(this.getClass)
     val replaceWhiteSpaces = (s: Stream[String]) => s.map(utils.replace("\\s+")(","))
 
     val extractTrainingFeatures = (l: Stream[String]) =>
@@ -86,7 +87,7 @@ object TestOmniAR {
 
 
     val deltaOperation = (lines: Stream[(Double, Double)]) =>
-      lines.toList.sliding(deltaT).map((history) => {
+      lines.toList.sliding(deltaT+1).map((history) => {
         val features = DenseVector(history.take(history.length - 1).map(_._2).toArray)
         (features, history.last._2)
     }).toStream
@@ -122,7 +123,7 @@ object TestOmniAR {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPRegression(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+        val model = new GPNarxModel(deltaT, kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
 
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
@@ -141,18 +142,23 @@ object TestOmniAR {
         model.setState(conf)
 
         val res = model.test(trainTest._1._2.toSeq)
+
+        val deNormalize = DataPipe((list: List[(Double, Double)]) =>
+          list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
+            l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
+
         val scoresAndLabelsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2)).toList) > DataPipe((list: List[(Double, Double)]) =>
-            list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
-              l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
+              res.map(i => (i._3, i._2)).toList) > deNormalize
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res)
 
         val metrics = new RegressionMetrics(scoresAndLabels,
           scoresAndLabels.length)
 
+
+        logger.info("Printing One Step Ahead (OSA) Performance Metrics")
         metrics.print()
         metrics.generatePlots()
 
@@ -162,6 +168,22 @@ object TestOmniAR {
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
         legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
         unhold()
+
+
+        /*logger.info("Printing Model Predicted Output (MPO) Performance Metrics")
+        //Now test the Model Predicted Output and its performance.
+        val mpo = model.modelPredictedOutput(trainTest._1._2.length) _
+        val predictedOutput = mpo(trainTest._1._2.head._1)
+          .map(_._1)
+        val outputs = trainTest._1._2.map(_._2).toList
+
+        val res2 = predictedOutput zip outputs
+
+        val mpoMetrics = new RegressionMetrics(deNormalize.run(res2.toList),
+          res2.length)
+        mpoMetrics.print()
+        mpoMetrics.generatePlots()*/
+
       }
 
     val processpipe = DataPipe(utils.textFileToStream _) >
