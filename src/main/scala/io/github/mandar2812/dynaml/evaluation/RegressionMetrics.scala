@@ -34,6 +34,9 @@ class RegressionMetrics(
 
   val corr: Double = RegressionMetrics.computeCorr(scoresAndLabels, length)
 
+  val predictionEfficiency = scoresAndLabels.map((p) =>
+    math.pow(p._1 - p._2, 2)/length).sum
+
   val sigma: Double =
     math.sqrt(utils.getStats(this.residuals().map(i => DenseVector(i._1)))._2(0)/(length - 1.0))
 
@@ -49,6 +52,7 @@ class RegressionMetrics(
     logger.info("RMSLE: " + rmsle)
     logger.info("R^2: " + Rsq)
     logger.info("Corr. Coefficient: " + corr)
+    logger.info("Model Yield: "+RegressionMetrics.computeYield(scoresAndLabels, length))
     logger.info("Std Dev of Residuals: " + sigma)
   }
 
@@ -111,4 +115,9 @@ object RegressionMetrics {
 
     SSLabelPred/(math.sqrt(SSPred)*math.sqrt(SSLabel))
   }
+
+  def computeYield(scoresAndLabels: Iterable[(Double, Double)], size: Int): Double =
+    (scoresAndLabels.map(_._1).max - scoresAndLabels.map(_._1).min)/
+      (scoresAndLabels.map(_._2).max - scoresAndLabels.map(_._2).min)
+
 }

@@ -198,8 +198,18 @@ object TestOmniAR {
 
         logger.info("Printing One Step Ahead (OSA) Performance Metrics")
         metrics.print()
+        val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
+        val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
+        logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
+
+
         logger.info("Printing Model Predicted Output (MPO) Performance Metrics")
         mpoMetrics.print()
+
+        val timeObsMPO = scoresAndLabels2.map(_._2).zipWithIndex.min._2
+        val timeModelMPO = scoresAndLabels2.map(_._1).zipWithIndex.min._2
+        logger.info("Timing Error; MPO, "+stepPred+" hours ahead Prediction: "+(timeObsMPO-timeModelMPO))
+
         mpoMetrics.generatePlots()
         //Plotting time series prediction comparisons
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
