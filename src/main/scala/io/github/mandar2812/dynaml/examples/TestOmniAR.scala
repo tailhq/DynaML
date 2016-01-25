@@ -1,6 +1,9 @@
 package io.github.mandar2812.dynaml.examples
 
+import java.io.File
+
 import breeze.linalg.{DenseMatrix, DenseVector}
+import com.github.tototoshi.csv.CSVWriter
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.{GPNarxModel, GPRegression}
@@ -9,6 +12,8 @@ import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 import com.quantifind.charts.Highcharts._
 import org.apache.log4j.Logger
+
+import scala.collection.mutable.{MutableList => ML}
 
 /**
   * Created by mandar on 22/11/15.
@@ -20,42 +25,13 @@ object TestOmniAR {
             num_training: Int, num_test: Int,
             column: Int, grid: Int,
             step: Double, globalOpt: String,
-            stepSize: Double,
-            maxIt: Int): Unit =
+            stepSize: Double = 0.05,
+            maxIt: Int = 200): Unit =
     runExperiment(year, yeartest, kernel, delta, stepAhead, bandwidth, noise,
       num_training, num_test, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString))
-
-  def apply(year: Int = 2006, yeartest:Int = 2007, kern: String = "RBF",
-            delta: Int = 2, stepAhead: Int, bandwidth: Double = 0.5, noise: Double = 0.0,
-            num_training: Int = 200, num_test: Int = 50,
-            column: Int = 40, grid: Int = 5,
-            step: Double = 0.2, globalOpt: String,
-            stepSize: Double, maxIt: Int): Unit = {
-
-    val kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] =
-      kern match {
-        case "RBF" =>
-          new RBFKernel(bandwidth)
-        case "Cauchy" =>
-          new CauchyKernel(bandwidth)
-        case "Laplacian" =>
-          new LaplacianKernel(bandwidth)
-        case "RationalQuadratic" =>
-          new RationalQuadraticKernel(bandwidth)
-        case "FBM" => new FBMKernel(bandwidth)
-        case "Student" => new TStudentKernel(bandwidth)
-        case "Anova" => new AnovaKernel(bandwidth)
-      }
-    runExperiment(year, yeartest, kernel, delta, stepAhead,
-      bandwidth, noise, num_training,
-      num_test, column, grid, step, globalOpt,
-      Map("tolerance" -> "0.0001",
-        "step" -> stepSize.toString,
-        "maxIterations" -> maxIt.toString))
-  }
 
   def runExperiment(year: Int = 2006, yearTest:Int = 2007,
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
@@ -64,7 +40,7 @@ object TestOmniAR {
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
-                    opt: Map[String, String]): Unit = {
+                    opt: Map[String, String]): Seq[Seq[AnyVal]] = {
     //Load Omni data into a stream
     //Extract the time and Dst values
     //separate data into training and test
@@ -219,6 +195,16 @@ object TestOmniAR {
         legend(List("Time Series", "Predicted Time Series (one hour ahead)",
           "Predicted Time Series ("+stepPred+" hours ahead)"))
         unhold()
+        Seq(
+          Seq(year, yearTest, deltaT, 1, num_training, num_test,
+            metrics.mae, metrics.rmse, metrics.Rsq,
+            metrics.corr, metrics.modelYield,
+            timeObs.toDouble - timeModel.toDouble),
+          Seq(year, yearTest, deltaT, stepPred, num_training, num_test,
+            mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
+            mpoMetrics.corr, mpoMetrics.modelYield,
+            timeObsMPO.toDouble - timeModelMPO.toDouble)
+        )
 
       }
 
@@ -246,9 +232,32 @@ object TestOmniAR {
       DataPipe(normalizeData) >
       DataPipe(modelTrainTest)*/
 
-    trainTestPipe.run(("data/omni2_"+year+".csv", "data/omni2_"+yearTest+".csv"))
     //processpipe.run("data/omni2_"+year+".csv")
 
+    trainTestPipe.run(("data/omni2_"+year+".csv", "data/omni2_"+yearTest+".csv"))
 
+
+
+  }
+}
+
+object DstARExperiment {
+
+  def apply(year: Int, testYears: List[Int] = (2000 to 2015).toList,
+            delta: Int, stepAhead: Int, bandwidth: Double, noise: Double,
+            num_test: Int, column: Int, grid: Int, step: Double) = {
+    var perfs:Seq[Seq[AnyVal]] = Seq()
+    val writer = CSVWriter.open(new File("data/OmniRes.csv"), append = true)
+    testYears.foreach((testYear) => {
+      List(25, 50, 100, 150).foreach((modelSize) => {
+        perfs = TestOmniAR.runExperiment(year, testYear, new FBMKernel(1.05), delta, 3, bandwidth, noise,
+          modelSize, num_test, column, grid, step, "GS",
+          Map("tolerance" -> "0.0001",
+            "step" -> "0.1",
+            "maxIterations" -> "100"))
+        perfs.foreach(res => writer.writeRow(res))
+      })
+    })
+    writer.close()
   }
 }
