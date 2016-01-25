@@ -243,21 +243,31 @@ object TestOmniAR {
 
 object DstARExperiment {
 
-  def apply(year: Int, testYears: List[Int] = (2000 to 2015).toList,
-            delta: Int, stepAhead: Int, bandwidth: Double, noise: Double,
+  def apply(years: List[Int] = (2007 to 2014).toList,
+            testYears: List[Int] = (2000 to 2015).toList,
+            deltas: List[Int] = List(1, 2, 3),
+            stepAhead: Int, bandwidth: Double, noise: Double,
             num_test: Int, column: Int, grid: Int, step: Double) = {
-    var perfs:Seq[Seq[AnyVal]] = Seq()
+
     val writer = CSVWriter.open(new File("data/OmniRes.csv"), append = true)
-    testYears.foreach((testYear) => {
-      List(25, 50, 100, 150).foreach((modelSize) => {
-        perfs = TestOmniAR.runExperiment(year, testYear, new FBMKernel(1.05), delta, 3, bandwidth, noise,
-          modelSize, num_test, column, grid, step, "GS",
-          Map("tolerance" -> "0.0001",
-            "step" -> "0.1",
-            "maxIterations" -> "100"))
-        perfs.foreach(res => writer.writeRow(res))
+
+    years.foreach((year) => {
+      testYears.foreach((testYear) => {
+        deltas.foreach((delta) => {
+          List(25, 50, 100, 150).foreach((modelSize) => {
+            TestOmniAR.runExperiment(year, testYear, new FBMKernel(1.05),
+              delta, stepAhead, bandwidth, noise,
+              modelSize, num_test, column,
+              grid, step, "GS",
+              Map("tolerance" -> "0.0001",
+                "step" -> "0.1",
+                "maxIterations" -> "100"))
+              .foreach(res => writer.writeRow(res))
+          })
+        })
       })
     })
+
     writer.close()
   }
 }
