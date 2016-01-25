@@ -32,6 +32,8 @@ class RegressionMetrics(
 
   val Rsq: Double = RegressionMetrics.computeRsq(scoresAndLabels, length)
 
+  val corr: Double = RegressionMetrics.computeCorr(scoresAndLabels, length)
+
   val sigma: Double =
     math.sqrt(utils.getStats(this.residuals().map(i => DenseVector(i._1)))._2(0)/(length - 1.0))
 
@@ -46,6 +48,7 @@ class RegressionMetrics(
     logger.info("RMSE: " + rmse)
     logger.info("RMSLE: " + rmsle)
     logger.info("R^2: " + Rsq)
+    logger.info("Corr. Coefficient: " + corr)
     logger.info("Std Dev of Residuals: " + sigma)
   }
 
@@ -60,14 +63,14 @@ class RegressionMetrics(
       title = "Residuals", legend = true)
 
     chart1.show()*/
-    histogram(roccurve.map(_._1))
-    title("Histogram of Regression Residuals")
-    xAxis("Residual Value Range")
-    yAxis("Number of Samples")
+    //histogram(roccurve.map(_._1))
+    //title("Histogram of Regression Residuals")
+    //xAxis("Residual Value Range")
+    //yAxis("Number of Samples")
 
     logger.info("Generating plot of residuals vs labels")
     scatter(roccurve.map(i => (i._2, i._1)))
-    title("Scatter Plot of Standardized Residuals")
+    title("Scatter Plot of Residuals")
     xAxis("Predicted Value")
     yAxis("Residual")
 
@@ -91,5 +94,21 @@ object RegressionMetrics {
       SStot += math.pow(couple._2 - mean, 2)
     })
     1 - (SSres/SStot)
+  }
+
+  def computeCorr(scoresAndLabels: Iterable[(Double, Double)], size: Int): Double = {
+
+    val meanLabel: Double = scoresAndLabels.map{coup => coup._2}.sum/size
+    val meanScore = scoresAndLabels.map{coup => coup._1}.sum/size
+    var SSLabel = 0.0
+    var SSPred = 0.0
+    var SSLabelPred = 0.0
+    scoresAndLabels.foreach((couple) => {
+      SSLabel += math.pow(couple._2 - meanLabel, 2)
+      SSPred += math.pow(couple._1 - meanScore, 2)
+      SSLabelPred += (couple._1 - meanScore)*(couple._2 - meanLabel)
+    })
+
+    SSLabelPred/(math.sqrt(SSPred)*math.sqrt(SSLabel))
   }
 }

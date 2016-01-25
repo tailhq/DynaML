@@ -15,20 +15,20 @@ import org.apache.log4j.Logger
   */
 object TestOmniAR {
 
-  def apply(year: Int, kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  def apply(year: Int, yeartest:Int, kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             delta: Int, stepAhead: Int, bandwidth: Double, noise: Double,
             num_training: Int, num_test: Int,
             column: Int, grid: Int,
             step: Double, globalOpt: String,
             stepSize: Double,
             maxIt: Int): Unit =
-    runExperiment(year, kernel, delta, stepAhead, bandwidth, noise,
+    runExperiment(year, yeartest, kernel, delta, stepAhead, bandwidth, noise,
       num_training, num_test, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString))
 
-  def apply(year: Int = 2006, kern: String = "RBF",
+  def apply(year: Int = 2006, yeartest:Int = 2007, kern: String = "RBF",
             delta: Int = 2, stepAhead: Int, bandwidth: Double = 0.5, noise: Double = 0.0,
             num_training: Int = 200, num_test: Int = 50,
             column: Int = 40, grid: Int = 5,
@@ -49,7 +49,7 @@ object TestOmniAR {
         case "Student" => new TStudentKernel(bandwidth)
         case "Anova" => new AnovaKernel(bandwidth)
       }
-    runExperiment(year, kernel, delta, stepAhead,
+    runExperiment(year, yeartest, kernel, delta, stepAhead,
       bandwidth, noise, num_training,
       num_test, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
@@ -57,7 +57,7 @@ object TestOmniAR {
         "maxIterations" -> maxIt.toString))
   }
 
-  def runExperiment(year: Int = 2006,
+  def runExperiment(year: Int = 2006, yearTest:Int = 2007,
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     deltaT: Int = 2, stepPred: Int = 3,
                     bandwidth: Double = 0.5, noise: Double = 0.0,
@@ -91,6 +91,8 @@ object TestOmniAR {
     val deltaOperation = (lines: Stream[(Double, Double)]) =>
       lines.toList.sliding(deltaT+1).map((history) => {
         val features = DenseVector(history.take(history.length - 1).map(_._2).toArray)
+        //assert(history.length == deltaT + 1, "Check one")
+        //assert(features.length == deltaT, "Check two")
         (features, history.last._2)
     }).toStream
 
@@ -101,6 +103,8 @@ object TestOmniAR {
     val normalizeData =
       (trainTest: (Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)])) => {
+
+        logger.info(trainTest._1.toList)
 
         val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
           DenseVector(tup._1.toArray ++ Array(tup._2))).toList)
@@ -208,7 +212,21 @@ object TestOmniAR {
 
       }
 
-    val processpipe = DataPipe(utils.textFileToStream _) >
+    val preProcessPipe = DataPipe(utils.textFileToStream _) >
+      DataPipe(replaceWhiteSpaces) >
+      DataPipe(extractTrainingFeatures) >
+      StreamDataPipe((line: String) => !line.contains(",,")) >
+      DataPipe(extractTimeSeries) >
+      DataPipe(deltaOperation)
+
+    val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
+      DataPipe((data: (Stream[(DenseVector[Double], Double)],
+        Stream[(DenseVector[Double], Double)])) => {
+          (data._1.take(num_training), data._2.takeRight(num_test))
+      }) > DataPipe(normalizeData) > DataPipe(modelTrainTest)
+
+
+    /*val processpipe = DataPipe(utils.textFileToStream _) >
       DataPipe(replaceWhiteSpaces) >
       DataPipe(extractTrainingFeatures) >
       StreamDataPipe((line: String) => !line.contains(",,")) >
@@ -216,9 +234,10 @@ object TestOmniAR {
       DataPipe(deltaOperation) >
       DataPipe(splitTrainingTest) >
       DataPipe(normalizeData) >
-      DataPipe(modelTrainTest)
+      DataPipe(modelTrainTest)*/
 
-    processpipe.run("data/omni2_"+year+".csv")
+    trainTestPipe.run(("data/omni2_"+year+".csv", "data/omni2_"+yearTest+".csv"))
+    //processpipe.run("data/omni2_"+year+".csv")
 
 
   }
