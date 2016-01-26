@@ -23,10 +23,10 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   override def dataAsSeq(data: Seq[(DenseVector[Double], Double)]) = data
 }
 
-class GPNarxModel(order: Int,
-                  cov: CovarianceFunction[DenseVector[Double],
+class GPNarModel(order: Int,
+                 cov: CovarianceFunction[DenseVector[Double],
                     Double, DenseMatrix[Double]],
-                  trainingdata: Seq[(DenseVector[Double], Double)]) extends
+                 trainingdata: Seq[(DenseVector[Double], Double)]) extends
 GPRegression(cov, trainingdata) {
 
   val modelOrder = order
@@ -51,4 +51,40 @@ GPRegression(cov, trainingdata) {
 
     predictAheadRec(n, input, ML())
   }
+}
+
+
+class GPNarXModel(order: Int,
+                  ex: Int,
+                  cov: CovarianceFunction[DenseVector[Double],
+                    Double, DenseMatrix[Double]],
+                  trainingdata: Seq[(DenseVector[Double], Double)]) extends
+GPRegression(cov, trainingdata) {
+
+  val modelOrder = order
+
+  val exogenousInputs = ex
+
+  /*def modelPredictedOutput(n: Int)(input: DenseVector[Double]):
+  Seq[(Double, Double, Double)] = {
+    assert((exogenousInputs+1)*modelOrder == input.length, "Model order must be equal to dimension of input")
+
+    @tailrec
+    def predictAheadRec(num: Int, features: DenseVector[Double],
+                        predictions: ML[(Double, Double, Double)]):
+    Seq[(Double, Double, Double)] =
+      num match {
+        case 0 => predictions.toSeq
+        case _ =>
+          val pred: (DenseVector[Double], Double, Double, Double) =
+            predictionWithErrorBars[Seq[DenseVector[Double]]](Seq(features), 2).head
+          val newFeatures = DenseVector(features(1 until modelOrder).toArray ++
+            Array(pred._2) ++
+            features(modelOrder+1 until features.length).toArray)
+          assert(newFeatures.length == features.length, "Feature Vector Mismatch")
+          predictAheadRec(num-1, newFeatures, predictions.+=:((pred._2, pred._3, pred._4)))
+      }
+
+    predictAheadRec(n, input, ML())
+  }*/
 }

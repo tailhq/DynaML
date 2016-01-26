@@ -6,28 +6,29 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.CSVWriter
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.gp.{GPNarModel, GPRegression}
+import io.github.mandar2812.dynaml.models.gp.{GPNarXModel, GPNarModel, GPRegression}
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 import com.quantifind.charts.Highcharts._
 import org.apache.log4j.Logger
-
+import scala.collection.mutable.{MutableList => ML}
 
 /**
   * Created by mandar on 22/11/15.
   */
-object TestOmniAR {
+object TestOmniARX {
 
   def apply(year: Int, yeartest:Int, kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             delta: Int, stepAhead: Int, bandwidth: Double, noise: Double,
             num_training: Int, num_test: Int,
-            column: Int, grid: Int,
-            step: Double, globalOpt: String,
+            column: Int, exoInputColumns: List[Int] = List(24),
+            grid: Int, step: Double, globalOpt: String,
             stepSize: Double = 0.05,
             maxIt: Int = 200): Unit =
     runExperiment(year, yeartest, kernel, delta, stepAhead, bandwidth, noise,
-      num_training, num_test, column, grid, step, globalOpt,
+      num_training, num_test, column, exoInputColumns,
+      grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString))
@@ -37,7 +38,7 @@ object TestOmniAR {
                     deltaT: Int = 2, stepPred: Int = 3,
                     bandwidth: Double = 0.5, noise: Double = 0.0,
                     num_training: Int = 200, num_test: Int = 50,
-                    column: Int = 40, grid: Int = 5,
+                    column: Int = 40, ex: List[Int] = List(24), grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {
     //Load Omni data into a stream
@@ -49,7 +50,7 @@ object TestOmniAR {
     val replaceWhiteSpaces = (s: Stream[String]) => s.map(utils.replace("\\s+")(","))
 
     val extractTrainingFeatures = (l: Stream[String]) =>
-      utils.extractColumns(l, ",", List(0,1,2,column),
+      utils.extractColumns(l, ",", List(0,1,2,column)++ex,
         Map(16 -> "999.9", 21 -> "999.9",
           24 -> "9999.", 23 -> "999.9",
           40 -> "99999", 22 -> "9999999.",
@@ -59,21 +60,26 @@ object TestOmniAR {
     val extractTimeSeries = (lines: Stream[String]) => lines.map{line =>
       val splits = line.split(",")
       val timestamp = splits(1).toDouble * 24 + splits(2).toDouble
-      (timestamp, splits(3).toDouble)
+      val feat = DenseVector(splits.slice(3, splits.length).map(_.toDouble))
+      (timestamp, feat)
     }
 
 
-    val deltaOperation = (lines: Stream[(Double, Double)]) =>
+    val deltaOperation = (lines: Stream[(Double, DenseVector[Double])]) =>
       lines.toList.sliding(deltaT+1).map((history) => {
-        val features = DenseVector(history.take(history.length - 1).map(_._2).toArray)
+        val hist = history.take(history.length - 1).map(_._2)
+        val featuresAcc: ML[Double] = ML()
+
+        (0 until hist.head.length).foreach((dimension) => {
+          //for each dimension take points t to t-order
+          featuresAcc ++= hist.map(vec => vec(dimension))
+        })
+
+        val features = DenseVector(featuresAcc.toArray)
         //assert(history.length == deltaT + 1, "Check one")
         //assert(features.length == deltaT, "Check two")
-        (features, history.last._2)
-    }).toStream
-
-    val splitTrainingTest = (data: Stream[(DenseVector[Double], Double)]) => {
-      (data.take(num_training), data.take(num_training+num_test).takeRight(num_test))
-    }
+        (features, history.last._2(0))
+      }).toStream
 
     val normalizeData =
       (trainTest: (Stream[(DenseVector[Double], Double)],
@@ -104,7 +110,8 @@ object TestOmniAR {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPNarModel(deltaT, kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+        val model = new GPNarXModel(deltaT, ex.length,
+          kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
 
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
@@ -148,9 +155,11 @@ object TestOmniAR {
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
         legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
         unhold()
+        val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
+        val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
 
         //Now test the Model Predicted Output and its performance.
-        val mpo = model.modelPredictedOutput(stepPred) _
+        /*val mpo = model.modelPredictedOutput(stepPred) _
         val testData = trainTest._1._2
 
 
@@ -173,8 +182,6 @@ object TestOmniAR {
 
         logger.info("Printing One Step Ahead (OSA) Performance Metrics")
         metrics.print()
-        val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
-        val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
         logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
 
 
@@ -193,16 +200,16 @@ object TestOmniAR {
         line((1 to scoresAndLabels2.length).toList, scoresAndLabels2.map(_._1))
         legend(List("Time Series", "Predicted Time Series (one hour ahead)",
           "Predicted Time Series ("+stepPred+" hours ahead)"))
-        unhold()
+        unhold()*/
         Seq(
-          Seq(year, yearTest, deltaT, 1, num_training, num_test,
+          Seq(year, yearTest, deltaT, ex.length, 1, num_training, num_test,
             metrics.mae, metrics.rmse, metrics.Rsq,
             metrics.corr, metrics.modelYield,
-            timeObs.toDouble - timeModel.toDouble),
-          Seq(year, yearTest, deltaT, stepPred, num_training, num_test,
+            timeObs.toDouble - timeModel.toDouble)/*,
+          Seq(year, yearTest, deltaT, ex.length, stepPred, num_training, num_test,
             mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
             mpoMetrics.corr, mpoMetrics.modelYield,
-            timeObsMPO.toDouble - timeModelMPO.toDouble)
+            timeObsMPO.toDouble - timeModelMPO.toDouble)*/
         )
 
       }
@@ -217,7 +224,7 @@ object TestOmniAR {
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
       DataPipe((data: (Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)])) => {
-          (data._1.take(num_training), data._2.takeRight(num_test))
+        (data._1.take(num_training), data._2.takeRight(num_test))
       }) > DataPipe(normalizeData) > DataPipe(modelTrainTest)
 
 
@@ -240,24 +247,24 @@ object TestOmniAR {
   }
 }
 
-object DstARExperiment {
+object DstARXExperiment {
 
   def apply(years: List[Int] = (2007 to 2014).toList,
             testYears: List[Int] = (2000 to 2015).toList,
             modelSizes: List[Int] = List(50, 100, 150),
-            deltas: List[Int] = List(1, 2, 3),
+            deltas: List[Int] = List(1, 2, 3), exogenous: List[Int] = List(24),
             stepAhead: Int, bandwidth: Double, noise: Double,
             num_test: Int, column: Int, grid: Int, step: Double) = {
 
-    val writer = CSVWriter.open(new File("data/OmniRes.csv"), append = true)
+    val writer = CSVWriter.open(new File("data/OmniNARXRes.csv"), append = true)
 
     years.foreach((year) => {
       testYears.foreach((testYear) => {
         deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
-            TestOmniAR.runExperiment(year, testYear, new FBMKernel(1.05),
+            TestOmniARX.runExperiment(year, testYear, new FBMKernel(1.05),
               delta, stepAhead, bandwidth, noise,
-              modelSize, num_test, column,
+              modelSize, num_test, column, exogenous,
               grid, step, "GS",
               Map("tolerance" -> "0.0001",
                 "step" -> "0.1",
