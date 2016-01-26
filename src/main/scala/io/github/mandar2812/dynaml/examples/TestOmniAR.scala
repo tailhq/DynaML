@@ -245,6 +245,7 @@ object DstARExperiment {
 
   def apply(years: List[Int] = (2007 to 2014).toList,
             testYears: List[Int] = (2000 to 2015).toList,
+            modelSizes: List[Int] = List(50, 100, 150),
             deltas: List[Int] = List(1, 2, 3),
             stepAhead: Int, bandwidth: Double, noise: Double,
             num_test: Int, column: Int, grid: Int, step: Double) = {
@@ -254,7 +255,7 @@ object DstARExperiment {
     years.foreach((year) => {
       testYears.foreach((testYear) => {
         deltas.foreach((delta) => {
-          List(25, 50, 100, 150).foreach((modelSize) => {
+          modelSizes.foreach((modelSize) => {
             TestOmniAR.runExperiment(year, testYear, new FBMKernel(1.05),
               delta, stepAhead, bandwidth, noise,
               modelSize, num_test, column,
