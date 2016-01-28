@@ -43,6 +43,8 @@ with GloballyOptimizable {
 
   val npoints = num
 
+  protected var kernelMatrixCache: DenseMatrix[Double] = null
+
   def setNoiseLevel(n: Double): this.type = {
     noiseLevel = n
     this
@@ -143,7 +145,11 @@ with GloballyOptimizable {
     //Calculate the kernel matrix on the training data
     val training = dataAsIndexSeq(g)
     val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
-    val kernelTraining = covariance.buildKernelMatrix(training, npoints).getKernelMatrix()
+
+    val kernelTraining = if(kernelMatrixCache == null)
+      covariance.buildKernelMatrix(training, npoints).getKernelMatrix() else
+      kernelMatrixCache
+
     val kernelTest = covariance.buildKernelMatrix(test, test.length).getKernelMatrix()
     val crossKernel = covariance.buildCrossKernelMatrix(training, test)
 
@@ -169,6 +175,17 @@ with GloballyOptimizable {
     logger.info("Generating error bars")
     val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
+  }
+
+  def persist(): Unit = {
+    kernelMatrixCache =
+      covariance.buildKernelMatrix(dataAsIndexSeq(g), npoints)
+        .getKernelMatrix()
+
+  }
+
+  def unpersist(): Unit = {
+    kernelMatrixCache = null
   }
 
 }

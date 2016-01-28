@@ -121,6 +121,7 @@ object TestOmniAR {
         val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise), opt)
 
         model.setState(conf)
+        model.persist()
 
         val res = model.test(trainTest._1._2.toSeq)
 
