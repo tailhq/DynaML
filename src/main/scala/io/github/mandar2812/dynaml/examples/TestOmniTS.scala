@@ -16,7 +16,8 @@ import io.github.mandar2812.dynaml.utils
 object TestOmniTS {
 
   def apply(year: Int, kernel: CovarianceFunction[Double, Double, DenseMatrix[Double]],
-            bandwidth: Double, noise: Double,
+            bandwidth: Double,
+            noise: CovarianceFunction[Double, Double, DenseMatrix[Double]],
             num_training: Int, num_test: Int,
             column: Int, grid: Int,
             step: Double, globalOpt: String,
@@ -29,7 +30,8 @@ object TestOmniTS {
         "maxIterations" -> maxIt.toString))
 
   def apply(year: Int = 2006, kern: String = "RBF",
-            bandwidth: Double = 0.5, noise: Double = 0.0,
+            bandwidth: Double = 0.5,
+            noise: CovarianceFunction[Double, Double, DenseMatrix[Double]],
             num_training: Int = 200, num_test: Int = 50,
             column: Int = 40, grid: Int = 5,
             step: Double = 0.2, globalOpt: String,
@@ -70,7 +72,8 @@ object TestOmniTS {
 
   def runExperiment(year: Int = 2006,
                     kernel: CovarianceFunction[Double, Double, DenseMatrix[Double]],
-                    bandwidth: Double = 0.5, noise: Double = 0.0,
+                    bandwidth: Double = 0.5,
+                    noise: CovarianceFunction[Double, Double, DenseMatrix[Double]],
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
@@ -126,8 +129,7 @@ object TestOmniTS {
       (trainTest: ((Stream[(Double, Double)],
         Stream[(Double, Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPTimeSeries(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
-
+        val model = new GPTimeSeries(kernel, noise, trainTest._1._1.toSeq)
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
             .setGridSize(grid)
@@ -138,7 +140,7 @@ object TestOmniTS {
             Seq[(Double, Double)],
             GPTimeSeries](model)
         }
-        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise), opt)
+        val (_, conf) = gs.optimize(kernel.state ++ noise.state, opt)
 
         model.setState(conf)
 

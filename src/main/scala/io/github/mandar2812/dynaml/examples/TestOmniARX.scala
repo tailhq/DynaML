@@ -20,7 +20,8 @@ import scala.collection.mutable.{MutableList => ML}
 object TestOmniARX {
 
   def apply(year: Int, yeartest:Int, kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            delta: Int, stepAhead: Int, bandwidth: Double, noise: Double,
+            delta: Int, stepAhead: Int, bandwidth: Double,
+            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             num_training: Int, num_test: Int,
             column: Int, exoInputColumns: List[Int] = List(24),
             grid: Int, step: Double, globalOpt: String,
@@ -36,7 +37,8 @@ object TestOmniARX {
   def runExperiment(year: Int = 2006, yearTest:Int = 2007,
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     deltaT: Int = 2, stepPred: Int = 3,
-                    bandwidth: Double = 0.5, noise: Double = 0.0,
+                    bandwidth: Double = 0.5,
+                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, ex: List[Int] = List(24), grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
@@ -111,7 +113,7 @@ object TestOmniARX {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
         val model = new GPNarXModel(deltaT, ex.length,
-          kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+          kernel, noise, trainTest._1._1.toSeq)
 
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
@@ -124,11 +126,10 @@ object TestOmniARX {
             GPRegression](model)
         }
 
-        val startConf = kernel.state ++ Map("noiseLevel" -> noise)
-        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise), opt)
+        val startConf = kernel.state ++ noise.state
+        val (_, conf) = gs.optimize(startConf, opt)
 
         model.setState(conf)
-        //model.persist()
 
         val res = model.test(trainTest._1._2.toSeq)
 
@@ -159,58 +160,12 @@ object TestOmniARX {
         val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
         val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
 
-        //Now test the Model Predicted Output and its performance.
-        /*val mpo = model.modelPredictedOutput(stepPred) _
-        val testData = trainTest._1._2
 
-
-        val predictedOutput:List[Double] = testData.grouped(stepPred).map((partition) => {
-          val preds = mpo(partition.head._1).map(_._1)
-          if(preds.length == partition.length) {
-            preds.toList
-          } else {
-            preds.take(partition.length).toList
-          }
-        }).foldRight(List[Double]())(_++_)
-
-        val outputs = testData.map(_._2).toList
-
-        val res2 = predictedOutput zip outputs
-        val scoresAndLabels2 = deNormalize.run(res2.toList)
-
-        val mpoMetrics = new RegressionMetrics(scoresAndLabels2,
-          scoresAndLabels2.length)
-
-        logger.info("Printing One Step Ahead (OSA) Performance Metrics")
-        metrics.print()
-        logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
-
-
-        logger.info("Printing Model Predicted Output (MPO) Performance Metrics")
-        mpoMetrics.print()
-
-        val timeObsMPO = scoresAndLabels2.map(_._2).zipWithIndex.min._2
-        val timeModelMPO = scoresAndLabels2.map(_._1).zipWithIndex.min._2
-        logger.info("Timing Error; MPO, "+stepPred+" hours ahead Prediction: "+(timeObsMPO-timeModelMPO))
-
-        mpoMetrics.generatePlots()
-        //Plotting time series prediction comparisons
-        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
-        hold()
-        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
-        line((1 to scoresAndLabels2.length).toList, scoresAndLabels2.map(_._1))
-        legend(List("Time Series", "Predicted Time Series (one hour ahead)",
-          "Predicted Time Series ("+stepPred+" hours ahead)"))
-        unhold()*/
         Seq(
           Seq(year, yearTest, deltaT, ex.length, 1, num_training, num_test,
             metrics.mae, metrics.rmse, metrics.Rsq,
             metrics.corr, metrics.modelYield,
-            timeObs.toDouble - timeModel.toDouble)/*,
-          Seq(year, yearTest, deltaT, ex.length, stepPred, num_training, num_test,
-            mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
-            mpoMetrics.corr, mpoMetrics.modelYield,
-            timeObsMPO.toDouble - timeModelMPO.toDouble)*/
+            timeObs.toDouble - timeModel.toDouble)
         )
 
       }
@@ -229,19 +184,8 @@ object TestOmniARX {
       }) > DataPipe(normalizeData) > DataPipe(modelTrainTest)
 
 
-    /*val processpipe = DataPipe(utils.textFileToStream _) >
-      DataPipe(replaceWhiteSpaces) >
-      DataPipe(extractTrainingFeatures) >
-      StreamDataPipe((line: String) => !line.contains(",,")) >
-      DataPipe(extractTimeSeries) >
-      DataPipe(deltaOperation) >
-      DataPipe(splitTrainingTest) >
-      DataPipe(normalizeData) >
-      DataPipe(modelTrainTest)*/
-
-    //processpipe.run("data/omni2_"+year+".csv")
-
-    trainTestPipe.run(("data/omni2_"+year+".csv", "data/omni2_"+yearTest+".csv"))
+    trainTestPipe.run(("data/omni2_"+year+".csv",
+      "data/omni2_"+yearTest+".csv"))
 
 
 
@@ -254,7 +198,8 @@ object DstARXExperiment {
             testYears: List[Int] = (2000 to 2015).toList,
             modelSizes: List[Int] = List(50, 100, 150),
             deltas: List[Int] = List(1, 2, 3), exogenous: List[Int] = List(24),
-            stepAhead: Int, bandwidth: Double, noise: Double,
+            stepAhead: Int, bandwidth: Double,
+            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             num_test: Int, column: Int, grid: Int, step: Double) = {
 
     val writer = CSVWriter.open(new File("data/OmniNARXRes.csv"), append = true)

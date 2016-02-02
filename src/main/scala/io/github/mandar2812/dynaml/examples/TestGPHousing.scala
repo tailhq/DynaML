@@ -14,7 +14,8 @@ import io.github.mandar2812.dynaml.utils
 object TestGPHousing {
 
   def apply(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            bandwidth: Double = 0.5, noise: Double = 0.0,
+            bandwidth: Double = 0.5,
+            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             trainFraction: Double = 0.75,
             columns: List[Int] = List(13,0,1,2,3,4,5,6,7,8,9,10,11,12),
             grid: Int = 5, step: Double = 0.2, globalOpt: String = "ML",
@@ -29,7 +30,8 @@ object TestGPHousing {
     )
 
   def apply(kern: String,
-            bandwidth: Double, noise: Double,
+            bandwidth: Double,
+            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             trainFraction: Double,
             columns: List[Int],
             grid: Int, step: Double, globalOpt: String,
@@ -64,7 +66,8 @@ object TestGPHousing {
   }
 
   def runExperiment(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    bandwidth: Double = 0.5, noise: Double = 0.0,
+                    bandwidth: Double = 0.5,
+                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     num_training: Int = 200, columns: List[Int] = List(40,16,21,23,24,22,25),
                     grid: Int = 5, step: Double = 0.2,
                     globalOpt: String = "ML", opt: Map[String, String]): Unit = {
@@ -107,7 +110,7 @@ object TestGPHousing {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPRegression(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+        val model = new GPRegression(kernel, noise, trainingdata = trainTest._1._1.toSeq)
 
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
@@ -120,8 +123,8 @@ object TestGPHousing {
             GPRegression](model)
         }
 
-        val startConf = kernel.state ++ Map("noiseLevel" -> noise)
-        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise), opt)
+        val startConf = kernel.state ++ noise.state
+        val (_, conf) = gs.optimize(startConf, opt)
 
         model.setState(conf)
 

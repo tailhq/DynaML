@@ -32,6 +32,8 @@ abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T] {
    * */
   val covariance: CovarianceFunction[I, K, M]
 
+  val noiseModel: CovarianceFunction[I, K, M]
+
   /** Calculates posterior predictive distribution for
   * a particular set of test data points.
   *

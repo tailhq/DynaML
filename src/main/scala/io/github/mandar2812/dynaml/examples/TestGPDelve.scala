@@ -65,7 +65,7 @@ object TestGPDelve {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPRegression(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+        val model = new GPRegression(kernel, new DiracKernel(noise), trainTest._1._1.toSeq)
         val res = model.test(trainTest._1._2.toSeq)
         val scoresAndLabelsPipe =
           DataPipe(

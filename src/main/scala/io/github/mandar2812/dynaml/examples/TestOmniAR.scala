@@ -20,13 +20,14 @@ import org.apache.log4j.Logger
 object TestOmniAR {
 
   def apply(year: Int, yeartest:Int, kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            delta: Int, stepAhead: Int, bandwidth: Double, noise: Double,
+            delta: Int, timeLag:Int, stepAhead: Int, bandwidth: Double,
+            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             num_training: Int, num_test: Int,
             column: Int, grid: Int,
             step: Double, globalOpt: String,
             stepSize: Double = 0.05,
             maxIt: Int = 200): Unit =
-    runExperiment(year, yeartest, kernel, delta, stepAhead, bandwidth, noise,
+    runExperiment(year, yeartest, kernel, delta, timeLag, stepAhead, bandwidth, noise,
       num_training, num_test, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
@@ -34,8 +35,9 @@ object TestOmniAR {
 
   def runExperiment(year: Int = 2006, yearTest:Int = 2007,
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    deltaT: Int = 2, stepPred: Int = 3,
-                    bandwidth: Double = 0.5, noise: Double = 0.0,
+                    deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
+                    bandwidth: Double = 0.5,
+                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
@@ -64,8 +66,8 @@ object TestOmniAR {
 
 
     val deltaOperation = (lines: Stream[(Double, Double)]) =>
-      lines.toList.sliding(deltaT+1).map((history) => {
-        val features = DenseVector(history.take(history.length - 1).map(_._2).toArray)
+      lines.toList.sliding(deltaT+timelag+1).map((history) => {
+        val features = DenseVector(history.take(deltaT).map(_._2).toArray)
         //assert(history.length == deltaT + 1, "Check one")
         //assert(features.length == deltaT, "Check two")
         (features, history.last._2)
@@ -104,7 +106,7 @@ object TestOmniAR {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPNarModel(deltaT, kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+        val model = new GPNarModel(deltaT, kernel, noise, trainTest._1._1.toSeq)
 
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
@@ -117,8 +119,8 @@ object TestOmniAR {
             GPRegression](model)
         }
 
-        val startConf = kernel.state ++ Map("noiseLevel" -> noise)
-        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise), opt)
+        val startConf = kernel.state ++ noise.state
+        val (_, conf) = gs.optimize(startConf, opt)
 
         model.setState(conf)
         model.persist()
@@ -221,19 +223,6 @@ object TestOmniAR {
           (data._1.take(num_training), data._2.takeRight(num_test))
       }) > DataPipe(normalizeData) > DataPipe(modelTrainTest)
 
-
-    /*val processpipe = DataPipe(utils.textFileToStream _) >
-      DataPipe(replaceWhiteSpaces) >
-      DataPipe(extractTrainingFeatures) >
-      StreamDataPipe((line: String) => !line.contains(",,")) >
-      DataPipe(extractTimeSeries) >
-      DataPipe(deltaOperation) >
-      DataPipe(splitTrainingTest) >
-      DataPipe(normalizeData) >
-      DataPipe(modelTrainTest)*/
-
-    //processpipe.run("data/omni2_"+year+".csv")
-
     trainTestPipe.run(("data/omni2_"+year+".csv", "data/omni2_"+yearTest+".csv"))
 
 
@@ -247,7 +236,8 @@ object DstARExperiment {
             testYears: List[Int] = (2000 to 2015).toList,
             modelSizes: List[Int] = List(50, 100, 150),
             deltas: List[Int] = List(1, 2, 3),
-            stepAhead: Int, bandwidth: Double, noise: Double,
+            stepAhead: Int, bandwidth: Double,
+            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             num_test: Int, column: Int, grid: Int, step: Double) = {
 
     val writer = CSVWriter.open(new File("data/OmniRes.csv"), append = true)
@@ -257,7 +247,7 @@ object DstARExperiment {
         deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
             TestOmniAR.runExperiment(year, testYear, new FBMKernel(1.05),
-              delta, stepAhead, bandwidth, noise,
+              delta, 0, stepAhead, bandwidth, noise,
               modelSize, num_test, column,
               grid, step, "GS",
               Map("tolerance" -> "0.0001",

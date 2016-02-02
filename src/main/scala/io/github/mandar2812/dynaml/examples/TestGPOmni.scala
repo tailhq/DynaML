@@ -136,7 +136,7 @@ object TestGPOmni {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPRegression(kernel, trainTest._1._1.toSeq).setNoiseLevel(noise)
+        val model = new GPRegression(kernel, trainingdata = trainTest._1._1.toSeq).setNoiseLevel(noise)
 
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)

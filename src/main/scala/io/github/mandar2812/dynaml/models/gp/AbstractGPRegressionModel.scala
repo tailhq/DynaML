@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg._
-import io.github.mandar2812.dynaml.kernels.CovarianceFunction
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, CovarianceFunction}
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import org.apache.log4j.Logger
 
@@ -20,6 +20,7 @@ import org.apache.log4j.Logger
   */
 abstract class AbstractGPRegressionModel[T, I](
   cov: CovarianceFunction[I, Double, DenseMatrix[Double]],
+  n: CovarianceFunction[I, Double, DenseMatrix[Double]] = new DiracKernel(1.0),
   data: T, num: Int) extends
   GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
   (DenseVector[Double], DenseMatrix[Double])]
@@ -35,7 +36,9 @@ with GloballyOptimizable {
    * */
   override val mean: (I) => Double = _ => 0.0
 
-  override val covariance: CovarianceFunction[I, Double, DenseMatrix[Double]] = cov
+  override val covariance = cov
+
+  override val noiseModel = n
 
   override protected val g: T = data
 
@@ -43,7 +46,8 @@ with GloballyOptimizable {
 
   val npoints = num
 
-  protected var kernelMatrixCache: DenseMatrix[Double] = null
+  protected var (caching, kernelMatrixCache, noiseCache)
+  : (Boolean, DenseMatrix[Double], DenseMatrix[Double]) = (false, null, null)
 
   def setNoiseLevel(n: Double): this.type = {
     noiseLevel = n
@@ -52,16 +56,17 @@ with GloballyOptimizable {
 
   def setState(s: Map[String, Double]): this.type ={
     covariance.setHyperParameters(s)
-    noiseLevel = s("noiseLevel")
-    current_state = cov.state + (("noiseLevel", noiseLevel))
+    noiseModel.setHyperParameters(s)
+    //noiseLevel = s("noiseLevel")
+    current_state = cov.state ++ noiseModel.state
     this
   }
 
   override protected var hyper_parameters: List[String] =
-    cov.hyper_parameters :+ "noiseLevel"
+    covariance.hyper_parameters ++ noiseModel.hyper_parameters
 
   override protected var current_state: Map[String, Double] =
-    cov.state + (("noiseLevel", noiseLevel))
+    covariance.state ++ noiseModel.state
 
 
   /**
@@ -80,7 +85,7 @@ with GloballyOptimizable {
     **/
   override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
 
-    this.setNoiseLevel(h("noiseLevel"))
+    //this.setNoiseLevel(h("noiseLevel"))
     covariance.setHyperParameters(h)
 
     val training = dataAsIndexSeq(g)
@@ -89,7 +94,9 @@ with GloballyOptimizable {
     val kernelTraining: DenseMatrix[Double] =
       covariance.buildKernelMatrix(training, npoints).getKernelMatrix()
 
-    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining, noiseLevel)
+    val noiseMat = noiseModel.buildKernelMatrix(training, npoints).getKernelMatrix()
+
+    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining, noiseMat)
   }
 
   /**
@@ -107,20 +114,23 @@ with GloballyOptimizable {
 
     this.setNoiseLevel(h("noiseLevel"))
     covariance.setHyperParameters(h)
+    noiseModel.setHyperParameters(h)
 
     val training = dataAsIndexSeq(g)
     val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
 
     val inverse = inv(covariance.buildKernelMatrix(training, npoints).getKernelMatrix() +
-      DenseMatrix.eye[Double](npoints) * noiseLevel)
+      noiseModel.buildKernelMatrix(training, npoints).getKernelMatrix())
 
-    val hParams = covariance.hyper_parameters :+ "noiseLevel"
+    val hParams = covariance.hyper_parameters ++ noiseModel.hyper_parameters
     val alpha = inverse * trainingLabels
     hParams.map(h => {
       //build kernel derivative matrix
       val kernelDerivative =
-        if(h == "noiseLevel")
-          DenseMatrix.eye[Double](npoints)
+        if(noiseModel.hyper_parameters.contains(h))
+          DenseMatrix.tabulate[Double](npoints, npoints){(i,j) => {
+            noiseModel.gradient(training(i), training(j))(h)
+          }}
         else
           DenseMatrix.tabulate[Double](npoints, npoints){(i,j) => {
             covariance.gradient(training(i), training(j))(h)
@@ -146,15 +156,22 @@ with GloballyOptimizable {
     val training = dataAsIndexSeq(g)
     val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
 
-    val kernelTraining = if(kernelMatrixCache == null)
-      covariance.buildKernelMatrix(training, npoints).getKernelMatrix() else
+    val kernelTraining = if(!caching)
+      covariance.buildKernelMatrix(training, npoints).getKernelMatrix()
+    else
       kernelMatrixCache
 
-    val kernelTest = covariance.buildKernelMatrix(test, test.length).getKernelMatrix()
+    val noiseMat = if(!caching)
+      noiseModel.buildKernelMatrix(training, npoints).getKernelMatrix()
+    else
+      noiseCache
+
+    val kernelTest = covariance.buildKernelMatrix(test, test.length)
+      .getKernelMatrix()
     val crossKernel = covariance.buildCrossKernelMatrix(training, test)
 
     //Calculate the predictive mean and co-variance
-    val inverse = inv(kernelTraining + DenseMatrix.eye[Double](training.length) * noiseLevel)
+    val inverse = inv(kernelTraining + noiseMat)
     (crossKernel.t * (inverse * trainingLabels),
       kernelTest - (crossKernel.t * (inverse * crossKernel)))
   }
@@ -181,11 +198,16 @@ with GloballyOptimizable {
     kernelMatrixCache =
       covariance.buildKernelMatrix(dataAsIndexSeq(g), npoints)
         .getKernelMatrix()
+    noiseCache = noiseModel.buildKernelMatrix(dataAsIndexSeq(g), npoints)
+      .getKernelMatrix()
+    caching = true
 
   }
 
   def unpersist(): Unit = {
     kernelMatrixCache = null
+    noiseCache = null
+    caching = false
   }
 
 }
@@ -194,10 +216,10 @@ object AbstractGPRegressionModel {
 
   def logLikelihood(trainingData: DenseVector[Double],
                     kernelMatrix: DenseMatrix[Double],
-                    noise: Double): Double = {
+                    noiseMatrix: DenseMatrix[Double]): Double = {
 
     val kernelTraining: DenseMatrix[Double] =
-      kernelMatrix + DenseMatrix.eye[Double](trainingData.length) * noise
+      kernelMatrix + noiseMatrix
     val Kinv = inv(kernelTraining)
 
     0.5*(trainingData.t * (Kinv * trainingData) + math.log(det(kernelTraining)) +

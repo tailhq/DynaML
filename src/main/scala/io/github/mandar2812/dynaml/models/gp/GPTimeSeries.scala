@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseVector, DenseMatrix}
 import com.github.tototoshi.csv.CSVReader
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 
@@ -8,8 +8,9 @@ import io.github.mandar2812.dynaml.kernels.CovarianceFunction
   * Created by mandar on 16/11/15.
   */
 class GPTimeSeries(cov: CovarianceFunction[Double, Double, DenseMatrix[Double]],
+                   n: CovarianceFunction[Double, Double, DenseMatrix[Double]],
                    trainingdata: Seq[(Double, Double)])
-  extends AbstractGPRegressionModel[Seq[(Double, Double)],Double](cov, trainingdata,
+  extends AbstractGPRegressionModel[Seq[(Double, Double)],Double](cov, n, trainingdata,
     trainingdata.length){
   /**
     * Convert from the underlying data structure to
