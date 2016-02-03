@@ -111,15 +111,15 @@
       </h4>
       <p class="comment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.kernels.CompositeCovariance" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CompositeCovariance[T,V,M]extendsCovarianceFunction[T,V,M]"></a>
-      <a id="CompositeCovariance[T,V,M]:CompositeCovariance[T,V,M]"></a>
+      <a id="CompositeCovariance[T]extendsCovarianceFunction[T,Double,breeze.linalg.DenseMatrix[Double]]withLocalScalarKernel[T]"></a>
+      <a id="CompositeCovariance[T]:CompositeCovariance[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="CompositeCovariance.html"><span class="name">CompositeCovariance</span></a><span class="tparams">[<span name="T">T</span>, <span name="V">V</span>, <span name="M">M</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance.V">V</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance.M">M</span>]</span>
+        <a href="CompositeCovariance.html"><span class="name">CompositeCovariance</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance.T">T</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance.T">T</span>]</span>
       </span>
       </h4>
       
@@ -151,6 +151,19 @@
       <p class="comment cmt">Abstract class which can be extended to
 implement various Multivariate Density
 Kernels.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DiracKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DiracKernelextendsSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="DiracKernel:DiracKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DiracKernel.html"><span class="name">DiracKernel</span></a><span class="result"> extends <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Created by mandar on 1/2/16.</p>
     </li><li name="io.github.mandar2812.dynaml.kernels.ExponentialKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ExponentialKernelextendsSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
       <a id="ExponentialKernel:ExponentialKernel"></a>
@@ -298,6 +311,32 @@ of a breeze <span class="extype" name="DenseMatrix">DenseMatrix</span> instance.
       </h4>
       <p class="comment cmt">Scalar Kernel defines algebraic behavior for kernels of the form
 K: Index x Index -&gt; Double, i.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.MAKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MAKernelextendsSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="MAKernel:MAKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MAKernel.html"><span class="name">MAKernel</span></a><span class="result"> extends <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.MahalanobisKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MahalanobisKernelextendsSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="MahalanobisKernel:MahalanobisKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MahalanobisKernel.html"><span class="name">MahalanobisKernel</span></a><span class="result"> extends <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
     </li><li name="io.github.mandar2812.dynaml.kernels.PeriodicCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PeriodicCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
       <a id="PeriodicCovFunc:PeriodicCovFunc"></a>
@@ -393,6 +432,32 @@ K(Xi,Xj) = exp(-||Xi - Xj||**2/2*bandwidth**2)
       </span>
       </h4>
       <p class="comment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.SECovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SECovFuncextendsRBFCovFunc"></a>
+      <a id="SECovFunc:SECovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SECovFunc.html"><span class="name">SECovFunc</span></a><span class="result"> extends <a href="RBFCovFunc.html" class="extype" name="io.github.mandar2812.dynaml.kernels.RBFCovFunc">RBFCovFunc</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.SEKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SEKernelextendsRBFKernel"></a>
+      <a id="SEKernel:SEKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SEKernel.html"><span class="name">SEKernel</span></a><span class="result"> extends <a href="RBFKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.RBFKernel">RBFKernel</a></span>
+      </span>
+      </h4>
+      
     </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SVMKernel[M]extendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,M]withSerializable"></a>
       <a id="SVMKernel[M]:SVMKernel[M]"></a>

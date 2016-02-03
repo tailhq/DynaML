@@ -266,19 +266,27 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#logLikelihood" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="logLikelihood(trainingData:breeze.linalg.DenseVector[Double],kernelMatrix:breeze.linalg.DenseMatrix[Double],noise:Double):Double"></a>
-      <a id="logLikelihood(DenseVector[Double],DenseMatrix[Double],Double):Double"></a>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#logLikelihood" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logLikelihood(trainingData:breeze.linalg.DenseVector[Double],kernelMatrix:breeze.linalg.DenseMatrix[Double],noiseMatrix:breeze.linalg.DenseMatrix[Double]):Double"></a>
+      <a id="logLikelihood(DenseVector[Double],DenseMatrix[Double],DenseMatrix[Double]):Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">logLikelihood</span><span class="params">(<span name="trainingData">trainingData: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="kernelMatrix">kernelMatrix: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="noise">noise: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">logLikelihood</span><span class="params">(<span name="trainingData">trainingData: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="kernelMatrix">kernelMatrix: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="noiseMatrix">noiseMatrix: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Calculate the marginal log likelihood
+of the training data for a pre-initialized
+kernel and noise matrices.</p><div class="fullcomment"><div class="comment cmt"><p>Calculate the marginal log likelihood
+of the training data for a pre-initialized
+kernel and noise matrices.
+</p></div><dl class="paramcmts block"><dt class="param">trainingData</dt><dd class="cmt"><p>The function values assimilated as a <span class="extype" name="DenseVector">DenseVector</span>
+</p></dd><dt class="param">kernelMatrix</dt><dd class="cmt"><p>The kernel matrix of the training features
+</p></dd><dt class="param">noiseMatrix</dt><dd class="cmt"><p>The noise matrix with respect to the training data features
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

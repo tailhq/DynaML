@@ -45,7 +45,7 @@
           <div class="superTypes hiddenContent"><a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.T">T</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>, <a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <a href="GPTimeSeries.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries">GPTimeSeries</a></div>
+          <div class="subClasses hiddenContent"><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>, <a href="GPNarModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarModel">GPNarModel</a>, <a href="GPNarXModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarXModel">GPNarXModel</a>, <a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <a href="GPTimeSeries.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries">GPTimeSeries</a></div>
         </div></div>
         
 
@@ -160,6 +160,19 @@ and Y is the value/label type.</p>
       <p class="shortcomment cmt">Mean Function: Takes a member of the index set (input)
 and returns the corresponding mean of the distribution
 corresponding to input.</p>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel#noiseModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="noiseModel:io.github.mandar2812.dynaml.kernels.CovarianceFunction[I,K,M]"></a>
+      <a id="noiseModel:CovarianceFunction[I,K,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">noiseModel</span><span class="result">: <a href="../../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.K">K</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.M">M</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel#predictionWithErrorBars" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="predictionWithErrorBars[U&lt;:Seq[I]](testData:U,sigma:Int):Seq[(I,Y,Y,Y)]"></a>
       <a id="predictionWithErrorBars[U&lt;:Seq[I]](U,Int):Seq[(I,Y,Y,Y)]"></a>
