@@ -8,7 +8,7 @@ import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.{GPNarModel, GPRegression}
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
-import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 import com.quantifind.charts.Highcharts._
 import org.apache.log4j.Logger
@@ -49,66 +49,12 @@ object TestOmniAR {
     //Extract the time and Dst values
 
     val logger = Logger.getLogger(this.getClass)
-    val replaceWhiteSpaces = (s: Stream[String]) => s.map(utils.replace("\\s+")(","))
-
-    val extractTrainingFeatures = (l: Stream[String]) =>
-      utils.extractColumns(l, ",", List(0,1,2,column),
-        Map(16 -> "999.9", 21 -> "999.9",
-          24 -> "9999.", 23 -> "999.9",
-          40 -> "99999", 22 -> "9999999.",
-          25 -> "999.9", 28 -> "99.99",
-          27 -> "9.999", 39 -> "999"))
 
     val extractTimeSeries = (lines: Stream[String]) => lines.map{line =>
       val splits = line.split(",")
       val timestamp = splits(1).toDouble * 24 + splits(2).toDouble
       (timestamp, splits(3).toDouble)
     }
-
-
-     /* Perform a delta operation to select
-      * the time history of the relevant columns
-      */
-    val deltaOperation = (lines: Stream[(Double, Double)]) =>
-      lines.toList.sliding(deltaT+timelag+1).map((history) => {
-        val features = DenseVector(history.take(deltaT).map(_._2).toArray)
-        //assert(history.length == deltaT + 1, "Check one")
-        //assert(features.length == deltaT, "Check two")
-        (features, history.last._2)
-    }).toStream
-
-
-     /*
-      * A functional pipe which takes two streams of data,
-      * one each for training and testing respectively.
-      *
-      * Performs Gaussian standardization.
-      */
-    val normalizeData =
-      (trainTest: (Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)])) => {
-
-        logger.info(trainTest._1.toList)
-
-        val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
-          DenseVector(tup._1.toArray ++ Array(tup._2))).toList)
-
-        val stdDev: DenseVector[Double] = variance.map(v =>
-          math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
-
-
-        val normalizationFunc = (point: (DenseVector[Double], Double)) => {
-          val extendedpoint = DenseVector(point._1.toArray ++ Array(point._2))
-
-          val normPoint = (extendedpoint - mean) :/ stdDev
-          val length = normPoint.length
-          (normPoint(0 until length-1), normPoint(-1))
-        }
-
-        ((trainTest._1.map(normalizationFunc),
-          trainTest._2.map(normalizationFunc)), (mean, stdDev))
-      }
-
 
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
@@ -220,18 +166,24 @@ object TestOmniAR {
 
       }
 
-    val preProcessPipe = DataPipe(utils.textFileToStream _) >
-      DataPipe(replaceWhiteSpaces) >
-      DataPipe(extractTrainingFeatures) >
-      StreamDataPipe((line: String) => !line.contains(",,")) >
+    val preProcessPipe = DynaMLPipe.fileToStream >
+      DynaMLPipe.replaceWhiteSpaces >
+      DynaMLPipe.extractTrainingFeatures(
+        List(0,1,2,column),
+        Map(
+          16 -> "999.9", 21 -> "999.9",
+          24 -> "9999.", 23 -> "999.9",
+          40 -> "99999", 22 -> "9999999.",
+          25 -> "999.9", 28 -> "99.99",
+          27 -> "9.999", 39 -> "999")
+      ) > DynaMLPipe.removeMissingLines >
       DataPipe(extractTimeSeries) >
-      DataPipe(deltaOperation)
+      DynaMLPipe.deltaOperation(deltaT, timelag)
 
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
-      DataPipe((data: (Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)])) => {
-          (data._1.take(num_training), data._2.takeRight(num_test))
-      }) > DataPipe(normalizeData) > DataPipe(modelTrainTest)
+      DynaMLPipe.splitTrainingTest(num_training, num_test) >
+      DynaMLPipe.gaussianStandardization >
+      DataPipe(modelTrainTest)
 
     trainTestPipe.run(("data/omni2_"+year+".csv", "data/omni2_"+yearTest+".csv"))
 
