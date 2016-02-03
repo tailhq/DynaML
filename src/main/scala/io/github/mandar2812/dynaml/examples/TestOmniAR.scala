@@ -15,11 +15,14 @@ import org.apache.log4j.Logger
 
 
 /**
-  * Created by mandar on 22/11/15.
+  * @author mandar2812 datum 22/11/15.
+  *
+  * Test a GP-NAR model on the Omni Data set
   */
 object TestOmniAR {
 
-  def apply(year: Int, yeartest:Int, kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  def apply(year: Int, yeartest:Int,
+            kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             delta: Int, timeLag:Int, stepAhead: Int, bandwidth: Double,
             noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             num_training: Int, num_test: Int,
@@ -44,9 +47,7 @@ object TestOmniAR {
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {
     //Load Omni data into a stream
     //Extract the time and Dst values
-    //separate data into training and test
-    //pipe training data to model and then generate test predictions
-    //create RegressionMetrics instance and produce plots
+
     val logger = Logger.getLogger(this.getClass)
     val replaceWhiteSpaces = (s: Stream[String]) => s.map(utils.replace("\\s+")(","))
 
@@ -65,6 +66,9 @@ object TestOmniAR {
     }
 
 
+     /* Perform a delta operation to select
+      * the time history of the relevant columns
+      */
     val deltaOperation = (lines: Stream[(Double, Double)]) =>
       lines.toList.sliding(deltaT+timelag+1).map((history) => {
         val features = DenseVector(history.take(deltaT).map(_._2).toArray)
@@ -73,10 +77,13 @@ object TestOmniAR {
         (features, history.last._2)
     }).toStream
 
-    val splitTrainingTest = (data: Stream[(DenseVector[Double], Double)]) => {
-      (data.take(num_training), data.take(num_training+num_test).takeRight(num_test))
-    }
 
+     /*
+      * A functional pipe which takes two streams of data,
+      * one each for training and testing respectively.
+      *
+      * Performs Gaussian standardization.
+      */
     val normalizeData =
       (trainTest: (Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)])) => {
@@ -102,6 +109,9 @@ object TestOmniAR {
           trainTest._2.map(normalizationFunc)), (mean, stdDev))
       }
 
+
+    //pipe training data to model and then generate test predictions
+    //create RegressionMetrics instance and produce plots
     val modelTrainTest =
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),

@@ -42,22 +42,21 @@ with GloballyOptimizable {
 
   override protected val g: T = data
 
-  var noiseLevel: Double = 1.0
-
   val npoints = num
 
   protected var (caching, kernelMatrixCache, noiseCache)
   : (Boolean, DenseMatrix[Double], DenseMatrix[Double]) = (false, null, null)
 
-  def setNoiseLevel(n: Double): this.type = {
-    noiseLevel = n
-    this
-  }
 
+  /**
+    * Set the model "state" which
+    * contains values of its hyper-parameters
+    * with respect to the covariance and noise
+    * kernels.
+    * */
   def setState(s: Map[String, Double]): this.type ={
     covariance.setHyperParameters(s)
     noiseModel.setHyperParameters(s)
-    //noiseLevel = s("noiseLevel")
     current_state = cov.state ++ noiseModel.state
     this
   }
@@ -67,7 +66,6 @@ with GloballyOptimizable {
 
   override protected var current_state: Map[String, Double] =
     covariance.state ++ noiseModel.state
-
 
   /**
     * Calculates the energy of the configuration,
@@ -85,7 +83,6 @@ with GloballyOptimizable {
     **/
   override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
 
-    //this.setNoiseLevel(h("noiseLevel"))
     covariance.setHyperParameters(h)
 
     val training = dataAsIndexSeq(g)
@@ -112,7 +109,6 @@ with GloballyOptimizable {
     **/
   override def gradEnergy(h: Map[String, Double]): Map[String, Double] = {
 
-    this.setNoiseLevel(h("noiseLevel"))
     covariance.setHyperParameters(h)
     noiseModel.setHyperParameters(h)
 
@@ -194,6 +190,10 @@ with GloballyOptimizable {
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
   }
 
+  /**
+    * Cache the training kernel and noise matrices
+    * for fast access in future predictions.
+    * */
   def persist(): Unit = {
     kernelMatrixCache =
       covariance.buildKernelMatrix(dataAsIndexSeq(g), npoints)
@@ -204,6 +204,9 @@ with GloballyOptimizable {
 
   }
 
+  /**
+    * Forget the cached kernel & noise matrices.
+    * */
   def unpersist(): Unit = {
     kernelMatrixCache = null
     noiseCache = null
@@ -214,6 +217,17 @@ with GloballyOptimizable {
 
 object AbstractGPRegressionModel {
 
+  /**
+    * Calculate the marginal log likelihood
+    * of the training data for a pre-initialized
+    * kernel and noise matrices.
+    *
+    * @param trainingData The function values assimilated as a [[DenseVector]]
+    *
+    * @param kernelMatrix The kernel matrix of the training features
+    *
+    * @param noiseMatrix The noise matrix with respect to the training data features
+    * */
   def logLikelihood(trainingData: DenseVector[Double],
                     kernelMatrix: DenseMatrix[Double],
                     noiseMatrix: DenseMatrix[Double]): Double = {

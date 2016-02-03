@@ -7,7 +7,13 @@ import scala.annotation.tailrec
 import scala.collection.mutable.{MutableList => ML}
 
 /**
-  * Created by mandar on 17/11/15.
+  * @author mandar2812 datum 17/11/15.
+  *
+  * Class representing Gaussian Process regression models
+  *
+  * y = f(x) + e
+  * f(x) ~ GP(0, cov(X,X))
+  * e|f(x) ~ N(f(x), noise(X,X))
   */
 class GPRegression(
   cov: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
@@ -25,6 +31,18 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   override def dataAsSeq(data: Seq[(DenseVector[Double], Double)]) = data
 }
 
+/**
+  * @author mandar2812
+  *
+  * GP-NAR
+  * Gaussian Process Non-Linear
+  * Auto-regressive Models.
+  *
+  * y(t) = f(x(t)) + e
+  * x(t) = (y(t-1), ... , t-p)
+  * f(x) ~ GP(0, cov(X,X))
+  * e|f(x) ~ N(0, noise(X,X))
+  */
 class GPNarModel(order: Int,
                  cov: CovarianceFunction[DenseVector[Double],
                     Double, DenseMatrix[Double]],
@@ -58,6 +76,19 @@ GPRegression(cov, nL, trainingdata) {
 }
 
 
+/**
+  * @author mandar2812
+  *
+  * GP-NARX
+  * Gaussian Process Non-Linear
+  * Auto-regressive Model with
+  * Exogenous Inputs.
+  *
+  * y(t) = f(x(t)) + e
+  * x(t) = (y(t-1), ... , y(t-p), u(t-1), ..., u(t-p))
+  * f(x) ~ GP(0, cov(X,X))
+  * e|f(x) ~ N(0, noise(X,X))
+  */
 class GPNarXModel(order: Int,
                   ex: Int,
                   cov: CovarianceFunction[DenseVector[Double],

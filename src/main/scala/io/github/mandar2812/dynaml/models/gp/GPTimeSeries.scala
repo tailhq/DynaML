@@ -1,17 +1,24 @@
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.DenseMatrix
 import com.github.tototoshi.csv.CSVReader
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 
 /**
-  * Created by mandar on 16/11/15.
+  * @author mandar2812 datum 16/11/15.
+  *
+  * Gaussian Process Time Series Model
+  *
+  * y(t) = f(t) + e
+  * f(t) ~ GP(0, cov(t, t'))
+  * e|f(t) ~ N(0, noise(t, t'))
   */
 class GPTimeSeries(cov: CovarianceFunction[Double, Double, DenseMatrix[Double]],
                    n: CovarianceFunction[Double, Double, DenseMatrix[Double]],
                    trainingdata: Seq[(Double, Double)])
   extends AbstractGPRegressionModel[Seq[(Double, Double)],Double](cov, n, trainingdata,
     trainingdata.length){
+
   /**
     * Convert from the underlying data structure to
     * Seq[(I, Y)] where I is the index set of the GP

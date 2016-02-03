@@ -6,7 +6,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.CSVWriter
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.gp.{GPNarXModel, GPNarModel, GPRegression}
+import io.github.mandar2812.dynaml.models.gp.{GPNarXModel, GPRegression}
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
@@ -15,7 +15,9 @@ import org.apache.log4j.Logger
 import scala.collection.mutable.{MutableList => ML}
 
 /**
-  * Created by mandar on 22/11/15.
+  * @author mandar2812 on 22/11/15.
+  *
+  * Test a GP-NARX model on the Omni Data set
   */
 object TestOmniARX {
 

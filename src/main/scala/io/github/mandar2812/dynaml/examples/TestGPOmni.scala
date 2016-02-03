@@ -11,51 +11,18 @@ import io.github.mandar2812.dynaml.utils
 import scala.util.Random
 
 /**
-  * Created by mandar on 19/11/15.
+  * @author mandar2812 datum 19/11/15.
+  *
+  * Train and evaluate a "vanilla"
+  * GP regression model f(x): R_n --> R
   */
 object TestGPOmni {
-  def apply (kern: String = "RBF",
-             year: Int = 2006,
-             yeartest: Int = 2007,
-             bandwidth: Double = 0.5,
-             noise: Double = 0.0,
-             num_training: Int = 200,
-             num_test: Int = 50,
-             columns: List[Int] = List(40,16,21,23,24,22,25),
-             grid: Int = 5,
-             step: Double = 0.2,
-             randomSample: Boolean = false,
-             globalOpt: String = "ML",
-             stepSize: Double, maxIt: Int): Unit = {
-
-    val kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] =
-      kern match {
-        case "RBF" =>
-          new RBFKernel(bandwidth)
-        case "Cauchy" =>
-          new CauchyKernel(bandwidth)
-        case "Laplacian" =>
-          new LaplacianKernel(bandwidth)
-        case "RationalQuadratic" =>
-          new RationalQuadraticKernel(bandwidth)
-        case "FBM" => new FBMKernel(bandwidth)
-        case "Student" => new TStudentKernel(bandwidth)
-        case "Anova" => new AnovaKernel(bandwidth)
-      }
-
-      runExperiment(year, yeartest, kernel, bandwidth,
-        noise, num_training, num_test, columns,
-        grid, step, globalOpt, randomSample,
-        Map("tolerance" -> "0.0001",
-        "step" -> stepSize.toString,
-        "maxIterations" -> maxIt.toString))
-
-  }
 
   def apply (kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
              year: Int, yeartest: Int,
              bandwidth: Double,
-             noise: Double, num_training: Int,
+             noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+             num_training: Int,
              num_test: Int, columns: List[Int],
              grid: Int, step: Double,
              randomSample: Boolean,
@@ -74,7 +41,8 @@ object TestGPOmni {
 
   def runExperiment(year: Int = 2006, yeartest: Int = 2007,
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    bandwidth: Double = 0.5, noise: Double = 0.0,
+                    bandwidth: Double = 0.5,
+                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     num_training: Int = 200, num_test: Int = 50,
                     columns: List[Int] = List(40,16,21,23,24,22,25),
                     grid: Int = 5, step: Double = 0.2,
@@ -136,7 +104,7 @@ object TestGPOmni {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPRegression(kernel, trainingdata = trainTest._1._1.toSeq).setNoiseLevel(noise)
+        val model = new GPRegression(kernel, noise, trainingdata = trainTest._1._1.toSeq)
 
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
@@ -149,8 +117,8 @@ object TestGPOmni {
             GPRegression](model)
         }
 
-        val startConf = kernel.state ++ Map("noiseLevel" -> noise)
-        val (_, conf) = gs.optimize(kernel.state + ("noiseLevel" -> noise), opt)
+        val startConf = kernel.state ++ noise.state
+        val (_, conf) = gs.optimize(startConf, opt)
 
         model.setState(conf)
 

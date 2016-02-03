@@ -5,7 +5,10 @@ import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import org.apache.log4j.Logger
 
 /**
-  * Created by mandar on 16/1/16.
+  * @author mandar2812 datum 16/1/16.
+  *
+  * Performs ML-II gradient based hyper-parameter
+  * optimization for Gaussian Process regression models
   */
 class GPMLOptimizer[I, T, M <: AbstractGPRegressionModel[T, I]](model: M)
   extends GlobalOptimizer[M] {
@@ -15,7 +18,8 @@ class GPMLOptimizer[I, T, M <: AbstractGPRegressionModel[T, I]](model: M)
 
   override def optimize(initialConfig: Map[String, Double],
                         options: Map[String, String] = Map("tolerance" -> "0.0001",
-                          "step" -> "0.005", "maxIterations" -> "50"))
+                          "step" -> "0.005",
+                          "maxIterations" -> "50"))
   : (M, Map[String, Double]) = {
 
     logger.info("Starting Maximum Likelihood based optimization: ML-II")
