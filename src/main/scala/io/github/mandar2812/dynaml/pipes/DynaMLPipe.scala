@@ -22,9 +22,6 @@ object DynaMLPipe {
 
   val fileToStream = DataPipe(utils.textFileToStream _)
 
-  def duplicate[Source, Destination](pipe: DataPipe[Source, Destination]) =
-    DataPipe(pipe, pipe)
-
   val replaceWhiteSpaces = DataPipe((s: Stream[String]) => s.map(utils.replace("\\s+")(",")))
 
   val trimLines = DataPipe((s: Stream[String]) => s.map(_.trim()))
@@ -94,6 +91,9 @@ object DynaMLPipe {
   val extractTrainingFeatures =
     (columns: List[Int], m: Map[Int, String]) => DataPipe((l: Stream[String]) =>
     utils.extractColumns(l, ",", columns, m))
+
+  def duplicate[Source, Destination](pipe: DataPipe[Source, Destination]) =
+    DataPipe(pipe, pipe)
 
   def GPRegressionTest[T <: AbstractGPRegressionModel[
     Seq[(DenseVector[Double], Double)],

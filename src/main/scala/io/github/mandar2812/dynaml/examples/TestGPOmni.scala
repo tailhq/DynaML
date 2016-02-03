@@ -5,7 +5,7 @@ import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
-import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 
 import scala.util.Random
@@ -49,53 +49,6 @@ object TestGPOmni {
                     globalOpt: String = "ML", randomSample: Boolean = false,
                     opt: Map[String, String]): Unit = {
 
-    //Load Omni data into a stream
-    //Extract the time and Dst values
-    //separate data into training and test
-    //pipe training data to model and then generate test predictions
-    //create RegressionMetrics instance and produce plots
-
-    val replaceWhiteSpaces = (s: Stream[String]) => s.map(utils.replace("\\s+")(","))
-
-    val extractTrainingFeatures = (l: Stream[String]) =>
-      utils.extractColumns(l, ",", columns,
-        Map(16 -> "999.9", 21 -> "999.9",
-          24 -> "9999.", 23 -> "999.9",
-          40 -> "99999", 22 -> "9999999.",
-          25 -> "999.9", 28 -> "99.99",
-          27 -> "9.999", 39 -> "999"))
-
-
-    val normalizeData =
-      (trainTest: (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)])) => {
-
-        val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
-          DenseVector(tup._1.toArray ++ Array(tup._2))).toList)
-
-        val stdDev: DenseVector[Double] = variance.map(v =>
-          math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
-
-
-        val normalizationFunc = (point: (DenseVector[Double], Double)) => {
-          val extendedpoint = DenseVector(point._1.toArray ++ Array(point._2))
-
-          val normPoint = (extendedpoint - mean) :/ stdDev
-          val length = normPoint.length
-          (normPoint(0 until length-1), normPoint(-1))
-        }
-
-        ((trainTest._1.map(normalizationFunc),
-          trainTest._2.map(normalizationFunc)), (mean, stdDev))
-      }
-
-    val preProcessPipe = DataPipe(utils.textFileToStream _) >
-      DataPipe(replaceWhiteSpaces) >
-      DataPipe(extractTrainingFeatures) >
-      StreamDataPipe((line: String) => !line.contains(",,")) >
-      StreamDataPipe((line: String) => {
-        val split = line.split(",")
-        (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
-      })
 
 
     //function to train and test a GP Regression model
@@ -141,6 +94,23 @@ object TestGPOmni {
 
       }
 
+    //Load Omni data into a stream
+    //Extract the time and Dst values
+    //separate data into training and test
+    //pipe training data to model and then generate test predictions
+    //create RegressionMetrics instance and produce plots
+
+    val preProcessPipe = DynaMLPipe.fileToStream >
+      DynaMLPipe.replaceWhiteSpaces >
+      DynaMLPipe.extractTrainingFeatures(columns,
+        Map(16 -> "999.9", 21 -> "999.9",
+          24 -> "9999.", 23 -> "999.9",
+          40 -> "99999", 22 -> "9999999.",
+          25 -> "999.9", 28 -> "99.99",
+          27 -> "9.999", 39 -> "999")) >
+      DynaMLPipe.removeMissingLines >
+      DynaMLPipe.splitFeaturesAndTargets
+
     /*
     * Create the final pipe composed as follows
     *
@@ -173,7 +143,7 @@ object TestGPOmni {
     *  |_________________|
     *
     * */
-    val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
+    val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
       DataPipe((data: (Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)])) => {
         if(!randomSample)
@@ -182,7 +152,7 @@ object TestGPOmni {
           (data._1.filter(_ => Random.nextDouble() <= num_training/data._1.size.toDouble),
             data._2.filter(_ => Random.nextDouble() <= num_test/data._2.size.toDouble))
       }) >
-      DataPipe(normalizeData) >
+      DynaMLPipe.gaussianStandardization >
       DataPipe(modelTrainTest)
 
 
