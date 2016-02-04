@@ -50,12 +50,6 @@ object TestOmniAR {
 
     val logger = Logger.getLogger(this.getClass)
 
-    val extractTimeSeries = (lines: Stream[String]) => lines.map{line =>
-      val splits = line.split(",")
-      val timestamp = splits(1).toDouble * 24 + splits(2).toDouble
-      (timestamp, splits(3).toDouble)
-    }
-
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
     val modelTrainTest =
@@ -190,8 +184,6 @@ object TestOmniAR {
 
     trainTestPipe.run(("data/omni2_"+year+".csv",
       "data/omni2_"+yearTest+".csv"))
-
-
 
   }
 }

@@ -40,7 +40,7 @@ object DynaMLPipe {
       val featuresAcc: ML[Double] = ML()
 
       (0 until hist.head.length).foreach((dimension) => {
-        //for each dimension take points t to t-order
+        //for each dimension/regressor take points t to t-order
         featuresAcc ++= hist.map(vec => vec(dimension))
       })
 
