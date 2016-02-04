@@ -50,6 +50,23 @@ object DynaMLPipe {
       (features, history.last._2(0))
     }).toStream)
 
+  val extractTimeSeries = (Tfunc: (Double, Double, Double) => Double) =>
+    DataPipe((lines: Stream[String]) => lines.map{line =>
+    val splits = line.split(",")
+    val timestamp = Tfunc(splits(0).toDouble, splits(1).toDouble, splits(2).toDouble)
+    (timestamp, splits(3).toDouble)
+  })
+
+
+  val extractTimeSeriesVec = (Tfunc: (Double, Double, Double) => Double) =>
+    DataPipe((lines: Stream[String]) => lines.map{line =>
+      val splits = line.split(",")
+      val timestamp = Tfunc(splits(0).toDouble, splits(1).toDouble, splits(2).toDouble)
+      val feat = DenseVector(splits.slice(3, splits.length).map(_.toDouble))
+      (timestamp, feat)
+    })
+
+
   val removeMissingLines = StreamDataPipe((line: String) => !line.contains(",,"))
 
   val splitFeaturesAndTargets = StreamDataPipe((line: String) => {

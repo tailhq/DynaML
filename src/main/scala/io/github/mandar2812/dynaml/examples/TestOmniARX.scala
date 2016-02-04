@@ -19,9 +19,12 @@ import org.apache.log4j.Logger
   */
 object TestOmniARX {
 
-  def apply(year: Int, yeartest:Int, kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  def apply(year: Int, yeartest:Int,
+            kernel: CovarianceFunction[DenseVector[Double],
+              Double, DenseMatrix[Double]],
             delta: Int, stepAhead: Int, bandwidth: Double,
-            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+            noise: CovarianceFunction[DenseVector[Double],
+              Double, DenseMatrix[Double]],
             num_training: Int, num_test: Int,
             column: Int, exoInputColumns: List[Int] = List(24),
             grid: Int, step: Double, globalOpt: String,
@@ -35,10 +38,12 @@ object TestOmniARX {
         "maxIterations" -> maxIt.toString))
 
   def runExperiment(year: Int = 2006, yearTest:Int = 2007,
-                    kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+                    kernel: CovarianceFunction[DenseVector[Double],
+                      Double, DenseMatrix[Double]],
                     deltaT: Int = 2, stepPred: Int = 3,
                     bandwidth: Double = 0.5,
-                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+                    noise: CovarianceFunction[DenseVector[Double],
+                      Double, DenseMatrix[Double]],
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, ex: List[Int] = List(24), grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
@@ -48,15 +53,6 @@ object TestOmniARX {
     //separate data into training and test
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
-    val logger = Logger.getLogger(this.getClass)
-
-    val extractTimeSeries = (lines: Stream[String]) => lines.map{line =>
-      val splits = line.split(",")
-      val timestamp = splits(1).toDouble * 24 + splits(2).toDouble
-      val feat = DenseVector(splits.slice(3, splits.length).map(_.toDouble))
-      (timestamp, feat)
-    }
-
     val modelTrainTest =
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
@@ -128,9 +124,12 @@ object TestOmniARX {
           24 -> "9999.", 23 -> "999.9",
           40 -> "99999", 22 -> "9999999.",
           25 -> "999.9", 28 -> "99.99",
-          27 -> "9.999", 39 -> "999")
-      ) > DynaMLPipe.removeMissingLines >
-      DataPipe(extractTimeSeries) >
+          27 -> "9.999", 39 -> "999",
+          45 -> "99999.99", 46 -> "99999.99",
+          47 -> "99999.99")
+      ) >
+      DynaMLPipe.removeMissingLines >
+      DynaMLPipe.extractTimeSeriesVec((year,day,hour) => (day * 24) + hour) >
       DynaMLPipe.deltaOperationVec(deltaT)
 
     val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
