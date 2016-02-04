@@ -28,7 +28,7 @@ object TestOmniTS {
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString))
-  
+
   def runExperiment(year: Int = 2006,
                     kernel: CovarianceFunction[Double, Double, DenseMatrix[Double]],
                     bandwidth: Double = 0.5,

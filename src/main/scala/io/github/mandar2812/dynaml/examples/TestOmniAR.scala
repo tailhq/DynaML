@@ -8,8 +8,7 @@ import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.{GPNarModel, GPRegression}
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
-import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, StreamDataPipe, DataPipe}
-import io.github.mandar2812.dynaml.utils
+import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
 import com.quantifind.charts.Highcharts._
 import org.apache.log4j.Logger
 

@@ -10,7 +10,6 @@ import io.github.mandar2812.dynaml.models.gp.{GPNarXModel, GPRegression}
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
 import com.quantifind.charts.Highcharts._
-import org.apache.log4j.Logger
 
 /**
   * @author mandar2812 on 22/11/15.
