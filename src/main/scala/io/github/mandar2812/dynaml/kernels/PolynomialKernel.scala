@@ -27,8 +27,6 @@ class PolynomialKernel(
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    Math.pow((x.t * y) + this.offset, state("degree"))/(Math.pow((x.t * x) + this.offset,
-      state("degree")/2.0) * Math.pow((y.t * y) + this.offset,
-      state("degree")/2.0))
+    Math.pow((x.t * y) + this.offset, state("degree"))
 
 }
