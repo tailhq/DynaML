@@ -26,37 +26,12 @@ object DynaMLPipe {
 
   val trimLines = DataPipe((s: Stream[String]) => s.map(_.trim()))
 
-  val deltaOperation = (deltaT: Int, timelag: Int) =>
-    DataPipe((lines: Stream[(Double, Double)]) =>
-      lines.toList.sliding(deltaT+timelag+1).map((history) => {
-        val features = DenseVector(history.take(deltaT).map(_._2).toArray)
-        (features, history.last._2)
-      }).toStream)
-
-  val deltaOperationVec = (deltaT: Int) =>
-    DataPipe((lines: Stream[(Double, DenseVector[Double])]) =>
-    lines.toList.sliding(deltaT+1).map((history) => {
-      val hist = history.take(history.length - 1).map(_._2)
-      val featuresAcc: ML[Double] = ML()
-
-      (0 until hist.head.length).foreach((dimension) => {
-        //for each dimension/regressor take points t to t-order
-        featuresAcc ++= hist.map(vec => vec(dimension))
-      })
-
-      val features = DenseVector(featuresAcc.toArray)
-      //assert(history.length == deltaT + 1, "Check one")
-      //assert(features.length == deltaT, "Check two")
-      (features, history.last._2(0))
-    }).toStream)
-
   val extractTimeSeries = (Tfunc: (Double, Double, Double) => Double) =>
     DataPipe((lines: Stream[String]) => lines.map{line =>
     val splits = line.split(",")
     val timestamp = Tfunc(splits(0).toDouble, splits(1).toDouble, splits(2).toDouble)
     (timestamp, splits(3).toDouble)
   })
-
 
   val extractTimeSeriesVec = (Tfunc: (Double, Double, Double) => Double) =>
     DataPipe((lines: Stream[String]) => lines.map{line =>
@@ -66,6 +41,29 @@ object DynaMLPipe {
       (timestamp, feat)
     })
 
+  val deltaOperation = (deltaT: Int, timelag: Int) =>
+    DataPipe((lines: Stream[(Double, Double)]) =>
+      lines.toList.sliding(deltaT+timelag+1).map((history) => {
+        val features = DenseVector(history.take(deltaT).map(_._2).toArray)
+        (features, history.last._2)
+      }).toStream)
+
+  val deltaOperationVec = (deltaT: Int) =>
+    DataPipe((lines: Stream[(Double, DenseVector[Double])]) =>
+      lines.toList.sliding(deltaT+1).map((history) => {
+        val hist = history.take(history.length - 1).map(_._2)
+        val featuresAcc: ML[Double] = ML()
+
+        (0 until hist.head.length).foreach((dimension) => {
+          //for each dimension/regressor take points t to t-order
+          featuresAcc ++= hist.map(vec => vec(dimension))
+        })
+
+        val features = DenseVector(featuresAcc.toArray)
+        //assert(history.length == deltaT + 1, "Check one")
+        //assert(features.length == deltaT, "Check two")
+        (features, history.last._2(0))
+      }).toStream)
 
   val removeMissingLines = StreamDataPipe((line: String) => !line.contains(",,"))
 
@@ -112,32 +110,33 @@ object DynaMLPipe {
   def duplicate[Source, Destination](pipe: DataPipe[Source, Destination]) =
     DataPipe(pipe, pipe)
 
-  def GPRegressionTest[T <: AbstractGPRegressionModel[
+  def GPTune[M <: AbstractGPRegressionModel[
     Seq[(DenseVector[Double], Double)],
-    DenseVector[Double]]](model:T, globalOpt: String,
+    DenseVector[Double]]](globalOpt: String,
                           grid: Int, step: Double) =
-    DataPipe(
-    (trainTest: (Stream[(DenseVector[Double], Double)],
-      (DenseVector[Double], DenseVector[Double]))) => {
-
+    DataPipe((model: M) => {
       val gs = globalOpt match {
-        case "GS" => new GridSearch[model.type](model)
+        case "GS" => new GridSearch[M](model)
           .setGridSize(grid)
           .setStepSize(step)
           .setLogScale(false)
 
         case "ML" => new GPMLOptimizer[DenseVector[Double],
-          Seq[(DenseVector[Double], Double)],
-          model.type](model)
+          Seq[(DenseVector[Double], Double)], M](model)
       }
 
       val startConf = model.covariance.state ++ model.noiseModel.state
-      val (_, conf) = gs.optimize(startConf,
-        Map("tolerance" -> "0.0001",
+      gs.optimize(startConf, Map("tolerance" -> "0.0001",
         "step" -> step.toString,
         "maxIterations" -> grid.toString))
+    })
 
-      model.setState(conf)
+  def GPRegressionTest[T <: AbstractGPRegressionModel[
+    Seq[(DenseVector[Double], Double)],
+    DenseVector[Double]]](model:T) =
+    DataPipe(
+    (trainTest: (Stream[(DenseVector[Double], Double)],
+      (DenseVector[Double], DenseVector[Double]))) => {
 
       val res = model.test(trainTest._1.toSeq)
       val scoresAndLabelsPipe =

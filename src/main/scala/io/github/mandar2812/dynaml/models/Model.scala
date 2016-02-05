@@ -84,7 +84,7 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
  * @tparam Q A Vector/Matrix representing the features of a point
  * @tparam R The type of the output of the predictive model
  *           i.e. A Real Number or a Vector of outputs.
- * @tparam S The type of the edge containing the
+ * @tparam S The type of the data containing the
  *           features and label.
  * */
 

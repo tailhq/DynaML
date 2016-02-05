@@ -239,4 +239,17 @@ object AbstractGPRegressionModel {
     0.5*(trainingData.t * (Kinv * trainingData) + math.log(det(kernelTraining)) +
       trainingData.length*math.log(2*math.Pi))
   }
+
+  def apply[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
+    DenseVector[Double]]](data: Seq[(DenseVector[Double], Double)],
+                          cov: CovarianceFunction[DenseVector[Double],
+                            Double, DenseMatrix[Double]],
+                          noise: CovarianceFunction[DenseVector[Double],
+                            Double, DenseMatrix[Double]] = new DiracKernel(1.0),
+                          order: Int = 0, ex: Int = 0): M = {
+    assert(ex >= 0 && order >= 0, "Non Negative values for order and ex")
+    if(order == 0) new GPRegression(cov, noise, data).asInstanceOf[M]
+    else if(order > 0 && ex == 0) new GPNarModel(order, cov, noise, data).asInstanceOf[M]
+    else new GPNarXModel(order, ex, cov, noise, data).asInstanceOf[M]
+  }
 }
