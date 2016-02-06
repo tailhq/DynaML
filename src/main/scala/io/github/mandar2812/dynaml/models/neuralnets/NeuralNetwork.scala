@@ -8,8 +8,9 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
  * the most important properties
  * of a neural network
  */
-trait NeuralNetwork[G] extends
-ParameterizedLearner[G, Int, List[DenseMatrix[Double]],
+
+trait NeuralNetwork[G, P] extends
+ParameterizedLearner[G, Int, P,
   DenseVector[Double], DenseVector[Double],
   (DenseVector[Double], DenseVector[Double])] {
 
