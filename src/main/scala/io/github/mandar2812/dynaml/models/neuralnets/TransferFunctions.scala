@@ -14,17 +14,20 @@ object TransferFunctions {
    * Hyperbolic tangent function
    * */
   val tansig = math.tanh _
+  val Dtansig = (x: Double) => tansig(x)/(math.sinh(x)*math.cosh(x))
 
   /**
    * Sigmoid/Logistic function
    *
    * */
   val logsig = (x:Double) => sigmoid(x)
+  val Dlogsig = (x:Double) => sigmoid(x)*(1-sigmoid(x))
 
   /**
    * Identity Function
    * */
   val lin = (x: Double) => identity(x)
+  val Dlin = (_: Double) => 1.0
 
   /**
    * Function which returns
@@ -37,5 +40,13 @@ object TransferFunctions {
       case "logsig" => logsig
       case "tansig" => tansig
       case "linear" => lin
+    }
+
+  def getDiffActivation(s: String): (Double) => Double =
+    s match {
+      case "sigmoid" => Dlogsig
+      case "logsig" => Dlogsig
+      case "tansig" => Dtansig
+      case "linear" => Dlin
     }
 }

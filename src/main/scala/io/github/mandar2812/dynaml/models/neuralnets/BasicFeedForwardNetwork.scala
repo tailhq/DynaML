@@ -1,18 +1,18 @@
 package io.github.mandar2812.dynaml.models.neuralnets
 
-import breeze.linalg.DenseVector
-import com.tinkerpop.frames.FramedGraphFactory
+import com.tinkerpop.blueprints.Graph
+import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
 
 /**
  * Represents the template of a Feed Forward Neural Network
  * backed by an underlying graph.
  */
 abstract class BasicFeedForwardNetwork[D](data: D, netgraph: FFNeuralGraph)
-  extends NeuralNetwork[D, FFNeuralGraph]{
+  extends NeuralNetwork[D, FramedGraph[Graph], FFNeuralGraph]{
 
   override protected val g = data
 
-  override protected var params = netgraph
+  override protected var params: FFNeuralGraph = netgraph
 
   val feedForward = params.forwardPass _
 
@@ -21,9 +21,14 @@ abstract class BasicFeedForwardNetwork[D](data: D, netgraph: FFNeuralGraph)
    * of the model.
    **/
   override val outputDimensions: Int = params.num_outputs
+
   override val hiddenLayers: Int = params.hidden_layers
-  override val activations: List[(Double) => Double] = params.activations.map(TransferFunctions.getActivation)
-  override val neuronCounts: List[Int] = List.tabulate[Int](hiddenLayers)(i => params.getLayer(i+1).size)
+
+  override val activations: List[(Double) => Double] =
+    params.activations.map(TransferFunctions.getActivation)
+
+  override val neuronCounts: List[Int] =
+    List.tabulate[Int](hiddenLayers)(i => params.getLayer(i+1).size)
   override val inputDimensions: Int = params.num_inputs
 
   override def initParams(): FFNeuralGraph = FFNeuralGraph(

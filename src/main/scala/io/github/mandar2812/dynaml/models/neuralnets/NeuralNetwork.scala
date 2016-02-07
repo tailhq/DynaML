@@ -9,8 +9,8 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
  * of a neural network
  */
 
-trait NeuralNetwork[G, P] extends
-ParameterizedLearner[G, Int, P,
+trait NeuralNetwork[G, P, T <: NeuralGraph[P]] extends
+ParameterizedLearner[G, Int, T,
   DenseVector[Double], DenseVector[Double],
   (DenseVector[Double], DenseVector[Double])] {
 
