@@ -24,15 +24,15 @@ object TransferFunctions {
   /**
    * Identity Function
    * */
-  val lin = identity _
+  val lin = (x: Double) => identity(x)
 
   /**
    * Function which returns
    * the appropriate activation
    * for a given string
    * */
-  val getActivation = (func: String) =>
-    func match {
+  def getActivation(s: String): (Double) => Double =
+    s match {
       case "sigmoid" => logsig
       case "logsig" => logsig
       case "tansig" => tansig

@@ -16,6 +16,7 @@ object DynaML extends App {
         intp.beQuietDuring {
           intp.addImports("breeze.linalg._")
           intp.addImports("io.github.mandar2812.dynaml.models._")
+          intp.addImports("io.github.mandar2812.dynaml.models.neuralnets._")
           intp.addImports("io.github.mandar2812.dynaml.models.svm._")
           intp.addImports("io.github.mandar2812.dynaml.utils")
           intp.addImports("io.github.mandar2812.dynaml.kernels._")

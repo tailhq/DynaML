@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.models.svm
 
 import breeze.linalg._
-import breeze.numerics.{sqrt, sigmoid}
+import breeze.numerics.sigmoid
 import com.github.tototoshi.csv.CSVReader
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter
