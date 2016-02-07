@@ -19,4 +19,10 @@ trait Synapse extends EdgeFrame {
   @Property("weight")
   def setWeight(w: Double): Unit
 
+  @Property("layer")
+  def getLayer(): Int
+
+  @Property("layer")
+  def setLayer(l: Int): Unit
+
 }

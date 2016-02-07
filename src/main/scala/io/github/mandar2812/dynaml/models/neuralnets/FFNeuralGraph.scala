@@ -27,6 +27,10 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
     g.getVertices[Neuron]("layer", layer, classOf[Neuron])
   )
 
+  def getLayerSynapses(layer: Int) = JavaConversions.iterableAsScalaIterable(
+    g.getEdges[Synapse]("layer", layer, classOf[Synapse])
+  )
+
   override val num_inputs: Int = getLayer(0).size
 
   override val num_outputs: Int = getLayer(hidden_layers+1).size
@@ -42,7 +46,7 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
 
     println("Output Neurons: "+getLayer(hidden_layers+1).toString())
     val outputs:Map[Int, Double] = getLayer(hidden_layers+1)
-      .map(outputNeuron => (outputNeuron.getNID(), Neuron.getLocalField(outputNeuron)))
+      .map(outputNeuron => (outputNeuron.getNID(), Neuron.getLocalField(outputNeuron)._1))
       .toMap
 
     DenseVector.tabulate[Double](num_outputs)(i => outputs(i+1))
@@ -103,7 +107,7 @@ object FFNeuralGraph {
             val synapse: Synapse =
               fg.addEdge((layer, vertex.getNID(), neuron.getNID()),
                 vertex.asVertex(), neuron.asVertex(), "synapse", classOf[Synapse])
-
+            synapse.setLayer(layer)
             synapse.setWeight(1.0)
           })
         })

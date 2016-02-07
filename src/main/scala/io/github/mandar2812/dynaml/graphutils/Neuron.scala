@@ -51,14 +51,42 @@ trait Neuron extends VertexFrame {
 
 object Neuron {
 
-  def getLocalField(neuron: Neuron): Double = neuron.getNeuronType() match {
-    case "input" => neuron.getValue()
-    case "bias" => 1.0
+  def getLocalField(neuron: Neuron): (Double, Double) = neuron.getNeuronType() match {
+    case "input" => (neuron.getValue(), neuron.getValue())
+    case "bias" => (1.0, 1.0)
     case "perceptron" =>
       val connections = JavaConversions.iterableAsScalaIterable(neuron.getIncomingSynapses())
       val activationFunc = TransferFunctions.getActivation(neuron.getActivationFunc())
-      activationFunc(connections.map(synapse => {
-        synapse.getWeight() * getLocalField(synapse.getPreSynapticNeuron())
-      }).sum)
+      val field = connections.map(synapse => {
+        synapse.getWeight() * getLocalField(synapse.getPreSynapticNeuron())._1
+      }).sum
+
+      (activationFunc(field), field)
+  }
+
+  def getLocalGradient(neuron: Neuron, hidden: Int): Double = {
+
+    def localGradientRec(n: Neuron, hidden_layers: Int): Double =
+      n.getLayer() - hidden_layers match {
+        case 1 =>
+          val DtransFunc = TransferFunctions.getDiffActivation(n.getActivationFunc())
+          val (localfield, field) = Neuron.getLocalField(n)
+          (n.getValue() - localfield)*DtransFunc(field)
+
+        case _ =>
+          val DtransFunc = TransferFunctions.getDiffActivation(n.getActivationFunc())
+          val (_, field) = Neuron.getLocalField(n)
+
+          val outCon = JavaConversions.iterableAsScalaIterable(n.getOutgoingSynapses())
+          val sum = outCon.map(synapse =>{
+            val weight = synapse.getWeight()
+            val preN = synapse.getPostSynapticNeuron()
+            weight*localGradientRec(preN, hidden_layers)
+          }).sum
+
+          sum*DtransFunc(field)
+      }
+
+    localGradientRec(neuron, hidden)
   }
 }
