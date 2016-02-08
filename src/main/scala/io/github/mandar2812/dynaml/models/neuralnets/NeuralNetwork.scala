@@ -24,5 +24,5 @@ ParameterizedLearner[G, Int, T,
 
   val neuronCounts: List[Int]
 
-  def dataAsStream(): Stream[Pattern]
+  def dataAsStream(d: G): Stream[Pattern]
 }

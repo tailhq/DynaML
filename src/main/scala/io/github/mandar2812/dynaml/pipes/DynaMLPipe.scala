@@ -76,8 +76,6 @@ object DynaMLPipe {
     DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
       Stream[(DenseVector[Double], Double)])) => {
 
-      logger.info(trainTest._1.toList)
-
       val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
         DenseVector(tup._1.toArray ++ Array(tup._2))).toList)
 

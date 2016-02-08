@@ -16,7 +16,6 @@ class BackPropogation extends RegularizedOptimizer[Int, FFNeuralGraph,
   override def optimize(nPoints: Long,
                         ParamOutEdges: Stream[(DenseVector[Double], DenseVector[Double])],
                         initialP: FFNeuralGraph): FFNeuralGraph = {
-
     (1 to this.numIterations).foreach{iteration =>
       ParamOutEdges.foreach(dataPattern => {
         //Perform Forward Pass
@@ -24,7 +23,7 @@ class BackPropogation extends RegularizedOptimizer[Int, FFNeuralGraph,
         //Set output node values
         initialP
           .getLayer(initialP.hidden_layers+1)
-          .foreach(n => n.setValue(dataPattern._2(n.getNID())))
+          .foreach(n => n.setValue(dataPattern._2(n.getNID()-1)))
         //Perform weight updates.
         (1 to initialP.hidden_layers+1).foreach(layer => {
           initialP.getLayerSynapses(layer).foreach(synapse => {

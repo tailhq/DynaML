@@ -31,20 +31,20 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
     g.getEdges[Synapse]("layer", layer, classOf[Synapse])
   )
 
-  override val num_inputs: Int = getLayer(0).size
+  override val num_inputs: Int = getLayer(0).size - 1
 
   override val num_outputs: Int = getLayer(hidden_layers+1).size
 
   override val forwardPass: (DenseVector[Double]) => DenseVector[Double] = (pattern) => {
     //Set the pattern as input to layer 0
-    val inputnodes = getLayer(0)
+    val inputnodes = getLayer(0) filter (_.getNeuronType() == "input")
 
-    inputnodes.filter(node => node.getNeuronType() != "bias").foreach(node => {
+    inputnodes.foreach(node => {
       val id = node.getNID()
       node.setValue(pattern(id-1))
     })
 
-    println("Output Neurons: "+getLayer(hidden_layers+1).toString())
+    //println("Output Neurons: "+getLayer(hidden_layers+1).toString())
     val outputs:Map[Int, Double] = getLayer(hidden_layers+1)
       .map(outputNeuron => (outputNeuron.getNID(), Neuron.getLocalField(outputNeuron)._1))
       .toMap

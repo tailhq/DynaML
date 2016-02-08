@@ -2,23 +2,27 @@ package io.github.mandar2812.dynaml.models.neuralnets
 
 import breeze.linalg.DenseVector
 import com.tinkerpop.blueprints.Graph
-import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
+import com.tinkerpop.frames.FramedGraph
 import io.github.mandar2812.dynaml.optimization.BackPropogation
+import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
  * Represents the template of a Feed Forward Neural Network
  * backed by an underlying graph.
  */
-abstract class BasicFeedForwardNetwork[D](data: D, netgraph: FFNeuralGraph)
-  extends NeuralNetwork[D, FramedGraph[Graph], FFNeuralGraph, (DenseVector[Double], DenseVector[Double])]{
+class FeedForwardNetwork[D](
+  data: D, netgraph: FFNeuralGraph,
+  transform: DataPipe[D, Stream[(DenseVector[Double], DenseVector[Double])]])
+  extends NeuralNetwork[D, FramedGraph[Graph], FFNeuralGraph,
+    (DenseVector[Double], DenseVector[Double])]{
 
   override protected val g = data
 
-  val num_points:Int = dataAsStream().length
+  val num_points:Int = dataAsStream(g).length
 
   override protected var params: FFNeuralGraph = netgraph
 
-  val feedForward = params.forwardPass _
+  val feedForward = params.forwardPass
 
   /**
    * Get the value of the parameters
@@ -42,8 +46,10 @@ abstract class BasicFeedForwardNetwork[D](data: D, netgraph: FFNeuralGraph)
 
   override protected val optimizer =
     new BackPropogation()
-      .setNumIterations(10)
+      .setNumIterations(100)
       .setStepSize(0.01)
+
+  override def dataAsStream(d: D) = transform.run(d)
 
   /**
    * Learn the parameters
@@ -53,13 +59,10 @@ abstract class BasicFeedForwardNetwork[D](data: D, netgraph: FFNeuralGraph)
    *
    **/
   override def learn(): Unit = {
-    params = optimizer.optimize(num_points, dataAsStream(), initParams())
+    params = optimizer.optimize(num_points, dataAsStream(g), initParams())
   }
-}
 
-object BasicFeedForwardNetwork {
-
-  val manager: FramedGraphFactory = new FramedGraphFactory
-
-
+  def test(d: D): Stream[(DenseVector[Double], DenseVector[Double])] = {
+    dataAsStream(d).map(rec => (feedForward(rec._1), rec._2))
+  }
 }
