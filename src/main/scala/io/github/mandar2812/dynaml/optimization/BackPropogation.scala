@@ -80,7 +80,6 @@ class BackPropogation extends RegularizedOptimizer[Int, FFNeuralGraph,
         }
       })
 
-
       //Backward pass calculate local gradients
       logger.info(" Backward Pass ")
       (1 to initialP.hidden_layers+1).reverse.foreach{layer => {
