@@ -7,6 +7,7 @@ import io.github.mandar2812.dynaml.graphutils.{Neuron, Synapse}
 
 import scala.collection.JavaConversions
 import scala.collection.JavaConversions._
+import scala.util.Random
 
 /**
  * Represents the underlying graph of a neural
@@ -108,7 +109,7 @@ object FFNeuralGraph {
               fg.addEdge((layer, vertex.getNID(), neuron.getNID()),
                 vertex.asVertex(), neuron.asVertex(), "synapse", classOf[Synapse])
             synapse.setLayer(layer)
-            synapse.setWeight(1.0)
+            synapse.setWeight(Random.nextDouble())
             synapse.setPrevWeightUpdate(0.0)
           })
         })

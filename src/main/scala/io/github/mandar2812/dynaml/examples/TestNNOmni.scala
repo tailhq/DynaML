@@ -4,6 +4,7 @@ import java.io.File
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.CSVWriter
+import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.neuralnets.{FeedForwardNetwork, FFNeuralGraph}
@@ -88,6 +89,13 @@ object TestNNOmni {
 
         metrics.print()
         metrics.generatePlots()
+
+        //Plotting time series prediction comparisons
+        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
+        hold()
+        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
+        legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
+        unhold()
 
         Seq(
           Seq(year, yearTest, deltaT, 1, num_training, num_test,
