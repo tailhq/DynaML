@@ -16,7 +16,7 @@ object TestNNDelve {
              training: Int = 100, test: Int = 1000,
              columns: List[Int] = List(10,0,1,2,3,4,5,6,7,8,9),
              stepSize: Double = 0.01, maxIt: Int = 30, mini: Double = 1.0,
-             alpha: Double = 0.5): Unit = {
+             alpha: Double = 0.5, regularization: Double = 0.5): Unit = {
 
     //Load Housing data into a stream
     //Extract the time and Dst values
@@ -66,6 +66,7 @@ object TestNNDelve {
           .setMaxIterations(maxIt)
           .setBatchFraction(mini)
           .setMomentum(alpha)
+          .setRegParam(regularization)
           .learn()
 
         val res = model.test(trainTest._1._2)

@@ -68,6 +68,11 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
     this
   }
 
+  def setRegParam(r: Double): this.type = {
+    this.optimizer.setRegParam(r)
+    this
+  }
+
   def initParams(): T
 
 }

@@ -49,11 +49,6 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
 
   override protected val optimizer: ConjugateGradient
 
-  def setRegParam(reg: Double): this.type = {
-    this.optimizer.setRegParam(reg)
-    this
-  }
-
   def getRegParam: Double
 
   protected val featuredims: Int

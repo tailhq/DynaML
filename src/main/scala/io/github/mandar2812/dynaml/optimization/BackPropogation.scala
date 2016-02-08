@@ -103,9 +103,10 @@ class BackPropogation extends RegularizedOptimizer[Int, FFNeuralGraph,
           val postG = postSN.getLocalGradBuffer()
           val preF = preSN.getLocalFieldBuffer()
           val momentumTerm = momentum*synapse.getPrevWeightUpdate()
+          val regularizationTerm = regParam*origWeight
 
-          val weightUpdate = this.stepSize*postG.zip(preF).map(c => c._1*c._2).sum +
-            momentumTerm
+          val weightUpdate = this.stepSize*postG.zip(preF).map(c => c._1*c._2).sum/(nPoints*miniBatchFraction) +
+            momentumTerm + regularizationTerm
 
           synapse.setWeight(origWeight + weightUpdate)
           synapse.setPrevWeightUpdate(weightUpdate)
