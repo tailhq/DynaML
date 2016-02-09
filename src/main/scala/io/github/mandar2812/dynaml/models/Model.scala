@@ -101,7 +101,7 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
  *           features and label.
  * */
 
-abstract class LinearModel[T, K1, K2,
+trait LinearModel[T, K1, K2,
   P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, S]
   extends ParameterizedLearner[T, K2, P, Q, R, S] {
 

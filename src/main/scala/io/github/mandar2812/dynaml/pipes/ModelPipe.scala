@@ -18,13 +18,11 @@ trait ModelPipe[Source, T, Q, R, M <: Model[T, Q, R]]
 
 
 class GPRegressionPipe[M <:
-AbstractGPRegressionModel[
-  Seq[(DenseVector[Double], Double)],
-  DenseVector[Double]], Source,
-Destination](pre: (Source) => Seq[(DenseVector[Double], Double)],
-             cov: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-             n: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-             order: Int, ex: Int)
+AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
+  DenseVector[Double]], Source](pre: (Source) => Seq[(DenseVector[Double], Double)],
+                                cov: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+                                n: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+                                order: Int, ex: Int)
   extends ModelPipe[Source, Seq[(DenseVector[Double], Double)],
     DenseVector[Double], Double, M] {
 

@@ -2,24 +2,38 @@ package io.github.mandar2812.dynaml.models
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.optimization.{DirectLinearSolver, RegularizedOptimizer, BackPropogation}
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.{ModelPipe, DataPipe}
+
+abstract class MetaModel[
+D, D1,
+BaseModel <: Model[D1, DenseVector[Double], Double],
+Pipe <: ModelPipe[D, D1, DenseVector[Double], Double, BaseModel]
+](num: Int, data: D, networks: Pipe*)
+  extends Model[D, DenseVector[Double], Double] {
+
+  override protected val g = data
+
+  val baseNetworks: List[BaseModel] =
+    networks.toList.map(net => net.run(g))
+
+}
+
+
 
 /**
   * Created by mandar on 9/2/16.
   */
-class CommitteeModel[D, M <: Model[D, DenseVector[Double], Double]]
-(data: D, transform: DataPipe[D, Stream[(DenseVector[Double],
-  DenseVector[Double])]], networks: M*) extends
+abstract class CommitteeModel[
+D, D1,
+BaseModel <: Model[D1, DenseVector[Double], Double],
+Pipe <: ModelPipe[D, D1, DenseVector[Double], Double, BaseModel]
+](num: Int, data: D, networks: Pipe*) extends
+MetaModel[D,D1,BaseModel,Pipe](num, data, networks:_*) with
 LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
-  Double, Stream[(DenseVector[Double], Double)]] {
+  Double, D] {
 
-  override protected val g: D = data
+  val num_points = num
 
-  val baseNetworks: List[Model[D, DenseVector[Double], Double]] = networks.toList
-
-  val num_points = dataAsStream(g).length
-
-  def dataAsStream(d: D) = transform.run(d)
 
   /**
     * Predict the value of the
@@ -45,17 +59,8 @@ LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
     **/
   override def learn(): Unit = {
 
-    params = optimizer.optimize(
-      num_points,
-      dataAsStream(g).map(couple =>
-        (featureMap(couple._1), couple._2(0))),
-      initParams()
-    )
+    params = optimizer.optimize(num_points, g, initParams())
   }
-
-  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
-    DenseVector[Double], Double,
-    Stream[(DenseVector[Double], Double)]] = new DirectLinearSolver()
 
   override protected var params: DenseVector[Double] =
     DenseVector.fill[Double](baseNetworks.length)(1.0)

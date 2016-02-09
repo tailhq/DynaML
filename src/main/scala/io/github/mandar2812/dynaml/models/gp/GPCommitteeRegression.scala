@@ -2,26 +2,22 @@ package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.models.LinearModel
-import io.github.mandar2812.dynaml.optimization.{DirectLinearSolver, RegularizedOptimizer}
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.GPRegressionPipe
 
 /**
   * Created by mandar on 9/2/16.
   */
-abstract class GPCommitteeRegression[D](data: D,
-                                        transform: DataPipe[D, Stream[(DenseVector[Double],
-                                          DenseVector[Double])]],
-                                        networks: GPRegression*) extends
-LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
-  Double, Stream[(DenseVector[Double], Double)]] {
+abstract class GPCommitteeRegression[T,D[T]](num: Int, data: D[T],
+                                             networks: GPRegressionPipe[GPRegression, D[T]]*)
+  extends LinearModel[D[T], Int, Int, DenseVector[Double], DenseVector[Double],
+    Double, D[T]] {
 
-  override protected val g: D = data
+  override protected val g: D[T] = data
 
-  val baseNetworks: List[GPRegression] = networks.toList
+  val baseNetworks: List[GPRegression] =
+    networks.toList.map(net => net.run(g))
 
-  val num_points = dataAsStream(g).length
-
-  def dataAsStream(d: D) = transform.run(d)
+  val num_points = num
 
   /**
     * Predict the value of the
@@ -49,15 +45,8 @@ LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
 
     params = optimizer.optimize(
       num_points,
-      dataAsStream(g).map(couple =>
-        (featureMap(couple._1), couple._2(0))),
-      initParams()
-    )
+      g, initParams())
   }
-
-  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
-    DenseVector[Double], Double,
-    Stream[(DenseVector[Double], Double)]] = new DirectLinearSolver()
 
   override protected var params: DenseVector[Double] =
     DenseVector.fill[Double](baseNetworks.length)(1.0)
