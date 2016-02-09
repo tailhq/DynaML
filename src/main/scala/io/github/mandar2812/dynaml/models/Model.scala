@@ -95,8 +95,14 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
 
 abstract class LinearModel[T, K1, K2,
   P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, S]
-  extends ParameterizedLearner[T, K2, P, Q, R, S]
-  with EvaluableModel[P, R] {
+  extends ParameterizedLearner[T, K2, P, Q, R, S] {
+
+  /**
+    * The non linear feature mapping implicitly
+    * defined by the kernel applied, this is initialized
+    * to an identity map.
+    * */
+  var featureMap: (Q) => Q = identity
 
   /**
    * Predict the value of the
@@ -125,7 +131,8 @@ trait EvaluableModel [P, R]{
 
 abstract class KernelizedModel[G, L, T <: Tensor[K1, Double],
 Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
-  extends LinearModel[G, K1, K2, T, Q, R, L] with GloballyOptimizable {
+  extends LinearModel[G, K1, K2, T, Q, R, L] with GloballyOptimizable
+  with EvaluableModel[T, R]{
 
   override protected var hyper_parameters: List[String] = List("RegParam")
 
@@ -140,13 +147,6 @@ Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
    * prototype points of the data set.
    * */
   protected var points: List[Long] = List()
-
-  /**
-   * The non linear feature mapping implicitly
-   * defined by the kernel applied, this is initialized
-   * to an identity map.
-   * */
-  var featureMap: (Q) => Q = identity
 
   def getXYEdges: L
 
