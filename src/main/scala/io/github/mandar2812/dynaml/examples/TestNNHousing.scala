@@ -30,7 +30,7 @@ object TestNNHousing {
         (DenseVector[Double], DenseVector[Double]))) => {
 
         val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 1, hidden,
-          nCounts.map(_ => "logsig")++List("linear"), nCounts)
+          nCounts.map(_ => "tansig")++List("linear"), nCounts)
 
         val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
           d.map(el => (el._1, DenseVector(el._2))))
@@ -39,6 +39,7 @@ object TestNNHousing {
 
         model.setLearningRate(opt("step").toDouble)
           .setMaxIterations(opt("maxIterations").toInt)
+          .setBatchFraction(1.0)
         model.learn()
 
         val res = model.test(trainTest._1._2)

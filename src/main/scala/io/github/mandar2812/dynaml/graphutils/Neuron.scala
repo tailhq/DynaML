@@ -35,6 +35,24 @@ trait Neuron extends VertexFrame {
   @Property("value")
   def getValue(): Double
 
+  @Property("valueBuffer")
+  def getValueBuffer(): Array[Double]
+
+  @Property("valueBuffer")
+  def setValueBuffer(v: Array[Double]): Unit
+
+  @Property("LocalGradBuffer")
+  def getLocalGradBuffer(): Array[Double]
+
+  @Property("LocalGradBuffer")
+  def setLocalGradBuffer(v: Array[Double]): Unit
+
+  @Property("LocalFieldBuffer")
+  def getLocalFieldBuffer(): Array[Double]
+
+  @Property("LocalFieldBuffer")
+  def setLocalFieldBuffer(v: Array[Double]): Unit
+
   @Property("NeuronType")
   def setNeuronType(v: String): Unit
 
@@ -64,6 +82,19 @@ object Neuron {
       (activationFunc(field), field)
   }
 
+  def getLocalFieldBuffer(neuron: Neuron): (Array[Double], Array[Double]) = neuron.getNeuronType() match {
+    case "input" => (neuron.getValueBuffer(), neuron.getValueBuffer())
+    case "bias" => (neuron.getValueBuffer(), neuron.getValueBuffer())
+    case "perceptron" =>
+      val connections = JavaConversions.iterableAsScalaIterable(neuron.getIncomingSynapses())
+      val activationFunc = TransferFunctions.getActivation(neuron.getActivationFunc())
+      val field = connections.map(synapse => {
+        synapse.getPreSynapticNeuron().getLocalFieldBuffer().map(synapse.getWeight()*_)
+      }).reduce((c1,c2) => c1.zip(c2).map(c => c._1+c._2))
+      (field.map(activationFunc), field)
+  }
+
+
   def getLocalGradient(neuron: Neuron, hidden: Int): Double = {
 
     def localGradientRec(n: Neuron, hidden_layers: Int): Double =
@@ -89,4 +120,33 @@ object Neuron {
 
     localGradientRec(neuron, hidden)
   }
+
+  def getLocalGradientBuffer(neuron: Neuron, hidden: Int): Array[Double] =
+    neuron.getLayer() - hidden match {
+      case 1 =>
+        val DtransFunc = TransferFunctions.getDiffActivation(neuron.getActivationFunc())
+        val (localfield, field) = Neuron.getLocalFieldBuffer(neuron)
+        neuron.getValueBuffer()
+          .zip(localfield).map(c => c._1 - c._2)
+          .zip(field).map(c => c._1 * DtransFunc(c._2))
+
+      case _ =>
+        val DtransFunc = neuron.getNeuronType() match {
+          case "perceptron" => TransferFunctions.getDiffActivation(neuron.getActivationFunc())
+          case "bias" => TransferFunctions.Dlin
+        }
+
+        val field = neuron.getValueBuffer()
+        val outCon = JavaConversions.iterableAsScalaIterable(neuron.getOutgoingSynapses())
+        val sum = outCon.map(synapse =>{
+          val weight = synapse.getWeight()
+          val postN = synapse.getPostSynapticNeuron()
+          postN.getLocalGradBuffer().map(_*weight)
+        }).reduce((c1,c2) => c1.zip(c2).map(c => c._1+c._2))
+
+        sum.zip(field).map(c => c._1*DtransFunc(c._2))
+      }
+
+
+
 }
