@@ -13,8 +13,16 @@ import scala.util.Random
  * Basic Higher Level abstraction
  * for Machine Learning models.
  */
-trait Model[T] {
+trait Model[T, Q, R] {
   protected val g: T
+
+  /**
+    * Predict the value of the
+    * target variable given a
+    * point.
+    *
+    * */
+  def predict(point: Q): R
 }
 
 /**
@@ -30,7 +38,7 @@ trait Model[T] {
  *
  * */
 trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
-  extends Model[G] {
+  extends Model[G, Q, R] {
   protected var params: T
   protected val optimizer: RegularizedOptimizer[K, T, Q, R, S]
   /**
@@ -104,13 +112,7 @@ abstract class LinearModel[T, K1, K2,
     * */
   var featureMap: (Q) => Q = identity
 
-  /**
-   * Predict the value of the
-   * target variable given a
-   * point.
-   *
-   * */
-  def predict(point: Q): R
+
 
   def clearParameters(): Unit
 

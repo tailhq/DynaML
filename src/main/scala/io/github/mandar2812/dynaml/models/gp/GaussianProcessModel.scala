@@ -15,7 +15,7 @@ import org.apache.log4j.Logger
  * @tparam M The underlying data structure of the kernel Matrix
  * @tparam W Implementing class of the posterior distribution
  **/
-abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T] {
+abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T, I, Y] {
 
   private val logger = Logger.getLogger(this.getClass)
 
@@ -77,5 +77,7 @@ abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T] {
     dataAsSeq(testData).zip(predictionWithError).map(i => (i._1._1, i._1._2,
       i._2._2, i._2._3, i._2._4))
   }
+
+  override def predict(point: I): Y = predictionWithErrorBars(Seq(point), 1).head._2
 
 }

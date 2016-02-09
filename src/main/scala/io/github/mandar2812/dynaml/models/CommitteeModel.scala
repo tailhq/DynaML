@@ -1,23 +1,21 @@
-package io.github.mandar2812.dynaml.models.gp
+package io.github.mandar2812.dynaml.models
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.models.LinearModel
-import io.github.mandar2812.dynaml.optimization.{DirectLinearSolver, RegularizedOptimizer}
+import io.github.mandar2812.dynaml.optimization.{DirectLinearSolver, RegularizedOptimizer, BackPropogation}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
   * Created by mandar on 9/2/16.
   */
-abstract class GPCommitteeRegression[D](data: D,
-                                        transform: DataPipe[D, Stream[(DenseVector[Double],
-                                          DenseVector[Double])]],
-                                        networks: GPRegression*) extends
+class CommitteeModel[D, M <: Model[D, DenseVector[Double], Double]]
+(data: D, transform: DataPipe[D, Stream[(DenseVector[Double],
+  DenseVector[Double])]], networks: M*) extends
 LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
   Double, Stream[(DenseVector[Double], Double)]] {
 
   override protected val g: D = data
 
-  val baseNetworks: List[GPRegression] = networks.toList
+  val baseNetworks: List[Model[D, DenseVector[Double], Double]] = networks.toList
 
   val num_points = dataAsStream(g).length
 
@@ -64,7 +62,7 @@ LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
 
   featureMap = (pattern) =>
     DenseVector(baseNetworks.map(net =>
-      net.predictionWithErrorBars(Seq(pattern), 1).head._2
-    ).toArray)
+      net.predict(pattern)).toArray)
+
 
 }

@@ -69,6 +69,8 @@ class FeedForwardNetwork[D](
     params = optimizer.optimize(num_points, dataAsStream(g), initParams())
   }
 
+  override def predict(point: DenseVector[Double]) = feedForward(point)
+
   def test(d: D): Stream[(DenseVector[Double], DenseVector[Double])] = {
 
     val (procInputs, procOutputs) =
