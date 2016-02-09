@@ -12,13 +12,15 @@ object TestNNHousing {
 
   def apply(hidden: Int = 2, nCounts:List[Int] = List(), acts:List[String], trainFraction: Double = 0.75,
             columns: List[Int] = List(13,0,1,2,3,4,5,6,7,8,9,10,11,12),
-            stepSize: Double = 0.01, maxIt: Int = 300, mini: Double = 1.0): Unit =
+            stepSize: Double = 0.01, maxIt: Int = 300, mini: Double = 1.0,
+            alpha: Double = 0.0): Unit =
     runExperiment(hidden, nCounts, acts,
       (506*trainFraction).toInt, columns,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString,
-        "miniBatchFraction" -> mini.toString
+        "miniBatchFraction" -> mini.toString,
+        "momentum" -> alpha.toString
       )
     )
 
@@ -42,6 +44,7 @@ object TestNNHousing {
         model.setLearningRate(opt("step").toDouble)
           .setMaxIterations(opt("maxIterations").toInt)
           .setBatchFraction(opt("miniBatchFraction").toDouble)
+          .setMomentum(opt("momentum").toDouble)
           .learn()
 
         val res = model.test(trainTest._1._2)

@@ -109,6 +109,7 @@ object FFNeuralGraph {
                 vertex.asVertex(), neuron.asVertex(), "synapse", classOf[Synapse])
             synapse.setLayer(layer)
             synapse.setWeight(1.0)
+            synapse.setPrevWeightUpdate(0.0)
           })
         })
 

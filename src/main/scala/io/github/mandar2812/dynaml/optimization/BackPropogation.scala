@@ -16,6 +16,13 @@ class BackPropogation extends RegularizedOptimizer[Int, FFNeuralGraph,
 
   private val logger = Logger.getLogger(this.getClass)
 
+  protected var momentum: Double = 0.0
+
+  def setMomentum(m: Double): this.type = {
+    momentum = m
+    this
+  }
+
   /**
     * Solve the convex optimization problem.
     */
@@ -95,7 +102,13 @@ class BackPropogation extends RegularizedOptimizer[Int, FFNeuralGraph,
           val origWeight = synapse.getWeight()
           val postG = postSN.getLocalGradBuffer()
           val preF = preSN.getLocalFieldBuffer()
-          synapse.setWeight(origWeight+(this.stepSize*postG.zip(preF).map(c => c._1*c._2).sum))
+          val momentumTerm = momentum*synapse.getPrevWeightUpdate()
+
+          val weightUpdate = this.stepSize*postG.zip(preF).map(c => c._1*c._2).sum +
+            momentumTerm
+
+          synapse.setWeight(origWeight + weightUpdate)
+          synapse.setPrevWeightUpdate(weightUpdate)
         })
       })
     }

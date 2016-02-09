@@ -46,6 +46,11 @@ class FeedForwardNetwork[D](
     hiddenLayers, params.activations,
     neuronCounts)
 
+  def setMomentum(m: Double): this.type = {
+    this.optimizer.setMomentum(m)
+    this
+  }
+
   override protected val optimizer =
     new BackPropogation()
       .setNumIterations(100)

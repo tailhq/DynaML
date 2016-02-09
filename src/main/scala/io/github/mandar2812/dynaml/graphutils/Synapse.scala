@@ -19,6 +19,12 @@ trait Synapse extends EdgeFrame {
   @Property("weight")
   def setWeight(w: Double): Unit
 
+  @Property("PrevWeightUpdate")
+  def getPrevWeightUpdate(): Double
+
+  @Property("PrevWeightUpdate")
+  def setPrevWeightUpdate(w: Double): Unit
+
   @Property("layer")
   def getLayer(): Int
 
