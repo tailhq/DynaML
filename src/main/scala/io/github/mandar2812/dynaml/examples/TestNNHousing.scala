@@ -10,17 +10,19 @@ import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
   */
 object TestNNHousing {
 
-  def apply(hidden: Int = 2, nCounts:List[Int] = List(), trainFraction: Double = 0.75,
+  def apply(hidden: Int = 2, nCounts:List[Int] = List(), acts:List[String], trainFraction: Double = 0.75,
             columns: List[Int] = List(13,0,1,2,3,4,5,6,7,8,9,10,11,12),
-            stepSize: Double = 0.01, maxIt: Int = 300): Unit =
-    runExperiment(hidden, nCounts, (506*trainFraction).toInt, columns,
+            stepSize: Double = 0.01, maxIt: Int = 300, mini: Double = 1.0): Unit =
+    runExperiment(hidden, nCounts, acts,
+      (506*trainFraction).toInt, columns,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
-        "maxIterations" -> maxIt.toString
+        "maxIterations" -> maxIt.toString,
+        "miniBatchFraction" -> mini.toString
       )
     )
 
-  def runExperiment(hidden: Int = 2, nCounts:List[Int] = List(),
+  def runExperiment(hidden: Int = 2, nCounts:List[Int] = List(), act: List[String],
                     num_training: Int = 200, columns: List[Int] = List(40,16,21,23,24,22,25),
                     opt: Map[String, String]): Unit = {
 
@@ -30,7 +32,7 @@ object TestNNHousing {
         (DenseVector[Double], DenseVector[Double]))) => {
 
         val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 1, hidden,
-          nCounts.map(_ => "tansig")++List("linear"), nCounts)
+          act, nCounts)
 
         val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
           d.map(el => (el._1, DenseVector(el._2))))
@@ -39,8 +41,8 @@ object TestNNHousing {
 
         model.setLearningRate(opt("step").toDouble)
           .setMaxIterations(opt("maxIterations").toInt)
-          .setBatchFraction(1.0)
-        model.learn()
+          .setBatchFraction(opt("miniBatchFraction").toDouble)
+          .learn()
 
         val res = model.test(trainTest._1._2)
         val scoresAndLabelsPipe =
