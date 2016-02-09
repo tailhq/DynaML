@@ -1,8 +1,7 @@
-package io.github.mandar2812.dynaml.models.neuralnets
+package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.models.LinearModel
-import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.optimization.{BackPropogation, DirectLinearSolver, RegularizedOptimizer}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
