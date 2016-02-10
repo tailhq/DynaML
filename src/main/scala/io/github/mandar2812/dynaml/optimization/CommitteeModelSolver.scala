@@ -5,7 +5,7 @@ import breeze.linalg.{DenseMatrix, inv, DenseVector}
 /**
   * Created by mandar on 9/2/16.
   */
-class DirectLinearSolver extends
+class CommitteeModelSolver extends
 RegularizedOptimizer[Int, DenseVector[Double],
   DenseVector[Double], Double,
   Stream[(DenseVector[Double], Double)]] {

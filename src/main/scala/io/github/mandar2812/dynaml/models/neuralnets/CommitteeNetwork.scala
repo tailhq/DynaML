@@ -2,7 +2,7 @@ package io.github.mandar2812.dynaml.models.neuralnets
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.models.LinearModel
-import io.github.mandar2812.dynaml.optimization.{BackPropogation, DirectLinearSolver, RegularizedOptimizer}
+import io.github.mandar2812.dynaml.optimization.{BackPropogation, CommitteeModelSolver, RegularizedOptimizer}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
@@ -66,7 +66,7 @@ LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
 
   override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
     DenseVector[Double], Double,
-    Stream[(DenseVector[Double], Double)]] = new DirectLinearSolver()
+    Stream[(DenseVector[Double], Double)]] = new CommitteeModelSolver()
 
   override protected var params: DenseVector[Double] =
     DenseVector.fill[Double](baseNetworks.length)(1.0)

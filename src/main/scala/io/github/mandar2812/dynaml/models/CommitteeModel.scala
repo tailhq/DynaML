@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.models
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.optimization.{DirectLinearSolver, RegularizedOptimizer, BackPropogation}
+import io.github.mandar2812.dynaml.optimization.{CommitteeModelSolver, RegularizedOptimizer, BackPropogation}
 import io.github.mandar2812.dynaml.pipes.{ModelPipe, DataPipe}
 
 abstract class MetaModel[
