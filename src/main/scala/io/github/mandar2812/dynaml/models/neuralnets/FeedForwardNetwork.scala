@@ -73,37 +73,14 @@ class FeedForwardNetwork[D](
 
   def test(d: D): Stream[(DenseVector[Double], DenseVector[Double])] = {
 
-    val (procInputs, procOutputs) =
+    val (procInputs, _) =
       dataAsStream(d)
         .map(c =>
           (c._1.toArray.toList.map(i => List(i)), c._2.toArray.toList.map(i => List(i))))
         .reduce((c1,c2) =>
           (c1._1.zip(c2._1).map(c => c._1++c._2), c1._2.zip(c2._2).map(c => c._1++c._2)))
 
-    params.getLayer(0).foreach(node => node.getNeuronType() match {
-      case "input" =>
-        node.setValueBuffer(procInputs(node.getNID() - 1).toArray)
-        node.setLocalFieldBuffer(procInputs(node.getNID() - 1).toArray)
-      case "bias" =>
-        node.setValueBuffer(Array.fill[Double](procInputs.head.length)(1.0))
-        node.setLocalFieldBuffer(Array.fill[Double](procInputs.head.length)(1.0))
-    })
-
-    (1 to params.hidden_layers).foreach(layer => {
-      params.getLayer(layer).foreach(node => node.getNeuronType() match {
-        case "perceptron" =>
-          val (locfield, field) = Neuron.getLocalFieldBuffer(node)
-          node.setLocalFieldBuffer(locfield)
-          node.setValueBuffer(field)
-        case "bias" =>
-          node.setValueBuffer(Array.fill[Double](procInputs.head.length)(1.0))
-          node.setLocalFieldBuffer(Array.fill[Double](procInputs.head.length)(1.0))
-      })
-    })
-
-    val predictedOutputBuffer = params.getLayer(hiddenLayers+1)
-      .map(node => (node.getNID()-1, Neuron.getLocalFieldBuffer(node)._1.zipWithIndex.map(_.swap).toMap))
-      .toMap
+    val predictedOutputBuffer = params.predictBatch(procInputs)
 
     //dataAsStream(d).map(rec => (feedForward(rec._1), rec._2))
     dataAsStream(d).map(_._2).zipWithIndex.map(c =>

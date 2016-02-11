@@ -1,26 +1,21 @@
 package io.github.mandar2812.dynaml.examples
 
-import java.io.File
 
-import breeze.linalg.{DenseMatrix, DenseVector}
-import com.github.tototoshi.csv.CSVWriter
+
+import breeze.linalg.DenseVector
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.neuralnets.{FeedForwardNetwork, FFNeuralGraph}
+import io.github.mandar2812.dynaml.models.neuralnets.{CommitteeNetwork, FFNeuralGraph}
 import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
 import org.apache.log4j.Logger
 
-
 /**
-  * @author mandar2812 datum 22/11/15.
-  *
-  * Test a Auto Regressive Neural Network model on the Omni Data set
+  * Created by mandar on 11/2/16.
   */
-object TestNNOmni {
+object TestCommitteeNNOmni {
 
   def apply(year: Int, yeartest:Int,
-            hidden: Int = 2, nCounts:List[Int] = List(), acts:List[String],
+            hidden: Int = 1, nCounts:List[Int] = List(), acts:List[String],
             delta: Int, timeLag:Int, stepAhead: Int,
             num_training: Int, num_test: Int,
             column: Int, stepSize: Double = 0.05,
@@ -54,13 +49,19 @@ object TestNNOmni {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
 
-        val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 1, hidden,
-          act, nCounts)
+
+        val configs = for (c <- nCounts; a <- act) yield(c,a)
+
+        val networks = configs.map(couple => {
+          FFNeuralGraph(trainTest._1._1.head._1.length, 1, 1,
+            List(couple._2, "linear"),List(couple._1))
+        })
 
         val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
           d.map(el => (el._1, DenseVector(el._2))))
 
-        val model = new FeedForwardNetwork[Stream[(DenseVector[Double], Double)]](trainTest._1._1, gr, transform)
+        val model =
+          new CommitteeNetwork[Stream[(DenseVector[Double], Double)]](trainTest._1._1, transform, networks:_*)
 
         model.setLearningRate(opt("step").toDouble)
           .setMaxIterations(opt("maxIterations").toInt)
@@ -126,35 +127,3 @@ object TestNNOmni {
   }
 }
 
-object DstARNNExperiment {
-
-  def apply(years: List[Int] = (2007 to 2014).toList,
-            testYears: List[Int] = (2000 to 2015).toList,
-            modelSizes: List[Int] = List(50, 100, 150),
-            deltas: List[Int] = List(1, 2, 3),
-            stepAhead: Int, bandwidth: Double,
-            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            num_test: Int, column: Int, grid: Int, step: Double) = {
-
-    val writer = CSVWriter.open(new File("data/OmniNNRes.csv"), append = true)
-
-    years.foreach((year) => {
-      testYears.foreach((testYear) => {
-        deltas.foreach((delta) => {
-          modelSizes.foreach((modelSize) => {
-            TestOmniAR.runExperiment(year, testYear, new FBMKernel(1.05),
-              delta, 0, stepAhead, bandwidth, noise,
-              modelSize, num_test, column,
-              grid, step, "GS",
-              Map("tolerance" -> "0.0001",
-                "step" -> "0.1",
-                "maxIterations" -> "100"))
-              .foreach(res => writer.writeRow(res))
-          })
-        })
-      })
-    })
-
-    writer.close()
-  }
-}

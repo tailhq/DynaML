@@ -8,23 +8,30 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 /**
   * Created by mandar on 9/2/16.
   */
-abstract class CommitteeNetwork[D](data: D,
-                                   transform: DataPipe[D, Stream[(DenseVector[Double],
-                                     DenseVector[Double])]],
-                                   networks: FFNeuralGraph*) extends
+class CommitteeNetwork[D](data: D,
+                          transform: DataPipe[D, Stream[(DenseVector[Double],
+                            DenseVector[Double])]],
+                          networks: FFNeuralGraph*) extends
 LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
   Double, Stream[(DenseVector[Double], Double)]] {
 
   override protected val g: D = data
 
+  val num_points = dataAsStream(g).length
+
   val baseNetworks: List[FFNeuralGraph] = networks.toList
 
   val baseOptimizer = new BackPropogation()
-    .setMomentum(0.01)
-    .setMiniBatchFraction(0.5)
+    .setMomentum(0.01).setRegParam(0.001)
+    .setMiniBatchFraction(1.0/baseNetworks.length)
     .setNumIterations(20)
 
-  val num_points = dataAsStream(g).length
+  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
+    DenseVector[Double], Double,
+    Stream[(DenseVector[Double], Double)]] = new CommitteeModelSolver()
+
+  override protected var params: DenseVector[Double] =
+    DenseVector.fill[Double](baseNetworks.length)(1.0)
 
   def dataAsStream(d: D) = transform.run(d)
 
@@ -42,6 +49,9 @@ LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
 
   override def initParams(): DenseVector[Double] =
     DenseVector.fill[Double](baseNetworks.length)(1.0)
+
+  featureMap = (pattern) =>
+    DenseVector(baseNetworks.map(net => net.forwardPass(pattern)(0)).toArray)
 
   /**
     * Learn the parameters
@@ -64,14 +74,32 @@ LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
     )
   }
 
-  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
-    DenseVector[Double], Double,
-    Stream[(DenseVector[Double], Double)]] = new CommitteeModelSolver()
+  def setMomentum(m: Double): this.type = {
+    this.baseOptimizer.setMomentum(m)
+    this
+  }
 
-  override protected var params: DenseVector[Double] =
-    DenseVector.fill[Double](baseNetworks.length)(1.0)
 
-  featureMap = (pattern) =>
-    DenseVector(baseNetworks.map(net => net.forwardPass(pattern)(0)).toArray)
+  def test(d: D): Stream[(DenseVector[Double], DenseVector[Double])] = {
+    val (procInputs, _) =
+      dataAsStream(d)
+        .map(c =>
+          (c._1.toArray.toList.map(i => List(i)), c._2.toArray.toList.map(i => List(i))))
+        .reduce((c1,c2) =>
+          (c1._1.zip(c2._1).map(c => c._1++c._2), c1._2.zip(c2._2).map(c => c._1++c._2)))
 
+
+    val committeepredictions = baseNetworks.map(network => {
+      network.predictBatch(procInputs)
+    })
+
+    dataAsStream(d).map(_._2).zipWithIndex.map(c => {
+      val votes = DenseVector.tabulate[Double](baseNetworks.length)(Ndim =>
+        committeepredictions(Ndim)(0)(c._2))
+
+      val prediction: Double = params dot votes
+
+      (DenseVector(prediction), c._1)
+    })
+  }
 }

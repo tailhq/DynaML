@@ -53,6 +53,36 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
     DenseVector.tabulate[Double](num_outputs)(i => outputs(i+1))
   }
 
+  def predictBatch(procInputs: List[List[Double]]) = {
+
+
+    getLayer(0).foreach(node => node.getNeuronType() match {
+      case "input" =>
+        node.setValueBuffer(procInputs(node.getNID() - 1).toArray)
+        node.setLocalFieldBuffer(procInputs(node.getNID() - 1).toArray)
+      case "bias" =>
+        node.setValueBuffer(Array.fill[Double](procInputs.head.length)(1.0))
+        node.setLocalFieldBuffer(Array.fill[Double](procInputs.head.length)(1.0))
+    })
+
+    (1 to hidden_layers).foreach(layer => {
+      getLayer(layer).foreach(node => node.getNeuronType() match {
+        case "perceptron" =>
+          val (locfield, field) = Neuron.getLocalFieldBuffer(node)
+          node.setLocalFieldBuffer(locfield)
+          node.setValueBuffer(field)
+        case "bias" =>
+          node.setValueBuffer(Array.fill[Double](procInputs.head.length)(1.0))
+          node.setLocalFieldBuffer(Array.fill[Double](procInputs.head.length)(1.0))
+      })
+    })
+
+    getLayer(hidden_layers+1)
+      .map(node => (node.getNID()-1, Neuron.getLocalFieldBuffer(node)._1.zipWithIndex.map(_.swap).toMap))
+      .toMap
+
+  }
+
 }
 
 
