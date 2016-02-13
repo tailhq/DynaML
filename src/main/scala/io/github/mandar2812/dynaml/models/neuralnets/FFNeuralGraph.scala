@@ -55,7 +55,6 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
 
   def predictBatch(procInputs: List[List[Double]]) = {
 
-
     getLayer(0).foreach(node => node.getNeuronType() match {
       case "input" =>
         node.setValueBuffer(procInputs(node.getNID() - 1).toArray)
@@ -80,9 +79,7 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
     getLayer(hidden_layers+1)
       .map(node => (node.getNID()-1, Neuron.getLocalFieldBuffer(node)._1.zipWithIndex.map(_.swap).toMap))
       .toMap
-
   }
-
 }
 
 
