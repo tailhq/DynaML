@@ -29,6 +29,9 @@ object TransferFunctions {
   val lin = (x: Double) => identity(x)
   val Dlin = (_: Double) => 1.0
 
+  val recLin = (x: Double) => math.max(0.0, x)
+  val DrecLin = (x: Double) => if(x < 0 ) 0.0 else 1.0
+
   /**
    * Function which returns
    * the appropriate activation
@@ -40,6 +43,7 @@ object TransferFunctions {
       case "logsig" => logsig
       case "tansig" => tansig
       case "linear" => lin
+      case "recLinear" => recLin
     }
 
   def getDiffActivation(s: String): (Double) => Double =
@@ -48,5 +52,6 @@ object TransferFunctions {
       case "logsig" => Dlogsig
       case "tansig" => Dtansig
       case "linear" => Dlin
+      case "recLinear" => DrecLin
     }
 }

@@ -152,7 +152,7 @@ object DstARXExperiment {
             modelSizes: List[Int] = List(50, 100, 150),
             deltas: List[Int] = List(1, 2, 3), exogenous: List[Int] = List(24),
             stepAhead: Int, bandwidth: Double,
-            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+            noise: Double,
             num_test: Int, column: Int, grid: Int, step: Double) = {
 
     val writer = CSVWriter.open(new File("data/OmniNARXRes.csv"), append = true)
@@ -161,8 +161,8 @@ object DstARXExperiment {
       testYears.foreach((testYear) => {
         deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
-            TestOmniARX.runExperiment(year, testYear, new FBMKernel(1.05),
-              delta, stepAhead, bandwidth, noise,
+            TestOmniARX.runExperiment(year, testYear, new FBMKernel(bandwidth),
+              delta, stepAhead, bandwidth, new DiracKernel(noise),
               modelSize, num_test, column, exogenous,
               grid, step, "GS",
               Map("tolerance" -> "0.0001",
