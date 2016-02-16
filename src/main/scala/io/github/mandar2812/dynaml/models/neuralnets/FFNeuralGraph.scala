@@ -10,9 +10,23 @@ import scala.collection.JavaConversions._
 import scala.util.Random
 
 /**
- * Represents the underlying graph of a neural
-  * model.
- */
+  * Represents the underlying graph of a
+  * feed-forward neural network.
+  *
+  * @param baseGraph The base graph object, [[FFNeuralGraph]] encapsulates
+  *                  an existing graph object of type [[FramedGraph]] and builds
+  *                  upon it by defining a set of behaviours expected from Neural Network
+  *                  graphs
+  *
+  * @param hidden The number of hidden layers in the network.
+  *
+  * @param act A list of Strings containing the activations for each layer.
+  *            Options for activation functions are:
+  *            1) "logsig" or "sigmoid"
+  *            2) "tansig"
+  *            3) "linear"
+  *            4) "recLinear"
+  * */
 class FFNeuralGraph(baseGraph: FramedGraph[Graph],
                     hidden: Int = 1,
                     act: List[String])
@@ -24,10 +38,28 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
 
   val activations = act
 
+  /**
+    * Get as a scala [[Iterable]] the neurons for a particular layer.
+    *
+    * @param layer The layer number, can vary from 0 (input layer)
+    *              to hidden_layers + 1 (output layer)
+    *
+    * @return The neurons in the particular layer as [[Neuron]] objects
+    *
+    * */
   def getLayer(layer: Int) = JavaConversions.iterableAsScalaIterable(
     g.getVertices[Neuron]("layer", layer, classOf[Neuron])
   )
 
+  /**
+    * Get as a scala [[Iterable]] the synapses between layer l and l-1.
+    *
+    * @param layer The layer number, can vary from 1 (input layer synapses)
+    *              to hidden_layers + 1 (output layer synapses)
+    *
+    * @return The respective synapses as [[Synapse]] objects
+    *
+    * */
   def getLayerSynapses(layer: Int) = JavaConversions.iterableAsScalaIterable(
     g.getEdges[Synapse]("layer", layer, classOf[Synapse])
   )
@@ -36,6 +68,10 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
 
   override val num_outputs: Int = getLayer(hidden_layers+1).size
 
+  /**
+    * Perform a forward pass through the network to
+    * calculate the predicted output.
+    * */
   override val forwardPass: (DenseVector[Double]) => DenseVector[Double] = (pattern) => {
     //Set the pattern as input to layer 0
     val inputnodes = getLayer(0) filter (_.getNeuronType() == "input")
@@ -45,7 +81,6 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
       node.setValue(pattern(id-1))
     })
 
-    //println("Output Neurons: "+getLayer(hidden_layers+1).toString())
     val outputs:Map[Int, Double] = getLayer(hidden_layers+1)
       .map(outputNeuron => (outputNeuron.getNID(), Neuron.getLocalField(outputNeuron)._1))
       .toMap
@@ -53,6 +88,18 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
     DenseVector.tabulate[Double](num_outputs)(i => outputs(i+1))
   }
 
+  /**
+    * Perform a forward pass through the network to
+    * calculate the predicted output for a batch of
+    * input points.
+    *
+    * @param procInputs The input batch as a List of Lists
+    *                   where each level of the top level List
+    *                   represents an input node. On the other hand
+    *                   each element of the lower level list represents
+    *                   a particular dimension of a particular data point
+    *                   in the data set.
+    * */
   def predictBatch(procInputs: List[List[Double]]) = {
 
     getLayer(0).foreach(node => node.getNeuronType() match {
@@ -86,6 +133,16 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph],
 object FFNeuralGraph {
   val manager: FramedGraphFactory = new FramedGraphFactory
 
+  /**
+    * Create a [[FFNeuralGraph]] object.
+    *
+    * @param num_inputs Number of input dimensions
+    * @param num_outputs Number of input dimensions
+    * @param hidden_layers Number of hidden layers
+    * @param nCounts The number of neurons in each hidden layer
+    * @param activations The activation functions for each layer
+    *
+    * */
   def apply(num_inputs: Int, num_outputs: Int,
             hidden_layers: Int = 1,
             activations: List[String],
