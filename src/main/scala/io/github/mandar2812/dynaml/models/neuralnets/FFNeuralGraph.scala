@@ -134,7 +134,8 @@ object FFNeuralGraph {
   val manager: FramedGraphFactory = new FramedGraphFactory
 
   /**
-    * Create a [[FFNeuralGraph]] object.
+    * Create a [[FFNeuralGraph]] object with
+    * [[FramedGraph]] as the base graph.
     *
     * @param num_inputs Number of input dimensions
     * @param num_outputs Number of input dimensions

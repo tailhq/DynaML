@@ -6,7 +6,15 @@ import io.github.mandar2812.dynaml.models.LinearModel
 import io.github.mandar2812.dynaml.optimization.{LSSVMLinearSolver, RegularizedOptimizer}
 
 /**
-  * Created by mandar on 10/2/16.
+  * Implementation of the classical Dual LSSVM model.
+  *
+  * @param data The underlying training data
+  *
+  * @param kern The kernel used to model the covariance
+  *             structure of the outputs with respect to the
+  *             input data.
+  *
+  * @param numPoints The number of data points in [[data]]
   */
 class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
              kern: LocalSVMKernel[DenseVector[Double]])
@@ -20,6 +28,12 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
 
   val num_points = numPoints
 
+  /**
+    * Initialize the synapse weights
+    * to small random values between
+    * 0 and 1.
+    *
+    * */
   override def initParams(): DenseVector[Double] =
     DenseVector.ones[Double](num_points+1)
 
@@ -41,6 +55,12 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
       initParams())
   }
 
+  /**
+    * Model optimizer set to
+    * [[LSSVMLinearSolver]] which
+    * solves the LSSVM optimization
+    * problem in the dual.
+    * */
   override protected val optimizer: RegularizedOptimizer[Int,
     DenseVector[Double], DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])] = new LSSVMLinearSolver()

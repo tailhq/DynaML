@@ -3,15 +3,26 @@ package io.github.mandar2812.dynaml.models.neuralnets
 import breeze.linalg.DenseVector
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
-import io.github.mandar2812.dynaml.graphutils.Neuron
 import io.github.mandar2812.dynaml.optimization.BackPropogation
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 
 /**
- * Represents the template of a Feed Forward Neural Network
- * backed by an underlying graph.
- */
+  *
+  * Represents the template of a Feed Forward Neural Network
+  * backed by an underlying graph.
+  *
+  * @tparam D The type of the underlying training data structure.
+  *
+  * @param data The training data
+  *
+  * @param netgraph The [[FFNeuralGraph]] object which represents the
+  *                 network.
+  *
+  * @param transform A [[DataPipe]] which takes input of type [[D]] and
+  *                  returns a [[Stream]] of input, output tuples.
+  *
+  * */
 class FeedForwardNetwork[D](
   data: D, netgraph: FFNeuralGraph,
   transform: DataPipe[D, Stream[(DenseVector[Double], DenseVector[Double])]])
@@ -26,10 +37,6 @@ class FeedForwardNetwork[D](
 
   val feedForward = params.forwardPass
 
-  /**
-   * Get the value of the parameters
-   * of the model.
-   **/
   override val outputDimensions: Int = params.num_outputs
 
   override val hiddenLayers: Int = params.hidden_layers
@@ -46,15 +53,23 @@ class FeedForwardNetwork[D](
     hiddenLayers, params.activations,
     neuronCounts)
 
-  def setMomentum(m: Double): this.type = {
-    this.optimizer.setMomentum(m)
-    this
-  }
-
+  /**
+    * Model optimizer set to
+    * [[BackPropogation]] which
+    * is an implementation of
+    * gradient based Back-propogation
+    * with a momentum term.
+    *
+    * */
   override protected val optimizer =
     new BackPropogation()
       .setNumIterations(100)
       .setStepSize(0.01)
+
+  def setMomentum(m: Double): this.type = {
+    this.optimizer.setMomentum(m)
+    this
+  }
 
   override def dataAsStream(d: D) = transform.run(d)
 
@@ -71,6 +86,14 @@ class FeedForwardNetwork[D](
 
   override def predict(point: DenseVector[Double]) = feedForward(point)
 
+  /**
+    * Calculate predictions for a test data set
+    *
+    * @param d The test data set as a data structure
+    *          of type [[D]]
+    * @return The predictions and actual outputs.
+    *
+    * */
   def test(d: D): Stream[(DenseVector[Double], DenseVector[Double])] = {
 
     val (procInputs, _) =
