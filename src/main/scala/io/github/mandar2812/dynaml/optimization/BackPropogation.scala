@@ -8,7 +8,8 @@ import org.apache.log4j.Logger
 import scala.util.Random
 
 /**
-  * Created by mandar on 7/2/16.
+  * Implementation of the standard back pro-pogation with momentum
+  * using the "generalized delta rule".
   */
 class BackPropogation extends RegularizedOptimizer[Int, FFNeuralGraph,
   DenseVector[Double], DenseVector[Double],

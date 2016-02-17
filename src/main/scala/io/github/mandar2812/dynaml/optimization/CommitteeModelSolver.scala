@@ -3,7 +3,8 @@ package io.github.mandar2812.dynaml.optimization
 import breeze.linalg.{DenseMatrix, inv, DenseVector}
 
 /**
-  * Created by mandar on 9/2/16.
+  * Solves the optimization problem pertaining
+  * to the weights of a committee model.
   */
 class CommitteeModelSolver extends
 RegularizedOptimizer[Int, DenseVector[Double],
@@ -11,6 +12,8 @@ RegularizedOptimizer[Int, DenseVector[Double],
   Stream[(DenseVector[Double], Double)]] {
   /**
     * Solve the convex optimization problem.
+    *
+    * min wT.C.w    such that ||w||_1 = 1
     */
   override def optimize(nPoints: Long,
                         ParamOutEdges: Stream[(DenseVector[Double], Double)],
