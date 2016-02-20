@@ -150,6 +150,62 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#Dlin" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Dlin:Double=&gt;Double"></a>
+      <a id="Dlin:(Double)⇒Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Dlin</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">First derivative of the linear function
+</p>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#Dlogsig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Dlogsig:Double=&gt;Double"></a>
+      <a id="Dlogsig:(Double)⇒Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Dlogsig</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">First derivative of the sigmoid function
+</p>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#DrecLin" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DrecLin:Double=&gt;Double"></a>
+      <a id="DrecLin:(Double)⇒Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DrecLin</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">First derivative of the rectified linear function
+</p>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#Dtansig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Dtansig:Double=&gt;Double"></a>
+      <a id="Dtansig:(Double)⇒Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Dtansig</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">First derivative of the hyperbolic tangent function
+</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -228,15 +284,15 @@
               
         </dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#getActivation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getActivation:String=&gt;(Nothing=&gt;Double)"></a>
-      <a id="getActivation:(String)⇒(Nothing)⇒Double"></a>
+      <a id="getActivation(s:String):Double=&gt;Double"></a>
+      <a id="getActivation(String):(Double)⇒Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getActivation</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ (<span class="extype" name="scala.Nothing">Nothing</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">getActivation</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Function which returns
@@ -256,6 +312,22 @@ for a given string
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#getDiffActivation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getDiffActivation(s:String):Double=&gt;Double"></a>
+      <a id="getDiffActivation(String):(Double)⇒Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getDiffActivation</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Function which returns
+the appropriate derivative
+activation for a given string
+</p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -283,18 +355,18 @@ for a given string
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#lin" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="lin:Nothing=&gt;Nothing"></a>
-      <a id="lin:(Nothing)⇒Nothing"></a>
+      <a id="lin:Double=&gt;Double"></a>
+      <a id="lin:(Double)⇒Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">lin</span><span class="result">: (<span class="extype" name="scala.Nothing">Nothing</span>) ⇒ <span class="extype" name="scala.Nothing">Nothing</span></span>
+        <span class="name">lin</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Identity Function
+      <p class="shortcomment cmt">Linear/Identity Function
 </p>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#logsig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="logsig:Double=&gt;Double"></a>
@@ -348,6 +420,20 @@ for a given string
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions#recLin" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recLin:Double=&gt;Double"></a>
+      <a id="recLin:(Double)⇒Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recLin</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Rectified linear Function
+</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

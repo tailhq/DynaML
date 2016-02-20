@@ -58,7 +58,20 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="io.github.mandar2812.dynaml.models.svm.DLSSVM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DLSSVMextendsLinearModel[Stream[(breeze.linalg.DenseVector[Double],Double)],Int,Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]"></a>
+      <a id="DLSSVM:DLSSVM"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DLSSVM.html"><span class="name">DLSSVM</span></a><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of the classical Dual LSSVM model.</p>
+    </li><li name="io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="KernelLSSVMModelextendsKernelizedModel[com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph],Iterable[io.github.mandar2812.dynaml.graphutils.CausalEdge],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]"></a>
       <a id="KernelLSSVMModel:KernelLSSVMModel"></a>
       <h4 class="signature">
@@ -116,6 +129,22 @@ is a Gaussian with mean = wT.</p>
       <p class="comment cmt">Implementation of the Least Squares SVM
 using Apache Spark RDDs
 </p>
+    </li><li name="io.github.mandar2812.dynaml.models.svm.LSSVMTurbo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LSSVMTurboextendsLSSVMSparkModelwithSerializable"></a>
+      <a id="LSSVMTurbo:LSSVMTurbo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LSSVMTurbo.html"><span class="name">LSSVMTurbo</span></a><span class="result"> extends <a href="LSSVMSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel">LSSVMSparkModel</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">FS-LSSVM Turbo:
+This class extends the basic functionality of the LSSVMSparkModel
+to enable the training and evaluation of multiple model instances
+in a single run through the training set.</p>
     </li><li name="io.github.mandar2812.dynaml.models.svm.SDLSSVMModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SDLSSVMModelextendsLSSVMModelwithSubsampledDualLSSVM[com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph],Iterable[io.github.mandar2812.dynaml.graphutils.CausalEdge]]"></a>
       <a id="SDLSSVMModel:SDLSSVMModel"></a>

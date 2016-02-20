@@ -35,14 +35,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">GaussianProcessModel</span><span class="tparams">[<span name="T">T</span>, <span name="I">I</span>, <span name="Y">Y</span>, <span name="K">K</span>, <span name="M">M</span>, <span name="W">W</span>]</span><span class="result"> extends <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.T">T</span>]</span>
+        <span class="name">GaussianProcessModel</span><span class="tparams">[<span name="T">T</span>, <span name="I">I</span>, <span name="Y">Y</span>, <span name="K">K</span>, <span name="M">M</span>, <span name="W">W</span>]</span><span class="result"> extends <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.Y">Y</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>High Level description of a Gaussian Process.</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The underlying data structure storing the training &amp; test data.</p></dd><dt class="tparam">I</dt><dd class="cmt"><p>The type of the index set (i.e. Double for time series, DenseVector for GP regression)</p></dd><dt class="tparam">Y</dt><dd class="cmt"><p>The type of the output label</p></dd><dt class="tparam">K</dt><dd class="cmt"><p>The type of value returned by the covariance kernel function</p></dd><dt class="tparam">M</dt><dd class="cmt"><p>The underlying data structure of the kernel Matrix</p></dd><dt class="tparam">W</dt><dd class="cmt"><p>Implementing class of the posterior distribution
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.T">T</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.Y">Y</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>, <a href="GPNarModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarModel">GPNarModel</a>, <a href="GPNarXModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarXModel">GPNarXModel</a>, <a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <a href="GPTimeSeries.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries">GPTimeSeries</a></div>
@@ -447,6 +447,23 @@ Seq[I] where I is the index set of the GP
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(point:I):Y"></a>
+      <a id="predict(I):Y"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.I">I</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.Y">Y</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Predict the value of the
+target variable given a
+point.</p><div class="fullcomment"><div class="comment cmt"><p>Predict the value of the
+target variable given a
+point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -555,7 +572,7 @@ Seq[I] where I is the index set of the GP
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.models.Model">
-              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.T">T</span>]</h3>
+              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.Y">Y</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

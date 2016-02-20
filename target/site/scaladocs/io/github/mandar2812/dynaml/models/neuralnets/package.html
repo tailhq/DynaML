@@ -58,36 +58,76 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FeedForwardNetwork[G]extendsNeuralNetwork[G]"></a>
-      <a id="FeedForwardNetwork[G]:FeedForwardNetwork[G]"></a>
+              <ol><li name="io.github.mandar2812.dynaml.models.neuralnets.CommitteeNetwork" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CommitteeNetwork[D]extendsLinearModel[D,Int,Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Stream[(breeze.linalg.DenseVector[Double],Double)]]"></a>
+      <a id="CommitteeNetwork[D]:CommitteeNetwork[D]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="FeedForwardNetwork.html"><span class="name">FeedForwardNetwork</span></a><span class="tparams">[<span name="G">G</span>]</span><span class="result"> extends <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span>]</span>
+        <a href="CommitteeNetwork.html"><span class="name">CommitteeNetwork</span></a><span class="tparams">[<span name="D">D</span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.CommitteeNetwork.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Created by mandar on 9/2/16.</p>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FFNeuralGraphextendsNeuralGraph[com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph]]"></a>
+      <a id="FFNeuralGraph:FFNeuralGraph"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FFNeuralGraph.html"><span class="name">FFNeuralGraph</span></a><span class="result"> extends <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Represents the underlying graph of a
+feed-forward neural network.</p>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FeedForwardNetwork[D]extendsNeuralNetwork[D,com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph],io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph,(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
+      <a id="FeedForwardNetwork[D]:FeedForwardNetwork[D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FeedForwardNetwork.html"><span class="name">FeedForwardNetwork</span></a><span class="tparams">[<span name="D">D</span>]</span><span class="result"> extends <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
       </h4>
       <p class="comment cmt">Represents the template of a Feed Forward Neural Network
 backed by an underlying graph.</p>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="NeuralNetwork[G]extendsParameterizedLearner[G,Int,List[breeze.linalg.DenseMatrix[Double]],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
-      <a id="NeuralNetwork[G]:NeuralNetwork[G]"></a>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NeuralGraph[B]extendsAnyRef"></a>
+      <a id="NeuralGraph[B]:NeuralGraph[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="NeuralNetwork.html"><span class="name">NeuralNetwork</span></a><span class="tparams">[<span name="G">G</span>]</span><span class="result"> extends <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork.G">G</span>, <span class="extype" name="scala.Int">Int</span>, <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+        <a href="NeuralGraph.html"><span class="name">NeuralGraph</span></a><span class="tparams">[<span name="B">B</span>]</span><span class="result"> extends <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A Neural Graph is an encapsulation
+of a base graph of type <span class="extype" name="B">B</span> with
+a set of predifined behaviors.</p>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NeuralNetwork[G,P,T&lt;:io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph[P],Pattern]extendsParameterizedLearner[G,Int,T,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Stream[Pattern]]"></a>
+      <a id="NeuralNetwork[G,P,T&lt;:NeuralGraph[P],Pattern]:NeuralNetwork[G,P,T,Pattern]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NeuralNetwork.html"><span class="name">NeuralNetwork</span></a><span class="tparams">[<span name="G">G</span>, <span name="P">P</span>, <span name="T">T &lt;: <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork.P">P</span>]</span>, <span name="Pattern">Pattern</span>]</span><span class="result"> extends <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork.G">G</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork.T">T</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork.Pattern">Pattern</span>]]</span>
       </span>
       </h4>
       <p class="comment cmt">Top level trait defining
-the most important properties
-of a neural network
-</p>
+properties of a neural network.</p>
     </li></ol>
             </div>
 
@@ -95,16 +135,16 @@ of a neural network
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FeedForwardNetwork"></a>
-      <a id="FeedForwardNetwork:FeedForwardNetwork"></a>
+              <ol><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FFNeuralGraph"></a>
+      <a id="FFNeuralGraph:FFNeuralGraph"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="FeedForwardNetwork$.html"><span class="name">FeedForwardNetwork</span></a>
+        <a href="FFNeuralGraph$.html"><span class="name">FFNeuralGraph</span></a>
       </span>
       </h4>
       

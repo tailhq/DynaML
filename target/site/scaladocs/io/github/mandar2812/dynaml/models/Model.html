@@ -35,7 +35,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Model</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">Model</span><span class="tparams">[<span name="T">T</span>, <span name="Q">Q</span>, <span name="R">R</span>]</span><span class="result"> extends <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       
@@ -46,7 +46,7 @@ for Machine Learning models.
           <div class="superTypes hiddenContent"><a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>, <a href="neuralnets/FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>, <a href="gp/GPNarModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarModel">GPNarModel</a>, <a href="gp/GPNarXModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarXModel">GPNarXModel</a>, <a href="gp/GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <a href="gp/GPTimeSeries.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries">GPTimeSeries</a>, <a href="gp/GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>, <a href="svm/KernelLSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel">KernelLSSVMModel</a>, <a href="svm/KernelSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel">KernelSparkModel</a>, <a href="KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>, <a href="svm/LSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMModel">LSSVMModel</a>, <a href="svm/LSSVMSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel">LSSVMSparkModel</a>, <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>, <a href="neuralnets/NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>, <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>, <a href="svm/SDLSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.SDLSSVMModel">SDLSSVMModel</a>, <a href="SubsampledDualLSSVM.html" class="extype" name="io.github.mandar2812.dynaml.models.SubsampledDualLSSVM">SubsampledDualLSSVM</a></div>
+          <div class="subClasses hiddenContent"><a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>, <a href="CommitteeModel.html" class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel">CommitteeModel</a>, <a href="neuralnets/CommitteeNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.CommitteeNetwork">CommitteeNetwork</a>, <a href="svm/DLSSVM.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.DLSSVM">DLSSVM</a>, <a href="neuralnets/FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>, <a href="gp/GPCommitteeRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression">GPCommitteeRegression</a>, <a href="gp/GPNarModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarModel">GPNarModel</a>, <a href="gp/GPNarXModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarXModel">GPNarXModel</a>, <a href="gp/GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <a href="gp/GPTimeSeries.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries">GPTimeSeries</a>, <a href="gp/GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>, <a href="svm/KernelLSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel">KernelLSSVMModel</a>, <a href="svm/KernelSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel">KernelSparkModel</a>, <a href="KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>, <a href="svm/LSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMModel">LSSVMModel</a>, <a href="svm/LSSVMSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel">LSSVMSparkModel</a>, <a href="svm/LSSVMTurbo.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMTurbo">LSSVMTurbo</a>, <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>, <a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a>, <a href="neuralnets/NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>, <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>, <a href="svm/SDLSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.SDLSSVMModel">SDLSSVMModel</a>, <a href="SubsampledDualLSSVM.html" class="extype" name="io.github.mandar2812.dynaml.models.SubsampledDualLSSVM">SubsampledDualLSSVM</a></div>
         </div></div>
         
 
@@ -101,6 +101,21 @@ for Machine Learning models.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.Model#predict" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="predict(point:Q):R"></a>
+      <a id="predict(Q):R"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="io.github.mandar2812.dynaml.models.Model.Q">Q</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.Model.R">R</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Predict the value of the
+target variable given a
+point.</p>
     </li></ol>
             </div>
 

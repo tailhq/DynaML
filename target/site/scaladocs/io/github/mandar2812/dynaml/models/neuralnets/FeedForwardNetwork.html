@@ -24,26 +24,27 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="FeedForwardNetwork$.html" title="Go to companion"><img src="../../../../../../lib/class_to_object_big.png" /></a>
+        <img src="../../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="io">io</a>.<a href="../../../../package.html" class="extype" name="io.github">github</a>.<a href="../../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets">neuralnets</a></p>
-        <h1><a href="FeedForwardNetwork$.html" title="Go to companion">FeedForwardNetwork</a></h1>
+        <h1>FeedForwardNetwork</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">FeedForwardNetwork</span><span class="tparams">[<span name="G">G</span>]</span><span class="result"> extends <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span>]</span>
+        <span class="name">FeedForwardNetwork</span><span class="tparams">[<span name="D">D</span>]</span><span class="result"> extends <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents the template of a Feed Forward Neural Network
 backed by an underlying graph.
-</p></div><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="tparam">D</dt><dd class="cmt"><p>The type of the underlying training data structure.
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span>], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span>, <span class="extype" name="scala.Int">Int</span>, <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -81,154 +82,32 @@ backed by an underlying graph.
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork[G]"></a>
-      <a id="&lt;init&gt;:FeedForwardNetwork[G]"></a>
+              <ol><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(data:D,netgraph:io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph,transform:io.github.mandar2812.dynaml.pipes.DataPipe[D,Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]]):io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork[D]"></a>
+      <a id="&lt;init&gt;:FeedForwardNetwork[D]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">FeedForwardNetwork</span><span class="params">()</span>
+        <span class="name">FeedForwardNetwork</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span></span>, <span name="netgraph">netgraph: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>, <span name="transform">transform: <a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]]</span>)</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The training data
+</p></dd><dt class="param">netgraph</dt><dd class="cmt"><p>The <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a> object which represents the
+                network.
+</p></dd><dt class="param">transform</dt><dd class="cmt"><p>A <span class="extype" name="DataPipe">DataPipe</span> which takes input of type <span class="extype" name="D">D</span> and
+                 returns a <span class="extype" name="Stream">Stream</span> of input, output tuples.</p></dd></dl></div>
     </li></ol>
             </div>
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork#activations" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="activations:List[Double=&gt;Double]"></a>
-      <a id="activations:List[(Double)⇒Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">activations</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[(<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.Model#g" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="g:T"></a>
-      <a id="g:G"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">g</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork#hiddenLayers" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="hiddenLayers:Int"></a>
-      <a id="hiddenLayers:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hiddenLayers</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#initParams" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="initParams():T"></a>
-      <a id="initParams():List[DenseMatrix[Double]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">initParams</span><span class="params">()</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork#inputDimensions" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="inputDimensions:Int"></a>
-      <a id="inputDimensions:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">inputDimensions</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#learn" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="learn():Unit"></a>
-      <a id="learn():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">learn</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Learn the parameters
-of the model which
-are in a node of the
-graph.</p><div class="fullcomment"><div class="comment cmt"><p>Learn the parameters
-of the model which
-are in a node of the
-graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork#neuronCounts" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="neuronCounts:List[Int]"></a>
-      <a id="neuronCounts:List[Int]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">neuronCounts</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Int">Int</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#optimizer" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[K,T,Q,R,S]"></a>
-      <a id="optimizer:RegularizedOptimizer[Int,List[DenseMatrix[Double]],DenseVector[Double],DenseVector[Double],(DenseVector[Double],DenseVector[Double])]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">optimizer</span><span class="result">: <a href="../../optimization/RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork#outputDimensions" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="outputDimensions:Int"></a>
-      <a id="outputDimensions:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">outputDimensions</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -294,6 +173,19 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#activations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="activations:List[Double=&gt;Double]"></a>
+      <a id="activations:List[(Double)⇒Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">activations</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[(<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -326,6 +218,21 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#dataAsStream" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dataAsStream(d:D):Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
+      <a id="dataAsStream(D):Stream[(DenseVector[Double],DenseVector[Double])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dataAsStream</span><span class="params">(<span name="d">d: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convert the data structure from type <span class="extype" name="G">G</span>
+to a <span class="extype" name="Stream">Stream</span> of <span class="extype" name="Pattern">Pattern</span> objects</p><div class="fullcomment"><div class="comment cmt"><p>Convert the data structure from type <span class="extype" name="G">G</span>
+to a <span class="extype" name="Stream">Stream</span> of <span class="extype" name="Pattern">Pattern</span> objects</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -353,15 +260,15 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#feedForward" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="feedForward:breeze.linalg.DenseVector[Double]=&gt;List[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
-      <a id="feedForward:(DenseVector[Double])⇒List[(DenseVector[Double],DenseVector[Double])]"></a>
+      <a id="feedForward:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]"></a>
+      <a id="feedForward:(DenseVector[Double])⇒DenseVector[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">feedForward</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+        <span class="name">feedForward</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4>
       
@@ -384,6 +291,19 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#g" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="g:D"></a>
+      <a id="g:D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">g</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -410,6 +330,45 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#hiddenLayers" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hiddenLayers:Int"></a>
+      <a id="hiddenLayers:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hiddenLayers</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#initParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="initParams():io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph"></a>
+      <a id="initParams():FFNeuralGraph"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initParams</span><span class="params">()</span><span class="result">: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#inputDimensions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="inputDimensions:Int"></a>
+      <a id="inputDimensions:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inputDimensions</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -423,6 +382,25 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#learn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="learn():Unit"></a>
+      <a id="learn():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">learn</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Learn the parameters
+of the model which
+are in a node of the
+graph.</p><div class="fullcomment"><div class="comment cmt"><p>Learn the parameters
+of the model which
+are in a node of the
+graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -436,6 +414,19 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#neuronCounts" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="neuronCounts:List[Int]"></a>
+      <a id="neuronCounts:List[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">neuronCounts</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -462,16 +453,63 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#num_points" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="num_points:Int"></a>
+      <a id="num_points:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">num_points</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#optimizer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="optimizer:io.github.mandar2812.dynaml.optimization.BackPropogation"></a>
+      <a id="optimizer:BackPropogation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">optimizer</span><span class="result">: <a href="../../optimization/BackPropogation.html" class="extype" name="io.github.mandar2812.dynaml.optimization.BackPropogation">BackPropogation</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Model optimizer set to
+<span class="extype" name="BackPropogation">BackPropogation</span> which
+is an implementation of
+gradient based Back-propogation
+with a momentum term.</p><div class="fullcomment"><div class="comment cmt"><p>Model optimizer set to
+<span class="extype" name="BackPropogation">BackPropogation</span> which
+is an implementation of
+gradient based Back-propogation
+with a momentum term.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#outputDimensions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="outputDimensions:Int"></a>
+      <a id="outputDimensions:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">outputDimensions</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#parameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="parameters():T"></a>
-      <a id="parameters():List[DenseMatrix[Double]]"></a>
+      <a id="parameters():FFNeuralGraph"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parameters</span><span class="params">()</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">parameters</span><span class="params">()</span><span class="result">: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Get the value of the parameters
@@ -479,18 +517,35 @@ of the model.</p><div class="fullcomment"><div class="comment cmt"><p>Get the va
 of the model.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#params" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="params:List[breeze.linalg.DenseMatrix[Double]]"></a>
-      <a id="params:List[DenseMatrix[Double]]"></a>
+      <a id="params:io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph"></a>
+      <a id="params:FFNeuralGraph"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">params</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">params</span><span class="result">: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(point:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
+      <a id="predict(DenseVector[Double]):DenseVector[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Predict the value of the
+target variable given a
+point.</p><div class="fullcomment"><div class="comment cmt"><p>Predict the value of the
+target variable given a
+point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setBatchFraction(f:Double):ParameterizedLearner.this.type"></a>
       <a id="setBatchFraction(Double):FeedForwardNetwork.this.type"></a>
@@ -530,6 +585,32 @@ of the model.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#setMomentum" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setMomentum(m:Double):FeedForwardNetwork.this.type"></a>
+      <a id="setMomentum(Double):FeedForwardNetwork.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setMomentum</span><span class="params">(<span name="m">m: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>.this.type</span>
+      </span>
+      </h4>
+      
+    </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setRegParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setRegParam(r:Double):ParameterizedLearner.this.type"></a>
+      <a id="setRegParam(Double):FeedForwardNetwork.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setRegParam</span><span class="params">(<span name="r">r: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>.this.type</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -543,6 +624,22 @@ of the model.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#test" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="test(d:D):Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
+      <a id="test(D):Stream[(DenseVector[Double],DenseVector[Double])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">test</span><span class="params">(<span name="d">d: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Calculate predictions for a test data set
+</p><div class="fullcomment"><div class="comment cmt"><p>Calculate predictions for a test data set
+</p></div><dl class="paramcmts block"><dt class="param">d</dt><dd class="cmt"><p>The test data set as a data structure
+         of type <span class="extype" name="D">D</span></p></dd><dt>returns</dt><dd class="cmt"><p>The predictions and actual outputs.</p></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -558,14 +655,14 @@ of the model.
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#updateParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateParameters(param:T):Unit"></a>
-      <a id="updateParameters(List[DenseMatrix[Double]]):Unit"></a>
+      <a id="updateParameters(FFNeuralGraph):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">updateParameters</span><span class="params">(<span name="param">param: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">updateParameters</span><span class="params">(<span name="param">param: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
@@ -636,11 +733,11 @@ of the model.
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">
-              <h3>Inherited from <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span>]</h3>
+              <h3>Inherited from <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">
-              <h3>Inherited from <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span>, <span class="extype" name="scala.Int">Int</span>, <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
+              <h3>Inherited from <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.Model">
-              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.G">G</span>]</h3>
+              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

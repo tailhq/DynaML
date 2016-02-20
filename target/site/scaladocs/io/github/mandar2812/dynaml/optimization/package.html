@@ -84,6 +84,20 @@
       </span>
       </h4>
       <p class="comment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.optimization.BackPropogation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BackPropogationextendsRegularizedOptimizer[Int,io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]]"></a>
+      <a id="BackPropogation:BackPropogation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BackPropogation.html"><span class="name">BackPropogation</span></a><span class="result"> extends <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <a href="../models/neuralnets/FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of the standard back pro-pogation with momentum
+using the &quot;generalized delta rule&quot;.</p>
     </li><li name="io.github.mandar2812.dynaml.optimization.BasicUpdater" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="BasicUpdater[P]extendsSerializable"></a>
       <a id="BasicUpdater[P]:BasicUpdater[P]"></a>
@@ -97,6 +111,20 @@
       </span>
       </h4>
       
+    </li><li name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CommitteeModelSolverextendsRegularizedOptimizer[Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Stream[(breeze.linalg.DenseVector[Double],Double)]]"></a>
+      <a id="CommitteeModelSolver:CommitteeModelSolver"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CommitteeModelSolver.html"><span class="name">CommitteeModelSolver</span></a><span class="result"> extends <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Solves the optimization problem pertaining
+to the weights of a committee model.</p>
     </li><li name="io.github.mandar2812.dynaml.optimization.ConjugateGradient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ConjugateGradientextendsRegularizedOptimizer[Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Iterable[io.github.mandar2812.dynaml.graphutils.CausalEdge]]"></a>
       <a id="ConjugateGradient:ConjugateGradient"></a>
@@ -270,6 +298,19 @@ spark RDD
       </span>
       </h4>
       <p class="comment cmt">Updater for L1 regularized problems.</p>
+    </li><li name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LSSVMLinearSolverextendsRegularizedOptimizer[Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]"></a>
+      <a id="LSSVMLinearSolver:LSSVMLinearSolver"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LSSVMLinearSolver.html"><span class="name">LSSVMLinearSolver</span></a><span class="result"> extends <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Created by mandar on 9/2/16.</p>
     </li><li name="io.github.mandar2812.dynaml.optimization.LeastSquaresGradient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LeastSquaresGradientextendsGradient"></a>
       <a id="LeastSquaresGradient:LeastSquaresGradient"></a>

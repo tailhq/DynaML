@@ -48,7 +48,7 @@ vector inputs and a singular scalar output.
           e.g  1) I = Double when implementing GP time series
                2) I = DenseVector when implementing GP regression</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a>, <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a>, <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="GPNarModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarModel">GPNarModel</a>, <a href="GPNarXModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarXModel">GPNarXModel</a>, <a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <a href="GPTimeSeries.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries">GPTimeSeries</a></div>
@@ -567,6 +567,23 @@ before being used for further processing.</p></div><dl class="attributes block">
       </h4>
       <p class="shortcomment cmt">Cache the training kernel and noise matrices
 for fast access in future predictions.</p>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(point:I):Y"></a>
+      <a id="predict(I):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Predict the value of the
+target variable given a
+point.</p><div class="fullcomment"><div class="comment cmt"><p>Predict the value of the
+target variable given a
+point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#predictionWithErrorBars" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predictionWithErrorBars[U&lt;:Seq[I]](testData:U,sigma:Int):Seq[(I,Double,Double,Double)]"></a>
       <a id="predictionWithErrorBars[U&lt;:Seq[I]](U,Int):Seq[(I,Double,Double,Double)]"></a>
@@ -746,7 +763,7 @@ kernels.</p>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">
               <h3>Inherited from <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.Model">
-              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>]</h3>
+              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
