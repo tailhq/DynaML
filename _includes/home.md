@@ -1,14 +1,52 @@
 
 [![Build Status](https://travis-ci.org/mandar2812/DynaML.svg?branch=branch-1.0)](https://travis-ci.org/mandar2812/DynaML)
 
-Aim
-============
+What is DynaML?
+=================
+DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows.
 
-DynaML is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.
+[[images/dynaml.png]]
 
-The aim is to build a robust set of abstract classes and interfaces, which can be extended easily to implement advanced models for small and large scale applications. But the library can also be used as an educational/research tool for multi scale data analysis. 
+DynaML uses the newly minted [Wisp](https://github.com/quantifind/wisp) plotting library to generate aesthetic charts of common model validation metrics.
 
-Currently DynaML has implementations of Least Squares Support Vector Machine (LS-SVM) for binary classification and regression. For further background consider [Wikipedia](https://en.wikipedia.org/wiki/Least_squares_support_vector_machine) or the [book](http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511).   
+[[images/plots.png]]
+
+Motivation behind DynaML
+=================
+
+DynaML was born out of the need to have a performant, extensible and easy to use Machine Learning research environment. Scala was a natural choice for these requirements due to its sprawling data science ecosystem (i.e. [Apache Spark](http://spark.apache.org/)), its functional object-oriented duality and its interoperability with the Java Virtual Machine.
+
+Current status/Road ahead
+=================
+
+DynaML is a fledgling open source project that is in a phase of rapid expansion. Currently it supports.
+
+* Regression with kernel based Dual LS-SVM
+* Regression with Gaussian Processes
+* Feed forward Neural Networks
+* Committee Models
+  - Neural Committee Models
+  - Gaussian Process Committee Models
+* Model Learning and Optimization
+  - Gradient Descent
+  - Conjugate Gradient
+  - Committee Model Solver
+  - Back propogation with momentum
+  - LSSVM linear solver
+* Model tuning
+  * Grid Search
+  * Maximum Likelihood (ML-II)
+  * Coupled Simulated Annealing
+* Model validation metrics (RMSE, Area under ROC)
+* Entropy based data subset selection
+* Data Pipes for configurable workflows
+
+Going ahead we aim to introduce (but not limit to)
+
+* Sampling based Bayesian models
+* Large scale committee models ([Apache Spark](http://spark.apache.org/) RDD based implementations)
+* GPU support
+
 
 
 Documentation
