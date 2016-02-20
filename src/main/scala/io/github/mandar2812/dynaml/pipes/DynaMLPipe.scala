@@ -20,12 +20,46 @@ object DynaMLPipe {
 
   val logger = Logger.getLogger(this.getClass)
 
+  /**
+    * Data pipe which takes a file name/path as a
+    * [[String]] and returns a [[Stream]] of [[String]].
+    * */
   val fileToStream = DataPipe(utils.textFileToStream _)
 
+  /**
+    * Writes a [[Stream]] of [[String]] to
+    * a file.
+    *
+    * Usage: DynaMLPipe.streamToFile("abc.csv")
+    * */
+  val streamToFile = (fileName: String) => DataPipe(utils.writeToFile(fileName) _)
+
+  /**
+    * Data pipe to replace all white spaces in a [[Stream]]
+    * of [[String]] with the comma character.
+    * */
   val replaceWhiteSpaces = DataPipe((s: Stream[String]) => s.map(utils.replace("\\s+")(",")))
 
+  /**
+    * Trim white spaces from each line in a [[Stream]]
+    * of [[String]]
+    * */
   val trimLines = DataPipe((s: Stream[String]) => s.map(_.trim()))
 
+  /**
+    * This pipe assumes its input to be of the form
+    * "YYYY,Day,Hour,Value"
+    *
+    * It takes as input a function (TFunc) which
+    * converts a [[Tuple3]] into a single "timestamp" like value.
+    *
+    * The pipe processes its data source line by line
+    * and outputs a [[Tuple2]] in the following format.
+    *
+    * (Timestamp,Value)
+    *
+    * Usage: DynaMLPipe.extractTimeSeries(TFunc)
+    * */
   val extractTimeSeries = (Tfunc: (Double, Double, Double) => Double) =>
     DataPipe((lines: Stream[String]) => lines.map{line =>
     val splits = line.split(",")
@@ -33,6 +67,12 @@ object DynaMLPipe {
     (timestamp, splits(3).toDouble)
   })
 
+  /**
+    * This pipe is exactly similar to [[DynaMLPipe.extractTimeSeries]],
+    * with one key difference, it returns a [[Tuple2]] like
+    * (Timestamp, FeatureVector), where FeatureVector is
+    * a Vector of values.
+    * */
   val extractTimeSeriesVec = (Tfunc: (Double, Double, Double) => Double) =>
     DataPipe((lines: Stream[String]) => lines.map{line =>
       val splits = line.split(",")
@@ -41,6 +81,26 @@ object DynaMLPipe {
       (timestamp, feat)
     })
 
+  /**
+    * Inorder to generate features for auto-regressive models,
+    * one needs to construct sliding windows in time. This function
+    * takes two parameters
+    *
+    * deltaT: the auto-regressive order
+    * timelag: the time lag after which the windowing is conducted.
+    *
+    * E.g
+    *
+    * Let deltaT = 2 and timelag = 1
+    *
+    * This pipe will take stream data of the form
+    * (t, Value_t)
+    *
+    * and output a stream which looks like
+    *
+    * (t, Vector(Value_t-2, Value_t-3))
+    *
+    * */
   val deltaOperation = (deltaT: Int, timelag: Int) =>
     DataPipe((lines: Stream[(Double, Double)]) =>
       lines.toList.sliding(deltaT+timelag+1).map((history) => {
@@ -48,6 +108,9 @@ object DynaMLPipe {
         (features, history.last._2)
       }).toStream)
 
+  /**
+    * The vector version of [[DynaMLPipe.deltaOperation]]
+    * */
   val deltaOperationVec = (deltaT: Int) =>
     DataPipe((lines: Stream[(Double, DenseVector[Double])]) =>
       lines.toList.sliding(deltaT+1).map((history) => {
@@ -65,13 +128,33 @@ object DynaMLPipe {
         (features, history.last._2(0))
       }).toStream)
 
+  /**
+    * From a [[Stream]] of [[String]] remove all records
+    * which contain missing values, this pipe should be applied
+    * after the application of [[DynaMLPipe.extractTrainingFeatures]].
+    * */
   val removeMissingLines = StreamDataPipe((line: String) => !line.contains(",,"))
 
+  /**
+    * Take each line which is a comma separated string and extract
+    * all but the last element into a feature vector and leave the last
+    * element as the "target" value.
+    *
+    * This pipe outputs data in a [[Stream]] of [[Tuple2]] in the following form
+    *
+    * (Vector(features), value)
+    * */
   val splitFeaturesAndTargets = StreamDataPipe((line: String) => {
     val split = line.split(",")
     (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
   })
 
+  /**
+    * Perform gaussian normalization on a data stream which
+    * is a [[Tuple2]] of the form.
+    *
+    * (Stream(training data), Stream(test data))
+    * */
   val gaussianStandardization =
     DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
       Stream[(DenseVector[Double], Double)])) => {
@@ -95,16 +178,34 @@ object DynaMLPipe {
         trainTest._2.map(normalizationFunc)), (mean, stdDev))
     })
 
+  /**
+    * Extract a subset of the data into a [[Tuple2]] which
+    * can be used as a training, test combo for model learning and evaluation.
+    *
+    * Usage: DynaMLPipe.splitTrainingTest(num_training, num_test)
+    * */
   val splitTrainingTest = (num_training: Int, num_test: Int) =>
     DataPipe((data: (Stream[(DenseVector[Double], Double)],
     Stream[(DenseVector[Double], Double)])) => {
     (data._1.take(num_training), data._2.takeRight(num_test))
   })
 
+  /**
+    * Extract a subset of columns from a [[Stream]] of comma separated [[String]]
+    * also replace any missing value strings with the empty string.
+    *
+    * Usage: DynaMLPipe.extractTrainingFeatures(List(1,2,3), Map(1 -> "N.A.", 2 -> "NA", 3 -> "na"))
+    * */
   val extractTrainingFeatures =
     (columns: List[Int], m: Map[Int, String]) => DataPipe((l: Stream[String]) =>
     utils.extractColumns(l, ",", columns, m))
 
+  /**
+    * Takes a base pipe and creates a parallel pipe by duplicating it.
+    *
+    * @param pipe The base data pipe
+    * @return a [[ParallelPipe]] object.
+    * */
   def duplicate[Source, Destination](pipe: DataPipe[Source, Destination]) =
     DataPipe(pipe, pipe)
 
