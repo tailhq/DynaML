@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Documentation
+title: Quick Start
 ---
 
 Installation
@@ -12,9 +12,3 @@ Getting Started
 -----
 
 {% include intro.md %}
-
-
-API Docs
------
-
-The API Scala docs can be found at the following [location]({{site.url}}/target/site/scaladocs/index.html#package).

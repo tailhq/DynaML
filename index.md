@@ -56,4 +56,4 @@ Going ahead we aim to introduce (but not limit to)
 
 Documentation
 =============
-You can refer to the project [documentation]({{site.url}}/documentation) for getting started with DynaML. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
+You can refer to the project [wiki](https://github.com/mandar2812/DynaML/wiki). Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
