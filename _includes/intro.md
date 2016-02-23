@@ -1,99 +1,38 @@
 
-The `data/` directory contains a few sample data sets, and the root directory also has example scripts which can be executed in the shell.
+The `data/` directory contains a few data sets, which are used by the programs in the `examples/` directory. Lets run a Gaussian Process (GP) regression model on the synthetic 'delve' data set.
 
-First we create a linear classification model on a csv data set. We will assume that the last column in each line of the file is the target value, and we build an LS-SVM model.
 
-{% highlight scala %}
-val config = Map("file" -> "data/ripley.csv", "delim" -> ",", "head" -> "false", "task" -> "classification")
-val model = LSSVMModel(config)
-{% endhighlight%}
 
-We can now (optionally) add a Kernel on the model to create a generalized linear Bayesian model.
-{% highlight scala %}
-val rbf = new RBFKernel(1.025)
-model.applyKernel(rbf)
-{% endhighlight %}
+```
+DynaML>TestGPDelve("RBF", 2.0, 1.0, 500, 1000)
+Feb 23, 2016 6:35:08 PM com.github.fommil.jni.JniLoader liberalLoad
+INFO: successfully loaded /tmp/jniloader4173849050766409147netlib-native_system-linux-x86_64.so
+16/02/23 18:35:09 INFO GPRegression: Generating predictions for test set
+16/02/23 18:35:09 INFO GPRegression: Calculating posterior predictive distribution
+16/02/23 18:35:09 INFO SVMKernel$: Constructing kernel matrix.
+16/02/23 18:35:10 INFO SVMKernel$: Dimension: 500 x 500
+16/02/23 18:35:10 INFO SVMKernel$: Constructing kernel matrix.
+16/02/23 18:35:13 INFO SVMKernel$: Dimension: 1000 x 1000
+16/02/23 18:35:13 INFO SVMKernel$: Constructing cross kernel matrix.
+16/02/23 18:35:13 INFO SVMKernel$: Dimension: 500 x 1000
+Feb 23, 2016 6:35:15 PM com.github.fommil.jni.JniLoader load
+INFO: already loaded netlib-native_system-linux-x86_64.so
+16/02/23 18:35:15 INFO GPRegression: Generating error bars
+16/02/23 18:35:15 INFO RegressionMetrics: Regression Model Performance
+16/02/23 18:35:15 INFO RegressionMetrics: ============================
+16/02/23 18:35:15 INFO RegressionMetrics: MAE: 0.832018817808599
+16/02/23 18:35:15 INFO RegressionMetrics: RMSE: 1.2904097720941374
+16/02/23 18:35:15 INFO RegressionMetrics: RMSLE: 0.10885967880476728
+16/02/23 18:35:15 INFO RegressionMetrics: R^2: 0.9339831074509592
+16/02/23 18:35:15 INFO RegressionMetrics: Corr. Coefficient: 0.9731513401331606
+16/02/23 18:35:15 INFO RegressionMetrics: Model Yield: 0.8073520083122128
+16/02/23 18:35:15 INFO RegressionMetrics: Std Dev of Residuals: 1.270213452763595
+16/02/23 18:35:15 INFO RegressionMetrics: Generating Plot of Residuals
+16/02/23 18:35:15 INFO RegressionMetrics: Generating plot of residuals vs labels
 
-{% highlight text %}
-15/08/03 19:07:42 INFO GreedyEntropySelector$: Returning final prototype set
-15/08/03 19:07:42 INFO SVMKernel$: Constructing key-value representation of kernel matrix.
-15/08/03 19:07:42 INFO SVMKernel$: Dimension: 13 x 13
-15/08/03 19:07:42 INFO SVMKernelMatrix: Eigenvalue decomposition of the kernel matrix using JBlas.
-15/08/03 19:07:42 INFO SVMKernelMatrix: Eigenvalue stats: 0.09104374173019622 =< lambda =< 3.110068839504519
-15/08/03 19:07:42 INFO LSSVMModel: Applying Feature map to data set
-15/08/03 19:07:42 INFO LSSVMModel: DONE: Applying Feature map to data set
-DynaML>
-{% endhighlight %}
 
-Now we can solve the optimization problem posed by the LS-SVM in the parameter space. Since the LS-SVM problem is equivalent to ridge regression, we have to specify a regularization constant.
+```
 
-{% highlight scala %}
-model.setRegParam(1.5).learn
-{% endhighlight %}
+In this example `TestGPDelve` we train a GP model based on the RBF Kernel with its bandwidth/length scale set to `2.0` and the noise level set to `1.0`, we use 500 input output patterns to train and test on an independent sample of 1000 data points. Apart from printing a bunch of evaluation metrics in the console DynaML also generates Javascript plots using Wisp in the browser.
 
-We can now predict the value of the target variable given a new point consisting of a Vector of features using `model.predict()`.
-
-Evaluating models is easy in DynaML. You can create an evaluation object as follows. 
-
-{% highlight scala %}
-val configtest = Map("file" -> "data/ripleytest.csv", "delim" -> ",", "head" -> "false")
-val met = model.evaluate(configtest)
-met.print
-{% endhighlight %}
-
-The object `met` has a `print()` method which will dump some performance metrics in the shell. But you can also generate plots by using the `generatePlots()` method.
-
-{% highlight text %}
-15/08/03 19:08:40 INFO BinaryClassificationMetrics: Classification Model Performance
-15/08/03 19:08:40 INFO BinaryClassificationMetrics: ============================
-15/08/03 19:08:40 INFO BinaryClassificationMetrics: Accuracy: 0.6172839506172839
-15/08/03 19:08:40 INFO BinaryClassificationMetrics: Area under ROC: 0.2019607843137254
-{% endhighlight %}
-
-{% highlight scala %}
-met.generatePlots
-{% endhighlight %}
-
-![Plots](public/Screenshot.png)
-
-Although kernel based models allow great flexibility in modeling non linear behavior in data, they are highly sensitive to the values of their hyper-parameters. For example if we use a Radial Basis Function (RBF) Kernel, it is a non trivial problem to find the best values of the kernel bandwidth and the regularization constant.
-
-In order to find the best hyper-parameters for a general kernel based supervised learning model, we use methods in gradient free global optimization. This is relevant because the cost (objective) function for the hyper-parameters is not smooth in general. In fact in most common scenarios the objective function is defined in terms of some kind of cross validation performance.
-
-DynaML has a robust global optimization API, currently Coupled Simulated Annealing and Grid Search algorithms are implemented, the API in the package ```org.kuleven.esat.optimization``` can be extended to implement any general gradient or gradient free optimization methods.
-
-Lets tune an RBF kernel on the Ripley data.
-
-{% highlight scala %}
-
-import com.tinkerpop.blueprints.Graph
-import com.tinkerpop.frames.FramedGraph
-import io.github.mandar2812.dynaml.graphutils.CausalEdge
-val (optModel, optConfig) = KernelizedModel.getOptimizedModel[FramedGraph[Graph],
-Iterable[CausalEdge], model.type](model, "csa",
-"RBF", 13, 7, 0.3, true)
-{% endhighlight %}
-
-We see a long list of logs which end in something like the snippet below, the Coupled Simulated Annealing model, gives us a set of hyper-parameters and their values. 
-{% highlight text %}
-optModel: io.github.mandar2812.dynaml.models.svm.LSSVMModel = io.github.mandar2812.dynaml.models.svm.LSSVMModel@3662a98a
-optConfig: scala.collection.immutable.Map[String,Double] = Map(bandwidth -> 3.824956165264642, RegParam -> 12.303758608075587)
-{% endhighlight%}
-
-To inspect the performance of this kernel model on an independent test set, we can use the ```model.evaluate()``` function. But before that we must train this 'optimized' kernel model on the training set.
-
-{% highlight scala %}
-optModel.setMaxIterations(2).learn()
-val met = optModel.evaluate(configtest)
-met.print()
-met.generatePlots()
-{% endhighlight %}
-
-And the evaluation results follow ...
-
-{% highlight text %}
-15/08/03 19:10:13 INFO BinaryClassificationMetrics: Classification Model Performance
-15/08/03 19:10:13 INFO BinaryClassificationMetrics: ============================
-15/08/03 19:10:13 INFO BinaryClassificationMetrics: Accuracy: 0.8765432098765432
-15/08/03 19:10:13 INFO BinaryClassificationMetrics: Area under ROC: 0.9143790849673203
-{% endhighlight %}
+![plots1](https://cloud.githubusercontent.com/assets/1389553/13259040/ff9bfa84-da55-11e5-9325-f58a73ebf532.png)
