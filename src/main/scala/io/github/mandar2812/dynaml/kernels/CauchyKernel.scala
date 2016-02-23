@@ -3,9 +3,8 @@ package io.github.mandar2812.dynaml.kernels
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
 
 /**
- * @author mandar2812
  * Cauchy Kernel given by the expression
- * K(x,y) = 1/(1 + ||x-y||**2/sigma**2)
+ * K(x,y) = 1/(1 + ||x-y||<sup>2</sup>/sigma<sup>2</sup>)
  */
 class CauchyKernel(si: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]

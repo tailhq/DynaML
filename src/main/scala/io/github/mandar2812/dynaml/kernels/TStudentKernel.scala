@@ -3,7 +3,8 @@ package io.github.mandar2812.dynaml.kernels
 import breeze.linalg.{norm, DenseVector, DenseMatrix}
 
 /**
-  * Created by mandar on 23/11/15.
+  * T-Student Kernel
+  * K(x,y) = 1/(1 + -||x - y||<sup>2d</sup>)
   */
 class TStudentKernel(private var d: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]

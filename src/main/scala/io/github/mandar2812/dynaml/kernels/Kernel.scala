@@ -61,6 +61,13 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
   def gradient(x: Index, y: Index): Map[String, Double] = hyper_parameters.map((_, 0.0)).toMap
 
+  /**
+    *  Create composite kernel k = k<sub>1</sub> + k<sub>2</sub>
+    *
+    *  @param otherKernel The kernel to add to the current one.
+    *  @return The kernel k defined above.
+    *
+    * */
   def +[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] = {
 
     val firstKern = this
@@ -84,6 +91,14 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
     }
   }
 
+
+  /**
+    *  Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
+    *
+    *  @param otherKernel The kernel to add to the current one.
+    *  @return The kernel k defined above.
+    *
+    * */
   def *[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] = {
 
     val firstKern = this

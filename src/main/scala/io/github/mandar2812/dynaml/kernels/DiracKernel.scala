@@ -3,7 +3,11 @@ package io.github.mandar2812.dynaml.kernels
 import breeze.linalg.{norm, DenseVector, DenseMatrix}
 
 /**
-  * Created by mandar on 1/2/16.
+  * Dirac kernel is equivalent to the
+  * classical Dirac delta function scaled by
+  * a hyper-parameter called the noise level.
+  *
+  * K(x,y) = noise*DiracDelta(x,y)
   */
 class DiracKernel(private var noiseLevel: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]

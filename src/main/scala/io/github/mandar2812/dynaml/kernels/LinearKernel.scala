@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.kernels
 import breeze.linalg.{DenseVector, DenseMatrix}
 
 /**
- * Created by mandar on 18/8/15.
+ * 18/8/15.
  */
 class LinearKernel(private var offset: Double = 0.0)
   extends SVMKernel[DenseMatrix[Double]]
