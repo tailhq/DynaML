@@ -4,7 +4,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
  * Standard Polynomial SVM Kernel
- * of the form K(Xi,Xj) = (Xi^T * Xj + 1.0)^r
+ * of the form K(x,y) = (x<sup>T</sup> . y + 1.0)<sup>r</sup>
  */
 class PolynomialKernel(
     private var degree: Int = 2,

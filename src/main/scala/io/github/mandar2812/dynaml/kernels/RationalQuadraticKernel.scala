@@ -3,10 +3,9 @@ package io.github.mandar2812.dynaml.kernels
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
 
 /**
- * @author mandar2812
- * Rational Quadratic Kernel given by the expression
- * K(x,y) = 1 - ||x-y||**2/(||x-y||**2 + c**2)
- */
+  * Rational Quadratic Kernel given by the expression
+  * K(x,y) = 1 - ||x-y||<sup>2</sup>/(||x-y||<sup>2</sup> + c<sup>2</sup>)
+  * */
 class RationalQuadraticKernel(si: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
   with LocalSVMKernel[DenseVector[Double]]

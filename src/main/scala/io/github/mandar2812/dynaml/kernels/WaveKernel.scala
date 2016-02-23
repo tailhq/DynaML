@@ -5,7 +5,7 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
 /**
  * @author mandar2812
  * Wave Kernel given by the expression
- * K(x,y) = sin(||x-y||**2/theta)*(theta/||x-y||**2)
+ * K(x,y) = sin(||x-y||<sup>2</sup>/theta) &#215;(theta/||x-y||<sup>2</sup>)
  */
 class WaveKernel(th: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]

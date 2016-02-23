@@ -44,7 +44,7 @@ class FBMCovFunction(private var hurst: Double)
   * its covariance function generalized to multivariate
   * index sets is.
   *
-  * K(x,y) = 1/2*(||x||<sup>2H</sup> + ||y||<sup>2H</sup> - ||x-y||<sup>2H</sup>)
+  * K(x,y) = 1/2 &#215; (||x||<sup>2H</sup> + ||y||<sup>2H</sup> - ||x-y||<sup>2H</sup>)
   *
   * */
 class FBMKernel(private var hurst: Double = 0.75)

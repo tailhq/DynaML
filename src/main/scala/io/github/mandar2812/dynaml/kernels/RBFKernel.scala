@@ -4,7 +4,7 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
 
 /**
  * RBF Kernel of the form
- * K(x,y) = exp(-||x - y||<sup>2</sup>/2*l<sup>2</sup>)
+ * K(x,y) = exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
  */
 
 class RBFKernel(private var bandwidth: Double = 1.0)
@@ -80,7 +80,7 @@ class RBFKernel(private var bandwidth: Double = 1.0)
 
 /**
   * Squared Exponential Kernel is a generalized RBF Kernel
-  * K(x,y) = h<sup><2/sup>*exp(-||x - y||<sup>2</sup>/2*l<sup>2</sup>)
+  * K(x,y) = h<sup>2</sup>*exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
   */
 class SEKernel(private var band: Double = 1.0, private var h: Double = 2.0)
   extends RBFKernel(band) {
@@ -103,7 +103,7 @@ class SEKernel(private var band: Double = 1.0, private var h: Double = 2.0)
   * RBF Kernel, its definition is based on the so called Mahalanobis
   * distance between two vectors x and y.
   *
-  * K(x,y) = h*exp(-(x - y)<sup>T</sup>*M*(x - y))
+  * K(x,y) = h*exp(-(x - y)<sup>T</sup> . M . (x - y))
   *
   * In this implementation the symmetric
   * positive semi-definite matrix M is assumed to
