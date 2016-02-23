@@ -16,3 +16,7 @@ trait NeuralGraph[B] {
   val num_outputs: Int
   val forwardPass: (DenseVector[Double]) => DenseVector[Double]
 }
+
+object NeuralGraph {
+
+}

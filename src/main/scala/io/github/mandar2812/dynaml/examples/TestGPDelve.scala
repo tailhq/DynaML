@@ -8,7 +8,7 @@ import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 
 /**
-  * Created by mandar on 11/1/16.
+  * Example: Gaussian Process regression on fried delve data.
   */
 object TestGPDelve {
   def apply (kern: String = "RBF",

@@ -94,6 +94,20 @@ object TestOmniAR {
         metrics.print()
         metrics.generatePlots()
 
+        val incrementsPipe =
+          DataPipe(
+            (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
+              res.map(i => (i._3 - i._1(i._1.length-1),
+                i._2 - i._1(i._1.length-1))).toList) > deNormalize
+
+        val increments = incrementsPipe.run(res)
+
+        val incrementMetrics = new RegressionMetrics(increments, increments.length)
+
+        logger.info("Results for Prediction of increments")
+        incrementMetrics.print()
+        incrementMetrics.generatePlots()
+
         //Plotting time series prediction comparisons
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
         hold()
@@ -101,6 +115,11 @@ object TestOmniAR {
         legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
         unhold()
 
+        line((1 to increments.length).toList, increments.map(_._2))
+        hold()
+        line((1 to increments.length).toList, increments.map(_._1))
+        legend(List("Increment Time Series", "Predicted Increment Time Series (one hour ahead)"))
+        unhold()
         //Now test the Model Predicted Output and its performance.
         val mpo = model.modelPredictedOutput(stepPred) _
         val testData = trainTest._1._2

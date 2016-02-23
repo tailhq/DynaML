@@ -27,9 +27,7 @@ import scala.util.Random
   *            3) "linear"
   *            4) "recLinear"
   * */
-class FFNeuralGraph(baseGraph: FramedGraph[Graph],
-                    hidden: Int = 1,
-                    act: List[String])
+class FFNeuralGraph(baseGraph: FramedGraph[Graph], act: List[String], hidden: Int = 1)
   extends NeuralGraph[FramedGraph[Graph]]{
 
   override protected val g = baseGraph
@@ -209,6 +207,6 @@ object FFNeuralGraph {
       }
     })
 
-    new FFNeuralGraph(fg, hidden_layers, activations)
+    new FFNeuralGraph(fg, activations, hidden_layers)
   }
 }

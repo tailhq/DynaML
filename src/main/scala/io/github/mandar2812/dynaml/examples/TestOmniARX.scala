@@ -10,6 +10,7 @@ import io.github.mandar2812.dynaml.models.gp.{GPNarXModel, GPRegression}
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
 import com.quantifind.charts.Highcharts._
+import org.apache.log4j.Logger
 
 /**
   * @author mandar2812 on 22/11/15.
@@ -47,6 +48,9 @@ object TestOmniARX {
                     column: Int = 40, ex: List[Int] = List(24), grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {
+
+    val logger = Logger.getLogger(this.getClass)
+
     //Load Omni data into a stream
     //Extract the time and Dst values
     //separate data into training and test
@@ -104,6 +108,26 @@ object TestOmniARX {
         val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
         val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
 
+
+        val incrementsPipe =
+          DataPipe(
+            (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
+              res.map(i => (i._3 - i._1(i._1.length-1),
+                i._2 - i._1(i._1.length-1))).toList) > deNormalize
+
+        val increments = incrementsPipe.run(res)
+
+        val incrementMetrics = new RegressionMetrics(increments, increments.length)
+
+        logger.info("Results for Prediction of increments")
+        incrementMetrics.print()
+        incrementMetrics.generatePlots()
+
+        line((1 to increments.length).toList, increments.map(_._2))
+        hold()
+        line((1 to increments.length).toList, increments.map(_._1))
+        legend(List("Increment Time Series", "Predicted Increment Time Series (one hour ahead)"))
+        unhold()
 
         Seq(
           Seq(year, yearTest, deltaT, ex.length, 1, num_training, num_test,
