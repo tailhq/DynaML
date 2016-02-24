@@ -112,8 +112,8 @@ object TestOmniARX {
         val incrementsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3 - i._1(i._1.length-1),
-                i._2 - i._1(i._1.length-1))).toList) > deNormalize
+              res.map(i => (i._3 - i._1(deltaT-1),
+                i._2 - i._1(deltaT-1))).toList) > deNormalize
 
         val increments = incrementsPipe.run(res)
 
