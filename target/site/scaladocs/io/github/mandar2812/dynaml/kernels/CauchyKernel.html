@@ -39,7 +39,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Cauchy Kernel given by the expression
+K(x,y) = 1/(1 + ||x-y||<sup>2</sup>/sigma<sup>2</sup>)
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]], <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -152,7 +154,9 @@
         <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="T">T &lt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.*.T">T</span></span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
+      <p class="shortcomment cmt"> Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
+</sub></sub></p><div class="fullcomment"><div class="comment cmt"><p> Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
+</p></div><dl class="paramcmts block"><dt class="param">otherKernel</dt><dd class="cmt"><p>The kernel to add to the current one.</p></dd><dt>returns</dt><dd class="cmt"><p>The kernel k defined above.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="+[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]"></a>
       <a id="+[T&lt;:LocalScalarKernel[DenseVector[Double]]](T):CompositeCovariance[DenseVector[Double]]"></a>
@@ -165,7 +169,9 @@
         <span title="gt4s: $plus" class="name">+</span><span class="tparams">[<span name="T">T &lt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.+.T">T</span></span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
+      <p class="shortcomment cmt"> Create composite kernel k = k<sub>1</sub> + k<sub>2</sub>
+</sub></sub></p><div class="fullcomment"><div class="comment cmt"><p> Create composite kernel k = k<sub>1</sub> + k<sub>2</sub>
+</p></div><dl class="paramcmts block"><dt class="param">otherKernel</dt><dd class="cmt"><p>The kernel to add to the current one.</p></dd><dt>returns</dt><dd class="cmt"><p>The kernel k defined above.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:AnyRef):Boolean"></a>
       <a id="==(AnyRef):Boolean"></a>

@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>FFNeuralGraph - DynaML 1.2 API - io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph</title>
-          <meta name="description" content="FFNeuralGraph - DynaML 1.2 API - io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph" />
-          <meta name="keywords" content="FFNeuralGraph DynaML 1.2 API io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph" />
+          <title>AutoEncoder - DynaML 1.2 API - io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder</title>
+          <meta name="description" content="AutoEncoder - DynaML 1.2 API - io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder" />
+          <meta name="keywords" content="AutoEncoder DynaML 1.2 API io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph';
+            var hash = 'io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,26 +24,25 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="FFNeuralGraph$.html" title="Go to companion"><img src="../../../../../../lib/class_to_object_big.png" /></a>
+        <img src="../../../../../../lib/trait_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="io">io</a>.<a href="../../../../package.html" class="extype" name="io.github">github</a>.<a href="../../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets">neuralnets</a></p>
-        <h1><a href="FFNeuralGraph$.html" title="Go to companion">FFNeuralGraph</a></h1>
+        <h1>AutoEncoder</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">FFNeuralGraph</span><span class="result"> extends <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]]</span>
+        <span class="name">AutoEncoder</span><span class="tparams">[<span name="Source">Source</span>, <span name="Data">Data</span>]</span><span class="result"> extends <a href="../../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>]]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents the underlying graph of a
-feed-forward neural network.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by mandar on 23/2/16.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>]], <a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Source">Source</span>, <a href="FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>]], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -61,7 +60,7 @@ feed-forward neural network.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph"><span>FFNeuralGraph</span></li><li class="in" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph"><span>NeuralGraph</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder"><span>AutoEncoder</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.ModelPipe"><span>ModelPipe</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.DataPipe"><span>DataPipe</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -79,41 +78,43 @@ feed-forward neural network.
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(baseGraph:com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph],act:List[String],hidden:Int):io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph"></a>
-      <a id="&lt;init&gt;:FFNeuralGraph"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">FFNeuralGraph</span><span class="params">(<span name="baseGraph">baseGraph: <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]</span>, <span name="act">act: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="hidden">hidden: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">baseGraph</dt><dd class="cmt"><p>The base graph object, <a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a> encapsulates
-                 an existing graph object of type <span class="extype" name="FramedGraph">FramedGraph</span> and builds
-                 upon it by defining a set of behaviours expected from Neural Network
-                 graphs
-</p></dd><dt class="param">act</dt><dd class="cmt"><p>A list of Strings containing the activations for each layer.
-           Options for activation functions are:
-           1) &quot;logsig&quot; or &quot;sigmoid&quot;
-           2) &quot;tansig&quot;
-           3) &quot;linear&quot;
-           4) &quot;recLinear&quot;
-</p></dd><dt class="param">hidden</dt><dd class="cmt"><p>The number of hidden layers in the network.
-</p></dd></dl></div>
-    </li></ol>
-            </div>
-
         
 
         
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.pipes.ModelPipe#preProcess" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="preProcess:Source=&gt;T"></a>
+      <a id="preProcess:(Source)⇒Data"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">preProcess</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Source">Source</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.pipes.ModelPipe#run" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="run(data:Source):M"></a>
+      <a id="run(Source):FeedForwardNetwork[Data]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Source">Source</span></span>)</span><span class="result">: <a href="FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a> → <a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -179,19 +180,24 @@ feed-forward neural network.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#activations" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="activations:List[String]"></a>
-      <a id="activations:List[String]"></a>
+    </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;[Further](that:io.github.mandar2812.dynaml.pipes.DataPipe[Destination,Further]):io.github.mandar2812.dynaml.pipes.DataPipe[Source,Further]"></a>
+      <a id="&gt;[Further](DataPipe[FeedForwardNetwork[Data],Further]):DataPipe[Source,Further]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">activations</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<a href="FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>)</span><span class="result">: <a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Represents the composition of two
+pipes, resulting in a third pipe
+Schematically represented as:</p><div class="fullcomment"><div class="comment cmt"><p>Represents the composition of two
+pipes, resulting in a third pipe
+Schematically represented as:</p><p><span class="extype" name="Source">Source</span> -&gt; <span class="extype" name="Destination">Destination</span> :: <span class="extype" name="Destination">Destination</span> -&gt; <span class="extype" name="Further">Further</span> ==
+<span class="extype" name="Source">Source</span> -&gt; <span class="extype" name="Further">Further</span></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -269,35 +275,6 @@ feed-forward neural network.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#forwardPass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forwardPass:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]"></a>
-      <a id="forwardPass:(DenseVector[Double])⇒DenseVector[Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">forwardPass</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Perform a forward pass through the network to
-calculate the predicted output.</p><div class="fullcomment"><div class="comment cmt"><p>Perform a forward pass through the network to
-calculate the predicted output.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a> → <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#g" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="g:com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph]"></a>
-      <a id="g:FramedGraph[Graph]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">g</span><span class="result">: <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a> → <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -311,38 +288,6 @@ calculate the predicted output.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#getLayer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getLayer(layer:Int):Iterable[io.github.mandar2812.dynaml.graphutils.Neuron]"></a>
-      <a id="getLayer(Int):Iterable[Neuron]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getLayer</span><span class="params">(<span name="layer">layer: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[<a href="../../graphutils/Neuron.html" class="extype" name="io.github.mandar2812.dynaml.graphutils.Neuron">Neuron</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Get as a scala <span class="extype" name="Iterable">Iterable</span> the neurons for a particular layer.</p><div class="fullcomment"><div class="comment cmt"><p>Get as a scala <span class="extype" name="Iterable">Iterable</span> the neurons for a particular layer.
-</p></div><dl class="paramcmts block"><dt class="param">layer</dt><dd class="cmt"><p>The layer number, can vary from 0 (input layer)
-             to hidden_layers + 1 (output layer)
-</p></dd><dt>returns</dt><dd class="cmt"><p>The neurons in the particular layer as <span class="extype" name="Neuron">Neuron</span> objects</p></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#getLayerSynapses" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getLayerSynapses(layer:Int):Iterable[io.github.mandar2812.dynaml.graphutils.Synapse]"></a>
-      <a id="getLayerSynapses(Int):Iterable[Synapse]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getLayerSynapses</span><span class="params">(<span name="layer">layer: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[<a href="../../graphutils/Synapse.html" class="extype" name="io.github.mandar2812.dynaml.graphutils.Synapse">Synapse</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Get as a scala <span class="extype" name="Iterable">Iterable</span> the synapses between layer l and l-1.</p><div class="fullcomment"><div class="comment cmt"><p>Get as a scala <span class="extype" name="Iterable">Iterable</span> the synapses between layer l and l-1.
-</p></div><dl class="paramcmts block"><dt class="param">layer</dt><dd class="cmt"><p>The layer number, can vary from 1 (input layer synapses)
-             to hidden_layers + 1 (output layer synapses)
-</p></dd><dt>returns</dt><dd class="cmt"><p>The respective synapses as <span class="extype" name="Synapse">Synapse</span> objects</p></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -356,19 +301,6 @@ calculate the predicted output.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#hidden_layers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="hidden_layers:Int"></a>
-      <a id="hidden_layers:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hidden_layers</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -421,56 +353,6 @@ calculate the predicted output.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#num_inputs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="num_inputs:Int"></a>
-      <a id="num_inputs:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">num_inputs</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a> → <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#num_outputs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="num_outputs:Int"></a>
-      <a id="num_outputs:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">num_outputs</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a> → <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph#predictBatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="predictBatch(procInputs:List[List[Double]]):scala.collection.immutable.Map[Int,scala.collection.immutable.Map[Int,Double]]"></a>
-      <a id="predictBatch(List[List[Double]]):Map[Int,Map[Int,Double]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">predictBatch</span><span class="params">(<span name="procInputs">procInputs: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Perform a forward pass through the network to
-calculate the predicted output for a batch of
-input points.</p><div class="fullcomment"><div class="comment cmt"><p>Perform a forward pass through the network to
-calculate the predicted output for a batch of
-input points.
-</p></div><dl class="paramcmts block"><dt class="param">procInputs</dt><dd class="cmt"><p>The input batch as a List of Lists
-                  where each level of the top level List
-                  represents an input node. On the other hand
-                  each element of the lower level list represents
-                  a particular dimension of a particular data point
-                  in the data set.
-</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -563,8 +445,10 @@ input points.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">
-              <h3>Inherited from <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]]</h3>
+        <div class="parent" name="io.github.mandar2812.dynaml.pipes.ModelPipe">
+              <h3>Inherited from <a href="../../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>]]</h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.DataPipe">
+              <h3>Inherited from <a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Source">Source</span>, <a href="FeedForwardNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder.Data">Data</span>]]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
