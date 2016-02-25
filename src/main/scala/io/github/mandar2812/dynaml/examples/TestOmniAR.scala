@@ -28,12 +28,12 @@ object TestOmniAR {
             column: Int, grid: Int,
             step: Double, globalOpt: String,
             stepSize: Double = 0.05,
-            maxIt: Int = 200): Unit =
+            maxIt: Int = 200, action: String = "test")  =
     runExperiment(year, yeartest, kernel, delta, timeLag, stepAhead, bandwidth, noise,
       num_training, num_test, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
-        "maxIterations" -> maxIt.toString))
+        "maxIterations" -> maxIt.toString), action)
 
   def runExperiment(year: Int = 2006, yearTest:Int = 2007,
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
@@ -43,7 +43,7 @@ object TestOmniAR {
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
-                    opt: Map[String, String]): Seq[Seq[AnyVal]] = {
+                    opt: Map[String, String], action: String = "test"): Seq[Seq[Double]] = {
     //Load Omni data into a stream
     //Extract the time and Dst values
 
@@ -166,17 +166,24 @@ object TestOmniAR {
         legend(List("Time Series", "Predicted Time Series (one hour ahead)",
           "Predicted Time Series ("+stepPred+" hours ahead)"))
         unhold()
-        Seq(
-          Seq(year, yearTest, deltaT, 1, num_training, num_test,
-            metrics.mae, metrics.rmse, metrics.Rsq,
-            metrics.corr, metrics.modelYield,
-            timeObs.toDouble - timeModel.toDouble),
-          Seq(year, yearTest, deltaT, stepPred, num_training, num_test,
-            mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
-            mpoMetrics.corr, mpoMetrics.modelYield,
-            timeObsMPO.toDouble - timeModelMPO.toDouble)
-        )
 
+        action match {
+          case "test" =>
+            Seq(
+              Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
+                1.0, num_training.toDouble, num_test.toDouble,
+                metrics.mae, metrics.rmse, metrics.Rsq,
+                metrics.corr, metrics.modelYield,
+                timeObs.toDouble - timeModel.toDouble),
+              Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
+                stepPred.toDouble, num_training.toDouble, num_test.toDouble,
+                mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
+                mpoMetrics.corr, mpoMetrics.modelYield,
+                timeObsMPO.toDouble - timeModelMPO.toDouble)
+            )
+
+          case "predict" => scoresAndLabels.toSeq.map(i => Seq(i._2, i._1))
+        }
       }
 
     val preProcessPipe = DynaMLPipe.fileToStream >
@@ -204,6 +211,9 @@ object TestOmniAR {
       "data/omni2_"+yearTest+".csv"))
 
   }
+
+
+
 }
 
 object DstARExperiment {

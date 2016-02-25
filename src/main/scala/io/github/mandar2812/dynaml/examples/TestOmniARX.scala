@@ -29,13 +29,13 @@ object TestOmniARX {
             column: Int, exoInputColumns: List[Int] = List(24),
             grid: Int, step: Double, globalOpt: String,
             stepSize: Double = 0.05,
-            maxIt: Int = 200): Unit =
+            maxIt: Int = 200, action: String = "test") =
     runExperiment(year, yeartest, kernel, delta, stepAhead, bandwidth, noise,
       num_training, num_test, column, exoInputColumns,
       grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
-        "maxIterations" -> maxIt.toString))
+        "maxIterations" -> maxIt.toString), action)
 
   def runExperiment(year: Int = 2006, yearTest:Int = 2007,
                     kernel: CovarianceFunction[DenseVector[Double],
@@ -47,7 +47,7 @@ object TestOmniARX {
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, ex: List[Int] = List(24), grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
-                    opt: Map[String, String]): Seq[Seq[AnyVal]] = {
+                    opt: Map[String, String], action: String = "test"): Seq[Seq[Double]] = {
 
     val logger = Logger.getLogger(this.getClass)
 
@@ -129,12 +129,18 @@ object TestOmniARX {
         legend(List("Increment Time Series", "Predicted Increment Time Series (one hour ahead)"))
         unhold()
 
-        Seq(
-          Seq(year, yearTest, deltaT, ex.length, 1, num_training, num_test,
-            metrics.mae, metrics.rmse, metrics.Rsq,
-            metrics.corr, metrics.modelYield,
-            timeObs.toDouble - timeModel.toDouble)
-        )
+        action match {
+          case "test" =>
+            Seq(
+              Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
+                ex.length.toDouble, 1.0, num_training.toDouble, num_test.toDouble,
+                metrics.mae, metrics.rmse, metrics.Rsq,
+                metrics.corr, metrics.modelYield,
+                timeObs.toDouble - timeModel.toDouble)
+            )
+          case "predict" => scoresAndLabels.toSeq.map(i => Seq(i._2, i._1))
+        }
+
 
       }
 
