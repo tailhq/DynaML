@@ -36,7 +36,15 @@ Currently DynaML supports.
 
 Installation
 ============
-Prerequisites: Maven
+
+Prerequisites
+------------
+
+* *nix system (linux or Mac OSX)
+* Maven
+
+Steps
+-------
 
 * Clone this repository
 * Run the following.
