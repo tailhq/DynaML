@@ -3,12 +3,11 @@ layout: page
 title: Quick Start
 ---
 
-Installation
------
+## Installation
+
 
 {% include installation.md %}
 
-Getting Started
------
+## Getting Started
 
 {% include intro.md %}
