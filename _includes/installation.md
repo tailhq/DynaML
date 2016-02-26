@@ -16,8 +16,7 @@ Currently DynaML installs and runs on *nix platforms, though it is possible to b
     </dependency>
   ```
 
-Steps
--------
+### Steps
 
 * Clone this repository
 * Run the following.
