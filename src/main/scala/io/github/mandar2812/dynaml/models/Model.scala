@@ -10,10 +10,21 @@ import io.github.mandar2812.dynaml.optimization._
 import scala.util.Random
 
 /**
- * Basic Higher Level abstraction
- * for Machine Learning models.
- */
+  * Basic Higher Level abstraction
+  * for Machine Learning models.
+  *
+  * @tparam T The type of the training & test data
+  *
+  * @tparam Q The type of a single input pattern
+  *
+  * @tparam R The type of a single output pattern
+  *
+  * */
 trait Model[T, Q, R] {
+
+  /**
+    * The training data
+    * */
   protected val g: T
 
   /**
