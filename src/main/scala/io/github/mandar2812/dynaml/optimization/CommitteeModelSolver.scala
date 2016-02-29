@@ -13,7 +13,7 @@ RegularizedOptimizer[Int, DenseVector[Double],
   /**
     * Solve the convex optimization problem.
     *
-    * min wT.C.w    such that ||w||_1 = 1
+    * min wT.C.w    such that ||w||<sub>1</sub> = 1
     */
   override def optimize(nPoints: Long,
                         ParamOutEdges: Stream[(DenseVector[Double], Double)],

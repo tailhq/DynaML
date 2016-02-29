@@ -76,18 +76,24 @@ object TestOmniAR {
 
         val res = model.test(trainTest._1._2.toSeq)
 
-        val deNormalize = DataPipe((list: List[(Double, Double)]) =>
+        val deNormalize = DataPipe((list: List[(Double, Double, Double, Double)]) =>
+          list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
+            l._2*trainTest._2._2(-1) + trainTest._2._1(-1),
+            l._3*trainTest._2._2(-1) + trainTest._2._1(-1),
+            l._4*trainTest._2._2(-1) + trainTest._2._1(-1))})
+
+        val deNormalize1 = DataPipe((list: List[(Double, Double)]) =>
           list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
             l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
 
         val scoresAndLabelsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2)).toList) > deNormalize
+              res.map(i => (i._3, i._2, i._4, i._5)).toList) > deNormalize
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res)
 
-        val metrics = new RegressionMetrics(scoresAndLabels,
+        val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
           scoresAndLabels.length)
 
 
@@ -97,8 +103,11 @@ object TestOmniAR {
         val incrementsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3 - i._1(i._1.length-1),
-                i._2 - i._1(i._1.length-1))).toList) > deNormalize
+              res.map(i => (i._3, i._2)).toList) >
+             deNormalize1 >
+            DataPipe((list: List[(Double, Double)]) =>
+              list.sliding(2).map(i => (i(1)._1 - i.head._1,
+                i(1)._2 - i.head._2)).toList)
 
         val increments = incrementsPipe.run(res)
 
@@ -112,7 +121,10 @@ object TestOmniAR {
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
         hold()
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
-        legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
+        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._3))
+        hold()
+        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
+        legend(List("Time Series", "Predicted Time Series (one hour ahead)", "Lower Bar", "Higher Bar"))
         unhold()
 
         line((1 to increments.length).toList, increments.map(_._2))
@@ -120,27 +132,58 @@ object TestOmniAR {
         line((1 to increments.length).toList, increments.map(_._1))
         legend(List("Increment Time Series", "Predicted Increment Time Series (one hour ahead)"))
         unhold()
-        //Now test the Model Predicted Output and its performance.
-        val mpo = model.modelPredictedOutput(stepPred) _
-        val testData = trainTest._1._2
+
+        //Model Predicted Output, only in stepPred > 0
+        var mpoRes: Seq[Double] = Seq()
+        if(stepPred > 0) {
+          //Now test the Model Predicted Output and its performance.
+          val mpo = model.modelPredictedOutput(stepPred) _
+          val testData = trainTest._1._2
 
 
-        val predictedOutput:List[Double] = testData.grouped(stepPred).map((partition) => {
-          val preds = mpo(partition.head._1).map(_._1)
-          if(preds.length == partition.length) {
-            preds.toList
-          } else {
-            preds.take(partition.length).toList
-          }
-        }).foldRight(List[Double]())(_++_)
+          val predictedOutput:List[Double] = testData.grouped(stepPred).map((partition) => {
+            val preds = mpo(partition.head._1).map(_._1)
+            if(preds.length == partition.length) {
+              preds.toList
+            } else {
+              preds.take(partition.length).toList
+            }
+          }).foldRight(List[Double]())(_++_)
 
-        val outputs = testData.map(_._2).toList
+          val outputs = testData.map(_._2).toList
 
-        val res2 = predictedOutput zip outputs
-        val scoresAndLabels2 = deNormalize.run(res2.toList)
+          val res2 = predictedOutput zip outputs
+          val scoresAndLabels2 = deNormalize1.run(res2.toList)
 
-        val mpoMetrics = new RegressionMetrics(scoresAndLabels2,
-          scoresAndLabels2.length)
+          val mpoMetrics = new RegressionMetrics(scoresAndLabels2,
+            scoresAndLabels2.length)
+
+          logger.info("Printing Model Predicted Output (MPO) Performance Metrics")
+          mpoMetrics.print()
+
+          val timeObsMPO = scoresAndLabels2.map(_._2).zipWithIndex.min._2
+          val timeModelMPO = scoresAndLabels2.map(_._1).zipWithIndex.min._2
+          logger.info("Timing Error; MPO, "+stepPred+
+            " hours ahead Prediction: "+(timeObsMPO-timeModelMPO))
+
+          mpoMetrics.generatePlots()
+          //Plotting time series prediction comparisons
+          line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
+          hold()
+          line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
+          line((1 to scoresAndLabels2.length).toList, scoresAndLabels2.map(_._1))
+          legend(List("Time Series", "Predicted Time Series (one hour ahead)",
+            "Predicted Time Series ("+stepPred+" hours ahead)"))
+          unhold()
+
+          mpoRes = Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
+            stepPred.toDouble, num_training.toDouble, num_test.toDouble,
+            mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
+            mpoMetrics.corr, mpoMetrics.modelYield,
+            timeObsMPO.toDouble - timeModelMPO.toDouble)
+
+        }
+
 
         logger.info("Printing One Step Ahead (OSA) Performance Metrics")
         metrics.print()
@@ -149,23 +192,8 @@ object TestOmniAR {
         logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
 
 
-        logger.info("Printing Model Predicted Output (MPO) Performance Metrics")
-        mpoMetrics.print()
 
-        val timeObsMPO = scoresAndLabels2.map(_._2).zipWithIndex.min._2
-        val timeModelMPO = scoresAndLabels2.map(_._1).zipWithIndex.min._2
-        logger.info("Timing Error; MPO, "+stepPred+
-          " hours ahead Prediction: "+(timeObsMPO-timeModelMPO))
 
-        mpoMetrics.generatePlots()
-        //Plotting time series prediction comparisons
-        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
-        hold()
-        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
-        line((1 to scoresAndLabels2.length).toList, scoresAndLabels2.map(_._1))
-        legend(List("Time Series", "Predicted Time Series (one hour ahead)",
-          "Predicted Time Series ("+stepPred+" hours ahead)"))
-        unhold()
 
         action match {
           case "test" =>
@@ -175,11 +203,7 @@ object TestOmniAR {
                 metrics.mae, metrics.rmse, metrics.Rsq,
                 metrics.corr, metrics.modelYield,
                 timeObs.toDouble - timeModel.toDouble),
-              Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
-                stepPred.toDouble, num_training.toDouble, num_test.toDouble,
-                mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
-                mpoMetrics.corr, mpoMetrics.modelYield,
-                timeObsMPO.toDouble - timeModelMPO.toDouble)
+              mpoRes
             )
 
           case "predict" => scoresAndLabels.toSeq.map(i => Seq(i._2, i._1))

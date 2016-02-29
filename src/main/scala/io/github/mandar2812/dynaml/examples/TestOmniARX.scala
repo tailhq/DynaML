@@ -81,6 +81,12 @@ object TestOmniARX {
 
         val res = model.test(trainTest._1._2.toSeq)
 
+        val deNormalize1 = DataPipe((list: List[(Double, Double, Double, Double)]) =>
+          list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
+            l._2*trainTest._2._2(-1) + trainTest._2._1(-1),
+            l._3*trainTest._2._2(-1) + trainTest._2._1(-1),
+            l._4*trainTest._2._2(-1) + trainTest._2._1(-1))})
+
         val deNormalize = DataPipe((list: List[(Double, Double)]) =>
           list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
             l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})

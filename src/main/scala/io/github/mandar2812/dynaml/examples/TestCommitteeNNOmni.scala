@@ -54,7 +54,7 @@ object TestCommitteeNNOmni {
 
         val networks = configs.map(couple => {
           FFNeuralGraph(trainTest._1._1.head._1.length, 1, 1,
-            List(couple._2, "linear"),List(couple._1))
+            List(couple._2, "recLinear"),List(couple._1))
         })
 
         val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
@@ -63,18 +63,19 @@ object TestCommitteeNNOmni {
         val model =
           new CommitteeNetwork[Stream[(DenseVector[Double], Double)]](trainTest._1._1, transform, networks:_*)
 
-        model.setLearningRate(opt("step").toDouble)
-          .setMaxIterations(opt("maxIterations").toInt)
-          .setBatchFraction(opt("miniBatchFraction").toDouble)
+        model.baseOptimizer.setStepSize(opt("step").toDouble)
+          .setNumIterations(opt("maxIterations").toInt)
           .setMomentum(opt("momentum").toDouble)
           .setRegParam(opt("regularization").toDouble)
-          .learn()
+
+        model.learn()
 
         val res = model.test(trainTest._1._2)
         val scoresAndLabelsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], DenseVector[Double])]) =>
-              res.map(i => (i._1(0), i._2(0))).toList) > DataPipe((list: List[(Double, Double)]) =>
+              res.map(i => (i._1(0), i._2(0))).toList) >
+            DataPipe((list: List[(Double, Double)]) =>
             list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
               l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
 
@@ -91,6 +92,24 @@ object TestCommitteeNNOmni {
         hold()
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
         legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
+        unhold()
+
+        val incrementsPipe = DataPipe((list: List[(Double, Double)]) =>
+              list.sliding(2).map(i => (i(1)._1 - i.head._1,
+                i(1)._2 - i.head._2)).toList)
+
+        val increments = incrementsPipe.run(scoresAndLabels)
+
+        val incrementMetrics = new RegressionMetrics(increments, increments.length)
+
+        logger.info("Results for Prediction of increments")
+        incrementMetrics.print()
+        incrementMetrics.generatePlots()
+
+        line((1 to increments.length).toList, increments.map(_._2))
+        hold()
+        line((1 to increments.length).toList, increments.map(_._1))
+        legend(List("Increment Time Series", "Predicted Increment Time Series (one hour ahead)"))
         unhold()
 
         Seq(
