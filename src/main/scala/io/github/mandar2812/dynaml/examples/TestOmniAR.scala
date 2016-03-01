@@ -47,6 +47,14 @@ object TestOmniAR {
     //Load Omni data into a stream
     //Extract the time and Dst values
 
+    val names = Map(24 -> "Solar Wind Speed",
+      16 -> "I.M.F Bz",
+      40 -> "Dst",
+      41 -> "AE",
+      38 -> "Kp",
+      39 -> "Sunspot Number",
+      28 -> "Plasma Flow Pressure")
+
     val logger = Logger.getLogger(this.getClass)
 
     //pipe training data to model and then generate test predictions
@@ -96,9 +104,11 @@ object TestOmniAR {
         val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
           scoresAndLabels.length)
 
+        val (name, name1) =
+          if(names.contains(column)) (names(column), names(column))
+          else ("Value","Time Series")
 
-        metrics.print()
-        metrics.generatePlots()
+        metrics.setName(name)
 
         val incrementsPipe =
           DataPipe(
@@ -112,26 +122,6 @@ object TestOmniAR {
         val increments = incrementsPipe.run(res)
 
         val incrementMetrics = new RegressionMetrics(increments, increments.length)
-
-        logger.info("Results for Prediction of increments")
-        incrementMetrics.print()
-        incrementMetrics.generatePlots()
-
-        //Plotting time series prediction comparisons
-        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
-        hold()
-        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
-        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._3))
-        hold()
-        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
-        legend(List("Time Series", "Predicted Time Series (one hour ahead)", "Lower Bar", "Higher Bar"))
-        unhold()
-
-        line((1 to increments.length).toList, increments.map(_._2))
-        hold()
-        line((1 to increments.length).toList, increments.map(_._1))
-        legend(List("Increment Time Series", "Predicted Increment Time Series (one hour ahead)"))
-        unhold()
 
         //Model Predicted Output, only in stepPred > 0
         var mpoRes: Seq[Double] = Seq()
@@ -166,7 +156,7 @@ object TestOmniAR {
           logger.info("Timing Error; MPO, "+stepPred+
             " hours ahead Prediction: "+(timeObsMPO-timeModelMPO))
 
-          mpoMetrics.generatePlots()
+          mpoMetrics.generateFitPlot()
           //Plotting time series prediction comparisons
           line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
           hold()
@@ -184,16 +174,34 @@ object TestOmniAR {
 
         }
 
+        metrics.generateFitPlot()
+        //Plotting time series prediction comparisons
+        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
+        hold()
+        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
+        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._3))
+        hold()
+        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
+        legend(List(name1, "Predicted "+name1+" (one hour ahead)", "Lower Bar", "Higher Bar"))
+        unhold()
 
-        logger.info("Printing One Step Ahead (OSA) Performance Metrics")
-        metrics.print()
         val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
         val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
         logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
 
+        incrementMetrics.generateFitPlot()
+        line((1 to increments.length).toList, increments.map(_._2))
+        hold()
+        line((1 to increments.length).toList, increments.map(_._1))
+        legend(List("Increments of "+name1,
+          "Predicted Increments of "+name1+" (one hour ahead)"))
+        unhold()
 
+        logger.info("Printing One Step Ahead (OSA) Performance Metrics")
+        metrics.print()
 
-
+        logger.info("Results for Prediction of increments")
+        incrementMetrics.print()
 
         action match {
           case "test" =>

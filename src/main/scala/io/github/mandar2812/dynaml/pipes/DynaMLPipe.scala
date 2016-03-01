@@ -133,7 +133,7 @@ object DynaMLPipe {
     * which contain missing values, this pipe should be applied
     * after the application of [[DynaMLPipe.extractTrainingFeatures]].
     * */
-  val removeMissingLines = StreamDataPipe((line: String) => !line.contains(",,"))
+  val removeMissingLines = StreamDataPipe((line: String) => !line.contains("<NA>"))
 
   /**
     * Take each line which is a comma separated string and extract

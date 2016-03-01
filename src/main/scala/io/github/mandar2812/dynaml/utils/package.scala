@@ -186,7 +186,7 @@ package object utils {
 
       val newFields:List[String] = columns.map(col => {
         if (!naStrings.contains(col) || fields(col) != naStrings(col)) fields(col)
-        else ""
+        else "<NA>"
       })
 
       val newLine = newFields.foldLeft("")(

@@ -18,6 +18,9 @@ class RegressionMetrics(
     val len: Int)
   extends Metrics[Double] {
   private val logger = Logger.getLogger(this.getClass)
+
+  var name = "Value"
+
   val length: Int = len
 
   val rmse: Double = math.sqrt(scoresAndLabels.map((p) =>
@@ -46,8 +49,13 @@ class RegressionMetrics(
 
   def scores_and_labels() = this.scoresAndLabels
 
+  def setName(n: String): this.type = {
+    name = n
+    this
+  }
+
   override def print(): Unit = {
-    logger.info("Regression Model Performance")
+    logger.info("Regression Model Performance: "+name)
     logger.info("============================")
     logger.info("MAE: " + mae)
     logger.info("RMSE: " + rmse)
@@ -74,17 +82,25 @@ class RegressionMetrics(
     //xAxis("Residual Value Range")
     //yAxis("Number of Samples")
 
-    logger.info("Generating plot of residuals vs labels")
-    scatter(roccurve.map(i => (i._2, i._1)))
-    title("Scatter Plot of Residuals")
-    xAxis("Predicted Value")
-    yAxis("Residual")
+    generateResidualPlot()
+    generateFitPlot()
+  }
 
+  def generateFitPlot(): Unit = {
     logger.info("Generating plot of goodness of fit")
     regression(scoresAndLabels)
-    title("Goodness of fit")
-    xAxis("Predicted Value")
-    yAxis("Actual Value")
+    title("Goodness of fit: "+name)
+    xAxis("Predicted "+name)
+    yAxis("Actual "+name)
+  }
+
+  def generateResidualPlot(): Unit = {
+    val roccurve = this.residuals()
+    logger.info("Generating plot of residuals vs labels")
+    scatter(roccurve.map(i => (i._2, i._1)))
+    title("Scatter Plot of Residuals: "+name)
+    xAxis("Predicted "+name)
+    yAxis("Residual")
   }
 
 }

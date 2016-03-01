@@ -51,6 +51,15 @@ object TestOmniARX {
 
     val logger = Logger.getLogger(this.getClass)
 
+
+    val names = Map(24 -> "Solar Wind Speed",
+      16 -> "I.M.F Bz",
+      40 -> "Dst",
+      41 -> "AE",
+      38 -> "Kp",
+      39 -> "Sunspot Number",
+      28 -> "Plasma Flow Pressure")
+
     //Load Omni data into a stream
     //Extract the time and Dst values
     //separate data into training and test
@@ -91,26 +100,34 @@ object TestOmniARX {
           list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
             l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
 
+
         val scoresAndLabelsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2)).toList) > deNormalize
+              res.map(i => (i._3, i._2, i._4, i._5)).toList) > deNormalize1
+
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res)
 
-        val metrics = new RegressionMetrics(scoresAndLabels,
+        val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
           scoresAndLabels.length)
 
+        val (name, name1) = if(names.contains(column)) (names(column), names(column)) else ("Value","Time Series")
+        metrics.setName(name)
 
         metrics.print()
-        metrics.generatePlots()
+        metrics.generateFitPlot()
 
         //Plotting time series prediction comparisons
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
         hold()
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
-        legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
+        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._3))
+        hold()
+        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
+        legend(List(name1, "Predicted "+name1+" (one hour ahead)", "Lower Bar", "Higher Bar"))
         unhold()
+
         val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
         val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
 
@@ -127,12 +144,13 @@ object TestOmniARX {
 
         logger.info("Results for Prediction of increments")
         incrementMetrics.print()
-        incrementMetrics.generatePlots()
+        incrementMetrics.generateFitPlot()
 
         line((1 to increments.length).toList, increments.map(_._2))
         hold()
         line((1 to increments.length).toList, increments.map(_._1))
-        legend(List("Increment Time Series", "Predicted Increment Time Series (one hour ahead)"))
+        legend(List("Increments of "+name1,
+          "Predicted Increments of "+name1+" (one hour ahead)"))
         unhold()
 
         action match {
