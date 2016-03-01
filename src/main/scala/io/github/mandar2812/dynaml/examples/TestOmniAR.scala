@@ -1,6 +1,8 @@
 package io.github.mandar2812.dynaml.examples
 
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.{Calendar, GregorianCalendar, Date}
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import com.github.tototoshi.csv.CSVWriter
@@ -8,7 +10,7 @@ import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.{GPNarModel, GPRegression}
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
-import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DynaMLPipe, DataPipe}
 import com.quantifind.charts.Highcharts._
 import org.apache.log4j.Logger
 
@@ -21,29 +23,35 @@ import org.apache.log4j.Logger
 object TestOmniAR {
 
   def apply(year: Int, yeartest:Int,
+            start: String = "12/28/00", end: String = "12/29/23",
             kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            delta: Int, timeLag:Int, stepAhead: Int, bandwidth: Double,
+            delta: Int, timeLag:Int,
+            stepAhead: Int,
             noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             num_training: Int, num_test: Int,
             column: Int, grid: Int,
             step: Double, globalOpt: String,
             stepSize: Double = 0.05,
-            maxIt: Int = 200, action: String = "test")  =
-    runExperiment(year, yeartest, kernel, delta, timeLag, stepAhead, bandwidth, noise,
+            maxIt: Int = 200,
+            action: String = "test") =
+    runExperiment(year, yeartest, start, end,
+      kernel, delta, timeLag, stepAhead, noise,
       num_training, num_test, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString), action)
 
   def runExperiment(year: Int = 2006, yearTest:Int = 2007,
+                    start: String = "",
+                    end: String = "",
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
-                    bandwidth: Double = 0.5,
                     noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     num_training: Int = 200, num_test: Int = 50,
                     column: Int = 40, grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
-                    opt: Map[String, String], action: String = "test"): Seq[Seq[Double]] = {
+                    opt: Map[String, String],
+                    action: String = "test"): Seq[Seq[Double]] = {
     //Load Omni data into a stream
     //Extract the time and Dst values
 
@@ -56,6 +64,22 @@ object TestOmniAR {
       28 -> "Plasma Flow Pressure")
 
     val logger = Logger.getLogger(this.getClass)
+
+    val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd/HH")
+    val dateS: Date = sdf.parse(yearTest.toString+"/"+start)
+    val dateE: Date = sdf.parse(yearTest.toString+"/"+end)
+
+    val greg: GregorianCalendar = new GregorianCalendar()
+    greg.setTime(dateS)
+    val dayStart = greg.get(Calendar.DAY_OF_YEAR)
+    val hourStart = greg.get(Calendar.HOUR_OF_DAY)
+    val stampStart = (dayStart * 24) + hourStart
+
+
+    greg.setTime(dateE)
+    val dayEnd = greg.get(Calendar.DAY_OF_YEAR)
+    val hourEnd = greg.get(Calendar.HOUR_OF_DAY)
+    val stampEnd = (dayEnd * 24) + hourEnd
 
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
@@ -110,7 +134,7 @@ object TestOmniAR {
 
         metrics.setName(name)
 
-        val incrementsPipe =
+        /*val incrementsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
               res.map(i => (i._3, i._2)).toList) >
@@ -122,6 +146,7 @@ object TestOmniAR {
         val increments = incrementsPipe.run(res)
 
         val incrementMetrics = new RegressionMetrics(increments, increments.length)
+        */
 
         //Model Predicted Output, only in stepPred > 0
         var mpoRes: Seq[Double] = Seq()
@@ -189,20 +214,22 @@ object TestOmniAR {
         val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
         logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
 
-        incrementMetrics.generateFitPlot()
+        /*incrementMetrics.generateFitPlot()
         line((1 to increments.length).toList, increments.map(_._2))
         hold()
         line((1 to increments.length).toList, increments.map(_._1))
         legend(List("Increments of "+name1,
           "Predicted Increments of "+name1+" (one hour ahead)"))
         unhold()
+        */
 
         logger.info("Printing One Step Ahead (OSA) Performance Metrics")
         metrics.print()
 
+        /*
         logger.info("Results for Prediction of increments")
         incrementMetrics.print()
-
+        */
         action match {
           case "test" =>
             Seq(
@@ -231,12 +258,21 @@ object TestOmniAR {
           45 -> "99999.99", 46 -> "99999.99",
           47 -> "99999.99")
       ) > DynaMLPipe.removeMissingLines >
-      DynaMLPipe.extractTimeSeries((year,day,hour) => (day * 24) + hour) >
+      DynaMLPipe.extractTimeSeries((year,day,hour) => (day * 24) + hour)
+
+
+    val processTraining = preProcessPipe >
       DynaMLPipe.deltaOperation(deltaT, timelag)
 
-    val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
-      DynaMLPipe.splitTrainingTest(num_training, num_test) >
-      DynaMLPipe.gaussianStandardization >
+    val processTest = preProcessPipe >
+      StreamDataPipe((couple: (Double, Double)) => couple._1 >= stampStart && couple._1 <= stampEnd) >
+      DynaMLPipe.deltaOperation(deltaT, timelag)
+
+    val trainTestPipe = DataPipe(processTraining, processTest) >
+      DataPipe((data: (Stream[(DenseVector[Double], Double)],
+        Stream[(DenseVector[Double], Double)])) => {
+        (data._1.take(num_training), data._2)
+      }) > DynaMLPipe.gaussianStandardization >
       DataPipe(modelTrainTest)
 
     trainTestPipe.run(("data/omni2_"+year+".csv",
@@ -264,8 +300,11 @@ object DstARExperiment {
       testYears.foreach((testYear) => {
         deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
-            TestOmniAR.runExperiment(year, testYear, new FBMKernel(bandwidth),
-              delta, 0, stepAhead, bandwidth, new DiracKernel(noise),
+            TestOmniAR.runExperiment(
+              year, testYear, "12/12:00", "12/12:23",
+              new FBMKernel(bandwidth),
+              delta, 0, stepAhead,
+              new DiracKernel(noise),
               modelSize, num_test, column,
               grid, step, "GS",
               Map("tolerance" -> "0.0001",

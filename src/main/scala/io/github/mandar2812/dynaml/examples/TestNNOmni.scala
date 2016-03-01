@@ -142,14 +142,7 @@ object DstARNNExperiment {
       testYears.foreach((testYear) => {
         deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
-            TestOmniAR.runExperiment(year, testYear, new FBMKernel(1.05),
-              delta, 0, stepAhead, bandwidth, noise,
-              modelSize, num_test, column,
-              grid, step, "GS",
-              Map("tolerance" -> "0.0001",
-                "step" -> "0.1",
-                "maxIterations" -> "100"))
-              .foreach(res => writer.writeRow(res))
+
           })
         })
       })
