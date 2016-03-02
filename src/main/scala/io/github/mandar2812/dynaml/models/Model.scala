@@ -293,7 +293,7 @@ object KernelizedModel {
       case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
         Map("kernel" -> "RBF", "subset" -> prototypes.toString))
 
-      case "Polynomial" => gs.optimize(Map("degree" -> 1.0, /*"offset" -> 1.0,*/ "RegParam" -> 0.5),
+      case "Polynomial" => gs.optimize(Map("degree" -> 1.0, "offset" -> 1.0, "RegParam" -> 0.5),
         Map("kernel" -> "Polynomial", "subset" -> prototypes.toString))
 
       case "Exponential" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),

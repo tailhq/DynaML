@@ -13,9 +13,9 @@ class PolynomialKernel(
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable{
 
-  override val hyper_parameters = List("degree")
+  override val hyper_parameters = List("degree", "offset")
 
-  state = Map("degree" -> degree)
+  state = Map("degree" -> degree, "offset" -> offset)
 
   def setdegree(d: Int): Unit = {
     this.degree = d
@@ -24,9 +24,10 @@ class PolynomialKernel(
 
   def setoffset(o: Int): Unit = {
     this.offset = o
+    state += ("offset" -> o)
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    Math.pow((x.t * y) + this.offset, state("degree"))
+    Math.pow((x.t * y) + state("offset"), state("degree"))
 
 }

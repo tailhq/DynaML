@@ -21,8 +21,7 @@ import org.apache.log4j.Logger
   */
 object TestOmniARX {
 
-  def apply(year: Int, yeartest:Int,
-            start: String = "12/28/00", end: String = "12/29/23",
+  def apply(year: Int, start: String = "2006/12/28/00", end: String = "2006/12/29/23",
             kernel: CovarianceFunction[DenseVector[Double],
               Double, DenseMatrix[Double]],
             delta: Int, noise: CovarianceFunction[DenseVector[Double],
@@ -33,7 +32,7 @@ object TestOmniARX {
             stepSize: Double = 0.05,
             maxIt: Int = 200, action: String = "test") =
     runExperiment(
-      year, yeartest, start, end, kernel, delta,
+      year, start, end, kernel, delta,
       stepPred = 0, noise, num_training,
       column, exoInputColumns,
       grid, step, globalOpt,
@@ -42,7 +41,7 @@ object TestOmniARX {
         "maxIterations" -> maxIt.toString),
       action)
 
-  def runExperiment(year: Int = 2006, yearTest:Int = 2007,
+  def runExperiment(year: Int = 2006,
                     start: String = "",
                     end: String = "",
                     kernel: CovarianceFunction[DenseVector[Double],
@@ -68,14 +67,15 @@ object TestOmniARX {
     )
 
     val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd/HH")
-    val dateS: Date = sdf.parse(yearTest.toString+"/"+start)
-    val dateE: Date = sdf.parse(yearTest.toString+"/"+end)
+    val dateS: Date = sdf.parse(start)
+    val dateE: Date = sdf.parse(end)
 
     val greg: GregorianCalendar = new GregorianCalendar()
     greg.setTime(dateS)
     val dayStart = greg.get(Calendar.DAY_OF_YEAR)
     val hourStart = greg.get(Calendar.HOUR_OF_DAY)
     val stampStart = (dayStart * 24) + hourStart
+    val yearTest = greg.get(Calendar.YEAR)
 
 
     greg.setTime(dateE)
@@ -187,7 +187,8 @@ object TestOmniARX {
                 trainTest._1._2.length.toDouble,
                 metrics.mae, metrics.rmse, metrics.Rsq,
                 metrics.corr, metrics.modelYield,
-                timeObs.toDouble - timeModel.toDouble)
+                timeObs.toDouble - timeModel.toDouble,
+                scoresAndLabels.map(_._1).min)
             )
           case "predict" => scoresAndLabels.toSeq.map(i => Seq(i._2, i._1))
         }
@@ -247,8 +248,8 @@ object DstARXExperiment {
       testYears.foreach((testYear) => {
         deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
-            TestOmniARX.runExperiment(year, testYear,
-              "12/12:00", "12/12:23",
+            TestOmniARX.runExperiment(year,
+              testYear+"/12/12:00", testYear+"/12/12:23",
               new FBMKernel(bandwidth),
               delta, stepAhead, new DiracKernel(noise),
               modelSize, column, exogenous,
@@ -263,5 +264,43 @@ object DstARXExperiment {
     })
 
     writer.close()
+  }
+
+  def apply(yearTrain: Int,
+            num_training: Int,
+            deltas: List[Int]) = {
+    val writer = CSVWriter.open(new File("data/OmniARXStormsRes.csv"), append = true)
+    deltas.foreach(modelOrder => {
+      val stormsPipe =
+        DynaMLPipe.fileToStream >
+          DynaMLPipe.replaceWhiteSpaces >
+          StreamDataPipe((stormEventData: String) => {
+            val stormMetaFields = stormEventData.split(',')
+
+            val eventId = stormMetaFields(0)
+            val startDate = stormMetaFields(1)
+            val startHour = stormMetaFields(2).take(2)
+
+            val endDate = stormMetaFields(3)
+            val endHour = stormMetaFields(4).take(2)
+
+            val minDst = stormMetaFields(5).toDouble
+
+            val stormCategory = stormMetaFields(6)
+
+            val res = TestOmniARX.runExperiment(yearTrain,
+              startDate+"/"+startHour, endDate+"/"+endHour,
+              new FBMKernel(0.99), modelOrder, 0, new DiracKernel(2.0),
+              250, 40, List(24,25,26,16), 6, 0.05, "GS",
+              Map(), action = "test")
+
+            val row = Seq(eventId, stormCategory, modelOrder, num_training, res.head(8),
+              res.head(10), res.head.last-minDst, minDst, res.head(12))
+
+            writer.writeRow(row)
+          })
+
+      stormsPipe.run("data/geomagnetic_storms.csv")
+    })
   }
 }

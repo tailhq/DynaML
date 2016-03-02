@@ -22,8 +22,7 @@ import org.apache.log4j.Logger
   */
 object TestOmniAR {
 
-  def apply(year: Int, yeartest:Int,
-            start: String = "12/28/00", end: String = "12/29/23",
+  def apply(year: Int, start: String = "2006/12/28/00", end: String = "2006/12/29/23",
             kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             delta: Int, timeLag:Int,
             noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
@@ -33,16 +32,14 @@ object TestOmniAR {
             stepSize: Double = 0.05,
             maxIt: Int = 200,
             action: String = "test") =
-    runExperiment(year, yeartest, start, end,
+    runExperiment(year, start, end,
       kernel, delta, timeLag, stepPred = 0, noise,
       num_training, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString), action)
 
-  def runExperiment(year: Int = 2006, yearTest:Int = 2007,
-                    start: String = "",
-                    end: String = "",
+  def runExperiment(year: Int = 2006, start: String = "", end: String = "",
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
                     noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
@@ -64,14 +61,15 @@ object TestOmniAR {
     val logger = Logger.getLogger(this.getClass)
 
     val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd/HH")
-    val dateS: Date = sdf.parse(yearTest.toString+"/"+start)
-    val dateE: Date = sdf.parse(yearTest.toString+"/"+end)
+    val dateS: Date = sdf.parse(start)
+    val dateE: Date = sdf.parse(end)
 
     val greg: GregorianCalendar = new GregorianCalendar()
     greg.setTime(dateS)
     val dayStart = greg.get(Calendar.DAY_OF_YEAR)
     val hourStart = greg.get(Calendar.HOUR_OF_DAY)
     val stampStart = (dayStart * 24) + hourStart
+    val yearTest = greg.get(Calendar.YEAR)
 
 
     greg.setTime(dateE)
@@ -194,7 +192,8 @@ object TestOmniAR {
             trainTest._1._2.length.toDouble,
             mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
             mpoMetrics.corr, mpoMetrics.modelYield,
-            timeObsMPO.toDouble - timeModelMPO.toDouble)
+            timeObsMPO.toDouble - timeModelMPO.toDouble,
+            scoresAndLabels2.map(_._1).min)
 
         }
 
@@ -236,7 +235,8 @@ object TestOmniAR {
                 1.0, num_training.toDouble, trainTest._1._2.length.toDouble,
                 metrics.mae, metrics.rmse, metrics.Rsq,
                 metrics.corr, metrics.modelYield,
-                timeObs.toDouble - timeModel.toDouble),
+                timeObs.toDouble - timeModel.toDouble,
+                scoresAndLabels.map(_._1).min),
               mpoRes
             )
 
@@ -279,8 +279,6 @@ object TestOmniAR {
 
   }
 
-
-
 }
 
 object DstARExperiment {
@@ -290,8 +288,8 @@ object DstARExperiment {
             modelSizes: List[Int] = List(50, 100, 150),
             deltas: List[Int] = List(1, 2, 3),
             stepAhead: Int, bandwidth: Double,
-            noise: Double,
-            num_test: Int, column: Int, grid: Int, step: Double) = {
+            noise: Double, num_test: Int,
+            column: Int, grid: Int, step: Double) = {
 
     val writer = CSVWriter.open(new File("data/OmniRes.csv"), append = true)
 
@@ -300,7 +298,8 @@ object DstARExperiment {
         deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
             TestOmniAR.runExperiment(
-              year, testYear, "12/12:00", "12/12:23",
+              year, testYear.toString+"/12/12:00",
+              testYear.toString+"/12/12:23",
               new FBMKernel(bandwidth),
               delta, 0, stepAhead,
               new DiracKernel(noise),
@@ -316,5 +315,42 @@ object DstARExperiment {
     })
 
     writer.close()
+  }
+
+  def apply(yearTrain: Int,
+            num_training: Int,
+            deltas: List[Int]) = {
+    val writer = CSVWriter.open(new File("data/OmniARStormsRes.csv"), append = true)
+    deltas.foreach(modelOrder => {
+      val stormsPipe =
+        DynaMLPipe.fileToStream >
+          DynaMLPipe.replaceWhiteSpaces >
+          StreamDataPipe((stormEventData: String) => {
+            val stormMetaFields = stormEventData.split(',')
+
+            val eventId = stormMetaFields(0)
+            val startDate = stormMetaFields(1)
+            val startHour = stormMetaFields(2).take(2)
+
+            val endDate = stormMetaFields(3)
+            val endHour = stormMetaFields(4).take(2)
+
+            val minDst = stormMetaFields(5).toDouble
+
+            val stormCategory = stormMetaFields(6)
+
+            val res = TestOmniAR.runExperiment(yearTrain,
+              startDate+"/"+startHour, endDate+"/"+endHour,
+              new FBMKernel(0.99), modelOrder, 0, 0, new DiracKernel(2.0),
+              250, 40, 6, 0.05, "GS", Map(), action = "test")
+
+            val row = Seq(eventId, stormCategory, modelOrder, num_training, res.head(7),
+              res.head(9), res.head.last-minDst, minDst, res.head(11))
+
+            writer.writeRow(row)
+          })
+
+      stormsPipe.run("data/geomagnetic_storms.csv")
+    })
   }
 }
