@@ -26,17 +26,16 @@ object TestOmniAR {
             start: String = "12/28/00", end: String = "12/29/23",
             kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             delta: Int, timeLag:Int,
-            stepAhead: Int,
             noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            num_training: Int, num_test: Int,
+            num_training: Int,
             column: Int, grid: Int,
             step: Double, globalOpt: String,
             stepSize: Double = 0.05,
             maxIt: Int = 200,
             action: String = "test") =
     runExperiment(year, yeartest, start, end,
-      kernel, delta, timeLag, stepAhead, noise,
-      num_training, num_test, column, grid, step, globalOpt,
+      kernel, delta, timeLag, stepPred = 0, noise,
+      num_training, column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString), action)
@@ -47,8 +46,7 @@ object TestOmniAR {
                     kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
                     noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    num_training: Int = 200, num_test: Int = 50,
-                    column: Int = 40, grid: Int = 5,
+                    num_training: Int = 200, column: Int = 40, grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
                     opt: Map[String, String],
                     action: String = "test"): Seq[Seq[Double]] = {
@@ -192,7 +190,8 @@ object TestOmniAR {
           unhold()
 
           mpoRes = Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
-            stepPred.toDouble, num_training.toDouble, num_test.toDouble,
+            stepPred.toDouble, num_training.toDouble,
+            trainTest._1._2.length.toDouble,
             mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
             mpoMetrics.corr, mpoMetrics.modelYield,
             timeObsMPO.toDouble - timeModelMPO.toDouble)
@@ -234,7 +233,7 @@ object TestOmniAR {
           case "test" =>
             Seq(
               Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
-                1.0, num_training.toDouble, num_test.toDouble,
+                1.0, num_training.toDouble, trainTest._1._2.length.toDouble,
                 metrics.mae, metrics.rmse, metrics.Rsq,
                 metrics.corr, metrics.modelYield,
                 timeObs.toDouble - timeModel.toDouble),
@@ -305,7 +304,7 @@ object DstARExperiment {
               new FBMKernel(bandwidth),
               delta, 0, stepAhead,
               new DiracKernel(noise),
-              modelSize, num_test, column,
+              modelSize, column,
               grid, step, "GS",
               Map("tolerance" -> "0.0001",
                 "step" -> "0.1",
