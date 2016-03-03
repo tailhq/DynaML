@@ -21,17 +21,17 @@ Currently DynaML installs and runs on *nix platforms, though it is possible to b
 * Clone this repository
 * Run the following.
 
-```shell
-  mvn clean compile
-  mvn package
-```
+  ```shell
+    mvn clean compile
+    mvn package
+  ```
 
 * Make sure you give execution permission to `DynaML` in the `target/bin` directory.
 
-```shell
-  chmod +x target/bin/DynaML
-  target/bin/DynaML
-```
+  ```shell
+    chmod +x target/bin/DynaML
+    target/bin/DynaML
+  ```
 
 You should get the following prompt.
   
