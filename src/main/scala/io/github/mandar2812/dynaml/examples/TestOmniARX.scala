@@ -63,7 +63,8 @@ object TestOmniARX {
       41 -> "AE",
       38 -> "Kp",
       39 -> "Sunspot Number",
-      28 -> "Plasma Flow Pressure"
+      28 -> "Plasma Flow Pressure",
+      23 -> "Proton Density"
     )
 
     val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd/HH")
@@ -154,9 +155,18 @@ object TestOmniARX {
         legend(List(name1, "Predicted "+name1+" (one hour ahead)", "Lower Bar", "Higher Bar"))
         unhold()
 
-        val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
-        val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
-
+        val (timeObs, timeModel, peakValuePred, peakValueAct) = names(column) match {
+          case "Dst" =>
+            (scoresAndLabels.map(_._2).zipWithIndex.min._2,
+              scoresAndLabels.map(_._1).zipWithIndex.min._2,
+              scoresAndLabels.map(_._1).min,
+              scoresAndLabels.map(_._2).min)
+          case _ =>
+            (scoresAndLabels.map(_._2).zipWithIndex.max._2,
+              scoresAndLabels.map(_._1).zipWithIndex.max._2,
+              scoresAndLabels.map(_._1).max,
+              scoresAndLabels.map(_._2).max)
+        }
 
         /*val incrementsPipe =
           DataPipe(
@@ -188,7 +198,8 @@ object TestOmniARX {
                 metrics.mae, metrics.rmse, metrics.Rsq,
                 metrics.corr, metrics.modelYield,
                 timeObs.toDouble - timeModel.toDouble,
-                scoresAndLabels.map(_._1).min)
+                peakValuePred,
+                peakValueAct)
             )
           case "predict" => scoresAndLabels.toSeq.map(i => Seq(i._2, i._1))
         }
@@ -271,6 +282,7 @@ object DstARXExperiment {
               Double, DenseMatrix[Double]],
             num_training: Int,
             deltas: List[Int],
+            column: Int, ex: List[Int],
             options: Map[String, String]) = {
     val writer =
       CSVWriter.open(new File("data/"+
@@ -301,12 +313,15 @@ object DstARXExperiment {
             val res = TestOmniARX.runExperiment(yearTrain,
               startDate+"/"+startHour, endDate+"/"+endHour,
               kernel, modelOrder, 0, new DiracKernel(2.0),
-              250, 40, List(24,25,26,16), options("grid").toInt,
+              num_training, column, ex, options("grid").toInt,
               options("step").toDouble, options("globalOpt"),
               Map(), action = "test")
 
-            val row = Seq(eventId, stormCategory, modelOrder, num_training, res.head(8),
-              res.head(10), res.head.last-minDst, minDst, res.head(12))
+            val row = Seq(
+              eventId, stormCategory, modelOrder,
+              num_training, res.head(8),
+              res.head(10), res.head(13)-res.head(14),
+              res.head(14), res.head(12))
 
             writer.writeRow(row)
           })
