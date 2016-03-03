@@ -3,7 +3,7 @@ The `data/` directory contains a few data sets, which are used by the programs i
 
 
 
-```
+```scala
 DynaML>TestGPDelve("RBF", 2.0, 1.0, 500, 1000)
 Feb 23, 2016 6:35:08 PM com.github.fommil.jni.JniLoader liberalLoad
 INFO: successfully loaded /tmp/jniloader4173849050766409147netlib-native_system-linux-x86_64.so
