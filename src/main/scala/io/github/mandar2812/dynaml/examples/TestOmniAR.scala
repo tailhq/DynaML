@@ -318,9 +318,19 @@ object DstARExperiment {
   }
 
   def apply(yearTrain: Int,
+            kernel: CovarianceFunction[DenseVector[Double],
+              Double, DenseMatrix[Double]],
             num_training: Int,
-            deltas: List[Int]) = {
-    val writer = CSVWriter.open(new File("data/OmniARStormsRes.csv"), append = true)
+            deltas: List[Int],
+            options: Map[String, String]) = {
+    val writer =
+      CSVWriter.open(new File("data/"+
+        options("fileID")+
+        "OmniARStormsRes.csv"),
+        append = true)
+
+    val initialKernelState = kernel.state
+
     deltas.foreach(modelOrder => {
       val stormsPipe =
         DynaMLPipe.fileToStream >
@@ -338,11 +348,12 @@ object DstARExperiment {
             val minDst = stormMetaFields(5).toDouble
 
             val stormCategory = stormMetaFields(6)
-
+            kernel.setHyperParameters(initialKernelState)
             val res = TestOmniAR.runExperiment(yearTrain,
               startDate+"/"+startHour, endDate+"/"+endHour,
-              new FBMKernel(0.99), modelOrder, 0, 0, new DiracKernel(2.0),
-              250, 40, 6, 0.05, "GS", Map(), action = "test")
+              kernel, modelOrder, 0, 0, new DiracKernel(2.0),
+              250, 40, options("grid").toInt, options("step").toDouble,
+              options("globalOpt"), Map(), action = "test")
 
             val row = Seq(eventId, stormCategory, modelOrder, num_training, res.head(7),
               res.head(9), res.head.last-minDst, minDst, res.head(11))

@@ -142,7 +142,7 @@ object TestOmniARX {
         metrics.setName(name)
 
         metrics.print()
-        metrics.generateFitPlot()
+        //metrics.generateFitPlot()
 
         //Plotting time series prediction comparisons
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
@@ -267,9 +267,18 @@ object DstARXExperiment {
   }
 
   def apply(yearTrain: Int,
+            kernel: CovarianceFunction[DenseVector[Double],
+              Double, DenseMatrix[Double]],
             num_training: Int,
-            deltas: List[Int]) = {
-    val writer = CSVWriter.open(new File("data/OmniARXStormsRes.csv"), append = true)
+            deltas: List[Int],
+            options: Map[String, String]) = {
+    val writer =
+      CSVWriter.open(new File("data/"+
+        options("fileID")+
+        "OmniARXStormsRes.csv"), append = true)
+
+    val initialKernelState = kernel.state
+
     deltas.foreach(modelOrder => {
       val stormsPipe =
         DynaMLPipe.fileToStream >
@@ -287,11 +296,13 @@ object DstARXExperiment {
             val minDst = stormMetaFields(5).toDouble
 
             val stormCategory = stormMetaFields(6)
+            kernel.setHyperParameters(initialKernelState)
 
             val res = TestOmniARX.runExperiment(yearTrain,
               startDate+"/"+startHour, endDate+"/"+endHour,
-              new FBMKernel(0.99), modelOrder, 0, new DiracKernel(2.0),
-              250, 40, List(24,25,26,16), 6, 0.05, "GS",
+              kernel, modelOrder, 0, new DiracKernel(2.0),
+              250, 40, List(24,25,26,16), options("grid").toInt,
+              options("step").toDouble, options("globalOpt"),
               Map(), action = "test")
 
             val row = Seq(eventId, stormCategory, modelOrder, num_training, res.head(8),

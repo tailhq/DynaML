@@ -28,6 +28,6 @@ class PolynomialKernel(
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    Math.pow((x.t * y) + state("offset"), state("degree"))
+    Math.pow((x.t * y) + state("offset"), state("degree").toInt)
 
 }
