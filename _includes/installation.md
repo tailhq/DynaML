@@ -35,7 +35,7 @@ Currently DynaML installs and runs on *nix platforms, though it is possible to b
 
 You should get the following prompt.
   
-```
+```scala
     ___       ___       ___       ___       ___       ___   
    /\  \     /\__\     /\__\     /\  \     /\__\     /\__\  
   /::\  \   |::L__L   /:| _|_   /::\  \   /::L_L_   /:/  /  
