@@ -107,6 +107,8 @@ object TestGPHousing {
         val metrics = new RegressionMetrics(scoresAndLabels,
           scoresAndLabels.length)
 
+        metrics.setName("MEDV")
+
         //println(scoresAndLabels)
         metrics.print()
         metrics.generatePlots()
