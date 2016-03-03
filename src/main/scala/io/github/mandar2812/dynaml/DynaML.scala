@@ -39,7 +39,7 @@ object DynaML extends App {
           " /    /:/  /   \\:\\__\\  \n   \\/__/               \\/__/    "+
           " \\/__/     \\/__/     \\/__/  ")
         val version = prop.getProperty("dynaml.version")
-        echo("\nWelcome to DynaML v "+version+"\nInteractive Scala shell")
+        echo("\nWelcome to DynaML v "+version+"\nInteractive Scala shell for Machine Learning Research")
       }
     }
     val settings = new Settings
