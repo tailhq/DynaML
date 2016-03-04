@@ -3,3 +3,10 @@ scala:
    - 2.10.4
 jdk:
 - oraclejdk7
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/45cb5820ca70c8a3445e
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: never     # options: [always|never|change] default: always
