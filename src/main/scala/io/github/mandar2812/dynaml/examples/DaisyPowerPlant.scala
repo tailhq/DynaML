@@ -18,10 +18,10 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.examples
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector}
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.kernels.LocalSVMKernel
+import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalSVMKernel}
 import io.github.mandar2812.dynaml.models.svm.DLSSVM
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DynaMLPipe, DataPipe}
@@ -31,14 +31,14 @@ import org.apache.log4j.Logger
   * Created by mandar on 4/3/16.
   */
 object DaisyPowerPlant {
-  def apply(kernel: LocalSVMKernel[DenseVector[Double]],
+  def apply(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
             num_training: Int = 150, column: Int = 7,
             opt: Map[String, String]) =
     runExperiment(kernel, deltaT, timelag,
     stepPred, num_training, column, opt)
 
-  def runExperiment(kernel: LocalSVMKernel[DenseVector[Double]],
+  def runExperiment(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
                     num_training: Int = 150, column: Int = 7,
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {

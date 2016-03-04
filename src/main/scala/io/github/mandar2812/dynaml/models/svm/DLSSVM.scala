@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.svm
 
 import breeze.linalg.{trace, inv, DenseMatrix, DenseVector}
-import io.github.mandar2812.dynaml.kernels.LocalSVMKernel
+import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalSVMKernel}
 import io.github.mandar2812.dynaml.models.LinearModel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LSSVMLinearSolver, RegularizedOptimizer}
@@ -36,7 +36,8 @@ import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LSSVMLinea
   * @param numPoints The number of data points in [[data]]
   */
 class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
-             kern: LocalSVMKernel[DenseVector[Double]])
+             kern: CovarianceFunction[DenseVector[Double],
+               Double, DenseMatrix[Double]])
   extends LinearModel[Stream[(DenseVector[Double], Double)],
     Int, Int, DenseVector[Double], DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])]
