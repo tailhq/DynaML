@@ -99,7 +99,8 @@ object DaisyPowerPlant {
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
         hold()
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
-        legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
+        legend(List(names(column), "Predicted "+names(column)+" (one hour ahead)"))
+        title("Pont-sur-Sambre 120 MW power plant: "+names(column))
         unhold()
 
         Seq(
