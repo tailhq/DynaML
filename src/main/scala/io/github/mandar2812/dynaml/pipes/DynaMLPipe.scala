@@ -38,13 +38,13 @@ object DynaMLPipe {
     * Data pipe to replace all white spaces in a [[Stream]]
     * of [[String]] with the comma character.
     * */
-  val replaceWhiteSpaces = DataPipe((s: Stream[String]) => s.map(utils.replace("\\s+")(",")))
+  val replaceWhiteSpaces = StreamDataPipe((s: String) => utils.replace("\\s+")(",")(s))
 
   /**
     * Trim white spaces from each line in a [[Stream]]
     * of [[String]]
     * */
-  val trimLines = DataPipe((s: Stream[String]) => s.map(_.trim()))
+  val trimLines = StreamDataPipe((s: String) => s.trim())
 
   /**
     * This pipe assumes its input to be of the form
