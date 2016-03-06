@@ -3,6 +3,7 @@ package io.github.mandar2812.dynaml.graphutils
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.frames.{Incidence, Property, VertexFrame}
 import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions
+import org.apache.log4j.Logger
 
 import scala.collection.JavaConversions
 
@@ -68,6 +69,8 @@ trait Neuron extends VertexFrame {
 }
 
 object Neuron {
+
+  private val logger = Logger.getLogger(this.getClass)
 
   def getLocalField(neuron: Neuron): (Double, Double) = neuron.getNeuronType() match {
     case "input" => (neuron.getValue(), neuron.getValue())

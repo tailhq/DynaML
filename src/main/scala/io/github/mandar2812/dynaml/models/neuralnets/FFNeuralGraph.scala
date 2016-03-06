@@ -4,6 +4,7 @@ import breeze.linalg.DenseVector
 import com.tinkerpop.blueprints.{GraphFactory, Graph}
 import com.tinkerpop.frames.{FramedGraphFactory, FramedGraph}
 import io.github.mandar2812.dynaml.graphutils.{Neuron, Synapse}
+import org.apache.log4j.Logger
 
 import scala.collection.JavaConversions
 import scala.collection.JavaConversions._
@@ -131,6 +132,8 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph], act: List[String], hidden: In
 object FFNeuralGraph {
   val manager: FramedGraphFactory = new FramedGraphFactory
 
+  private val logger = Logger.getLogger(this.getClass)
+
   /**
     * Create a [[FFNeuralGraph]] object with
     * [[FramedGraph]] as the base graph.
@@ -159,6 +162,7 @@ object FFNeuralGraph {
     val fg = manager.create(GraphFactory.open(mapAsJavaMap(graphconfig)))
 
     (0 to hidden_layers+1).foreach((layer) => {
+      logger.info("Initializing layer "+layer)
       //For each layer create neurons
       if(layer == 0) {
         (1 to num_inputs).foreach(inputnode => {

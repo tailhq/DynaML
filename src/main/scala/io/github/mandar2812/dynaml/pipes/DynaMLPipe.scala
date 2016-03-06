@@ -182,6 +182,43 @@ object DynaMLPipe {
         trainTest._2.map(normalizationFunc)), (mean, stdDev))
     })
 
+
+  /**
+    * Perform gaussian normalization on a data stream which
+    * is a [[Tuple2]] of the form.
+    *
+    * (Stream(training data), Stream(test data))
+    * */
+  val gaussianStandardizationMO =
+    DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
+      Stream[(DenseVector[Double], DenseVector[Double])])) => {
+      //logger.info("Training Data")
+      //logger.info(trainTest._1.toList)
+      //logger.info("-----------")
+      //logger.info("Test Data")
+      //logger.info(trainTest._2.toList)
+      val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
+        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+      val stdDev: DenseVector[Double] = variance.map(v =>
+        math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
+
+
+      val normalizationFunc = (point: (DenseVector[Double], DenseVector[Double])) => {
+        val extendedpoint = DenseVector(point._1.toArray ++ point._2.toArray)
+
+        val normPoint = (extendedpoint - mean) :/ stdDev
+        val length = point._1.length
+        val outlength = point._2.length
+        //logger.info("Features Normalized: "+normPoint(0 until length))
+        //logger.info("Outputs Normalized: "+normPoint(length until length+outlength))
+        (normPoint(0 until length), normPoint(length until length+outlength))
+      }
+
+      ((trainTest._1.map(normalizationFunc),
+        trainTest._2.map(normalizationFunc)), (mean, stdDev))
+    })
+
   /**
     * Extract a subset of the data into a [[Tuple2]] which
     * can be used as a training, test combo for model learning and evaluation.
