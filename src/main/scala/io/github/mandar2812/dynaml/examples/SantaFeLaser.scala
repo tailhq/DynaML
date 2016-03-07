@@ -22,38 +22,32 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
-import io.github.mandar2812.dynaml.models.gp.GPNarXModel
+import io.github.mandar2812.dynaml.models.gp.GPNarModel
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
-import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DynaMLPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
 import org.apache.log4j.Logger
 
 /**
   * Created by mandar on 4/3/16.
   */
-object AbottPowerPlant {
+object SantaFeLaser {
   def apply(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
-            num_training: Int = 150, num_test:Int = 1000, column: Int = 7,
+            num_training: Int = 150, num_test:Int = 1000,
             opt: Map[String, String]) =
     runExperiment(kernel, noise, deltaT, timelag,
-      stepPred, num_training, num_test, column, opt)
+      stepPred, num_training, num_test, opt)
 
   def runExperiment(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
-                    num_training: Int = 150, num_test:Int, column: Int = 7,
+                    num_training: Int = 150, num_test:Int,
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {
     //Load Daisy data into a stream
     //Extract the time and Dst values
 
     val logger = Logger.getLogger(this.getClass)
-
-    val names = Map(
-      5 -> "Drum pressure PSI",
-      6 -> "Excess Oxygen",
-      7 -> "Water level in Drum",
-      8 -> "Steam Flow kg/s")
 
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
@@ -62,7 +56,7 @@ object AbottPowerPlant {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
 
-        val model = new GPNarXModel(deltaT, 4, kernel,
+        val model = new GPNarModel(deltaT, kernel,
           noise, trainTest._1._1)
 
         val gs = opt("globalOpt") match {
@@ -79,10 +73,6 @@ object AbottPowerPlant {
         val startConf = kernel.state ++ noise.state
 
         val (_, conf) = gs.optimize(startConf, opt)
-
-        //model.setRegParam(opt("regularization").toDouble).learn()
-
-        //val res = trainTest._1._2.map(testpoint => (model.predict(testpoint._1), testpoint._2))
 
         val res = model.test(trainTest._1._2.toSeq)
 
@@ -102,11 +92,8 @@ object AbottPowerPlant {
         val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
           scoresAndLabels.length)
 
-        val (name, name1) =
-          if(names.contains(column)) (names(column), names(column))
-          else ("Value","Time Series")
-
-        metrics.setName(name)
+        val name1 = "Laser Intensity"
+        //metrics.setName(name)
 
         metrics.print()
         metrics.generateFitPlot()
@@ -119,7 +106,7 @@ object AbottPowerPlant {
         hold()
         spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
         legend(List(name1, "Predicted "+name1+" (one hour ahead)", "Lower Bar", "Higher Bar"))
-        title("Abott power plant, Illinois USA: "+names(column))
+        title("Santa Fe Infrared Laser: "+name1)
         unhold()
 
         Seq(
@@ -131,27 +118,22 @@ object AbottPowerPlant {
 
     val preProcessPipe = DynaMLPipe.fileToStream >
       DynaMLPipe.trimLines >
-      DynaMLPipe.replaceWhiteSpaces >
       DynaMLPipe.extractTrainingFeatures(
-        List(0,column,1,2,3,4),
+        List(0),
         Map()
       ) >
-      DynaMLPipe.removeMissingLines >
-      StreamDataPipe((line: String) => {
-        val splits = line.split(",")
-        val timestamp = splits.head.toDouble
-        val feat = DenseVector(splits.tail.map(_.toDouble))
-        (timestamp, feat)
-      }) >
-      DynaMLPipe.deltaOperationVec(deltaT)
+      DataPipe((lines: Stream[String]) =>
+        lines.zipWithIndex.map(couple =>
+          (couple._2.toDouble, couple._1.toDouble))
+      ) > DynaMLPipe.deltaOperation(deltaT, 0)
 
     val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
       DynaMLPipe.splitTrainingTest(num_training, num_test) >
       DynaMLPipe.gaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe.run(("data/steamgen.csv",
-      "data/steamgen.csv"))
+    trainTestPipe.run(("data/santafelaser.csv",
+      "data/santafelaser.csv"))
 
   }
 }
