@@ -30,7 +30,7 @@ import org.apache.log4j.Logger
 /**
   * Created by mandar on 4/3/16.
   */
-object SantaFeLaser {
+object LightCurveAGN {
   def apply(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
@@ -44,7 +44,7 @@ object SantaFeLaser {
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
                     num_training: Int = 150, num_test:Int,
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {
-    //Load Daisy data into a stream
+    //Load data into a stream
     //Extract the time and Dst values
 
     val logger = Logger.getLogger(this.getClass)
@@ -53,11 +53,10 @@ object SantaFeLaser {
     //create RegressionMetrics instance and produce plots
     val modelTrainTest =
       (trainTest: ((Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)]),
-        (DenseVector[Double], DenseVector[Double]))) => {
+        Stream[(DenseVector[Double], Double)]))) => {
 
         val model = new GPNarModel(deltaT, kernel,
-          noise, trainTest._1._1)
+          noise, trainTest._1)
 
         val gs = opt("globalOpt") match {
           case "GS" => new GridSearch[model.type](model)
@@ -74,25 +73,19 @@ object SantaFeLaser {
 
         val (_, conf) = gs.optimize(startConf, opt)
 
-        val res = model.test(trainTest._1._2.toSeq)
-
-        val deNormalize = DataPipe((list: List[(Double, Double, Double, Double)]) =>
-          list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._2*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._3*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._4*trainTest._2._2(-1) + trainTest._2._1(-1))})
+        val res = model.test(trainTest._2.toSeq)
 
         val scoresAndLabelsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2, i._4, i._5)).toList) > deNormalize
+              res.map(i => (i._3, i._2, i._4, i._5)).toList)
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res.toList)
 
         val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
           scoresAndLabels.length)
 
-        val name = "Laser Intensity"
+        val name = "Light Curve"
         metrics.setName(name)
 
         metrics.print()
@@ -106,7 +99,7 @@ object SantaFeLaser {
         hold()
         spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
         legend(List(name, "Predicted "+name+" (one hour ahead)", "Lower Bar", "Higher Bar"))
-        title("Santa Fe Infrared Laser: "+name)
+        title("Active Galactic Nucleus "+opt("objectId").capitalize.replace("_", " ")+": "+name)
         unhold()
 
         Seq(
@@ -117,23 +110,21 @@ object SantaFeLaser {
       }
 
     val preProcessPipe = DynaMLPipe.fileToStream >
-      DynaMLPipe.trimLines >
+      DynaMLPipe.trimLines > DynaMLPipe.replaceWhiteSpaces >
       DynaMLPipe.extractTrainingFeatures(
-        List(0),
+        List(0, 1),
         Map()
-      ) >
-      DataPipe((lines: Stream[String]) =>
-        lines.zipWithIndex.map(couple =>
-          (couple._2.toDouble, couple._1.toDouble))
-      ) > DynaMLPipe.deltaOperation(deltaT, 0)
+      ) > DataPipe((lines: Stream[String]) => lines.map{line =>
+        val splits = line.split(",")
+        (splits.head.toDouble, splits.last.toDouble)
+      }) > DynaMLPipe.deltaOperation(deltaT, 0)
 
     val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
       DynaMLPipe.splitTrainingTest(num_training, num_test) >
-      DynaMLPipe.gaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe.run(("data/santafelaser.csv",
-      "data/santafelaser.csv"))
+    trainTestPipe.run(("data/"+opt("objectId")+".csv",
+      "data/"+opt("objectId")+".csv"))
 
   }
 }
