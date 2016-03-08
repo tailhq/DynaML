@@ -208,8 +208,19 @@ object TestOmniAR {
         legend(List(name1, "Predicted "+name1+" (one hour ahead)", "Lower Bar", "Higher Bar"))
         unhold()
 
-        val timeObs = scoresAndLabels.map(_._2).zipWithIndex.min._2
-        val timeModel = scoresAndLabels.map(_._1).zipWithIndex.min._2
+        val (timeObs, timeModel, peakValuePred, peakValueAct) = names(column) match {
+          case "Dst" =>
+            (scoresAndLabels.map(_._2).zipWithIndex.min._2,
+              scoresAndLabels.map(_._1).zipWithIndex.min._2,
+              scoresAndLabels.map(_._1).min,
+              scoresAndLabels.map(_._2).min)
+          case _ =>
+            (scoresAndLabels.map(_._2).zipWithIndex.max._2,
+              scoresAndLabels.map(_._1).zipWithIndex.max._2,
+              scoresAndLabels.map(_._1).max,
+              scoresAndLabels.map(_._2).max)
+        }
+
         logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
 
         /*incrementMetrics.generateFitPlot()
@@ -236,7 +247,8 @@ object TestOmniAR {
                 metrics.mae, metrics.rmse, metrics.Rsq,
                 metrics.corr, metrics.modelYield,
                 timeObs.toDouble - timeModel.toDouble,
-                scoresAndLabels.map(_._1).min),
+                peakValuePred,
+                peakValueAct),
               mpoRes
             )
 

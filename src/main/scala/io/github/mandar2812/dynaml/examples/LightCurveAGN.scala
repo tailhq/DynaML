@@ -31,6 +31,7 @@ import org.apache.log4j.Logger
   * Created by mandar on 4/3/16.
   */
 object LightCurveAGN {
+
   def apply(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
