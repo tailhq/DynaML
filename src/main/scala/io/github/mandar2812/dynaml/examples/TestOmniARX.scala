@@ -222,13 +222,29 @@ object TestOmniARX {
       DynaMLPipe.removeMissingLines >
       DynaMLPipe.extractTimeSeriesVec((year,day,hour) => (day * 24) + hour)
 
-    val processTraining = preProcessPipe >
-      DynaMLPipe.deltaOperationVec(deltaT)
+    val processTraining = if(opt("Use VBz").toBoolean) {
+      preProcessPipe >
+      StreamDataPipe((point: (Double, DenseVector[Double])) => {
+        (point._1, DenseVector(point._2.toArray ++ Array(point._2(1) * point._2(2))))
+      }) > DynaMLPipe.deltaOperationVec(deltaT)
+    } else {
+      preProcessPipe > DynaMLPipe.deltaOperationVec(deltaT)
+    }
 
-    val processTest = preProcessPipe >
-      StreamDataPipe((couple: (Double, DenseVector[Double])) =>
-        couple._1 >= stampStart && couple._1 <= stampEnd) >
-      DynaMLPipe.deltaOperationVec(deltaT)
+    val processTest = if(opt("Use VBz").toBoolean){
+      preProcessPipe >
+        StreamDataPipe((point: (Double, DenseVector[Double])) => {
+          (point._1, DenseVector(point._2.toArray ++ Array(point._2(1) * point._2(2))))
+        }) >
+        StreamDataPipe((couple: (Double, DenseVector[Double])) =>
+          couple._1 >= stampStart && couple._1 <= stampEnd) >
+        DynaMLPipe.deltaOperationVec(deltaT)
+    } else {
+      preProcessPipe >
+        StreamDataPipe((couple: (Double, DenseVector[Double])) =>
+          couple._1 >= stampStart && couple._1 <= stampEnd) >
+        DynaMLPipe.deltaOperationVec(deltaT)
+    }
 
     val trainTestPipe = DataPipe(processTraining, processTest) >
       DataPipe((data: (Stream[(DenseVector[Double], Double)],
@@ -315,7 +331,7 @@ object DstARXExperiment {
               kernel, modelOrder, 0, new DiracKernel(2.0),
               num_training, column, ex, options("grid").toInt,
               options("step").toDouble, options("globalOpt"),
-              Map(), action = "test")
+              options, action = "test")
 
             val row = Seq(
               eventId, stormCategory, modelOrder,
