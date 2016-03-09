@@ -129,6 +129,27 @@ object DynaMLPipe {
       }).toStream)
 
   /**
+    * The vector ARX version of [[DynaMLPipe.deltaOperation]]
+    * */
+  val deltaOperationARX = (deltaT: List[Int]) =>
+    DataPipe((lines: Stream[(Double, DenseVector[Double])]) =>
+      lines.toList.sliding(deltaT.max+1).map((history) => {
+        val hist = history.take(history.length - 1).map(_._2)
+        val featuresAcc: ML[Double] = ML()
+
+        (0 until hist.head.length).foreach((dimension) => {
+          //for each dimension/regressor take points t to t-order
+          featuresAcc ++= hist.takeRight(deltaT(dimension))
+            .map(vec => vec(dimension))
+        })
+
+        val features = DenseVector(featuresAcc.toArray)
+        //assert(history.length == deltaT + 1, "Check one")
+        //assert(features.length == deltaT, "Check two")
+        (features, history.last._2(0))
+      }).toStream)
+
+  /**
     * From a [[Stream]] of [[String]] remove all records
     * which contain missing values, this pipe should be applied
     * after the application of [[DynaMLPipe.extractTrainingFeatures]].

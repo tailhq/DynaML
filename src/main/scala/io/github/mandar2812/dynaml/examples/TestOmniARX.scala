@@ -24,7 +24,7 @@ object TestOmniARX {
   def apply(year: Int, start: String = "2006/12/28/00", end: String = "2006/12/29/23",
             kernel: CovarianceFunction[DenseVector[Double],
               Double, DenseMatrix[Double]],
-            delta: Int, noise: CovarianceFunction[DenseVector[Double],
+            delta: List[Int], noise: CovarianceFunction[DenseVector[Double],
               Double, DenseMatrix[Double]],
             num_training: Int, column: Int,
             exoInputColumns: List[Int] = List(24),
@@ -46,7 +46,7 @@ object TestOmniARX {
                     end: String = "",
                     kernel: CovarianceFunction[DenseVector[Double],
                       Double, DenseMatrix[Double]],
-                    deltaT: Int = 2, stepPred: Int = 3,
+                    deltaT: List[Int], stepPred: Int = 3,
                     noise: CovarianceFunction[DenseVector[Double],
                       Double, DenseMatrix[Double]],
                     num_training: Int = 200, column: Int = 40,
@@ -93,7 +93,7 @@ object TestOmniARX {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPNarXModel(deltaT, ex.length,
+        val model = new GPNarXModel(deltaT.max, ex.length,
           kernel, noise, trainTest._1._1.toSeq)
 
         val gs = globalOpt match {
@@ -192,7 +192,7 @@ object TestOmniARX {
         action match {
           case "test" =>
             Seq(
-              Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
+              Seq(year.toDouble, yearTest.toDouble, deltaT.max.toDouble,
                 ex.length.toDouble, 1.0, num_training.toDouble,
                 trainTest._1._2.length.toDouble,
                 metrics.mae, metrics.rmse, metrics.Rsq,
@@ -226,9 +226,9 @@ object TestOmniARX {
       preProcessPipe >
       StreamDataPipe((point: (Double, DenseVector[Double])) => {
         (point._1, DenseVector(point._2.toArray ++ Array(point._2(1) * point._2(2))))
-      }) > DynaMLPipe.deltaOperationVec(deltaT)
+      }) > DynaMLPipe.deltaOperationARX(deltaT)
     } else {
-      preProcessPipe > DynaMLPipe.deltaOperationVec(deltaT)
+      preProcessPipe > DynaMLPipe.deltaOperationARX(deltaT)
     }
 
     val processTest = if(opt("Use VBz").toBoolean){
@@ -238,12 +238,12 @@ object TestOmniARX {
         }) >
         StreamDataPipe((couple: (Double, DenseVector[Double])) =>
           couple._1 >= stampStart && couple._1 <= stampEnd) >
-        DynaMLPipe.deltaOperationVec(deltaT)
+        DynaMLPipe.deltaOperationARX(deltaT)
     } else {
       preProcessPipe >
         StreamDataPipe((couple: (Double, DenseVector[Double])) =>
           couple._1 >= stampStart && couple._1 <= stampEnd) >
-        DynaMLPipe.deltaOperationVec(deltaT)
+        DynaMLPipe.deltaOperationARX(deltaT)
     }
 
     val trainTestPipe = DataPipe(processTraining, processTest) >
@@ -273,12 +273,11 @@ object DstARXExperiment {
 
     years.foreach((year) => {
       testYears.foreach((testYear) => {
-        deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
             TestOmniARX.runExperiment(year,
               testYear+"/12/12:00", testYear+"/12/12:23",
               new FBMKernel(bandwidth),
-              delta, stepAhead, new DiracKernel(noise),
+              deltas, stepAhead, new DiracKernel(noise),
               modelSize, column, exogenous,
               grid, step, "GS",
               Map("tolerance" -> "0.0001",
@@ -286,7 +285,7 @@ object DstARXExperiment {
                 "maxIterations" -> "100"))
               .foreach(res => writer.writeRow(res))
           })
-        })
+
       })
     })
 
@@ -307,7 +306,6 @@ object DstARXExperiment {
 
     val initialKernelState = kernel.state
 
-    deltas.foreach(modelOrder => {
       val stormsPipe =
         DynaMLPipe.fileToStream >
           DynaMLPipe.replaceWhiteSpaces >
@@ -328,13 +326,13 @@ object DstARXExperiment {
 
             val res = TestOmniARX.runExperiment(yearTrain,
               startDate+"/"+startHour, endDate+"/"+endHour,
-              kernel, modelOrder, 0, new DiracKernel(2.0),
+              kernel, deltas, 0, new DiracKernel(1.0),
               num_training, column, ex, options("grid").toInt,
               options("step").toDouble, options("globalOpt"),
               options, action = "test")
 
             val row = Seq(
-              eventId, stormCategory, modelOrder,
+              eventId, stormCategory, deltas.max,
               num_training, res.head(8),
               res.head(10), res.head(13)-res.head(14),
               res.head(14), res.head(12))
@@ -343,6 +341,5 @@ object DstARXExperiment {
           })
 
       stormsPipe.run("data/geomagnetic_storms.csv")
-    })
-  }
+      }
 }
