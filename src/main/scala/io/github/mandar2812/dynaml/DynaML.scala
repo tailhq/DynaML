@@ -24,6 +24,7 @@ object DynaML extends App {
           intp.addImports("org.apache.spark.SparkContext")
           intp.addImports("org.apache.spark.SparkConf")
           intp.addImports("io.github.mandar2812.dynaml.pipes._")
+          intp.addImports("org.openml.apiconnector.io._")
         }
       }
 
@@ -39,7 +40,8 @@ object DynaML extends App {
           " /    /:/  /   \\:\\__\\  \n   \\/__/               \\/__/    "+
           " \\/__/     \\/__/     \\/__/  ")
         val version = prop.getProperty("dynaml.version")
-        echo("\nWelcome to DynaML v "+version+"\nInteractive Scala shell for Machine Learning Research")
+        echo("\nWelcome to DynaML v "+version+
+          "\nInteractive Scala shell for Machine Learning Research")
       }
     }
     val settings = new Settings
