@@ -22,28 +22,36 @@ import org.apache.log4j.Logger
   */
 object TestOmniAR {
 
-  def apply(year: Int, start: String = "2006/12/28/00", end: String = "2006/12/29/23",
-            kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  def apply(trainstart: String = "2008/01/01/00",
+            trainend: String = "2008/01/10/23",
+            start: String = "2006/12/28/00",
+            end: String = "2006/12/29/23",
+            kernel: CovarianceFunction[DenseVector[Double],
+              Double, DenseMatrix[Double]],
             delta: Int, timeLag:Int,
-            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            num_training: Int,
+            noise: CovarianceFunction[DenseVector[Double],
+              Double, DenseMatrix[Double]],
             column: Int, grid: Int,
             step: Double, globalOpt: String,
             stepSize: Double = 0.05,
             maxIt: Int = 200,
             action: String = "test") =
-    runExperiment(year, start, end,
+    runExperiment(trainstart, trainend, start, end,
       kernel, delta, timeLag, stepPred = 0, noise,
-      num_training, column, grid, step, globalOpt,
+      column, grid, step, globalOpt,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString), action)
 
-  def runExperiment(year: Int = 2006, start: String = "", end: String = "",
-                    kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
-                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    num_training: Int = 200, column: Int = 40, grid: Int = 5,
+  def runExperiment(trainstart: String = "", trainend: String = "",
+                    start: String = "", end: String = "",
+                    kernel: CovarianceFunction[DenseVector[Double],
+                      Double, DenseMatrix[Double]],
+                    deltaT: Int = 2, timelag:Int = 0,
+                    stepPred: Int = 3,
+                    noise: CovarianceFunction[DenseVector[Double],
+                      Double, DenseMatrix[Double]],
+                    column: Int = 40, grid: Int = 5,
                     step: Double = 0.2, globalOpt: String = "ML",
                     opt: Map[String, String],
                     action: String = "test"): Seq[Seq[Double]] = {
@@ -60,11 +68,27 @@ object TestOmniAR {
 
     val logger = Logger.getLogger(this.getClass)
 
+    val greg: GregorianCalendar = new GregorianCalendar()
     val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd/HH")
+
+    val trainDateS: Date = sdf.parse(trainstart)
+    val trainDateE: Date = sdf.parse(trainend)
+
+    greg.setTime(trainDateS)
+    val traindayStart = greg.get(Calendar.DAY_OF_YEAR)
+    val trainhourStart = greg.get(Calendar.HOUR_OF_DAY)
+    val trainstampStart = (traindayStart * 24) + trainhourStart
+    val yearTrain = greg.get(Calendar.YEAR)
+
+
+    greg.setTime(trainDateE)
+    val traindayEnd = greg.get(Calendar.DAY_OF_YEAR)
+    val trainhourEnd = greg.get(Calendar.HOUR_OF_DAY)
+    val trainstampEnd = (traindayEnd * 24) + trainhourEnd
+
     val dateS: Date = sdf.parse(start)
     val dateE: Date = sdf.parse(end)
 
-    val greg: GregorianCalendar = new GregorianCalendar()
     greg.setTime(dateS)
     val dayStart = greg.get(Calendar.DAY_OF_YEAR)
     val hourStart = greg.get(Calendar.HOUR_OF_DAY)
@@ -84,7 +108,7 @@ object TestOmniAR {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
         val model = new GPNarModel(deltaT, kernel, noise, trainTest._1._1.toSeq)
-
+        val num_training = trainTest._1._1.length
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
             .setGridSize(grid)
@@ -130,20 +154,6 @@ object TestOmniAR {
 
         metrics.setName(name)
 
-        /*val incrementsPipe =
-          DataPipe(
-            (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2)).toList) >
-             deNormalize1 >
-            DataPipe((list: List[(Double, Double)]) =>
-              list.sliding(2).map(i => (i(1)._1 - i.head._1,
-                i(1)._2 - i.head._2)).toList)
-
-        val increments = incrementsPipe.run(res)
-
-        val incrementMetrics = new RegressionMetrics(increments, increments.length)
-        */
-
         //Model Predicted Output, only in stepPred > 0
         var mpoRes: Seq[Double] = Seq()
         if(stepPred > 0) {
@@ -187,7 +197,7 @@ object TestOmniAR {
             "Predicted Time Series ("+stepPred+" hours ahead)"))
           unhold()
 
-          mpoRes = Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
+          mpoRes = Seq(yearTrain.toDouble, yearTest.toDouble, deltaT.toDouble,
             stepPred.toDouble, num_training.toDouble,
             trainTest._1._2.length.toDouble,
             mpoMetrics.mae, mpoMetrics.rmse, mpoMetrics.Rsq,
@@ -223,26 +233,13 @@ object TestOmniAR {
 
         logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
 
-        /*incrementMetrics.generateFitPlot()
-        line((1 to increments.length).toList, increments.map(_._2))
-        hold()
-        line((1 to increments.length).toList, increments.map(_._1))
-        legend(List("Increments of "+name1,
-          "Predicted Increments of "+name1+" (one hour ahead)"))
-        unhold()
-        */
-
         logger.info("Printing One Step Ahead (OSA) Performance Metrics")
         metrics.print()
 
-        /*
-        logger.info("Results for Prediction of increments")
-        incrementMetrics.print()
-        */
         action match {
           case "test" =>
             Seq(
-              Seq(year.toDouble, yearTest.toDouble, deltaT.toDouble,
+              Seq(yearTrain.toDouble, yearTest.toDouble, deltaT.toDouble,
                 1.0, num_training.toDouble, trainTest._1._2.length.toDouble,
                 metrics.mae, metrics.rmse, metrics.Rsq,
                 metrics.corr, metrics.modelYield,
@@ -273,20 +270,20 @@ object TestOmniAR {
 
 
     val processTraining = preProcessPipe >
+      StreamDataPipe((couple: (Double, Double)) =>
+        couple._1 >= trainstampStart && couple._1 <= trainstampEnd) >
       DynaMLPipe.deltaOperation(deltaT, timelag)
 
     val processTest = preProcessPipe >
-      StreamDataPipe((couple: (Double, Double)) => couple._1 >= stampStart && couple._1 <= stampEnd) >
+      StreamDataPipe((couple: (Double, Double)) =>
+        couple._1 >= stampStart && couple._1 <= stampEnd) >
       DynaMLPipe.deltaOperation(deltaT, timelag)
 
     val trainTestPipe = DataPipe(processTraining, processTest) >
-      DataPipe((data: (Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)])) => {
-        (data._1.take(num_training), data._2)
-      }) > DynaMLPipe.gaussianStandardization >
+      DynaMLPipe.gaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe.run(("data/omni2_"+year+".csv",
+    trainTestPipe.run(("data/omni2_"+yearTrain+".csv",
       "data/omni2_"+yearTest+".csv"))
 
   }
@@ -310,12 +307,14 @@ object DstARExperiment {
         deltas.foreach((delta) => {
           modelSizes.foreach((modelSize) => {
             TestOmniAR.runExperiment(
-              year, testYear.toString+"/12/12:00",
-              testYear.toString+"/12/12:23",
+              year.toString+"/01/01/00",
+              year.toString+"/01/10/23",
+              testYear.toString+"/12/12/00",
+              testYear.toString+"/12/12/23",
               new FBMKernel(bandwidth),
               delta, 0, stepAhead,
               new DiracKernel(noise),
-              modelSize, column,
+              column,
               grid, step, "GS",
               Map("tolerance" -> "0.0001",
                 "step" -> "0.1",
@@ -329,7 +328,7 @@ object DstARExperiment {
     writer.close()
   }
 
-  def apply(yearTrain: Int,
+  def apply(trainstart: String, trainend: String,
             kernel: CovarianceFunction[DenseVector[Double],
               Double, DenseMatrix[Double]],
             num_training: Int,
@@ -361,10 +360,10 @@ object DstARExperiment {
 
             val stormCategory = stormMetaFields(6)
             kernel.setHyperParameters(initialKernelState)
-            val res = TestOmniAR.runExperiment(yearTrain,
+            val res = TestOmniAR.runExperiment(trainstart, trainend,
               startDate+"/"+startHour, endDate+"/"+endHour,
               kernel, modelOrder, 0, 0, new DiracKernel(2.0),
-              250, 40, options("grid").toInt, options("step").toDouble,
+              40, options("grid").toInt, options("step").toDouble,
               options("globalOpt"), Map(), action = "test")
 
             val row = Seq(eventId, stormCategory, modelOrder, num_training, res.head(7),
