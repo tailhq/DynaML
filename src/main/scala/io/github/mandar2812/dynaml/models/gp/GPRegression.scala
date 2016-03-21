@@ -19,7 +19,9 @@ under the License.
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.{DenseMatrix, DenseVector}
+import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, CovarianceFunction}
+import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
   *
@@ -39,10 +41,41 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   DenseVector[Double]](cov, noise, trainingdata,
   trainingdata.length){
 
+  var validationSet: Seq[(DenseVector[Double], Double)] = Seq()
+
+  var validationScoresToEnergy: DataPipe[Seq[(Double, Double)], Double] =
+    DataPipe((scoresAndLabels: Seq[(Double, Double)]) => {
+
+      val metrics = new RegressionMetrics(
+        scoresAndLabels.toList,
+        scoresAndLabels.length
+      )
+
+      metrics.rmse*(1.0-metrics.corr)
+    })
+
   /**
     * Convert from the underlying data structure to
     * Seq[(I, Y)] where I is the index set of the GP
     * and Y is the value/label type.
     **/
   override def dataAsSeq(data: Seq[(DenseVector[Double], Double)]) = data
+
+  override def energy(h: Map[String, Double],
+                      options: Map[String, String]): Double = validationSet.length match {
+    case 0 => super.energy(h, options)
+    case _ =>
+      // Calculate regression metrics on validation set
+      // Return some function of kpi as energy
+
+      val resultsToScoresAndLabels = DataPipe(
+        (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
+          res.map(i => (i._3, i._2)))
+
+      val scoresAndLabelsPipe = resultsToScoresAndLabels >
+          validationScoresToEnergy
+
+     scoresAndLabelsPipe.run(this.test(validationSet))
+  }
+
 }

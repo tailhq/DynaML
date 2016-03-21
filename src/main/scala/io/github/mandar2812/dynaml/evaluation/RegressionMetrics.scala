@@ -84,7 +84,7 @@ class RegressionMetrics(
     logger.info("Std Dev of Residuals: " + sigma)
   }
 
-  override def kpi() = DenseVector(mae, rmse, Rsq)
+  override def kpi() = DenseVector(mae, rmse, Rsq, corr)
 
   override def generatePlots(): Unit = {
     //implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
