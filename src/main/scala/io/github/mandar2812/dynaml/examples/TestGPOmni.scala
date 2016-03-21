@@ -152,7 +152,7 @@ object TestGPOmni {
           (data._1.filter(_ => Random.nextDouble() <= num_training/data._1.size.toDouble),
             data._2.filter(_ => Random.nextDouble() <= num_test/data._2.size.toDouble))
       }) >
-      DynaMLPipe.gaussianStandardization >
+      DynaMLPipe.trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
 

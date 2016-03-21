@@ -181,7 +181,69 @@ object TestOmniARX {
           kernel, noise, trainTest._1._1)
         val num_training = trainTest._1._1.length
 
+        // If a validation set is specified, process it
+        // using the above pre-process Data Pipes and
+        // feed it into the model instance.
 
+        if(opt.contains("validationStart") && opt.contains("validationEnd")) {
+          val validationDateS: Date = sdf.parse(opt("validationStart"))
+          val validationDateE: Date = sdf.parse(opt("validationEnd"))
+
+          greg.setTime(validationDateS)
+          val valdayStart = greg.get(Calendar.DAY_OF_YEAR)
+          val valhourStart = greg.get(Calendar.HOUR_OF_DAY)
+          val valstampStart = (valdayStart * 24) + valhourStart
+          val yearVal = greg.get(Calendar.YEAR)
+
+
+          greg.setTime(validationDateE)
+          val valdayEnd = greg.get(Calendar.DAY_OF_YEAR)
+          val valhourEnd = greg.get(Calendar.HOUR_OF_DAY)
+          val valstampEnd = (valdayEnd * 24) + valhourEnd
+
+          val processValidation = if(opt("Use VBz").toBoolean) {
+            preProcessPipe >
+              StreamDataPipe((couple: (Double, DenseVector[Double])) =>
+                couple._1 >= valstampStart && couple._1 <= valstampEnd) >
+              StreamDataPipe((point: (Double, DenseVector[Double])) => {
+                (point._1, DenseVector(point._2.toArray ++ Array(point._2(1) * point._2(2))))
+              }) >
+              DynaMLPipe.deltaOperationARX(deltaT)
+          } else {
+            preProcessPipe >
+              StreamDataPipe((couple: (Double, DenseVector[Double])) =>
+                couple._1 >= valstampStart && couple._1 <= valstampEnd) >
+              DynaMLPipe.deltaOperationARX(deltaT)
+          }
+
+          val featureDims = trainTest._2._1.length - 1
+
+          val meanFeatures = trainTest._2._1(0 until featureDims)
+          val stdDevFeatures = trainTest._2._2(0 until featureDims)
+
+          val meanTargets = trainTest._2._1(-1)
+          val stdDevTargets = trainTest._2._2(-1)
+
+          // Set processTargets to a data pipe
+          // which re scales the predicted outputs and actual
+          // outputs to their orignal scales using the calculated
+          // mean and standard deviation of the targets.
+          model.processTargets = StreamDataPipe((predictionCouple: (Double, Double)) =>
+            (predictionCouple._1*stdDevTargets + meanTargets,
+              predictionCouple._2*stdDevTargets + meanTargets)
+          )
+
+          val standardizeValidationInstances = StreamDataPipe(
+            (instance: (DenseVector[Double], Double)) => {
+
+              ((instance._1 - meanFeatures) :/ stdDevFeatures,
+                (instance._2 - meanTargets)/stdDevTargets)
+            })
+
+          model.validationSet =
+            (processValidation > standardizeValidationInstances) run
+              "data/omni2_"+yearTrain+".csv"
+        }
 
 
 
@@ -269,7 +331,7 @@ object TestOmniARX {
       }
 
     val trainTestPipe = DataPipe(processTraining, processTest) >
-      DynaMLPipe.gaussianStandardization >
+      DynaMLPipe.trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
 
@@ -285,8 +347,9 @@ object DstARXExperiment {
             modelSizes: List[Int] = List(50, 100, 150),
             deltas: List[Int] = List(1, 2, 3), exogenous: List[Int] = List(24),
             stepAhead: Int, bandwidth: Double,
-            noise: Double,
-            num_test: Int, column: Int, grid: Int, step: Double) = {
+            noise: Double, num_test: Int,
+            column: Int, grid: Int,
+            step: Double) = {
 
     val writer = CSVWriter.open(new File("data/OmniNARXRes.csv"), append = true)
 
@@ -368,5 +431,5 @@ object DstARXExperiment {
           })
 
       stormsPipe.run("data/geomagnetic_storms.csv")
-      }
+  }
 }

@@ -117,7 +117,7 @@ object TestNNOmni {
 
     val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
       DynaMLPipe.splitTrainingTest(num_training, num_test) >
-      DynaMLPipe.gaussianStandardization >
+      DynaMLPipe.trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
     trainTestPipe.run(("data/omni2_"+year+".csv",

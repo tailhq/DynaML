@@ -101,7 +101,7 @@ object TestOmniTS {
           l.map(d => (DenseVector(d._1), d._2)))
       ) >
       DynaMLPipe.splitTrainingTest(num_training, num_test) >
-      DynaMLPipe.gaussianStandardization >
+      DynaMLPipe.trainTestGaussianStandardization >
       DataPipe((X: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {

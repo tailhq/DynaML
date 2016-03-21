@@ -145,7 +145,7 @@ object TestGPHousing {
 
     val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
       DynaMLPipe.splitTrainingTest(num_training, 506-num_training) >
-      DynaMLPipe.gaussianStandardization >
+      DynaMLPipe.trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
     trainTestPipe.run(("data/housing.data", "data/housing.data"))

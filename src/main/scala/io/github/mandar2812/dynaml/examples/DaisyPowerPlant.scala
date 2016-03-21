@@ -128,7 +128,7 @@ object DaisyPowerPlant {
 
     val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
       DynaMLPipe.splitTrainingTest(num_training, 200-num_training) >
-      DynaMLPipe.gaussianStandardization >
+      DynaMLPipe.trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
     trainTestPipe.run(("data/powerplant.csv",

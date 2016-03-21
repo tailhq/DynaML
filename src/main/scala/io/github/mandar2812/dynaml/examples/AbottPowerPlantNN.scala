@@ -174,7 +174,7 @@ object AbottPowerPlantNN {
         Stream[(DenseVector[Double], DenseVector[Double])])) => {
         (data._1.take(num_training), data._2.takeRight(num_test))
       }) >
-      DynaMLPipe.gaussianStandardizationMO >
+      DynaMLPipe.trainTestGaussianStandardizationMO >
       DataPipe(modelTrainTest)
 
     trainTestPipe.run(("data/steamgen.csv",

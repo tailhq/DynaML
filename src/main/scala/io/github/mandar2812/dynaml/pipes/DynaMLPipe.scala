@@ -194,7 +194,7 @@ object DynaMLPipe {
     *
     * (Stream(training data), Stream(test data))
     * */
-  val gaussianStandardization =
+  val trainTestGaussianStandardization =
     DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
       Stream[(DenseVector[Double], Double)])) => {
       logger.info("Training Data")
@@ -228,7 +228,7 @@ object DynaMLPipe {
     *
     * (Stream(training data), Stream(test data))
     * */
-  val gaussianStandardizationMO =
+  val trainTestGaussianStandardizationMO =
     DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
       Stream[(DenseVector[Double], DenseVector[Double])])) => {
       //logger.info("Training Data")

@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, CovarianceFunction => CovFunc}
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 
 /**
   *
@@ -63,6 +63,20 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   var validationSet: Seq[(DenseVector[Double], Double)] = Seq()
 
   /**
+    * Setting a data pipe to process predicted and
+    * actual target values can be useful in cases where
+    * one needs to perform operations such as de-normalizing
+    * the predicted and actual targets to their original
+    * scales.
+    *
+    * */
+  var processTargets: DataPipe[
+    Stream[(Double, Double)],
+    Stream[(Double, Double)]] =
+    StreamDataPipe((predictionCouple: (Double, Double)) =>
+      identity(predictionCouple))
+
+  /**
     * If one uses a non empty validation set, then
     * the user can set a custom function of
     * the validation predictions and targets as
@@ -72,15 +86,15 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     * Currently this defaults to RMSE*(1-CC) calculated
     * on the validation data.
     * */
-  var scoresToEnergy: DataPipe[Seq[(Double, Double)], Double] =
-    DataPipe((scoresAndLabels: Seq[(Double, Double)]) => {
+  var scoresToEnergy: DataPipe[Stream[(Double, Double)], Double] =
+    DataPipe((scoresAndLabels) => {
 
       val metrics = new RegressionMetrics(
         scoresAndLabels.toList,
         scoresAndLabels.length
       )
 
-      metrics.rmse*(1.0-metrics.corr)
+      metrics.rmse
     })
 
   /**
@@ -112,9 +126,10 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
 
       val resultsToScores = DataPipe(
         (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-          res.map(i => (i._3, i._2)))
+          res.map(i => (i._3, i._2)).toStream)
 
       (resultsToScores >
+        processTargets >
         scoresToEnergy) run
         this.test(validationSet)
   }
