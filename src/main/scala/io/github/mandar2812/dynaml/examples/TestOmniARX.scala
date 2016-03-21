@@ -33,7 +33,8 @@ import com.quantifind.charts.Highcharts._
 import org.apache.log4j.Logger
 
 /**
-  * @author mandar2812 on 22/11/15.
+  * @author mandar2812
+  * date: 22/11/15.
   *
   * Test a GP-NARX model on the Omni Data set
   */

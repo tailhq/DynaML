@@ -34,7 +34,8 @@ import org.apache.log4j.Logger
 
 
 /**
-  * @author mandar2812 datum 22/11/15.
+  * @author mandar2812
+  * date: 22/11/15.
   *
   * Test a GP-NAR model on the Omni Data set
   */

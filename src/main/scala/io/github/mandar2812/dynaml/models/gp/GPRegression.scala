@@ -20,30 +20,59 @@ package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, CovarianceFunction}
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, CovarianceFunction => CovFunc}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
   *
-  * @author mandar2812 date 17/11/15.
+  * @author mandar2812
+  * date: 17/11/15.
   *
   * Class representing Gaussian Process regression models
   *
   * y = f(x) + e
   * f(x) ~ GP(0, cov(X,X))
   * e|f(x) ~ N(f(x), noise(X,X))
+  *
+  * Constructor Parameters:
+  *
+  * @param cov The covariance/kernel function
+  *            as an appropriate subtype of [[CovFunc]]
+  *
+  * @param noise The kernel function describing the
+  *              noise model, defaults to [[DiracKernel]].
+  *
+  * @param trainingdata The data structure containing the
+  *                     training data i.e. [[Seq]] of [[Tuple2]]
+  *                     of the form (features, target)
+  *
   */
 class GPRegression(
-  cov: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-  noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] = new DiracKernel(1.0),
+  cov: CovFunc[DenseVector[Double], Double, DenseMatrix[Double]],
+  noise: CovFunc[DenseVector[Double], Double, DenseMatrix[Double]] = new DiracKernel(1.0),
   trainingdata: Seq[(DenseVector[Double], Double)]) extends
 AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   DenseVector[Double]](cov, noise, trainingdata,
   trainingdata.length){
 
+  /**
+    * Setting a validation set is optional in case
+    * one wants to use some function of metrics like correltaion or rmse
+    * as hyper-parameter optimization objective functions.
+    * */
   var validationSet: Seq[(DenseVector[Double], Double)] = Seq()
 
-  var validationScoresToEnergy: DataPipe[Seq[(Double, Double)], Double] =
+  /**
+    * If one uses a non empty validation set, then
+    * the user can set a custom function of
+    * the validation predictions and targets as
+    * the objective function for the hyper-parameter
+    * optimization routine.
+    *
+    * Currently this defaults to RMSE*(1-CC) calculated
+    * on the validation data.
+    * */
+  var scoresToEnergy: DataPipe[Seq[(Double, Double)], Double] =
     DataPipe((scoresAndLabels: Seq[(Double, Double)]) => {
 
       val metrics = new RegressionMetrics(
@@ -61,6 +90,17 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     **/
   override def dataAsSeq(data: Seq[(DenseVector[Double], Double)]) = data
 
+  /**
+    * Calculates the energy of the configuration, required
+    * for global optimization routines.
+    *
+    * Defaults to the base implementation in [[io.github.mandar2812.dynaml.optimization.GloballyOptimizable]]
+    * in case a validation set is not specified through the [[validationSet]] variable.
+    *
+    * @param h The value of the hyper-parameters in the configuration space
+    * @param options Optional parameters about configuration
+    * @return Configuration Energy E(h)
+    * */
   override def energy(h: Map[String, Double],
                       options: Map[String, String]): Double = validationSet.length match {
     case 0 => super.energy(h, options)
@@ -68,14 +108,13 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
       // Calculate regression metrics on validation set
       // Return some function of kpi as energy
 
-      val resultsToScoresAndLabels = DataPipe(
+      val resultsToScores = DataPipe(
         (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
           res.map(i => (i._3, i._2)))
 
-      val scoresAndLabelsPipe = resultsToScoresAndLabels >
-          validationScoresToEnergy
-
-     scoresAndLabelsPipe.run(this.test(validationSet))
+      (resultsToScores >
+        scoresToEnergy) run
+        this.test(validationSet)
   }
 
 }
