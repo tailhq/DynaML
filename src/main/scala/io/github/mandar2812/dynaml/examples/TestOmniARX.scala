@@ -128,13 +128,62 @@ object TestOmniARX {
     //separate data into training and test
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
+
+    val preProcessPipe = DynaMLPipe.fileToStream >
+      DynaMLPipe.replaceWhiteSpaces >
+      DynaMLPipe.extractTrainingFeatures(
+        List(0,1,2,column)++ex,
+        Map(
+          16 -> "999.9", 21 -> "999.9",
+          24 -> "9999.", 23 -> "999.9",
+          40 -> "99999", 22 -> "9999999.",
+          25 -> "999.9", 28 -> "99.99",
+          27 -> "9.999", 39 -> "999",
+          45 -> "99999.99", 46 -> "99999.99",
+          47 -> "99999.99")
+      ) >
+      DynaMLPipe.removeMissingLines >
+      DynaMLPipe.extractTimeSeriesVec((year,day,hour) => (day * 24) + hour)
+
+    val processTraining = if(opt("Use VBz").toBoolean) {
+      preProcessPipe > StreamDataPipe((point: (Double, DenseVector[Double])) => {
+        (point._1, DenseVector(point._2.toArray ++ Array(point._2(1) * point._2(2))))
+      }) > StreamDataPipe((couple: (Double, DenseVector[Double])) =>
+        couple._1 >= trainstampStart && couple._1 <= trainstampEnd) >
+        DynaMLPipe.deltaOperationARX(deltaT)
+    } else {
+      preProcessPipe > StreamDataPipe((couple: (Double, DenseVector[Double])) =>
+        couple._1 >= trainstampStart && couple._1 <= trainstampEnd) >
+        DynaMLPipe.deltaOperationARX(deltaT)
+    }
+
+    val processTest = if(opt("Use VBz").toBoolean){
+      preProcessPipe >
+        StreamDataPipe((point: (Double, DenseVector[Double])) => {
+          (point._1, DenseVector(point._2.toArray ++ Array(point._2(1) * point._2(2))))
+        }) >
+        StreamDataPipe((couple: (Double, DenseVector[Double])) =>
+          couple._1 >= stampStart && couple._1 <= stampEnd) >
+        DynaMLPipe.deltaOperationARX(deltaT)
+    } else {
+      preProcessPipe >
+        StreamDataPipe((couple: (Double, DenseVector[Double])) =>
+          couple._1 >= stampStart && couple._1 <= stampEnd) >
+        DynaMLPipe.deltaOperationARX(deltaT)
+    }
+
+
     val modelTrainTest =
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
         val model = new GPNarXModel(deltaT.max, ex.length,
-          kernel, noise, trainTest._1._1.toSeq)
+          kernel, noise, trainTest._1._1)
         val num_training = trainTest._1._1.length
+
+
+
+
 
         val gs = globalOpt match {
           case "GS" => new GridSearch[model.type](model)
@@ -152,7 +201,7 @@ object TestOmniARX {
 
         model.setState(conf)
 
-        val res = model.test(trainTest._1._2.toSeq)
+        val res = model.test(trainTest._1._2)
 
         val deNormalize1 = DataPipe((list: List[(Double, Double, Double, Double)]) =>
           list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
@@ -218,49 +267,6 @@ object TestOmniARX {
         }
 
       }
-
-    val preProcessPipe = DynaMLPipe.fileToStream >
-      DynaMLPipe.replaceWhiteSpaces >
-      DynaMLPipe.extractTrainingFeatures(
-        List(0,1,2,column)++ex,
-        Map(
-          16 -> "999.9", 21 -> "999.9",
-          24 -> "9999.", 23 -> "999.9",
-          40 -> "99999", 22 -> "9999999.",
-          25 -> "999.9", 28 -> "99.99",
-          27 -> "9.999", 39 -> "999",
-          45 -> "99999.99", 46 -> "99999.99",
-          47 -> "99999.99")
-      ) >
-      DynaMLPipe.removeMissingLines >
-      DynaMLPipe.extractTimeSeriesVec((year,day,hour) => (day * 24) + hour)
-
-    val processTraining = if(opt("Use VBz").toBoolean) {
-      preProcessPipe > StreamDataPipe((point: (Double, DenseVector[Double])) => {
-        (point._1, DenseVector(point._2.toArray ++ Array(point._2(1) * point._2(2))))
-      }) > StreamDataPipe((couple: (Double, DenseVector[Double])) =>
-        couple._1 >= trainstampStart && couple._1 <= trainstampEnd) >
-        DynaMLPipe.deltaOperationARX(deltaT)
-    } else {
-      preProcessPipe > StreamDataPipe((couple: (Double, DenseVector[Double])) =>
-        couple._1 >= trainstampStart && couple._1 <= trainstampEnd) >
-        DynaMLPipe.deltaOperationARX(deltaT)
-    }
-
-    val processTest = if(opt("Use VBz").toBoolean){
-      preProcessPipe >
-        StreamDataPipe((point: (Double, DenseVector[Double])) => {
-          (point._1, DenseVector(point._2.toArray ++ Array(point._2(1) * point._2(2))))
-        }) >
-        StreamDataPipe((couple: (Double, DenseVector[Double])) =>
-          couple._1 >= stampStart && couple._1 <= stampEnd) >
-        DynaMLPipe.deltaOperationARX(deltaT)
-    } else {
-      preProcessPipe >
-        StreamDataPipe((couple: (Double, DenseVector[Double])) =>
-          couple._1 >= stampStart && couple._1 <= stampEnd) >
-        DynaMLPipe.deltaOperationARX(deltaT)
-    }
 
     val trainTestPipe = DataPipe(processTraining, processTest) >
       DynaMLPipe.gaussianStandardization >
