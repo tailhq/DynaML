@@ -94,8 +94,10 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     * Calculates the energy of the configuration, required
     * for global optimization routines.
     *
-    * Defaults to the base implementation in [[io.github.mandar2812.dynaml.optimization.GloballyOptimizable]]
-    * in case a validation set is not specified through the [[validationSet]] variable.
+    * Defaults to the base implementation in
+    * [[io.github.mandar2812.dynaml.optimization.GloballyOptimizable]]
+    * in case a validation set is not specified
+    * through the [[validationSet]] variable.
     *
     * @param h The value of the hyper-parameters in the configuration space
     * @param options Optional parameters about configuration
