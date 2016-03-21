@@ -350,7 +350,6 @@ object DstARExperiment {
   def apply(trainstart: String, trainend: String,
             kernel: CovarianceFunction[DenseVector[Double],
               Double, DenseMatrix[Double]],
-            num_training: Int,
             deltas: List[Int],
             options: Map[String, String]) = {
     val writer =
@@ -385,8 +384,11 @@ object DstARExperiment {
               40, options("grid").toInt, options("step").toDouble,
               options("globalOpt"), Map(), action = "test")
 
-            val row = Seq(eventId, stormCategory, modelOrder, num_training, res.head(7),
-              res.head(9), res.head.last-minDst, minDst, res.head(11))
+            val row = Seq(
+              eventId, stormCategory, modelOrder,
+              res.head(4), res.head(7), res.head(9),
+              res.head.last-minDst, minDst, res.head(11)
+            )
 
             writer.writeRow(row)
           })

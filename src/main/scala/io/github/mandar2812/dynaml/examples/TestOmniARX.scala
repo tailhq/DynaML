@@ -214,7 +214,7 @@ object TestOmniARX {
                 peakValuePred,
                 peakValueAct)
             )
-          case "predict" => scoresAndLabels.toSeq.map(i => Seq(i._2, i._1))
+          case "predict" => scoresAndLabels.map(i => Seq(i._2, i._1))
         }
 
       }
@@ -302,7 +302,6 @@ object DstARXExperiment {
                 "Use VBz" -> "false"))
               .foreach(res => writer.writeRow(res))
           })
-
       })
     })
 
@@ -312,7 +311,6 @@ object DstARXExperiment {
   def apply(trainstart: String, trainend: String,
             kernel: CovarianceFunction[DenseVector[Double],
               Double, DenseMatrix[Double]],
-            num_training: Int,
             deltas: List[Int],
             column: Int, ex: List[Int],
             options: Map[String, String]) = {
@@ -356,7 +354,7 @@ object DstARXExperiment {
             val row = Seq(
               eventId, stormCategory,
               deltas.head.toDouble,
-              num_training, res.head(8),
+              res.head(5), res.head(8),
               res.head(10), res.head(13)-res.head(14),
               res.head(14), res.head(12))
 
