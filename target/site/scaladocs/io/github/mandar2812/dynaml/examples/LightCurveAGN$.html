@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>CommitteeModelSolver - DynaML 1.2 API - io.github.mandar2812.dynaml.optimization.CommitteeModelSolver</title>
-          <meta name="description" content="CommitteeModelSolver - DynaML 1.2 API - io.github.mandar2812.dynaml.optimization.CommitteeModelSolver" />
-          <meta name="keywords" content="CommitteeModelSolver DynaML 1.2 API io.github.mandar2812.dynaml.optimization.CommitteeModelSolver" />
+          <title>LightCurveAGN - DynaML 1.2 API - io.github.mandar2812.dynaml.examples.LightCurveAGN</title>
+          <meta name="description" content="LightCurveAGN - DynaML 1.2 API - io.github.mandar2812.dynaml.examples.LightCurveAGN" />
+          <meta name="keywords" content="LightCurveAGN DynaML 1.2 API io.github.mandar2812.dynaml.examples.LightCurveAGN" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'io.github.mandar2812.dynaml.optimization.CommitteeModelSolver';
+            var hash = 'io.github.mandar2812.dynaml.examples.LightCurveAGN$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -22,28 +22,27 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <img src="../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.optimization">optimization</a></p>
-        <h1>CommitteeModelSolver</h1>
+        <img src="../../../../../lib/object_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.examples">examples</a></p>
+        <h1>LightCurveAGN</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">CommitteeModelSolver</span><span class="result"> extends <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]]</span>
+        <span class="name">LightCurveAGN</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Solves the optimization problem pertaining
-to the weights of a committee model.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by mandar on 4/3/16.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]], <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -61,7 +60,7 @@ to the weights of a committee model.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver"><span>CommitteeModelSolver</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer"><span>RegularizedOptimizer</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.Optimizer"><span>Optimizer</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.examples.LightCurveAGN"><span>LightCurveAGN</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -79,23 +78,7 @@ to the weights of a committee model.
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():io.github.mandar2812.dynaml.optimization.CommitteeModelSolver"></a>
-      <a id="&lt;init&gt;:CommitteeModelSolver"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">CommitteeModelSolver</span><span class="params">()</span>
-      </span>
-      </h4>
-      
-    </li></ol>
-            </div>
+        
 
         
 
@@ -168,6 +151,19 @@ to the weights of a committee model.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.examples.LightCurveAGN#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply(kernel:io.github.mandar2812.dynaml.kernels.CovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]],noise:io.github.mandar2812.dynaml.kernels.CovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]],deltaT:Int,timelag:Int,stepPred:Int,num_training:Int,num_test:Int,opt:Map[String,String]):Seq[Seq[AnyVal]]"></a>
+      <a id="apply(CovarianceFunction[DenseVector[Double],Double,DenseMatrix[Double]],CovarianceFunction[DenseVector[Double],Double,DenseMatrix[Double]],Int,Int,Int,Int,Int,Map[String,String]):Seq[Seq[AnyVal]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="kernel">kernel: <a href="../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="noise">noise: <a href="../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="deltaT">deltaT: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="timelag">timelag: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="stepPred">stepPred: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">3</span></span>, <span name="num_training">num_training: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">150</span></span>, <span name="num_test">num_test: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1000</span></span>, <span name="opt">opt: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.AnyVal">AnyVal</span>]]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -284,19 +280,6 @@ to the weights of a committee model.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#miniBatchFraction" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="miniBatchFraction:Double"></a>
-      <a id="miniBatchFraction:Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">miniBatchFraction</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -336,117 +319,32 @@ to the weights of a committee model.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#numIterations" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="numIterations:Int"></a>
-      <a id="numIterations:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">numIterations</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver#optimize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="optimize(nPoints:Long,ParamOutEdges:Stream[(breeze.linalg.DenseVector[Double],Double)],initialP:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
-      <a id="optimize(Long,Stream[(DenseVector[Double],Double)],DenseVector[Double]):DenseVector[Double]"></a>
+    </li><li name="io.github.mandar2812.dynaml.examples.LightCurveAGN#runExperiment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="runExperiment(kernel:io.github.mandar2812.dynaml.kernels.CovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]],noise:io.github.mandar2812.dynaml.kernels.CovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]],deltaT:Int,timelag:Int,stepPred:Int,num_training:Int,num_test:Int,opt:Map[String,String]):Seq[Seq[AnyVal]]"></a>
+      <a id="runExperiment(CovarianceFunction[DenseVector[Double],Double,DenseMatrix[Double]],CovarianceFunction[DenseVector[Double],Double,DenseMatrix[Double]],Int,Int,Int,Int,Int,Map[String,String]):Seq[Seq[AnyVal]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Long">Long</span></span>, <span name="ParamOutEdges">ParamOutEdges: <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="initialP">initialP: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">runExperiment</span><span class="params">(<span name="kernel">kernel: <a href="../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="noise">noise: <a href="../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="deltaT">deltaT: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="timelag">timelag: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="stepPred">stepPred: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">3</span></span>, <span name="num_training">num_training: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">150</span></span>, <span name="num_test">num_test: <span class="extype" name="scala.Int">Int</span></span>, <span name="opt">opt: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.AnyVal">AnyVal</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Solve the convex optimization problem.</p><div class="fullcomment"><div class="comment cmt"><p>Solve the convex optimization problem.</p><p>min wT.C.w    such that ||w||<sub>1</sub> = 1
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver">CommitteeModelSolver</a> → <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#regParam" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="regParam:Double"></a>
-      <a id="regParam:Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">regParam</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#setMiniBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setMiniBatchFraction(fraction:Double):RegularizedOptimizer.this.type"></a>
-      <a id="setMiniBatchFraction(Double):CommitteeModelSolver.this.type"></a>
+      
+    </li><li name="io.github.mandar2812.dynaml.examples.LightCurveAGN#runExperimentTS" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="runExperimentTS(kernel:io.github.mandar2812.dynaml.kernels.CovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]],noise:io.github.mandar2812.dynaml.kernels.CovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]],deltaT:Int,timelag:Int,stepPred:Int,num_training:Int,num_test:Int,opt:Map[String,String]):Seq[Seq[AnyVal]]"></a>
+      <a id="runExperimentTS(CovarianceFunction[Double,Double,DenseMatrix[Double]],CovarianceFunction[Double,Double,DenseMatrix[Double]],Int,Int,Int,Int,Int,Map[String,String]):Seq[Seq[AnyVal]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setMiniBatchFraction</span><span class="params">(<span name="fraction">fraction: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver">CommitteeModelSolver</a>.this.type</span>
+        <span class="name">runExperimentTS</span><span class="params">(<span name="kernel">kernel: <a href="../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="noise">noise: <a href="../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="deltaT">deltaT: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="timelag">timelag: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="stepPred">stepPred: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">3</span></span>, <span name="num_training">num_training: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">150</span></span>, <span name="num_test">num_test: <span class="extype" name="scala.Int">Int</span></span>, <span name="opt">opt: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.AnyVal">AnyVal</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Set fraction of data to be used for each SGD iteration.</p><div class="fullcomment"><div class="comment cmt"><p>Set fraction of data to be used for each SGD iteration.
-Default 1.0 (corresponding to deterministic/classical gradient descent)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#setNumIterations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setNumIterations(iters:Int):RegularizedOptimizer.this.type"></a>
-      <a id="setNumIterations(Int):CommitteeModelSolver.this.type"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setNumIterations</span><span class="params">(<span name="iters">iters: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver">CommitteeModelSolver</a>.this.type</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Set the number of iterations for SGD.</p><div class="fullcomment"><div class="comment cmt"><p>Set the number of iterations for SGD. Default 100.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#setRegParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setRegParam(regParam:Double):RegularizedOptimizer.this.type"></a>
-      <a id="setRegParam(Double):CommitteeModelSolver.this.type"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setRegParam</span><span class="params">(<span name="regParam">regParam: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver">CommitteeModelSolver</a>.this.type</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Set the regularization parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Set the regularization parameter. Default 0.0.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#setStepSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setStepSize(step:Double):RegularizedOptimizer.this.type"></a>
-      <a id="setStepSize(Double):CommitteeModelSolver.this.type"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setStepSize</span><span class="params">(<span name="step">step: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.CommitteeModelSolver">CommitteeModelSolver</a>.this.type</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Set the initial step size of SGD for the first step.</p><div class="fullcomment"><div class="comment cmt"><p>Set the initial step size of SGD for the first step. Default 1.0.
-In subsequent steps, the step size will decrease with stepSize/sqrt(t)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#stepSize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="stepSize:Double"></a>
-      <a id="stepSize:Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">stepSize</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -539,15 +437,7 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">
-              <h3>Inherited from <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]]</h3>
-            </div><div class="parent" name="io.github.mandar2812.dynaml.optimization.Optimizer">
-              <h3>Inherited from <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]]</h3>
-            </div><div class="parent" name="scala.Serializable">
-              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

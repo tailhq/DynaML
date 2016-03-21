@@ -226,6 +226,20 @@ one needs to construct sliding windows in time. This function
 takes two parameters</p><p>deltaT: the auto-regressive order
 timelag: the time lag after which the windowing is conducted.</p><p>E.g</p><p>Let deltaT = 2 and timelag = 1</p><p>This pipe will take stream data of the form
 (t, Value_t)</p><p>and output a stream which looks like</p><p>(t, Vector(Value_t-2, Value_t-3))</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.pipes.DynaMLPipe#deltaOperationARX" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deltaOperationARX:List[Int]=&gt;io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,breeze.linalg.DenseVector[Double])],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]]"></a>
+      <a id="deltaOperationARX:(List[Int])⇒DataPipe[Stream[(Double,DenseVector[Double])],Stream[(DenseVector[Double],Double)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deltaOperationARX</span><span class="result">: (<a href="../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Int">Int</span>]) ⇒ <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The vector ARX version of <a href="#deltaOperation:(Int,Int)=&gt;io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]]" class="extmbr" name="io.github.mandar2812.dynaml.pipes.DynaMLPipe#deltaOperation">DynaMLPipe.deltaOperation</a>
+</p>
     </li><li name="io.github.mandar2812.dynaml.pipes.DynaMLPipe#deltaOperationVec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="deltaOperationVec:Int=&gt;io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,breeze.linalg.DenseVector[Double])],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]]"></a>
       <a id="deltaOperationVec:(Int)⇒DataPipe[Stream[(Double,DenseVector[Double])],Stream[(DenseVector[Double],Double)]]"></a>
@@ -380,6 +394,22 @@ also replace any missing value strings with the empty string.</p><p>Usage: DynaM
 is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><div class="fullcomment"><div class="comment cmt"><p>Perform gaussian normalization on a data stream which
 is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><p>(Stream(training data), Stream(test data))
 </p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.pipes.DynaMLPipe#gaussianStandardizationMO" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="gaussianStandardizationMO:io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
+      <a id="gaussianStandardizationMO:BifurcationPipe[(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])]),(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])]),(DenseVector[Double],DenseVector[Double])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gaussianStandardizationMO</span><span class="result">: <a href="BifurcationPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</a>[(<a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]), (<span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]), (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Perform gaussian normalization on a data stream which
+is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><div class="fullcomment"><div class="comment cmt"><p>Perform gaussian normalization on a data stream which
+is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><p>(Stream(training data), Stream(test data))
+</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -487,15 +517,15 @@ is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><p>(Stream
 which contain missing values, this pipe should be applied
 after the application of <a href="#extractTrainingFeatures:(List[Int],Map[Int,String])=&gt;io.github.mandar2812.dynaml.pipes.DataPipe[Stream[String],Stream[String]]" class="extmbr" name="io.github.mandar2812.dynaml.pipes.DynaMLPipe#extractTrainingFeatures">DynaMLPipe.extractTrainingFeatures</a>.</p>
     </li><li name="io.github.mandar2812.dynaml.pipes.DynaMLPipe#replaceWhiteSpaces" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="replaceWhiteSpaces:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[String],scala.collection.immutable.Stream[String]]"></a>
-      <a id="replaceWhiteSpaces:DataPipe[Stream[String],Stream[String]]"></a>
+      <a id="replaceWhiteSpaces:io.github.mandar2812.dynaml.pipes.StreamMapPipe[String,String]"></a>
+      <a id="replaceWhiteSpaces:StreamMapPipe[String,String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">replaceWhiteSpaces</span><span class="result">: <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
+        <span class="name">replaceWhiteSpaces</span><span class="result">: <a href="StreamMapPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamMapPipe">StreamMapPipe</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Data pipe to replace all white spaces in a <span class="extype" name="Stream">Stream</span>
@@ -577,15 +607,15 @@ a file.</p><p>Usage: DynaMLPipe.streamToFile(&quot;abc.csv&quot;)
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.DynaMLPipe#trimLines" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="trimLines:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[String],scala.collection.immutable.Stream[String]]"></a>
-      <a id="trimLines:DataPipe[Stream[String],Stream[String]]"></a>
+      <a id="trimLines:io.github.mandar2812.dynaml.pipes.StreamMapPipe[String,String]"></a>
+      <a id="trimLines:StreamMapPipe[String,String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">trimLines</span><span class="result">: <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[<span class="extype" name="java.lang.String">String</span>]]</span>
+        <span class="name">trimLines</span><span class="result">: <a href="StreamMapPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamMapPipe">StreamMapPipe</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="java.lang.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Trim white spaces from each line in a <span class="extype" name="Stream">Stream</span>

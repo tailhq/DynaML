@@ -278,7 +278,7 @@ and Y is the value/label type.</p><div class="fullcomment"><div class="comment c
 Seq[(I, Y)] where I is the index set of the GP
 and Y is the value/label type.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a> → <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#energy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#energy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="energy(h:Map[String,Double],options:Map[String,String]):Double"></a>
       <a id="energy(Map[String,Double],Map[String,String]):Double"></a>
       <h4 class="signature">
@@ -290,18 +290,14 @@ and Y is the value/label type.
         <span class="name">energy</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Calculates the energy of the configuration,
-in most global optimization algorithms
-we aim to find an approximate value of
-the hyper-parameters such that this function
-is minimized.</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the energy of the configuration,
-in most global optimization algorithms
-we aim to find an approximate value of
-the hyper-parameters such that this function
-is minimized.
-</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt class="param">options</dt><dd class="cmt"><p>Optional parameters about configuration</p></dd><dt>returns</dt><dd class="cmt"><p>Configuration Energy E(h)</p><p>In this particular case E(h) = -log p(Y|X,h)
-also known as log likelihood.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
+      <p class="shortcomment cmt">Calculates the energy of the configuration, required
+for global optimization routines.</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the energy of the configuration, required
+for global optimization routines.</p><p>Defaults to the base implementation in
+<a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">io.github.mandar2812.dynaml.optimization.GloballyOptimizable</a>
+in case a validation set is not specified
+through the <a href="#validationSet:Seq[(breeze.linalg.DenseVector[Double],Double)]" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.GPNarXModel#validationSet">validationSet</a> variable.
+</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt class="param">options</dt><dd class="cmt"><p>Optional parameters about configuration</p></dd><dt>returns</dt><dd class="cmt"><p>Configuration Energy E(h)
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a> → <a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -615,11 +611,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       </h4>
       <p class="shortcomment cmt">Draw three predictions from the posterior predictive distribution
 1) Mean or MAP estimate Y
-2) Y- : The lower error bar estimate (mean - )
+2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
 3) Y+ : The upper error bar.</p><div class="fullcomment"><div class="comment cmt"><p>Draw three predictions from the posterior predictive distribution
 1) Mean or MAP estimate Y
-2) Y- : The lower error bar estimate (mean - )
-3) Y+ : The upper error bar.
+2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
+3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#predictiveDistribution" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predictiveDistribution[U&lt;:Seq[I]](test:U):(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double])"></a>
@@ -639,6 +635,29 @@ a particular set of test data points.
 </p></div><dl class="paramcmts block"><dt class="param">test</dt><dd class="cmt"><p>A Sequence or Sequence like data structure
             storing the values of the input patters.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#scoresToEnergy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="scoresToEnergy:io.github.mandar2812.dynaml.pipes.DataPipe[Seq[(Double,Double)],Double]"></a>
+      <a id="scoresToEnergy:DataPipe[Seq[(Double,Double)],Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">scoresToEnergy</span><span class="result">: <a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">If one uses a non empty validation set, then
+the user can set a custom function of
+the validation predictions and targets as
+the objective function for the hyper-parameter
+optimization routine.</p><div class="fullcomment"><div class="comment cmt"><p>If one uses a non empty validation set, then
+the user can set a custom function of
+the validation predictions and targets as
+the objective function for the hyper-parameter
+optimization routine.</p><p>Currently this defaults to RMSE*(1-CC) calculated
+on the validation data.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#setState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setState(s:Map[String,Double]):AbstractGPRegressionModel.this.type"></a>
       <a id="setState(Map[String,Double]):GPNarXModel.this.type"></a>
@@ -714,6 +733,24 @@ kernels.
       </h4>
       <p class="shortcomment cmt">Forget the cached kernel &amp; noise matrices.</p><div class="fullcomment"><div class="comment cmt"><p>Forget the cached kernel &amp; noise matrices.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#validationSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="validationSet:Seq[(breeze.linalg.DenseVector[Double],Double)]"></a>
+      <a id="validationSet:Seq[(DenseVector[Double],Double)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validationSet</span><span class="result">: <a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Setting a validation set is optional in case
+one wants to use some function of metrics like correltaion or rmse
+as hyper-parameter optimization objective functions.</p><div class="fullcomment"><div class="comment cmt"><p>Setting a validation set is optional in case
+one wants to use some function of metrics like correltaion or rmse
+as hyper-parameter optimization objective functions.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
