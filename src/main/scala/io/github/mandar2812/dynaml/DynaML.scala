@@ -30,21 +30,6 @@ object DynaML extends App {
     val repl = new ILoop {
       override def prompt = "DynaML>"
 
-      addThunk {
-        intp.beQuietDuring {
-          intp.addImports("breeze.linalg._")
-          intp.addImports("io.github.mandar2812.dynaml.models._")
-          intp.addImports("io.github.mandar2812.dynaml.models.neuralnets._")
-          intp.addImports("io.github.mandar2812.dynaml.models.svm._")
-          intp.addImports("io.github.mandar2812.dynaml.utils")
-          intp.addImports("io.github.mandar2812.dynaml.kernels._")
-          intp.addImports("io.github.mandar2812.dynaml.examples._")
-          intp.addImports("org.apache.spark.SparkContext")
-          intp.addImports("org.apache.spark.SparkConf")
-          intp.addImports("io.github.mandar2812.dynaml.pipes._")
-          intp.addImports("org.openml.apiconnector.io._")
-        }
-      }
 
       override def printWelcome() {
         val prop = new Properties()
@@ -62,6 +47,7 @@ object DynaML extends App {
           "\nInteractive Scala shell for Machine Learning Research")
       }
     }
+
     val settings = new Settings
     settings.Yreplsync.value = true
 
@@ -76,6 +62,8 @@ object DynaML extends App {
       new Exception().printStackTrace(new PrintWriter(c))
       c.toString().contains("at sbt.")
     }
+
+    new sys.SystemProperties += ("scala.repl.autoruncode" -> "conf/DynaMLInit.scala")
 
     repl.process(settings)
   }
