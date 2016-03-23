@@ -57,15 +57,15 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
 
   /**
     * Setting a validation set is optional in case
-    * one wants to use some function of metrics like correltaion or rmse
+    * one wants to use some function of metrics like correltaion (CC) or rmse (RMSE)
     * as hyper-parameter optimization objective functions.
     * */
   var validationSet: Seq[(DenseVector[Double], Double)] = Seq()
 
   /**
-    * Setting a data pipe to process predicted and
-    * actual target values can be useful in cases where
-    * one needs to perform operations such as de-normalizing
+    * Assigning a value to the [[processTargets]] data pipe
+    * can be useful in cases where we need to
+    * perform operations such as de-normalizing
     * the predicted and actual targets to their original
     * scales.
     *
