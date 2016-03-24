@@ -105,7 +105,19 @@ $$
 $$
 
 
-In the presence of training data $$ X = (x_1, x_2, \cdot , x_n) \ y = (y_1, y_2, \cdot , y_n) $$, inference is carried out by calculating the posterior predictive distribution over the unknown targets $$ \mathbf{f_*}|X,\mathbf{y},X_* $$ assuming $$ X_* $$, the test inputs are known. 
+In the presence of training data
+
+$$
+	X = (x_1, x_2, \cdot , x_n) \ y = (y_1, y_2, \cdot , y_n)
+$$
+
+Inference is carried out by calculating the posterior predictive distribution over the unknown targets
+
+$$
+	\mathbf{f_*}|X,\mathbf{y},X_*
+$$
+
+assuming $$ X_* $$, the test inputs are known. 
 
 $$
 	\begin{align}
