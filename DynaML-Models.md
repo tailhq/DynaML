@@ -85,9 +85,15 @@ model.setRegParam(1.5).learn()
 
 ### Gaussian Processes
 
-[Ramussen and Williams](https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&hl=en)
+![gp]({{site.baseurl}}/public/gp.png)
+
+<br/>
+
+_Gaussian Processes_ are powerful non-parametric predictive models, which represent probability measures over spaces of functions. [Ramussen and Williams](https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&hl=en) is the definitive guide on understanding their applications in machine learning and a gateway to their deeper theoretical foundations.
 
 ![gp-book]({{site.baseurl}}/public/gpbook.jpg)
+
+<br/>
 
 $$
 	\begin{align}
@@ -95,6 +101,18 @@ $$
 		& f \sim \mathcal{GP}(m(x), C(x,x')) \\
 		& \left(\mathbf{y} \ \ \mathbf{f_*} \right)^T \sim \mathcal{N}\left(\mathbf{0}, \left[ \begin{matrix} K(X, X) + \sigma^{2} \it{I} & K(X, X_*) \\ K(X_*, X) & K(X_*, X_*) \end{matrix} \right ] \right) 
 
+	\end{align}
+$$
+
+
+In the presence of training data $$ X = (x_1, x_2, \cdot , x_n) \ y = (y_1, y_2, \cdot , y_n) $$, inference is carried out by calculating the posterior predictive distribution over the unknown targets $$ \mathbf{f_*}|X,\mathbf{y},X_* $$ assuming $$ X_* $$, the test inputs are known. 
+
+$$
+	\begin{align}
+		& \mathbf{f_*}|X,\mathbf{y},X_* \sim \mathcal{N}(\mathbf{\bar{f_*}}, cov(\mathbf{f_*}))  \label{eq:posterior}\\
+		& \mathbf{\bar{f_*}} \overset{\triangle}{=} \mathbb{E}[\mathbf{f_*}|X,y,X_*] = K(X_*,X)[K(X,X) + \sigma^{2}_n \it{I}]^{-1} \mathbf{y} \label{eq:posterior:mean} \\
+		& cov(\mathbf{f_*}) = K(X_*,X_*) - K(X_*,X)[K(X,X) + \sigma^{2}_n \it{I}]^{-1}K(X,X_*) 
+	
 	\end{align}
 $$
 
