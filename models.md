@@ -1,6 +1,6 @@
 ---
 layout: page
-title: DynaML Models
+title: Models
 ---
 
 ## Model Classes
@@ -83,7 +83,7 @@ val model = new DLSSVM(data, data.length, kernel)
 model.setRegParam(1.5).learn()
 ```
 
-### Gaussian Processes
+### Gaussian Processes ([wiki](https://github.com/mandar2812/DynaML/wiki/Gaussian-Processes))
 
 ![gp]({{site.baseurl}}/public/gp.png)
 
@@ -138,4 +138,76 @@ val noiseKernel = new DiracKernel(1.5)
 val model = new GPRegression(kernel, noiseKernel, trainingData)
 ```
 
-### Feed forward Neural Networks
+### Feed forward Neural Networks ([wiki](https://github.com/mandar2812/DynaML/wiki/Neural-Networks))
+
+<br/>
+
+![feedforward-NN]({{site.baseurl}}/public/fnn.png)
+
+<br/>
+
+Feed forward neural networks are the most common network architectures in predictive modeling, DynaML has an implementation of feed forward architectures that is trained using _Backpropogation_ with momentum.
+
+In a feed forward neural network with a single hidden layer the predicted target $$y$$ is expressed using the edge weights and node values in the following manner (this expression is easily extended for multi-layer nets).
+
+$$
+	\begin{equation}
+		y = W_2 \sigma(W_1 \mathbf{x} + b_1) + b_2
+	\end{equation}
+$$
+
+Where $$W_1 , \ W_2$$  are matrices representing edge weights for the hidden layer and output layer respectively and $$\sigma(.)$$ represents a monotonic _activation_ function, the usual choices are _sigmoid_, _tanh_, _linear_ or _rectified linear_ functions.
+
+#### Feed forward nets in DynaML
+
+To create a feedforward network we need three entities.
+
+* The training data (type parameter `D`)
+* A data pipe which transforms the original data into a data structure that understood by the `FeedForwardNetwork`
+* The network architecture (i.e. the network as a graph object)
+
+
+A standard feedforward network can be created by first initializing the network architecture/graph.
+
+```scala
+val gr = FFNeuralGraph(num_inputs = 3, num_outputs = 1, 
+hidden_layers = 1, List("logsig", "linear"), List(5))
+```
+
+This creates a neural network graph with one hidden layer, 3 input nodes, 1 output node and assigns sigmoid activation in the hidden layer. It also creates 5 neurons in the hidden layer.
+
+Next we create a data transform pipe which converts instances of the data input-output patterns to `(DenseVector[Double], DenseVector[Double])`, this is required in many data processing applications where the data structure storing the training data is not a [breeze](https://github.com/scalanlp/breeze) vector.
+
+Lets say we have data in the form `trainingdata: Stream[(DenseVector[Double], Double)]`, i.e. we have input features as breeze vectors and scalar output values which help the network learn an unknown function. We can write the transform as.
+
+```scala
+val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
+d.map(el => (el._1, DenseVector(el._2))))
+```
+
+We are now in a position to initialize a feed forward neural network model.
+
+```scala
+val model = new FeedForwardNetwork[Stream[(DenseVector[Double], Double)]](trainingdata, gr, transform)
+```
+
+Here the variable `trainingdata` represents the training input output pairs, which must conform to the type argument given in square brackets (i.e. `Stream[(DenseVector[Double], Double)]`).
+
+Training the model using back propagation can be done as follows, you can set custom values for the backpropagation parameters like the learning rate, momentum factor, mini batch fraction, regularization and number of learning iterations.
+
+```scala
+model.setLearningRate(0.09)
+   .setMaxIterations(100)
+   .setBatchFraction(0.85)
+   .setMomentum(0.45)
+   .setRegParam(0.0001)
+   .learn()
+```
+
+The trained model can now be used for prediction, by using either the `predict()` method or the `feedForward()` value member both of which are members of `FeedForwardNetwork` (refer to the [api](http://mandar2812.github.io/DynaML/target/site/scaladocs/index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork) docs for more details).
+
+```scala
+val pattern = DenseVector(2.0, 3.5, 2.5)
+val prediction = model.predict(pattern)
+```
+
