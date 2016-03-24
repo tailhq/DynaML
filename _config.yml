@@ -22,8 +22,12 @@ author:
   url:               https://twitter.com/Mandar_2812
   email:             mandar2812@gmail.com
 
+github:
+  repository_url: https://github.com/mandar2812/DynaML
 
 # Custom vars
 version:             1.2
 
-gems: [jekyll-paginate]
+gems: 
+  - jekyll-paginate
+  - jekyll-gist
