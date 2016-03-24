@@ -63,7 +63,8 @@ object DynaML extends App {
       c.toString().contains("at sbt.")
     }
 
-    new sys.SystemProperties += ("scala.repl.autoruncode" -> "conf/DynaMLInit.scala")
+    new sys.SystemProperties += ("scala.repl.autoruncode" ->
+      "conf/DynaMLInit.scala")
 
     repl.process(settings)
   }
