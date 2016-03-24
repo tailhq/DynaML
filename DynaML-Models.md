@@ -74,7 +74,38 @@ $$
 
 Here _K_ is the $$N \times N$$ kernel matrix whose entries are given by $$ K_{kl} = \phi(x_k)^\intercal\phi(x_l), \ \ k,l = 1, \cdots, N$$ and $$I$$ is the identity matrix of order $$N$$.
 
+#### Using Dual LSSVM in DynaML
+
+```scala
+val kernel = new ...
+val data: Stream[(DenseVector[Double], Double)] = ... 
+val model = new DLSSVM(data, data.length, kernel)
+model.setRegParam(1.5).learn()
+```
 
 ### Gaussian Processes
+
+[Ramussen and Williams](https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&hl=en)
+
+![gp-book]({{site.baseurl}}/public/gpbook.jpg)
+
+$$
+	\begin{align}
+		& y = f(x) + \epsilon \\
+		& f \sim \mathcal{GP}(m(x), C(x,x')) \\
+		& \left(\mathbf{y} \ \ \mathbf{f_*} \right)^T \sim \mathcal{N}\left(\mathbf{0}, \left[ \begin{matrix} K(X, X) + \sigma^{2} \it{I} & K(X, X_*) \\ K(X_*, X) & K(X_*, X_*) \end{matrix} \right ] \right) 
+
+	\end{align}
+$$
+
+
+#### Gaussian Processes in DynaML
+
+```scala
+val trainingdata: Stream[(DenseVector[Double], Double)] = ...
+val kernel = new RBFKernel(2.5)
+val noiseKernel = new DiracKernel(1.5)
+val model = new GPRegression(kernel, noiseKernel, trainingData)
+```
 
 ### Feed forward Neural Networks
