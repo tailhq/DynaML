@@ -101,7 +101,7 @@ val params = optimizer.optimize(num_points,
 
 ## Model Selection Routines
 
-These routines are also known as _global optimizers_, paradigms/algorithms such as genetic algorithms, gibbs sampling, simulated annealing, evolutionary optimization fall under this category. They can be used in situations when the objective function in not "smooth", in DynaML they are most prominently used in hyper-parameter optimization in kernel based learning methods.
+These routines are also known as _global optimizers_, paradigms/algorithms such as genetic algorithms, gibbs sampling, simulated annealing, evolutionary optimization fall under this category. They can be used in situations when the objective function in not "smooth". In DynaML they are most prominently used in hyper-parameter optimization in kernel based learning methods.
 
 
 ### Grid Search
