@@ -23,9 +23,10 @@
           </h3>
         </div>
       </div>
-
       <div class="container content">
-        {{ content | toc_generate }}
+        <div id="toc"></div>
+	<br/>
+	{{ content}}
       </div>
     </div>
 
@@ -34,6 +35,11 @@
     <script type="text/javascript" 
 	    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript" 
+	    src="/DynaML/javascripts/toc.js">
+    </script>
+    
     <script>
       (function(document) {
         var toggle = document.querySelector('.sidebar-toggle');
@@ -50,6 +56,11 @@
           checkbox.checked = false;
         }, false);
       })(document);
+    </script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+      $('#toc').toc({ listType: 'ul' });
+      });
     </script>
     {% include google_analytics.html %}
   </body>

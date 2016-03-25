@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Models
+noToc: true
 ---
 
 ## Model Classes
@@ -25,6 +26,8 @@ $$
 
 Non parametric models generally grow with the size of the data set, some examples include _Gaussian Processes_ and _Dual LSSVM_ among others.
 
+
+-----
 
 ## Model Implementations
 
@@ -83,6 +86,8 @@ val model = new DLSSVM(data, data.length, kernel)
 model.setRegParam(1.5).learn()
 ```
 
+-----
+
 ### Gaussian Processes ([wiki](https://github.com/mandar2812/DynaML/wiki/Gaussian-Processes))
 
 ![gp]({{site.baseurl}}/public/gp.png)
@@ -137,6 +142,8 @@ val kernel = new RBFKernel(2.5)
 val noiseKernel = new DiracKernel(1.5)
 val model = new GPRegression(kernel, noiseKernel, trainingData)
 ```
+
+-----
 
 ### Feed forward Neural Networks ([wiki](https://github.com/mandar2812/DynaML/wiki/Neural-Networks))
 
