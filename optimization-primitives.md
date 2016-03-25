@@ -9,6 +9,8 @@ Model solvers are implementations which either solve for the parameters/coeffici
 
 ### Backpropagation with Momentum
 
+This is the most common learning methods for supervised training of feed forward neural networks, the edge weights are adjusted using the _generalized delta rule_.
+
 ```scala
 val data: Stream[(DenseVector[Double], DenseVector[Double])] = ...
 
@@ -26,6 +28,8 @@ val newparams = optimizer.optimize(data.length, data, initParam)
 
 ### Conjugate Gradient
 
+The conjugate gradient method is used to solve linear systems of the form $$Ax = b$$ where $$A$$ is a symmetric positive definite matrix.
+
 ```scala
 val num_dim = ...
 val A: DenseMatrix[Double] = ...
@@ -38,6 +42,25 @@ val x = ConjugateGradient.runCG(A, b,
 ```
 
 ### Dual LSSVM Solver
+
+The LSSVM solver solves the linear program that results from the application of the _Karush, Kuhn Tucker_ conditions on the LSSVM optimization problem.
+
+$$
+\begin{equation}
+\left[\begin{array}{c|c}
+   0  & 1^\intercal_v   \\ \hline
+   1_v & K + \gamma^{-1} \mathit{I} 
+\end{array}\right] 
+\left[\begin{array}{c}
+   b    \\ \hline
+   \alpha  
+\end{array}\right] = \left[\begin{array}{c}
+   0    \\ \hline
+   y  
+\end{array}\right]
+\end{equation}
+$$
+
 
 ```scala
 val data: Stream[(DenseVector[Double], Double)] = ...
@@ -55,6 +78,14 @@ val alpha = optimizer.optimize(num_points,
 
 ### Committee Model Solver
 
+The committee model solver aims to find the optimum values of weights applied to the predictions of a set of base models. The weights are calculated as follows.
+
+$$
+\alpha = \frac{C^{-1} \overrightarrow{1}}{\overrightarrow{1}^T C^{-1} \overrightarrow{1}}
+$$
+
+Where $$C$$ is the sample correlation matrix of errors for all combinations of the base models calculated on the training data. 
+
 ```scala
 val optimizer= new CommitteeModelSolver()
 //Data Structure containing for each training point the following couple
@@ -65,7 +96,13 @@ val params = optimizer.optimize(num_points,
 	DenseVector.ones[Double](num_of_models))
 ```
 
+
+------
+
 ## Model Selection Routines
+
+These routines are also known as _global optimizers_, paradigms/algorithms such as genetic algorithms, gibbs sampling, simulated annealing, evolutionary optimization fall under this category. They can be used in situations when the objective function in not "smooth", in DynaML they are most prominently used in hyper-parameter optimization in kernel based learning methods.
+
 
 ### Grid Search
 
@@ -105,7 +142,6 @@ val (_, conf) = gs.optimize(startConf, opt)
 
 model.setState(conf)
 ```
-
 
 
 ### Maximum Likelihood ML-II
