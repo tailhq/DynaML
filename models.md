@@ -88,7 +88,7 @@ model.setRegParam(1.5).learn()
 
 -----
 
-### Gaussian Processes ([wiki](https://github.com/mandar2812/DynaML/wiki/Gaussian-Processes))
+### Gaussian Processes
 
 ![gp]({{site.baseurl}}/public/gp.png)
 
@@ -143,9 +143,11 @@ val noiseKernel = new DiracKernel(1.5)
 val model = new GPRegression(kernel, noiseKernel, trainingData)
 ```
 
+To learn more about extending the Gaussian Process base classes/traits refer to the [wiki](https://github.com/mandar2812/DynaML/wiki/Gaussian-Processes).
+
 -----
 
-### Feed forward Neural Networks ([wiki](https://github.com/mandar2812/DynaML/wiki/Neural-Networks))
+### Feed forward Neural Networks
 
 <br/>
 
