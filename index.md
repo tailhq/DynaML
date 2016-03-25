@@ -30,7 +30,7 @@ DynaML is a fledgling open source project that is in a phase of rapid expansion.
 * Regression with [Gaussian Processes](/DynaML/models/#gaussian-processes)
 * Feed forward [Neural Networks](/DynaML/models/#feed-forward-neural-networks)
 * Committee Models
-  - Neural Committee Models
+  - [Neural Committee Models](/DynaML/models/#neural-committee-models)
   - Gaussian Process Committee Models
 * Model Learning and Optimization
   - Gradient Descent
@@ -44,7 +44,7 @@ DynaML is a fledgling open source project that is in a phase of rapid expansion.
   * [Coupled Simulated Annealing](/DynaML/optimization-primitives/#coupled-simulated-annealing)
 * Model validation metrics (RMSE, Area under ROC)
 * Entropy based data subset selection
-* Data Pipes for configurable workflows
+* [Data Pipes](/DynaML/data-pipes/) for configurable workflows
 
 Going ahead we aim to introduce (but not limit to)
 
