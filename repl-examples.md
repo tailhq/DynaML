@@ -39,4 +39,4 @@ opt = Map("globalOpt" -> "GS", "grid" -> "10", "step" -> "0.1"),
 num_training = 200, num_test = 500, deltaT = 5)
 ```
 
-{% mandar2812/0ac7ea02b73548c2e61d %}
+{% gist mandar2812/0ac7ea02b73548c2e61d %}
