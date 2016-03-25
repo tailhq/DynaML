@@ -220,3 +220,42 @@ val pattern = DenseVector(2.0, 3.5, 2.5)
 val prediction = model.predict(pattern)
 ```
 
+-----
+
+### Neural Committee Models
+
+[[images/committee.png]]
+
+Quite often it is observed that one cannot represent an unknown function accurately with a single neural network, it is then beneficial to consider a _committee_ of neural nets, each of which is trained on the entire or subsampled data. The final prediction of the model is a weighted average of the predictions of all the models in the committee.
+
+#### Neural Committees in DynaML
+
+```scala
+val trainTestData: Stream[(DenseVector[Double], Double)] = .... 
+
+val configs =
+  for (c <- List(3, 5, 7, 9); a <- List("tansig", "logsig"))
+  yield(c,a)
+
+val networks = configs.map(couple => {
+  FFNeuralGraph(trainTest._1._1.head._1.length, 1, 1,
+    List(couple._2, "linear"),List(couple._1))
+   })
+
+val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
+  d.map(el => (el._1, DenseVector(el._2))))
+
+val model =
+  new CommitteeNetwork[Stream[(DenseVector[Double], Double)]](
+    trainTestData, transform, networks:_*
+  )
+
+model.setLearningRate(0.05)
+  .setMaxIterations(100)
+  .setBatchFraction(0.8)
+  .setMomentum(0.35)
+  .setRegParam(0.0005)
+  .learn()
+		  
+```
+
