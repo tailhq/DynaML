@@ -3,6 +3,8 @@ layout: page
 title: Data Pipes
 ---
 
+-----
+
 ## Configurable Data Workflows
 Data _munging_ or pre-processing is one of the most time consuming activities in the analysis and modeling cycle, yet very few libraries do justice to this need. In DynaML the aim has been to make data analysis more reproducible and easy, hence designing, maintaining and improving a powerful data workflow framework is at the center of the development endeavour. In this section we attempt to give a simple yet effective introduction to the data pipes module of DynaML.
 
@@ -18,6 +20,62 @@ As we mentioned earlier a DynaML pipe is nothing but a thin wrapper around a sca
 ### Joining Data Pipes
 
 You can compose or join any number of pipes using the ```>``` character to create a composite data workflow. There is only one constraint when joining two pipes, that the destination type of the first pipe must be the same as the source type of the second pipe, in other words "dont put square pegs into round holes".
+
+-----
+
+## DynaML Library Pipes
+
+DynaML comes bundled with a set of data pipes which enable certain standard data processing tasks.
+
+### ```fileToStream```
+
+* _Type_: ```DataPipe[String, Stream[String]]```
+* _Result_: Converts a text file (inputted as a file path string) into ```Stream[String]```   
+
+
+### ```streamToFile(fileName: String)```
+
+* _Type_: ```DataPipe[Stream[String], Unit] ```
+* _Result_: Writes a stream of lines to the file specified by ```filePath```
+
+
+### ```replaceWhiteSpaces```
+
+* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
+* _Result_: Replace all white space characters in a stream of lines.
+
+
+### ```trimLines```
+
+* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
+* _Result_: Trim white spaces from both sides of every line.
+
+
+### ```removeMissingLines```
+
+* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
+* _Result_: Remove all lines/records which contain missing values
+
+
+### ```extractTimeSeries(Tfunc)```
+
+* _Type_: ```DataPipe[Stream[String], Stream[(Double, Double)]] ```
+* _Result_: This pipe assumes its input to be of the form `YYYY,Day,Hour,Value`. It takes as input a function (TFunc) which converts a ```(Double, Double, Double)``` into a single "timestamp" like value. The pipe processes its data source line by line and outputs a ```Tuple2``` in the following format `(Timestamp,Value)`.
+
+### ```extractTimeSeriesVec(Tfunc)```
+
+* _Type_: ```DataPipe[Stream[String], Stream[(Double, DenseVector[Double])]] ```
+* _Result_: This pipe is similar to ```extractTimeSeries``` but for application in multivariate time series analysis such as nonlinear autoregressive models with exogenous inputs. The pipe processes its data source line by line and outputs a ```(Double, DenseVector[Double])``` in the following format `(Timestamp,Values)`.
+
+
+### ```replaceWhiteSpaces```
+
+* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
+* Function: Replace all white space characters in a stream of lines.
+
+
+
+-----
 
 ## Example
 As a simple motivating example consider the following hypothetical csv data file called ```sample.csv```.
@@ -59,6 +117,8 @@ Lets go over the code snippet piece by piece.
 * Extract the required columns by ```DynaMLPipe.extractTrainingFeatures```, be sure to supply it the column numbers (indexed from 0) and the missing value strings for each column to be extracted.
 * Remove missing records ```DynaMLPipe.removeMissingLines```
 * Write the resulting data stream to a file ```DataPipe(utils.writeToFile("processedsample.csv") _)```
+
+-----
 
 ## Useful Links
 
