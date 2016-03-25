@@ -93,6 +93,16 @@ DynaML comes bundled with a set of data pipes which enable certain standard data
 * _Result_: Takes a base pipe and creates a parallel pipe by duplicating it.
 
 
+### ```trainTestGaussianStandardization```
+
+* _Result_:  Perform gaussian normalization on a data stream which is a ```Tuple2``` of the form `(Stream(training data), Stream(test data))`.
+
+
+### ```duplicate[S, D](pipe: DataPipe[S, D])```
+
+* _Type_: ```DataPipe[(S, S), (D, D)] ```
+* _Result_: Takes a base pipe and creates a parallel pipe by duplicating it.
+
 -----
 
 ## Example
@@ -134,7 +144,7 @@ Lets go over the code snippet piece by piece.
 * Replace white spaces in each line by using ```DynaMLPipe.replaceWhiteSpaces```
 * Extract the required columns by ```DynaMLPipe.extractTrainingFeatures```, be sure to supply it the column numbers (indexed from 0) and the missing value strings for each column to be extracted.
 * Remove missing records ```DynaMLPipe.removeMissingLines```
-* Write the resulting data stream to a file ```DataPipe(utils.writeToFile("processedsample.csv") _)```
+* Write the resulting data stream to a file ```DynaMLPipe.streamToFile("processedsample.csv")```
 
 -----
 
