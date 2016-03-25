@@ -224,8 +224,6 @@ val prediction = model.predict(pattern)
 
 ### Neural Committee Models
 
-[[images/committee.png]]
-
 Quite often it is observed that one cannot represent an unknown function accurately with a single neural network, it is then beneficial to consider a _committee_ of neural nets, each of which is trained on the entire or subsampled data. The final prediction of the model is a weighted average of the predictions of all the models in the committee.
 
 #### Neural Committees in DynaML
