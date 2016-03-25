@@ -233,6 +233,10 @@ object TestOmniARX {
               predictionCouple._2*stdDevTargets + meanTargets)
           )
 
+          /*model.scoresToEnergy = DataPipe((scoresAndLabels) => {
+            scoresAndLabels.map((couple) => math.abs(couple._1-couple._2)).max
+          })*/
+
           val standardizeValidationInstances = StreamDataPipe(
             (instance: (DenseVector[Double], Double)) => {
 

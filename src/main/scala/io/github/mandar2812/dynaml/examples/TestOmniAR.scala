@@ -204,6 +204,10 @@ object TestOmniAR {
                 (instance._2 - meanTargets)/stdDevTargets)
             })
 
+          /*model.scoresToEnergy = DataPipe((scoresAndLabels) => {
+            scoresAndLabels.map((couple) => math.abs(couple._1-couple._2)).max
+          })*/
+
           model.validationSet =
             (processValidation > standardizeValidationInstances) run
               "data/omni2_"+yearTrain+".csv"

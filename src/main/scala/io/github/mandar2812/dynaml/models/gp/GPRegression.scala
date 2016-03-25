@@ -83,7 +83,7 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     * the objective function for the hyper-parameter
     * optimization routine.
     *
-    * Currently this defaults to RMSE*(1-CC) calculated
+    * Currently this defaults to RMSE calculated
     * on the validation data.
     * */
   var scoresToEnergy: DataPipe[Stream[(Double, Double)], Double] =
