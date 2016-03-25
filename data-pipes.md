@@ -71,8 +71,26 @@ DynaML comes bundled with a set of data pipes which enable certain standard data
 ### ```replaceWhiteSpaces```
 
 * _Type_: ```DataPipe[Stream[String], Stream[String]] ```
-* Function: Replace all white space characters in a stream of lines.
+* _Result_: Replace all white space characters in a stream of lines.
 
+
+### ```extractTrainingFeatures(columns, missingVals)```
+
+* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
+* _Result_: Extract a subset of columns from a stream of comma separated string also replace any missing value strings with the empty string.
+
+
+### ```splitTrainingTest(num_training, num_test)```
+
+* _Type_: ```DataPipe[(Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+(Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)])] ```
+* _Result_: Extract a subset of the data into a ```Tuple2``` which can be used as a training, test combo for model learning and evaluation.
+
+
+### ```duplicate[S, D](pipe: DataPipe[S, D])```
+
+* _Type_: ```DataPipe[(S, S), (D, D)] ```
+* _Result_: Takes a base pipe and creates a parallel pipe by duplicating it.
 
 
 -----
@@ -107,7 +125,7 @@ We can do this by 'composing' data flow pipes which achieve each of the sub task
 		DynaMLPipe.removeMissingLines >
 		DataPipe(utils.writeToFile("processedsample.csv") _)
 
-	dataPipe.run("sample.csv")
+	val result = dataPipe run "sample.csv"
 ```
 
 Lets go over the code snippet piece by piece.
@@ -124,7 +142,7 @@ Lets go over the code snippet piece by piece.
 
 ### DynaML API
 
-* [DynaML library pipes](http://mandar2812.github.io/DynaML/target/site/scaladocs/index.html#io.github.mandar2812.dynaml.pipes.DynaMLPipe$)
 
+* [DynaMLPipe](http://mandar2812.github.io/DynaML/target/site/scaladocs/index.html#io.github.mandar2812.dynaml.pipes.DynaMLPipe$): Bundled data pipes.
 * [Pipes package](http://mandar2812.github.io/DynaML/target/site/scaladocs/index.html#io.github.mandar2812.dynaml.pipes.package)
 
