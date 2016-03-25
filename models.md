@@ -190,14 +190,18 @@ Next we create a data transform pipe which converts instances of the data input-
 Lets say we have data in the form `trainingdata: Stream[(DenseVector[Double], Double)]`, i.e. we have input features as breeze vectors and scalar output values which help the network learn an unknown function. We can write the transform as.
 
 ```scala
-val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
-d.map(el => (el._1, DenseVector(el._2))))
+val transform = DataPipe(
+	(d: Stream[(DenseVector[Double], Double)]) =>
+		d.map(el => (el._1, DenseVector(el._2)))
+)
 ```
 
 We are now in a position to initialize a feed forward neural network model.
 
 ```scala
-val model = new FeedForwardNetwork[Stream[(DenseVector[Double], Double)]](trainingdata, gr, transform)
+val model = new FeedForwardNetwork[
+	Stream[(DenseVector[Double], Double)]
+](trainingdata, gr, transform)
 ```
 
 Here the variable `trainingdata` represents the training input output pairs, which must conform to the type argument given in square brackets (i.e. `Stream[(DenseVector[Double], Double)]`).
@@ -240,8 +244,9 @@ val networks = configs.map(couple => {
     List(couple._2, "linear"),List(couple._1))
    })
 
-val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
-  d.map(el => (el._1, DenseVector(el._2))))
+val transform =
+	DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
+	d.map(el => (el._1, DenseVector(el._2))))
 
 val model =
   new CommitteeNetwork[Stream[(DenseVector[Double], Double)]](

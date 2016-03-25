@@ -13,14 +13,11 @@ At their heart data pipes in DynaML are (thinly wrapped) Scala functions. Every 
 
 ### Creating an arbitrary pipe
 
-As we mentioned earlier a DynaML pipe is nothing but a thin wrapper around a scala function.
-Creating a new data pipe is very easy, you just create a scala function and give it to the ```DataPipe()``` object.
+As we mentioned earlier a DynaML pipe is nothing but a thin wrapper around a scala function. Creating a new data pipe is very easy, you just create a scala function and give it to the ```DataPipe()``` object.
 
 ### Joining Data Pipes
 
-You can compose or join any number of pipes using the ```>``` character to create a composite data workflow. There is only one
-constraint when joining two pipes, that the destination type of the first pipe must be the same as the source type of the second pipe,
-in other words "dont put square pegs into round holes".
+You can compose or join any number of pipes using the ```>``` character to create a composite data workflow. There is only one constraint when joining two pipes, that the destination type of the first pipe must be the same as the source type of the second pipe, in other words "dont put square pegs into round holes".
 
 ## Example
 As a simple motivating example consider the following hypothetical csv data file called ```sample.csv```.
