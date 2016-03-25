@@ -123,7 +123,7 @@ We can do this by 'composing' data flow pipes which achieve each of the sub task
 			Map(0 -> "NA", 3 -> "NA", 5 -> "NA")
 		) >
 		DynaMLPipe.removeMissingLines >
-		DataPipe(utils.writeToFile("processedsample.csv") _)
+		DynaMLPipe.streamToFile("processedsample.csv")
 
 	val result = dataPipe run "sample.csv"
 ```
