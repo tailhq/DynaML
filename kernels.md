@@ -112,3 +112,7 @@ val k2 = new RationalQuadraticKernel(2.0)
 
 val k = k1 + k2
 ```
+
+## Implementing Custom Kernels
+
+For more details on implementing user defined kernels, refer to the [wiki](https://github.com/mandar2812/DynaML/wiki/Kernels).
