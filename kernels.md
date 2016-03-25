@@ -3,9 +3,17 @@ layout: page
 title: Kernels
 ---
 
+-----
+
+![kernel]({{site.baseurl}}/images/kernel.png)
+
+
 ## Kernels available in DynaML
 
+
 ### Radial Basis Function Kernel / Squared Exponential Kernel
+
+![kernel]({{site.baseurl}}/images/gaussiankernel.jpg)
 
 $$
 	C(\mathbf{x},\mathbf{y}) = e^{-\frac{1}{2}||\mathbf{x}-\mathbf{y}||_{2}^2/\sigma^2}
@@ -101,6 +109,8 @@ val fbm = new FBMKernel(0.99)
 
 The FBM kernel is the generalization of fractional Brownian motion to multi-variate index sets. Fractional Brownian motion is a stochastic process which is the generalization of Brownian motion, it was first studied by [Mandelbrot and Von Ness](https://www.jstor.org/stable/2027184). It is a _self similar_ stochastic process, with stationary increments. However the process itself is non-stationary (as can be seen from the expression for the kernel) and has long range non vanishing covariance.
 
+-----
+
 ## Creating Composite Kernels
 
 In machine learning it is well known that kernels can be combined to give other valid kernels. The symmetric positive semi-definite property of a kernel is preserved as long as it is added or multiplied to another valid kernel. In DynaML adding and multiplying kernels is elementary.
@@ -112,6 +122,8 @@ val k2 = new RationalQuadraticKernel(2.0)
 
 val k = k1 + k2
 ```
+
+-----
 
 ## Implementing Custom Kernels
 
