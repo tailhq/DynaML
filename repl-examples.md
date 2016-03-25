@@ -6,11 +6,7 @@ title: DynaML Shell Examples
 ## DynaML REPL
 
 
-The DynaML scala shell is the first point of contact when experimenting with data analysis workflows and modeling algorithms. In this section we consider two representative examples of binary classification and regression.
-
-## Model Building
-
-After starting the DynaML REPL one can start experimenting with building models for data sets. In the `data/` directory you can find a set of packaged data sets. We will work with the file `housing.csv` for now.
+The DynaML scala shell is the first point of contact when experimenting with data analysis workflows and modeling algorithms. In this section we consider two representative examples of binary classification and regression. After starting the DynaML REPL one can start experimenting with building models for data sets. In the `data/` directory you can find a set of packaged data sets. 
 
 
 ### Regression: Boston Housing Data Set
