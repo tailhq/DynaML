@@ -36,3 +36,21 @@ num_training = 200, num_test = 500, deltaT = 5)
 ```
 
 {% gist mandar2812/0ac7ea02b73548c2e61d %}
+
+
+### Regression: Delve Data
+
+The [Delve](http://www.cs.toronto.edu/~delve/data/datasets.html) archive contains many data sets for model comparison and testing. A synthetic regression data set from the archive is bundled in DynaML's `data/` directory.
+
+
+```scala
+TestNNDelve(hidden = 2, nCounts = List(3,3),
+acts = List("logsig", "logsig", "linear"),
+training = 100, test = 1000,
+columns = List(10,0,1,2,3,4,5,6,7,8,9),
+stepSize = 0.01, maxIt = 30, mini = 1.0,
+alpha = 0.5, regularization = 0.5)
+```
+
+
+{% gist mandar2812/4f067223d4ce7f2fba11 %}
