@@ -28,8 +28,10 @@ You can compose or join any number of pipes using the ```>``` character to creat
 
 DynaML comes bundled with a set of data pipes which enable certain standard data processing tasks.
 
+
 Data Pre-processing
 ------
+
 
 ### ```fileToStream```
 
@@ -117,6 +119,12 @@ Time Series Data
 
 * _Type_: ```DataPipe[Stream[String], Stream[(Double, DenseVector[Double])]] ```
 * _Result_: This pipe is similar to ```extractTimeSeries``` but for application in multivariate time series analysis such as nonlinear autoregressive models with exogenous inputs. The pipe processes its data source line by line and outputs a ```(Double, DenseVector[Double])``` in the following format `(Timestamp,Values)`.
+
+
+### ```deltaOperationVec(deltaT: Int)```
+
+* _Type_: ```DataPipe[Stream[(Double, Double)], Stream[(DenseVector[Double], Double)]] ```
+* _Result_: A variant of `deltaOperation` for NARX models.
 
 
 
