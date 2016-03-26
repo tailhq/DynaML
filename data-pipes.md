@@ -23,9 +23,13 @@ You can compose or join any number of pipes using the ```>``` character to creat
 
 -----
 
-## DynaML Library Pipes
+
+# DynaML Library Pipes
 
 DynaML comes bundled with a set of data pipes which enable certain standard data processing tasks.
+
+Data Pre-processing
+------
 
 ### ```fileToStream```
 
@@ -57,27 +61,10 @@ DynaML comes bundled with a set of data pipes which enable certain standard data
 * _Result_: Remove all lines/records which contain missing values
 
 
-### ```extractTimeSeries(Tfunc)```
-
-* _Type_: ```DataPipe[Stream[String], Stream[(Double, Double)]] ```
-* _Result_: This pipe assumes its input to be of the form `YYYY,Day,Hour,Value`. It takes as input a function (TFunc) which converts a ```(Double, Double, Double)``` into a single "timestamp" like value. The pipe processes its data source line by line and outputs a ```Tuple2``` in the following format `(Timestamp,Value)`.
-
-### ```extractTimeSeriesVec(Tfunc)```
-
-* _Type_: ```DataPipe[Stream[String], Stream[(Double, DenseVector[Double])]] ```
-* _Result_: This pipe is similar to ```extractTimeSeries``` but for application in multivariate time series analysis such as nonlinear autoregressive models with exogenous inputs. The pipe processes its data source line by line and outputs a ```(Double, DenseVector[Double])``` in the following format `(Timestamp,Values)`.
-
-
 ### ```replaceWhiteSpaces```
 
 * _Type_: ```DataPipe[Stream[String], Stream[String]] ```
 * _Result_: Replace all white space characters in a stream of lines.
-
-
-### ```extractTrainingFeatures(columns, missingVals)```
-
-* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
-* _Result_: Extract a subset of columns from a stream of comma separated string also replace any missing value strings with the empty string.
 
 
 ### ```splitTrainingTest(num_training, num_test)```
@@ -87,10 +74,21 @@ DynaML comes bundled with a set of data pipes which enable certain standard data
 * _Result_: Extract a subset of the data into a ```Tuple2``` which can be used as a training, test combo for model learning and evaluation.
 
 
-### ```duplicate[S, D](pipe: DataPipe[S, D])```
 
-* _Type_: ```DataPipe[(S, S), (D, D)] ```
-* _Result_: Takes a base pipe and creates a parallel pipe by duplicating it.
+Feature Processing
+------
+
+
+### ```splitFeaturesAndTargets```
+
+* _Type_: ```DataPipe[Stream[String], Stream[(DenseVector[Double], Double)]] ```
+* _Result_: Take each line which is a comma separated string and extract all but the last element into a feature vector and leave the last element as the "target" value.
+
+
+### ```extractTrainingFeatures(columns, missingVals)```
+
+* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
+* _Result_: Extract a subset of columns from a stream of comma separated string also replace any missing value strings with the empty string.
 
 
 ### ```trainTestGaussianStandardization```
@@ -98,10 +96,38 @@ DynaML comes bundled with a set of data pipes which enable certain standard data
 * _Result_:  Perform gaussian normalization on a data stream which is a ```Tuple2``` of the form `(Stream(training data), Stream(test data))`.
 
 
+
+Time Series Data
+------
+
+
+### ```extractTimeSeries(Tfunc)```
+
+* _Type_: ```DataPipe[Stream[String], Stream[(Double, Double)]] ```
+* _Result_: This pipe assumes its input to be of the form `YYYY,Day,Hour,Value`. It takes as input a function (TFunc) which converts a ```(Double, Double, Double)``` into a single "timestamp" like value. The pipe processes its data source line by line and outputs a ```Tuple2``` in the following format `(Timestamp,Value)`.
+
+
+### ```deltaOperation(deltaT, timelag)```
+
+* _Type_: ```DataPipe[Stream[(Double, Double)], Stream[(DenseVector[Double], Double)]] ```
+* _Result_: Inorder to generate features for auto-regressive models, one needs to construct sliding windows in time. This function takes two parameters `deltaT`: the auto-regressive order and `timelag`: the time lag after which the windowing is conducted. E.g Let deltaT = 2 and timelag = 1 This pipe will take stream data of the form $$(t, y(t))$$ and output a stream which looks like $$(t, [y(t-2), y(t-3)])$$
+
+
+### ```extractTimeSeriesVec(Tfunc)```
+
+* _Type_: ```DataPipe[Stream[String], Stream[(Double, DenseVector[Double])]] ```
+* _Result_: This pipe is similar to ```extractTimeSeries``` but for application in multivariate time series analysis such as nonlinear autoregressive models with exogenous inputs. The pipe processes its data source line by line and outputs a ```(Double, DenseVector[Double])``` in the following format `(Timestamp,Values)`.
+
+
+
+General
+------
+
 ### ```duplicate[S, D](pipe: DataPipe[S, D])```
 
 * _Type_: ```DataPipe[(S, S), (D, D)] ```
 * _Result_: Takes a base pipe and creates a parallel pipe by duplicating it.
+
 
 -----
 
