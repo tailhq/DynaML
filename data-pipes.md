@@ -91,6 +91,7 @@ Feature Processing
 
 * _Type_: ```DataPipe[Stream[String], Stream[String]] ```
 * _Result_: Extract a subset of columns from a stream of comma separated string also replace any missing value strings with the empty string.
+* _Usage_: ```DynaMLPipe.extractTrainingFeatures(List(1,2,3), Map(1 -> "N.A.", 2 -> "NA", 3 -> "na"))```
 
 
 ### ```trainTestGaussianStandardization```
