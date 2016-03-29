@@ -39,7 +39,7 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
   def dimensions = featureMap(data.head._1).length
 
   override def initParams(): DenseVector[Double] =
-    DenseVector.ones[Double](dimensions+1)
+    DenseVector.ones[Double](dimensions)
 
 
   override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
@@ -81,6 +81,6 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
     *
     **/
   override def predict(point: DenseVector[Double]): Double =
-    params(0 until dimensions) dot featureMap(point) + params(-1)
+    params dot featureMap(point)
 
 }
