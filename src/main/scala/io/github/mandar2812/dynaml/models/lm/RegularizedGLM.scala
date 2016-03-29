@@ -20,17 +20,16 @@ under the License.
 package io.github.mandar2812.dynaml.models.lm
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.models.LinearModel
 import io.github.mandar2812.dynaml.optimization.{RegularizedLSSolver, RegularizedOptimizer}
 
 /**
   * Created by mandar on 29/3/16.
   */
-class RegularizedGLM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
-                     kern: CovarianceFunction[DenseVector[Double],
-                       Double, DenseMatrix[Double]],
-                     modelTask: String = "regression")
+class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
+                     numPoints: Int,
+                     map: (DenseVector[Double]) => DenseVector[Double] =
+                     identity[DenseVector[Double]] _)
   extends LinearModel[Stream[(DenseVector[Double], Double)],
     Int, Int, DenseVector[Double], DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])]{
