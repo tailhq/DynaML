@@ -45,6 +45,12 @@ Data Pre-processing
 * _Result_: Writes a stream of lines to the file specified by ```filePath```
 
 
+### ```dropHead```
+
+* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
+* _Result_: Drop the first element of a ```Stream``` of ```String```
+
+
 ### ```replace(original, newString)```
 
 * _Type_: ```DataPipe[Stream[String], Stream[String]] ```
