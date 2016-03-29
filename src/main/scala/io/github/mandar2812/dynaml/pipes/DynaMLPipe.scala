@@ -53,10 +53,23 @@ object DynaMLPipe {
   val streamToFile = (fileName: String) => DataPipe(utils.writeToFile(fileName) _)
 
   /**
+    * Drop the first element of a [[Stream]] of [[String]]
+    * */
+  val dropHead = DataPipe((s: Stream[String]) => s.tail)
+
+
+  /**
+    * Data pipe to replace all occurrences of a regular expression or string in a [[Stream]]
+    * of [[String]] with with a specified replacement string.
+    * */
+  val replace = (original: String, newString: String) =>
+    StreamDataPipe((s: String) => utils.replace(original)(newString)(s))
+
+  /**
     * Data pipe to replace all white spaces in a [[Stream]]
     * of [[String]] with the comma character.
     * */
-  val replaceWhiteSpaces = StreamDataPipe((s: String) => utils.replace("\\s+")(",")(s))
+  val replaceWhiteSpaces = replace("\\s+", ",")
 
   /**
     * Trim white spaces from each line in a [[Stream]]
@@ -141,8 +154,6 @@ object DynaMLPipe {
         })
 
         val features = DenseVector(featuresAcc.toArray)
-        //assert(history.length == deltaT + 1, "Check one")
-        //assert(features.length == deltaT, "Check two")
         (features, history.last._2(0))
       }).toStream)
 
@@ -162,8 +173,6 @@ object DynaMLPipe {
         })
 
         val features = DenseVector(featuresAcc.toArray)
-        //assert(history.length == deltaT + 1, "Check one")
-        //assert(features.length == deltaT, "Check two")
         (features, history.last._2(0))
       }).toStream)
 
@@ -197,11 +206,7 @@ object DynaMLPipe {
   val trainTestGaussianStandardization =
     DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
       Stream[(DenseVector[Double], Double)])) => {
-      logger.info("Training Data")
-      logger.info(trainTest._1.toList)
-      logger.info("-----------")
-      logger.info("Test Data")
-      logger.info(trainTest._2.toList)
+
       val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
         DenseVector(tup._1.toArray ++ Array(tup._2))).toList)
 
@@ -231,11 +236,7 @@ object DynaMLPipe {
   val trainTestGaussianStandardizationMO =
     DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
       Stream[(DenseVector[Double], DenseVector[Double])])) => {
-      //logger.info("Training Data")
-      //logger.info(trainTest._1.toList)
-      //logger.info("-----------")
-      //logger.info("Test Data")
-      //logger.info(trainTest._2.toList)
+
       val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
         DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
 
@@ -249,9 +250,9 @@ object DynaMLPipe {
         val normPoint = (extendedpoint - mean) :/ stdDev
         val length = point._1.length
         val outlength = point._2.length
-        //logger.info("Features Normalized: "+normPoint(0 until length))
-        //logger.info("Outputs Normalized: "+normPoint(length until length+outlength))
-        (normPoint(0 until length), normPoint(length until length+outlength))
+
+        (normPoint(0 until length),
+          normPoint(length until length+outlength))
       }
 
       ((trainTest._1.map(normalizationFunc),
