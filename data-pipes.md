@@ -45,6 +45,12 @@ Data Pre-processing
 * _Result_: Writes a stream of lines to the file specified by ```filePath```
 
 
+### ```replace(original, newString)```
+
+* _Type_: ```DataPipe[Stream[String], Stream[String]] ```
+* _Result_: Replace all occurrences of a regular expression or string in a ```Stream``` of ```String``` with with a specified replacement string.
+
+
 ### ```replaceWhiteSpaces```
 
 * _Type_: ```DataPipe[Stream[String], Stream[String]] ```
