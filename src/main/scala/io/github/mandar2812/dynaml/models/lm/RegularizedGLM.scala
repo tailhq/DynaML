@@ -21,7 +21,8 @@ package io.github.mandar2812.dynaml.models.lm
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.models.LinearModel
-import io.github.mandar2812.dynaml.optimization.{RegularizedLSSolver, RegularizedOptimizer}
+import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
+import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, RegularizedLSSolver, RegularizedOptimizer}
 
 /**
   * Created by mandar on 29/3/16.
@@ -32,7 +33,8 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
                      identity[DenseVector[Double]] _)
   extends LinearModel[Stream[(DenseVector[Double], Double)],
     Int, Int, DenseVector[Double], DenseVector[Double], Double,
-    (DenseMatrix[Double], DenseVector[Double])]{
+    (DenseMatrix[Double], DenseVector[Double])]
+    with GloballyOptimizable {
 
   override protected val g = data
 
@@ -83,4 +85,42 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
   override def predict(point: DenseVector[Double]): Double =
     params dot featureMap(point)
 
+  override protected var hyper_parameters: List[String] = List("regularization")
+
+  /**
+    * Calculates the energy of the configuration,
+    * in most global optimization algorithms
+    * we aim to find an approximate value of
+    * the hyper-parameters such that this function
+    * is minimized.
+    *
+    * @param h       The value of the hyper-parameters in the configuration space
+    * @param options Optional parameters about configuration
+    * @return Configuration Energy E(h)
+    **/
+  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
+    val designMatrix = DenseMatrix.vertcat[Double](
+      g.map(point => featureMap(point._1).toDenseMatrix):_*
+    )
+
+    val kernelTraining = designMatrix.t*designMatrix
+    val trainingLabels = DenseVector(g.map(_._2).toArray)
+    val noiseMat = DenseMatrix.eye[Double](dimensions)*h("regularization")
+
+    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining, noiseMat)
+  }
+
+  override protected var current_state: Map[String, Double] = Map("regularization" -> 0.001)
+
+  /**
+    * Set the model "state" which
+    * contains values of its hyper-parameters
+    * with respect to the covariance and noise
+    * kernels.
+    * */
+  def setState(s: Map[String, Double]): this.type ={
+    this.setRegParam(s("regularization"))
+    current_state = Map("regularization" -> s("regularization"))
+    this
+  }
 }

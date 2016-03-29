@@ -27,7 +27,7 @@ import org.apache.log4j.Logger
   * Performs ML-II gradient based hyper-parameter
   * optimization for Gaussian Process regression models
   */
-class GPMLOptimizer[I, T, M <: GloballyOptimizable](model: M)
+class GPMLOptimizer[I, T, M <: GloballyOptWithGrad](model: M)
   extends GlobalOptimizer[M] {
   override val system: M = model
 

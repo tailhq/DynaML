@@ -19,8 +19,8 @@ under the License.
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg._
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, CovarianceFunction}
-import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
+import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, DiracKernel}
+import io.github.mandar2812.dynaml.optimization.{GloballyOptWithGrad, GloballyOptimizable}
 import org.apache.log4j.Logger
 
 /**
@@ -38,11 +38,11 @@ import org.apache.log4j.Logger
   */
 abstract class AbstractGPRegressionModel[T, I](
   cov: CovarianceFunction[I, Double, DenseMatrix[Double]],
-  n: CovarianceFunction[I, Double, DenseMatrix[Double]] = new DiracKernel(1.0),
+  n: CovarianceFunction[I, Double, DenseMatrix[Double]],
   data: T, num: Int) extends
   GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
   (DenseVector[Double], DenseMatrix[Double])]
-with GloballyOptimizable {
+with GloballyOptWithGrad {
 
   private val logger = Logger.getLogger(this.getClass)
 

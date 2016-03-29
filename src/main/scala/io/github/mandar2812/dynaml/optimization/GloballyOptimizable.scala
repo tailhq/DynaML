@@ -53,6 +53,10 @@ trait GloballyOptimizable {
   def energy(h: Map[String, Double],
              options: Map[String, String] = Map()): Double
 
+}
+
+trait GloballyOptWithGrad extends GloballyOptimizable {
+
   /**
     * Calculates the gradient energy of the configuration and
     * subtracts this from the current value of h to yield a new
@@ -66,5 +70,4 @@ trait GloballyOptimizable {
     * */
   def gradEnergy(h: Map[String, Double])
   : Map[String, Double] = Map()
-
 }

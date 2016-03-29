@@ -18,11 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.svm
 
-import breeze.linalg.{trace, inv, DenseMatrix, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, inv, trace}
 import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalSVMKernel}
 import io.github.mandar2812.dynaml.models.LinearModel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LSSVMLinearSolver, RegularizedOptimizer}
+import io.github.mandar2812.dynaml.optimization.{GloballyOptWithGrad, GloballyOptimizable, LSSVMLinearSolver, RegularizedOptimizer}
 
 /**
   * Implementation of the classical Dual LSSVM model.
@@ -42,7 +42,7 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
   extends LinearModel[Stream[(DenseVector[Double], Double)],
     Int, Int, DenseVector[Double], DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])]
-  with GloballyOptimizable {
+  with GloballyOptWithGrad {
 
   override protected val g = data
 
