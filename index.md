@@ -10,11 +10,11 @@ What is DynaML?
 =================
 DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows.
 
-![dynaml](https://cloud.githubusercontent.com/assets/1389553/13198526/4481d1b6-d80b-11e5-911b-4ba0a3e0c73e.png)
+![dynaml]({{site.baseurl}}/images/screenshot.png)
 
 DynaML uses the newly minted [Wisp](https://github.com/quantifind/wisp) plotting library to generate aesthetic charts of common model validation metrics.
 
-![plots](https://cloud.githubusercontent.com/assets/1389553/13198527/44834078-d80b-11e5-86bb-e16edf32d913.png)
+![plots]({{site.baseurl}}/images/plot-screen.png)
 
 Motivation behind DynaML
 =================
