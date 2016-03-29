@@ -26,25 +26,26 @@ Current status/Road ahead
 
 DynaML is a fledgling open source project that is in a phase of rapid expansion. Currently it supports.
 
-* Regression with kernel based [Dual LS-SVM](/DynaML/models/#least-squares-support-vector-machines)
-* Regression with [Gaussian Processes](/DynaML/models/#gaussian-processes)
-* Feed forward [Neural Networks](/DynaML/models/#feed-forward-neural-networks)
+* [Regularized Ordinary Least Squares]({{site.baseurl}}/models/#regularized-least-squares)
+* Regression with kernel based [Dual LS-SVM]({{site.baseurl}}/models/#least-squares-support-vector-machines)
+* Regression with [Gaussian Processes]({{site.baseurl}}/models/#gaussian-processes)
+* Feed forward [Neural Networks]({{site.baseurl}}/models/#feed-forward-neural-networks)
 * Committee Models
-  - [Neural Committee Models](/DynaML/models/#neural-committee-models)
+  - [Neural Committee Models]({{site.baseurl}}/models/#neural-committee-models)
   - Gaussian Process Committee Models
 * Model Learning and Optimization
   - Gradient Descent
-  - [Conjugate Gradient](/DynaML/optimization-primitives/#conjugate-gradient)
-  - [Committee Model Solver](/DynaML/optimization-primitives/#committee-model-solver)
-  - [Back propogation with momentum](/DynaML/optimization-primitives/#backpropagation-with-momentum)
-  - [LSSVM linear solver](/DynaML/optimization-primitives/#dual-lssvm-solver)
+  - [Conjugate Gradient]({{site.baseurl}}/optimization-primitives/#conjugate-gradient)
+  - [Committee Model Solver]({{site.baseurl}}/optimization-primitives/#committee-model-solver)
+  - [Back propogation with momentum]({{site.baseurl}}/optimization-primitives/#backpropagation-with-momentum)
+  - [LSSVM linear solver]({{site.baseurl}}/optimization-primitives/#dual-lssvm-solver)
 * Model tuning
-  * [Grid Search](/DynaML/optimization-primitives/#grid-search)
-  * [Maximum Likelihood (ML-II)](/DynaML/optimization-primitives/#maximum-likelihood-ml-ii)
-  * [Coupled Simulated Annealing](/DynaML/optimization-primitives/#coupled-simulated-annealing)
+  * [Grid Search]({{site.baseurl}}/optimization-primitives/#grid-search)
+  * [Maximum Likelihood (ML-II)]({{site.baseurl}}/optimization-primitives/#maximum-likelihood-ml-ii)
+  * [Coupled Simulated Annealing]({{site.baseurl}}/optimization-primitives/#coupled-simulated-annealing)
 * Model validation metrics (RMSE, Area under ROC)
 * Entropy based data subset selection
-* [Data Pipes](/DynaML/data-pipes/) for configurable workflows
+* [Data Pipes]({{site.baseurl}}/data-pipes/) for configurable workflows
 
 Going ahead we aim to introduce (but not limit to)
 

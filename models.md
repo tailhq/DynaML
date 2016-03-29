@@ -34,6 +34,36 @@ Non parametric models generally grow with the size of the data set, some example
 DynaML contains a few (but growing number) of algorithm implementations, currently the base data structures used for these implementations is `DenseVector` as defined in the [Breeze](https://github.com/scalanlp/breeze) linear algebra and statistics library.
 The base model classes can be extended for specific applications like big data analysis where the programmer use customized data structures.
 
+
+
+### Regularized Least Squares
+
+The [_regularized least squares_](https://en.wikipedia.org/wiki/Tikhonov_regularization) model builds a predictor of the following form (assuming the data is centered see the data pipes [page]({{site.baseurl}}/data-pipes/#traintestgaussianstandardization)).
+
+$$
+	y = w^T \varphi(x)
+$$
+
+Here $$\varphi(.)$$ is an appropriately chosen set of _basis functions_. The inference problem is formulated as.
+
+$$
+	\begin{equation}
+		\min_{w} \ \mathcal{J}_P(w) = \frac{1}{2} \gamma \  w^Tw + \frac{1}{2} \sum_{k = 1}^{N} (y_k - w^T \varphi(x_k))^2
+	\end{equation}
+$$
+
+
+#### Regularized Least Squares in DynaML
+
+```scala
+val basisFunc: (DenseVector[Double]) => DenseVector[Double] = ...
+val data: Stream[(DenseVector[Double], Double)] = ... 
+val model = new RegularizedGLM(data, data.length, basisFunc)
+model.setRegParam(1.5).learn()
+```
+
+
+
 ### Least Squares Support Vector Machines
 
 Least Squares Support Vector Machines are a modification of the classical Support Vector Machine, please see the [book](http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511) for a complete background.
