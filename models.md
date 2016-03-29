@@ -18,7 +18,7 @@ _Generalized Linear Models_ which are linear in parameters expression for the pr
 
 $$
 	\begin{equation}
-		y = w^T\phi(x) + b + e
+		y = w^T\varphi(x) + \epsilon
 	\end{equation}
 $$
 
@@ -41,7 +41,7 @@ The base model classes can be extended for specific applications like big data a
 The [_regularized least squares_](https://en.wikipedia.org/wiki/Tikhonov_regularization) model builds a predictor of the following form (assuming the data is centered see the data pipes [page]({{site.baseurl}}/data-pipes/#traintestgaussianstandardization)).
 
 $$
-	y = w^T \varphi(x)
+	y = w^T \varphi(x) + \epsilon
 $$
 
 Here $$\varphi(.)$$ is an appropriately chosen set of _basis functions_. The inference problem is formulated as.
