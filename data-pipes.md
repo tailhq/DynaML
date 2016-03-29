@@ -5,7 +5,6 @@ title: Data Pipes
 
 -----
 
-## Configurable Data Workflows
 Data _munging_ or pre-processing is one of the most time consuming activities in the analysis and modeling cycle, yet very few libraries do justice to this need. In DynaML the aim has been to make data analysis more reproducible and easy, hence designing, maintaining and improving a powerful data workflow framework is at the center of the development endeavour. In this section we attempt to give a simple yet effective introduction to the data pipes module of DynaML.
 
 ## What are DynaML Data Pipes?
