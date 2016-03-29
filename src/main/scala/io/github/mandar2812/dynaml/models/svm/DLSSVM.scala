@@ -37,7 +37,8 @@ import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LSSVMLinea
   */
 class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
              kern: CovarianceFunction[DenseVector[Double],
-               Double, DenseMatrix[Double]])
+               Double, DenseMatrix[Double]],
+             modelTask: String = "regression")
   extends LinearModel[Stream[(DenseVector[Double], Double)],
     Int, Int, DenseVector[Double], DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])]
@@ -54,6 +55,8 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
     List("regularization")++kernel.hyper_parameters
 
   val num_points = numPoints
+
+  var task: String = modelTask
 
   /**
     * Model optimizer set to
@@ -147,7 +150,7 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
     **/
   override def learn(): Unit = {
     params = optimizer.optimize(num_points,
-      (kernel.buildKernelMatrix(g.map(_._1).toSeq, num_points).getKernelMatrix(),
+      (kernel.buildKernelMatrix(g.map(_._1), num_points).getKernelMatrix(),
         DenseVector(g.map(_._2).toArray)),
       initParams())
   }
@@ -163,7 +166,7 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
     val features = DenseVector(g.map(inducingpoint =>
       kernel.evaluate(point, inducingpoint._1)).toArray)
 
-    params(0 to num_points-1) dot features + params(-1)
+    params(0 until num_points) dot features + params(-1)
   }
 
   def setState(h: Map[String, Double]) = {
