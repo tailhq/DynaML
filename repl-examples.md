@@ -8,6 +8,7 @@ title: DynaML Shell Examples
 
 The DynaML scala shell is the first point of contact when experimenting with data analysis workflows and modeling algorithms. In this section we consider two representative examples of binary classification and regression. After starting the DynaML REPL one can start experimenting with building models for data sets. In the `data/` directory you can find a set of packaged data sets. 
 
+------
 
 ### Regression: Boston Housing Data Set
 
@@ -24,6 +25,7 @@ In this example we make use of the *pipes* module of DynaML which enables us to 
 
 {% gist mandar2812/bc5ff898ca921f22b5ee %}
 
+------
 
 ### System Identification: Santa Fe Laser
 
@@ -37,6 +39,7 @@ num_training = 200, num_test = 500, deltaT = 5)
 
 {% gist mandar2812/0ac7ea02b73548c2e61d %}
 
+------
 
 ### Regression: Delve Data
 
@@ -54,3 +57,21 @@ alpha = 0.5, regularization = 0.5)
 
 
 {% gist mandar2812/4f067223d4ce7f2fba11 %}
+
+------
+
+### Binary Classification: Wine Quality
+
+The [_wine quality_](https://archive.ics.uci.edu/ml/datasets/Wine+Quality) data is commonly used to benchmark classification models. In this example program, we transform the output category (which takes values from `0` to `10`) into a binary class value such that it takes the value `1` for quality scores greater than `6` and `-1` for scores lesser than or equal to `6`. 
+
+
+```scala
+TestNNWineQuality(hidden = 1, nCounts = List(2),
+acts = List("linear"), stepSize = 0.05, maxIt = 30,
+mini = 1.0, alpha = 0.55,
+training = 1000, test = 600,
+regularization = 0.001,
+wineType = "red")
+```
+
+{% gist mandar2812/f918bc0b52ec1b08e5bfe988a5657f9a %}
