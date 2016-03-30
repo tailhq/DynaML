@@ -8,6 +8,15 @@ title: Kernels
 ![kernel]({{site.baseurl}}/images/kernel.png)
 
 
+_Positive definite_ functions or _positive type_ functions occupy an important place in various areas of mathematics, from the construction of covariances of random variables to quantifying distance measures in _Hilbert spaces_. Symmetric positive type functions defined on the cartesian product of a set with itself $$K: E\timesE \rightarrow \mathbb{R}$$ are also known as _kernel_ functions in machine learning. They are applied extensively in problems such as.
+
+1. Represent non-linear behavior in SVM models: _SVM_ and _LSSVM_
+2. Quantify covariance between input patterns: _Gaussian Processes_
+3. Represent degree of 'closeness' or affinity in unsupervised learning: _Kernel Spectral Clustering_
+
+For an in depth review of the various applications of kernels in the machine learning domain, refer to [Scholkopf et. al](http://www.kernel-machines.org/publications/pdfs/0701907.pdf)
+
+
 ## Kernels available in DynaML
 
 
