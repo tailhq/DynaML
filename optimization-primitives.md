@@ -7,6 +7,34 @@ title: Optimization Primitives
 
 Model solvers are implementations which either solve for the parameters/coefficients which determine the prediction of a model. Below is a list of all model solvers currently implemented, they are all sub-classes/subtraits of the top level optimization API. Refer to the [wiki page](https://github.com/mandar2812/DynaML/wiki/Optimization-%26-Model-Selection) on optimizers for more details on extending the API and writing your own optimizers.
 
+
+### Regularized Least Squares
+
+This subroutine solves the regularized least squares optimization problem as shown below.
+
+$$ 
+\begin{equation} 
+	\min_{w} \ \mathcal{J}P(w) = \frac{1}{2} \gamma \ w^Tw + \frac{1}{2} \sum{k = 1}^{N} (y_k - w^T \varphi(x_k))^2 
+\end{equation} 
+$$
+
+
+```scala
+val num_dim = ...
+val designMatrix: DenseMatrix[Double] = ...
+val response: DenseVector[Double] = ...
+
+val optimizer = new RegularizedLSSolver()
+
+
+val x = optimizer.setRegParam(0.05)
+	.optimize(designMatrix.nrow, 
+		(designMatrix, response),
+		DenseVector.ones[Double](num_dim))
+```
+
+
+
 ### Backpropagation with Momentum
 
 This is the most common learning methods for supervised training of feed forward neural networks, the edge weights are adjusted using the _generalized delta rule_.
