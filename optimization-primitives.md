@@ -14,7 +14,7 @@ This subroutine solves the regularized least squares optimization problem as sho
 
 $$ 
 \begin{equation} 
-	\min_{w} \ \mathcal{J}P(w) = \frac{1}{2} \gamma \ w^Tw + \frac{1}{2} \sum{k = 1}^{N} (y_k - w^T \varphi(x_k))^2 
+	\min_{w} \ \mathcal{J}_{P}(w) = \frac{1}{2} \gamma \ w^Tw + \frac{1}{2} \sum{k = 1}^{N} (y_k - w^T \varphi(x_k))^2 
 \end{equation} 
 $$
 
