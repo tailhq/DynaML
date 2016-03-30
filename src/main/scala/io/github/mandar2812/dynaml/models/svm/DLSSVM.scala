@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.svm
 
 import breeze.linalg.{DenseMatrix, DenseVector, inv, trace}
-import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalSVMKernel}
+import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.models.LinearModel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.{GloballyOptWithGrad, GloballyOptimizable, LSSVMLinearSolver, RegularizedOptimizer}
@@ -96,7 +96,7 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
     **/
   override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
     kernel.setHyperParameters(h)
-    val kernelTraining = kernel.buildKernelMatrix(g.map(_._1).toSeq, num_points).getKernelMatrix()
+    val kernelTraining = kernel.buildKernelMatrix(g.map(_._1), num_points).getKernelMatrix()
     val trainingLabels = DenseVector(g.map(_._2).toArray)
     val noiseMat = DenseMatrix.eye[Double](num_points)*h("regularization")
 
@@ -116,7 +116,7 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
     **/
   override def gradEnergy(h: Map[String, Double]): Map[String, Double] = {
     kernel.setHyperParameters(h)
-    val kernelTraining = kernel.buildKernelMatrix(g.map(_._1).toSeq, num_points).getKernelMatrix()
+    val kernelTraining = kernel.buildKernelMatrix(g.map(_._1), num_points).getKernelMatrix()
     val trainingLabels = DenseVector(g.map(_._2).toArray)
     val noiseMat = DenseMatrix.eye[Double](num_points)*h("regularization")
     val training = g.map(_._1)

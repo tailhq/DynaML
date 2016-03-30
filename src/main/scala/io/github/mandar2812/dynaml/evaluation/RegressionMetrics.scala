@@ -37,8 +37,6 @@ class RegressionMetrics(
   extends Metrics[Double] {
   private val logger = Logger.getLogger(this.getClass)
 
-  var name = "Value"
-
   val length: Int = len
 
   val rmse: Double = math.sqrt(scoresAndLabels.map((p) =>
@@ -67,11 +65,6 @@ class RegressionMetrics(
 
   def scores_and_labels() = this.scoresAndLabels
 
-  def setName(n: String): this.type = {
-    name = n
-    this
-  }
-
   override def print(): Unit = {
     logger.info("Regression Model Performance: "+name)
     logger.info("============================")
@@ -87,19 +80,7 @@ class RegressionMetrics(
   override def kpi() = DenseVector(mae, rmse, Rsq, corr)
 
   override def generatePlots(): Unit = {
-    //implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
-    val roccurve = this.residuals()
-
-    logger.log(Priority.INFO, "Generating Plot of Residuals")
-    /*val chart1 = XYBarChart(roccurve,
-      title = "Residuals", legend = true)
-
-    chart1.show()*/
-    //histogram(roccurve.map(_._1))
-    //title("Histogram of Regression Residuals")
-    //xAxis("Residual Value Range")
-    //yAxis("Number of Samples")
-
+    logger.info("Generating Plot of Residuals")
     generateResidualPlot()
     generateFitPlot()
   }

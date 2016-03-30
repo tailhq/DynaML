@@ -81,32 +81,36 @@ class BinaryClassificationMetrics(
    * Calculate the F1 metric by threshold, for an
    * arbitrary beta value
    * */
-  def fMeasureByThreshold(beta: Double): List[(Double, Double)] = tpfpByThreshold().map((couple) => {
-    val tp = couple._2._1
-    val fp = couple._2._2
-    val betasq = math.pow(beta, 2.0)
-    (couple._1, (1 + betasq)*tp/((1 + betasq)*tp + betasq*(1-tp) + fp))
-  })
+  def fMeasureByThreshold(beta: Double): List[(Double, Double)] =
+    tpfpByThreshold().map((couple) => {
+      val tp = couple._2._1
+      val fp = couple._2._2
+      val betasq = math.pow(beta, 2.0)
+      (couple._1, (1 + betasq)*tp/((1 + betasq)*tp + betasq*(1-tp) + fp))
+    })
 
   /**
    * Return the Precision-Recall curve, as a [[List]]
    * of [[Tuple2]] (Recall, Precision).
    * */
-  def pr(): List[(Double, Double)] = recallByThreshold().zip(precisionByThreshold()).map((couple) =>
-    (couple._1._2, couple._2._2)).sorted
+  def pr(): List[(Double, Double)] =
+    recallByThreshold().zip(precisionByThreshold()).map((couple) =>
+      (couple._1._2, couple._2._2)).sorted
 
   /**
    * Return the Recall-Threshold curve, as a [[List]]
    * of [[Tuple2]] (Threshold, Recall).
    * */
-  def recallByThreshold(): List[(Double, Double)]  = tpfpByThreshold().map((point) => (point._1, point._2._1))
+  def recallByThreshold(): List[(Double, Double)] =
+    tpfpByThreshold().map((point) => (point._1, point._2._1))
 
   /**
    * Return the Precision-Threshold curve, as a [[List]]
    * of [[Tuple2]] (Threshold, Precision).
    * */
-  def precisionByThreshold(): List[(Double, Double)]  = tpfpByThreshold().map((point) =>
-    (point._1, point._2._1/(point._2._1 + point._2._2)))
+  def precisionByThreshold(): List[(Double, Double)] =
+    tpfpByThreshold().map((point) =>
+      (point._1, point._2._1/(point._2._1 + point._2._2)))
 
   /**
    * Return the Receiver Operating Characteristic
@@ -122,14 +126,14 @@ class BinaryClassificationMetrics(
    * of [[Tuple2]] (Threshold, (True Positive rate, False Positive Rate)).
    * */
   def tpfpByThreshold(): List[(Double, (Double, Double))]  =
-    this.thresholds.toList.map((th) => {
-      val true_positive = if(positives.length > 0) {
+    this.thresholds.map((th) => {
+      val true_positive = if(positives.nonEmpty) {
         positives.count(p =>
           math.signum(p._1 - th) == 1.0)
           .toDouble/positives.length
       } else {0.0}
 
-      val false_positive = if(negatives.length > 0) {
+      val false_positive = if(negatives.nonEmpty) {
         negatives.count(p =>
           math.signum(p._1 - th) == 1.0)
           .toDouble/negatives.length
@@ -149,35 +153,26 @@ class BinaryClassificationMetrics(
     val roccurve = this.roc()
     val prcurve = this.pr()
     val fm = this.fMeasureByThreshold()
-    //implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
-    logger.log(Priority.INFO, "Generating ROC Plot")
-    /*val chart1 = XYAreaChart(roccurve,
-      title = "Receiver Operating Characteristic", legend = true)
+    logger.info("Generating ROC Plot")
 
-    chart1.show()
+    spline(fm.map(_._1), fm.map(_._2))
+    title("F Measure vs Threshold Cutoff: "+name)
+    xAxis("Threshold")
+    yAxis("F Measure")
 
-    logger.log(Priority.INFO, "Generating PR Plot")
-    val chart2 = XYAreaChart(prcurve,
-      title = "Precision Recall Curve", legend = true)
-    chart2.show()
-
-    logger.log(Priority.INFO, "Generating F1 measure Plot")
-    val chart3 = XYLineChart(fm,
-      title = "F1 measure by threshold beta = 1", legend = true)
-    chart3.show()*/
     areaspline(roccurve.map(_._1), roccurve.map(_._2))
-    title("Receiver Operating Characteristic")
+    title("Receiver Operating Characteristic: "+name+
+      ", Area under curve: "+areaUnderCurve(roc))
     xAxis("False Positives")
     yAxis("True Positives")
-
   }
 
   override def print(): Unit = {
-    logger.log(Priority.INFO, "Classification Model Performance")
-    logger.log(Priority.INFO, "============================")
-    logger.log(Priority.INFO, "Accuracy: " + accuracyByThreshold().map((c) => c._2).max)
-    logger.log(Priority.INFO, "Area under ROC: " + areaUnderROC())
-
+    logger.info("Classification Model Performance: "+name)
+    logger.info("============================")
+    logger.info("Accuracy: " + accuracyByThreshold().map((c) => c._2).max)
+    logger.info("Area under ROC: " + areaUnderROC())
+    logger.info("Maximum F Measure: " + fMeasureByThreshold().map(_._2).max)
   }
 
   override def kpi() = DenseVector(accuracyByThreshold().map((c) => c._2).max,

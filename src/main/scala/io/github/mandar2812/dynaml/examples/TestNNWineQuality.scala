@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
+import io.github.mandar2812.dynaml.evaluation.BinaryClassificationMetrics
 import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DynaMLPipe, StreamDataPipe}
 
@@ -46,7 +46,7 @@ object TestNNWineQuality {
         (DenseVector[Double], DenseVector[Double]))) => {
 
         val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 1, hidden,
-          acts, nCounts)
+          acts ++ List("tansig"), nCounts)
 
         val transform = DataPipe(
           (d: Stream[(DenseVector[Double], Double)]) =>
@@ -76,19 +76,22 @@ object TestNNWineQuality {
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res)
 
-        val metrics = new RegressionMetrics(scoresAndLabels,
+        val metrics = new BinaryClassificationMetrics(
+          scoresAndLabels,
           scoresAndLabels.length)
 
-        metrics.setName("Wine Quality: "+wineType)
+        metrics.setName(wineType+" wine quality")
         metrics.print()
-        metrics.generateFitPlot()
+        metrics.generatePlots()
       }
 
     val preProcessPipe = DynaMLPipe.fileToStream >
       DynaMLPipe.dropHead >
       DynaMLPipe.replace(";", ",") >
       DynaMLPipe.extractTrainingFeatures(columns, Map()) >
-      DynaMLPipe.splitFeaturesAndTargets
+      DynaMLPipe.splitFeaturesAndTargets >
+      StreamDataPipe((pattern:(DenseVector[Double], Double)) =>
+        if(pattern._2 <= 6.0) (pattern._1, -1.0) else (pattern._1, 1.0))
 
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
       DynaMLPipe.splitTrainingTest(training, test) >
