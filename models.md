@@ -63,6 +63,28 @@ model.setRegParam(1.5).learn()
 ```
 
 
+### Logistic Regression
+
+The [_logistic regression_](https://en.wikipedia.org/wiki/Tikhonov_regularization) model builds a probabilistic binary classifier of the following form.
+
+$$
+	p(y = 1) = \frac{1}{1 + exp(- w^T \cdot \varphi(x))}
+$$
+
+Here $$\varphi(.)$$ is an appropriately chosen set of _basis functions_. The inference problem is formulated as.
+
+
+#### Logistic Regression in DynaML
+
+```scala
+val basisFunc: (DenseVector[Double]) => DenseVector[Double] = ...
+val data: Stream[(DenseVector[Double], Double)] = ... 
+val model = new RegularizedGLM(data, data.length, basisFunc)
+model.setRegParam(1.5).learn()
+```
+
+
+
 
 ### Least Squares Support Vector Machines
 

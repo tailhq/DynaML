@@ -26,8 +26,8 @@ $$
 
 Name | Class | Equation 
 ------------ | ------------- | -------------
-Logistic Gradient | ```LogisticGradient``` | $$ L = \frac1n \sum_{k=1}^n (y_k - S(w^{T} \cdot x_k)) x_k $$
-Least Sq. Gradient | ```LeastSquaresGradient``` | $$ L = \frac1n \sum_{k=1}^n \|w^{T} \cdot x_k - y_k\|^2 $$
+Logistic Gradient | ```LogisticGradient``` | $$ L = \frac1n \sum_{k=1}^n \log(1+\exp( -y_k w^T x_k)), y_k \in \{-1, +1\}$$
+Least Squares Gradient | ```LeastSquaresGradient``` | $$ L = \frac1n \sum_{k=1}^n \|w^{T} \cdot x_k - y_k\|^2 $$
 
 
 
