@@ -4,11 +4,10 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.{Calendar, GregorianCalendar, Date}
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseVector
 import com.github.tototoshi.csv.CSVWriter
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, CovarianceFunction}
 import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, StreamDataPipe, DataPipe}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
