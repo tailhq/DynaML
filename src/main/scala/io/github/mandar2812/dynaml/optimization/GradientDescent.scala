@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.graphutils.CausalEdge
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.{Logger, Priority}
 
 /**
@@ -29,7 +30,7 @@ import org.apache.log4j.{Logger, Priority}
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
   extends RegularizedOptimizer[Int, DenseVector[Double],
-    DenseVector[Double], Double, Iterable[CausalEdge]]{
+    DenseVector[Double], Double, Stream[(DenseVector[Double], Double)]]{
 
   /**
    * Set the gradient function (of the loss function of one single data example)
@@ -66,7 +67,9 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    *
    *
    * */
-  override def optimize(nPoints: Long, ParamOutEdges: Iterable[CausalEdge], initialP: DenseVector[Double])
+  override def optimize(nPoints: Long,
+                        ParamOutEdges: Stream[(DenseVector[Double], Double)],
+                        initialP: DenseVector[Double])
   : DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
@@ -77,7 +80,8 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
         this.gradient,
         this.stepSize,
         initialP,
-        ParamOutEdges
+        ParamOutEdges,
+        DataPipe(identity[Stream[(DenseVector[Double], Double)]] _)
       )
     } else {
       GradientDescent.runBatchSGD(
@@ -89,7 +93,8 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
         this.stepSize,
         initialP,
         ParamOutEdges,
-        this.miniBatchFraction
+        this.miniBatchFraction,
+        DataPipe(identity[Stream[(DenseVector[Double], Double)]] _)
       )
     }
 
@@ -99,7 +104,7 @@ object GradientDescent {
 
   private val logger = Logger.getLogger(this.getClass)
 
-  def runSGD(
+  def runSGD[T](
       nPoints: Long,
       regParam: Double,
       numIterations: Int,
@@ -107,7 +112,8 @@ object GradientDescent {
       gradient: Gradient,
       stepSize: Double,
       initial: DenseVector[Double],
-      POutEdges: Iterable[CausalEdge]): DenseVector[Double] = {
+      POutEdges: T,
+      transform: DataPipe[T, Stream[(DenseVector[Double], Double)]]): DenseVector[Double] = {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
@@ -115,10 +121,9 @@ object GradientDescent {
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
       val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
-      POutEdges.foreach((ed) => {
-        val xarr = ed.getPoint().getFeatureMap()
-        val x = DenseVector(xarr)
-        val y = ed.getLabel().getValue()
+      transform.run(POutEdges).foreach((ed) => {
+        val x = DenseVector(ed._1.toArray ++ Array(1.0))
+        val y = ed._2
         gradient.compute(x, y, oldW, cumGradient)
       })
       newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
@@ -129,7 +134,7 @@ object GradientDescent {
     newW
   }
 
-  def runBatchSGD(
+  def runBatchSGD[T](
       nPoints: Long,
       regParam: Double,
       numIterations: Int,
@@ -137,18 +142,19 @@ object GradientDescent {
       gradient: Gradient,
       stepSize: Double,
       initial: DenseVector[Double],
-      POutEdges: Iterable[CausalEdge],
-      miniBatchFraction: Double): DenseVector[Double] = {
+      POutEdges: T,
+      miniBatchFraction: Double,
+      transform: DataPipe[T, Stream[(DenseVector[Double], Double)]]): DenseVector[Double] = {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
       val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
-      POutEdges.foreach((ed) => {
+      transform.run(POutEdges).foreach((ed) => {
         if(scala.util.Random.nextDouble() <= miniBatchFraction) {
-          val x = DenseVector(ed.getPoint().getFeatureMap())
-          val y = ed.getLabel().getValue()
+          val x = DenseVector(ed._1.toArray ++ Array(1.0))
+          val y = ed._2
           gradient.compute(x, y, oldW, cumGradient)
         }
       })
