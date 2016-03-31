@@ -65,7 +65,7 @@ model.setRegParam(1.5).learn()
 
 ### Logistic Regression
 
-The [_logistic regression_](https://en.wikipedia.org/wiki/Tikhonov_regularization) model builds a probabilistic binary classifier of the following form.
+The [_logistic regression_](https://en.wikipedia.org/wiki/Logistic_regression) model builds a probabilistic binary classifier of the following form.
 
 $$
 	p(y = 1) = \frac{1}{1 + exp(- w^T \cdot \varphi(x))}
