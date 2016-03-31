@@ -39,7 +39,7 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
   def dimensions = featureMap(data.head._1).length
 
   override def initParams(): DenseVector[Double] =
-    DenseVector.ones[Double](dimensions)
+    DenseVector.ones[Double](dimensions+1)
 
 
   override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
