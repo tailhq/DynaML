@@ -7,6 +7,49 @@ title: Optimization Primitives
 
 Model solvers are implementations which either solve for the parameters/coefficients which determine the prediction of a model. Below is a list of all model solvers currently implemented, they are all sub-classes/subtraits of the top level optimization API. Refer to the [wiki page](https://github.com/mandar2812/DynaML/wiki/Optimization-%26-Model-Selection) on optimizers for more details on extending the API and writing your own optimizers.
 
+### Gradient Descent
+
+The bread and butter of any machine learning framework, the ```GradientDescent``` class in the ```io.github.mandar2812.dynaml.optimization``` package provides gradient based optimization primitives for solving optimization problems of the form.
+
+$$
+\begin{equation}
+    f(w) := 
+    \lambda\, R(w) +
+    \frac1n \sum_{k=1}^n L(w;x_k,y_k) 
+    \label{eq:regPrimal}
+    \ .
+\end{equation}
+$$
+
+#### Gradients
+
+
+Name | Class | Equation 
+------------ | ------------- | -------------
+Logistic Gradient | ```LogisticGradient``` | $$ L = \frac1n \sum_{k=1}^n (y_k - S(w^{T} \cdot x_k)) x_k $$
+Least Sq. Gradient | ```LeastSquaresGradient``` | $$ L = \frac1n \sum_{k=1}^n \|w^{T} \cdot x_k - y_k\|^2 $$
+
+
+
+#### Updaters
+
+Name | Class | Equation 
+------------ | ------------- | -------------
+$$ L_1 $$ Updater | ```L1Updater```| $$R = \|\|w\|\|_1 $$
+$$ L_2 $$ Updater | ```SquaredL2Updater``` | $$R = \frac{1}{2} \|\|w\|\|^2 $$
+
+
+```scala
+val data: Stream[(DenseVector[Double], Double)] = ...
+val num_points = data.length
+val initial_params: DenseVector[Double] = ...
+val optimizer = new GradientDescent(
+	new LogisticGradient,
+	new SquaredL2Updater
+)
+val params = optimizer.setRegParam(0.002)
+.optimize(num_points, data, initial_params)
+```
 
 ### Regularized Least Squares
 
