@@ -63,15 +63,17 @@ model.setRegParam(1.5).learn()
 ```
 
 
-### Logistic Regression
+### Logistic & Probit Regression
 
-The [_logistic regression_](https://en.wikipedia.org/wiki/Logistic_regression) model builds a probabilistic binary classifier of the following form.
+The [_logistic_](https://en.wikipedia.org/wiki/Logistic_regression) and [_probit_](https://en.wikipedia.org/wiki/Probit_model) models build probabilistic binary classifiers of the following form.
 
 $$
-	p(y = 1) = \frac{1}{1 + exp(- w^T \cdot \varphi(x))}
+	p(y = 1) = h(w^T \cdot \varphi(x))
 $$
 
-Here $$\varphi(.)$$ is an appropriately chosen set of _basis functions_. The inference problem is formulated as.
+When $$h(t) = \frac{1}{1 + exp(-t)}$$, it is called _logistic regression_, and $$h(t) = \Phi(t)$$ (cumulative distribution function of the gaussian distribution) is called _probit regression_
+
+Here $$\varphi(.)$$ is an appropriately chosen set of _basis functions_.
 
 
 #### Logistic Regression in DynaML
