@@ -153,13 +153,15 @@ object GradientDescent {
     logger.log(Priority.INFO, "Training model using SGD")
     while(count <= numIterations) {
       val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
+      var cumLoss: Double = 0.0
       transform.run(POutEdges).foreach((ed) => {
         if(scala.util.Random.nextDouble() <= miniBatchFraction) {
           val x = DenseVector(ed._1.toArray ++ Array(1.0))
           val y = ed._2
-          gradient.compute(x, y, oldW, cumGradient)
+          cumLoss += gradient.compute(x, y, oldW, cumGradient)
         }
       })
+      logger.info("Average Loss; Iteration "+count+": "+cumLoss/nPoints.toDouble)
       newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
         stepSize, count, regParam)._1
       oldW = newW

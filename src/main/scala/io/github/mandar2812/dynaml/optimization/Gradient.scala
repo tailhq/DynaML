@@ -19,8 +19,8 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg._
-import breeze.stats.distributions.Gaussian
 import io.github.mandar2812.dynaml.utils
+import org.apache.commons.math3.distribution.NormalDistribution
 
 trait GeneralGradient {
   def compute(
@@ -120,19 +120,16 @@ class ProbitGradient extends Gradient {
                         weights: DenseVector[Double])
   : (DenseVector[Double], Double) = {
     val margin = weights dot data
-    val gau_dist = new Gaussian(0.0, 1.0)
-    val gradientMultiplier = label*gau_dist.pdf(margin)/gau_dist.cdf(margin) -
-      (1.0 - label)*gau_dist.pdf(margin)/(1.0 - gau_dist.cdf(margin))
+    val gau_dist = new NormalDistribution(0.0, 1.0)
+    val gradientMultiplier = if(label > 0) {
+      gau_dist.density(margin)/gau_dist.cumulativeProbability(margin)
+    } else {
+      gau_dist.density(margin)/(1.0 - gau_dist.cumulativeProbability(margin))
+    }
 
     val gradient = data.copy
     gradient :*= gradientMultiplier
-    val loss =
-      if (label > 0) {
-        1 - gau_dist.cdf(margin)
-      } else {
-        gau_dist.cdf(margin)
-      }
-
+    val loss = 1 - gau_dist.cumulativeProbability(margin)
     (gradient, loss)
   }
 
@@ -141,17 +138,15 @@ class ProbitGradient extends Gradient {
                         label: Double,
                         weights: DenseVector[Double],
                         cumGradient: DenseVector[Double]): Double = {
-    val margin = (weights.t * data)
-    val gau_dist = new Gaussian(0.0, 1.0)
-    val gradientMultiplier = label*gau_dist.pdf(margin)/gau_dist.cdf(margin) -
-      (1.0 - label)*gau_dist.pdf(margin)/(1.0 - gau_dist.cdf(margin))
-
-    axpy(gradientMultiplier, data, cumGradient)
-    if (label > 0) {
-      1 - gau_dist.cdf(margin)
+    val margin = weights.t * data
+    val gau_dist = new NormalDistribution(0.0, 1.0)
+    val gradientMultiplier = if(label > 0) {
+      gau_dist.density(margin)/gau_dist.cumulativeProbability(margin)
     } else {
-      gau_dist.cdf(margin)
+      gau_dist.density(margin)/(1.0 - gau_dist.cumulativeProbability(margin))
     }
+    axpy(gradientMultiplier, data, cumGradient)
+    1 - gau_dist.cumulativeProbability(margin)
   }
 }
 

@@ -20,8 +20,11 @@ under the License.
 package io.github.mandar2812.dynaml.models.lm
 
 import breeze.linalg.DenseVector
+import breeze.numerics.sigmoid
+import breeze.stats.distributions.Gaussian
 import io.github.mandar2812.dynaml.models.LinearModel
 import io.github.mandar2812.dynaml.optimization._
+import org.apache.commons.math3.distribution.NormalDistribution
 
 /**
   * Created by mandar on 31/3/16.
@@ -74,7 +77,7 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
     *
     **/
   override def predict(point: DenseVector[Double]): Double =
-    params dot DenseVector(featureMap(point).toArray ++ Array(1.0))
+    sigmoid(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
 
   /*override protected var hyper_parameters: List[String] = List("regularization")
 
@@ -123,6 +126,11 @@ class ProbitGLM(data: Stream[(DenseVector[Double], Double)],
                 map: (DenseVector[Double]) => DenseVector[Double] =
                 identity[DenseVector[Double]] _)
   extends LogisticGLM(data, numPoints, map) {
+
+  override def predict(point: DenseVector[Double]): Double = {
+    val g = new NormalDistribution(0, 1.0)
+    g.cumulativeProbability(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
+  }
 
   override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
     DenseVector[Double], Double,
