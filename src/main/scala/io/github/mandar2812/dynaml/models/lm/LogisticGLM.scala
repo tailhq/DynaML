@@ -27,9 +27,9 @@ import io.github.mandar2812.dynaml.optimization._
   * Created by mandar on 31/3/16.
   */
 class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
-                     numPoints: Int,
-                     map: (DenseVector[Double]) => DenseVector[Double] =
-                     identity[DenseVector[Double]] _)
+                  numPoints: Int,
+                  map: (DenseVector[Double]) => DenseVector[Double] =
+                  identity[DenseVector[Double]] _)
   extends LinearModel[Stream[(DenseVector[Double], Double)],
     Int, Int, DenseVector[Double], DenseVector[Double], Double,
     Stream[(DenseVector[Double], Double)]] {
@@ -74,7 +74,7 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
     *
     **/
   override def predict(point: DenseVector[Double]): Double =
-    params dot featureMap(point)
+    params dot DenseVector(featureMap(point).toArray ++ Array(1.0))
 
   /*override protected var hyper_parameters: List[String] = List("regularization")
 

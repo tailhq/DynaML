@@ -32,7 +32,7 @@ import com.quantifind.charts.Highcharts._
 
 class BinaryClassificationMetrics(
     override protected val scoresAndLabels: List[(Double, Double)],
-    val len: Int)
+    val len: Int, logisticFlag: Boolean = false)
   extends Metrics[Double]{
 
   private val logger = Logger.getLogger(this.getClass)
@@ -40,7 +40,7 @@ class BinaryClassificationMetrics(
 
   /**
    * A list of threshold values from
-   * -1.0 to 1.0 in 100 steps. These
+   * min(score) to max(score) in 100 steps. These
    * will be used to measure the variation
    * in precision, recall False Positive
    * and False Negative values.
@@ -51,13 +51,19 @@ class BinaryClassificationMetrics(
       i.toDouble*((scoresAndLabels.map(_._1).max.toInt -
         scoresAndLabels.map(_._1).min.toInt + 1)/100.0)})
 
-  val positives = this.scoresAndLabels.filter(_._2 == 1.0)
-  val negatives = this.scoresAndLabels.filter(_._2 == -1.0)
+  val (positives, negatives) =  logisticFlag match{
+    case true =>
+      (scoresAndLabels.filter(_._2 == 1.0),
+      scoresAndLabels.filter(_._2 == 0.0))
+    case false =>
+      (scoresAndLabels.filter(_._2 == 1.0),
+      scoresAndLabels.filter(_._2 == -1.0))
+  }
 
   def scores_and_labels = this.scoresAndLabels
 
   private def areaUnderCurve(points: List[(Double, Double)]): Double =
-    points.sliding(2).map(l => (l(1)._1 - l(0)._1) * (l(1)._2 + l(0)._2)/2).sum
+    points.sliding(2).map(l => (l(1)._1 - l.head._1) * (l(1)._2 + l.head._2)/2).sum
 
   /**
    * Calculate the area under the Precision-Recall

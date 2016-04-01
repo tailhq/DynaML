@@ -233,6 +233,33 @@ object DynaMLPipe {
     *
     * (Stream(training data), Stream(test data))
     * */
+  val featuresGaussianStandardization =
+    DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
+      Stream[(DenseVector[Double], Double)])) => {
+
+      val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
+        tup._1).toList)
+
+      val stdDev: DenseVector[Double] = variance.map(v =>
+        math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
+
+
+      val normalizationFunc = (point: (DenseVector[Double], Double)) => {
+        val normPoint = (point._1 - mean) :/ stdDev
+        (normPoint, point._2)
+      }
+
+      ((trainTest._1.map(normalizationFunc),
+        trainTest._2.map(normalizationFunc)), (mean, stdDev))
+    })
+
+
+  /**
+    * Perform gaussian normalization on a data stream which
+    * is a [[Tuple2]] of the form.
+    *
+    * (Stream(training data), Stream(test data))
+    * */
   val trainTestGaussianStandardizationMO =
     DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
       Stream[(DenseVector[Double], DenseVector[Double])])) => {
