@@ -68,10 +68,10 @@ model.setRegParam(1.5).learn()
 The [_logistic_](https://en.wikipedia.org/wiki/Logistic_regression) and [_probit_](https://en.wikipedia.org/wiki/Probit_model) models build probabilistic binary classifiers of the following form.
 
 $$
-	p(y = 1) = h(w^T \cdot \varphi(x))
+	P(y = 1) = h(w^T \cdot \varphi(x))
 $$
 
-When $$h(t) = \frac{1}{1 + exp(-t)}$$, it is called _logistic regression_, and $$h(t) = \Phi(t)$$ (cumulative distribution function of the gaussian distribution) is called _probit regression_
+When $$h(t) = 1/(1 + exp(-t))$$, it is called _logistic regression_, and $$h(t) = \Phi(t)$$ (cumulative distribution function of the gaussian distribution) is called _probit regression_
 
 Here $$\varphi(.)$$ is an appropriately chosen set of _basis functions_.
 
