@@ -76,16 +76,22 @@ When $$h(t) = \frac{1}{1 + exp(-t)}$$, it is called _logistic regression_, and $
 Here $$\varphi(.)$$ is an appropriately chosen set of _basis functions_.
 
 
-#### Logistic Regression in DynaML
+#### Logistic & Probit models in DynaML
 
 ```scala
 val basisFunc: (DenseVector[Double]) => DenseVector[Double] = ...
 val data: Stream[(DenseVector[Double], Double)] = ... 
-val model = new RegularizedGLM(data, data.length, basisFunc)
+val model = new LogisticGLM(data, data.length, basisFunc)
 model.setRegParam(1.5).learn()
 ```
 
 
+```scala
+val basisFunc: (DenseVector[Double]) => DenseVector[Double] = ...
+val data: Stream[(DenseVector[Double], Double)] = ... 
+val model = new ProbitGLM(data, data.length, basisFunc)
+model.setRegParam(1.5).learn()
+```
 
 
 ### Least Squares Support Vector Machines
