@@ -12,7 +12,8 @@ The aim is to build a robust set of abstract classes and interfaces, which can b
 But the library can also be used as an educational/research tool for multi scale data analysis. 
 
 Currently DynaML supports.
-
+* Regularized Ordinary Least Squares
+* Logistic and Probit Models for binary classification
 * Regression with kernel based Dual LS-SVM
 * Regression with Gaussian Processes
 * Feed forward Neural Networks
