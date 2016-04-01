@@ -62,8 +62,10 @@ alpha = 0.5, regularization = 0.5)
 
 ### Binary Classification: Wine Quality
 
-The [_wine quality_](https://archive.ics.uci.edu/ml/datasets/Wine+Quality) data is commonly used to benchmark classification models. In this example program, we transform the output category (which takes values from `0` to `10`) into a binary class value such that it takes the value `1` for quality scores greater than `6` and `-1` for scores lesser than or equal to `6`. 
+The [_wine quality_](https://archive.ics.uci.edu/ml/datasets/Wine+Quality) data is commonly used to benchmark classification models. In this example program, we transform the output category (which takes values from `0` to `10`) into a binary class value such that it takes the value `1` for quality scores greater than `6` and `-1` or `0` (depending on model employed) for scores lesser than or equal to `6`. 
 
+
+#### Using Neural Networks
 
 ```scala
 TestNNWineQuality(hidden = 1, nCounts = List(2),
@@ -75,3 +77,15 @@ wineType = "red")
 ```
 
 {% gist mandar2812/f918bc0b52ec1b08e5bfe988a5657f9a %}
+
+
+#### Using Logistic Regression
+
+```scala
+TestLogisticWineQuality(stepSize = 0.2, maxIt = 120, 
+mini = 1.0, training = 800,
+test = 800, regularization = 0.2, 
+wineType = "red")
+```
+
+{% gist mandar2812/b309d5c26b5aba9c84415d2f7cd6d913 %}
