@@ -20,7 +20,7 @@ package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.evaluation.BinaryClassificationMetrics
-import io.github.mandar2812.dynaml.models.lm.LogisticGLM
+import io.github.mandar2812.dynaml.models.lm.{LogisticGLM, ProbitGLM}
 import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DynaMLPipe, StreamDataPipe}
 
@@ -124,7 +124,8 @@ object TestLogisticWineQuality {
   def apply (training: Int = 100, test: Int = 1000,
              columns: List[Int] = List(11,0,1,2,3,4,5,6,7,8,9,10),
              stepSize: Double = 0.01, maxIt: Int = 30, mini: Double = 1.0,
-             regularization: Double = 0.5, wineType: String = "red"): Unit = {
+             regularization: Double = 0.5, wineType: String = "red",
+             modelType: String = "logistic"): Unit = {
 
     //Load wine quality data into a stream
     //Extract the time and Dst values
@@ -137,7 +138,10 @@ object TestLogisticWineQuality {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
 
-        val model = new LogisticGLM(trainTest._1._1, training)
+        val model = modelType match {
+          case "logistic" => new LogisticGLM(trainTest._1._1, training)
+          case "probit" => new ProbitGLM(trainTest._1._1, training)
+        }
 
         model.setLearningRate(stepSize)
           .setMaxIterations(maxIt)

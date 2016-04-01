@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg._
+import breeze.stats.distributions.Gaussian
 import io.github.mandar2812.dynaml.utils
 
 trait GeneralGradient {
@@ -110,6 +111,50 @@ class LogisticGradient extends Gradient {
     }
   }
 }
+
+
+class ProbitGradient extends Gradient {
+  override def compute(
+                        data: DenseVector[Double],
+                        label: Double,
+                        weights: DenseVector[Double])
+  : (DenseVector[Double], Double) = {
+    val margin = weights dot data
+    val gau_dist = new Gaussian(0.0, 1.0)
+    val gradientMultiplier = label*gau_dist.pdf(margin)/gau_dist.cdf(margin) -
+      (1.0 - label)*gau_dist.pdf(margin)/(1.0 - gau_dist.cdf(margin))
+
+    val gradient = data.copy
+    gradient :*= gradientMultiplier
+    val loss =
+      if (label > 0) {
+        1 - gau_dist.cdf(margin)
+      } else {
+        gau_dist.cdf(margin)
+      }
+
+    (gradient, loss)
+  }
+
+  override def compute(
+                        data: DenseVector[Double],
+                        label: Double,
+                        weights: DenseVector[Double],
+                        cumGradient: DenseVector[Double]): Double = {
+    val margin = (weights.t * data)
+    val gau_dist = new Gaussian(0.0, 1.0)
+    val gradientMultiplier = label*gau_dist.pdf(margin)/gau_dist.cdf(margin) -
+      (1.0 - label)*gau_dist.pdf(margin)/(1.0 - gau_dist.cdf(margin))
+
+    axpy(gradientMultiplier, data, cumGradient)
+    if (label > 0) {
+      1 - gau_dist.cdf(margin)
+    } else {
+      gau_dist.cdf(margin)
+    }
+  }
+}
+
 
 /**
  * Compute gradient and loss for a Least-squared loss function, as used in linear regression.

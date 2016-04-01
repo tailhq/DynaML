@@ -116,3 +116,17 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
     this
   }*/
 }
+
+
+class ProbitGLM(data: Stream[(DenseVector[Double], Double)],
+                numPoints: Int,
+                map: (DenseVector[Double]) => DenseVector[Double] =
+                identity[DenseVector[Double]] _)
+  extends LogisticGLM(data, numPoints, map) {
+
+  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
+    DenseVector[Double], Double,
+    Stream[(DenseVector[Double], Double)]] =
+    new GradientDescent(new ProbitGradient, new SquaredL2Updater)
+
+}
