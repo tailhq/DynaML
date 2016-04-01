@@ -9,7 +9,7 @@ DynaML is a scala library/repl for implementing and working with general Machine
 
 The aim is to build a robust set of abstract classes and interfaces, which can be extended easily to implement advanced models for small and large scale applications.
 
-But the library can also be used as an educational/research tool for multi scale data analysis. 
+But the library can also be used as an educational/research tool for data analysis. 
 
 Currently DynaML supports.
 * Regularized Ordinary Least Squares
