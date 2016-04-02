@@ -96,7 +96,7 @@ model.setRegParam(1.5).learn()
 
 ### Least Squares Support Vector Machines
 
-Least Squares Support Vector Machines are a modification of the classical Support Vector Machine, please see the [Suykens et. al](http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511) for a complete background.
+Least Squares Support Vector Machines are a modification of the classical Support Vector Machine, please see [Suykens et. al](http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511) for a complete background.
 
 ![lssvm-book]({{site.baseurl}}/public/cover_js_small.jpg)
 
