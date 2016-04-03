@@ -193,7 +193,7 @@ Here _K_ is the $$N \times N$$ kernel matrix whose entries are given by $$ K_{kl
 ```scala
 val kernel = new ...
 val data: Stream[(DenseVector[Double], Double)] = ... 
-val model = new DLSSVM(data, data.length, kernel)
+val model = new DLSSVM(data, data.length, kernel, task = "regression")
 model.setRegParam(1.5).learn()
 ```
 
