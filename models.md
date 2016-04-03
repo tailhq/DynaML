@@ -108,7 +108,7 @@ In case of LSSVM for binary classification one solves (by applying the [KKT](htt
 $$
 	\begin{align}
 		& \min_{w,b,e} \ \mathcal{J}_P(w,e) = \frac{1}{2}w^Tw + \gamma \frac{1}{2} \sum_{k = 1}^{N} e^2_k \\
-		& y_k[w^T\phi(x) + b] = 1 - e_k, \ k =1, \cdots, N 
+		& y_k[w^T\varphi(x) + b] = 1 - e_k, \ k =1, \cdots, N 
 	\end{align}
 $$
 
@@ -139,8 +139,12 @@ $$
 $$
 
 Here $$\Omega$$ is the $$N \times N$$ matrix whose entries are given by
+
 $$
-\Omega_{kl} = y_{k} y_{l} \phi(x_k)^\intercal\phi(x_l), \ \ k,l = 1, \cdots, N
+\begin{align}
+ \Omega_{kl} & = y_{k} y_{l} \varphi(x_k)^\intercal\varphi(x_l), \ \ k,l = 1, \cdots, N \\
+             & = y_{k} y_{l} K(x_k, x_l)
+\end{align}
 $$
 
 and $$I$$ is the identity matrix of order $$N$$.
@@ -152,7 +156,7 @@ In case of LSSVM regression one solves (by applying the [KKT](https://en.wikiped
 $$
 	\begin{align}
 		& \min_{w,b,e} \ \mathcal{J}_P(w,e) = \frac{1}{2}w^Tw + \gamma \frac{1}{2} \sum_{k = 1}^{N} e^2_k \\
-		& y_k = w^T\phi(x) + b + e_k, \ k =1, \cdots, N 
+		& y_k = w^T\varphi(x) + b + e_k, \ k =1, \cdots, N 
 	\end{align}
 $$
 
@@ -182,7 +186,7 @@ $$
 \end{equation}
 $$
 
-Here _K_ is the $$N \times N$$ kernel matrix whose entries are given by $$ K_{kl} = \phi(x_k)^\intercal\phi(x_l), \ \ k,l = 1, \cdots, N$$ and $$I$$ is the identity matrix of order $$N$$.
+Here _K_ is the $$N \times N$$ kernel matrix whose entries are given by $$ K_{kl} = \varphi(x_k)^\intercal\varphi(x_l), \ \ k,l = 1, \cdots, N$$ and $$I$$ is the identity matrix of order $$N$$.
 
 #### Using Dual LSSVM in DynaML
 
