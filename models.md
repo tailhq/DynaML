@@ -100,6 +100,53 @@ Least Squares Support Vector Machines are a modification of the classical Suppor
 
 ![lssvm-book]({{site.baseurl}}/public/cover_js_small.jpg)
 
+
+#### LSSVM Classification
+
+In case of LSSVM for binary classification one solves (by applying the [KKT](https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions) conditions) the following constrained optimization problem.
+
+$$
+	\begin{align}
+		& \min_{w,b,e} \ \mathcal{J}_P(w,e) = \frac{1}{2}w^Tw + \gamma \frac{1}{2} \sum_{k = 1}^{N} e^2_k \\
+		& y_k[w^T\phi(x) + b] = 1 - e_k, \ k =1, \cdots, N 
+	\end{align}
+$$
+
+Leading to a classifier of the form.
+
+$$
+	\begin{equation}
+		y(x) = sign \left[ \sum_{k = 1}^{N}\alpha_k K(x, x_k) + b \right]
+	\end{equation}
+$$
+
+Where the values $$\alpha \ \& \ b $$ are the solution of
+
+$$
+\begin{equation}
+\left[\begin{array}{c|c}
+   0  & y^\intercal   \\ \hline
+   y & \Omega + \gamma^{-1} \mathit{I} 
+\end{array}\right] 
+\left[\begin{array}{c}
+   b    \\ \hline
+   \alpha  
+\end{array}\right] = \left[\begin{array}{c}
+   0    \\ \hline
+   1_v  
+\end{array}\right]
+\end{equation}
+$$
+
+Here $$\Omega$$ is the $$N \times N$$ matrix whose entries are given by
+$$
+\Omega_{kl} = y_{k} y_{l} \phi(x_k)^\intercal\phi(x_l), \ \ k,l = 1, \cdots, N
+$$
+
+and $$I$$ is the identity matrix of order $$N$$.
+
+
+#### LSSVM Regression
 In case of LSSVM regression one solves (by applying the [KKT](https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions) conditions) the following constrained optimization problem.
 
 $$
