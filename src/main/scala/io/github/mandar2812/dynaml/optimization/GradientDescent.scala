@@ -29,7 +29,7 @@ import org.apache.log4j.{Logger, Priority}
  * values of the model parameters.
  */
 class GradientDescent (private var gradient: Gradient, private var updater: Updater)
-  extends RegularizedOptimizer[Int, DenseVector[Double],
+  extends RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double, Stream[(DenseVector[Double], Double)]]{
 
   /**

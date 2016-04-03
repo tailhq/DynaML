@@ -110,8 +110,7 @@ BaseModel <: Model[D1, DenseVector[Double], Double],
 Pipe <: ModelPipe[D, D1, DenseVector[Double], Double, BaseModel]
 ](num: Int, data: D, networks: Pipe*) extends
 MetaModel[D,D1,BaseModel,Pipe](num, data, networks:_*) with
-LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
-  Double, D] {
+LinearModel[D, DenseVector[Double], DenseVector[Double], Double, D] {
 
   val num_points = num
 

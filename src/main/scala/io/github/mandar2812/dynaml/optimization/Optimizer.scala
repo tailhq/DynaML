@@ -25,15 +25,13 @@ import com.tinkerpop.frames.EdgeFrame
 /**
  * Trait for optimization problem solvers.
  *
- * @tparam K The type indexing the Parameter vector, should be Int in
- *           most cases.
  * @tparam P The type of the parameters of the model to be optimized.
  * @tparam Q The type of the predictor variable
  * @tparam R The type of the target variable
  * @tparam S The type of the edge containing the
  *           features and label.
  */
-trait Optimizer[K, P, Q, R, S] extends Serializable {
+trait Optimizer[P, Q, R, S] extends Serializable {
 
   /**
    * Solve the convex optimization problem.
@@ -41,8 +39,8 @@ trait Optimizer[K, P, Q, R, S] extends Serializable {
   def optimize(nPoints: Long, ParamOutEdges: S, initialP: P): P
 }
 
-abstract class RegularizedOptimizer[K, P, Q, R, S]
-  extends Optimizer[K, P, Q, R, S] with Serializable {
+abstract class RegularizedOptimizer[P, Q, R, S]
+  extends Optimizer[P, Q, R, S] with Serializable {
 
   protected var regParam: Double = 1.0
 

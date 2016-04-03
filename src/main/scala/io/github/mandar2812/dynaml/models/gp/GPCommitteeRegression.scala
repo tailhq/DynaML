@@ -27,8 +27,7 @@ import io.github.mandar2812.dynaml.pipes.GPRegressionPipe
   */
 abstract class GPCommitteeRegression[T,D[T]](num: Int, data: D[T],
                                              networks: GPRegressionPipe[GPRegression, D[T]]*)
-  extends LinearModel[D[T], Int, Int, DenseVector[Double], DenseVector[Double],
-    Double, D[T]] {
+  extends LinearModel[D[T], DenseVector[Double], DenseVector[Double], Double, D[T]] {
 
   override protected val g: D[T] = data
 

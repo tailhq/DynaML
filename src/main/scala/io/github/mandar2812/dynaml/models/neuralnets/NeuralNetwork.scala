@@ -38,7 +38,7 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
   * @tparam Pattern The type of an individual data pattern
   * */
 trait NeuralNetwork[G, P, T <: NeuralGraph[P], Pattern] extends
-ParameterizedLearner[G, Int, T,
+ParameterizedLearner[G, T,
   DenseVector[Double], DenseVector[Double],
   Stream[Pattern]] {
 

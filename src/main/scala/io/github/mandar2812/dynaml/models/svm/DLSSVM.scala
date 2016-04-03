@@ -39,22 +39,8 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
              kern: CovarianceFunction[DenseVector[Double],
                Double, DenseMatrix[Double]],
              modelTask: String = "regression")
-  extends LinearModel[Stream[(DenseVector[Double], Double)],
-    Int, Int, DenseVector[Double], DenseVector[Double], Double,
-    (DenseMatrix[Double], DenseVector[Double])]
+  extends AbstractDualLSSVM[DenseVector[Double]](data, numPoints, kern)
   with GloballyOptWithGrad {
-
-  override protected val g = data
-
-  val kernel = kern
-
-  override protected var current_state: Map[String, Double] =
-    Map("regularization" -> 0.1) ++ kernel.state
-
-  override protected var hyper_parameters: List[String] =
-    List("regularization")++kernel.hyper_parameters
-
-  val num_points = numPoints
 
   var task: String = modelTask
 
@@ -64,24 +50,10 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
     * solves the LSSVM optimization
     * problem in the dual.
     * */
-  override protected val optimizer: RegularizedOptimizer[Int,
+  override protected val optimizer: RegularizedOptimizer[
     DenseVector[Double], DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])] = new LSSVMLinearSolver()
 
-  /**
-    * Initialize the synapse weights
-    * to small random values between
-    * 0 and 1.
-    *
-    * */
-  override def initParams(): DenseVector[Double] =
-    DenseVector.ones[Double](num_points+1)
-
-  override def clearParameters(): Unit = {
-    params = initParams()
-  }
-
-  override protected var params: DenseVector[Double] = initParams()
 
   /**
     * Calculates the energy of the configuration,
@@ -141,36 +113,5 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
     }).toMap
   }
 
-    /**
-    * Learn the parameters
-    * of the model which
-    * are in a node of the
-    * graph.
-    *
-    **/
-  override def learn(): Unit = {
-    params = optimizer.optimize(num_points,
-      (kernel.buildKernelMatrix(g.map(_._1), num_points).getKernelMatrix(),
-        DenseVector(g.map(_._2).toArray)),
-      initParams())
-  }
 
-  /**
-    * Predict the value of the
-    * target variable given a
-    * point.
-    *
-    **/
-  override def predict(point: DenseVector[Double]): Double = {
-
-    val features = DenseVector(g.map(inducingpoint =>
-      kernel.evaluate(point, inducingpoint._1)).toArray)
-
-    params(0 until num_points) dot features + params(-1)
-  }
-
-  def setState(h: Map[String, Double]) = {
-    kernel.setHyperParameters(h)
-    current_state += ("regularization" -> h("regularization"))
-  }
 }

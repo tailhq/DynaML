@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.graphutils.CausalEdge
 /**
  * @author mandar2812
  */
-class ConjugateGradient extends RegularizedOptimizer[Int, DenseVector[Double],
+class ConjugateGradient extends RegularizedOptimizer[DenseVector[Double],
   DenseVector[Double], Double, Iterable[CausalEdge]]{
 
   def getRegParam = this.regParam

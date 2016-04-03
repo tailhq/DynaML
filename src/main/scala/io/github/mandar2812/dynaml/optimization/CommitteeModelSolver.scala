@@ -25,7 +25,7 @@ import breeze.linalg.{DenseMatrix, inv, DenseVector}
   * to the weights of a committee model.
   */
 class CommitteeModelSolver extends
-RegularizedOptimizer[Int, DenseVector[Double],
+RegularizedOptimizer[DenseVector[Double],
   DenseVector[Double], Double,
   Stream[(DenseVector[Double], Double)]] {
   /**

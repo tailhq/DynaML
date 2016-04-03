@@ -30,7 +30,7 @@ import org.apache.spark.rdd.RDD
  */
 class GradientDescentSpark (private val gradient: Gradient,
                             private val updater: Updater)
-extends RegularizedOptimizer[Int, DenseVector[Double],
+extends RegularizedOptimizer[DenseVector[Double],
   DenseVector[Double], Double, RDD[LabeledPoint]]{
 
   /**

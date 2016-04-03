@@ -30,7 +30,7 @@ class CommitteeNetwork[D](data: D,
                           transform: DataPipe[D, Stream[(DenseVector[Double],
                             DenseVector[Double])]],
                           networks: FFNeuralGraph*) extends
-LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
+LinearModel[D, DenseVector[Double], DenseVector[Double],
   Double, Stream[(DenseVector[Double], Double)]] {
 
   override protected val g: D = data
@@ -44,7 +44,7 @@ LinearModel[D, Int, Int, DenseVector[Double], DenseVector[Double],
     .setMiniBatchFraction(1.0/baseNetworks.length)
     .setNumIterations(20)
 
-  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
+  override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     Stream[(DenseVector[Double], Double)]] = new CommitteeModelSolver()
 

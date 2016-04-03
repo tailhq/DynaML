@@ -28,7 +28,7 @@ import scala.util.Random
 /**
  * @author mandar2812
  */
-class ConjugateGradientSpark extends RegularizedOptimizer[Int, DenseVector[Double],
+class ConjugateGradientSpark extends RegularizedOptimizer[DenseVector[Double],
   DenseVector[Double], Double, RDD[LabeledPoint]]{
 
   def getRegParam = this.regParam

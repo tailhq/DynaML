@@ -32,7 +32,7 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
                      map: (DenseVector[Double]) => DenseVector[Double] =
                      identity[DenseVector[Double]] _)
   extends LinearModel[Stream[(DenseVector[Double], Double)],
-    Int, Int, DenseVector[Double], DenseVector[Double], Double,
+    DenseVector[Double], DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])]
     with GloballyOptimizable {
 
@@ -44,7 +44,7 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
     DenseVector.ones[Double](dimensions)
 
 
-  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
+  override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])] = new RegularizedLSSolver
 

@@ -34,7 +34,7 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
                   map: (DenseVector[Double]) => DenseVector[Double] =
                   identity[DenseVector[Double]] _)
   extends LinearModel[Stream[(DenseVector[Double], Double)],
-    Int, Int, DenseVector[Double], DenseVector[Double], Double,
+    DenseVector[Double], DenseVector[Double], Double,
     Stream[(DenseVector[Double], Double)]] {
 
   override protected val g = data
@@ -45,7 +45,7 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
     DenseVector.ones[Double](dimensions+1)
 
 
-  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
+  override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     Stream[(DenseVector[Double], Double)]] =
     new GradientDescent(new LogisticGradient, new SquaredL2Updater)
@@ -132,7 +132,7 @@ class ProbitGLM(data: Stream[(DenseVector[Double], Double)],
     g.cumulativeProbability(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
   }
 
-  override protected val optimizer: RegularizedOptimizer[Int, DenseVector[Double],
+  override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     Stream[(DenseVector[Double], Double)]] =
     new GradientDescent(new ProbitGradient, new SquaredL2Updater)

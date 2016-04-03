@@ -57,7 +57,6 @@ trait Model[T, Q, R] {
 /**
  * Skeleton of Parameterized Model
  * @tparam G The type of the underlying data.
- * @tparam K The type of indexing on the feature vectors.
  * @tparam T The type of the parameters
  * @tparam Q A Vector/Matrix representing the features of a point
  * @tparam R The type of the output of the predictive model
@@ -66,10 +65,10 @@ trait Model[T, Q, R] {
  *           features and label.
  *
  * */
-trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
+trait ParameterizedLearner[G, T, Q, R, S]
   extends Model[G, Q, R] {
   protected var params: T
-  protected val optimizer: RegularizedOptimizer[K, T, Q, R, S]
+  protected val optimizer: RegularizedOptimizer[T, Q, R, S]
   /**
    * Learn the parameters
    * of the model which
@@ -120,9 +119,7 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
  *
  * @tparam T The underlying type of the data structure
  *           ex. Gremlin, Neo4j, Spark RDD etc
- * @tparam K1 The type of indexing in the parameters
- * @tparam K2 The type of indexing in the feature space.
- * @tparam P A Vector/Matrix of Doubles indexed using [[K1]]
+ * @tparam P A Vector/Matrix of Doubles
  * @tparam Q A Vector/Matrix representing the features of a point
  * @tparam R The type of the output of the predictive model
  *           i.e. A Real Number or a Vector of outputs.
@@ -130,9 +127,8 @@ trait ParameterizedLearner[G, K, T, Q <: Tensor[K, Double], R, S]
  *           features and label.
  * */
 
-trait LinearModel[T, K1, K2,
-  P <: Tensor[K1, Double], Q <: Tensor[K2, Double], R, S]
-  extends ParameterizedLearner[T, K2, P, Q, R, S] {
+trait LinearModel[T, P, Q , R, S]
+  extends ParameterizedLearner[T, P, Q, R, S] {
 
   /**
     * The non linear feature mapping implicitly
@@ -162,7 +158,7 @@ trait EvaluableModel [P, R]{
 
 abstract class KernelizedModel[G, L, T <: Tensor[K1, Double],
 Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
-  extends LinearModel[G, K1, K2, T, Q, R, L] with GloballyOptimizable
+  extends LinearModel[G, T, Q, R, L] with GloballyOptimizable
   with EvaluableModel[T, R]{
 
   override protected var hyper_parameters: List[String] = List("RegParam")

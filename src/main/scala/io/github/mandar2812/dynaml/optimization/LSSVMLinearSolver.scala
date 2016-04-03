@@ -24,7 +24,7 @@ import breeze.linalg.{DenseMatrix, inv, DenseVector}
   * Created by mandar on 9/2/16.
   */
 class LSSVMLinearSolver extends
-RegularizedOptimizer[Int, DenseVector[Double],
+RegularizedOptimizer[DenseVector[Double],
   DenseVector[Double], Double,
   (DenseMatrix[Double], DenseVector[Double])] {
   /**
