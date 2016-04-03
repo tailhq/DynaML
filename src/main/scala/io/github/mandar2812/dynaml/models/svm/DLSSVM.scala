@@ -50,10 +50,28 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
     * solves the LSSVM optimization
     * problem in the dual.
     * */
-  override protected val optimizer: RegularizedOptimizer[
-    DenseVector[Double], DenseVector[Double], Double,
-    (DenseMatrix[Double], DenseVector[Double])] = new LSSVMLinearSolver()
+  override protected val optimizer = new LSSVMLinearSolver(modelTask)
 
+  /**
+    * Learn the parameters
+    * of the model which
+    * are in a node of the
+    * graph.
+    *
+    **/
+  override def learn(): Unit = {
+
+    val kernelMat = kernel.buildKernelMatrix(g.map(_._1), num_points)
+      .getKernelMatrix()
+
+    //Create a vector of target values y
+    val targets = DenseVector(g.map(_._2).toArray)
+
+    params = optimizer.optimize(
+      num_points,
+      (kernelMat, targets),
+      initParams())
+  }
 
   /**
     * Calculates the energy of the configuration,

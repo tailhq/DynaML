@@ -23,10 +23,14 @@ import breeze.linalg.{DenseMatrix, inv, DenseVector}
 /**
   * Created by mandar on 9/2/16.
   */
-class LSSVMLinearSolver extends
+class LSSVMLinearSolver(modelTask: String) extends
 RegularizedOptimizer[DenseVector[Double],
   DenseVector[Double], Double,
   (DenseMatrix[Double], DenseVector[Double])] {
+
+
+  var task: String = modelTask
+
   /**
     * Solve the convex optimization problem.
     *
@@ -43,15 +47,33 @@ RegularizedOptimizer[DenseVector[Double],
                         initialP: DenseVector[Double]): DenseVector[Double] = {
 
     val (kernelMat,labels) = ParamOutEdges
+
+    val OmegaMat = task match {
+      //In case of regression Omega(i,j)  = K(i, j)
+      case "regression" => kernelMat
+      //In case of classification Omega(i,j)  = y(j)y(j)K(i, j)
+      case "classification" => kernelMat :* (labels * labels.t)
+    }
+
+
     val smoother = DenseMatrix.eye[Double](initialP.length-1)*regParam
     val ones = DenseMatrix.ones[Double](1,nPoints.toInt)
     //Construct matrix A and b block by block
-    val A = DenseMatrix.horzcat(
-      DenseMatrix.vertcat(kernelMat + smoother, ones),
-      DenseMatrix.vertcat(ones.t, DenseMatrix(0.0))
-    )
+    val (a,b): (DenseMatrix[Double], DenseVector[Double]) = task match {
+      case "regression" =>
+        (DenseMatrix.horzcat(
+          DenseMatrix.vertcat(OmegaMat + smoother, ones),
+          DenseMatrix.vertcat(ones.t, DenseMatrix(0.0))
+        ), DenseVector.vertcat(labels, DenseVector(0.0)))
 
-    val b = DenseVector.vertcat(labels, DenseVector(0.0))
-    inv(A)*b
+      case "classification" =>
+        (DenseMatrix.horzcat(
+          DenseMatrix.vertcat(OmegaMat + smoother, labels.toDenseMatrix),
+          DenseMatrix.vertcat(labels.toDenseMatrix.t, DenseMatrix(0.0))
+        ), DenseVector.vertcat[Double](ones.toDenseVector, DenseVector(0.0))
+          )
+    }
+
+    inv(a)*b
   }
 }
