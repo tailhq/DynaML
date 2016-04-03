@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>svm - DynaML 1.2 API - io.github.mandar2812.dynaml.models.svm</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
@@ -24,9 +28,13 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../../../../lib/package_big.png" />
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="io">io</a>.<a href="../../../../package.html" class="extype" name="io.github">github</a>.<a href="../../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a></p>
-        <h1>svm</h1>
+        <h1>svm</h1><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -58,8 +66,25 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.svm.DLSSVM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="DLSSVMextendsLinearModel[Stream[(breeze.linalg.DenseVector[Double],Double)],Int,Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]withGloballyOptimizable"></a>
+              <ol><li name="io.github.mandar2812.dynaml.models.svm.AbstractDualLSSVM" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AbstractDualLSSVM[Index]extendsLinearModel[Stream[(Index,Double)],breeze.linalg.DenseVector[Double],Index,Double,(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]withGloballyOptimizable"></a>
+      <a id="AbstractDualLSSVM[Index]:AbstractDualLSSVM[Index]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AbstractDualLSSVM.html"><span class="name">AbstractDualLSSVM</span></a><span class="tparams">[<span name="Index">Index</span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="io.github.mandar2812.dynaml.models.svm.AbstractDualLSSVM.Index">Index</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.models.svm.AbstractDualLSSVM.Index">Index</span>, <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@AbstractDualLSSVM[Index]extendsLinearModel[Stream[(Index,Double)],breeze.linalg.DenseVector[Double],Index,Double,(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]withGloballyOptimizable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Created by mandar on 3/4/16.</p>
+    </li><li name="io.github.mandar2812.dynaml.models.svm.DLSSVM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DLSSVMextendsAbstractDualLSSVM[breeze.linalg.DenseVector[Double]]withGloballyOptWithGrad"></a>
       <a id="DLSSVM:DLSSVM"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -67,10 +92,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="DLSSVM.html"><span class="name">DLSSVM</span></a><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
+        <a href="DLSSVM.html"><span class="name">DLSSVM</span></a><span class="result"> extends <a href="AbstractDualLSSVM.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.AbstractDualLSSVM">AbstractDualLSSVM</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="../../optimization/GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></span>
       </span>
-      </h4>
-      <p class="comment cmt">Implementation of the classical Dual LSSVM model.</p>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@DLSSVMextendsAbstractDualLSSVM[breeze.linalg.DenseVector[Double]]withGloballyOptWithGrad" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the classical Dual LSSVM model.</p>
     </li><li name="io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="KernelLSSVMModelextendsKernelizedModel[com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph],Iterable[io.github.mandar2812.dynaml.graphutils.CausalEdge],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]"></a>
       <a id="KernelLSSVMModel:KernelLSSVMModel"></a>
@@ -82,10 +111,14 @@
       <span class="symbol">
         <a href="KernelLSSVMModel.html"><span class="name">KernelLSSVMModel</span></a><span class="result"> extends <a href="../KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="../../../../../../scala/package.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[<a href="../../graphutils/CausalEdge.html" class="extype" name="io.github.mandar2812.dynaml.graphutils.CausalEdge">CausalEdge</a>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt">Abstract class implementing kernel feature map
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@KernelLSSVMModelextendsKernelizedModel[com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph],Iterable[io.github.mandar2812.dynaml.graphutils.CausalEdge],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Abstract class implementing kernel feature map
 extraction functions.</p>
-    </li><li name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="KernelSparkModelextendsKernelizedModel[org.apache.spark.rdd.RDD[(Long,org.apache.spark.mllib.regression.LabeledPoint)],org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]withSerializable"></a>
       <a id="KernelSparkModel:KernelSparkModel"></a>
       <h4 class="signature">
@@ -96,10 +129,20 @@ extraction functions.</p>
       <span class="symbol">
         <a href="KernelSparkModel.html"><span class="name">KernelSparkModel</span></a><span class="result"> extends <a href="../KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Long">Long</span>, <span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>)], <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>] with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">Implementation of the Fixed Size
-Kernel based LS SVM</p>
-    </li><li name="io.github.mandar2812.dynaml.models.svm.LSSVMModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@KernelSparkModelextendsKernelizedModel[org.apache.spark.rdd.RDD[(Long,org.apache.spark.mllib.regression.LabeledPoint)],org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the Fixed Size
+Kernel based LS SVM</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the Fixed Size
+Kernel based LS SVM</p><p>Fixed Size implies that the model
+chooses a subset of the original
+data to calculate a low rank approximation
+to the kernel matrix.</p><p>Feature Extraction is done in the primal
+space using the Nystrom approximation.
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.models.svm.LSSVMModel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LSSVMModelextendsKernelLSSVMModel"></a>
       <a id="LSSVMModel:LSSVMModel"></a>
       <h4 class="signature">
@@ -110,10 +153,18 @@ Kernel based LS SVM</p>
       <span class="symbol">
         <a href="LSSVMModel.html"><span class="name">LSSVMModel</span></a><span class="result"> extends <a href="KernelLSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelLSSVMModel">KernelLSSVMModel</a></span>
       </span>
-      </h4>
-      <p class="comment cmt">Linear Model with conditional probability
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@LSSVMModelextendsKernelLSSVMModel" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Linear Model with conditional probability
 of the target variable given the features
-is a Gaussian with mean = wT.</p>
+is a Gaussian with mean = wT.x.</p><div class="fullcomment"><div class="comment cmt"><p>Linear Model with conditional probability
+of the target variable given the features
+is a Gaussian with mean = wT.x.</p><p>Gaussian priors on the parameters are imposed
+as a means for L2 regularization.
+</p></div></div>
     </li><li name="io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LSSVMSparkModelextendsKernelSparkModelwithSerializable"></a>
       <a id="LSSVMSparkModel:LSSVMSparkModel"></a>
@@ -125,8 +176,12 @@ is a Gaussian with mean = wT.</p>
       <span class="symbol">
         <a href="LSSVMSparkModel.html"><span class="name">LSSVMSparkModel</span></a><span class="result"> extends <a href="KernelSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.KernelSparkModel">KernelSparkModel</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">Implementation of the Least Squares SVM
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@LSSVMSparkModelextendsKernelSparkModelwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the Least Squares SVM
 using Apache Spark RDDs
 </p>
     </li><li name="io.github.mandar2812.dynaml.models.svm.LSSVMTurbo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
@@ -140,8 +195,12 @@ using Apache Spark RDDs
       <span class="symbol">
         <a href="LSSVMTurbo.html"><span class="name">LSSVMTurbo</span></a><span class="result"> extends <a href="LSSVMSparkModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel">LSSVMSparkModel</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">FS-LSSVM Turbo:
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@LSSVMTurboextendsLSSVMSparkModelwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">FS-LSSVM Turbo:
 This class extends the basic functionality of the LSSVMSparkModel
 to enable the training and evaluation of multiple model instances
 in a single run through the training set.</p>
@@ -156,7 +215,11 @@ in a single run through the training set.</p>
       <span class="symbol">
         <a href="SDLSSVMModel.html"><span class="name">SDLSSVMModel</span></a><span class="result"> extends <a href="LSSVMModel.html" class="extype" name="io.github.mandar2812.dynaml.models.svm.LSSVMModel">LSSVMModel</a> with <a href="../SubsampledDualLSSVM.html" class="extype" name="io.github.mandar2812.dynaml.models.SubsampledDualLSSVM">SubsampledDualLSSVM</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="../../../../../../scala/package.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[<a href="../../graphutils/CausalEdge.html" class="extype" name="io.github.mandar2812.dynaml.graphutils.CausalEdge">CausalEdge</a>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@SDLSSVMModelextendsLSSVMModelwithSubsampledDualLSSVM[com.tinkerpop.frames.FramedGraph[com.tinkerpop.blueprints.Graph],Iterable[io.github.mandar2812.dynaml.graphutils.CausalEdge]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -176,7 +239,11 @@ in a single run through the training set.</p>
       <span class="symbol">
         <a href="KernelSparkModel$.html"><span class="name">KernelSparkModel</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@KernelSparkModel" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.svm.LSSVMModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LSSVMModel"></a>
@@ -189,7 +256,11 @@ in a single run through the training set.</p>
       <span class="symbol">
         <a href="LSSVMModel$.html"><span class="name">LSSVMModel</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@LSSVMModel" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LSSVMSparkModel"></a>
@@ -202,7 +273,11 @@ in a single run through the training set.</p>
       <span class="symbol">
         <a href="LSSVMSparkModel$.html"><span class="name">LSSVMSparkModel</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@LSSVMSparkModel" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.svm.SDLSSVMModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SDLSSVMModel"></a>
@@ -215,7 +290,11 @@ in a single run through the training set.</p>
       <span class="symbol">
         <a href="SDLSSVMModel$.html"><span class="name">SDLSSVMModel</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.svm.package@SDLSSVMModel" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -242,6 +321,7 @@ in a single run through the training set.</p>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+
+
     </body>
       </html>

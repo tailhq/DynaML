@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>ConjugateGradientSpark - DynaML 1.2 API - io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
@@ -24,9 +28,17 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="ConjugateGradientSpark$.html" title="Go to companion"><img src="../../../../../lib/class_to_object_big.png" /></a>
+        <a href="ConjugateGradientSpark$.html" title="See companion object"><img alt="Class/Object" src="../../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.optimization">optimization</a></p>
-        <h1><a href="ConjugateGradientSpark$.html" title="Go to companion">ConjugateGradientSpark</a></h1>
+        <h1><a href="ConjugateGradientSpark$.html" title="See companion object">ConjugateGradientSpark</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="ConjugateGradientSpark$.html" title="See companion object">object ConjugateGradientSpark</a>
+            | <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.optimization">package optimization</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,13 +47,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ConjugateGradientSpark</span><span class="result"> extends <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]]</span>
+        <span class="name">ConjugateGradientSpark</span><span class="result"> extends <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]], <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]], <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -52,7 +64,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -65,9 +77,8 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -90,7 +101,11 @@
       <span class="symbol">
         <span class="name">ConjugateGradientSpark</span><span class="params">()</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@&lt;init&gt;():io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -102,19 +117,6 @@
         <div id="values" class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -125,8 +127,12 @@
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -138,22 +144,13 @@
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -164,8 +161,12 @@
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -177,7 +178,11 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -190,7 +195,11 @@
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -209,7 +218,11 @@
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -222,7 +235,11 @@
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
@@ -235,7 +252,11 @@
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -254,7 +275,11 @@
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark#getRegParam" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="getRegParam:Double"></a>
@@ -267,7 +292,11 @@
       <span class="symbol">
         <span class="name">getRegParam</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@getRegParam:Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -280,7 +309,11 @@
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -293,7 +326,11 @@
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#miniBatchFraction" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="miniBatchFraction:Double"></a>
@@ -306,7 +343,11 @@
       <span class="symbol">
         <span class="name">miniBatchFraction</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@miniBatchFraction:Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
@@ -319,7 +360,11 @@
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -332,7 +377,11 @@
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -345,7 +394,11 @@
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#numIterations" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="numIterations:Int"></a>
@@ -358,7 +411,11 @@
       <span class="symbol">
         <span class="name">numIterations</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@numIterations:Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark#optimize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="optimize(nPoints:Long,ParamOutEdges:org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint],initialP:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
@@ -371,14 +428,17 @@
       <span class="symbol">
         <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Long">Long</span></span>, <span name="ParamOutEdges">ParamOutEdges: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]</span>, <span name="initialP">initialP: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@optimize(nPoints:Long,ParamOutEdges:org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint],initialP:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Find the optimum value of the parameters using
 Gradient Descent.</p><div class="fullcomment"><div class="comment cmt"><p>Find the optimum value of the parameters using
 Gradient Descent.
 </p></div><dl class="paramcmts block"><dt class="param">nPoints</dt><dd class="cmt"><p>The number of data points</p></dd><dt class="param">ParamOutEdges</dt><dd class="cmt"><p>An <span class="extype" name="java.lang.Iterable">java.lang.Iterable</span> object
                      having all of the out edges of the
-                     parameter node
-</p></dd><dt class="param">initialP</dt><dd class="cmt"><p>The initial value of the parameters
+                     parameter node</p></dd><dt class="param">initialP</dt><dd class="cmt"><p>The initial value of the parameters
                 as a <span class="extype" name="DenseVector">DenseVector</span></p></dd><dt>returns</dt><dd class="cmt"><p>The value of the parameters as a <span class="extype" name="DenseVector">DenseVector</span></p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark">ConjugateGradientSpark</a> → <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#regParam" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="regParam:Double"></a>
@@ -391,7 +451,11 @@ Gradient Descent.
       <span class="symbol">
         <span class="name">regParam</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@regParam:Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#setMiniBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setMiniBatchFraction(fraction:Double):RegularizedOptimizer.this.type"></a>
@@ -404,7 +468,11 @@ Gradient Descent.
       <span class="symbol">
         <span class="name">setMiniBatchFraction</span><span class="params">(<span name="fraction">fraction: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark">ConjugateGradientSpark</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@setMiniBatchFraction(fraction:Double):RegularizedOptimizer.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Set fraction of data to be used for each SGD iteration.</p><div class="fullcomment"><div class="comment cmt"><p>Set fraction of data to be used for each SGD iteration.
 Default 1.0 (corresponding to deterministic/classical gradient descent)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
@@ -419,7 +487,11 @@ Default 1.0 (corresponding to deterministic/classical gradient descent)
       <span class="symbol">
         <span class="name">setNumIterations</span><span class="params">(<span name="iters">iters: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark">ConjugateGradientSpark</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@setNumIterations(iters:Int):RegularizedOptimizer.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Set the number of iterations for SGD.</p><div class="fullcomment"><div class="comment cmt"><p>Set the number of iterations for SGD. Default 100.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#setRegParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -433,7 +505,11 @@ Default 1.0 (corresponding to deterministic/classical gradient descent)
       <span class="symbol">
         <span class="name">setRegParam</span><span class="params">(<span name="regParam">regParam: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark">ConjugateGradientSpark</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@setRegParam(regParam:Double):RegularizedOptimizer.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Set the regularization parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Set the regularization parameter. Default 0.0.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#setStepSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -447,7 +523,11 @@ Default 1.0 (corresponding to deterministic/classical gradient descent)
       <span class="symbol">
         <span class="name">setStepSize</span><span class="params">(<span name="step">step: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark">ConjugateGradientSpark</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@setStepSize(step:Double):RegularizedOptimizer.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Set the initial step size of SGD for the first step.</p><div class="fullcomment"><div class="comment cmt"><p>Set the initial step size of SGD for the first step. Default 1.0.
 In subsequent steps, the step size will decrease with stepSize/sqrt(t)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
@@ -462,7 +542,11 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
       <span class="symbol">
         <span class="name">stepSize</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@stepSize:Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -475,7 +559,11 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
@@ -488,7 +576,11 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -501,7 +593,11 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -520,7 +616,11 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -539,7 +639,11 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ConjugateGradientSpark@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -557,9 +661,9 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">
-              <h3>Inherited from <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]]</h3>
+              <h3>Inherited from <a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.optimization.Optimizer">
-              <h3>Inherited from <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]]</h3>
+              <h3>Inherited from <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
@@ -584,6 +688,7 @@ In subsequent steps, the step size will decrease with stepSize/sqrt(t)
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+
+
     </body>
       </html>

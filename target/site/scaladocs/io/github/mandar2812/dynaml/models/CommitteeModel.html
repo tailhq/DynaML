@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>CommitteeModel - DynaML 1.2 API - io.github.mandar2812.dynaml.models.CommitteeModel</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
@@ -24,9 +28,15 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../lib/class_big.png" />
+        <img alt="Class" src="../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a></p>
-        <h1>CommitteeModel</h1>
+        <h1>CommitteeModel</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models">package models</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,7 +45,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">CommitteeModel</span><span class="tparams">[<span name="D">D</span>, <span name="D1">D1</span>, <span name="BaseModel">BaseModel &lt;: <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Pipe">Pipe &lt;: <a href="../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>]</span>]</span><span class="result"> extends <a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.Pipe">Pipe</span>] with <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</span>
+        <span class="name">CommitteeModel</span><span class="tparams">[<span name="D">D</span>, <span name="D1">D1</span>, <span name="BaseModel">BaseModel &lt;: <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Pipe">Pipe &lt;: <a href="../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>]</span>]</span><span class="result"> extends <a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.Pipe">Pipe</span>] with <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</span>
       </span>
       </h4>
       
@@ -43,18 +53,14 @@
 are trained on sub-sampled versions of the training data set and <code>b</code>
 is the number of base models used.
 </p></div><dl class="paramcmts block"><dt class="tparam">D</dt><dd class="cmt"><p>The type of the data structure containing the
-          training data set.
-</p></dd><dt class="tparam">D1</dt><dd class="cmt"><p>The type of data structure containing the data
-           of the base models.
-</p></dd><dt class="tparam">BaseModel</dt><dd class="cmt"><p>The type of model used as base model
+          training data set.</p></dd><dt class="tparam">D1</dt><dd class="cmt"><p>The type of data structure containing the data
+           of the base models.</p></dd><dt class="tparam">BaseModel</dt><dd class="cmt"><p>The type of model used as base model
                   for the meta model.
-                  example: <span class="extype" name="FeedForwardNetwork">FeedForwardNetwork</span>, <span class="extype" name="GPRegression">GPRegression</span>, etc
-</p></dd><dt class="tparam">Pipe</dt><dd class="cmt"><p>A sub-type of <span class="extype" name="ModelPipe">ModelPipe</span> which yields a <span class="extype" name="BaseModel">BaseModel</span>
+                  example: <span class="extype" name="FeedForwardNetwork">FeedForwardNetwork</span>, <span class="extype" name="GPRegression">GPRegression</span>, etc</p></dd><dt class="tparam">Pipe</dt><dd class="cmt"><p>A sub-type of <span class="extype" name="ModelPipe">ModelPipe</span> which yields a <span class="extype" name="BaseModel">BaseModel</span>
              with <span class="extype" name="D1">D1</span> as the base data structure given a
-             data structure of type <span class="extype" name="D">D</span>
-</p></dd></dl><div class="toggleContainer block">
+             data structure of type <span class="extype" name="D">D</span></p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>], <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>], <a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.Pipe">Pipe</span>], <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>], <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>], <a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.Pipe">Pipe</span>], <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -65,7 +71,7 @@ is the number of base models used.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -78,9 +84,8 @@ is the number of base models used.
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -103,11 +108,12 @@ is the number of base models used.
       <span class="symbol">
         <span class="name">CommitteeModel</span><span class="params">(<span name="num">num: <span class="extype" name="scala.Int">Int</span></span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span></span>, <span name="networks">networks: <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.Pipe">Pipe</span>*</span>)</span>
       </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">num</dt><dd class="cmt"><p>The number of training data points.
-</p></dd><dt class="param">data</dt><dd class="cmt"><p>The actual training data
-</p></dd><dt class="param">networks</dt><dd class="cmt"><p>A sequence of <span class="extype" name="Pipe">Pipe</span> objects yielding <span class="extype" name="BaseModel">BaseModel</span>
-</p></dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@&lt;init&gt;(num:Int,data:D,networks:Pipe*):io.github.mandar2812.dynaml.models.CommitteeModel[D,D1,BaseModel,Pipe]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">num</dt><dd class="cmt"><p>The number of training data points.</p></dd><dt class="param">data</dt><dd class="cmt"><p>The actual training data</p></dd><dt class="param">networks</dt><dd class="cmt"><p>A sequence of <span class="extype" name="Pipe">Pipe</span> objects yielding <span class="extype" name="BaseModel">BaseModel</span></p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -116,17 +122,21 @@ is the number of base models used.
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#optimizer" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[K,T,Q,R,S]"></a>
-      <a id="optimizer:RegularizedOptimizer[Int,DenseVector[Double],DenseVector[Double],Double,D]"></a>
+      <a id="optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[T,Q,R,S]"></a>
+      <a id="optimizer:RegularizedOptimizer[DenseVector[Double],DenseVector[Double],Double,D]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">optimizer</span><span class="result">: <a href="../optimization/RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</span>
+        <span class="name">optimizer</span><span class="result">: <a href="../optimization/RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[T,Q,R,S]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li></ol>
             </div>
@@ -134,19 +144,6 @@ is the number of base models used.
         <div id="values" class="values members">
               <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -157,8 +154,12 @@ is the number of base models used.
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -170,22 +171,13 @@ is the number of base models used.
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -196,8 +188,12 @@ is the number of base models used.
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -209,7 +205,11 @@ is the number of base models used.
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.MetaModel#baseNetworks" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="baseNetworks:List[BaseModel]"></a>
@@ -222,7 +222,11 @@ is the number of base models used.
       <span class="symbol">
         <span class="name">baseNetworks</span><span class="result">: <a href="../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@baseNetworks:List[BaseModel]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.CommitteeModel#clearParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clearParameters():Unit"></a>
@@ -235,7 +239,11 @@ is the number of base models used.
       <span class="symbol">
         <span class="name">clearParameters</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@clearParameters():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel">CommitteeModel</a> → <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -248,7 +256,11 @@ is the number of base models used.
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -267,7 +279,11 @@ is the number of base models used.
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -280,7 +296,11 @@ is the number of base models used.
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.LinearModel#featureMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="featureMap:Q=&gt;Q"></a>
@@ -293,7 +313,11 @@ is the number of base models used.
       <span class="symbol">
         <span class="name">featureMap</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@featureMap:Q=&gt;Q" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">The non linear feature mapping implicitly
 defined by the kernel applied, this is initialized
 to an identity map.</p><div class="fullcomment"><div class="comment cmt"><p>The non linear feature mapping implicitly
@@ -311,7 +335,11 @@ to an identity map.
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -330,7 +358,11 @@ to an identity map.
       <span class="symbol">
         <span class="name">g</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@g:D" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">The training data
 </p><div class="fullcomment"><div class="comment cmt"><p>The training data
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a> → <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
@@ -345,7 +377,11 @@ to an identity map.
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -358,7 +394,11 @@ to an identity map.
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.CommitteeModel#initParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="initParams():breeze.linalg.DenseVector[Double]"></a>
@@ -371,7 +411,11 @@ to an identity map.
       <span class="symbol">
         <span class="name">initParams</span><span class="params">()</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@initParams():breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel">CommitteeModel</a> → <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -384,7 +428,11 @@ to an identity map.
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.CommitteeModel#learn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="learn():Unit"></a>
@@ -397,7 +445,11 @@ to an identity map.
       <span class="symbol">
         <span class="name">learn</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@learn():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Learn the parameters
 of the model which
 are in a node of the
@@ -416,7 +468,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -429,7 +485,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -442,7 +502,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.CommitteeModel#num_points" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="num_points:Int"></a>
@@ -455,7 +519,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">num_points</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@num_points:Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#parameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="parameters():T"></a>
@@ -468,7 +536,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">parameters</span><span class="params">()</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@parameters():T" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Get the value of the parameters
 of the model.</p><div class="fullcomment"><div class="comment cmt"><p>Get the value of the parameters
 of the model.
@@ -484,7 +556,11 @@ of the model.
       <span class="symbol">
         <span class="name">params</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@params:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel">CommitteeModel</a> → <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.CommitteeModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(point:breeze.linalg.DenseVector[Double]):Double"></a>
@@ -497,7 +573,11 @@ of the model.
       <span class="symbol">
         <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@predict(point:breeze.linalg.DenseVector[Double]):Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Predict the value of the
 target variable given a
 point.</p><div class="fullcomment"><div class="comment cmt"><p>Predict the value of the
@@ -514,7 +594,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setBatchFraction</span><span class="params">(<span name="f">f: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel">CommitteeModel</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@setBatchFraction(f:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setLearningRate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setLearningRate(alpha:Double):ParameterizedLearner.this.type"></a>
@@ -527,7 +611,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setLearningRate</span><span class="params">(<span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel">CommitteeModel</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@setLearningRate(alpha:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setMaxIterations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setMaxIterations(i:Int):ParameterizedLearner.this.type"></a>
@@ -540,7 +628,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setMaxIterations</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel">CommitteeModel</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@setMaxIterations(i:Int):ParameterizedLearner.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setRegParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setRegParam(r:Double):ParameterizedLearner.this.type"></a>
@@ -553,7 +645,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setRegParam</span><span class="params">(<span name="r">r: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel">CommitteeModel</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@setRegParam(r:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -566,7 +662,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
@@ -579,7 +679,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#updateParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateParameters(param:T):Unit"></a>
@@ -592,7 +696,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">updateParameters</span><span class="params">(<span name="param">param: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@updateParameters(param:T):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -605,7 +713,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -624,7 +736,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -643,7 +759,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.CommitteeModel@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -661,9 +781,9 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.models.LinearModel">
-              <h3>Inherited from <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</h3>
+              <h3>Inherited from <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">
-              <h3>Inherited from <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</h3>
+              <h3>Inherited from <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.MetaModel">
               <h3>Inherited from <a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.Pipe">Pipe</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.Model">
@@ -688,6 +808,7 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+
+
     </body>
       </html>

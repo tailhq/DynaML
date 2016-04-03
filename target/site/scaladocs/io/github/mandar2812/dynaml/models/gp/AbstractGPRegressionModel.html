@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>AbstractGPRegressionModel - DynaML 1.2 API - io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
@@ -24,9 +28,17 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="AbstractGPRegressionModel$.html" title="Go to companion"><img src="../../../../../../lib/class_to_object_big.png" /></a>
+        <a href="AbstractGPRegressionModel$.html" title="See companion object"><img alt="Class/Object" src="../../../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../../../package.html" class="extype" name="io">io</a>.<a href="../../../../package.html" class="extype" name="io.github">github</a>.<a href="../../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.gp">gp</a></p>
-        <h1><a href="AbstractGPRegressionModel$.html" title="Go to companion">AbstractGPRegressionModel</a></h1>
+        <h1><a href="AbstractGPRegressionModel$.html" title="See companion object">AbstractGPRegressionModel</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="AbstractGPRegressionModel$.html" title="See companion object">object AbstractGPRegressionModel</a>
+            | <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.gp">package gp</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,24 +47,23 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">AbstractGPRegressionModel</span><span class="tparams">[<span name="T">T</span>, <span name="I">I</span>]</span><span class="result"> extends <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
+        <span class="name">AbstractGPRegressionModel</span><span class="tparams">[<span name="T">T</span>, <span name="I">I</span>]</span><span class="result"> extends <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])] with <a href="../../optimization/GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Single-Output Gaussian Process Regression Model
 Performs gp/spline smoothing/regression with
 vector inputs and a singular scalar output.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The data structure holding the training data.
-</p></dd><dt class="tparam">I</dt><dd class="cmt"><p>The index set over which the Gaussian Process
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The data structure holding the training data.</p></dd><dt class="tparam">I</dt><dd class="cmt"><p>The index set over which the Gaussian Process
           is defined.
           e.g  1) I = Double when implementing GP time series
                2) I = DenseVector when implementing GP regression</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a>, <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../optimization/GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a>, <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a>, <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="GPNarModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarModel">GPNarModel</a>, <a href="GPNarXModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarXModel">GPNarXModel</a>, <a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <a href="GPTimeSeries.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries">GPTimeSeries</a></div>
-        </div></div>
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="GPNarModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarModel">GPNarModel</a>, <a href="GPNarXModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPNarXModel">GPNarXModel</a>, <a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <a href="GPTimeSeries.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries">GPTimeSeries</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -62,22 +73,21 @@ vector inputs and a singular scalar output.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel"><span>AbstractGPRegressionModel</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable"><span>GloballyOptimizable</span></li><li class="in" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel"><span>GaussianProcessModel</span></li><li class="in" name="io.github.mandar2812.dynaml.models.Model"><span>Model</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel"><span>AbstractGPRegressionModel</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad"><span>GloballyOptWithGrad</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable"><span>GloballyOptimizable</span></li><li class="in" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel"><span>GaussianProcessModel</span></li><li class="in" name="io.github.mandar2812.dynaml.models.Model"><span>Model</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -98,9 +108,13 @@ vector inputs and a singular scalar output.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AbstractGPRegressionModel</span><span class="params">(<span name="cov">cov: <a href="../../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="n">n: <a href="../../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] = <span class="defval" name="new io.github.mandar2812.dynaml.kernels.DiracKernel(1.0)">...</span></span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span></span>, <span name="num">num: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="name">AbstractGPRegressionModel</span><span class="params">(<span name="cov">cov: <a href="../../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="n">n: <a href="../../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span></span>, <span name="num">num: <span class="extype" name="scala.Int">Int</span></span>)</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.CovarianceFunction[I,Double,breeze.linalg.DenseMatrix[Double]],n:io.github.mandar2812.dynaml.kernels.CovarianceFunction[I,Double,breeze.linalg.DenseMatrix[Double]],data:T,num:Int):io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[T,I]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt"></p>
     </li></ol>
             </div>
@@ -120,7 +134,11 @@ vector inputs and a singular scalar output.
       <span class="symbol">
         <span class="name">dataAsSeq</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@dataAsSeq(data:T):Seq[(I,Y)]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Convert from the underlying data structure to
 Seq[(I, Y)] where I is the index set of the GP
 and Y is the value/label type.</p><div class="fullcomment"><div class="comment cmt"><p>Convert from the underlying data structure to
@@ -133,19 +151,6 @@ and Y is the value/label type.
         <div id="values" class="values members">
               <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -156,8 +161,12 @@ and Y is the value/label type.
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -169,22 +178,13 @@ and Y is the value/label type.
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -195,8 +195,12 @@ and Y is the value/label type.
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -208,7 +212,11 @@ and Y is the value/label type.
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#caching" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="caching:Boolean"></a>
@@ -221,7 +229,11 @@ and Y is the value/label type.
       <span class="symbol">
         <span class="name">caching</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@caching:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -234,7 +246,11 @@ and Y is the value/label type.
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -253,7 +269,11 @@ and Y is the value/label type.
       <span class="symbol">
         <span class="name">covariance</span><span class="result">: <a href="../../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@covariance:io.github.mandar2812.dynaml.kernels.CovarianceFunction[I,Double,breeze.linalg.DenseMatrix[Double]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Underlying covariance function of the
 Gaussian Processes.</p><div class="fullcomment"><div class="comment cmt"><p>Underlying covariance function of the
 Gaussian Processes.
@@ -269,7 +289,11 @@ Gaussian Processes.
       <span class="symbol">
         <span class="name">current_state</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@current_state:Map[String,Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">A Map which stores the current state of
 the system.</p><div class="fullcomment"><div class="comment cmt"><p>A Map which stores the current state of
 the system.
@@ -285,7 +309,11 @@ the system.
       <span class="symbol">
         <span class="name">dataAsIndexSeq</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@dataAsIndexSeq(data:T):Seq[I]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Convert from the underlying data structure to
 Seq[I] where I is the index set of the GP
 </p><div class="fullcomment"><div class="comment cmt"><p>Convert from the underlying data structure to
@@ -302,7 +330,11 @@ Seq[I] where I is the index set of the GP
       <span class="symbol">
         <span class="name">energy</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@energy(h:Map[String,Double],options:Map[String,String]):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Calculates the energy of the configuration,
 in most global optimization algorithms
 we aim to find an approximate value of
@@ -312,9 +344,9 @@ in most global optimization algorithms
 we aim to find an approximate value of
 the hyper-parameters such that this function
 is minimized.
-</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt class="param">options</dt><dd class="cmt"><p>Optional parameters about configuration</p></dd><dt>returns</dt><dd class="cmt"><p>Configuration Energy E(h)</p><p>In this particular case E(h) = -log p(Y|X,h)
-also known as log likelihood.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt class="param">options</dt><dd class="cmt"><p>Optional parameters about configuration</p></dd><dt>returns</dt><dd class="cmt"><p>Configuration Energy E(h)
+In this particular case E(h) = -log p(Y|X,h)
+also known as log likelihood.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -326,7 +358,11 @@ also known as log likelihood.
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -339,7 +375,11 @@ also known as log likelihood.
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
@@ -352,7 +392,11 @@ also known as log likelihood.
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -371,7 +415,11 @@ also known as log likelihood.
       <span class="symbol">
         <span class="name">g</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@g:T" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">The training data
 </p><div class="fullcomment"><div class="comment cmt"><p>The training data
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
@@ -386,7 +434,11 @@ also known as log likelihood.
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#gradEnergy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="gradEnergy(h:Map[String,Double]):Map[String,Double]"></a>
@@ -399,15 +451,18 @@ also known as log likelihood.
       <span class="symbol">
         <span class="name">gradEnergy</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@gradEnergy(h:Map[String,Double]):Map[String,Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Calculates the gradient energy of the configuration and
 subtracts this from the current value of h to yield a new
 hyper-parameter configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the gradient energy of the configuration and
 subtracts this from the current value of h to yield a new
 hyper-parameter configuration.</p><p>Over ride this function if you aim to implement a gradient based
 hyper-parameter optimization routine like ML-II
-</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt>returns</dt><dd class="cmt"><p>Gradient of the objective function (marginal likelihood) as a Map
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt>returns</dt><dd class="cmt"><p>Gradient of the objective function (marginal likelihood) as a Map</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -419,7 +474,11 @@ hyper-parameter optimization routine like ML-II
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#hyper_parameters" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hyper_parameters:List[String]"></a>
@@ -432,7 +491,11 @@ hyper-parameter optimization routine like ML-II
       <span class="symbol">
         <span class="name">hyper_parameters</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@hyper_parameters:List[String]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Stores the names of the hyper-parameters
 </p><div class="fullcomment"><div class="comment cmt"><p>Stores the names of the hyper-parameters
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
@@ -447,7 +510,11 @@ hyper-parameter optimization routine like ML-II
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#kernelMatrixCache" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernelMatrixCache:breeze.linalg.DenseMatrix[Double]"></a>
@@ -460,7 +527,11 @@ hyper-parameter optimization routine like ML-II
       <span class="symbol">
         <span class="name">kernelMatrixCache</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@kernelMatrixCache:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#mean" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="mean:I=&gt;Double"></a>
@@ -473,7 +544,11 @@ hyper-parameter optimization routine like ML-II
       <span class="symbol">
         <span class="name">mean</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@mean:I=&gt;Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">The GP is taken to be zero mean, or centered.</p><div class="fullcomment"><div class="comment cmt"><p>The GP is taken to be zero mean, or centered.
 This is ensured by standardization of the data
 before being used for further processing.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a></dd></dl></div>
@@ -488,7 +563,11 @@ before being used for further processing.</p></div><dl class="attributes block">
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#noiseCache" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="noiseCache:breeze.linalg.DenseMatrix[Double]"></a>
@@ -501,7 +580,11 @@ before being used for further processing.</p></div><dl class="attributes block">
       <span class="symbol">
         <span class="name">noiseCache</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@noiseCache:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#noiseModel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="noiseModel:io.github.mandar2812.dynaml.kernels.CovarianceFunction[I,Double,breeze.linalg.DenseMatrix[Double]]"></a>
@@ -514,7 +597,11 @@ before being used for further processing.</p></div><dl class="attributes block">
       <span class="symbol">
         <span class="name">noiseModel</span><span class="result">: <a href="../../kernels/CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@noiseModel:io.github.mandar2812.dynaml.kernels.CovarianceFunction[I,Double,breeze.linalg.DenseMatrix[Double]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -527,7 +614,11 @@ before being used for further processing.</p></div><dl class="attributes block">
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -540,7 +631,11 @@ before being used for further processing.</p></div><dl class="attributes block">
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#npoints" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="npoints:Int"></a>
@@ -553,7 +648,11 @@ before being used for further processing.</p></div><dl class="attributes block">
       <span class="symbol">
         <span class="name">npoints</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@npoints:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#persist" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="persist():Unit"></a>
@@ -566,7 +665,11 @@ before being used for further processing.</p></div><dl class="attributes block">
       <span class="symbol">
         <span class="name">persist</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@persist():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Cache the training kernel and noise matrices
 for fast access in future predictions.</p>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -580,7 +683,11 @@ for fast access in future predictions.</p>
       <span class="symbol">
         <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@predict(point:I):Y" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Predict the value of the
 target variable given a
 point.</p><div class="fullcomment"><div class="comment cmt"><p>Predict the value of the
@@ -597,7 +704,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">predictionWithErrorBars</span><span class="tparams">[<span name="U">U &lt;: <a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>]</span><span class="params">(<span name="testData">testData: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.predictionWithErrorBars.U">U</span></span>, <span name="sigma">sigma: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@predictionWithErrorBars[U&lt;:Seq[I]](testData:U,sigma:Int):Seq[(I,Double,Double,Double)]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Draw three predictions from the posterior predictive distribution
 1) Mean or MAP estimate Y
 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
@@ -617,13 +728,16 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">predictiveDistribution</span><span class="tparams">[<span name="U">U &lt;: <a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>]</span><span class="params">(<span name="test">test: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.predictiveDistribution.U">U</span></span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@predictiveDistribution[U&lt;:Seq[I]](test:U):(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double])" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Calculates posterior predictive distribution for
 a particular set of test data points.</p><div class="fullcomment"><div class="comment cmt"><p>Calculates posterior predictive distribution for
 a particular set of test data points.
 </p></div><dl class="paramcmts block"><dt class="param">test</dt><dd class="cmt"><p>A Sequence or Sequence like data structure
-            storing the values of the input patters.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a></dd></dl></div>
+            storing the values of the input patters.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#setState" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="setState(s:Map[String,Double]):AbstractGPRegressionModel.this.type"></a>
       <a id="setState(Map[String,Double]):AbstractGPRegressionModel.this.type"></a>
@@ -635,7 +749,11 @@ a particular set of test data points.
       <span class="symbol">
         <span class="name">setState</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@setState(s:Map[String,Double]):AbstractGPRegressionModel.this.type" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Set the model &quot;state&quot; which
 contains values of its hyper-parameters
 with respect to the covariance and noise
@@ -651,7 +769,11 @@ kernels.</p>
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel#test" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="test(testData:T):Seq[(I,Y,Y,Y,Y)]"></a>
@@ -664,7 +786,11 @@ kernels.</p>
       <span class="symbol">
         <span class="name">test</span><span class="params">(<span name="testData">testData: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@test(testData:T):Seq[(I,Y,Y,Y,Y)]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns a prediction with error bars for a test set of indexes and labels.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a prediction with error bars for a test set of indexes and labels.
 (Index, Actual Value, Prediction, Lower Bar, Higher Bar)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a></dd></dl></div>
@@ -679,7 +805,11 @@ kernels.</p>
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#unpersist" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="unpersist():Unit"></a>
@@ -692,7 +822,11 @@ kernels.</p>
       <span class="symbol">
         <span class="name">unpersist</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@unpersist():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Forget the cached kernel &amp; noise matrices.</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -705,7 +839,11 @@ kernels.</p>
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -724,7 +862,11 @@ kernels.</p>
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -743,7 +885,11 @@ kernels.</p>
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -760,7 +906,9 @@ kernels.</p>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">
+        <div class="parent" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">
+              <h3>Inherited from <a href="../../optimization/GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">
               <h3>Inherited from <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">
               <h3>Inherited from <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
@@ -786,6 +934,7 @@ kernels.</p>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+
+
     </body>
       </html>

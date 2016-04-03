@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>gp - DynaML 1.2 API - io.github.mandar2812.dynaml.models.gp</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
@@ -24,9 +28,13 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../../../../lib/package_big.png" />
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="io">io</a>.<a href="../../../../package.html" class="extype" name="io.github">github</a>.<a href="../../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a></p>
-        <h1>gp</h1>
+        <h1>gp</h1><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -58,8 +66,8 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AbstractGPRegressionModel[T,I]extendsGaussianProcessModel[T,I,Double,Double,breeze.linalg.DenseMatrix[Double],(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double])]withGloballyOptimizable"></a>
+              <ol><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AbstractGPRegressionModel[T,I]extendsGaussianProcessModel[T,I,Double,Double,breeze.linalg.DenseMatrix[Double],(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double])]withGloballyOptWithGrad"></a>
       <a id="AbstractGPRegressionModel[T,I]:AbstractGPRegressionModel[T,I]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -67,14 +75,24 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="AbstractGPRegressionModel.html"><span class="name">AbstractGPRegressionModel</span></a><span class="tparams">[<span name="T">T</span>, <span name="I">I</span>]</span><span class="result"> extends <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
+        <a href="AbstractGPRegressionModel.html"><span class="name">AbstractGPRegressionModel</span></a><span class="tparams">[<span name="T">T</span>, <span name="I">I</span>]</span><span class="result"> extends <a href="GaussianProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel">GaussianProcessModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])] with <a href="../../optimization/GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></span>
       </span>
-      </h4>
-      <p class="comment cmt">Single-Output Gaussian Process Regression Model
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@AbstractGPRegressionModel[T,I]extendsGaussianProcessModel[T,I,Double,Double,breeze.linalg.DenseMatrix[Double],(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double])]withGloballyOptWithGrad" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Single-Output Gaussian Process Regression Model
 Performs gp/spline smoothing/regression with
-vector inputs and a singular scalar output.</p>
+vector inputs and a singular scalar output.</p><div class="fullcomment"><div class="comment cmt"><p>Single-Output Gaussian Process Regression Model
+Performs gp/spline smoothing/regression with
+vector inputs and a singular scalar output.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The data structure holding the training data.</p></dd><dt class="tparam">I</dt><dd class="cmt"><p>The index set over which the Gaussian Process
+          is defined.
+          e.g  1) I = Double when implementing GP time series
+               2) I = DenseVector when implementing GP regression</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="GPCommitteeRegression[T,D[T]]extendsLinearModel[D[T],Int,Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,D[T]]"></a>
+      <a id="GPCommitteeRegression[T,D[T]]extendsLinearModel[D[T],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,D[T]]"></a>
       <a id="GPCommitteeRegression[T,D[T]]:GPCommitteeRegression[T,D]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -82,10 +100,14 @@ vector inputs and a singular scalar output.</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="GPCommitteeRegression.html"><span class="name">GPCommitteeRegression</span></a><span class="tparams">[<span name="T">T</span>, <span name="D">D<span class="tparams">[<span name="T">T</span>]</span></span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]]</span>
+        <a href="GPCommitteeRegression.html"><span class="name">GPCommitteeRegression</span></a><span class="tparams">[<span name="T">T</span>, <span name="D">D<span class="tparams">[<span name="T">T</span>]</span></span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]]</span>
       </span>
-      </h4>
-      <p class="comment cmt">Created by mandar on 9/2/16.</p>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@GPCommitteeRegression[T,D[T]]extendsLinearModel[D[T],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,D[T]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Created by mandar on 9/2/16.</p>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPNarModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GPNarModelextendsGPRegression"></a>
       <a id="GPNarModel:GPNarModel"></a>
@@ -97,8 +119,12 @@ vector inputs and a singular scalar output.</p>
       <span class="symbol">
         <a href="GPNarModel.html"><span class="name">GPNarModel</span></a><span class="result"> extends <a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a></span>
       </span>
-      </h4>
-      <p class="comment cmt"></p>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@GPNarModelextendsGPRegression" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPNarXModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GPNarXModelextendsGPRegression"></a>
       <a id="GPNarXModel:GPNarXModel"></a>
@@ -110,8 +136,12 @@ vector inputs and a singular scalar output.</p>
       <span class="symbol">
         <a href="GPNarXModel.html"><span class="name">GPNarXModel</span></a><span class="result"> extends <a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a></span>
       </span>
-      </h4>
-      <p class="comment cmt"></p>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@GPNarXModelextendsGPRegression" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GPRegressionextendsAbstractGPRegressionModel[Seq[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double]]"></a>
       <a id="GPRegression:GPRegression"></a>
@@ -123,8 +153,12 @@ vector inputs and a singular scalar output.</p>
       <span class="symbol">
         <a href="GPRegression.html"><span class="name">GPRegression</span></a><span class="result"> extends <a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
-      </h4>
-      <p class="comment cmt"></p>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@GPRegressionextendsAbstractGPRegressionModel[Seq[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GPTimeSeriesextendsAbstractGPRegressionModel[Seq[(Double,Double)],Double]"></a>
       <a id="GPTimeSeries:GPTimeSeries"></a>
@@ -136,9 +170,13 @@ vector inputs and a singular scalar output.</p>
       <span class="symbol">
         <a href="GPTimeSeries.html"><span class="name">GPTimeSeries</span></a><span class="result"> extends <a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<a href="../../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt"></p>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@GPTimeSeriesextendsAbstractGPRegressionModel[Seq[(Double,Double)],Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="GaussianProcessModel[T,I,Y,K,M,W]extendsModel[T,I,Y]"></a>
       <a id="GaussianProcessModel[T,I,Y,K,M,W]:GaussianProcessModel[T,I,Y,K,M,W]"></a>
       <h4 class="signature">
@@ -149,8 +187,12 @@ vector inputs and a singular scalar output.</p>
       <span class="symbol">
         <a href="GaussianProcessModel.html"><span class="name">GaussianProcessModel</span></a><span class="tparams">[<span name="T">T</span>, <span name="I">I</span>, <span name="Y">Y</span>, <span name="K">K</span>, <span name="M">M</span>, <span name="W">W</span>]</span><span class="result"> extends <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GaussianProcessModel.Y">Y</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt">High Level description of a Gaussian Process.</p>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@GaussianProcessModel[T,I,Y,K,M,W]extendsModel[T,I,Y]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">High Level description of a Gaussian Process.</p><div class="fullcomment"><div class="comment cmt"><p>High Level description of a Gaussian Process.</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The underlying data structure storing the training &amp; test data.</p></dd><dt class="tparam">I</dt><dd class="cmt"><p>The type of the index set (i.e. Double for time series, DenseVector for GP regression)</p></dd><dt class="tparam">Y</dt><dd class="cmt"><p>The type of the output label</p></dd><dt class="tparam">K</dt><dd class="cmt"><p>The type of value returned by the covariance kernel function</p></dd><dt class="tparam">M</dt><dd class="cmt"><p>The underlying data structure of the kernel Matrix</p></dd><dt class="tparam">W</dt><dd class="cmt"><p>Implementing class of the posterior distribution</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -169,7 +211,11 @@ vector inputs and a singular scalar output.</p>
       <span class="symbol">
         <a href="AbstractGPRegressionModel$.html"><span class="name">AbstractGPRegressionModel</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@AbstractGPRegressionModel" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPTimeSeries" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GPTimeSeries"></a>
@@ -182,7 +228,11 @@ vector inputs and a singular scalar output.</p>
       <span class="symbol">
         <a href="GPTimeSeries$.html"><span class="name">GPTimeSeries</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.package@GPTimeSeries" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -209,6 +259,7 @@ vector inputs and a singular scalar output.</p>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+
+
     </body>
       </html>

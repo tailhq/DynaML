@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>models - DynaML 1.2 API - io.github.mandar2812.dynaml.models</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
@@ -24,9 +28,13 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../../../lib/package_big.png" />
+        <img alt="Package" src="../../../../../lib/package_big.png" />
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a></p>
-        <h1>models</h1>
+        <h1>models</h1><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -58,8 +66,8 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.CommitteeModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CommitteeModel[D,D1,BaseModel&lt;:io.github.mandar2812.dynaml.models.Model[D1,breeze.linalg.DenseVector[Double],Double],Pipe&lt;:io.github.mandar2812.dynaml.pipes.ModelPipe[D,D1,breeze.linalg.DenseVector[Double],Double,BaseModel]]extendsMetaModel[D,D1,BaseModel,Pipe]withLinearModel[D,Int,Int,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,D]"></a>
+              <ol><li name="io.github.mandar2812.dynaml.models.CommitteeModel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CommitteeModel[D,D1,BaseModel&lt;:io.github.mandar2812.dynaml.models.Model[D1,breeze.linalg.DenseVector[Double],Double],Pipe&lt;:io.github.mandar2812.dynaml.pipes.ModelPipe[D,D1,breeze.linalg.DenseVector[Double],Double,BaseModel]]extendsMetaModel[D,D1,BaseModel,Pipe]withLinearModel[D,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,D]"></a>
       <a id="CommitteeModel[D,D1,BaseModel&lt;:Model[D1,DenseVector[Double],Double],Pipe&lt;:ModelPipe[D,D1,DenseVector[Double],Double,BaseModel]]:CommitteeModel[D,D1,BaseModel,Pipe]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -67,11 +75,24 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="CommitteeModel.html"><span class="name">CommitteeModel</span></a><span class="tparams">[<span name="D">D</span>, <span name="D1">D1</span>, <span name="BaseModel">BaseModel &lt;: <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Pipe">Pipe &lt;: <a href="../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>]</span>]</span><span class="result"> extends <a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.Pipe">Pipe</span>] with <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</span>
+        <a href="CommitteeModel.html"><span class="name">CommitteeModel</span></a><span class="tparams">[<span name="D">D</span>, <span name="D1">D1</span>, <span name="BaseModel">BaseModel &lt;: <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Pipe">Pipe &lt;: <a href="../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>]</span>]</span><span class="result"> extends <a href="MetaModel.html" class="extype" name="io.github.mandar2812.dynaml.models.MetaModel">MetaModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D1">D1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.BaseModel">BaseModel</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.Pipe">Pipe</span>] with <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.CommitteeModel.D">D</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt">Defines an abstract implementation of a &quot;committee-model&quot;.</p>
-    </li><li name="io.github.mandar2812.dynaml.models.EvaluableModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@CommitteeModel[D,D1,BaseModel&lt;:io.github.mandar2812.dynaml.models.Model[D1,breeze.linalg.DenseVector[Double],Double],Pipe&lt;:io.github.mandar2812.dynaml.pipes.ModelPipe[D,D1,breeze.linalg.DenseVector[Double],Double,BaseModel]]extendsMetaModel[D,D1,BaseModel,Pipe]withLinearModel[D,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,D]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Defines an abstract implementation of a &quot;committee-model&quot;.</p><div class="fullcomment"><div class="comment cmt"><p>Defines an abstract implementation of a &quot;committee-model&quot;.</p><p>A predictor of the form</p><p>y(x) = w1*y1(x) + w2*y2(x) + ... + wb*yb(x)</p><p>is learned, where <code>(y1(x), y2(x), ..., yb(x))</code> a set of base models
+are trained on sub-sampled versions of the training data set and <code>b</code>
+is the number of base models used.
+</p></div><dl class="paramcmts block"><dt class="tparam">D</dt><dd class="cmt"><p>The type of the data structure containing the
+          training data set.</p></dd><dt class="tparam">D1</dt><dd class="cmt"><p>The type of data structure containing the data
+           of the base models.</p></dd><dt class="tparam">BaseModel</dt><dd class="cmt"><p>The type of model used as base model
+                  for the meta model.
+                  example: <span class="extype" name="FeedForwardNetwork">FeedForwardNetwork</span>, <span class="extype" name="GPRegression">GPRegression</span>, etc</p></dd><dt class="tparam">Pipe</dt><dd class="cmt"><p>A sub-type of <span class="extype" name="ModelPipe">ModelPipe</span> which yields a <span class="extype" name="BaseModel">BaseModel</span>
+             with <span class="extype" name="D1">D1</span> as the base data structure given a
+             data structure of type <span class="extype" name="D">D</span></p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.EvaluableModel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="EvaluableModel[P,R]extendsAnyRef"></a>
       <a id="EvaluableModel[P,R]:EvaluableModel[P,R]"></a>
       <h4 class="signature">
@@ -82,14 +103,22 @@
       <span class="symbol">
         <a href="EvaluableModel.html"><span class="name">EvaluableModel</span></a><span class="tparams">[<span name="P">P</span>, <span name="R">R</span>]</span><span class="result"> extends <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
-      <p class="comment cmt">An evaluable model is on in which
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@EvaluableModel[P,R]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An evaluable model is on in which
 there is a function taking in a csv
 reader object pointing to a test csv file
 and returns the appropriate <span class="extype" name="Metrics">Metrics</span> object
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>An evaluable model is on in which
+there is a function taking in a csv
+reader object pointing to a test csv file
+and returns the appropriate <span class="extype" name="Metrics">Metrics</span> object
+</p></div><dl class="paramcmts block"><dt class="tparam">P</dt><dd class="cmt"><p>The type of the model's Parameters</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of the output value</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.KernelizedModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="KernelizedModel[G,L,T&lt;:breeze.linalg.Tensor[K1,Double],Q&lt;:breeze.linalg.Tensor[K2,Double],R,K1,K2]extendsLinearModel[G,K1,K2,T,Q,R,L]withGloballyOptimizablewithEvaluableModel[T,R]"></a>
+      <a id="KernelizedModel[G,L,T&lt;:breeze.linalg.Tensor[K1,Double],Q&lt;:breeze.linalg.Tensor[K2,Double],R,K1,K2]extendsLinearModel[G,T,Q,R,L]withGloballyOptimizablewithEvaluableModel[T,R]"></a>
       <a id="KernelizedModel[G,L,T&lt;:Tensor[K1,Double],Q&lt;:Tensor[K2,Double],R,K1,K2]:KernelizedModel[G,L,T,Q,R,K1,K2]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,25 +126,38 @@ and returns the appropriate <span class="extype" name="Metrics">Metrics</span> o
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="KernelizedModel.html"><span class="name">KernelizedModel</span></a><span class="tparams">[<span name="G">G</span>, <span name="L">L</span>, <span name="T">T &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K1">K1</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K2">K2</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="R">R</span>, <span name="K1">K1</span>, <span name="K2">K2</span>]</span><span class="result"> extends <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K1">K1</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K2">K2</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.L">L</span>] with <a href="../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a> with <a href="EvaluableModel.html" class="extype" name="io.github.mandar2812.dynaml.models.EvaluableModel">EvaluableModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.R">R</span>]</span>
+        <a href="KernelizedModel.html"><span class="name">KernelizedModel</span></a><span class="tparams">[<span name="G">G</span>, <span name="L">L</span>, <span name="T">T &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K1">K1</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.K2">K2</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="R">R</span>, <span name="K1">K1</span>, <span name="K2">K2</span>]</span><span class="result"> extends <a href="LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.L">L</span>] with <a href="../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a> with <a href="EvaluableModel.html" class="extype" name="io.github.mandar2812.dynaml.models.EvaluableModel">EvaluableModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel.R">R</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@KernelizedModel[G,L,T&lt;:breeze.linalg.Tensor[K1,Double],Q&lt;:breeze.linalg.Tensor[K2,Double],R,K1,K2]extendsLinearModel[G,T,Q,R,L]withGloballyOptimizablewithEvaluableModel[T,R]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li name="io.github.mandar2812.dynaml.models.LinearModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="LinearModel[T,K1,K2,P&lt;:breeze.linalg.Tensor[K1,Double],Q&lt;:breeze.linalg.Tensor[K2,Double],R,S]extendsParameterizedLearner[T,K2,P,Q,R,S]"></a>
-      <a id="LinearModel[T,K1,K2,P&lt;:Tensor[K1,Double],Q&lt;:Tensor[K2,Double],R,S]:LinearModel[T,K1,K2,P,Q,R,S]"></a>
+    </li><li name="io.github.mandar2812.dynaml.models.LinearModel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LinearModel[T,P,Q,R,S]extendsParameterizedLearner[T,P,Q,R,S]"></a>
+      <a id="LinearModel[T,P,Q,R,S]:LinearModel[T,P,Q,R,S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="LinearModel.html"><span class="name">LinearModel</span></a><span class="tparams">[<span name="T">T</span>, <span name="K1">K1</span>, <span name="K2">K2</span>, <span name="P">P &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.K1">K1</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Q">Q &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.K2">K2</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="R">R</span>, <span name="S">S</span>]</span><span class="result"> extends <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.K2">K2</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.P">P</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.S">S</span>]</span>
+        <a href="LinearModel.html"><span class="name">LinearModel</span></a><span class="tparams">[<span name="T">T</span>, <span name="P">P</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="S">S</span>]</span><span class="result"> extends <a href="ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.P">P</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.LinearModel.S">S</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt">Represents skeleton of a
-Linear Model.</p>
-    </li><li name="io.github.mandar2812.dynaml.models.MetaModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@LinearModel[T,P,Q,R,S]extendsParameterizedLearner[T,P,Q,R,S]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents skeleton of a
+Linear Model.</p><div class="fullcomment"><div class="comment cmt"><p>Represents skeleton of a
+Linear Model.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The underlying type of the data structure
+          ex. Gremlin, Neo4j, Spark RDD etc</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>A Vector/Matrix of Doubles</p></dd><dt class="tparam">Q</dt><dd class="cmt"><p>A Vector/Matrix representing the features of a point</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of the output of the predictive model
+          i.e. A Real Number or a Vector of outputs.</p></dd><dt class="tparam">S</dt><dd class="cmt"><p>The type of the data containing the
+          features and label.</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.MetaModel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="MetaModel[D,D1,BaseModel&lt;:io.github.mandar2812.dynaml.models.Model[D1,breeze.linalg.DenseVector[Double],Double],Pipe&lt;:io.github.mandar2812.dynaml.pipes.ModelPipe[D,D1,breeze.linalg.DenseVector[Double],Double,BaseModel]]extendsModel[D,breeze.linalg.DenseVector[Double],Double]"></a>
       <a id="MetaModel[D,D1,BaseModel&lt;:Model[D1,DenseVector[Double],Double],Pipe&lt;:ModelPipe[D,D1,DenseVector[Double],Double,BaseModel]]:MetaModel[D,D1,BaseModel,Pipe]"></a>
       <h4 class="signature">
@@ -126,9 +168,24 @@ Linear Model.</p>
       <span class="symbol">
         <a href="MetaModel.html"><span class="name">MetaModel</span></a><span class="tparams">[<span name="D">D</span>, <span name="D1">D1</span>, <span name="BaseModel">BaseModel &lt;: <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.MetaModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>, <span name="Pipe">Pipe &lt;: <a href="../pipes/ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.MetaModel.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.MetaModel.D1">D1</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.MetaModel.BaseModel">BaseModel</span>]</span>]</span><span class="result"> extends <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.MetaModel.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt">w1*y1(x) + w2*y2(x) + .</p>
-    </li><li name="io.github.mandar2812.dynaml.models.Model" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@MetaModel[D,D1,BaseModel&lt;:io.github.mandar2812.dynaml.models.Model[D1,breeze.linalg.DenseVector[Double],Double],Pipe&lt;:io.github.mandar2812.dynaml.pipes.ModelPipe[D,D1,breeze.linalg.DenseVector[Double],Double,BaseModel]]extendsModel[D,breeze.linalg.DenseVector[Double],Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">w1*y1(x) + w2*y2(x) + ...</p><div class="fullcomment"><div class="comment cmt"><p>w1*y1(x) + w2*y2(x) + ... + wb*yb(x)
+Defines the basic skeleton of a &quot;meta-model&quot; or
+a model of models.</p><p>A set of base models are trained on sub-sampled versions
+of the training data set and finally a predictor of the form.</p><p>y(x) = f(y1(x), y2(x), ..., yb(x))</p><p>Where f is some combination function and
+b is the number of base models used.
+</p></div><dl class="paramcmts block"><dt class="tparam">D</dt><dd class="cmt"><p>The type of the data structure containing the
+          training data set.</p></dd><dt class="tparam">D1</dt><dd class="cmt"><p>The type of data structure containing the data
+           of the base models.</p></dd><dt class="tparam">BaseModel</dt><dd class="cmt"><p>The type of model used as base model
+                  for the meta model.
+                  example: <span class="extype" name="FeedForwardNetwork">FeedForwardNetwork</span>, <span class="extype" name="GPRegression">GPRegression</span>, etc</p></dd><dt class="tparam">Pipe</dt><dd class="cmt"><p>A sub-type of <span class="extype" name="ModelPipe">ModelPipe</span> which yields a <span class="extype" name="BaseModel">BaseModel</span>
+             with <span class="extype" name="D1">D1</span> as the base data structure given a
+             data structure of type <span class="extype" name="D">D</span></p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.Model" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Model[T,Q,R]extendsAnyRef"></a>
       <a id="Model[T,Q,R]:Model[T,Q,R]"></a>
       <h4 class="signature">
@@ -139,22 +196,34 @@ Linear Model.</p>
       <span class="symbol">
         <a href="Model.html"><span class="name">Model</span></a><span class="tparams">[<span name="T">T</span>, <span name="Q">Q</span>, <span name="R">R</span>]</span><span class="result"> extends <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
-      <p class="comment cmt">Basic Higher Level abstraction
-for Machine Learning models.</p>
-    </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ParameterizedLearner[G,K,T,Q&lt;:breeze.linalg.Tensor[K,Double],R,S]extendsModel[G,Q,R]"></a>
-      <a id="ParameterizedLearner[G,K,T,Q&lt;:Tensor[K,Double],R,S]:ParameterizedLearner[G,K,T,Q,R,S]"></a>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@Model[T,Q,R]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Basic Higher Level abstraction
+for Machine Learning models.</p><div class="fullcomment"><div class="comment cmt"><p>Basic Higher Level abstraction
+for Machine Learning models.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the training &amp; test data</p></dd><dt class="tparam">Q</dt><dd class="cmt"><p>The type of a single input pattern</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of a single output pattern</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ParameterizedLearner[G,T,Q,R,S]extendsModel[G,Q,R]"></a>
+      <a id="ParameterizedLearner[G,T,Q,R,S]:ParameterizedLearner[G,T,Q,R,S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ParameterizedLearner.html"><span class="name">ParameterizedLearner</span></a><span class="tparams">[<span name="G">G</span>, <span name="K">K</span>, <span name="T">T</span>, <span name="Q">Q &lt;: <span class="extype" name="breeze.linalg.Tensor">Tensor</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner.K">K</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="R">R</span>, <span name="S">S</span>]</span><span class="result"> extends <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner.R">R</span>]</span>
+        <a href="ParameterizedLearner.html"><span class="name">ParameterizedLearner</span></a><span class="tparams">[<span name="G">G</span>, <span name="T">T</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="S">S</span>]</span><span class="result"> extends <a href="Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner.R">R</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt">Skeleton of Parameterized Model</p>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@ParameterizedLearner[G,T,Q,R,S]extendsModel[G,Q,R]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Skeleton of Parameterized Model</p><div class="fullcomment"><div class="comment cmt"><p>Skeleton of Parameterized Model</p></div><dl class="paramcmts block"><dt class="tparam">G</dt><dd class="cmt"><p>The type of the underlying data.</p></dd><dt class="tparam">T</dt><dd class="cmt"><p>The type of the parameters</p></dd><dt class="tparam">Q</dt><dd class="cmt"><p>A Vector/Matrix representing the features of a point</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of the output of the predictive model
+          i.e. A Real Number or a Vector of outputs.</p></dd><dt class="tparam">S</dt><dd class="cmt"><p>The type of the edge containing the
+          features and label.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.SubsampledDualLSSVM" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SubsampledDualLSSVM[G,L]extendsKernelizedModel[G,L,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]"></a>
       <a id="SubsampledDualLSSVM[G,L]:SubsampledDualLSSVM[G,L]"></a>
@@ -166,7 +235,11 @@ for Machine Learning models.</p>
       <span class="symbol">
         <a href="SubsampledDualLSSVM.html"><span class="name">SubsampledDualLSSVM</span></a><span class="tparams">[<span name="G">G</span>, <span name="L">L</span>]</span><span class="result"> extends <a href="KernelizedModel.html" class="extype" name="io.github.mandar2812.dynaml.models.KernelizedModel">KernelizedModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.SubsampledDualLSSVM.G">G</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.SubsampledDualLSSVM.L">L</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@SubsampledDualLSSVM[G,L]extendsKernelizedModel[G,L,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,Int,Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -186,7 +259,11 @@ for Machine Learning models.</p>
       <span class="symbol">
         <a href="KernelizedModel$.html"><span class="name">KernelizedModel</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@KernelizedModel" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.gp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="gp"></a>
@@ -199,7 +276,28 @@ for Machine Learning models.</p>
       <span class="symbol">
         <a href="gp/package.html"><span class="name">gp</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@gp" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.models.lm" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lm"></a>
+      <a id="lm:lm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="lm/package.html"><span class="name">lm</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@lm" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="neuralnets"></a>
@@ -212,7 +310,11 @@ for Machine Learning models.</p>
       <span class="symbol">
         <a href="neuralnets/package.html"><span class="name">neuralnets</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@neuralnets" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.svm" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="svm"></a>
@@ -225,7 +327,11 @@ for Machine Learning models.</p>
       <span class="symbol">
         <a href="svm/package.html"><span class="name">svm</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.package@svm" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -252,6 +358,7 @@ for Machine Learning models.</p>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+
+
     </body>
       </html>

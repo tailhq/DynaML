@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>FeedForwardNetwork - DynaML 1.2 API - io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
@@ -24,9 +28,15 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../../lib/class_big.png" />
+        <img alt="Class" src="../../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="io">io</a>.<a href="../../../../package.html" class="extype" name="io.github">github</a>.<a href="../../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets">neuralnets</a></p>
-        <h1>FeedForwardNetwork</h1>
+        <h1>FeedForwardNetwork</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets">package neuralnets</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -41,10 +51,9 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents the template of a Feed Forward Neural Network
 backed by an underlying graph.
-</p></div><dl class="paramcmts block"><dt class="tparam">D</dt><dd class="cmt"><p>The type of the underlying training data structure.
-</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="tparam">D</dt><dd class="cmt"><p>The type of the underlying training data structure.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -55,7 +64,7 @@ backed by an underlying graph.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -68,9 +77,8 @@ backed by an underlying graph.
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -93,11 +101,13 @@ backed by an underlying graph.
       <span class="symbol">
         <span class="name">FeedForwardNetwork</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span></span>, <span name="netgraph">netgraph: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>, <span name="transform">transform: <a href="../../pipes/DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]]</span>)</span>
       </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The training data
-</p></dd><dt class="param">netgraph</dt><dd class="cmt"><p>The <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a> object which represents the
-                network.
-</p></dd><dt class="param">transform</dt><dd class="cmt"><p>A <span class="extype" name="DataPipe">DataPipe</span> which takes input of type <span class="extype" name="D">D</span> and
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@&lt;init&gt;(data:D,netgraph:io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph,transform:io.github.mandar2812.dynaml.pipes.DataPipe[D,Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]]):io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork[D]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The training data</p></dd><dt class="param">netgraph</dt><dd class="cmt"><p>The <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a> object which represents the
+                network.</p></dd><dt class="param">transform</dt><dd class="cmt"><p>A <span class="extype" name="DataPipe">DataPipe</span> which takes input of type <span class="extype" name="D">D</span> and
                  returns a <span class="extype" name="Stream">Stream</span> of input, output tuples.</p></dd></dl></div>
     </li></ol>
             </div>
@@ -109,19 +119,6 @@ backed by an underlying graph.
         <div id="values" class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -132,8 +129,12 @@ backed by an underlying graph.
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -145,22 +146,13 @@ backed by an underlying graph.
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -171,8 +163,12 @@ backed by an underlying graph.
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#activations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="activations:List[Double=&gt;Double]"></a>
       <a id="activations:List[(Double)⇒Double]"></a>
@@ -184,7 +180,11 @@ backed by an underlying graph.
       <span class="symbol">
         <span class="name">activations</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[(<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@activations:List[Double=&gt;Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
@@ -197,7 +197,11 @@ backed by an underlying graph.
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -210,7 +214,11 @@ backed by an underlying graph.
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -229,7 +237,11 @@ backed by an underlying graph.
       <span class="symbol">
         <span class="name">dataAsStream</span><span class="params">(<span name="d">d: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@dataAsStream(d:D):Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Convert the data structure from type <span class="extype" name="G">G</span>
 to a <span class="extype" name="Stream">Stream</span> of <span class="extype" name="Pattern">Pattern</span> objects</p><div class="fullcomment"><div class="comment cmt"><p>Convert the data structure from type <span class="extype" name="G">G</span>
 to a <span class="extype" name="Stream">Stream</span> of <span class="extype" name="Pattern">Pattern</span> objects</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
@@ -244,7 +256,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -257,7 +273,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#feedForward" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="feedForward:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]"></a>
@@ -270,7 +290,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">feedForward</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@feedForward:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
@@ -283,7 +307,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -302,7 +330,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">g</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@g:D" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">The training data
 </p><div class="fullcomment"><div class="comment cmt"><p>The training data
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
@@ -317,7 +349,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -330,7 +366,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#hiddenLayers" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hiddenLayers:Int"></a>
@@ -343,7 +383,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">hiddenLayers</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@hiddenLayers:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#initParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="initParams():io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph"></a>
@@ -356,7 +400,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">initParams</span><span class="params">()</span><span class="result">: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@initParams():io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#inputDimensions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inputDimensions:Int"></a>
@@ -369,7 +417,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">inputDimensions</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@inputDimensions:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -382,7 +434,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#learn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="learn():Unit"></a>
@@ -395,7 +451,11 @@ to a <span class="extype" name="Stream">Stream</span> of <span class="extype" na
       <span class="symbol">
         <span class="name">learn</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@learn():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Learn the parameters
 of the model which
 are in a node of the
@@ -414,7 +474,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#neuronCounts" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="neuronCounts:List[Int]"></a>
@@ -427,7 +491,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">neuronCounts</span><span class="result">: <a href="../../../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Int">Int</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@neuronCounts:List[Int]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -440,7 +508,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -453,7 +525,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#num_points" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="num_points:Int"></a>
@@ -466,7 +542,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">num_points</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@num_points:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#optimizer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="optimizer:io.github.mandar2812.dynaml.optimization.BackPropogation"></a>
@@ -479,7 +559,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">optimizer</span><span class="result">: <a href="../../optimization/BackPropogation.html" class="extype" name="io.github.mandar2812.dynaml.optimization.BackPropogation">BackPropogation</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@optimizer:io.github.mandar2812.dynaml.optimization.BackPropogation" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Model optimizer set to
 <span class="extype" name="BackPropogation">BackPropogation</span> which
 is an implementation of
@@ -500,7 +584,11 @@ with a momentum term.</p></div><dl class="attributes block"> <dt>Attributes</dt>
       <span class="symbol">
         <span class="name">outputDimensions</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@outputDimensions:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#parameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="parameters():T"></a>
@@ -513,7 +601,11 @@ with a momentum term.</p></div><dl class="attributes block"> <dt>Attributes</dt>
       <span class="symbol">
         <span class="name">parameters</span><span class="params">()</span><span class="result">: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@parameters():T" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Get the value of the parameters
 of the model.</p><div class="fullcomment"><div class="comment cmt"><p>Get the value of the parameters
 of the model.
@@ -529,7 +621,11 @@ of the model.
       <span class="symbol">
         <span class="name">params</span><span class="result">: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@params:io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(point:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
@@ -542,7 +638,11 @@ of the model.
       <span class="symbol">
         <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@predict(point:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Predict the value of the
 target variable given a
 point.</p><div class="fullcomment"><div class="comment cmt"><p>Predict the value of the
@@ -559,7 +659,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setBatchFraction</span><span class="params">(<span name="f">f: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@setBatchFraction(f:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setLearningRate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setLearningRate(alpha:Double):ParameterizedLearner.this.type"></a>
@@ -572,7 +676,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setLearningRate</span><span class="params">(<span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@setLearningRate(alpha:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setMaxIterations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setMaxIterations(i:Int):ParameterizedLearner.this.type"></a>
@@ -585,7 +693,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setMaxIterations</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@setMaxIterations(i:Int):ParameterizedLearner.this.type" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#setMomentum" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="setMomentum(m:Double):FeedForwardNetwork.this.type"></a>
@@ -598,7 +710,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setMomentum</span><span class="params">(<span name="m">m: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@setMomentum(m:Double):FeedForwardNetwork.this.type" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setRegParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setRegParam(r:Double):ParameterizedLearner.this.type"></a>
@@ -611,7 +727,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">setRegParam</span><span class="params">(<span name="r">r: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">FeedForwardNetwork</a>.this.type</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@setRegParam(r:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -624,7 +744,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork#test" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="test(d:D):Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
@@ -637,7 +761,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">test</span><span class="params">(<span name="d">d: <span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@test(d:D):Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Calculate predictions for a test data set
 </p><div class="fullcomment"><div class="comment cmt"><p>Calculate predictions for a test data set
 </p></div><dl class="paramcmts block"><dt class="param">d</dt><dd class="cmt"><p>The test data set as a data structure
@@ -653,7 +781,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#updateParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateParameters(param:T):Unit"></a>
@@ -666,7 +798,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">updateParameters</span><span class="params">(<span name="param">param: <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@updateParameters(param:T):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -679,7 +815,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -698,7 +838,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -717,7 +861,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -737,7 +885,7 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
         <div class="parent" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">
               <h3>Inherited from <a href="NeuralNetwork.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralNetwork">NeuralNetwork</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">
-              <h3>Inherited from <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="scala.Int">Int</span>, <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]]</h3>
+              <h3>Inherited from <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph">FFNeuralGraph</a>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <a href="../../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.Model">
               <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
             </div><div class="parent" name="scala.AnyRef">
@@ -760,6 +908,7 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+
+
     </body>
       </html>

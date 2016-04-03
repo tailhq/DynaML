@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>pipes - DynaML 1.2 API - io.github.mandar2812.dynaml.pipes</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
@@ -24,9 +28,13 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../../../lib/package_big.png" />
+        <img alt="Package" src="../../../../../lib/package_big.png" />
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a></p>
-        <h1>pipes</h1>
+        <h1>pipes</h1><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -69,7 +77,11 @@
       <span class="symbol">
         <a href="BifurcationPipe.html"><span class="name">BifurcationPipe</span></a><span class="tparams">[<span name="Source">Source</span>, <span name="Result1">Result1</span>, <span name="Result2">Result2</span>]</span><span class="result"> extends <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe.Source">Source</span>, (<span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe.Result1">Result1</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe.Result2">Result2</span>)]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@BifurcationPipe[Source,Result1,Result2]extendsDataPipe[Source,(Result1,Result2)]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="DataPipe[Source,Destination]extendsAnyRef"></a>
@@ -82,8 +94,12 @@
       <span class="symbol">
         <a href="DataPipe.html"><span class="name">DataPipe</span></a><span class="tparams">[<span name="Source">Source</span>, <span name="Destination">Destination</span>]</span><span class="result"> extends <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
-      <p class="comment cmt"></p>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@DataPipe[Source,Destination]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.pipes.GPRegressionPipe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GPRegressionPipe[M&lt;:io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double]],Source]extendsModelPipe[Source,Seq[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double],Double,M]"></a>
       <a id="GPRegressionPipe[M&lt;:AbstractGPRegressionModel[Seq[(DenseVector[Double],Double)],DenseVector[Double]],Source]:GPRegressionPipe[M,Source]"></a>
@@ -95,7 +111,11 @@
       <span class="symbol">
         <a href="GPRegressionPipe.html"><span class="name">GPRegressionPipe</span></a><span class="tparams">[<span name="M">M &lt;: <a href="../models/gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="Source">Source</span>]</span><span class="result"> extends <a href="ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.GPRegressionPipe.Source">Source</span>, <a href="../../../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.GPRegressionPipe.M">M</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@GPRegressionPipe[M&lt;:io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double]],Source]extendsModelPipe[Source,Seq[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double],Double,M]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.pipes.ModelPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ModelPipe[Source,T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]]extendsDataPipe[Source,M]"></a>
@@ -108,8 +128,12 @@
       <span class="symbol">
         <a href="ModelPipe.html"><span class="name">ModelPipe</span></a><span class="tparams">[<span name="Source">Source</span>, <span name="T">T</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="M">M &lt;: <a href="../models/Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe.R">R</span>]</span>]</span><span class="result"> extends <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ModelPipe.M">M</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt">Top level trait for Pipes involving ML models.</p>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@ModelPipe[Source,T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]]extendsDataPipe[Source,M]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Top level trait for Pipes involving ML models.</p>
     </li><li name="io.github.mandar2812.dynaml.pipes.ParallelPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ParallelPipe[Source1,Result1,Source2,Result2]extendsDataPipe[(Source1,Source2),(Result1,Result2)]"></a>
       <a id="ParallelPipe[Source1,Result1,Source2,Result2]:ParallelPipe[Source1,Result1,Source2,Result2]"></a>
@@ -121,7 +145,11 @@
       <span class="symbol">
         <a href="ParallelPipe.html"><span class="name">ParallelPipe</span></a><span class="tparams">[<span name="Source1">Source1</span>, <span name="Result1">Result1</span>, <span name="Source2">Source2</span>, <span name="Result2">Result2</span>]</span><span class="result"> extends <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[(<span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe.Source1">Source1</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe.Source2">Source2</span>), (<span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe.Result1">Result1</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe.Result2">Result2</span>)]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@ParallelPipe[Source1,Result1,Source2,Result2]extendsDataPipe[(Source1,Source2),(Result1,Result2)]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.pipes.SideEffectPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SideEffectPipe[I]extendsDataPipe[I,Unit]"></a>
@@ -134,9 +162,13 @@
       <span class="symbol">
         <a href="SideEffectPipe.html"><span class="name">SideEffectPipe</span></a><span class="tparams">[<span name="I">I</span>]</span><span class="result"> extends <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.SideEffectPipe.I">I</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@SideEffectPipe[I]extendsDataPipe[I,Unit]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
-    </li><li name="io.github.mandar2812.dynaml.pipes.StreamDataPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.pipes.StreamDataPipe" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="StreamDataPipe[I,J,K]extendsDataPipe[Stream[I],K]"></a>
       <a id="StreamDataPipe[I,J,K]:StreamDataPipe[I,J,K]"></a>
       <h4 class="signature">
@@ -147,8 +179,12 @@
       <span class="symbol">
         <a href="StreamDataPipe.html"><span class="name">StreamDataPipe</span></a><span class="tparams">[<span name="I">I</span>, <span name="J">J</span>, <span name="K">K</span>]</span><span class="result"> extends <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe.I">I</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe.K">K</span>]</span>
       </span>
-      </h4>
-      <p class="comment cmt"></p>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamDataPipe[I,J,K]extendsDataPipe[Stream[I],K]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of a single source record</p></dd><dt class="tparam">J</dt><dd class="cmt"><p>The result type of a single record.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.StreamFilterPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="StreamFilterPipe[I]extendsStreamDataPipe[I,Boolean,Stream[I]]"></a>
       <a id="StreamFilterPipe[I]:StreamFilterPipe[I]"></a>
@@ -160,7 +196,11 @@
       <span class="symbol">
         <a href="StreamFilterPipe.html"><span class="name">StreamFilterPipe</span></a><span class="tparams">[<span name="I">I</span>]</span><span class="result"> extends <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFilterPipe.I">I</span>, <span class="extype" name="scala.Boolean">Boolean</span>, <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFilterPipe.I">I</span>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamFilterPipe[I]extendsStreamDataPipe[I,Boolean,Stream[I]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.pipes.StreamMapPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="StreamMapPipe[I,J]extendsStreamDataPipe[I,J,Stream[J]]"></a>
@@ -173,7 +213,11 @@
       <span class="symbol">
         <a href="StreamMapPipe.html"><span class="name">StreamMapPipe</span></a><span class="tparams">[<span name="I">I</span>, <span name="J">J</span>]</span><span class="result"> extends <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamMapPipe.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamMapPipe.J">J</span>, <a href="../../../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamMapPipe.J">J</span>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamMapPipe[I,J]extendsStreamDataPipe[I,J,Stream[J]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.pipes.StreamSideEffectPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="StreamSideEffectPipe[I]extendsStreamDataPipe[I,Unit,Unit]"></a>
@@ -186,7 +230,11 @@
       <span class="symbol">
         <a href="StreamSideEffectPipe.html"><span class="name">StreamSideEffectPipe</span></a><span class="tparams">[<span name="I">I</span>]</span><span class="result"> extends <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamSideEffectPipe.I">I</span>, <span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamSideEffectPipe[I]extendsStreamDataPipe[I,Unit,Unit]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -206,7 +254,11 @@
       <span class="symbol">
         <a href="DataPipe$.html"><span class="name">DataPipe</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@DataPipe" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li><li name="io.github.mandar2812.dynaml.pipes.DynaMLPipe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DynaMLPipe"></a>
@@ -219,8 +271,12 @@
       <span class="symbol">
         <a href="DynaMLPipe$.html"><span class="name">DynaMLPipe</span></a>
       </span>
-      </h4>
-      <p class="comment cmt"></p>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@DynaMLPipe" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.pipes.StreamDataPipe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="StreamDataPipe"></a>
       <a id="StreamDataPipe:StreamDataPipe"></a>
@@ -232,7 +288,11 @@
       <span class="symbol">
         <a href="StreamDataPipe$.html"><span class="name">StreamDataPipe</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamDataPipe" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -259,6 +319,7 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+
+
     </body>
       </html>
