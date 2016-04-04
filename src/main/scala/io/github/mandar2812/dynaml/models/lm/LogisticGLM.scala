@@ -33,7 +33,7 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
                   identity[DenseVector[Double]] _)
   extends GeneralizedLinearModel[Stream[(DenseVector[Double], Double)]](data, numPoints, map) {
 
-  val h: (Double) => Double = sigmoid _
+  val h: (Double) => Double = (x) => sigmoid(x)
 
   override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
