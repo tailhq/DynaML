@@ -151,7 +151,7 @@ General
 * _Result_: Takes a base pipe and creates a parallel pipe by duplicating it.
 
 
-Model Pipes
+Operations on Models
 ------
 
 ### ```trainParametricModel[G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]](regParameter: Double, step: Double, maxIt: Int, mini: Double)```
@@ -164,6 +164,22 @@ Model Pipes
 * _Type_: ```DataPipe[(S, S), (D, D)] ```
 * _Result_: Takes as input a parametric model i.e. a subclass of ```GloballyOptimizableWithGrad```, tunes it using a global optimization procedure ```globalOpt``` and outputs the tuned model.
 
+
+DynaML Model Pipes
+------
+
+We saw in the previous section that certain operations like training/tuning of models are expressed as pipes which take input the relevant model and perform an operation on it. But it is evident that the model creation itself is a common step in the data analysis workflow, therefore one needs library pipes which instantiate DynaML machine learning models given the training data and other relevant inputs. Model creation pipes are not in the ```DynaMLPipe``` object but exist as an independent class hierarchy. Below we explore a section of it.
+
+
+### ```GLMPipe[T, Source]```
+
+* _Type_: ```DataPipe[Source, GeneralizedLinearModel[T]] ```
+* _Result_: Takes as input a data of type ```Source``` and outputs a _Generalized Linear Model_.
+
+### ```GPRegressionPipe[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)], DenseVector[Double]], Source]```
+
+* _Type_: ```DataPipe[Source, M] ```
+* _Result_: Takes as input data of type ```Source``` and intializes a _Gaussian Process_ regression model as the output.
 
 
 ------
