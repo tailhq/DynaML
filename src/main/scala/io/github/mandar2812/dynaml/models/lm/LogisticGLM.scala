@@ -20,9 +20,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.lm
 
 import breeze.linalg.DenseVector
-import breeze.numerics.sigmoid
-import breeze.stats.distributions.Gaussian
-import io.github.mandar2812.dynaml.models.LinearModel
+import breeze.numerics._
 import io.github.mandar2812.dynaml.optimization._
 import org.apache.commons.math3.distribution.NormalDistribution
 
@@ -33,42 +31,16 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
                   numPoints: Int,
                   map: (DenseVector[Double]) => DenseVector[Double] =
                   identity[DenseVector[Double]] _)
-  extends LinearModel[Stream[(DenseVector[Double], Double)],
-    DenseVector[Double], DenseVector[Double], Double,
-    Stream[(DenseVector[Double], Double)]] {
+  extends GeneralizedLinearModel[Stream[(DenseVector[Double], Double)]](data, numPoints, map) {
 
-  override protected val g = data
-
-  def dimensions = featureMap(data.head._1).length
-
-  override def initParams(): DenseVector[Double] =
-    DenseVector.ones[Double](dimensions+1)
-
+  val h: (Double) => Double = sigmoid _
 
   override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     Stream[(DenseVector[Double], Double)]] =
     new GradientDescent(new LogisticGradient, new SquaredL2Updater)
 
-  override protected var params: DenseVector[Double] = initParams()
-
-  override def clearParameters(): Unit = {
-    params = initParams()
-  }
-
-
-  /**
-    * Learn the parameters
-    * of the model which
-    * are in a node of the
-    * graph.
-    *
-    **/
-  override def learn(): Unit = {
-    params = optimizer.optimize(numPoints,
-      g.map(point => (featureMap(point._1), point._2)),
-      initParams())
-  }
+  override def prepareData = g.map(point => (featureMap(point._1), point._2))
 
   /**
     * Predict the value of the
@@ -77,47 +49,8 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
     *
     **/
   override def predict(point: DenseVector[Double]): Double =
-    sigmoid(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
+    h(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
 
-  /*override protected var hyper_parameters: List[String] = List("regularization")
-
-  /**
-    * Calculates the energy of the configuration,
-    * in most global optimization algorithms
-    * we aim to find an approximate value of
-    * the hyper-parameters such that this function
-    * is minimized.
-    *
-    * @param h       The value of the hyper-parameters in the configuration space
-    * @param options Optional parameters about configuration
-    * @return Configuration Energy E(h)
-    **/
-  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
-    val designMatrix = DenseMatrix.vertcat[Double](
-      g.map(point => featureMap(point._1).toDenseMatrix):_*
-    )
-
-    val kernelTraining = designMatrix.t*designMatrix
-    val trainingLabels = DenseVector(g.map(_._2).toArray)
-    val noiseMat = DenseMatrix.eye[Double](dimensions)*h("regularization")
-
-    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining, noiseMat)
-  }
-
-  override protected var current_state: Map[String, Double] =
-    Map("regularization" -> 0.001)
-
-  /**
-    * Set the model "state" which
-    * contains values of its hyper-parameters
-    * with respect to the covariance and noise
-    * kernels.
-    * */
-  def setState(s: Map[String, Double]): this.type ={
-    this.setRegParam(s("regularization"))
-    current_state = Map("regularization" -> s("regularization"))
-    this
-  }*/
 }
 
 
@@ -127,14 +60,13 @@ class ProbitGLM(data: Stream[(DenseVector[Double], Double)],
                 identity[DenseVector[Double]] _)
   extends LogisticGLM(data, numPoints, map) {
 
-  override def predict(point: DenseVector[Double]): Double = {
-    val g = new NormalDistribution(0, 1.0)
-    g.cumulativeProbability(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
-  }
+  private val standardGaussian = new NormalDistribution(0, 1.0)
 
-  override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
-    DenseVector[Double], Double,
-    Stream[(DenseVector[Double], Double)]] =
-    new GradientDescent(new ProbitGradient, new SquaredL2Updater)
+  override val h = (x: Double) => standardGaussian.cumulativeProbability(x)
+
+  override protected val optimizer =
+    new GradientDescent(
+      new ProbitGradient,
+      new SquaredL2Updater)
 
 }
