@@ -63,15 +63,14 @@ RegularizedOptimizer[DenseVector[Double],
       case "regression" =>
         (DenseMatrix.horzcat(
           DenseMatrix.vertcat(OmegaMat + smoother, ones),
-          DenseMatrix.vertcat(ones.t, DenseMatrix(0.0))
-        ), DenseVector.vertcat(labels, DenseVector(0.0)))
+          DenseMatrix.vertcat(ones.t, DenseMatrix(0.0))),
+          DenseVector.vertcat(labels, DenseVector(0.0)))
 
       case "classification" =>
         (DenseMatrix.horzcat(
           DenseMatrix.vertcat(OmegaMat + smoother, labels.toDenseMatrix),
-          DenseMatrix.vertcat(labels.toDenseMatrix.t, DenseMatrix(0.0))
-        ), DenseVector.vertcat[Double](ones.toDenseVector, DenseVector(0.0))
-          )
+          DenseMatrix.vertcat(labels.toDenseMatrix.t, DenseMatrix(0.0))),
+          DenseVector.vertcat[Double](ones.toDenseVector, DenseVector(0.0)))
     }
 
     inv(a)*b

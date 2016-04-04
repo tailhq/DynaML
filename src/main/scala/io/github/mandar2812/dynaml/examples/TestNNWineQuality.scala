@@ -20,8 +20,10 @@ package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.evaluation.BinaryClassificationMetrics
+import io.github.mandar2812.dynaml.kernels.LocalSVMKernel
 import io.github.mandar2812.dynaml.models.lm.{LogisticGLM, ProbitGLM}
 import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
+import io.github.mandar2812.dynaml.models.svm.DLSSVM
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DynaMLPipe, StreamDataPipe}
 
 /**
@@ -121,11 +123,11 @@ object TestNNWineQuality {
 
 
 object TestLogisticWineQuality {
-  def apply (training: Int = 100, test: Int = 1000,
-             columns: List[Int] = List(11,0,1,2,3,4,5,6,7,8,9,10),
-             stepSize: Double = 0.01, maxIt: Int = 30, mini: Double = 1.0,
-             regularization: Double = 0.5, wineType: String = "red",
-             modelType: String = "logistic"): Unit = {
+  def apply(training: Int = 100, test: Int = 1000,
+            columns: List[Int] = List(11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+            stepSize: Double = 0.01, maxIt: Int = 30, mini: Double = 1.0,
+            regularization: Double = 0.5, wineType: String = "red",
+            modelType: String = "logistic"): Unit = {
 
     //Load wine quality data into a stream
     //Extract the time and Dst values
@@ -162,6 +164,66 @@ object TestLogisticWineQuality {
           scoresAndLabels.length,
           logisticFlag = true)
 
+        metrics.setName(wineType + " wine quality")
+        metrics.print()
+        metrics.generatePlots()
+      }
+
+    val preProcessPipe = DynaMLPipe.fileToStream >
+      DynaMLPipe.dropHead >
+      DynaMLPipe.replace(";", ",") >
+      DynaMLPipe.extractTrainingFeatures(columns, Map()) >
+      DynaMLPipe.splitFeaturesAndTargets >
+      StreamDataPipe((pattern: (DenseVector[Double], Double)) =>
+        if (pattern._2 <= 6.0) (pattern._1, 0.0) else (pattern._1, 1.0))
+
+    val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
+      DynaMLPipe.splitTrainingTest(training, test) >
+      DynaMLPipe.featuresGaussianStandardization >
+      DataPipe(modelTrainTest)
+
+    trainTestPipe run
+      ("data/winequality-" + wineType + ".csv",
+        "data/winequality-" + wineType + ".csv")
+
+  }
+
+}
+
+
+object TestLSSVMWineQuality {
+  def apply (kernel: LocalSVMKernel[DenseVector[Double]],
+             training: Int = 100, test: Int = 1000,
+             columns: List[Int] = List(11,0,1,2,3,4,5,6,7,8,9,10),
+             regularization: Double = 0.5, wineType: String = "red"): Unit = {
+
+    //Load wine quality data into a stream
+    //Extract the time and Dst values
+    //separate data into training and test
+    //pipe training data to model and then generate test predictions
+    //create RegressionMetrics instance and produce plots
+
+    val modelTrainTest =
+      (trainTest: ((Stream[(DenseVector[Double], Double)],
+        Stream[(DenseVector[Double], Double)]),
+        (DenseVector[Double], DenseVector[Double]))) => {
+
+        val model = new DLSSVM(trainTest._1._1, training, kernel, "classification")
+
+        model.setRegParam(regularization).learn()
+
+        val pipe1 = StreamDataPipe((couple: (DenseVector[Double], Double)) => {
+          (model.predict(couple._1), couple._2)
+        })
+
+        val scoresAndLabelsPipe = pipe1
+        val scoresAndLabels = scoresAndLabelsPipe.run(trainTest._1._2).toList
+
+        val metrics = new BinaryClassificationMetrics(
+          scoresAndLabels,
+          scoresAndLabels.length,
+          logisticFlag = true)
+
         metrics.setName(wineType+" wine quality")
         metrics.print()
         metrics.generatePlots()
@@ -173,7 +235,7 @@ object TestLogisticWineQuality {
       DynaMLPipe.extractTrainingFeatures(columns, Map()) >
       DynaMLPipe.splitFeaturesAndTargets >
       StreamDataPipe((pattern:(DenseVector[Double], Double)) =>
-        if(pattern._2 <= 6.0) (pattern._1, 0.0) else (pattern._1, 1.0))
+        if(pattern._2 <= 6.0) (pattern._1, 1.0) else (pattern._1, -1.0))
 
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
       DynaMLPipe.splitTrainingTest(training, test) >
@@ -185,5 +247,4 @@ object TestLogisticWineQuality {
         "data/winequality-"+wineType+".csv")
 
   }
-
 }

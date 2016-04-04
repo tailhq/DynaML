@@ -73,6 +73,22 @@ class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
       initParams())
   }
 
+
+  /**
+    * Predict the value of the
+    * target variable given a
+    * point.
+    *
+    **/
+  override def predict(point: DenseVector[Double]): Double = task match {
+    case "regression" => super.predict(point)
+    case "classification" =>
+      val features = DenseVector(g.map(inducingpoint =>
+        kernel.evaluate(point, inducingpoint._1)).toArray)
+
+      params(0 until num_points) dot features + params(-1)
+  }
+
   /**
     * Calculates the energy of the configuration,
     * in most global optimization algorithms
