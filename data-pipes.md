@@ -27,7 +27,7 @@ You can compose or stack any number of pipes using the ```>``` character to crea
 
 # DynaML Library Pipes
 
-DynaML comes bundled with a set of data pipes which enable certain standard data processing tasks.
+DynaML comes bundled with a set of data pipes which enable certain standard data processing tasks, they are defined in the ```DynaMLPipe``` object in the ```io.github.mandar2812.dynaml.pipes``` package and they can be invoked as ```DynaMLPipe.<pipe name>```.
 
 
 Data Pre-processing
@@ -151,7 +151,22 @@ General
 * _Result_: Takes a base pipe and creates a parallel pipe by duplicating it.
 
 
------
+Model Pipes
+------
+
+### ```trainParametricModel[G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]](regParameter: Double, step: Double, maxIt: Int, mini: Double)```
+
+* _Type_: ```DataPipe[M, M] ```
+* _Result_: Takes as input a parametric model i.e. a subclass of ```ParameterizedLearner[G, T, Q, R, S]```, trains it and outputs the trained model.
+
+### ```modelTuning[M <: GloballyOptWithGrad](startingState: Map[String, Double], globalOpt: String, grid: Int, step: Double)```
+
+* _Type_: ```DataPipe[(S, S), (D, D)] ```
+* _Result_: Takes as input a parametric model i.e. a subclass of ```GloballyOptimizableWithGrad```, tunes it using a global optimization procedure ```globalOpt``` and outputs the tuned model.
+
+
+
+------
 
 ## Example
 As a simple motivating example consider the following hypothetical csv data file called ```sample.csv```.
