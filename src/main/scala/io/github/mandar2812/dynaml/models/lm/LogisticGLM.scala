@@ -37,12 +37,15 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
 
   override val h: (Double) => Double = (x) => sigmoid(x)
 
+  override val task = "classification"
+
   override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     Stream[(DenseVector[Double], Double)]] =
     new GradientDescent(new LogisticGradient, new SquaredL2Updater)
 
-  override def prepareData = g.map(point => (featureMap(point._1), point._2))
+  override def prepareData(d: Stream[(DenseVector[Double], Double)]) =
+    d.map(point => (featureMap(point._1), point._2))
 
 }
 

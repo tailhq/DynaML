@@ -241,7 +241,7 @@ object TestLSSVMWineQuality {
       DynaMLPipe.extractTrainingFeatures(columns, Map()) >
       DynaMLPipe.splitFeaturesAndTargets >
       StreamDataPipe((pattern:(DenseVector[Double], Double)) =>
-        if(pattern._2 <= 6.0) (pattern._1, 1.0) else (pattern._1, -1.0))
+        if(pattern._2 <= 6.0) (pattern._1, -1.0) else (pattern._1, 1.0))
 
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
       DynaMLPipe.splitTrainingTest(training, test) >

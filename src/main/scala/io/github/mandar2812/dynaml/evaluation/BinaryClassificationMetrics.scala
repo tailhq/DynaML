@@ -51,7 +51,7 @@ class BinaryClassificationMetrics(
       i.toDouble*((scoresAndLabels.map(_._1).max.toInt -
         scoresAndLabels.map(_._1).min.toInt + 1)/100.0)})
 
-  val (positives, negatives) =  logisticFlag match{
+  val (positives, negatives) =  logisticFlag match {
     case true =>
       (scoresAndLabels.filter(_._2 == 1.0),
       scoresAndLabels.filter(_._2 == 0.0))
@@ -168,7 +168,7 @@ class BinaryClassificationMetrics(
 
     areaspline(roccurve.map(_._1), roccurve.map(_._2))
     title("Receiver Operating Characteristic: "+name+
-      ", Area under curve: "+areaUnderCurve(roc))
+      ", Area under curve: "+areaUnderCurve(roccurve))
     xAxis("False Positives")
     yAxis("True Positives")
   }

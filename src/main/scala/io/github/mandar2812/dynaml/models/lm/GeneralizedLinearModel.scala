@@ -8,10 +8,12 @@
 
 package io.github.mandar2812.dynaml.models.lm
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.evaluation.Metrics
 import io.github.mandar2812.dynaml.models.LinearModel
-import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
+
+import scala.util.Random
 
 /**
   * Created by mandar on 4/4/16.
@@ -25,6 +27,8 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
     with GloballyOptimizable {
 
   override protected val g = data
+
+  val task: String
 
   val h: (Double) => Double = identity _
 
@@ -40,7 +44,7 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
     params = initParams()
   }
 
-  def prepareData: T
+  def prepareData(d: Stream[(DenseVector[Double], Double)]): T
 
 
   /**
@@ -52,7 +56,7 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
     **/
   override def learn(): Unit = {
     params = optimizer.optimize(numPoints,
-      prepareData, initParams())
+      prepareData(g), initParams())
   }
 
   /**
@@ -82,15 +86,36 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
                       options: Map[String, String]): Double = {
 
     setState(h)
-    val designMatrix = DenseMatrix.vertcat[Double](
-      g.map(point => featureMap(point._1).toDenseMatrix):_*
-    )
+    val folds: Int = options("folds").toInt
+    val shuffle = Random.shuffle((1L to numPoints).toList)
 
-    val kernelTraining = designMatrix.t*designMatrix
-    val trainingLabels = DenseVector(g.map(_._2).toArray)
-    val noiseMat = DenseMatrix.eye[Double](dimensions)*h("regularization")
+    val avg_metrics: DenseVector[Double] = (1 to folds).map { a =>
+      //For the ath fold
+      //partition the data
+      //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
+      //as test and the rest as training
+      val test = shuffle.slice((a - 1) * numPoints / folds, a * numPoints / folds)
+      val (trainingData, testData) = g.zipWithIndex.partition((c) => !test.contains(c._2))
+      val tempParams = optimizer.optimize(numPoints,
+        prepareData(trainingData.map(_._1)),
+        initParams())
 
-    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining, noiseMat)
+      val scoresAndLabels = testData.map(_._1).map(p =>
+        (this.h(tempParams dot DenseVector(featureMap(p._1).toArray ++ Array(1.0))), p._2))
+
+      val metrics = Metrics("classification")(
+        scoresAndLabels.toList,
+        testData.length,
+        logFlag = true)
+      val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
+      res
+    }.reduce(_+_)
+    //Perform n-fold cross validation
+
+    task match {
+      case "regression" => avg_metrics(1)
+      case "classification" => 1 - avg_metrics(2)
+    }
   }
 
   override protected var current_state: Map[String, Double] = Map("regularization" -> 0.001)

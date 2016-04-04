@@ -34,29 +34,21 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
   extends GeneralizedLinearModel[(DenseMatrix[Double], DenseVector[Double])](data, numPoints, map)
     with GloballyOptimizable {
 
+  override val task = "regression"
+
   override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])] = new RegularizedLSSolver
 
 
-  override def prepareData = {
+  override def prepareData(d: Stream[(DenseVector[Double], Double)]) = {
     val designMatrix = DenseMatrix.vertcat[Double](
-      g.map(point => featureMap(point._1).toDenseMatrix):_*
+      d.map(point => featureMap(point._1).toDenseMatrix):_*
     )
 
     val responseVector = DenseVector.vertcat(
-      g.map(p => DenseVector(p._2)):_*
+      d.map(p => DenseVector(p._2)):_*
     )
     (designMatrix, responseVector)
   }
-
-  /**
-    * Predict the value of the
-    * target variable given a
-    * point.
-    *
-    **/
-  override def predict(point: DenseVector[Double]): Double =
-    params dot featureMap(point)
-
 }
