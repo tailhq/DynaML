@@ -320,10 +320,14 @@ object DynaMLPipe {
 
 
   def trainParametricModel[
-  G, T, Q, R, S,
-  M <: ParameterizedLearner[G, T, Q, R, S]](regParameter: Double) =
-    DataPipe((model: M) => {
-      model.setRegParam(regParameter).learn()
+  G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]
+  ](regParameter: Double, step: Double = 0.05,
+    maxIt: Int = 50, mini: Double = 1.0) = DataPipe((model: M) => {
+      model.setLearningRate(step)
+        .setMaxIterations(maxIt)
+        .setBatchFraction(mini)
+        .setRegParam(regParameter)
+        .learn()
       model
     })
 

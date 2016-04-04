@@ -26,10 +26,12 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
 
   override protected val g = data
 
+  val h: (Double) => Double = identity _
+
   def dimensions = featureMap(data.head._1).length
 
   override def initParams(): DenseVector[Double] =
-    DenseVector.ones[Double](dimensions)
+    DenseVector.ones[Double](dimensions + 1)
 
 
   override protected var params: DenseVector[Double] = initParams()
@@ -60,7 +62,7 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
     *
     **/
   override def predict(point: DenseVector[Double]): Double =
-    params dot featureMap(point)
+    h(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
 
   override protected var hyper_parameters: List[String] =
     List("regularization")
@@ -108,10 +110,14 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
 
 object GeneralizedLinearModel {
   def apply[T](data: Stream[(DenseVector[Double], Double)],
-            task: String = "regression",
-            map: (DenseVector[Double]) => DenseVector[Double] =
-            identity[DenseVector[Double]] _) = task match {
+               task: String = "regression",
+               map: (DenseVector[Double]) => DenseVector[Double] =
+               identity[DenseVector[Double]] _,
+               modeltype: String = "") = task match {
     case "regression" => new RegularizedGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
-    case "classification" => new LogisticGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
+    case "classification" => task match {
+      case "probit" => new ProbitGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
+      case _ => new LogisticGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
+    }
   }
 }

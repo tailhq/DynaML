@@ -31,9 +31,11 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
                   numPoints: Int,
                   map: (DenseVector[Double]) => DenseVector[Double] =
                   identity[DenseVector[Double]] _)
-  extends GeneralizedLinearModel[Stream[(DenseVector[Double], Double)]](data, numPoints, map) {
+  extends GeneralizedLinearModel[
+    Stream[(DenseVector[Double], Double)]
+    ](data, numPoints, map) {
 
-  val h: (Double) => Double = (x) => sigmoid(x)
+  override val h: (Double) => Double = (x) => sigmoid(x)
 
   override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
@@ -41,15 +43,6 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
     new GradientDescent(new LogisticGradient, new SquaredL2Updater)
 
   override def prepareData = g.map(point => (featureMap(point._1), point._2))
-
-  /**
-    * Predict the value of the
-    * target variable given a
-    * point.
-    *
-    **/
-  override def predict(point: DenseVector[Double]): Double =
-    h(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
 
 }
 
@@ -62,7 +55,8 @@ class ProbitGLM(data: Stream[(DenseVector[Double], Double)],
 
   private val standardGaussian = new NormalDistribution(0, 1.0)
 
-  override val h = (x: Double) => standardGaussian.cumulativeProbability(x)
+  override val h = (x: Double) =>
+    standardGaussian.cumulativeProbability(x)
 
   override protected val optimizer =
     new GradientDescent(

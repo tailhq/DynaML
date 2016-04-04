@@ -150,7 +150,7 @@ object GradientDescent {
     var count = 1
     var oldW: DenseVector[Double] = initial
     var newW = oldW
-    logger.log(Priority.INFO, "Training model using SGD")
+    logger.info("Training model using SGD")
     while(count <= numIterations) {
       val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
       var cumLoss: Double = 0.0

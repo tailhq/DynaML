@@ -21,10 +21,10 @@ package io.github.mandar2812.dynaml.examples
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.evaluation.BinaryClassificationMetrics
 import io.github.mandar2812.dynaml.kernels.LocalSVMKernel
-import io.github.mandar2812.dynaml.models.lm.{LogisticGLM, ProbitGLM}
+import io.github.mandar2812.dynaml.models.lm.{GeneralizedLinearModel, LogisticGLM, ProbitGLM}
 import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
 import io.github.mandar2812.dynaml.models.svm.DLSSVM
-import io.github.mandar2812.dynaml.pipes.{DataPipe, DynaMLPipe, StreamDataPipe}
+import io.github.mandar2812.dynaml.pipes._
 
 /**
   * Created by mandar on 11/1/16.
@@ -135,29 +135,30 @@ object TestLogisticWineQuality {
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
 
-    val modelTrainTest =
-      (trainTest: ((Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)]),
-        (DenseVector[Double], DenseVector[Double]))) => {
+    val modelpipe = new GLMPipe[
+      Stream[(DenseVector[Double], Double)],
+      ((Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+        (DenseVector[Double], DenseVector[Double]))
+      ]((tt: ((Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+      (DenseVector[Double], DenseVector[Double]))) => tt._1._1,
+      task = "classification", modelType = modelType) >
+      DynaMLPipe.trainParametricModel[
+        Stream[(DenseVector[Double], Double)],
+        DenseVector[Double], DenseVector[Double], Double,
+        Stream[(DenseVector[Double], Double)],
+        GeneralizedLinearModel[Stream[(DenseVector[Double], Double)]]
+        ](regularization, stepSize, maxIt, mini)
 
-        val model = modelType match {
-          case "logistic" => new LogisticGLM(trainTest._1._1, training)
-          case "probit" => new ProbitGLM(trainTest._1._1, training)
-        }
-
-        model.setLearningRate(stepSize)
-          .setMaxIterations(maxIt)
-          .setBatchFraction(mini)
-          .setRegParam(regularization)
-          .learn()
-
+    val testPipe =  DataPipe(
+      (modelAndData: (GeneralizedLinearModel[Stream[(DenseVector[Double], Double)]],
+        Stream[(DenseVector[Double], Double)])) => {
 
         val pipe1 = StreamDataPipe((couple: (DenseVector[Double], Double)) => {
-          (model.predict(couple._1), couple._2)
+          (modelAndData._1.predict(couple._1), couple._2)
         })
 
         val scoresAndLabelsPipe = pipe1
-        val scoresAndLabels = scoresAndLabelsPipe.run(trainTest._1._2).toList
+        val scoresAndLabels = scoresAndLabelsPipe.run(modelAndData._2).toList
 
         val metrics = new BinaryClassificationMetrics(
           scoresAndLabels,
@@ -167,7 +168,8 @@ object TestLogisticWineQuality {
         metrics.setName(wineType + " wine quality")
         metrics.print()
         metrics.generatePlots()
-      }
+
+      })
 
     val preProcessPipe = DynaMLPipe.fileToStream >
       DynaMLPipe.dropHead >
@@ -180,7 +182,11 @@ object TestLogisticWineQuality {
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
       DynaMLPipe.splitTrainingTest(training, test) >
       DynaMLPipe.featuresGaussianStandardization >
-      DataPipe(modelTrainTest)
+      BifurcationPipe(modelpipe,
+        DataPipe((tt: (
+          (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+            (DenseVector[Double], DenseVector[Double]))) => tt._1._2)) >
+      testPipe
 
     trainTestPipe run
       ("data/winequality-" + wineType + ".csv",
