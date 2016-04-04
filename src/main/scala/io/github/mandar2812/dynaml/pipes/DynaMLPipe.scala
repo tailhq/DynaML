@@ -20,8 +20,9 @@ package io.github.mandar2812.dynaml.pipes
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
+import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
 
@@ -317,10 +318,19 @@ object DynaMLPipe {
   def duplicate[Source, Destination](pipe: DataPipe[Source, Destination]) =
     DataPipe(pipe, pipe)
 
-  def GPTune[M <: AbstractGPRegressionModel[
-    Seq[(DenseVector[Double], Double)],
-    DenseVector[Double]]](globalOpt: String,
-                          grid: Int, step: Double) =
+
+  def trainParametricModel[
+  G, T, Q, R, S,
+  M <: ParameterizedLearner[G, T, Q, R, S]](regParameter: Double) =
+    DataPipe((model: M) => {
+      model.setRegParam(regParameter).learn()
+      model
+    })
+
+
+  def modelTuning[M <: GloballyOptWithGrad](startingState: Map[String, Double],
+                                            globalOpt: String = "GS",
+                                            grid: Int = 3, step: Double = 0.02) =
     DataPipe((model: M) => {
       val gs = globalOpt match {
         case "GS" => new GridSearch[M](model)
@@ -330,13 +340,18 @@ object DynaMLPipe {
 
         case "ML" => new GPMLOptimizer[DenseVector[Double],
           Seq[(DenseVector[Double], Double)], M](model)
+
+        case "CSA" => new CoupledSimulatedAnnealing(model)
+          .setGridSize(grid)
+          .setStepSize(step)
+          .setLogScale(false)
       }
 
-      val startConf = model.covariance.state ++ model.noiseModel.state
-      gs.optimize(startConf, Map("tolerance" -> "0.0001",
+      gs.optimize(startingState, Map("tolerance" -> "0.0001",
         "step" -> step.toString,
         "maxIterations" -> grid.toString))
     })
+
 
   def GPRegressionTest[T <: AbstractGPRegressionModel[
     Seq[(DenseVector[Double], Double)],
@@ -345,7 +360,7 @@ object DynaMLPipe {
     (trainTest: (Stream[(DenseVector[Double], Double)],
       (DenseVector[Double], DenseVector[Double]))) => {
 
-      val res = model.test(trainTest._1.toSeq)
+      val res = model.test(trainTest._1)
       val scoresAndLabelsPipe =
         DataPipe(
           (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>

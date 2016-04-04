@@ -18,10 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
 
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.models._
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
+import io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel
 
 /**
   * Top level trait for Pipes involving ML models.
@@ -40,7 +41,7 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   DenseVector[Double]], Source](pre: (Source) => Seq[(DenseVector[Double], Double)],
                                 cov: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                                 n: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                                order: Int, ex: Int)
+                                order: Int = 0, ex: Int = 0)
   extends ModelPipe[Source, Seq[(DenseVector[Double], Double)],
     DenseVector[Double], Double, M] {
 
@@ -48,6 +49,22 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
 
   override def run(data: Source): M =
     AbstractGPRegressionModel[M](preProcess(data), cov, n, order, ex)
+
+}
+
+class GLMPipe[T, Source](pre: (Source) => Stream[(DenseVector[Double], Double)],
+                         map: (DenseVector[Double]) => (DenseVector[Double]) = identity _,
+                         task: String = "regression") extends
+  ModelPipe[Source, Stream[(DenseVector[Double], Double)],
+    DenseVector[Double], Double,
+    GeneralizedLinearModel[T]] {
+
+  override val preProcess = pre
+
+  override def run(data: Source) = {
+    val training = preProcess(data)
+    GeneralizedLinearModel[T](training, task, map)
+  }
 
 }
 

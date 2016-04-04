@@ -102,6 +102,7 @@ with GloballyOptWithGrad {
   override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
 
     covariance.setHyperParameters(h)
+    noiseModel.setHyperParameters(h)
 
     val training = dataAsIndexSeq(g)
     val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)

@@ -105,3 +105,13 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
     this
   }
 }
+
+object GeneralizedLinearModel {
+  def apply[T](data: Stream[(DenseVector[Double], Double)],
+            task: String = "regression",
+            map: (DenseVector[Double]) => DenseVector[Double] =
+            identity[DenseVector[Double]] _) = task match {
+    case "regression" => new RegularizedGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
+    case "classification" => new LogisticGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
+  }
+}

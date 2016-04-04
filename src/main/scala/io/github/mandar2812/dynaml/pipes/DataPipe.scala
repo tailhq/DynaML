@@ -89,3 +89,14 @@ object DataPipe {
   }
 }
 
+object BifurcationPipe {
+
+  def apply[Source,
+  Destination1,
+  Destination2](pipe1: DataPipe[Source, Destination1],
+                pipe2: DataPipe[Source, Destination2]):
+  BifurcationPipe[Source, Destination1, Destination2] = {
+
+    DataPipe((x: Source) => (pipe1.run(x), pipe2.run(x)))
+  }
+}

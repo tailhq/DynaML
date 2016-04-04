@@ -23,7 +23,7 @@ import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
-import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe, DynaMLPipe, GPRegressionPipe}
 
 /**
   * Created by mandar on 15/12/15.
@@ -89,47 +89,41 @@ object TestGPHousing {
                     grid: Int = 5, step: Double = 0.2,
                     globalOpt: String = "ML", opt: Map[String, String]): Unit = {
 
-    val modelTrainTest =
-      (trainTest: ((Stream[(DenseVector[Double], Double)],
+
+    val startConf = kernel.state ++ noise.state
+
+    val modelpipe = new GPRegressionPipe[
+      GPRegression, ((Stream[(DenseVector[Double], Double)],
+      Stream[(DenseVector[Double], Double)]),
+      (DenseVector[Double], DenseVector[Double]))](
+      (tt: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
-        (DenseVector[Double], DenseVector[Double]))) => {
-        val model = new GPRegression(kernel, noise, trainingdata = trainTest._1._1.toSeq)
+        (DenseVector[Double], DenseVector[Double]))) => tt._1._1,
+      kernel, noise) >
+      DynaMLPipe.modelTuning(startConf, globalOpt, grid, step) >
+      DataPipe((modelCouple: (GPRegression, Map[String, Double])) => {
+        modelCouple._1.setState(modelCouple._2)
+        modelCouple._1
+      })
 
-        val gs = globalOpt match {
-          case "GS" => new GridSearch[model.type](model)
-            .setGridSize(grid)
-            .setStepSize(step)
-            .setLogScale(false)
-
-          case "ML" => new GPMLOptimizer[DenseVector[Double],
-            Seq[(DenseVector[Double], Double)],
-            GPRegression](model)
-        }
-
-        val startConf = kernel.state ++ noise.state
-        val (_, conf) = gs.optimize(startConf, opt)
-
-        model.setState(conf)
-
-        val res = model.test(trainTest._1._2.toSeq)
-        val scoresAndLabelsPipe =
-          DataPipe(
-            (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2)).toList) > DataPipe((list: List[(Double, Double)]) =>
-            list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
-              l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
-
-        val scoresAndLabels = scoresAndLabelsPipe.run(res)
-
+    val testPipe = DataPipe((testSample: (GPRegression,
+          (Stream[(DenseVector[Double], Double)],
+          (DenseVector[Double], DenseVector[Double]))
+          )) => (testSample._1.test(testSample._2._1), testSample._2._2)) >
+        DataPipe((res: (Seq[(DenseVector[Double], Double, Double, Double, Double)],
+          (DenseVector[Double], DenseVector[Double]))) =>
+          res._1.map(i => (i._3, i._2)).toList.map{l => (l._1*res._2._2(-1) + res._2._1(-1),
+            l._2*res._2._2(-1) + res._2._1(-1))}
+        ) > DataPipe((scoresAndLabels: List[(Double, Double)]) => {
         val metrics = new RegressionMetrics(scoresAndLabels,
           scoresAndLabels.length)
 
         metrics.setName("MEDV")
 
-        //println(scoresAndLabels)
         metrics.print()
         metrics.generatePlots()
-      }
+      })
+
 
     //Load Housing data into a stream
     //Extract the time and Dst values
@@ -146,7 +140,13 @@ object TestGPHousing {
     val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
       DynaMLPipe.splitTrainingTest(num_training, 506-num_training) >
       DynaMLPipe.trainTestGaussianStandardization >
-      DataPipe(modelTrainTest)
+      BifurcationPipe(
+        modelpipe,
+        DataPipe((tt: (
+          (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+            (DenseVector[Double], DenseVector[Double]))) => (tt._1._2, tt._2)
+        )
+      ) > testPipe
 
     trainTestPipe.run(("data/housing.data", "data/housing.data"))
 
