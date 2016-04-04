@@ -54,8 +54,7 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
 
 class GLMPipe[T, Source](pre: (Source) => Stream[(DenseVector[Double], Double)],
                          map: (DenseVector[Double]) => (DenseVector[Double]) = identity _,
-                         task: String = "regression",
-                         modelType: String = "") extends
+                         task: String = "regression", modelType: String = "") extends
   ModelPipe[Source, Stream[(DenseVector[Double], Double)],
     DenseVector[Double], Double,
     GeneralizedLinearModel[T]] {
