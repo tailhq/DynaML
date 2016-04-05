@@ -107,8 +107,8 @@ In case of LSSVM for binary classification one solves (by applying the [KKT](htt
 
 $$
 	\begin{align}
-		& \min_{w,b,e} \ \mathcal{J}_P(w,e) = \frac{1}{2}w^Tw + \gamma \frac{1}{2} \sum_{k = 1}^{N} e^2_k \\
-		& y_k[w^T\varphi(x) + b] = 1 - e_k, \ k =1, \cdots, N 
+		& \min_{w,b,e} \ \mathcal{J}_P(w,e) = \frac{1}{2}w^\intercal w + \gamma \frac{1}{2} \sum_{k = 1}^{N} e^2_k \\
+		& y_k[w^\intercal \varphi(x) + b] = 1 - e_k, \ k =1, \cdots, N 
 	\end{align}
 $$
 
@@ -155,8 +155,8 @@ In case of LSSVM regression one solves (by applying the [KKT](https://en.wikiped
 
 $$
 	\begin{align}
-		& \min_{w,b,e} \ \mathcal{J}_P(w,e) = \frac{1}{2}w^Tw + \gamma \frac{1}{2} \sum_{k = 1}^{N} e^2_k \\
-		& y_k = w^T\varphi(x) + b + e_k, \ k =1, \cdots, N 
+		& \min_{w,b,e} \ \mathcal{J}_P(w,e) = \frac{1}{2}w^\intercal w + \gamma \frac{1}{2} \sum_{k = 1}^{N} e^2_k \\
+		& y_k = w^\intercal \varphi(x) + b + e_k, \ k =1, \cdots, N 
 	\end{align}
 $$
 
