@@ -56,7 +56,7 @@ with GloballyOptWithGrad {
 
   override val covariance = cov
 
-  override val noiseModel = n
+  val noiseModel: CovarianceFunction[I, Double, DenseMatrix[Double]] = n
 
   override protected val g: T = data
 
@@ -207,6 +207,22 @@ with GloballyOptWithGrad {
     logger.info("Generating error bars")
     val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
+  }
+
+
+  override def predict(point: I): Double = predictionWithErrorBars(Seq(point), 1).head._2
+
+  /**
+    * Returns a prediction with error bars for a test set of indexes and labels.
+    * (Index, Actual Value, Prediction, Lower Bar, Higher Bar)
+    * */
+  def test(testData: T): Seq[(I, Double, Double, Double, Double)] = {
+    logger.info("Generating predictions for test set")
+    //Calculate the posterior predictive distribution for the test points.
+    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 2)
+    //Collate the test data with the predictions and error bars
+    dataAsSeq(testData).zip(predictionWithError).map(i => (i._1._1, i._1._2,
+      i._2._2, i._2._3, i._2._4))
   }
 
   /**

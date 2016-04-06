@@ -32,8 +32,6 @@ abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T, I, Y] {
    * */
   val covariance: CovarianceFunction[I, K, M]
 
-  val noiseModel: CovarianceFunction[I, K, M]
-
   /** Calculates posterior predictive distribution for
   * a particular set of test data points.
   *
@@ -65,19 +63,5 @@ abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T, I, Y] {
     * */
   def dataAsIndexSeq(data: T): Seq[I] = dataAsSeq(data).map(_._1)
 
-  /**
-    * Returns a prediction with error bars for a test set of indexes and labels.
-    * (Index, Actual Value, Prediction, Lower Bar, Higher Bar)
-    * */
-  def test(testData: T): Seq[(I, Y, Y, Y, Y)] = {
-    logger.info("Generating predictions for test set")
-    //Calculate the posterior predictive distribution for the test points.
-    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 2)
-    //Collate the test data with the predictions and error bars
-    dataAsSeq(testData).zip(predictionWithError).map(i => (i._1._1, i._1._2,
-      i._2._2, i._2._3, i._2._4))
-  }
-
-  override def predict(point: I): Y = predictionWithErrorBars(Seq(point), 1).head._2
 
 }
