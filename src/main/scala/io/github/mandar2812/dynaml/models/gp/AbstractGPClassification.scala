@@ -26,15 +26,25 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
   *
   * Skeleton of a Gaussian Process binary classification
   * model.
+  *
+  * @tparam T The type of data structure holding the training instances
+  *
+  * @tparam I The type of input features (also called index set)
+  *
+  * @tparam P The data type storing all the relevant information
+  *           about the posterior mode of the nuisance function.
+  *
   */
 abstract class AbstractGPClassification[T, I, P](data: T) extends
   GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
   (DenseVector[Double], DenseMatrix[Double])] with
-  ParameterizedLearner[T, P, I, Double, Stream[(I, Double)]] {
+  ParameterizedLearner[T, P, I, Double,
+    (DenseMatrix[Double], DenseVector[Double])] {
 
 
   override protected val g: T = data
 
+  val num_points = dataAsSeq(g).length
 
   override protected var params: P = initParams()
 
@@ -45,13 +55,15 @@ abstract class AbstractGPClassification[T, I, P](data: T) extends
     *
     **/
   override def learn(): Unit = {
-    val procdata = dataAsSeq(g)
-    params = optimizer.optimize(procdata.length,
-      procdata.toStream,
-      initParams())
+    val procdata = dataAsIndexSeq(g)
+    val targets = DenseVector(dataAsSeq(g).map(_._2).toArray)
+    val kernelMat = covariance.buildKernelMatrix(procdata, procdata.length).getKernelMatrix()
+    params = optimizer.optimize(
+      num_points,
+      (kernelMat, targets),
+      initParams()
+    )
   }
-
-
 
 
 }
