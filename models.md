@@ -211,6 +211,8 @@ _Gaussian Processes_ are powerful non-parametric predictive models, which repres
 
 <br/>
 
+#### Gaussian Process Regression
+
 $$
 	\begin{align}
 		& y = f(x) + \epsilon \\
@@ -224,7 +226,7 @@ $$
 In the presence of training data
 
 $$
-	X = (x_1, x_2, \cdot , x_n) \ y = (y_1, y_2, \cdot , y_n)
+	X = (x_1, x_2, \cdot , x_n) \ \mathbf{y} = (y_1, y_2, \cdot , y_n)
 $$
 
 Inference is carried out by calculating the posterior predictive distribution over the unknown targets
@@ -244,6 +246,40 @@ $$
 	\end{align}
 $$
 
+<br/>
+
+#### Gaussian Process Binary Classification
+
+Gaussian process models for classification are formulated using two components.
+
+- A latent (nuisance) function $$f(x)$$
+- A transfer function $$\sigma(.)$$ which transforms the value $$f(x)$$ to a class probability
+
+$$
+	\begin{align}
+		& \pi(x) \overset{\triangle}{=} p(y = +1| x) = \sigma(f(x)) \\
+		& f \sim \mathcal{GP}(m(x), C(x,x')) \\
+	\end{align}
+$$
+
+Inference is divided into two steps.
+
+- Computing the distribution of the latent function corresponding to a test case
+
+$$
+\begin{align}
+	& p(f_*|X, \mathbf{y}, x_*) = \int p(f_*|X, \mathbf{y}, x_*, \mathbf{f}) p(\mathbf{f}|X, \mathbf{y}) d\mathbf{f} \\
+	& p(\mathbf{f}|X, \mathbf{y}) = p(\mathbf{y}| \mathbf{f}) p(\mathbf{f}|X)/ p(\mathbf{y}|X)
+\end{align}
+
+$$
+
+- Generating probabilistic prediction for a test case.
+
+$$
+\bar{\pi_*} \overset{\triangle}{=} p(y_* = +1| X, \mathbf{y}, x_*) = \int \sigma(f_*) p(f_*|X, \mathbf{y}, x_*) df_*
+$$
+
 
 #### Gaussian Processes in DynaML
 
@@ -253,6 +289,15 @@ val kernel = new RBFKernel(2.5)
 val noiseKernel = new DiracKernel(1.5)
 val model = new GPRegression(kernel, noiseKernel, trainingData)
 ```
+
+
+```scala
+val trainingdata: Stream[(DenseVector[Double], Double)] = ...
+val kernel = new RBFKernel(2.5)
+val likelihood = new VectorIIDSigmoid()
+val model = new LaplaceBinaryGPC(trainingData, kernel, likelihood)
+```
+
 
 To learn more about extending the Gaussian Process base classes/traits refer to the [wiki](https://github.com/mandar2812/DynaML/wiki/Gaussian-Processes).
 
