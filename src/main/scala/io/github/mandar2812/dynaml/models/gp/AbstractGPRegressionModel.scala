@@ -197,7 +197,7 @@ with GloballyOptWithGrad {
     * 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
     * 3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
     **/
-  override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int):
+  def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int):
   Seq[(I, Double, Double, Double)] = {
 
     val posterior = predictiveDistribution(testData)

@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.{DenseMatrix, DenseVector}
+import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 
 /**
@@ -35,11 +36,9 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
   *           about the posterior mode of the nuisance function.
   *
   */
-abstract class AbstractGPClassification[T, I, P](data: T) extends
-  GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
-  (DenseVector[Double], DenseMatrix[Double])] with
-  ParameterizedLearner[T, P, I, Double,
-    (DenseMatrix[Double], DenseVector[Double])] {
+abstract class AbstractGPClassification[T, I, P](data: T, kernel: LocalScalarKernel[I])
+  extends GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double], DenseVector[Double]]
+    with ParameterizedLearner[T, P, I, Double, (DenseMatrix[Double], DenseVector[Double])] {
 
 
   override protected val g: T = data
@@ -48,16 +47,28 @@ abstract class AbstractGPClassification[T, I, P](data: T) extends
 
   override protected var params: P = initParams()
 
+
+  override val mean: (I) => Double = _ => 0
+
+
+  override val covariance = kernel
+
   /**
     * Learn the Laplace approximation
     * to the posterior mean of the nuisance
     * function f(x) ~ GP(m(x), K(x, x'))
+    * Here we learn p(f|X,y) by approximating
+    * it with a gaussian N(mean(f), Var(f))
     *
+    * Note that the routine optimize() only
+    * returns the value of mean(f)
     **/
   override def learn(): Unit = {
     val procdata = dataAsIndexSeq(g)
     val targets = DenseVector(dataAsSeq(g).map(_._2).toArray)
-    val kernelMat = covariance.buildKernelMatrix(procdata, procdata.length).getKernelMatrix()
+    val kernelMat = covariance.buildKernelMatrix(
+      procdata, procdata.length)
+      .getKernelMatrix()
     params = optimizer.optimize(
       num_points,
       (kernelMat, targets),
@@ -65,5 +76,14 @@ abstract class AbstractGPClassification[T, I, P](data: T) extends
     )
   }
 
-
+  /**
+    * Predict the value of the
+    * target variable given a
+    * point.
+    *
+    * Returns p(y = 1| x)
+    *
+    **/
+  override def predict(point: I): Double =
+    predictiveDistribution(Seq(point))(0)
 }

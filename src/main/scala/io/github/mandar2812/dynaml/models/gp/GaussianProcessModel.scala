@@ -42,14 +42,6 @@ abstract class GaussianProcessModel[T, I, Y, K, M, W] extends Model[T, I, Y] {
 
 
   /**
-    * Draw three predictions from the posterior predictive distribution
-    * 1) Mean or MAP estimate Y
-    * 2) Y- : The lower error bar estimate (mean - )
-    * 3) Y+ : The upper error bar.
-    * */
-  def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int): Seq[(I, Y, Y, Y)]
-
-  /**
     * Convert from the underlying data structure to
     * Seq[(I, Y)] where I is the index set of the GP
     * and Y is the value/label type.

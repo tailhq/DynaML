@@ -15,7 +15,8 @@ import breeze.numerics.sqrt
   * Created by mandar on 6/4/16.
   */
 class LaplacePosteriorMode(l: Likelihood[DenseVector[Double],
-  DenseVector[Double], DenseMatrix[Double]]) extends
+  DenseVector[Double], DenseMatrix[Double],
+  (DenseVector[Double], DenseVector[Double])]) extends
   RegularizedOptimizer[DenseVector[Double], DenseVector[Double],
     Double, (DenseMatrix[Double], DenseVector[Double])]{
 
