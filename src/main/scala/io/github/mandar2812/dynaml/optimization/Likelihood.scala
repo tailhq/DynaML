@@ -168,7 +168,7 @@ class VectorIIDProbit extends
   override def gaussianExpectation(normalDistParams: (DenseVector[Double],
     DenseVector[Double])): DenseVector[Double] = {
     DenseVector((normalDistParams._1.toArray zip normalDistParams._2.toArray).map((couple) => {
-      val gamma = math.sqrt(1.0 + (math.Pi*couple._2/8.0))
+      val gamma = math.sqrt(1.0 + couple._2)
       standardGaussian.cumulativeProbability(couple._1/gamma)
     }))
   }
