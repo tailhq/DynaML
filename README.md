@@ -15,7 +15,7 @@ Currently DynaML supports.
 * Regularized Ordinary Least Squares
 * Logistic and Probit Models for binary classification
 * Regression and Classification with kernel based Dual LS-SVM
-* Regression with Gaussian Processes
+* Regression and Classification with Gaussian Processes
 * Feed forward Neural Networks
 * Committee Models
   - Neural Committee Models
