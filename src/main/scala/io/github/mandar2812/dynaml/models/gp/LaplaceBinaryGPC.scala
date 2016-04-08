@@ -31,12 +31,8 @@ class LaplaceBinaryGPC(data: Stream[(DenseVector[Double], Double)],
                                 l: Likelihood[DenseVector[Double], DenseVector[Double], DenseMatrix[Double],
                                   (DenseVector[Double], DenseVector[Double])]) extends
   AbstractGPClassification[Stream[(DenseVector[Double], Double)],
-    DenseVector[Double], DenseVector[Double]](data, kernel) {
+    DenseVector[Double]](data, kernel, l) {
 
-  override def initParams() = DenseVector.zeros[Double](num_points)
-
-
-  override protected val optimizer = new LaplacePosteriorMode(l)
 
   /** Calculates posterior predictive distribution for
     * a particular set of test data points.

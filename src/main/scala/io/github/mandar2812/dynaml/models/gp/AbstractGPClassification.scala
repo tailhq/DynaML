@@ -18,9 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, det, inv}
+import breeze.numerics._
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
+import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LaplacePosteriorMode, Likelihood}
 
 /**
   * @author mandar on 6/4/16.
@@ -32,26 +34,30 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
   *
   * @tparam I The type of input features (also called index set)
   *
-  * @tparam P The data type storing all the relevant information
-  *           about the posterior mode of the nuisance function.
-  *
   */
-abstract class AbstractGPClassification[T, I, P](data: T, kernel: LocalScalarKernel[I])
+abstract class AbstractGPClassification[T, I](
+  data: T, kernel: LocalScalarKernel[I],
+  likelihood: Likelihood[DenseVector[Double], DenseVector[Double],
+    DenseMatrix[Double], (DenseVector[Double], DenseVector[Double])])
   extends GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double], DenseVector[Double]]
-    with ParameterizedLearner[T, P, I, Double, (DenseMatrix[Double], DenseVector[Double])] {
+    with ParameterizedLearner[T, DenseVector[Double], I,
+    Double, (DenseMatrix[Double], DenseVector[Double])]
+    with GloballyOptimizable {
 
 
   override protected val g: T = data
 
-  val num_points = dataAsSeq(g).length
+  val npoints = dataAsSeq(g).length
 
-  override protected var params: P = initParams()
+  override def initParams() = DenseVector.zeros[Double](npoints)
 
+  override protected var params: DenseVector[Double] = initParams()
 
   override val mean: (I) => Double = _ => 0
 
-
   override val covariance = kernel
+
+  override protected val optimizer = new LaplacePosteriorMode[I](likelihood)
 
   /**
     * Learn the Laplace approximation
@@ -70,7 +76,7 @@ abstract class AbstractGPClassification[T, I, P](data: T, kernel: LocalScalarKer
       procdata, procdata.length)
       .getKernelMatrix()
     params = optimizer.optimize(
-      num_points,
+      npoints,
       (kernelMat, targets),
       initParams()
     )
@@ -86,4 +92,81 @@ abstract class AbstractGPClassification[T, I, P](data: T, kernel: LocalScalarKer
     **/
   override def predict(point: I): Double =
     predictiveDistribution(Seq(point))(0)
+
+  /**
+    * Set the model "state" which
+    * contains values of its hyper-parameters
+    * with respect to the covariance and noise
+    * kernels.
+    * */
+  def setState(s: Map[String, Double]): this.type = {
+    covariance.setHyperParameters(s)
+    current_state = covariance.state
+    this
+  }
+
+  override protected var hyper_parameters: List[String] = covariance.hyper_parameters
+  override protected var current_state: Map[String, Double] = covariance.state
+
+  /**
+    * Calculates the energy of the configuration,
+    * in most global optimization algorithms
+    * we aim to find an approximate value of
+    * the hyper-parameters such that this function
+    * is minimized.
+    *
+    * @param h       The value of the hyper-parameters in the configuration space
+    * @param options Optional parameters about configuration
+    * @return Configuration Energy E(h)
+    **/
+  override def energy(h: Map[String, Double],
+                      options: Map[String, String]): Double = {
+
+    setState(h)
+
+    val training = dataAsIndexSeq(g)
+    val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
+
+    val kernelTraining: DenseMatrix[Double] =
+      covariance.buildKernelMatrix(training, npoints).getKernelMatrix()
+
+    AbstractGPClassification.logLikelihood(trainingLabels,
+      kernelTraining, params,
+      optimizer.likelihood)
+  }
+}
+
+object AbstractGPClassification {
+
+  /**
+    * Calculate the marginal log likelihood
+    * of the training data for a pre-initialized
+    * kernel and noise matrices.
+    *
+    * @param trainingData The function values assimilated as a [[DenseVector]]
+    *
+    * @param kernelMatrix The kernel matrix of the training features
+    *
+    * @param f The estimation of mean(f); from the Laplace approximation
+    * */
+  def logLikelihood(trainingData: DenseVector[Double],
+                    kernelMatrix: DenseMatrix[Double],
+                    f : DenseVector[Double],
+                    likelihood: Likelihood[
+                      DenseVector[Double],
+                      DenseVector[Double],
+                      DenseMatrix[Double],
+                      (DenseVector[Double],
+                        DenseVector[Double])]): Double = {
+
+    val kernelTraining: DenseMatrix[Double] = kernelMatrix
+    val Kinv = inv(kernelTraining)
+
+    val wMat = likelihood.hessian(trainingData, f) * -1.0
+    val wMatsq = sqrt(wMat)
+
+    0.5*(f.t * (Kinv * f) + math.log(det(kernelTraining))) -
+      likelihood.loglikelihood(trainingData, f)
+  }
+
 }

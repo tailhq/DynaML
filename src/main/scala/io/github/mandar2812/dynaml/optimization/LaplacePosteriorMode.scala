@@ -14,10 +14,10 @@ import breeze.numerics.sqrt
 /**
   * Created by mandar on 6/4/16.
   */
-class LaplacePosteriorMode(l: Likelihood[DenseVector[Double],
+class LaplacePosteriorMode[I](l: Likelihood[DenseVector[Double],
   DenseVector[Double], DenseMatrix[Double],
   (DenseVector[Double], DenseVector[Double])]) extends
-  RegularizedOptimizer[DenseVector[Double], DenseVector[Double],
+  RegularizedOptimizer[DenseVector[Double], I,
     Double, (DenseMatrix[Double], DenseVector[Double])]{
 
   val likelihood = l

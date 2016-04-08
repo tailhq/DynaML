@@ -72,10 +72,10 @@ with GloballyOptWithGrad {
     * with respect to the covariance and noise
     * kernels.
     * */
-  def setState(s: Map[String, Double]): this.type ={
+  def setState(s: Map[String, Double]): this.type = {
     covariance.setHyperParameters(s)
     noiseModel.setHyperParameters(s)
-    current_state = cov.state ++ noiseModel.state
+    current_state = covariance.state ++ noiseModel.state
     this
   }
 
@@ -101,9 +101,7 @@ with GloballyOptWithGrad {
     **/
   override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
 
-    covariance.setHyperParameters(h)
-    noiseModel.setHyperParameters(h)
-
+    setState(h)
     val training = dataAsIndexSeq(g)
     val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
 
