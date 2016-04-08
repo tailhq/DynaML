@@ -69,7 +69,7 @@ The [_wine quality_](https://archive.ics.uci.edu/ml/datasets/Wine+Quality) data 
 
 ```scala
 TestNNWineQuality(hidden = 1, nCounts = List(2),
-acts = List("linear"), stepSize = 0.05, maxIt = 30,
+acts = List("linear", "logsig"), stepSize = 0.05, maxIt = 80,
 mini = 1.0, alpha = 0.55,
 training = 1000, test = 600,
 regularization = 0.001,
