@@ -32,9 +32,9 @@ In this example we make use of the *pipes* module of DynaML which enables us to 
 The Santa Fe laser data is a standard benchmark data set in system identification. It serves as good starting point to start exploring time series models. It records only one observable (laser intensity), has little noise and is generated from a known physics dynamical process. Run the example at the DynaML repl prompt as follows.
 
 ```scala
-SantaFeLaser(new RBFKernel(2.5), new DiracKernel(1.0),
-opt = Map("globalOpt" -> "GS", "grid" -> "10", "step" -> "0.1"),
-num_training = 200, num_test = 500, deltaT = 5)
+SantaFeLaser(new RBFKernel(1.5), new DiracKernel(1.0),
+opt = Map("globalOpt" -> "GS", "grid" -> "9", "step" -> "0.1"),
+num_training = 200, num_test = 500, deltaT = 2)
 ```
 
 {% gist mandar2812/0ac7ea02b73548c2e61d %}
