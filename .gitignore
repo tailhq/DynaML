@@ -16,6 +16,7 @@ target/*
 release.properties
 *.log
 data/results*
+data/dst_*.txt
 _site
 data/MagicGamma.csv
 data/Adult.csv
