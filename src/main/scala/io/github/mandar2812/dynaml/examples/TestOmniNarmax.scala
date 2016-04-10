@@ -189,7 +189,6 @@ object TestOmniTL {
     val dayStart = greg.get(Calendar.DAY_OF_YEAR)
     val hourStart = greg.get(Calendar.HOUR_OF_DAY)
     val stampStart = (dayStart * 24) + hourStart
-    val yearTest = greg.get(Calendar.YEAR)
 
 
     val yearStart = greg.get(Calendar.YEAR).toString
@@ -202,19 +201,126 @@ object TestOmniTL {
 
     val fileNameS = "dst_"+yearStart+"_"+monthStart+".txt"
 
-
-
-
     greg.setTime(dateE)
     val dayEnd = greg.get(Calendar.DAY_OF_YEAR)
     val hourEnd = greg.get(Calendar.HOUR_OF_DAY)
     val stampEnd = (dayEnd * 24) + hourEnd
 
+    val yearEnd = greg.get(Calendar.YEAR).toString
+
+    val monthEnd = if(greg.get(Calendar.MONTH) < 9) {
+      "0"+(greg.get(Calendar.MONTH)+1).toString
+    } else {
+      (greg.get(Calendar.MONTH)+1).toString
+    }
+
+    val fileNameE = "dst_"+yearEnd+"_"+monthEnd+".txt"
 
 
+    // Create two pipes pipeTL and pipeDst
 
 
+    val pipeDst = DynaMLPipe.fileToStream >
+      DynaMLPipe.replaceWhiteSpaces > DynaMLPipe.extractTrainingFeatures(
+      List(0, 1, 2, 40),
+      Map(
+        16 -> "999.9", 16 -> "999.9",
+        21 -> "999.9", 24 -> "9999.",
+        23 -> "999.9", 40 -> "99999",
+        22 -> "9999999.", 25 -> "999.9",
+        28 -> "99.99", 27 -> "9.999", 39 -> "999",
+        45 -> "99999.99", 46 -> "99999.99",
+        47 -> "99999.99")) >
+      DynaMLPipe.removeMissingLines >
+      DynaMLPipe.extractTimeSeries((year,day,hour) => (day * 24) + hour) >
+      StreamDataPipe((couple: (Double, Double)) =>
+      couple._1 >= stampStart && couple._1 <= stampEnd) >
+      StreamDataPipe((couple: (Double, Double)) => {
+        couple._2
+      })
 
+
+    val preprocessTLFile = DynaMLPipe.fileToStream >
+      DynaMLPipe.dropHead >
+      DynaMLPipe.replaceWhiteSpaces >
+      StreamDataPipe((line: String) => {
+        //Split line using comma
+        val spl = line.split(",")
+        val datetime = spl.head
+        val datespl = datetime.split("-")
+
+        val hour = datespl.last.split(":").head.toDouble
+        val dayNum = datespl.head.split("/").last.toDouble
+
+        val dst = spl.last.toDouble
+        (dayNum*24 + hour,dst)
+      }) >
+      StreamDataPipe((couple: (Double, Double)) =>
+        couple._1 >= stampStart && couple._1 <= stampEnd) >
+      DataPipe((tlData: Stream[(Double, Double)]) => {
+        tlData.grouped(6).toStream.map{gr => (gr.head._1, gr.map(_._2).sum/gr.length.toDouble)}
+      })
+
+    val actualDst = pipeDst.run("data/omni2_"+yearStart+".csv")
+
+    val tlDstPrediction = if(fileNameS == fileNameE) {
+      val pipeTL = preprocessTLFile > StreamDataPipe((couple: (Double, Double)) => couple._2)
+      pipeTL.run("data/"+fileNameS)
+    } else {
+      val pipeTL = DataPipe(preprocessTLFile, preprocessTLFile) >
+        DataPipe((couple: (Stream[(Double, Double)], Stream[(Double, Double)])) => {
+          couple._1 ++ couple._2
+        }) >
+        StreamDataPipe((couple: (Double, Double)) => couple._2)
+      pipeTL.run(("data/"+fileNameS, "data/"+fileNameE))
+    }
+
+    val scoresAndLabels = tlDstPrediction zip actualDst
+
+    val metrics = new RegressionMetrics(scoresAndLabels.toList,
+      scoresAndLabels.length)
+
+
+    metrics.print()
+    metrics.generatePlots()
+
+    //Plotting time series prediction comparisons
+    line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
+    hold()
+    line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
+    legend(List("Time Series", "Predicted Time Series (one hour ahead)"))
+    unhold()
+
+
+    logger.info("Printing One Step Ahead (OSA) Performance Metrics")
+    metrics.print()
+    val (timeObs, timeModel, peakValuePred, peakValueAct) = names(40) match {
+      case "Dst" =>
+        (scoresAndLabels.map(_._2).zipWithIndex.min._2,
+          scoresAndLabels.map(_._1).zipWithIndex.min._2,
+          scoresAndLabels.map(_._1).min,
+          scoresAndLabels.map(_._2).min)
+      case _ =>
+        (scoresAndLabels.map(_._2).zipWithIndex.max._2,
+          scoresAndLabels.map(_._1).zipWithIndex.max._2,
+          scoresAndLabels.map(_._1).max,
+          scoresAndLabels.map(_._2).max)
+    }
+
+    logger.info("Timing Error; OSA Prediction: "+(timeObs-timeModel))
+
+    line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
+    hold()
+    line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
+    unhold()
+    Seq(
+      Seq(yearStart.toDouble, 1.0, scoresAndLabels.length.toDouble,
+        metrics.mae, metrics.rmse, metrics.Rsq,
+        metrics.corr, metrics.modelYield,
+        timeObs.toDouble - timeModel.toDouble,
+        peakValuePred,
+        peakValueAct)
+    )
 
   }
 
@@ -280,12 +386,12 @@ object TestOmniTL {
 }
 
 
-object DstNMExperiment {
+object DstNMTLExperiment {
 
-  def apply() = {
+  def apply(model: String = "NM") = {
     val writer =
       CSVWriter.open(
-        new File("data/OmniNMStormsRes.csv"),
+        new File("data/Omni"+model+"StormsRes.csv"),
         append = true)
 
     val stormsPipe =
@@ -305,7 +411,15 @@ object DstNMExperiment {
 
           val stormCategory = stormMetaFields(6)
 
-          val res = TestOmniNarmax(startDate+"/"+startHour, endDate+"/"+endHour)
+          val res = model match {
+            case "NM" => TestOmniNarmax(
+              startDate+"/"+startHour,
+              endDate+"/"+endHour)
+
+            case "TL" => TestOmniTL(
+              startDate+"/"+startHour,
+              endDate+"/"+endHour)
+          }
 
           val row = Seq(
             eventId, stormCategory, 1.0,
