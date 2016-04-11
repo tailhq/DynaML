@@ -354,7 +354,7 @@ object TestOmniAR {
               mpoRes
             )
 
-          case "predict" => scoresAndLabels.toSeq.map(i => Seq(i._2, i._1))
+          case "predict" => scoresAndLabels.map(i => Seq(i._2, i._1))
         }
       }
 
@@ -443,15 +443,20 @@ object DstARExperiment {
               startDate+"/"+startHour, endDate+"/"+endHour,
               kernel, modelOrder, 0, 0, new DiracKernel(2.0),
               40, options("grid").toInt, options("step").toDouble,
-              options("globalOpt"), options, action = "test")
+              options("globalOpt"), options, action = options("action"))
 
-            val row = Seq(
-              eventId, stormCategory, modelOrder,
-              res.head(4), res.head(7), res.head(9),
-              res.head.last-minDst, minDst, res.head(11)
-            )
+            if(options("action") == "test") {
+              val row = Seq(
+                eventId, stormCategory, modelOrder,
+                res.head(4), res.head(7), res.head(9),
+                res.head.last-minDst, minDst, res.head(11)
+              )
 
-            writer.writeRow(row)
+              writer.writeRow(row)
+            } else {
+              writer.writeAll(res)
+            }
+
           })
 
       stormsPipe.run("data/geomagnetic_storms.csv")

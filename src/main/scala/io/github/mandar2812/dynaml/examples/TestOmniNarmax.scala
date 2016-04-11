@@ -25,7 +25,8 @@ import org.apache.log4j.Logger
   */
 object TestOmniNarmax {
   def apply(start: String = "2006/12/28/00",
-            end: String = "2006/12/29/23"): Seq[Seq[Double]] = {
+            end: String = "2006/12/29/23",
+            action: String = "test"): Seq[Seq[Double]] = {
 
     val logger = Logger.getLogger(this.getClass)
 
@@ -142,14 +143,21 @@ object TestOmniNarmax {
         hold()
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
         unhold()
-        Seq(
-          Seq(yearTest.toDouble, 1.0, scoresAndLabels.length.toDouble,
-            metrics.mae, metrics.rmse, metrics.Rsq,
-            metrics.corr, metrics.modelYield,
-            timeObs.toDouble - timeModel.toDouble,
-            peakValuePred,
-            peakValueAct)
-        )
+
+
+        action match {
+          case "test" =>
+            Seq(
+              Seq(yearTest.toDouble, 1.0, scoresAndLabels.length.toDouble,
+                metrics.mae, metrics.rmse, metrics.Rsq,
+                metrics.corr, metrics.modelYield,
+                timeObs.toDouble - timeModel.toDouble,
+                peakValuePred,
+                peakValueAct)
+            )
+          case "predict" =>
+            scoresAndLabels.map(c => Seq(c._2, c._1))
+        }
 
 
       })
@@ -165,9 +173,8 @@ object TestOmniTL {
   val logger = Logger.getLogger(this.getClass)
 
   def apply(start: String = "2006/12/28/00",
-            end: String = "2006/12/29/23") = {
-
-
+            end: String = "2006/12/29/23",
+            action: String = "test") = {
 
     val names = Map(
       24 -> "Solar Wind Speed",
@@ -313,14 +320,21 @@ object TestOmniTL {
     hold()
     line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
     unhold()
-    Seq(
-      Seq(yearStart.toDouble, 1.0, scoresAndLabels.length.toDouble,
-        metrics.mae, metrics.rmse, metrics.Rsq,
-        metrics.corr, metrics.modelYield,
-        timeObs.toDouble - timeModel.toDouble,
-        peakValuePred,
-        peakValueAct)
-    )
+
+    action match {
+      case "test" =>
+        Seq(
+          Seq(yearStart.toDouble, 1.0, scoresAndLabels.length.toDouble,
+            metrics.mae, metrics.rmse, metrics.Rsq,
+            metrics.corr, metrics.modelYield,
+            timeObs.toDouble - timeModel.toDouble,
+            peakValuePred,
+            peakValueAct)
+        )
+      case "predict" =>
+        scoresAndLabels.map(c => Seq(c._2, c._1))
+    }
+
 
   }
 
@@ -388,10 +402,10 @@ object TestOmniTL {
 
 object DstNMTLExperiment {
 
-  def apply(model: String = "NM") = {
+  def apply(model: String = "NM", action:String = "test", fileID: String = "") = {
     val writer =
       CSVWriter.open(
-        new File("data/Omni"+model+"StormsRes.csv"),
+        new File("data/Omni"+model+fileID+"StormsRes.csv"),
         append = true)
 
     val stormsPipe =
@@ -414,21 +428,26 @@ object DstNMTLExperiment {
           val res = model match {
             case "NM" => TestOmniNarmax(
               startDate+"/"+startHour,
-              endDate+"/"+endHour)
+              endDate+"/"+endHour, action)
 
             case "TL" => TestOmniTL(
               startDate+"/"+startHour,
-              endDate+"/"+endHour)
+              endDate+"/"+endHour, action)
           }
 
-          val row = Seq(
-            eventId, stormCategory, 1.0,
-            0.0, res.head(4), res.head(6),
-            res.head(9)-res.head(10),
-            res.head(10), res.head(8)
-          )
+          if(action == "test") {
+            val row = Seq(
+              eventId, stormCategory, 1.0,
+              0.0, res.head(4), res.head(6),
+              res.head(9)-res.head(10),
+              res.head(10), res.head(8)
+            )
 
-          writer.writeRow(row)
+            writer.writeRow(row)
+          } else {
+            writer.writeAll(res)
+          }
+
         })
 
     stormsPipe.run("data/geomagnetic_storms.csv")

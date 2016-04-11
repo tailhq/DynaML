@@ -422,16 +422,22 @@ object DstARXExperiment {
               options("grid").toInt,
               options("step").toDouble,
               options("globalOpt"),
-              options, action = "test")
+              options, action = options("action"))
 
-            val row = Seq(
-              eventId, stormCategory,
-              deltas.head.toDouble,
-              res.head(5), res.head(8),
-              res.head(10), res.head(13)-res.head(14),
-              res.head(14), res.head(12))
+            if(options("action") == "test") {
+              val row = Seq(
+                eventId, stormCategory,
+                deltas.head.toDouble,
+                res.head(5), res.head(8),
+                res.head(10), res.head(13)-res.head(14),
+                res.head(14), res.head(12))
 
-            writer.writeRow(row)
+              writer.writeRow(row)
+            } else {
+              writer.writeAll(res)
+            }
+
+
           })
 
       stormsPipe.run("data/geomagnetic_storms.csv")
