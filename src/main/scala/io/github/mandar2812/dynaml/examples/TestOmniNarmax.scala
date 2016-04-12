@@ -79,7 +79,7 @@ object TestOmniNarmax {
       StreamDataPipe((couple: (Double, DenseVector[Double])) => {
         val features = couple._2
         //Calculate the coupling function p^0.5 V^4/3 Bt sin^6(theta)
-        val Bt = math.sqrt(math.pow(features(2), 2) + math.pow(features(2), 2))
+        val Bt = math.sqrt(math.pow(features(2), 2) + math.pow(features(3), 2))
         val sin_theta6 = math.pow(features(2)/Bt,6)
         val p = features(4)
         val v = features(1)
