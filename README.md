@@ -34,6 +34,28 @@ Currently DynaML supports.
 * Entropy based data subset selection
 * Data Pipes for configurable workflows
 
+Include 
+--------
+
+To include DynaML in your maven JVM project edit your ```pom.xml``` file as follows
+
+```xml
+<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+</repositories>
+```
+
+```xml
+<dependency>
+    <groupId>com.github.mandar2812</groupId>
+    <artifactId>DynaML</artifactId>
+    <version>v1.3</version>
+</dependency>
+```
+
 
 Installation
 ============
