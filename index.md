@@ -30,7 +30,7 @@ DynaML is a fledgling open source project that is in a phase of rapid expansion.
   - [Regularized Ordinary Least Squares]({{site.baseurl}}/models/#regularized-least-squares)
   - [Logistic and Probit Models]({{site.baseurl}}/models/#logistic--probit-regression) for binary classification
 * Regression and Classification with kernel based [Dual LS-SVM]({{site.baseurl}}/models/#least-squares-support-vector-machines)
-* Regression with [Gaussian Processes]({{site.baseurl}}/models/#gaussian-processes)
+* Regression and binary classificationwith [Gaussian Processes]({{site.baseurl}}/models/#gaussian-processes)
 * Feed forward [Neural Networks]({{site.baseurl}}/models/#feed-forward-neural-networks)
 * Committee Models
   - [Neural Committee Models]({{site.baseurl}}/models/#neural-committee-models)
