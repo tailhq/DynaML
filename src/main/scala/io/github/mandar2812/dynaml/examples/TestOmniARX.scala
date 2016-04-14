@@ -263,75 +263,84 @@ object TestOmniARX {
         }
 
         val startConf = kernel.state ++ noise.state
-        val (_, conf) = gs.optimize(startConf, opt)
 
-        model.setState(conf)
+        if (action != "energyLandscape") {
+          val (_, conf) = gs.optimize(startConf, opt)
 
-        val res = model.test(trainTest._1._2)
+          model.setState(conf)
 
-        val deNormalize1 = DataPipe((list: List[(Double, Double, Double, Double)]) =>
-          list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._2*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._3*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._4*trainTest._2._2(-1) + trainTest._2._1(-1))})
+          val res = model.test(trainTest._1._2)
 
-        val scoresAndLabelsPipe =
-          DataPipe(
-            (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2, i._4, i._5)).toList) > deNormalize1
+          val deNormalize1 = DataPipe((list: List[(Double, Double, Double, Double)]) =>
+            list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
+              l._2*trainTest._2._2(-1) + trainTest._2._1(-1),
+              l._3*trainTest._2._2(-1) + trainTest._2._1(-1),
+              l._4*trainTest._2._2(-1) + trainTest._2._1(-1))})
+
+          val scoresAndLabelsPipe =
+            DataPipe(
+              (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
+                res.map(i => (i._3, i._2, i._4, i._5)).toList) > deNormalize1
 
 
-        val scoresAndLabels = scoresAndLabelsPipe.run(res)
+          val scoresAndLabels = scoresAndLabelsPipe.run(res)
 
-        val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
-          scoresAndLabels.length)
+          val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
+            scoresAndLabels.length)
 
-        val (name, name1) =
-          if(names.contains(column)) (names(column), names(column))
-          else ("Value","Time Series")
+          val (name, name1) =
+            if(names.contains(column)) (names(column), names(column))
+            else ("Value","Time Series")
 
-        metrics.setName(name)
+          metrics.setName(name)
 
-        metrics.print()
+          metrics.print()
 
-        //Plotting time series prediction comparisons
-        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
-        hold()
-        line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
-        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._3))
-        hold()
-        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
-        legend(List(name1, "Predicted "+name1+" (one hour ahead)", "Lower Bar", "Higher Bar"))
-        unhold()
+          //Plotting time series prediction comparisons
+          line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
+          hold()
+          line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
+          spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._3))
+          hold()
+          spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
+          legend(List(name1, "Predicted "+name1+" (one hour ahead)", "Lower Bar", "Higher Bar"))
+          unhold()
 
-        val (timeObs, timeModel, peakValuePred, peakValueAct) = names(column) match {
-          case "Dst" =>
-            (scoresAndLabels.map(_._2).zipWithIndex.min._2,
-              scoresAndLabels.map(_._1).zipWithIndex.min._2,
-              scoresAndLabels.map(_._1).min,
-              scoresAndLabels.map(_._2).min)
-          case _ =>
-            (scoresAndLabels.map(_._2).zipWithIndex.max._2,
-              scoresAndLabels.map(_._1).zipWithIndex.max._2,
-              scoresAndLabels.map(_._1).max,
-              scoresAndLabels.map(_._2).max)
+          val (timeObs, timeModel, peakValuePred, peakValueAct) = names(column) match {
+            case "Dst" =>
+              (scoresAndLabels.map(_._2).zipWithIndex.min._2,
+                scoresAndLabels.map(_._1).zipWithIndex.min._2,
+                scoresAndLabels.map(_._1).min,
+                scoresAndLabels.map(_._2).min)
+            case _ =>
+              (scoresAndLabels.map(_._2).zipWithIndex.max._2,
+                scoresAndLabels.map(_._1).zipWithIndex.max._2,
+                scoresAndLabels.map(_._1).max,
+                scoresAndLabels.map(_._2).max)
+          }
+
+          action match {
+            case "test" =>
+              Seq(
+                Seq(yearTrain.toDouble, yearTest.toDouble, deltaT.head.toDouble,
+                  ex.length.toDouble, 1.0, num_training.toDouble,
+                  trainTest._1._2.length.toDouble,
+                  metrics.mae, metrics.rmse, metrics.Rsq,
+                  metrics.corr, metrics.modelYield,
+                  timeObs.toDouble - timeModel.toDouble,
+                  peakValuePred,
+                  peakValueAct)
+              )
+            case "predict" => scoresAndLabels.map(i => Seq(i._2, i._1))
+
+          }
+        } else {
+          gs.getEnergyLandscape(startConf, opt).map(k => {
+            Seq(k._1) ++
+              kernel.hyper_parameters.map(k._2(_)) ++
+              noise.hyper_parameters.map(k._2(_))
+          }).toSeq
         }
-
-        action match {
-          case "test" =>
-            Seq(
-              Seq(yearTrain.toDouble, yearTest.toDouble, deltaT.head.toDouble,
-                ex.length.toDouble, 1.0, num_training.toDouble,
-                trainTest._1._2.length.toDouble,
-                metrics.mae, metrics.rmse, metrics.Rsq,
-                metrics.corr, metrics.modelYield,
-                timeObs.toDouble - timeModel.toDouble,
-                peakValuePred,
-                peakValueAct)
-            )
-          case "predict" => scoresAndLabels.map(i => Seq(i._2, i._1))
-        }
-
       }
 
     val trainTestPipe = DataPipe(processTraining, processTest) >

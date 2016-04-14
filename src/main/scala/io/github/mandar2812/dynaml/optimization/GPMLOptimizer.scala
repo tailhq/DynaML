@@ -31,7 +31,7 @@ class GPMLOptimizer[I, T, M <: GloballyOptWithGrad](model: M)
   extends GlobalOptimizer[M] {
   override val system: M = model
 
-  protected val logger = Logger.getLogger(this.getClass)
+  override protected val logger = Logger.getLogger(this.getClass)
 
   override def optimize(initialConfig: Map[String, Double],
                         options: Map[String, String] = Map("tolerance" -> "0.0001",

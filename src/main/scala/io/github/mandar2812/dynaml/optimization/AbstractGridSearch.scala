@@ -31,27 +31,21 @@ import io.github.mandar2812.dynaml.utils
 class AbstractGridSearch[M <: GloballyOptimizable](model: M)
   extends GlobalOptimizer[M]{
 
-  protected val logger = Logger.getLogger(this.getClass)
+  override protected val logger = Logger.getLogger(this.getClass)
 
   override val system = model
 
-  protected var step: Double = 0.3
-
-  protected var gridsize: Int = 3
-
-  protected var logarithmicScale = false
-
-  def setLogScale(t: Boolean) = {
+  override def setLogScale(t: Boolean) = {
     logarithmicScale = t
     this
   }
 
-  def setGridSize(s: Int) = {
+  override def setGridSize(s: Int) = {
     this.gridsize = s
     this
   }
 
-  def setStepSize(s: Double) = {
+  override def setStepSize(s: Double) = {
     this.step = s
     this
   }
