@@ -18,9 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
-import breeze.linalg.DenseVector
 import org.apache.log4j.Logger
-import io.github.mandar2812.dynaml.utils
 
 /**
  * @author mandar2812 datum 24/6/15.

@@ -24,14 +24,17 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
 
   val hyper_parameters: List[String]
 
+  var blocked_hyper_parameters: List[String] = List()
+
   var state: Map[String, Double] = Map()
 
   def setHyperParameters(h: Map[String, Double]): this.type = {
     assert(hyper_parameters.forall(h contains _),
       "All hyper parameters must be contained in the arguments")
-    hyper_parameters.foreach((key) => {
-      state += (key -> h(key))
-    })
+    hyper_parameters.filterNot(h => blocked_hyper_parameters.contains(h))
+      .foreach((key) => {
+        state += (key -> h(key))
+      })
     this
   }
 

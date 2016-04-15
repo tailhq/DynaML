@@ -65,7 +65,7 @@ trait GlobalOptimizer[T <: GloballyOptimizable] {
     val hyper_params = initialConfig.keys.toList
 
     def scaleFunc(param: String) = if(logarithmicScale)
-      (i: Int) => {initialConfig(param)*math.exp((i+1).toDouble*step)}
+      (i: Int) => {initialConfig(param)/math.exp((i+1).toDouble*step)}
     else
       (i: Int) => initialConfig(param) - (i+1).toDouble*step
 

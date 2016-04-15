@@ -28,6 +28,11 @@ class PolynomialKernel(
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    Math.pow((x.t * y) + state("offset"), state("degree").toInt)
+    math.pow((x.t * y) + state("offset"), state("degree").toInt)
 
+  override def setHyperParameters(h: Map[String, Double]) = {
+    super.setHyperParameters(h)
+    state += ("offset" -> math.abs(h("offset")))
+    this
+  }
 }

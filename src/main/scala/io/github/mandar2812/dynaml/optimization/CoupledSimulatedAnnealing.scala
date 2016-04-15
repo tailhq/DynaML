@@ -18,10 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
-import breeze.linalg.DenseVector
 import breeze.stats.distributions.CauchyDistribution
-import io.github.mandar2812.dynaml.models.KernelizedModel
-import io.github.mandar2812.dynaml.utils
 
 import scala.util.Random
 
