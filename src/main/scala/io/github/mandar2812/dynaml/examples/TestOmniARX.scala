@@ -177,6 +177,7 @@ object TestOmniARX {
       (trainTest: ((Stream[(DenseVector[Double], Double)],
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
+        kernel.blocked_hyper_parameters = opt("block").split(',').toList
         val model = new GPNarXModel(deltaT.max, ex.length,
           kernel, noise, trainTest._1._1)
         val num_training = trainTest._1._1.length
@@ -262,7 +263,7 @@ object TestOmniARX {
             GPRegression](model)
         }
 
-        val startConf = kernel.state ++ noise.state
+        val startConf = kernel.effective_state ++ noise.effective_state
 
         if (action != "energyLandscape") {
           val (_, conf) = gs.optimize(startConf, opt)
