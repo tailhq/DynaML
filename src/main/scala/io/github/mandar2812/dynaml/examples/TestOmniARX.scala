@@ -405,7 +405,7 @@ object DstARXExperiment {
         "OmniARXStormsRes.csv"), append = true)
 
     val initialKernelState = kernel.state
-
+    val initialNoiseState = noise.state
       val stormsPipe =
         DynaMLPipe.fileToStream >
           DynaMLPipe.replaceWhiteSpaces >
@@ -423,7 +423,7 @@ object DstARXExperiment {
 
             val stormCategory = stormMetaFields(6)
             kernel.setHyperParameters(initialKernelState)
-
+            noise.setHyperParameters(initialNoiseState)
             val res = TestOmniARX.runExperiment(
               trainstart, trainend,
               startDate+"/"+startHour,
