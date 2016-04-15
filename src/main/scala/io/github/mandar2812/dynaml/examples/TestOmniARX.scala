@@ -394,6 +394,8 @@ object DstARXExperiment {
   def apply(trainstart: String, trainend: String,
             kernel: CovarianceFunction[DenseVector[Double],
               Double, DenseMatrix[Double]],
+            noise: CovarianceFunction[DenseVector[Double],
+              Double, DenseMatrix[Double]],
             deltas: List[Int],
             column: Int, ex: List[Int],
             options: Map[String, String]) = {
@@ -427,7 +429,7 @@ object DstARXExperiment {
               startDate+"/"+startHour,
               endDate+"/"+endHour,
               kernel, deltas, 0,
-              new DiracKernel(2.0),
+              noise,
               column, ex,
               options("grid").toInt,
               options("step").toDouble,
