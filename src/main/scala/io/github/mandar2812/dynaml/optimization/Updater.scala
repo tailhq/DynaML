@@ -45,7 +45,22 @@ abstract class Updater
       regParam: Double): (DenseVector[Double], Double)
 }
 
+abstract class HessianUpdater extends Updater {
+  def hessianUpdate(oldHessian: DenseMatrix[Double],
+                    deltaParams: DenseVector[Double],
+                    deltaGradient: DenseVector[Double]): DenseMatrix[Double] = oldHessian
+}
 
+class SimpleBFGSUpdater extends HessianUpdater {
+
+  override def compute(weightsOld: DenseVector[Double],
+                       gradient: DenseVector[Double],
+                       stepSize: Double,
+                       iter: Int,
+                       regParam: Double): (DenseVector[Double], Double) = {
+    (weightsOld + (gradient*stepSize), 0.0)
+  }
+}
 
 class SimpleUpdater extends Updater {
   override def compute(
