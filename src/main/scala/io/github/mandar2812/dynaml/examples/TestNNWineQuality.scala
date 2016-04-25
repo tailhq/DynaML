@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.examples
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseVector => BDV}
 import io.github.mandar2812.dynaml.evaluation.BinaryClassificationMetrics
 import io.github.mandar2812.dynaml.kernels.LocalSVMKernel
 import io.github.mandar2812.dynaml.models.lm.{GeneralizedLinearModel, LogisticGLM, ProbitGLM}
@@ -44,20 +44,20 @@ object TestNNWineQuality {
     //create RegressionMetrics instance and produce plots
 
     val modelTrainTest =
-      (trainTest: ((Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)]),
-        (DenseVector[Double], DenseVector[Double]))) => {
+      (trainTest: ((Stream[(BDV[Double], Double)],
+        Stream[(BDV[Double], Double)]),
+        (BDV[Double], BDV[Double]))) => {
 
         val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 1, hidden,
           acts, nCounts)
 
         val transform = DataPipe(
-          (d: Stream[(DenseVector[Double], Double)]) =>
-            d.map(el => (el._1, DenseVector(el._2)))
+          (d: Stream[(BDV[Double], Double)]) =>
+            d.map(el => (el._1, BDV(el._2)))
         )
 
         val model = new FeedForwardNetwork[
-          Stream[(DenseVector[Double], Double)]
+          Stream[(BDV[Double], Double)]
           ](trainTest._1._1, gr, transform)
 
         model.setLearningRate(stepSize)
@@ -71,7 +71,7 @@ object TestNNWineQuality {
 
         val scoresAndLabelsPipe =
           DataPipe(
-            (res: Seq[(DenseVector[Double], DenseVector[Double])]) =>
+            (res: Seq[(BDV[Double], BDV[Double])]) =>
               res.map(i => (i._1(0), i._2(0))).toList)
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res)
@@ -93,11 +93,11 @@ object TestNNWineQuality {
       }
 
     val processLabelsinPatterns = acts.last match {
-      case "tansig" => StreamDataPipe((pattern:(DenseVector[Double], Double)) =>
+      case "tansig" => StreamDataPipe((pattern:(BDV[Double], Double)) =>
         if(pattern._2 <= 6.0) (pattern._1, -1.0) else (pattern._1, 1.0))
-      case "linear" => StreamDataPipe((pattern:(DenseVector[Double], Double)) =>
+      case "linear" => StreamDataPipe((pattern:(BDV[Double], Double)) =>
         if(pattern._2 <= 6.0) (pattern._1, -1.0) else (pattern._1, 1.0))
-      case "logsig" => StreamDataPipe((pattern:(DenseVector[Double], Double)) =>
+      case "logsig" => StreamDataPipe((pattern:(BDV[Double], Double)) =>
         if(pattern._2 <= 6.0) (pattern._1, 0.0) else (pattern._1, 1.0))
     }
 
@@ -136,24 +136,24 @@ object TestLogisticWineQuality {
     //create RegressionMetrics instance and produce plots
 
     val modelpipe = new GLMPipe[
-      Stream[(DenseVector[Double], Double)],
-      ((Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-        (DenseVector[Double], DenseVector[Double]))
-      ]((tt: ((Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-      (DenseVector[Double], DenseVector[Double]))) => tt._1._1,
+      Stream[(BDV[Double], Double)],
+      ((Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)]),
+        (BDV[Double], BDV[Double]))
+      ]((tt: ((Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)]),
+      (BDV[Double], BDV[Double]))) => tt._1._1,
       task = "classification", modelType = modelType) >
       DynaMLPipe.trainParametricModel[
-        Stream[(DenseVector[Double], Double)],
-        DenseVector[Double], DenseVector[Double], Double,
-        Stream[(DenseVector[Double], Double)],
-        GeneralizedLinearModel[Stream[(DenseVector[Double], Double)]]
+        Stream[(BDV[Double], Double)],
+        BDV[Double], BDV[Double], Double,
+        Stream[(BDV[Double], Double)],
+        GeneralizedLinearModel[Stream[(BDV[Double], Double)]]
         ](regularization, stepSize, maxIt, mini)
 
     val testPipe =  DataPipe(
-      (modelAndData: (GeneralizedLinearModel[Stream[(DenseVector[Double], Double)]],
-        Stream[(DenseVector[Double], Double)])) => {
+      (modelAndData: (GeneralizedLinearModel[Stream[(BDV[Double], Double)]],
+        Stream[(BDV[Double], Double)])) => {
 
-        val pipe1 = StreamDataPipe((couple: (DenseVector[Double], Double)) => {
+        val pipe1 = StreamDataPipe((couple: (BDV[Double], Double)) => {
           (modelAndData._1.predict(couple._1), couple._2)
         })
 
@@ -176,7 +176,7 @@ object TestLogisticWineQuality {
       DynaMLPipe.replace(";", ",") >
       DynaMLPipe.extractTrainingFeatures(columns, Map()) >
       DynaMLPipe.splitFeaturesAndTargets >
-      StreamDataPipe((pattern: (DenseVector[Double], Double)) =>
+      StreamDataPipe((pattern: (BDV[Double], Double)) =>
         if (pattern._2 <= 6.0) (pattern._1, 0.0) else (pattern._1, 1.0))
 
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
@@ -184,8 +184,8 @@ object TestLogisticWineQuality {
       DynaMLPipe.featuresGaussianStandardization >
       BifurcationPipe(modelpipe,
         DataPipe((tt: (
-          (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-            (DenseVector[Double], DenseVector[Double]))) => tt._1._2)) >
+          (Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)]),
+            (BDV[Double], BDV[Double]))) => tt._1._2)) >
       testPipe
 
     trainTestPipe run
@@ -198,7 +198,7 @@ object TestLogisticWineQuality {
 
 
 object TestLSSVMWineQuality {
-  def apply (kernel: LocalSVMKernel[DenseVector[Double]],
+  def apply (kernel: LocalSVMKernel[BDV[Double]],
              training: Int = 100, test: Int = 1000,
              columns: List[Int] = List(11,0,1,2,3,4,5,6,7,8,9,10),
              regularization: Double = 0.5, wineType: String = "red"): Unit = {
@@ -210,15 +210,15 @@ object TestLSSVMWineQuality {
     //create RegressionMetrics instance and produce plots
 
     val modelTrainTest =
-      (trainTest: ((Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)]),
-        (DenseVector[Double], DenseVector[Double]))) => {
+      (trainTest: ((Stream[(BDV[Double], Double)],
+        Stream[(BDV[Double], Double)]),
+        (BDV[Double], BDV[Double]))) => {
 
         val model = new DLSSVM(trainTest._1._1, training, kernel, "classification")
 
         model.setRegParam(regularization).learn()
 
-        val pipe1 = StreamDataPipe((couple: (DenseVector[Double], Double)) => {
+        val pipe1 = StreamDataPipe((couple: (BDV[Double], Double)) => {
           (model.predict(couple._1), couple._2)
         })
 
@@ -240,7 +240,7 @@ object TestLSSVMWineQuality {
       DynaMLPipe.replace(";", ",") >
       DynaMLPipe.extractTrainingFeatures(columns, Map()) >
       DynaMLPipe.splitFeaturesAndTargets >
-      StreamDataPipe((pattern:(DenseVector[Double], Double)) =>
+      StreamDataPipe((pattern:(BDV[Double], Double)) =>
         if(pattern._2 <= 6.0) (pattern._1, -1.0) else (pattern._1, 1.0))
 
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
