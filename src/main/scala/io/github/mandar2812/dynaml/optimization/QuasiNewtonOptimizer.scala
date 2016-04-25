@@ -33,8 +33,8 @@ import org.apache.log4j.Logger
   * 2. An updater which computes the approximate
   * inverse Hessian and carries out the update.
   */
-abstract class QuasiNewtonOptimizer(private var gradient: Gradient,
-                                    private var updater: HessianUpdater)
+class QuasiNewtonOptimizer(private var gradient: Gradient,
+                           private var updater: HessianUpdater)
   extends RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     Stream[(DenseVector[Double], Double)]]{
