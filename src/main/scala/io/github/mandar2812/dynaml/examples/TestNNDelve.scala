@@ -18,10 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.examples
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseVector => BDV}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.models.neuralnets.{FeedForwardNetwork, FFNeuralGraph}
-import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
+import io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel
+import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
+import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils
 
 /**
@@ -44,17 +45,17 @@ object TestNNDelve {
       utils.extractColumns(l, ",", columns, Map())
 
     val normalizeData =
-      (trainTest: (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)])) => {
+      (trainTest: (Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)])) => {
 
         val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
-          DenseVector(tup._1.toArray ++ Array(tup._2))).toList)
+          BDV(tup._1.toArray ++ Array(tup._2))).toList)
 
-        val stdDev: DenseVector[Double] = variance.map(v =>
+        val stdDev: BDV[Double] = variance.map(v =>
           math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
 
 
-        val normalizationFunc = (point: (DenseVector[Double], Double)) => {
-          val extendedpoint = DenseVector(point._1.toArray ++ Array(point._2))
+        val normalizationFunc = (point: (BDV[Double], Double)) => {
+          val extendedpoint = BDV(point._1.toArray ++ Array(point._2))
 
           val normPoint = (extendedpoint - mean) :/ stdDev
           val length = normPoint.length
@@ -66,17 +67,17 @@ object TestNNDelve {
       }
 
     val modelTrainTest =
-      (trainTest: ((Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)]),
-        (DenseVector[Double], DenseVector[Double]))) => {
+      (trainTest: ((Stream[(BDV[Double], Double)],
+        Stream[(BDV[Double], Double)]),
+        (BDV[Double], BDV[Double]))) => {
 
         val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 1, hidden,
           acts, nCounts)
 
-        val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
-          d.map(el => (el._1, DenseVector(el._2))))
+        val transform = DataPipe((d: Stream[(BDV[Double], Double)]) =>
+          d.map(el => (el._1, BDV(el._2))))
 
-        val model = new FeedForwardNetwork[Stream[(DenseVector[Double], Double)]](trainTest._1._1, gr, transform)
+        val model = new FeedForwardNetwork[Stream[(BDV[Double], Double)]](trainTest._1._1, gr, transform)
 
         model.setLearningRate(stepSize)
           .setMaxIterations(maxIt)
@@ -88,7 +89,7 @@ object TestNNDelve {
         val res = model.test(trainTest._1._2)
         val scoresAndLabelsPipe =
           DataPipe(
-            (res: Seq[(DenseVector[Double], DenseVector[Double])]) =>
+            (res: Seq[(BDV[Double], BDV[Double])]) =>
               res.map(i => (i._1(0), i._2(0))).toList) > DataPipe((list: List[(Double, Double)]) =>
             list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
               l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
@@ -106,12 +107,12 @@ object TestNNDelve {
       DataPipe(extractTrainingFeatures) >
       StreamDataPipe((line: String) => {
         val split = line.split(",")
-        (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
+        (BDV(split.tail.map(_.toDouble)), split.head.toDouble)
       })
 
     val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
-      DataPipe((data: (Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)])) => {
+      DataPipe((data: (Stream[(BDV[Double], Double)],
+        Stream[(BDV[Double], Double)])) => {
         (data._1.take(training),
           data._2.takeRight(test))
       }) >
@@ -122,4 +123,68 @@ object TestNNDelve {
 
   }
 
+}
+
+
+object TestGLMDelve {
+  def apply(training: Int = 100, test: Int = 1000,
+            columns: List[Int] = List(10,0,1,2,3,4,5,6,7,8,9),
+            stepSize: Double = 0.01, maxIt: Int = 30, mini: Double = 1.0,
+            alpha: Double = 0.5, regularization: Double = 0.5) = {
+
+    val modelpipe = new GLMPipe(
+      (tt: ((Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)]),
+        (BDV[Double], BDV[Double]))) => tt._1._1) >
+      DynaMLPipe.trainParametricModel[
+        Stream[(BDV[Double], Double)],
+        BDV[Double], BDV[Double], Double,
+        Stream[(BDV[Double], Double)],
+        GeneralizedLinearModel[Stream[(BDV[Double], Double)]]
+        ](regularization, stepSize, maxIt, mini)
+
+    val testPipe =  DataPipe(
+      (modelAndData: (
+        GeneralizedLinearModel[Stream[(BDV[Double], Double)]],
+        (Stream[(BDV[Double], Double)], BDV[Double], BDV[Double]))) => {
+
+        val pipe1 = StreamDataPipe((couple: (BDV[Double], Double)) => {
+          (modelAndData._1.predict(couple._1), couple._2)
+        })
+        val means = modelAndData._2._2
+        val stdDevs = modelAndData._2._3
+
+        val scoresAndLabelsPipe = pipe1 >
+          StreamDataPipe((s: (Double, Double)) =>
+            ((s._1*stdDevs(-1)) + means(-1), (s._2*stdDevs(-1))+means(-1))
+          )
+
+        val scoresAndLabels = scoresAndLabelsPipe.run(modelAndData._2._1).toList
+
+        val metrics = new RegressionMetrics(
+          scoresAndLabels,
+          scoresAndLabels.length)
+
+        metrics.setName("Fried Delve")
+        metrics.print()
+        metrics.generatePlots()
+
+      })
+
+    val preProcessPipe = DynaMLPipe.fileToStream >
+      DynaMLPipe.extractTrainingFeatures(columns, Map()) >
+      DynaMLPipe.splitFeaturesAndTargets
+
+    val trainTestPipe = DataPipe(preProcessPipe, preProcessPipe) >
+      DataPipe((data: (Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)])) => {
+        (data._1.take(training), data._2.takeRight(test))
+      }) >
+      DynaMLPipe.trainTestGaussianStandardization >
+      BifurcationPipe(modelpipe,
+        DataPipe((tt: ((Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)]),
+          (BDV[Double], BDV[Double]))) => (tt._1._2, tt._2._1, tt._2._2))) >
+      testPipe
+
+    trainTestPipe run ("data/delve.csv", "data/delve.csv")
+    
+  }
 }

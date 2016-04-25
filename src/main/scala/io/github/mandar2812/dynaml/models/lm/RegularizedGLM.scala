@@ -43,12 +43,13 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
 
   override def prepareData(d: Stream[(DenseVector[Double], Double)]) = {
     val designMatrix = DenseMatrix.vertcat[Double](
-      d.map(point => featureMap(point._1).toDenseMatrix):_*
+      d.map(point => DenseVector(featureMap(point._1).toArray ++ Array(1.0)).toDenseMatrix):_*
     )
 
     val responseVector = DenseVector.vertcat(
       d.map(p => DenseVector(p._2)):_*
     )
+
     (designMatrix, responseVector)
   }
 }
