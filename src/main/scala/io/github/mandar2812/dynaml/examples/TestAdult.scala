@@ -118,19 +118,16 @@ object TestAdultLogistic {
             regularization: Double = 0.5,
             modelType: String = "logistic") = {
 
-    val modelpipe = new GLMPipe[
-      Stream[(BDV[Double], Double)],
-      ((Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)]),
-        (BDV[Double], BDV[Double]))
-      ]((tt: ((Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)]),
+    val modelpipe = new GLMPipe(
+      (tt: ((Stream[(BDV[Double], Double)], Stream[(BDV[Double], Double)]),
       (BDV[Double], BDV[Double]))) => tt._1._1,
-      task = "classification", modelType = modelType) >
-      DynaMLPipe.trainParametricModel[
-        Stream[(BDV[Double], Double)],
-        BDV[Double], BDV[Double], Double,
-        Stream[(BDV[Double], Double)],
-        GeneralizedLinearModel[Stream[(BDV[Double], Double)]]
-        ](regularization, stepSize, maxIt, mini)
+      task = "classification", modelType = modelType
+    ) > DynaMLPipe.trainParametricModel[
+      Stream[(BDV[Double], Double)],
+      BDV[Double], BDV[Double], Double,
+      Stream[(BDV[Double], Double)],
+      GeneralizedLinearModel[Stream[(BDV[Double], Double)]]
+      ](regularization, stepSize, maxIt, mini)
 
     val testPipe =  DataPipe(
       (modelAndData: (GeneralizedLinearModel[Stream[(BDV[Double], Double)]],
