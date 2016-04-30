@@ -51,7 +51,7 @@ class GridSearch[M <: GloballyOptimizable](model: M)
   override def optimize(initialConfig: Map[String, Double],
                         options: Map[String, String] = Map()) = {
 
-    val energyLandscape = getEnergyLandscape(initialConfig, options)
+    val energyLandscape = getEnergyLandscape(initialConfig, options).toMap
     val optimum = energyLandscape.keys.min
 
     logger.info("Optimum value of energy is: "+optimum+

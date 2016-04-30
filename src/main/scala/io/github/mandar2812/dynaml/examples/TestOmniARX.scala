@@ -337,10 +337,10 @@ object TestOmniARX {
           }
         } else {
           gs.getEnergyLandscape(startConf, opt).map(k => {
-            Seq(k._1) ++
-              kernel.hyper_parameters.map(k._2(_)) ++
+            Seq(k._1) ++ kernel.blocked_hyper_parameters.map(p => kernel.state(p)) ++
+              kernel.hyper_parameters.filter(l => !kernel.blocked_hyper_parameters.contains(l)).map(k._2(_)) ++
               noise.hyper_parameters.map(k._2(_))
-          }).toSeq
+          })
         }
       }
 

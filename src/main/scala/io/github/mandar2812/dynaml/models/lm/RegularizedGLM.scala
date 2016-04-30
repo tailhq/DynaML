@@ -20,7 +20,8 @@ under the License.
 package io.github.mandar2812.dynaml.models.lm
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, RegularizedLSSolver, RegularizedOptimizer}
+import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable,
+RegularizedLSSolver, RegularizedOptimizer}
 
 /**
   * Created by mandar on 29/3/16.

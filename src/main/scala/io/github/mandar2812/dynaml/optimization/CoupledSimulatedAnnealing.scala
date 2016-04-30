@@ -116,13 +116,13 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
     })
 
-
-    val optimum = currentEnergyLandscape.keys.min
+    val landscape = currentEnergyLandscape.toMap
+    val optimum = landscape.keys.min
 
     logger.info("Optimum value of energy is: "+optimum+
-      "\nConfiguration: "+currentEnergyLandscape(optimum))
+      "\nConfiguration: "+landscape(optimum))
 
-    system.energy(currentEnergyLandscape(optimum), options)
-    (system, currentEnergyLandscape(optimum))
+    system.energy(landscape(optimum), options)
+    (system, landscape(optimum))
   }
 }

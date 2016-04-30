@@ -57,7 +57,7 @@ trait GlobalOptimizer[T <: GloballyOptimizable] {
 
   def getEnergyLandscape(initialConfig: Map[String, Double],
                          options: Map[String, String] = Map())
-  : Map[Double, Map[String, Double]] = {
+  : Seq[(Double, Map[String, Double])] = {
 
     //create grid
 
@@ -84,7 +84,7 @@ trait GlobalOptimizer[T <: GloballyOptimizable] {
       logger.info("Energy = "+configEnergy+"\n")
 
       (configEnergy, configMap)
-    }).toMap
+    })
 
   }
 
