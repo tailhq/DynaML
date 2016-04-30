@@ -55,6 +55,16 @@ object DynaMLPipe {
     * */
   val streamToFile = (fileName: String) => DataPipe(utils.writeToFile(fileName) _)
 
+
+  /**
+    * Writes a [[Stream]] of [[AnyVal]] to
+    * a file.
+    *
+    * Usage: DynaMLPipe.valuesToFile("abc.csv")
+    * */
+  val valuesToFile = (fileName: String) => DataPipe((stream: Stream[Seq[AnyVal]]) =>
+    utils.writeToFile(fileName)(stream.map(s => s.mkString(","))))
+
   /**
     * Drop the first element of a [[Stream]] of [[String]]
     * */
