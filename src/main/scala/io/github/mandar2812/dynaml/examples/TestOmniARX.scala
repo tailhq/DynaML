@@ -88,7 +88,8 @@ object TestOmniARX {
       38 -> "Kp",
       39 -> "Sunspot Number",
       28 -> "Plasma Flow Pressure",
-      23 -> "Proton Density"
+      23 -> "Proton Density",
+      47 -> "Proton Flux > 30 MeV"
     )
 
     val greg: GregorianCalendar = new GregorianCalendar()
@@ -139,8 +140,9 @@ object TestOmniARX {
           40 -> "99999", 22 -> "9999999.",
           25 -> "999.9", 28 -> "99.99",
           27 -> "9.999", 39 -> "999",
-          45 -> "99999.99", 46 -> "99999.99",
-          47 -> "99999.99")
+          42 -> "999999.99", 43 -> "99999.99",
+          44 -> "99999.99", 45 -> "99999.99",
+          46 -> "99999.99", 47 -> "99999.99")
       ) >
       DynaMLPipe.removeMissingLines >
       DynaMLPipe.extractTimeSeriesVec((year,day,hour) => (day * 24) + hour)
