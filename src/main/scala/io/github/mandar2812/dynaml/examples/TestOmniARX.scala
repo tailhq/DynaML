@@ -334,7 +334,10 @@ object TestOmniARX {
                   peakValuePred,
                   peakValueAct)
               )
+
             case "predict" => scoresAndLabels.map(i => Seq(i._2, i._1))
+
+            case "predict_error_bars" => scoresAndLabels.map(i => Seq(i._2, i._1, i._3, i._4))
 
           }
         } else {

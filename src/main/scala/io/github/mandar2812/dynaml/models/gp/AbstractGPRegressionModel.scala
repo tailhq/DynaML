@@ -217,7 +217,7 @@ with GloballyOptWithGrad {
   def test(testData: T): Seq[(I, Double, Double, Double, Double)] = {
     logger.info("Generating predictions for test set")
     //Calculate the posterior predictive distribution for the test points.
-    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 2)
+    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 1)
     //Collate the test data with the predictions and error bars
     dataAsSeq(testData).zip(predictionWithError).map(i => (i._1._1, i._1._2,
       i._2._2, i._2._3, i._2._4))
