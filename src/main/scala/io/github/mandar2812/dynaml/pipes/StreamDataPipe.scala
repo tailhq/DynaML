@@ -51,6 +51,10 @@ trait StreamFilterPipe[I] extends StreamDataPipe[I, Boolean, Stream[I]] {
   override def run(data: Stream[I]): Stream[I] = data.filter(pipe)
 }
 
+trait StreamPartitionPipe[I] extends StreamDataPipe[I, Boolean, (Stream[I], Stream[I])] {
+  override def run(data: Stream[I]): (Stream[I], Stream[I]) = data.partition(pipe)
+}
+
 trait StreamSideEffectPipe[I] extends StreamDataPipe[I, Unit, Unit] {
   override def run(data: Stream[I]): Unit = data.foreach(pipe)
 }
@@ -70,5 +74,12 @@ object StreamDataPipe {
   def apply[I](seFunc: (I) => Unit): StreamSideEffectPipe[I] =
     new StreamSideEffectPipe[I] {
       val pipe = seFunc
+    }
+}
+
+object StreamPartitionPipe {
+  def apply[I](mapFunc: (I) => Boolean): StreamPartitionPipe[I] =
+    new StreamPartitionPipe[I] {
+      val pipe = mapFunc
     }
 }
