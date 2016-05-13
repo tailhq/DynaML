@@ -26,7 +26,10 @@ package io.github.mandar2812.dynaml.pipes
   * between two data types, i.e. [[Source]] and [[Destination]]
   * */
 trait DataPipe[Source, Destination] {
+
   def run(data: Source): Destination
+
+  def apply(data: Source): Destination = run(data)
 
   /**
     * Represents the composition of two

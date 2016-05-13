@@ -174,9 +174,9 @@ object TestAdultLogistic {
             (BDV[Double], BDV[Double]))) => tt._1._2)) >
       testPipe
 
-    trainTestPipe run
-      ("data/adult.csv",
-        "data/adulttest.csv")
+    trainTestPipe(("data/adult.csv",
+      "data/adulttest.csv"))
+
   }
 
 }
