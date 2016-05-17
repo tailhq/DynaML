@@ -123,7 +123,7 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     case _ =>
       // Calculate regression metrics on validation set
       // Return some function of kpi as energy
-
+      setState(h)
       val resultsToScores = DataPipe(
         (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
           res.map(i => (i._3, i._2)).toStream)
