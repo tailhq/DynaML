@@ -32,6 +32,8 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
 
   val h: (Double) => Double = identity _
 
+  featureMap = map
+
   def dimensions = featureMap(data.head._1).length
 
   override def initParams(): DenseVector[Double] =
