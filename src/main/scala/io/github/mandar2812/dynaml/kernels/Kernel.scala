@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, DenseVector}
 
 
 /**
@@ -49,6 +49,21 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
                                      length: Int): KernelMatrix[M]
 
   def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): M
+}
+
+object CovarianceFunction {
+  def apply[T](phi: T => DenseVector[Double]) = new LocalScalarKernel[T] {
+    override val hyper_parameters: List[String] = List()
+
+    override def evaluate(x: T, y: T): Double = phi(x) dot phi(y)
+
+    override def buildKernelMatrix[S <: Seq[T]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
+      SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
+
+    override def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): DenseMatrix[Double] =
+      SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
+
+  }
 }
 
 abstract class CompositeCovariance[T]
