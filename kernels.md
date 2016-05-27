@@ -17,7 +17,24 @@ _Positive definite_ functions or _positive type_ functions occupy an important p
 For an in depth review of the various applications of kernels in the machine learning domain, refer to [Scholkopf et. al](http://www.kernel-machines.org/publications/pdfs/0701907.pdf)
 
 
-## Kernels available in DynaML
+## DynaML Kernels Library
+
+### Creating arbitrary kernel functions
+
+Apart from off the shelf kernel functions below, it is also possible to create custom kernels on the fly by using the ```CovarianceFunction``` object.
+
+```scala
+// First create a function mapping from some input space to
+// Breeze dense vectors.
+
+val mapFunc = (vec: DenseVector[Double]) => {
+	val mat = vec * vec.t
+	norm(mat)
+}
+
+val kernel = CovarianceFunction(mapFunc)
+
+```
 
 
 ### Radial Basis Function Kernel / Squared Exponential Kernel
