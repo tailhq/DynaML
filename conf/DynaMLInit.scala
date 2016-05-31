@@ -9,4 +9,3 @@ import io.github.mandar2812.dynaml.examples._
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 import io.github.mandar2812.dynaml.pipes._
-import org.openml.apiconnector.io._
