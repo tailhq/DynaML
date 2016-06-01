@@ -1,5 +1,14 @@
 import sbt._
 
+maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
+
+packageSummary := "Scala Library/REPL for Machine Learning Research"
+
+packageDescription := "DynaML is a scala library/repl for implementing and working with "+
+  "general Machine Learning models.\n\nThe aim is to build a robust set of abstract classes and interfaces, "+
+  "which can be extended easily to implement advanced models for small and large scale applications.\n\n"+
+  "But the library can also be used as an educational/research tool for data analysis."
+
 lazy val commonSettings = Seq(
   name := "DynaML",
   organization := "io.github.mandar2812",
@@ -28,8 +37,11 @@ lazy val commonSettings = Seq(
     "org.apache.spark" % "spark-core_2.11" % "1.6.1" % "compile",
     "org.apache.spark" % "spark-mllib_2.11" % "1.6.1" % "compile",
     "com.quantifind" % "wisp_2.11" % "0.0.4" % "compile",
-    "org.jzy3d" % "jzy3d-api" % "0.9.1" % "compile"
-  )
+    "org.jzy3d" % "jzy3d-api" % "0.9.1" % "compile",
+    "com.lihaoyi" % "ammonite-repl_2.11.7" % "0.5.8"
+  ),
+  initialCommands in console :=
+    """io.github.mandar2812.dynaml.DynaML.run();"""
 )
 
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
@@ -37,5 +49,17 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
   .settings(
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
-    buildInfoUsePackageAsPath := true
+    buildInfoUsePackageAsPath := true,
+    mappings in Universal += {
+      // we are using the reference.conf as default application.conf
+      // the user can override settings here
+      val init = (resourceDirectory in Compile).value / "DynaMLInit.scala"
+      init -> "conf/DynaMLInit.scala"
+    },
+    javaOptions in Universal ++= Seq(
+      // -J params will be added as jvm parameters
+      "-J-Xmx2048m",
+      "-J-Xms64m"
+    )
   )
+
