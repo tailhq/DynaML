@@ -8,7 +8,8 @@ lazy val commonSettings = Seq(
   mainClass in Compile := Some("io.github.mandar2812.dynaml.DynaML"),
   fork in run := true,
   resolvers in ThisBuild ++= Seq("jzy3d-releases" at "http://maven.jzy3d.org/releases"),
-  libraryDependencies in ThisBuild ++= Seq(
+  libraryDependencies ++= Seq(
+    "org.scala-lang" % "scala-compiler" % scalaVersion.value % "compile",
     "org.scala-lang" % "scala-library" % scalaVersion.value % "compile",
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % "compile",
     "com.typesafe" % "config" % "1.2.1" % "compile",

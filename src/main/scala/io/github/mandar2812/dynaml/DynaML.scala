@@ -27,8 +27,7 @@ import repl._
 //entry point to start my custom Scala REPL
 object DynaML extends DynaML {
   def main(args: Array[String]): Unit = {
-    new sys.SystemProperties += (
-      "scala.repl.autoruncode" -> "conf/DynaMLInit.scala")
+    new sys.SystemProperties += ("scala.repl.autoruncode" -> "conf/DynaMLInit.scala")
     if (!process(args)) sys.exit(1)
   }
 }
