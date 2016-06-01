@@ -16,6 +16,7 @@ Currently DynaML installs and runs on *nix platforms, though it is possible to b
 
 * Clone this repository
 * Run the following.
+
 ```shell
   sbt console
 ```
