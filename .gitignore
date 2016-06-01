@@ -26,3 +26,5 @@ Gemfile.lock
 index*.html
 javascripts
 stylesheets
+project/project
+project/target
