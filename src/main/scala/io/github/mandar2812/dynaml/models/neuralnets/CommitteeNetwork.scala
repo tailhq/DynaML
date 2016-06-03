@@ -62,14 +62,15 @@ LinearModel[D, DenseVector[Double], DenseVector[Double],
   override def predict(point: DenseVector[Double]): Double =
     params dot featureMap(point)
 
-  override def clearParameters(): Unit =
-    DenseVector.fill[Double](baseNetworks.length)(1.0)
+  override def clearParameters(): Unit = {
+    params = initParams()
+  }
 
   override def initParams(): DenseVector[Double] =
-    DenseVector.fill[Double](baseNetworks.length)(1.0)
+    DenseVector.fill[Double](baseNetworks.length)(1.0/baseNetworks.length)
 
   featureMap = (pattern) =>
-    DenseVector(baseNetworks.map(net => net.forwardPass(pattern)(0)).toArray)
+    DenseVector(baseNetworks.map(_.forwardPass(pattern)(0)).toArray)
 
   /**
     * Learn the parameters

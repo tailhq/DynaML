@@ -81,5 +81,6 @@ abstract class AbstractDualLSSVM[Index](data: Stream[(Index, Double)],
     current_state += ("regularization" -> h("regularization"))
   }
 
+  def getState = current_state
 
 }

@@ -40,8 +40,7 @@ lazy val commonSettings = Seq(
     "org.jzy3d" % "jzy3d-api" % "0.9.1" % "compile",
     "com.lihaoyi" % "ammonite-repl_2.11.7" % "0.5.8"
   ),
-  initialCommands in console :=
-    """io.github.mandar2812.dynaml.DynaML.run();"""
+  initialCommands in console := """io.github.mandar2812.dynaml.DynaML.run();"""
 )
 
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
