@@ -4,6 +4,8 @@ import java.io.{InputStream, OutputStream}
 
 import ammonite.repl.{Bind, Ref, Repl, Storage}
 
+import scala.io.Source
+
 /**
   * Created by mandar on 1/6/16.
   */
@@ -12,20 +14,17 @@ class DynaMLRepl(input: InputStream,
                  error: OutputStream,
                  storage: Ref[Storage],
                  predef: String = "",
-                 replArgs: Seq[Bind[_]] = Nil) extends
+                 replArgs: Seq[Bind[_]] = Nil,
+                 promptStr: String,
+                 bannerText: String) extends
   Repl(input, output, error, storage, predef, replArgs) {
 
-  override val prompt = Ref("DynaML>")
+  override val prompt = Ref(promptStr)
+
+  val banner = Source.fromFile(bannerText).getLines.mkString("\n")
 
   override def printBanner(): Unit = {
-    printStream.println("    ___       ___       ___       ___       ___       ___ "+
-      "  \n   /\\  \\     /\\__\\     /\\__\\     /\\  \\     /\\__\\ "+
-      "    /\\__\\  \n  /::\\  \\   |::L__L   /:| _|_   /::\\  \\   /::L_L_ "+
-      "  /:/  /  \n /:/\\:\\__\\  |:::\\__\\ /::|/\\__\\ /::\\:\\__\\ "+
-      "/:/L:\\__\\ /:/__/   \n \\:\\/:/  /  /:;;/__/ \\/|::/  / \\/\\::/ "+
-      " / \\/_/:/  / \\:\\  \\   \n  \\::/  /   \\/__/      |:/  /    /:/ "+
-      " /    /:/  /   \\:\\__\\  \n   \\/__/               \\/__/    "+
-      " \\/__/     \\/__/     \\/__/  ")
+    printStream.println(banner)
     val version = BuildInfo.version
     printStream.println("\nWelcome to DynaML "+version+
       "\nInteractive Scala shell for Machine Learning Research")

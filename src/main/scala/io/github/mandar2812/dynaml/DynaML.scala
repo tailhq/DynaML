@@ -129,10 +129,12 @@ object DynaML {
 
     val storage = Storage(defaultAmmoniteHome, None)
     val repl = new DynaMLRepl(
-      System.in, System.out, System.err,
+      input = System.in, output = System.out, error = System.err,
       storage = Ref(storage),
       predef = "",
-      replArgs
+      replArgs = replArgs,
+      promptStr = "DynaML>",
+      bannerText = "conf/banner.txt"
     )
 
     repl.run()
@@ -148,14 +150,17 @@ object DynaML {
           predefFile: Option[Path] = None,
           file: Option[Path] = None,
           args: Seq[String] = Vector.empty,
-          kwargs: Map[String, String] = Map.empty) = {
+          kwargs: Map[String, String] = Map.empty,
+          prompt: String = "DynaML>",
+          banner: String = "conf/banner.txt") = {
 
     Timer("Repl.run Start")
     def storage = Storage(ammoniteHome, predefFile)
     lazy val repl = new DynaMLRepl(
       System.in, System.out, System.err,
       storage = Ref(storage),
-      predef = predef
+      predef = predef, promptStr = prompt,
+      bannerText = banner
     )
     (file, code) match{
       case (None, None) => println("Loading..."); repl.run()

@@ -1,4 +1,6 @@
 import sbt._
+import NativePackagerHelper._
+import java.io.File
 
 maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
 
@@ -8,6 +10,8 @@ packageDescription := "DynaML is a scala library/repl for implementing and worki
   "general Machine Learning models.\n\nThe aim is to build a robust set of abstract classes and interfaces, "+
   "which can be extended easily to implement advanced models for small and large scale applications.\n\n"+
   "But the library can also be used as an educational/research tool for data analysis."
+
+val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
 lazy val commonSettings = Seq(
   name := "DynaML",
@@ -40,7 +44,9 @@ lazy val commonSettings = Seq(
     "org.jzy3d" % "jzy3d-api" % "0.9.1" % "compile",
     "com.lihaoyi" % "ammonite-repl_2.11.7" % "0.5.8"
   ),
-  initialCommands in console := """io.github.mandar2812.dynaml.DynaML.run();"""
+  dataDirectory := new File("data/"),
+  initialCommands in console := """io.github.mandar2812.dynaml.DynaML.run(banner="""" +
+    target.value.getPath + """/universal/stage/conf/banner.txt");"""
 )
 
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
@@ -49,12 +55,15 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
     buildInfoUsePackageAsPath := true,
-    mappings in Universal += {
+    mappings in Universal ++= Seq({
       // we are using the reference.conf as default application.conf
       // the user can override settings here
       val init = (resourceDirectory in Compile).value / "DynaMLInit.scala"
       init -> "conf/DynaMLInit.scala"
-    },
+    }, {
+      val banner = (resourceDirectory in Compile).value / "dynamlBanner.txt"
+      banner -> "conf/banner.txt"
+    }),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
       "-J-Xmx2048m",
