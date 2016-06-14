@@ -32,7 +32,8 @@ class PolynomialKernel(
 
   override def setHyperParameters(h: Map[String, Double]) = {
     super.setHyperParameters(h)
-    state += ("offset" -> math.abs(h("offset")))
+    if(h contains "offset")
+      state += ("offset" -> math.abs(h("offset")))
     this
   }
 }

@@ -1,5 +1,4 @@
 import sbt._
-import NativePackagerHelper._
 import java.io.File
 
 maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
@@ -16,7 +15,7 @@ val dataDirectory = settingKey[File]("The directory holding the data files for r
 lazy val commonSettings = Seq(
   name := "DynaML",
   organization := "io.github.mandar2812",
-  version := "v1.4-beta.6",
+  version := "v1.4-beta.7",
   scalaVersion in ThisBuild := "2.11.7",
   mainClass in Compile := Some("io.github.mandar2812.dynaml.DynaML"),
   fork in run := true,
