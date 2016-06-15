@@ -25,9 +25,9 @@ import com.github.tototoshi.csv.CSVWriter
 import io.github.mandar2812.dynaml.kernels.{RBFKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.KernelizedModel
 import io.github.mandar2812.dynaml.models.svm.{KernelSparkModel, LSSVMSparkModel}
-import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
+import org.apache.spark.{SparkConf, SparkContext}
 
 /**
  * @author mandar2812 on 22/6/15.

@@ -1,6 +1,8 @@
 import sbt._
 import java.io.File
 
+import sbtbuildinfo.BuildInfoPlugin.autoImport._
+
 maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
 
 packageSummary := "Scala Library/REPL for Machine Learning Research"
@@ -12,14 +14,13 @@ packageDescription := "DynaML is a scala library/repl for implementing and worki
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
-lazy val commonSettings = Seq(
-  name := "DynaML",
+val baseSettings = Seq(
   organization := "io.github.mandar2812",
-  version := "v1.4-beta.7",
   scalaVersion in ThisBuild := "2.11.7",
-  mainClass in Compile := Some("io.github.mandar2812.dynaml.DynaML"),
-  fork in run := true,
-  resolvers in ThisBuild ++= Seq("jzy3d-releases" at "http://maven.jzy3d.org/releases"),
+  resolvers in ThisBuild ++= Seq("jzy3d-releases" at "http://maven.jzy3d.org/releases")
+)
+
+lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-compiler" % scalaVersion.value % "compile",
     "org.scala-lang" % "scala-library" % scalaVersion.value % "compile",
@@ -42,15 +43,41 @@ lazy val commonSettings = Seq(
     "com.quantifind" % "wisp_2.11" % "0.0.4" % "compile",
     "org.jzy3d" % "jzy3d-api" % "0.9.1" % "compile",
     "com.lihaoyi" % "ammonite-repl_2.11.7" % "0.5.8"
-  ),
-  dataDirectory := new File("data/"),
-  initialCommands in console := """io.github.mandar2812.dynaml.DynaML.run(banner="""" +
-    target.value.getPath + """/universal/stage/conf/banner.txt");"""
+  )
 )
 
-lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
-  .settings(commonSettings: _*)
+lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
   .settings(
+    name := "dynaml-pipes",
+    version := "1.0"
+  )
+
+lazy val core = (project in file("dynaml-core")).settings(baseSettings)
+  .settings(commonSettings:_*)
+  .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
+  .dependsOn(pipes)
+  .settings(
+    name := "dynaml-core",
+    version := "v1.4-beta.7"
+  )
+
+lazy val examples = (project in file("dynaml-examples"))
+  .settings(baseSettings:_*)
+  .settings(commonSettings:_*)
+  .settings(
+    name := "dynaml-examples",
+    version := "1.0"
+  ).dependsOn(pipes, core)
+
+lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
+  .settings(baseSettings:_*)
+  .settings(commonSettings: _*)
+  .dependsOn(core, examples, pipes)
+  .settings(
+    //aggregate in update := false,
+    name := "DynaML",
+    version := "v1.4-beta.7",
+    fork in run := true,
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
     buildInfoUsePackageAsPath := true,
@@ -67,6 +94,10 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       // -J params will be added as jvm parameters
       "-J-Xmx2048m",
       "-J-Xms64m"
-    )
-  )
+    ),
+    dataDirectory := new File("data/"),
+    initialCommands in console := """io.github.mandar2812.dynaml.DynaML.run(banner="""" +
+      target.value.getPath + """/universal/stage/conf/banner.txt");"""
+
+)
 

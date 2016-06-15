@@ -23,32 +23,34 @@ import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
-import io.github.mandar2812.dynaml.models.gp.GPNarModel
+import io.github.mandar2812.dynaml.models.svm.DLSSVM
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
 /**
   * Created by mandar on 4/3/16.
   */
-object SantaFeLaser {
+object DaisyPowerPlant {
   def apply(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
             deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
-            num_training: Int = 150, num_test:Int = 1000,
+            num_training: Int = 150, column: Int = 7,
             opt: Map[String, String]) =
-    runExperiment(kernel, noise, deltaT, timelag,
-      stepPred, num_training, num_test, opt)
+    runExperiment(kernel, deltaT, timelag,
+    stepPred, num_training, column, opt)
 
   def runExperiment(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
-                    num_training: Int = 150, num_test:Int,
+                    num_training: Int = 150, column: Int = 7,
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {
     //Load Daisy data into a stream
     //Extract the time and Dst values
 
     val logger = Logger.getLogger(this.getClass)
+
+    val names = Map(6 -> "steam pressure",
+      7 -> "main stem temperature",
+      8 -> "reheat steam temperature")
 
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
@@ -57,8 +59,7 @@ object SantaFeLaser {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
 
-        val model = new GPNarModel(deltaT, kernel,
-          noise, trainTest._1._1)
+        val model = new DLSSVM(trainTest._1._1, num_training, kernel)
 
         val gs = opt("globalOpt") match {
           case "GS" => new GridSearch[model.type](model)
@@ -68,73 +69,71 @@ object SantaFeLaser {
 
           case "ML" => new GPMLOptimizer[DenseVector[Double],
             Stream[(DenseVector[Double], Double)],
-            model.type](model)
+            DLSSVM](model)
         }
 
-        val startConf = kernel.state ++ noise.state
+        val startConf = kernel.state ++ Map("regularization" ->
+          opt("regularization").toDouble)
 
         val (_, conf) = gs.optimize(startConf, opt)
 
-        val res = model.test(trainTest._1._2.toSeq)
 
-        val deNormalize = DataPipe((list: List[(Double, Double, Double, Double)]) =>
+
+        model.setRegParam(opt("regularization").toDouble).learn()
+
+        val res = trainTest._1._2.map(testpoint => (model.predict(testpoint._1), testpoint._2))
+
+        val scoresAndLabelsPipe = DataPipe((list: List[(Double, Double)]) =>
           list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._2*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._3*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._4*trainTest._2._2(-1) + trainTest._2._1(-1))})
-
-        val scoresAndLabelsPipe =
-          DataPipe(
-            (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2, i._4, i._5)).toList) > deNormalize
+            l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res.toList)
 
-        val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
+        val metrics = new RegressionMetrics(scoresAndLabels,
           scoresAndLabels.length)
-
-        val name = "Laser Intensity"
-        metrics.setName(name)
+        metrics.setName(names(column))
 
         metrics.print()
-        metrics.generateFitPlot()
+        metrics.generatePlots()
 
         //Plotting time series prediction comparisons
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._2))
         hold()
         line((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._1))
-        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._3))
-        hold()
-        spline((1 to scoresAndLabels.length).toList, scoresAndLabels.map(_._4))
-        legend(List(name, "Predicted "+name+" (one hour ahead)", "Lower Bar", "Higher Bar"))
-        title("Santa Fe Infrared Laser: "+name)
+        legend(List(names(column), "Predicted "+names(column)+" (one hour ahead)"))
+        title("Pont-sur-Sambre 120 MW power plant: "+names(column))
         unhold()
 
         Seq(
-          Seq(deltaT, 1, num_training, num_test,
+          Seq(deltaT, 1, num_training, 200-num_training,
             metrics.mae, metrics.rmse, metrics.Rsq,
             metrics.corr, metrics.modelYield)
         )
       }
 
     val preProcessPipe = DynaMLPipe.fileToStream >
-      DynaMLPipe.trimLines >
+    DynaMLPipe.trimLines >
+      DynaMLPipe.replaceWhiteSpaces >
       DynaMLPipe.extractTrainingFeatures(
-        List(0),
+        List(0,column,1,2,3,4,5),
         Map()
       ) >
-      DataPipe((lines: Stream[String]) =>
-        lines.zipWithIndex.map(couple =>
-          (couple._2.toDouble, couple._1.toDouble))
-      ) > DynaMLPipe.deltaOperation(deltaT, 0)
+      DynaMLPipe.removeMissingLines >
+      StreamDataPipe((line: String) => {
+        val splits = line.split(",")
+        val timestamp = splits.head.toDouble
+        val feat = DenseVector(splits.tail.map(_.toDouble))
+        (timestamp, feat)
+      }) >
+      DynaMLPipe.deltaOperationVec(deltaT)
 
     val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
-      DynaMLPipe.splitTrainingTest(num_training, num_test) >
+      DynaMLPipe.splitTrainingTest(num_training, 200-num_training) >
       DynaMLPipe.trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe.run(("data/santafelaser.csv",
-      "data/santafelaser.csv"))
+    trainTestPipe.run(("data/powerplant.csv",
+      "data/powerplant.csv"))
 
   }
 }

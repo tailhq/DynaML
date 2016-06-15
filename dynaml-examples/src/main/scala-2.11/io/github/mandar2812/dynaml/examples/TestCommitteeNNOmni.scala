@@ -18,8 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.examples
 
-
-
 import breeze.linalg.DenseVector
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.DynaMLPipe

@@ -19,7 +19,9 @@ under the License.
 package io.github.mandar2812.dynaml.examples
 
 import java.io.BufferedReader
+
 import com.github.tototoshi.csv.CSVWriter
+
 import scala.util.Random
 
 class ExtendedString(s:String) {
