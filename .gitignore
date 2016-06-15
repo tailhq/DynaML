@@ -12,6 +12,9 @@ build/*.jar
 .settings
 .cache
 target/*
+dynaml-core/target/*
+dynaml-examples/target/*
+dynaml-pipes/target/*
 .DS_Store
 release.properties
 *.log
