@@ -16,28 +16,22 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.graphutils
+package io.github.mandar2812.dynaml.graph
 
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.frames.{Adjacency, VertexFrame, Property}
 
 /**
  * Defines the [[VertexFrame]] for the
- * input features nodes in the graph.
+ * parameter node in the graph.
  */
-trait Point extends VertexFrame {
-  @Property("value")
-  def getValue(): Array[Double]
+trait Parameter extends VertexFrame {
+  @Property("slope")
+  def getSlope(): Array[Double]
 
-  @Property("value")
-  def setValue(value: Array[Double]): Unit
+  @Property("slope")
+  def setSlope(slope: Array[Double]): Unit
 
-  @Property("featureMap")
-  def getFeatureMap(): Array[Double]
-
-  @Property("featureMap")
-  def setFeatureMap(value: Array[Double]): Unit
-
-  @Adjacency(label = "causes", direction = Direction.OUT)
-  def getLabel(): java.lang.Iterable[Label]
+  @Adjacency(label = "controls", direction = Direction.OUT)
+  def getControlledPointLabels(): java.lang.Iterable[Label]
 }

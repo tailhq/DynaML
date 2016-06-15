@@ -20,11 +20,12 @@ package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalSVMKernel}
 import io.github.mandar2812.dynaml.models.svm.DLSSVM
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
-import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DynaMLPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
 /**

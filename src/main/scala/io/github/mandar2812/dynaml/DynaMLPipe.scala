@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.pipes
+package io.github.mandar2812.dynaml
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
@@ -25,7 +25,7 @@ import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.{
 CoupledSimulatedAnnealing, GPMLOptimizer,
 GloballyOptWithGrad, GridSearch}
-import io.github.mandar2812.dynaml.utils
+import io.github.mandar2812.dynaml.pipes.{DataPipe, ParallelPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
 import scala.collection.mutable.{MutableList => ML}

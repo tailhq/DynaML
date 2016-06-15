@@ -19,9 +19,10 @@ under the License.
 package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
-import io.github.mandar2812.dynaml.pipes.{DynaMLPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
   * Created by mandar on 15/12/15.

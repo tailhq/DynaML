@@ -19,7 +19,7 @@ package io.github.mandar2812.dynaml.models.svm
 import breeze.linalg.{DenseMatrix, DenseVector, norm}
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
-import io.github.mandar2812.dynaml.graphutils.{CausalEdge, Parameter, Point}
+import io.github.mandar2812.dynaml.graph.{CausalEdge, Parameter, Point}
 import io.github.mandar2812.dynaml.kernels.{GaussianDensityKernel, RBFKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.KernelizedModel
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient

@@ -16,37 +16,25 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.graphutils
+package io.github.mandar2812.dynaml.graph
 
-import com.tinkerpop.frames.{Property, InVertex, OutVertex, EdgeFrame}
+import com.tinkerpop.frames.{Property, OutVertex, InVertex, EdgeFrame}
 
 /**
- * Frames implementation of a Neural Network
- * Synapse
+ * Defines the [[EdgeFrame]] for the
+ * edges going out from the input data
+ * node.
  */
-trait Synapse extends EdgeFrame {
+trait CausalEdge extends EdgeFrame {
   @OutVertex
-  def getPreSynapticNeuron(): Neuron
+  def getPoint(): Point
 
   @InVertex
-  def getPostSynapticNeuron(): Neuron
+  def getLabel(): Label
 
-  @Property("weight")
-  def getWeight(): Double
+  @Property("relation")
+  def getRelation(): String
 
-  @Property("weight")
-  def setWeight(w: Double): Unit
-
-  @Property("PrevWeightUpdate")
-  def getPrevWeightUpdate(): Double
-
-  @Property("PrevWeightUpdate")
-  def setPrevWeightUpdate(w: Double): Unit
-
-  @Property("layer")
-  def getLayer(): Int
-
-  @Property("layer")
-  def setLayer(l: Int): Unit
-
+  @Property("relation")
+  def setRelation(value: String): Unit
 }

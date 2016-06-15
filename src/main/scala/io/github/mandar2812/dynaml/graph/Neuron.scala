@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.graphutils
+package io.github.mandar2812.dynaml.graph
 
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.frames.{Incidence, Property, VertexFrame}

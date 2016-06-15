@@ -19,8 +19,10 @@ under the License.
 package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.{DenseVector => BDV}
+import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.BinaryClassificationMetrics
 import io.github.mandar2812.dynaml.kernels.LocalSVMKernel
+import io.github.mandar2812.dynaml.models.GLMPipe
 import io.github.mandar2812.dynaml.models.lm.{GeneralizedLinearModel, LogisticGLM, ProbitGLM}
 import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
 import io.github.mandar2812.dynaml.models.svm.DLSSVM

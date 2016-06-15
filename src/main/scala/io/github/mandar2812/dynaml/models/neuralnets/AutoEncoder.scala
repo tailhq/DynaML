@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.neuralnets
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.pipes.ModelPipe
+import io.github.mandar2812.dynaml.models.ModelPipe
 
 /**
   * Created by mandar on 23/2/16.

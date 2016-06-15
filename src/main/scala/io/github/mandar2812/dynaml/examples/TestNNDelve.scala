@@ -20,10 +20,11 @@ package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.{DenseVector => BDV}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
+import io.github.mandar2812.dynaml.models.GLMPipe
 import io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel
 import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
 import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.utils
+import io.github.mandar2812.dynaml.{DynaMLPipe, utils}
 
 /**
   * Created by mandar on 11/1/16.

@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg._
-import io.github.mandar2812.dynaml.graphutils.CausalEdge
+import io.github.mandar2812.dynaml.graph.CausalEdge
 
 /**
  * @author mandar2812

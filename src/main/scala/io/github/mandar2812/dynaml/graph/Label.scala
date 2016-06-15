@@ -16,19 +16,22 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.graphutils
+package io.github.mandar2812.dynaml.graph
 
-import com.tinkerpop.frames.{InVertex, OutVertex, EdgeFrame}
+import com.tinkerpop.blueprints.Direction
+import com.tinkerpop.frames.{Adjacency, VertexFrame, Property}
 
 /**
- * Defines the [[EdgeFrame]] for the
- * edges going out from the parameter
- * node.
+ * Defines the [[VertexFrame]] for the
+ * target label node in the graph.
  */
-trait ParamEdge extends EdgeFrame {
-  @OutVertex
-  def getParameter(): Parameter
+trait Label extends VertexFrame{
+  @Property("value")
+  def getValue(): Double
 
-  @InVertex
-  def getLabel(): Label
+  @Property("value")
+  def setValue(value: Double): Unit
+
+  @Adjacency(label = "causes", direction = Direction.IN)
+  def getCausedByPoint(): java.lang.Iterable[Point]
 }

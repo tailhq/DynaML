@@ -19,8 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.models.LinearModel
-import io.github.mandar2812.dynaml.pipes.GPRegressionPipe
+import io.github.mandar2812.dynaml.models.{GPRegressionPipe, LinearModel}
 
 /**
   * Created by mandar on 9/2/16.

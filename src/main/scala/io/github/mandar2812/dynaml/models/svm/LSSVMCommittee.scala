@@ -1,9 +1,9 @@
 package io.github.mandar2812.dynaml.models.svm
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.models.DLSSVMPipe
 import io.github.mandar2812.dynaml.models.ensemble.CommitteeModel
 import io.github.mandar2812.dynaml.optimization.{GlobalOptimizer, GridSearch, RDDCommitteeSolver, RegularizedOptimizer}
-import io.github.mandar2812.dynaml.pipes.DLSSVMPipe
 import org.apache.spark.rdd.RDD
 
 /**

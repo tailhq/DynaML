@@ -20,9 +20,10 @@ package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.DenseVector
 import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.neuralnets.{FFNeuralGraph, FeedForwardNetwork}
-import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DynaMLPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
 import scala.collection.mutable.{MutableList => ML}

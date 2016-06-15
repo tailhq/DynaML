@@ -188,7 +188,7 @@ object DynaML {
                                     |main(${(quotedArgs ++ quotedKwargs).mkString(", ")})
                                     |}
         """.stripMargin)
-      }catch{
+      } catch {
         case e: ArgParseException =>
           // For this semi-expected invalid-argument exception, chop off the
           // irrelevant bits of the stack trace to reveal only the part which

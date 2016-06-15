@@ -124,17 +124,17 @@ package object utils {
                     s: DenseMatrix[Double],
                     i: Int):
     (DenseVector[Double], DenseMatrix[Double]) = d match {
-      case Nil => {
+      case Nil =>
         m :/= i.toDouble
         s :/= i.toDouble
         //val m1: DenseVector[Double] = m/i.toDouble
         (m, s - (m*m.t))
-      }
-      case x :: rest => {
+
+      case x :: rest =>
         getStatsRec(rest, m + x,
           s + x*x.t,
           i + 1)
-      }
+
     }
 
     getStatsRec(data.tail, data.head,
