@@ -59,4 +59,4 @@ Going ahead we aim to introduce (but not limit to)
 
 Documentation
 =============
-You can refer to the project [wiki](https://github.com/mandar2812/DynaML/wiki) or [API](http://mandar2812.github.io/DynaML/target/site/scaladocs/index.html#package) docs. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
+You can refer to the project [wiki](https://github.com/mandar2812/DynaML/wiki) or [API](http://mandar2812.github.io/DynaML/target/site/index.html#package) docs. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
