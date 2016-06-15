@@ -11,6 +11,9 @@
 build/*.jar
 .settings
 .cache
+dynaml-core
+dynaml-pipes
+dynaml-examples
 target/*
 .DS_Store
 !target/site
