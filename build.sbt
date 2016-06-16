@@ -83,6 +83,6 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     dataDirectory := new File("data/"),
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.run(banner="""" +
       target.value.getPath + """/universal/stage/conf/banner.txt");"""
-
-)
+  ).aggregate(core, pipes, examples).settings(
+    aggregate in publishM2 := true)
 
