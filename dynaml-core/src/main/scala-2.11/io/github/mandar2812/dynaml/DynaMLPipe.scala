@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml
 
 import scala.collection.mutable.{MutableList => ML}
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector, diag}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
@@ -333,6 +333,27 @@ object DynaMLPipe {
     val dwtvec = utils.haarMatrix(math.pow(2.0, order).toInt)*signal
 
     dwtvec.mapPairs((row, v) => v*appRowFactors(row))
+  })
+
+  def invWaveletFilter(order: Int) = DataPipe((signal: DenseVector[Double]) => {
+    //Check size of signal before constructing DWT matrix
+    assert(
+      signal.length == math.pow(2.0, order).toInt,
+      "Length of signal must be dyadic power: 2^"+order
+    )
+
+    // Now construct DWT matrix
+    val invSqrtTwo = 1.0/math.sqrt(2.0)
+
+    val rowFactors = (0 until order).reverse.map(i => {
+      (1 to math.pow(2.0, i).toInt).map(k =>
+        invSqrtTwo/math.sqrt(order-i))})
+      .reduceLeft((a,b) => a ++ b).reverse
+
+    val appRowFactors = Seq(rowFactors.head) ++ rowFactors
+    val normalizationMat: DenseMatrix[Double] = diag(DenseVector(appRowFactors.toArray))
+
+    utils.haarMatrix(math.pow(2.0, order).toInt).t*(normalizationMat*signal)
   })
 
   def trainParametricModel[
