@@ -309,6 +309,31 @@ object DynaMLPipe {
   def duplicate[Source, Destination](pipe: DataPipe[Source, Destination]) =
     DataPipe(pipe, pipe)
 
+  /**
+    * Constructs a data pipe which performs discrete Haar wavelet transform
+    * on the original signal.
+    * */
+  def waveletFilter(order: Int) = DataPipe((signal: DenseVector[Double]) => {
+    //Check size of signal before constructing DWT matrix
+    assert(
+      signal.length == math.pow(2.0, order).toInt,
+      "Length of signal must be dyadic power: 2^"+order
+    )
+
+    // Now construct DWT matrix
+    val invSqrtTwo = 1.0/math.sqrt(2.0)
+
+    val rowFactors = (0 until order).reverse.map(i => {
+      (1 to math.pow(2.0, i).toInt).map(k =>
+        invSqrtTwo/math.sqrt(order-i))})
+      .reduceLeft((a,b) => a ++ b).reverse
+
+    val appRowFactors = Seq(rowFactors.head) ++ rowFactors
+
+    val dwtvec = utils.haarMatrix(math.pow(2.0, order).toInt)*signal
+
+    dwtvec.mapPairs((row, v) => v*appRowFactors(row))
+  })
 
   def trainParametricModel[
   G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]

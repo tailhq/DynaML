@@ -18,11 +18,13 @@ under the License.
 * */
 package io.github.mandar2812.dynaml
 
-import java.io.{FileWriter, BufferedWriter, File}
-import breeze.linalg.{DenseMatrix, DenseVector}
-import com.github.tototoshi.csv.{QUOTE_NONNUMERIC, DefaultCSVFormat, CSVReader}
+import java.io.{BufferedWriter, File, FileWriter}
+
+import breeze.linalg.{DenseMatrix, DenseVector, kron}
+import com.github.tototoshi.csv.{CSVReader, DefaultCSVFormat, QUOTE_NONNUMERIC}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
+
 import scala.io.Source
 import scala.reflect.runtime.{universe => ru}
 import scala.annotation.tailrec
@@ -215,6 +217,27 @@ package object utils {
     }
 
     transformData(tFunc)(lines)
+  }
+
+  /**
+    * Construct a haar transform matrix of size n
+    *
+    * NOTE: n must be a power of 2.
+    *
+    * */
+  def haarMatrix(n: Int) = {
+    val pos = DenseMatrix(Array(1.0, 1.0))
+    val neg = DenseMatrix(Array(-1.0, 1.0))
+    val hMat = DenseMatrix(Array(1.0, 1.0), Array(-1, 1.0))
+    def haarMatrixAcc(i: Int, hMatAcc: DenseMatrix[Double]): DenseMatrix[Double] = i match {
+      case `n` => hMatAcc
+      case index =>
+        haarMatrixAcc(i*2,
+          DenseMatrix.vertcat[Double](
+            kron(hMatAcc, pos),
+            kron(DenseMatrix.eye[Double](i), neg)))
+    }
+    haarMatrixAcc(2, hMat)
   }
 }
 
