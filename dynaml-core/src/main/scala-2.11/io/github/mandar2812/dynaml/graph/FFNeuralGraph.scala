@@ -16,12 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.models.neuralnets
+package io.github.mandar2812.dynaml.graph
 
 import breeze.linalg.DenseVector
 import com.tinkerpop.blueprints.{GraphFactory, Graph}
 import com.tinkerpop.frames.{FramedGraphFactory, FramedGraph}
-import io.github.mandar2812.dynaml.graph.{Neuron, Synapse}
 import org.apache.log4j.Logger
 
 import scala.collection.JavaConversions

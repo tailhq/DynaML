@@ -22,7 +22,8 @@ import breeze.linalg.DenseVector
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.models.neuralnets.{CommitteeNetwork, FFNeuralGraph}
+import io.github.mandar2812.dynaml.graph.FFNeuralGraph
+import io.github.mandar2812.dynaml.models.neuralnets.CommitteeNetwork
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.Logger
 

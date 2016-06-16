@@ -18,7 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.neuralnets
 
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.graph.NeuralGraph
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 
 /**

@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.models.neuralnets
 import breeze.linalg.DenseVector
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
+import io.github.mandar2812.dynaml.graph.FFNeuralGraph
 import io.github.mandar2812.dynaml.optimization.BackPropogation
 import io.github.mandar2812.dynaml.pipes.DataPipe
 

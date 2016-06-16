@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.neuralnets
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.graph.FFNeuralGraph
 import io.github.mandar2812.dynaml.models.LinearModel
 import io.github.mandar2812.dynaml.optimization.{BackPropogation, CommitteeModelSolver, RegularizedOptimizer}
 import io.github.mandar2812.dynaml.pipes.DataPipe

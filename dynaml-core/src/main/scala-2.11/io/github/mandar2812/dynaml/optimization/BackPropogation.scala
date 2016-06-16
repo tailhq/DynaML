@@ -19,8 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.graph.Neuron
-import io.github.mandar2812.dynaml.models.neuralnets.FFNeuralGraph
+import io.github.mandar2812.dynaml.graph.{FFNeuralGraph, Neuron}
 import org.apache.log4j.Logger
 
 import scala.util.Random
