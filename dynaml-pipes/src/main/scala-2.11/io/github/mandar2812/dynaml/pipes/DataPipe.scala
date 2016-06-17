@@ -45,11 +45,23 @@ trait DataPipe[Source, Destination] {
     val runFunc = (d: Source) => that.run(this.run(d))
     DataPipe(runFunc)
   }
+
+  def *[OtherSource, OtherDestination](that: DataPipe[OtherSource, OtherDestination])
+  :ParallelPipe[Source, Destination, OtherSource, OtherDestination] = ParallelPipe(this.run, that.run)
 }
 
 trait ParallelPipe[Source1, Result1, Source2, Result2]
   extends DataPipe[(Source1, Source2), (Result1, Result2)] {
 
+}
+
+object ParallelPipe {
+  def apply[S1, D1, S2, D2](func1: (S1) => D1, func2: (S2) => D2):
+  ParallelPipe[S1, D1, S2, D2] = {
+    new ParallelPipe[S1, D1, S2, D2] {
+      def run(data: (S1, S2)) = (func1(data._1), func2(data._2))
+    }
+  }
 }
 
 trait BifurcationPipe[Source, Result1, Result2]
@@ -70,12 +82,9 @@ object DataPipe {
     }
   }
 
-  def apply[S1, D1, S2, D2](pipe1: DataPipe[S1, D1], pipe2: DataPipe[S2, D2]):
-  ParallelPipe[S1, D1, S2, D2] = {
-    new ParallelPipe[S1, D1, S2, D2] {
-      def run(data: (S1, S2)) = (pipe1.run(data._1), pipe2.run(data._2))
-    }
-  }
+  def apply[S1, D1, S2, D2](pipe1: DataPipe[S1, D1],
+                            pipe2: DataPipe[S2, D2]): ParallelPipe[S1, D1, S2, D2] =
+    ParallelPipe(pipe1.run, pipe2.run)
 
   def apply[S, D1, D2](func: (S) => (D1, D2)):
   BifurcationPipe[S, D1, D2] = {

@@ -287,8 +287,8 @@ object DynaMLPipe {
   val splitTrainingTest = (num_training: Int, num_test: Int) =>
     DataPipe((data: (Stream[(DenseVector[Double], Double)],
     Stream[(DenseVector[Double], Double)])) => {
-    (data._1.take(num_training), data._2.takeRight(num_test))
-  })
+      (data._1.take(num_training), data._2.takeRight(num_test))
+    })
 
   /**
     * Extract a subset of columns from a [[Stream]] of comma separated [[String]]
@@ -311,13 +311,14 @@ object DynaMLPipe {
 
   /**
     * Constructs a data pipe which performs discrete Haar wavelet transform
-    * on the original signal.
+    * on a (breeze) vector signal.
     * */
-  def waveletFilter(order: Int) = DataPipe((signal: DenseVector[Double]) => {
+  val waveletFilter = (order: Int) => DataPipe((signal: DenseVector[Double]) => {
     //Check size of signal before constructing DWT matrix
     assert(
       signal.length == math.pow(2.0, order).toInt,
-      "Length of signal must be dyadic power: 2^"+order
+      "Signal: "+signal+"\n is of length "+signal.length+
+        "\nLength of signal must be : 2^"+order
     )
 
     // Now construct DWT matrix
@@ -335,11 +336,16 @@ object DynaMLPipe {
     dwtvec.mapPairs((row, v) => v*appRowFactors(row))
   })
 
-  def invWaveletFilter(order: Int) = DataPipe((signal: DenseVector[Double]) => {
+  /**
+    * Implements the inverse Discrete Haar Wavelet Transform
+    *
+    * */
+  val invWaveletFilter = (order: Int) => DataPipe((signal: DenseVector[Double]) => {
     //Check size of signal before constructing DWT matrix
     assert(
       signal.length == math.pow(2.0, order).toInt,
-      "Length of signal must be dyadic power: 2^"+order
+      "Signal: "+signal+"\n is of length "+signal.length+
+        "\nLength of signal must be : 2^"+order
     )
 
     // Now construct DWT matrix
