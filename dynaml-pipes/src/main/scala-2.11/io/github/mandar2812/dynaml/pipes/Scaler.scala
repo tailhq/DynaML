@@ -25,5 +25,9 @@ object Scaler {
   * */
 trait ReversibleScaler[S] extends Scaler[S] {
 
-  def i: Scaler[S]
+  /**
+    * The inverse operation of this scaling.
+    *
+    * */
+  val i: Scaler[S]
 }
