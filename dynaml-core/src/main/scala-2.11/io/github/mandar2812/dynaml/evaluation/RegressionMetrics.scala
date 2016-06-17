@@ -19,10 +19,11 @@ under the License.
 package io.github.mandar2812.dynaml.evaluation
 
 import breeze.linalg.DenseVector
+import breeze.numerics.{abs, log, sqrt}
 import io.github.mandar2812.dynaml.utils
-import org.apache.log4j.{Priority, Logger}
-
+import org.apache.log4j.{Logger, Priority}
 import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.utils.square
 
 /**
  * Class implementing the calculation
@@ -138,3 +139,120 @@ object RegressionMetrics {
       (scoresAndLabels.map(_._2).max - scoresAndLabels.map(_._2).min)
 
 }
+
+class MultiRegressionMetrics(override protected val scoresAndLabels
+                             : List[(DenseVector[Double], DenseVector[Double])],
+                             val len: Int)
+  extends Metrics[DenseVector[Double]] {
+  private val logger = Logger.getLogger(this.getClass)
+
+  val num_outputs: Int = scoresAndLabels.head._2.length
+
+  val onesVec = DenseVector.ones[Double](num_outputs)
+
+  val length: DenseVector[Double] = DenseVector.fill(num_outputs)(len)
+
+  val rmse: DenseVector[Double] = sqrt(scoresAndLabels.map((p) =>
+    square(p._1-p._2)).reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/length)
+
+  val mae: DenseVector[Double] = scoresAndLabels.map((p) =>
+    abs(p._1 - p._2)).reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/length
+
+  val rmsle: DenseVector[Double] = sqrt(scoresAndLabels.map((p) =>
+    square(log(onesVec + abs(p._1)) - log(abs(p._2) + onesVec)))
+    .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/length)
+
+  val Rsq: DenseVector[Double] = MultiRegressionMetrics.computeRsq(scoresAndLabels, length)
+
+  val corr: DenseVector[Double] = MultiRegressionMetrics.computeCorr(scoresAndLabels, length)
+
+  val predictionEfficiency = scoresAndLabels.map((p) =>
+    square(p._1 - p._2)).reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b)/length
+
+  val modelYield: DenseVector[Double] = MultiRegressionMetrics.computeYield(scoresAndLabels, length)
+
+  val sigma: DenseVector[Double] =
+    sqrt(utils.getStats(this.residuals().map(_._1))._2/(length - 1.0))
+
+  def residuals() = this.scoresAndLabels.map((s) => (s._2 - s._1, s._1))
+
+  def scores_and_labels() = this.scoresAndLabels
+
+  override def print(): Unit = {
+    logger.info("Regression Model Performance: "+name)
+    logger.info("============================")
+    logger.info("MAE: \n" + mae)
+    logger.info("RMSE: \n" + rmse)
+    logger.info("RMSLE: \n" + rmsle)
+    logger.info("R^2: \n" + Rsq)
+    logger.info("Corr. Coefficient: \n" + corr)
+    logger.info("Model Yield: \n"+modelYield)
+    logger.info("Std Dev of Residuals: \n" + sigma)
+  }
+
+  override def kpi() = DenseVector(mae, rmse, Rsq, corr)
+
+  override def generatePlots(): Unit = {
+    //logger.info("Generating Plot of Residuals")
+    //generateResidualPlot()
+    //generateFitPlot()
+  }
+
+
+}
+
+object MultiRegressionMetrics {
+  def computeRsq(scoresAndLabels: Iterable[(DenseVector[Double], DenseVector[Double])],
+                 size: DenseVector[Double]): DenseVector[Double] = {
+
+    val num_outputs = scoresAndLabels.head._2.length
+    val mean: DenseVector[Double] =
+      scoresAndLabels.map{_._2}.reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/size
+
+    var SSres = DenseVector.zeros[Double](num_outputs)
+    var SStot = DenseVector.zeros[Double](num_outputs)
+
+    scoresAndLabels.foreach((couple) => {
+      SSres :+= square(couple._2 - couple._1)
+      SStot :+= square(couple._2 - mean)
+    })
+
+    DenseVector.ones[Double](num_outputs) - (SSres:/SStot)
+  }
+
+  def computeCorr(scoresAndLabels: Iterable[(DenseVector[Double], DenseVector[Double])],
+                  size: DenseVector[Double]): DenseVector[Double] = {
+
+    val num_outputs = scoresAndLabels.head._2.length
+
+    val meanLabel: DenseVector[Double] = scoresAndLabels.map{_._2}
+      .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/size
+
+    val meanScore = scoresAndLabels.map{_._1}
+      .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/size
+
+    var SSLabel = DenseVector.zeros[Double](num_outputs)
+    var SSPred = DenseVector.zeros[Double](num_outputs)
+    var SSLabelPred = DenseVector.zeros[Double](num_outputs)
+
+    scoresAndLabels.foreach((couple) => {
+      SSLabel :+= square(couple._2 - meanLabel)
+      SSPred :+= square(couple._1 - meanScore)
+      SSLabelPred :+= (couple._1 - meanScore) :* (couple._2 - meanLabel)
+    })
+
+    SSLabelPred:/(sqrt(SSPred):*sqrt(SSLabel))
+  }
+
+  def computeYield(scoresAndLabels: Iterable[(DenseVector[Double], DenseVector[Double])],
+                   size: DenseVector[Double]): DenseVector[Double] = {
+    val num_outputs = scoresAndLabels.head._2.length
+    DenseVector.tabulate[Double](num_outputs)(dimension => {
+      //for each dimension, calculate the model yield
+      RegressionMetrics.computeYield(
+        scoresAndLabels.map(c => (c._1(dimension), c._2(dimension))),
+        size(0).toInt)
+    })
+  }
+}
+
