@@ -1,10 +1,11 @@
 package io.github.mandar2812.dynaml.models.svm
 
-import breeze.linalg.{DenseVector, DenseMatrix}
-import com.tinkerpop.blueprints.{GraphFactory, Graph}
-import com.tinkerpop.frames.{FramedGraphFactory, FramedGraph}
+import breeze.linalg.{DenseMatrix, DenseVector}
+import com.tinkerpop.blueprints.{Graph, GraphFactory}
+import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
 import io.github.mandar2812.dynaml.evaluation.Metrics
 import io.github.mandar2812.dynaml.graph._
+import io.github.mandar2812.dynaml.graph.utils._
 import io.github.mandar2812.dynaml.kernels.SVMKernel
 import io.github.mandar2812.dynaml.models.SubsampledDualLSSVM
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient

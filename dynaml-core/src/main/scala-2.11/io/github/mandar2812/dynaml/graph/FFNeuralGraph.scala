@@ -19,8 +19,9 @@ under the License.
 package io.github.mandar2812.dynaml.graph
 
 import breeze.linalg.DenseVector
-import com.tinkerpop.blueprints.{GraphFactory, Graph}
-import com.tinkerpop.frames.{FramedGraphFactory, FramedGraph}
+import com.tinkerpop.blueprints.{Graph, GraphFactory}
+import com.tinkerpop.frames.{FramedGraph, FramedGraphFactory}
+import io.github.mandar2812.dynaml.graph.utils.{Neuron, Synapse}
 import org.apache.log4j.Logger
 
 import scala.collection.JavaConversions
