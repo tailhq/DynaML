@@ -141,6 +141,11 @@ Time Series Data
 * _Result_: A variant of `deltaOperation` for NARX models.
 
 
+### ```haarWaveletFilter(order: Int)```
+
+* _Type_: ```DataPipe[DenseVector[Double], DenseVector[Double]] ```
+* _Result_: A Haar Discrete wavelet transform.
+
 
 General
 ------
