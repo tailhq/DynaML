@@ -9,6 +9,14 @@ package io.github.mandar2812.dynaml.pipes
 trait Scaler[S] extends DataPipe[S, S]{
   def apply[T[S] <: Traversable[S]](data: T[S]) =
     data.map(run _).asInstanceOf[T[S]]
+
+  def *[T](that: Scaler[T]) = {
+    val firstRun = this.run _
+    new Scaler[(S,T)] {
+      override def run(data: (S, T)): (S, T) = (firstRun(data._1), that(data._2))
+    }
+  }
+
 }
 
 object Scaler {
@@ -30,4 +38,18 @@ trait ReversibleScaler[S] extends Scaler[S] {
     *
     * */
   val i: Scaler[S]
+
+  def *[T](that: ReversibleScaler[T]) = {
+
+    val firstInv = this.i
+
+    val firstRun = this.run _
+
+    new ReversibleScaler[(S, T)] {
+
+      val i: Scaler[(S,T)] = firstInv * that.i
+
+      override def run(data: (S, T)): (S, T) = (firstRun(data._1), that(data._2))
+    }
+  }
 }

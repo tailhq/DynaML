@@ -7,6 +7,7 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler, Scaler, StreamDataPipe}
+import io.github.mandar2812.dynaml.utils.{GaussianScaler, MinMaxScaler}
 import org.apache.log4j.Logger
 
 /**
@@ -282,6 +283,62 @@ object DynaMLPipe {
 
       ((trainTest._1.map(normalizationFunc),
         trainTest._2.map(normalizationFunc)), (mean, stdDev))
+    })
+
+  /**
+    * Perform gaussian normalization on a data stream which
+    * is a [[Tuple2]] of the form.
+    *
+    * (Stream(training data), Stream(test data))
+    * */
+  val gaussianScalingTrainTest =
+    DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
+      Stream[(DenseVector[Double], DenseVector[Double])])) => {
+
+      val (num_features, num_targets) = (trainTest._1.head._1.length, trainTest._1.head._2.length)
+
+      val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
+        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+      val stdDev: DenseVector[Double] = variance.map(v =>
+        math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
+
+
+      val featuresScaler = new GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
+
+      val targetsScaler = new GaussianScaler(
+        mean(num_features until num_features + num_targets - 1),
+        stdDev(num_features until num_features + num_targets - 1))
+
+      val scaler = featuresScaler * targetsScaler
+
+      (scaler(trainTest._1), scaler(trainTest._2), scaler)
+    })
+
+  /**
+    * Perform [0,1] scaling on a data stream which
+    * is a [[Tuple2]] of the form.
+    *
+    * (Stream(training data), Stream(test data))
+    * */
+  val minMaxScalingTrainTest =
+    DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
+      Stream[(DenseVector[Double], DenseVector[Double])])) => {
+
+      val (num_features, num_targets) = (trainTest._1.head._1.length, trainTest._1.head._2.length)
+
+      val (min, max) = utils.getMinMax(trainTest._1.map(tup =>
+        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+      val featuresScaler = new GaussianScaler(min(0 until num_features), max(0 until num_features))
+
+      val targetsScaler = new MinMaxScaler(
+        min(num_features until num_features + num_targets - 1),
+        max(num_features until num_features + num_targets - 1))
+
+      val scaler = featuresScaler * targetsScaler
+
+      (scaler(trainTest._1), scaler(trainTest._2), scaler)
     })
 
   /**

@@ -75,15 +75,40 @@ package object utils {
                     i: Int):
     (DenseVector[Double], DenseVector[Double]) = d match {
       case Nil => (m, s)
-      case x :: rest => {
+      case x :: rest =>
         getStatsRec(rest, m + (x - m)/i.toDouble,
           s + ((x - m) :* (x - (m + (x - m)/i.toDouble))),
           i - 1)
-      }
+
     }
 
     getStatsRec(data.tail, data.head,
       DenseVector.zeros[Double](data.head.length),
+      data.length)
+  }
+
+
+  def getMinMax(data: List[DenseVector[Double]]):
+  (DenseVector[Double], DenseVector[Double]) = {
+    @tailrec
+    def getMinMaxRec(d: List[DenseVector[Double]],
+                     m: DenseVector[Double],
+                     s: DenseVector[Double],
+                     i: Int):
+    (DenseVector[Double], DenseVector[Double]) = d match {
+      case Nil => (m, s)
+      case x :: rest =>
+        getMinMaxRec(rest,
+          DenseVector((x.toArray zip m.toArray).map(c => math.min(c._1, c._2))),
+          DenseVector((x.toArray zip s.toArray).map(c => math.max(c._1, c._2))),
+          i - 1)
+
+    }
+
+    getMinMaxRec(
+      data.tail,
+      data.head,
+      data.head,
       data.length)
   }
 
