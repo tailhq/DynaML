@@ -307,12 +307,12 @@ object DynaMLPipe {
       val featuresScaler = new GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
 
       val targetsScaler = new GaussianScaler(
-        mean(num_features until num_features + num_targets - 1),
-        stdDev(num_features until num_features + num_targets - 1))
+        mean(num_features until num_features + num_targets),
+        stdDev(num_features until num_features + num_targets))
 
-      val scaler = featuresScaler * targetsScaler
+      val scaler: ReversibleScaler[(DenseVector[Double], DenseVector[Double])] = featuresScaler * targetsScaler
 
-      (scaler(trainTest._1), scaler(trainTest._2), scaler)
+      (scaler(trainTest._1), scaler(trainTest._2), (featuresScaler, targetsScaler))
     })
 
   /**
@@ -333,12 +333,12 @@ object DynaMLPipe {
       val featuresScaler = new GaussianScaler(min(0 until num_features), max(0 until num_features))
 
       val targetsScaler = new MinMaxScaler(
-        min(num_features until num_features + num_targets - 1),
-        max(num_features until num_features + num_targets - 1))
+        min(num_features until num_features + num_targets),
+        max(num_features until num_features + num_targets))
 
-      val scaler = featuresScaler * targetsScaler
+      val scaler: ReversibleScaler[(DenseVector[Double], DenseVector[Double])] = featuresScaler * targetsScaler
 
-      (scaler(trainTest._1), scaler(trainTest._2), scaler)
+      (scaler(trainTest._1), scaler(trainTest._2), (featuresScaler, targetsScaler))
     })
 
   /**
