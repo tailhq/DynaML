@@ -286,6 +286,37 @@ object DynaMLPipe {
     })
 
   /**
+    * Scale a data set which is stored as a [[Stream]],
+    * return the scaled data as well as a [[GaussianScaler]] instance
+    * which can be used to reverse the scaled values to the original
+    * data.
+    *
+    * */
+  val gaussianScaling =
+    DataPipe((trainTest: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+
+      val (num_features, num_targets) = (trainTest.head._1.length, trainTest.head._2.length)
+
+      val (mean, variance) = utils.getStats(trainTest.map(tup =>
+        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+      val stdDev: DenseVector[Double] = variance.map(v =>
+        math.sqrt(v/(trainTest.length.toDouble - 1.0)))
+
+
+      val featuresScaler = new GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
+
+      val targetsScaler = new GaussianScaler(
+        mean(num_features until num_features + num_targets),
+        stdDev(num_features until num_features + num_targets))
+
+      val scaler: ReversibleScaler[(DenseVector[Double], DenseVector[Double])] = featuresScaler * targetsScaler
+
+      (scaler(trainTest), (featuresScaler, targetsScaler))
+    })
+
+
+  /**
     * Perform gaussian normalization on a data stream which
     * is a [[Tuple2]] of the form.
     *
@@ -313,6 +344,32 @@ object DynaMLPipe {
       val scaler: ReversibleScaler[(DenseVector[Double], DenseVector[Double])] = featuresScaler * targetsScaler
 
       (scaler(trainTest._1), scaler(trainTest._2), (featuresScaler, targetsScaler))
+    })
+
+  /**
+    * Scale a data set which is stored as a [[Stream]],
+    * return the scaled data as well as a [[MinMaxScaler]] instance
+    * which can be used to reverse the scaled values to the original
+    * data.
+    *
+    * */
+  val minMaxScaling =
+    DataPipe((trainTest: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+
+      val (num_features, num_targets) = (trainTest.head._1.length, trainTest.head._2.length)
+
+      val (min, max) = utils.getMinMax(trainTest.map(tup =>
+        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+      val featuresScaler = new GaussianScaler(min(0 until num_features), max(0 until num_features))
+
+      val targetsScaler = new MinMaxScaler(
+        min(num_features until num_features + num_targets),
+        max(num_features until num_features + num_targets))
+
+      val scaler: ReversibleScaler[(DenseVector[Double], DenseVector[Double])] = featuresScaler * targetsScaler
+
+      (scaler(trainTest), (featuresScaler, targetsScaler))
     })
 
   /**
