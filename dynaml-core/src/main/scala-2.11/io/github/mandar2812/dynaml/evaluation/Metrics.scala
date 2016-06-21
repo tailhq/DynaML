@@ -25,11 +25,17 @@ import org.apache.spark.rdd.RDD
  * Abstract trait for metrics
  */
 trait Metrics[P] {
+
   protected val scoresAndLabels: List[(P, P)]
+
   protected var name = "Value"
+
   def print(): Unit
+
   def generatePlots(): Unit = {}
+
   def kpi(): DenseVector[P]
+
   def setName(n: String): this.type = {
     name = n
     this

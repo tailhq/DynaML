@@ -40,6 +40,7 @@ class BinaryClassificationMetricsSpark(
   override protected val scoresAndLabels = List()
 
   private val logger = Logger.getLogger(this.getClass)
+
   val length = len
 
   /**

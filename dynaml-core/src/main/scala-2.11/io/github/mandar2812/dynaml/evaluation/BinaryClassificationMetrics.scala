@@ -184,4 +184,10 @@ class BinaryClassificationMetrics(
   override def kpi() = DenseVector(accuracyByThreshold().map((c) => c._2).max,
     fMeasureByThreshold().map((c) => c._2).max,
     areaUnderROC())
+
+  def ++(otherMetrics: BinaryClassificationMetrics): BinaryClassificationMetrics = {
+    new BinaryClassificationMetrics(
+      this.scoresAndLabels ++ otherMetrics.scoresAndLabels,
+      this.length + otherMetrics.length).setName(this.name)
+  }
 }
