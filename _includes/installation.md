@@ -24,7 +24,7 @@ The sbt shell will open
 
 ```shell
  [info] Loading project definition from ~/DynaML/project
- [info] Set current project to DynaML (in build file:~/Development/DynaML/)
+ [info] Set current project to DynaML
  >
 ```
 
@@ -38,18 +38,14 @@ Now enter the following commands
 After the project builds, you should get the following prompt.
   
 ```
-      ___           ___           ___           ___           ___           ___
-     /\  \         |\__\         /\__\         /\  \         /\__\         /\__\
-    /::\  \        |:|  |       /::|  |       /::\  \       /::|  |       /:/  /
-   /:/\:\  \       |:|  |      /:|:|  |      /:/\:\  \     /:|:|  |      /:/  /
-  /:/  \:\__\      |:|__|__   /:/|:|  |__   /::\~\:\  \   /:/|:|__|__   /:/  /
- /:/__/ \:|__|     /::::\__\ /:/ |:| /\__\ /:/\:\ \:\__\ /:/ |::::\__\ /:/__/
- \:\  \ /:/  /    /:/~~/~    \/__|:|/:/  / \/__\:\/:/  / \/__/~~/:/  / \:\  \
-  \:\  /:/  /    /:/  /          |:/:/  /       \::/  /        /:/  /   \:\  \
-   \:\/:/  /     \/__/           |::/  /        /:/  /        /:/  /     \:\  \
-    \::/__/                      /:/  /        /:/  /        /:/  /       \:\__\
-     ~~                          \/__/         \/__/         \/__/         \/__/
-
+    ___       ___       ___       ___       ___       ___   
+   /\  \     /\__\     /\__\     /\  \     /\__\     /\__\  
+  /::\  \   |::L__L   /:| _|_   /::\  \   /::L_L_   /:/  /  
+ /:/\:\__\  |:::\__\ /::|/\__\ /::\:\__\ /:/L:\__\ /:/__/   
+ \:\/:/  /  /:;;/__/ \/|::/  / \/\::/  / \/_/:/  / \:\  \   
+  \::/  /   \/__/      |:/  /    /:/  /    /:/  /   \:\__\  
+   \/__/               \/__/     \/__/     \/__/     \/__/  
+   
 Welcome to DynaML v1.4-beta.8
 Interactive Scala shell for Machine Learning Research
 (Scala 2.11.7 Java 1.7.0_80)
