@@ -22,7 +22,7 @@ import breeze.linalg.DenseVector
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
 import io.github.mandar2812.dynaml.graph.FFNeuralGraph
-import io.github.mandar2812.dynaml.optimization.BackPropogation
+import io.github.mandar2812.dynaml.optimization.BackPropagation
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 
@@ -32,12 +32,9 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
   * backed by an underlying graph.
   *
   * @tparam D The type of the underlying training data structure.
-  *
   * @param data The training data
-  *
   * @param netgraph The [[FFNeuralGraph]] object which represents the
   *                 network.
-  *
   * @param transform A [[DataPipe]] which takes input of type [[D]] and
   *                  returns a [[Stream]] of input, output tuples.
   *
@@ -74,14 +71,14 @@ class FeedForwardNetwork[D](
 
   /**
     * Model optimizer set to
-    * [[BackPropogation]] which
+    * [[BackPropagation]] which
     * is an implementation of
     * gradient based Back-propogation
     * with a momentum term.
     *
     * */
   override protected val optimizer =
-    new BackPropogation()
+    new BackPropagation()
       .setNumIterations(100)
       .setStepSize(0.01)
 
@@ -90,7 +87,7 @@ class FeedForwardNetwork[D](
     this
   }
 
-  override def dataAsStream(d: D) = transform.run(d)
+  override def dataAsStream(d: D) = transform(d)
 
   /**
    * Learn the parameters

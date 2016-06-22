@@ -19,13 +19,45 @@ under the License.
 package io.github.mandar2812.dynaml.models.neuralnets
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.models.ModelPipe
+import io.github.mandar2812.dynaml.graph.FFNeuralGraph
+import io.github.mandar2812.dynaml.graph.utils.Neuron
+import io.github.mandar2812.dynaml.optimization.BackPropagation
+import io.github.mandar2812.dynaml.pipes.{ReversibleScaler, Scaler}
 
 /**
-  * Created by mandar on 23/2/16.
+  * @author mandar2812 22/6/16.
+  *
+  * Base implementation of a Sparse Autoencoder
+  *
+  * It is represented as a [[ReversibleScaler]] transforming
+  * a breeze [[DenseVector]] into another breeze Dense Vector.
   */
-trait AutoEncoder[Source, Data] extends
-ModelPipe[Source, Data, DenseVector[Double],
-  DenseVector[Double], FeedForwardNetwork[Data]]{
+class AutoEncoder(inDim: Int, outDim: Int) extends ReversibleScaler[DenseVector[Double]]{
+
+  def initialize() =
+    FFNeuralGraph(
+      inDim, inDim, 1,
+      List("logsig", "logsig"),
+      List(outDim))
+
+  var graph = initialize()
+
+  val optimizer = new BackPropagation
+
+  val i = Scaler((xhat: DenseVector[Double]) => {
+    graph.getLayer(1)
+      .filter(_.getNeuronType() == "perceptron")
+      .foreach(n => n.setValue(xhat(n.getNID())))
+    DenseVector(graph.getLayer(2).map(n => Neuron.getLocalField(n)._1).toArray)
+  })
+
+  def learn(data: Stream[(DenseVector[Double], DenseVector[Double])]) = {
+    graph = optimizer.optimize(data.length.toLong, data, initialize())
+  }
+
+  override def run(x: DenseVector[Double]) = {
+    graph.forwardPass(x)
+    DenseVector(graph.getLayer(1).filter(_.getNeuronType() == "perceptron").map(_.getValue()).toArray)
+  }
 
 }

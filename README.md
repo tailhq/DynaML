@@ -88,10 +88,25 @@ Steps
 * Clone this repository
 * Run the following.
 ```shell
-  sbt console
+  sbt
 ```
 
-  You should get the following prompt.
+The sbt shell will open
+
+```shell
+ [info] Loading project definition from ~/DynaML/project
+ [info] Set current project to DynaML (in build file:~/Development/DynaML/)
+ >
+```
+
+Now enter the following commands
+
+```shell
+>stage
+>console
+```
+
+After the project builds, you should get the following prompt.
   
 ```
       ___           ___           ___           ___           ___           ___

@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.models.neuralnets
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.graph.FFNeuralGraph
 import io.github.mandar2812.dynaml.models.LinearModel
-import io.github.mandar2812.dynaml.optimization.{BackPropogation, CommitteeModelSolver, RegularizedOptimizer}
+import io.github.mandar2812.dynaml.optimization.{BackPropagation, CommitteeModelSolver, RegularizedOptimizer}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
@@ -40,7 +40,7 @@ LinearModel[D, DenseVector[Double], DenseVector[Double],
 
   val baseNetworks: List[FFNeuralGraph] = networks.toList
 
-  val baseOptimizer = new BackPropogation()
+  val baseOptimizer = new BackPropagation()
     .setMomentum(0.01).setRegParam(0.001)
     .setMiniBatchFraction(1.0/baseNetworks.length)
     .setNumIterations(20)

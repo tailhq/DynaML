@@ -29,7 +29,7 @@ import scala.util.Random
   * Implementation of the standard back pro-pogation with momentum
   * using the "generalized delta rule".
   */
-class BackPropogation extends RegularizedOptimizer[FFNeuralGraph,
+class BackPropagation extends RegularizedOptimizer[FFNeuralGraph,
   DenseVector[Double], DenseVector[Double],
   Stream[(DenseVector[Double], DenseVector[Double])]] {
 
