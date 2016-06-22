@@ -16,24 +16,42 @@ Currently DynaML installs and runs on *nix platforms, though it is possible to b
 
 * Clone this repository
 * Run the following.
+```shell
+  sbt
+```
+
+The sbt shell will open
 
 ```shell
-  sbt console
+ [info] Loading project definition from ~/DynaML/project
+ [info] Set current project to DynaML (in build file:~/Development/DynaML/)
+ >
 ```
 
-  You should get the following prompt.
+Now enter the following commands
+
+```shell
+>stage
+>console
+```
+
+After the project builds, you should get the following prompt.
   
 ```
-    ___       ___       ___       ___       ___       ___   
-   /\  \     /\__\     /\__\     /\  \     /\__\     /\__\  
-  /::\  \   |::L__L   /:| _|_   /::\  \   /::L_L_   /:/  /  
- /:/\:\__\  |:::\__\ /::|/\__\ /::\:\__\ /:/L:\__\ /:/__/   
- \:\/:/  /  /:;;/__/ \/|::/  / \/\::/  / \/_/:/  / \:\  \   
-  \::/  /   \/__/      |:/  /    /:/  /    /:/  /   \:\__\  
-   \/__/               \/__/     \/__/     \/__/     \/__/  
+      ___           ___           ___           ___           ___           ___
+     /\  \         |\__\         /\__\         /\  \         /\__\         /\__\
+    /::\  \        |:|  |       /::|  |       /::\  \       /::|  |       /:/  /
+   /:/\:\  \       |:|  |      /:|:|  |      /:/\:\  \     /:|:|  |      /:/  /
+  /:/  \:\__\      |:|__|__   /:/|:|  |__   /::\~\:\  \   /:/|:|__|__   /:/  /
+ /:/__/ \:|__|     /::::\__\ /:/ |:| /\__\ /:/\:\ \:\__\ /:/ |::::\__\ /:/__/
+ \:\  \ /:/  /    /:/~~/~    \/__|:|/:/  / \/__\:\/:/  / \/__/~~/:/  / \:\  \
+  \:\  /:/  /    /:/  /          |:/:/  /       \::/  /        /:/  /   \:\  \
+   \:\/:/  /     \/__/           |::/  /        /:/  /        /:/  /     \:\  \
+    \::/__/                      /:/  /        /:/  /        /:/  /       \:\__\
+     ~~                          \/__/         \/__/         \/__/         \/__/
 
-Welcome to DynaML v 1.3
-Interactive Scala shell
-
-DynaML>
+Welcome to DynaML v1.4-beta.8
+Interactive Scala shell for Machine Learning Research
+(Scala 2.11.7 Java 1.7.0_80)
+DynaML> 
 ```
