@@ -1,5 +1,5 @@
 import breeze.stats.distributions.Gaussian
-import dlm._
+import generalDLM._
 import java.io.{PrintWriter, File}
 
 object KFilter {
