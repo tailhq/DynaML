@@ -3,6 +3,7 @@ import Scalaz._
 import java.io.{File, PrintWriter}
 import breeze.stats.distributions.Gaussian
 import Math.sqrt
+import KFilter._
 
 object generalDLM {
   type Loglikelihood = Double
