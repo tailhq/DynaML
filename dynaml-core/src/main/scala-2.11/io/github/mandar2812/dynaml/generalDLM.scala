@@ -4,7 +4,7 @@ import java.io.{File, PrintWriter}
 import breeze.stats.distributions.Gaussian
 import Math.sqrt
 
-object dlm {
+object generalDLM {
   type Loglikelihood = Double
   type Observation = Double
   type State = Double
