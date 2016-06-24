@@ -17,7 +17,7 @@ object generalDLM {
     }
   }
   case class Parameters(a: Double, b: Double, l1: Double, l2: Double) {
-    override def toString = s"$v, $w, $m0, $c0" 
+    override def toString = s"$a, $b, $l1, $l2" 
   }
 
   def simulate(p: Parameters): Stream[Data] = {
