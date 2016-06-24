@@ -26,7 +26,7 @@ object KFilter {
 
   def filter(d: Data, p: Parameters): FilterOut = {
     // update the mean and variance of the posterior to determine the state space
-    val e1 = d.observation - p.m0
+    val e1 = d.observation - p.l1
     val a1 = (p.l2 + p.b)/(p.l2 + p.b + p.a)
     val m1 = p.l1 + a1 * e1
     val c1 = a1 * p.a
