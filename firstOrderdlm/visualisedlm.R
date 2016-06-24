@@ -8,7 +8,7 @@ lapply(packages,require,character.only=T)
 theme_set(theme_minimal())
 
 ## read in the data and set column names
-data = read.csv("firstOrderDlm.csv")
+data = read.csv("firstOrderdlm.csv")
 colnames(data) = c("stationId", "time", "observation", "state")
 
 ## clean the data using dplyr and plot using ggplot2
