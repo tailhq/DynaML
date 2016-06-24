@@ -21,6 +21,6 @@ plotIters = function(iters, variable, burnin, thin) {
 ##################
 
 iters = read.csv("mcmcOut.csv")
-colnames(iters) <- c("V", "W", "m0", "c0")
+colnames(iters) <- c("A", "B", "l1", "l2")
 
 plotIters(iters, variable = 1:2, burnin = nrow(iters)*0.1, thin = 1)
