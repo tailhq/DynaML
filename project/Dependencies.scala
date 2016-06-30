@@ -27,8 +27,7 @@ object Dependencies {
 
   val linearAlgebraDependencies = Seq(
     "org.scalanlp" % "breeze_2.11" % "0.11.2" % "compile",
-    "org.scalanlp" % "breeze-natives_2.11" % "0.11.2" % "compile"/*,
-    "org.spire-math" %% "spire" % "0.11.0"*/)
+    "org.scalanlp" % "breeze-natives_2.11" % "0.11.2" % "compile")
 
   val chartsDependencies = Seq(
     "com.github.wookietreiber" % "scala-chart_2.11" % "0.4.2" % "compile",
