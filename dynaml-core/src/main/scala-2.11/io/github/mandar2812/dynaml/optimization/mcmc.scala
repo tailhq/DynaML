@@ -1,11 +1,12 @@
-import breeze.stats.distributions.{Uniform, Gaussian, Gamma}
-import generalDLM._
-import KFilter._
+package io.github.mandar2812.dynaml.optimization
+
 import java.io.{File, PrintWriter}
 import breeze.numerics.log
-import breeze.linalg.{DenseMatrix, DenseVector, diag}
-import scalaz._
-import Scalaz._
+import breeze.stats.distributions.{Gaussian, Uniform}
+import io.github.mandar2812.dynaml.models.lm.KFilter
+import io.github.mandar2812.dynaml.models.lm.generalDLM._
+import KFilter._
+import scalaz.Scalaz._
 
 object mcmc {
   case class MetropolisState(params: Parameters, accepted: Int, ll: Loglikelihood)
@@ -56,7 +57,7 @@ object mcmc {
     println(s"Accepted: ${iters.last.accepted.toDouble/n}")
 
     // write the parameters to file
-    val pw = new PrintWriter(new File("mcmcOut.csv"))
+    val pw = new PrintWriter(new File("data/mcmcOutRes.csv"))
     pw.write(iters.map(_.params).mkString("\n"))
     pw.close()
   }

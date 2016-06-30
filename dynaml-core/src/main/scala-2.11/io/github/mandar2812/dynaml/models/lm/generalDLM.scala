@@ -1,9 +1,12 @@
-import scalaz._
-import Scalaz._
+package io.github.mandar2812.dynaml.models.lm
+
 import java.io.{File, PrintWriter}
+import java.lang.Math.sqrt
+
 import breeze.stats.distributions.Gaussian
-import Math.sqrt
-import KFilter._
+
+import scalaz.Scalaz._
+
 
 object generalDLM {
   type Loglikelihood = Double
@@ -34,7 +37,7 @@ object generalDLM {
     // simulate 16 different realisations of 100 observations, representing 16 stations
     val observations = (1 to 16) map (id => (id, simulate(p).take(100).toVector))
 
-    val pw = new PrintWriter(new File("firstOrderdlm.csv"))
+    val pw = new PrintWriter(new File("data/firstOrderdlmRes.csv"))
     pw.write(
       observations.
         flatMap{ case (id, data) =>

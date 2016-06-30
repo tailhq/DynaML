@@ -14,8 +14,8 @@ object Dependencies {
     "com.github.tototoshi" % "scala-csv_2.11" % "1.1.2" % "compile",
     "org.scala-lang" % "jline" % "2.11.0-M3" % "compile",
     "org.scalaforge" % "scalax" % "0.1" % "compile",
-    "org.scala-lang" % "scala-pickling_2.11" % "0.9.1" % "compile"
-
+    "org.scala-lang" % "scala-pickling_2.11" % "0.9.1" % "compile",
+    "org.scalaz" %% "scalaz-core" % "7.2.0"
   )
 
   val apacheSpark = Seq(
@@ -27,7 +27,8 @@ object Dependencies {
 
   val linearAlgebraDependencies = Seq(
     "org.scalanlp" % "breeze_2.11" % "0.11.2" % "compile",
-    "org.scalanlp" % "breeze-natives_2.11" % "0.11.2" % "compile")
+    "org.scalanlp" % "breeze-natives_2.11" % "0.11.2" % "compile"/*,
+    "org.spire-math" %% "spire" % "0.11.0"*/)
 
   val chartsDependencies = Seq(
     "com.github.wookietreiber" % "scala-chart_2.11" % "0.4.2" % "compile",

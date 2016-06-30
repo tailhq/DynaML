@@ -1,6 +1,11 @@
+package io.github.mandar2812.dynaml.models.lm
+
+import java.io.{File, PrintWriter}
+
 import breeze.stats.distributions.Gaussian
-import generalDLM._
-import java.io.{PrintWriter, File}
+import io.github.mandar2812.dynaml.models.lm.generalDLM._
+
+import scala.io.Source
 
 object KFilter {
 
@@ -54,7 +59,7 @@ object KFilter {
   val runKFilter = {
     val p = Parameters(3.0, 0.5, 0.0, 10.0)
     // simulate 16 different realisations of 100 observations, representing 16 stations
-    val observations = (1 to 16) map (id => (id -> simulate(p).take(100).toVector))
+    val observations = (1 to 16) map (id => id -> simulate(p).take(100).toVector)
 
     // filter for one station, using simulated data
     observations.
@@ -62,9 +67,9 @@ object KFilter {
       flatMap{ case (_, d) => filterSeries(d)(p) }
 
     // or, read in data from the file we previously wrote
-    val data = io.Source.fromFile("firstOrderdlm.csv").getLines.toList.
+    val data = Source.fromFile("data/firstOrderdlmRes.csv").getLines.toList.
       map(l => l.split(",")).
-      map(r => (r(0).toInt -> Data(r(1).toDouble, r(2).toDouble, None)))
+      map(r => r(0).toInt -> Data(r(1).toDouble, r(2).toDouble, None))
 
     // filter for all stations, using data from file
     val filtered = data.
@@ -75,7 +80,7 @@ object KFilter {
         (id, filterSeries(data.sortBy(_.time))(p)) } // apply the filter to the sorted data
 
     // write the filter for all stations to a file
-    val pw = new PrintWriter(new File("filteredDlm.csv"))
+    val pw = new PrintWriter(new File("data/filteredDlmRes.csv"))
     pw.write(filtered.
       flatMap{ case (id, data) =>
           data map (x => id + ", " + x.toString)}.
