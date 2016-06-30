@@ -64,6 +64,22 @@ object CovarianceFunction {
       SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
   }
+
+  def apply[T](phi: Map[String, Double] => T => DenseVector[Double])(s: Map[String, Double]) =
+    new LocalScalarKernel[T] {
+      override val hyper_parameters: List[String] = s.keys.toList
+
+      state = s
+
+      override def evaluate(x: T, y: T): Double = phi(state)(x) dot phi(state)(y)
+
+      override def buildKernelMatrix[S <: Seq[T]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
+        SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
+
+      override def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): DenseMatrix[Double] =
+        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
+
+    }
 }
 
 abstract class CompositeCovariance[T]
