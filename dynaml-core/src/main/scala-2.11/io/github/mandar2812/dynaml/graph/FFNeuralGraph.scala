@@ -161,12 +161,14 @@ object FFNeuralGraph {
     * @param hidden_layers Number of hidden layers
     * @param nCounts The number of neurons in each hidden layer
     * @param activations The activation functions for each layer
+    * @param biasFlag Indicates if bias unit is to be created.
     *
     * */
   def apply(num_inputs: Int, num_outputs: Int,
             hidden_layers: Int = 1,
             activations: List[String],
-            nCounts:List[Int] = List()): FFNeuralGraph = {
+            nCounts:List[Int] = List(),
+            biasFlag: Boolean = true): FFNeuralGraph = {
 
     val neuronCounts:List[Int] = if(nCounts.isEmpty)
       List.tabulate[Int](hidden_layers+1)(i => {
@@ -191,10 +193,12 @@ object FFNeuralGraph {
           inNode.setNeuronType("input")
         })
         //Create Bias unit
-        val biasInput: Neuron = fg.addVertex((0,num_inputs+1), classOf[Neuron])
-        biasInput.setLayer(0)
-        biasInput.setNeuronType("bias")
-        biasInput.setNID(num_inputs+1)
+        if(biasFlag) {
+          val biasInput: Neuron = fg.addVertex((0,num_inputs+1), classOf[Neuron])
+          biasInput.setLayer(0)
+          biasInput.setNeuronType("bias")
+          biasInput.setNID(num_inputs+1)
+        }
 
       } else {
         val num_neurons = if(layer == hidden_layers+1) num_outputs else neuronCounts(layer-1)
@@ -220,7 +224,7 @@ object FFNeuralGraph {
         })
 
         //Create Bias unit for layer if it is not an output layer
-        if(layer < hidden_layers+1) {
+        if(layer < hidden_layers+1 && biasFlag) {
           val biasLayerL: Neuron = fg.addVertex((layer, num_neurons+1), classOf[Neuron])
           biasLayerL.setLayer(layer)
           biasLayerL.setNeuronType("bias")
