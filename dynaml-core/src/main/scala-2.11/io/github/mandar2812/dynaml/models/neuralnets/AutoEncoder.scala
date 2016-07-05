@@ -48,7 +48,12 @@ class AutoEncoder(inDim: Int, outDim: Int) extends ReversibleScaler[DenseVector[
     graph.getLayer(1)
       .filter(_.getNeuronType() == "perceptron")
       .foreach(n => n.setValue(xhat(n.getNID())))
-    DenseVector(graph.getLayer(2).map(n => Neuron.getLocalField(n)._1).toArray)
+
+    val outputs:Map[Int, Double] = graph.getLayer(2).filter(_.getNeuronType() == "perceptron")
+      .map(outputNeuron => (outputNeuron.getNID(), Neuron.getLocalField(outputNeuron)._1))
+      .toMap
+
+    DenseVector.tabulate[Double](inDim)(i => outputs(i+1))
   })
 
   def learn(data: Stream[(DenseVector[Double], DenseVector[Double])]) = {
@@ -57,7 +62,13 @@ class AutoEncoder(inDim: Int, outDim: Int) extends ReversibleScaler[DenseVector[
 
   override def run(x: DenseVector[Double]) = {
     graph.forwardPass(x)
-    DenseVector(graph.getLayer(1).filter(_.getNeuronType() == "perceptron").map(_.getValue()).toArray)
+
+    val outputs:Map[Int, Double] = graph.getLayer(1).filter(_.getNeuronType() == "perceptron")
+      .map(outputNeuron => (outputNeuron.getNID(), Neuron.getLocalField(outputNeuron)._1))
+      .toMap
+
+    DenseVector.tabulate[Double](outDim)(i => outputs(i+1))
+
   }
 
 }
