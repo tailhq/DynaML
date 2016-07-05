@@ -20,6 +20,7 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.{DenseMatrix, DenseVector, inv}
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.Logger
 
 /**
@@ -46,24 +47,41 @@ class QuasiNewtonOptimizer(private var gradient: Gradient,
     */
   override def optimize(nPoints: Long,
                         ParamOutEdges: Stream[(DenseVector[Double], Double)],
-                        initialP: DenseVector[Double]): DenseVector[Double] = {
+                        initialP: DenseVector[Double]): DenseVector[Double] =
+    QuasiNewtonOptimizer.run(
+      nPoints, this.regParam, this.numIterations,
+      updater, gradient, this.stepSize, initialP,
+      ParamOutEdges, DataPipe(identity[Stream[(DenseVector[Double], Double)]] _)
+    )
+}
 
-    var oldW: DenseVector[Double] = initialP
+object QuasiNewtonOptimizer {
+
+  private val logger = Logger.getLogger(this.getClass)
+
+  def run[T](nPoints: Long, regParam: Double, numIterations: Int,
+             updater: HessianUpdater, gradient: Gradient, stepSize: Double,
+             initial: DenseVector[Double], POutEdges: T,
+             transform: DataPipe[T, Stream[(DenseVector[Double], Double)]]): DenseVector[Double] = {
+
+    var oldW: DenseVector[Double] = initial
 
     var newW = oldW
-    val hessian = ParamOutEdges.map(_._1)
+    val hessian = transform(POutEdges)
+      .map(_._1)
+      .map(x => DenseVector(x.toArray ++ Array(1.0)))
       .map(x => x*x.t)
       .reduce((x: DenseMatrix[Double],
                y: DenseMatrix[Double]) =>
         x + y)
 
-    var regInvHessian = inv(hessian + DenseMatrix.eye[Double](initialP.length)*regParam)
-    var oldCumGradient = DenseVector.zeros[Double](initialP.length)
+    var regInvHessian = inv(hessian + DenseMatrix.eye[Double](initial.length)*regParam)
+    var oldCumGradient = DenseVector.zeros[Double](initial.length)
 
     (1 to numIterations).foreach(iter => {
-      val cumGradient: DenseVector[Double] = DenseVector.zeros(initialP.length)
+      val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
       var cumLoss: Double = 0.0
-      ParamOutEdges.foreach(ed => {
+      transform(POutEdges).foreach(ed => {
         val x = DenseVector(ed._1.toArray ++ Array(1.0))
         val y = ed._2
         cumLoss += gradient.compute(x, y, oldW, cumGradient)
@@ -73,7 +91,7 @@ class QuasiNewtonOptimizer(private var gradient: Gradient,
       //Find the search direction p = inv(H)*grad(J)
       //perform update x_new = x + step*p
       val searchDirection = regInvHessian*cumGradient*(-1.0)
-      newW = updater.compute(oldW, searchDirection, this.stepSize, iter, regParam)._1
+      newW = updater.compute(oldW, searchDirection, stepSize, iter, regParam)._1
 
       regInvHessian = updater.hessianUpdate(regInvHessian, newW-oldW, cumGradient-oldCumGradient)
       oldW = newW
