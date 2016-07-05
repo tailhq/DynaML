@@ -10,12 +10,13 @@ object Dependencies {
     "org.scala-lang" % "scala-reflect" % scala % "compile",
     "com.typesafe" % "config" % "1.2.1" % "compile",
     "junit" % "junit" % "4.4",
-    "org.specs" % "specs" % "1.2.5" % "test",
     "com.github.tototoshi" % "scala-csv_2.11" % "1.1.2" % "compile",
     "org.scala-lang" % "jline" % "2.11.0-M3" % "compile",
     "org.scalaforge" % "scalax" % "0.1" % "compile",
     "org.scala-lang" % "scala-pickling_2.11" % "0.9.1" % "compile",
-    "org.scalaz" %% "scalaz-core" % "7.2.0"
+    "org.scalaz" %% "scalaz-core" % "7.2.0",
+    "org.scalactic" % "scalactic_2.11" % "2.2.6",
+    "org.scalatest" % "scalatest_2.11" % "2.2.6" % "test"
   )
 
   val apacheSpark = Seq(

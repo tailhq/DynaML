@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg._
 import io.github.mandar2812.dynaml.graph.utils.CausalEdge
+import org.apache.log4j.Logger
 
 /**
  * @author mandar2812
@@ -69,6 +70,9 @@ class ConjugateGradient extends RegularizedOptimizer[DenseVector[Double],
 }
 
 object ConjugateGradient {
+
+  val logger = Logger.getLogger(this.getClass)
+
   /**
    * Solves for x in A.x = b (where A is symmetric +ve semi-definite)
    * iteratively using the Conjugate Gradient
@@ -80,24 +84,27 @@ object ConjugateGradient {
             epsilon: Double,
             MAX_ITERATIONS: Int): DenseVector[Double] = {
     val residual = b - (A*x)
-    val p = residual
+    val p = b - (A*x)
     var count = 1.0
-    var alpha = math.pow(norm(residual, 2), 2)/(p.t * (A*p))
+    var alpha = 0.0
     var beta = 0.0
     while(norm(residual, 2) >= epsilon && count <= MAX_ITERATIONS) {
+      //update alpha
+      alpha = (residual dot residual)/(p dot (A*p))
+      logger.info("Iteration: "+count)
+      logger.info("----------------------------------")
+      logger.info("Residual: "+(residual dot residual))
       //update x
       axpy(alpha, p, x)
       //before updating residual, calculate norm (required for beta)
-      val de = math.pow(norm(residual, 2), 2)
+      val de = residual dot residual
       //update residual
       axpy(-1.0*alpha, A*p, residual)
       //calculate beta
-      beta = math.pow(norm(residual, 2), 2)/de
+      beta = (residual dot residual)/de
       //update p
       p :*= beta
       axpy(1.0, residual, p)
-      //update alpha
-      alpha = math.pow(norm(residual, 2), 2)/(p.t * (A*p))
       count += 1
     }
     x
@@ -114,7 +121,7 @@ object ConjugateGradient {
                  epsilon: Double,
                  MAX_ITERATIONS: Int): DenseMatrix[Double] = {
     val residual:DenseMatrix[Double] = b - (A*x)
-    val p = residual
+    val p = b - (A*x)
     var count = 1.0
 
     var alphaVec = DenseVector.tabulate[Double](x.cols)(i => {
