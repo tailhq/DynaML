@@ -129,7 +129,7 @@ object GradientDescent {
       })
       logger.info("Average Loss; Iteration "+count+": "+cumLoss/nPoints.toDouble)
       newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
-        stepSize, 1, regParam)._1
+        stepSize, count, regParam)._1
       oldW = newW
       count += 1
     }
