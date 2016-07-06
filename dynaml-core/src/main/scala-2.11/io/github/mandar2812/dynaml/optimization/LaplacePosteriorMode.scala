@@ -10,6 +10,8 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.{DenseMatrix, DenseVector, cholesky, inv}
 import breeze.numerics.sqrt
+import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
   * Created by mandar on 6/4/16.
@@ -27,8 +29,23 @@ class LaplacePosteriorMode[I](l: Likelihood[DenseVector[Double],
     */
   override def optimize(nPoints: Long,
                         ParamOutEdges: (DenseMatrix[Double], DenseVector[Double]),
-                        initialP: DenseVector[Double]): DenseVector[Double] = {
-    val (kMat, y) = ParamOutEdges
+                        initialP: DenseVector[Double]): DenseVector[Double] =
+    LaplacePosteriorMode.run(
+      nPoints, ParamOutEdges,
+      this.likelihood, initialP,
+      this.numIterations, identityPipe[(DenseMatrix[Double], DenseVector[Double])])
+}
+
+object LaplacePosteriorMode {
+
+  def run[T](nPoints: Long, data: T,
+             likelihood: Likelihood[
+               DenseVector[Double], DenseVector[Double], DenseMatrix[Double],
+               (DenseVector[Double], DenseVector[Double])],
+             initialP: DenseVector[Double], numIterations: Int,
+             transform: DataPipe[T, (DenseMatrix[Double], DenseVector[Double])]): DenseVector[Double] = {
+
+    val (kMat, y) = transform(data)
     var mode = initialP
 
     var b = DenseVector.zeros[Double](y.length)
@@ -36,7 +53,7 @@ class LaplacePosteriorMode[I](l: Likelihood[DenseVector[Double],
 
     val id = DenseMatrix.eye[Double](y.length)
 
-    (1 to this.numIterations).foreach{ iter =>
+    (1 to numIterations).foreach{ iter =>
       val wMat = likelihood.hessian(y, mode) * -1.0
       val wMatsq = sqrt(wMat)
 
@@ -50,5 +67,6 @@ class LaplacePosteriorMode[I](l: Likelihood[DenseVector[Double],
     }
 
     mode
+
   }
 }

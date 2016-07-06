@@ -10,7 +10,7 @@ import org.scalatest.{FlatSpec, Matchers}
   */
 class QuadraticOptimizationSpec extends FlatSpec with Matchers {
 
-  "Gradient Descent" should "be able to solve Quadratic cost functions "+
+  "Gradient Descent" should "be able to minimize Quadratic cost functions "+
     "of the form w^t.w + (w.x-y)^2 " in {
     val uni = new Uniform(0.0, 1.0)
     //Create synthetic data set of x,y values
@@ -44,7 +44,7 @@ class QuadraticOptimizationSpec extends FlatSpec with Matchers {
 
   }
 
-  "Quasi-Newton" should "be able to solve Quadratic cost functions "+
+  "Quasi-Newton" should "be able to minimize Quadratic cost functions "+
     "of the form w^t.w + (w.x-y)^2 " in {
     val uni = new Uniform(0.0, 1.0)
     //Create synthetic data set of x,y values

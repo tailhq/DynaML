@@ -22,6 +22,13 @@ object DynaMLPipe {
   val logger = Logger.getLogger(this.getClass)
 
   /**
+    * A trivial identity data pipe
+    * */
+
+  def identityPipe[T] = DataPipe(identity[T] _)
+
+
+  /**
     * Data pipe which takes a file name/path as a
     * [[String]] and returns a [[Stream]] of [[String]].
     * */
