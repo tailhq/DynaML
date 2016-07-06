@@ -19,8 +19,10 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.graph.FFNeuralGraph
 import io.github.mandar2812.dynaml.graph.utils.Neuron
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.Logger
 
 import scala.util.Random
@@ -47,15 +49,28 @@ class BackPropagation extends RegularizedOptimizer[FFNeuralGraph,
     */
   override def optimize(nPoints: Long,
                         ParamOutEdges: Stream[(DenseVector[Double], DenseVector[Double])],
-                        initialP: FFNeuralGraph): FFNeuralGraph = {
+                        initialP: FFNeuralGraph): FFNeuralGraph = BackPropagation.run(
+      nPoints, this.regParam, this.numIterations, this.miniBatchFraction,
+      this.stepSize, this.momentum, initialP, ParamOutEdges,
+      DynaMLPipe.identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]])
+}
+
+object BackPropagation {
+
+  val logger = Logger.getLogger(this.getClass)
+
+  def run[T](nPoints: Long, regParam: Double, numIterations: Int,
+             miniBatchFraction: Double, stepSize: Double, momentum: Double,
+             initialP: FFNeuralGraph, ParamOutEdges: T,
+             transform: DataPipe[T, Stream[(DenseVector[Double], DenseVector[Double])]]) = {
     logger.info(" Configuration ")
     logger.info("---------------")
     logger.info(" Mini Batch Fraction : "+miniBatchFraction)
     logger.info(" Max Iterations : "+numIterations)
     logger.info(" Learning Rate : "+stepSize)
-    (1 to this.numIterations).foreach{iteration =>
+    (1 to numIterations).foreach{iteration =>
       val (procInputs, procOutputs) =
-        ParamOutEdges
+        transform(ParamOutEdges)
           .filter(_ => Random.nextDouble() <= miniBatchFraction)
           .map(c =>
             (c._1.toArray.toList.map(i => List(i)), c._2.toArray.toList.map(i => List(i))))
@@ -123,7 +138,8 @@ class BackPropagation extends RegularizedOptimizer[FFNeuralGraph,
           val momentumTerm = momentum*synapse.getPrevWeightUpdate()
           val regularizationTerm = regParam*origWeight
 
-          val weightUpdate = this.stepSize*postG.zip(preF).map(c => c._1*c._2).sum/(nPoints*miniBatchFraction) +
+          val weightUpdate =
+            (stepSize/(1+0.5*iteration))*postG.zip(preF).map(c => c._1*c._2).sum/(nPoints*miniBatchFraction) +
             momentumTerm + regularizationTerm
 
           synapse.setWeight(origWeight + weightUpdate)
