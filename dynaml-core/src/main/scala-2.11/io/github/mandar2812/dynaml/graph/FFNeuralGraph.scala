@@ -27,7 +27,6 @@ import org.apache.log4j.Logger
 
 import scala.collection.JavaConversions
 import scala.collection.JavaConversions._
-import scala.util.Random
 
 /**
   * Represents the underlying graph of a
@@ -122,7 +121,7 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph], act: List[String], hidden: In
     val outN =
       if(layer <= hidden_layers) getLayer(layer).toList.length-1
       else getLayer(layer).toList.length
-    
+
     val synapsesMap: Map[(Int, Int), Double] =
       synapses.map(s => (
         (s.getPostSynapticNeuron().getNID(),
