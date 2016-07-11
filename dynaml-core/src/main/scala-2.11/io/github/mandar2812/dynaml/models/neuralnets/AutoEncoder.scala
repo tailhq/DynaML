@@ -32,12 +32,13 @@ import io.github.mandar2812.dynaml.pipes.{ReversibleScaler, Scaler}
   * It is represented as a [[ReversibleScaler]] transforming
   * a breeze [[DenseVector]] into another breeze Dense Vector.
   */
-class AutoEncoder(inDim: Int, outDim: Int) extends ReversibleScaler[DenseVector[Double]]{
+class AutoEncoder(inDim: Int, outDim: Int,
+                  acts: List[String] = List("logsig", "logsig"))
+  extends ReversibleScaler[DenseVector[Double]]{
 
   def initialize() =
     FFNeuralGraph(
-      inDim, inDim, 1,
-      List("logsig", "logsig"),
+      inDim, inDim, 1, acts,
       List(outDim))
 
   var graph = initialize()
@@ -47,7 +48,7 @@ class AutoEncoder(inDim: Int, outDim: Int) extends ReversibleScaler[DenseVector[
   val i = Scaler((xhat: DenseVector[Double]) => {
     graph.getLayer(1)
       .filter(_.getNeuronType() == "perceptron")
-      .foreach(n => n.setValue(xhat(n.getNID())))
+      .foreach(n => n.setValue(xhat(n.getNID()-1)))
 
     val outputs:Map[Int, Double] = graph.getLayer(2).filter(_.getNeuronType() == "perceptron")
       .map(outputNeuron => (outputNeuron.getNID(), Neuron.getLocalField(outputNeuron)._1))

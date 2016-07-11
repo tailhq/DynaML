@@ -131,7 +131,7 @@ object Neuron {
         val (localfield, field) = Neuron.getLocalFieldBuffer(neuron)
         neuron.getValueBuffer()
           .zip(localfield).map(c => c._1 - c._2)
-          .zip(field).map(c => c._1 * DtransFunc(c._2))
+          .zip(field).map(c => -1.0 * c._1 * DtransFunc(c._2))
 
       case _ =>
         val DtransFunc = neuron.getNeuronType() match {

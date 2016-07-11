@@ -88,12 +88,8 @@ class QuadraticOptimizationSpec extends FlatSpec with Matchers {
     val noise = new Gaussian(0.0, 0.002)
     val uniH = new Uniform(-1.0, 1.0)
 
-    val w = DenseVector(1.0, -1.0)//DenseVector.tabulate[Double](4)(i => uniH.draw)
+    val w = DenseVector.tabulate[Double](2)(i => uniH.draw)
     val wAug = DenseVector(w.toArray ++ Array(0.0))
-
-
-    val hiddenLayer = DenseMatrix.tabulate[Double](4,5)((i,j) => uniH.draw)
-
     val numPoints:Int = 2000
 
     val data = (1 to numPoints).map(_ => {
@@ -105,13 +101,14 @@ class QuadraticOptimizationSpec extends FlatSpec with Matchers {
       (features, target)
     })
 
-    val epsilon = 2E-1
+    val epsilon = 1E-2
 
     val transform = DataPipe((s: IndexedSeq[(DenseVector[Double], Double)]) =>
       s.map(p => (p._1, DenseVector(p._2))).toStream)
 
     val wApprox = BackPropagation.run(
-      numPoints.toLong, 0.0, 200, 1.0, 0.8, 0.5,
+      numPoints.toLong, 0.0, 300,
+      1.0, 0.9, 0.5,
       FFNeuralGraph(
         2,1,0, List("linear"),
         List(), biasFlag = true),

@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.neuralnets
 
-import breeze.numerics.sigmoid
+import breeze.numerics.{cosh, sigmoid, sinh, tanh}
 
 /**
  * @author mandar2812
@@ -31,12 +31,12 @@ object TransferFunctions {
   /**
    * Hyperbolic tangent function
    * */
-  val tansig = math.tanh _
+  val tansig = (x:Double) => tanh(x)
 
   /**
     * First derivative of the hyperbolic tangent function
     * */
-  val Dtansig = (x: Double) => tansig(x)/(math.sinh(x)*math.cosh(x))
+  val Dtansig = (x: Double) => tansig(x)/(sinh(x)*cosh(x))
 
   /**
    * Sigmoid/Logistic function
@@ -52,7 +52,7 @@ object TransferFunctions {
   /**
    * Linear/Identity Function
    * */
-  val lin = (x: Double) => identity(x)
+  val lin = (x: Double) => x
 
   /**
     * First derivative of the linear function

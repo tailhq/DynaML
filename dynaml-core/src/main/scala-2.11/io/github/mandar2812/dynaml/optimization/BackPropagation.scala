@@ -22,7 +22,7 @@ import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.graph.FFNeuralGraph
 import io.github.mandar2812.dynaml.graph.utils.Neuron
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
 import scala.util.Random
@@ -34,8 +34,6 @@ import scala.util.Random
 class BackPropagation extends RegularizedOptimizer[FFNeuralGraph,
   DenseVector[Double], DenseVector[Double],
   Stream[(DenseVector[Double], DenseVector[Double])]] {
-
-  private val logger = Logger.getLogger(this.getClass)
 
   protected var momentum: Double = 0.0
 
@@ -50,78 +48,120 @@ class BackPropagation extends RegularizedOptimizer[FFNeuralGraph,
   override def optimize(nPoints: Long,
                         ParamOutEdges: Stream[(DenseVector[Double], DenseVector[Double])],
                         initialP: FFNeuralGraph): FFNeuralGraph = BackPropagation.run(
-      nPoints, this.regParam, this.numIterations, this.miniBatchFraction,
-      this.stepSize, this.momentum, initialP, ParamOutEdges,
-      DynaMLPipe.identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]])
+    nPoints, this.regParam, this.numIterations, this.miniBatchFraction,
+    this.stepSize, this.momentum, initialP, ParamOutEdges,
+    DynaMLPipe.identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]]
+  )
 }
 
 object BackPropagation {
 
   val logger = Logger.getLogger(this.getClass)
 
+  /**
+    * Processes the raw data into neuron buffers,
+    * represented as a DynaML pipe
+    * */
+  val processDataToNeuronBuffers =
+    DataPipe((data: Stream[(DenseVector[Double], DenseVector[Double])]) =>
+      data.map(c =>
+        (c._1.toArray.toList.map(i => List(i)), c._2.toArray.toList.map(i => List(i)))
+      ).reduce((c1,c2) =>
+        (c1._1.zip(c2._1).map(c => c._1++c._2), c1._2.zip(c2._2).map(c => c._1++c._2))
+      )
+    )
+
+  /**
+    * Carry out the iterative backpropagation algorithm to
+    * determine synapse weights in a feed-forward neural network graph
+    * */
   def run[T](nPoints: Long, regParam: Double, numIterations: Int,
              miniBatchFraction: Double, stepSize: Double, momentum: Double,
              initialP: FFNeuralGraph, ParamOutEdges: T,
              transform: DataPipe[T, Stream[(DenseVector[Double], DenseVector[Double])]]) = {
+
+    //log important backpropagation parameters to the screen
     logger.info(" Configuration ")
     logger.info("---------------")
     logger.info(" Mini Batch Fraction : "+miniBatchFraction)
     logger.info(" Max Iterations : "+numIterations)
     logger.info(" Learning Rate : "+stepSize)
-    (1 to numIterations).foreach{iteration =>
-      val (procInputs, procOutputs) =
-        transform(ParamOutEdges)
-          .filter(_ => Random.nextDouble() <= miniBatchFraction)
-          .map(c =>
-            (c._1.toArray.toList.map(i => List(i)), c._2.toArray.toList.map(i => List(i))))
-          .reduce((c1,c2) =>
-            (c1._1.zip(c2._1).map(c => c._1++c._2), c1._2.zip(c2._2).map(c => c._1++c._2)))
+    logger.info(" Regularization : "+regParam)
+    logger.info(" Momentum: "+momentum)
 
+    //Calculate the effective data size based on the
+    //minibatch fraction and the total number of
+    //training data points
+    val effectiveDataSize = nPoints*miniBatchFraction
+
+    val dataToBuffersPipe = transform >
+      StreamDataPipe((pattern: (DenseVector[Double], DenseVector[Double])) =>
+        Random.nextDouble() <= miniBatchFraction) >
+      processDataToNeuronBuffers
+
+    val (procInputs, procOutputs) = dataToBuffersPipe(ParamOutEdges)
+
+    //Initialize bias units
+    (1 to initialP.hidden_layers).foreach(layer => {
+      initialP.getLayer(layer).filter(_.getNeuronType() == "bias").foreach(node => {
+        node.setValueBuffer(Array.fill[Double](procInputs.head.length)(1.0))
+        node.setLocalFieldBuffer(Array.fill[Double](procInputs.head.length)(1.0))
+      })
+    })
+
+    //Fill input layer with features from training data
+    initialP.getLayer(0).foreach(node => node.getNeuronType() match {
+      case "input" =>
+        node.setValueBuffer(procInputs(node.getNID() - 1).toArray)
+        node.setLocalFieldBuffer(procInputs(node.getNID() - 1).toArray)
+      case "bias" =>
+        node.setValueBuffer(Array.fill[Double](procInputs.head.length)(1.0))
+        node.setLocalFieldBuffer(Array.fill[Double](procInputs.head.length)(1.0))
+    })
+
+    //Fill output layer with target values from training data
+    initialP.getLayer(initialP.hidden_layers+1).foreach(node =>{
+      node.setValueBuffer(procOutputs(node.getNID() - 1).toArray)
+    })
+
+    //Begin backpropagation iterations
+    (1 to numIterations).foreach{iteration =>
+
+      val damping = stepSize/(1+0.5*iteration)
       logger.info(" ************** Iteration: "+iteration+" ************** ")
       logger.info(" Forward Pass ")
       //forward pass, set inputs
-      (0 to initialP.hidden_layers+1).foreach(layer => {
+      (1 to initialP.hidden_layers+1).foreach(layer => {
 
-        if(layer == 0) {
-
-          initialP.getLayer(0).foreach(node => node.getNeuronType() match {
-            case "input" =>
-              node.setValueBuffer(procInputs(node.getNID() - 1).toArray)
-              node.setLocalFieldBuffer(procInputs(node.getNID() - 1).toArray)
-            case "bias" =>
-              node.setValueBuffer(Array.fill[Double](procInputs.head.length)(1.0))
-              node.setLocalFieldBuffer(Array.fill[Double](procInputs.head.length)(1.0))
-          })
-
-        } else if(layer == initialP.hidden_layers+1) {
+        if(layer == initialP.hidden_layers+1) {
           initialP.getLayer(initialP.hidden_layers+1).foreach(node =>{
-            node.setValueBuffer(procOutputs(node.getNID() - 1).toArray)
             val (locfield, _) = Neuron.getLocalFieldBuffer(node)
             node.setLocalFieldBuffer(locfield)
+
+            //Set gradient values for output node
             node.setLocalGradBuffer(Neuron.getLocalGradientBuffer(node, initialP.hidden_layers))
           })
 
         } else {
-          initialP.getLayer(layer).foreach(node => node.getNeuronType() match {
-            case "perceptron" =>
+          initialP.getLayer(layer)
+            .filter(_.getNeuronType() == "perceptron")
+            .foreach(node => {
               val (locfield, field) = Neuron.getLocalFieldBuffer(node)
               node.setLocalFieldBuffer(locfield)
               node.setValueBuffer(field)
-            case "bias" =>
-              node.setValueBuffer(Array.fill[Double](procInputs.head.length)(1.0))
-              node.setLocalFieldBuffer(Array.fill[Double](procInputs.head.length)(1.0))
-          })
+            })
         }
       })
 
       //Backward pass calculate local gradients
       logger.info(" Backward Pass ")
-      (1 to initialP.hidden_layers+1).reverse.foreach{layer => {
+      (1 to initialP.hidden_layers).reverse.foreach{layer => {
 
-        initialP.getLayer(layer).foreach(node => {
-          //logger.info("Backward Pass Layer: "+layer + "Node "+node.getNID())
-          node.setLocalGradBuffer(Neuron.getLocalGradientBuffer(node, initialP.hidden_layers))
-        })
+        initialP.getLayer(layer)
+          .filter(_.getNeuronType() == "perceptron")
+          .foreach(node => {
+            node.setLocalGradBuffer(Neuron.getLocalGradientBuffer(node, initialP.hidden_layers))
+          })
       }}
 
       //Recalculate weights
@@ -130,19 +170,31 @@ object BackPropagation {
         initialP.getLayerSynapses(layer).foreach(synapse => {
           val preSN = synapse.getPreSynapticNeuron()
           val postSN = synapse.getPostSynapticNeuron()
+
           //For each synapse perform weight update as
           // delta(w) = learning_rate*grad(postSN)*localfield(preSN)
+
           val origWeight = synapse.getWeight()
           val postG = postSN.getLocalGradBuffer()
           val preF = preSN.getLocalFieldBuffer()
+
           val momentumTerm = momentum*synapse.getPrevWeightUpdate()
-          val regularizationTerm = regParam*origWeight
 
-          val weightUpdate =
-            (stepSize/(1+0.5*iteration))*postG.zip(preF).map(c => c._1*c._2).sum/(nPoints*miniBatchFraction) +
-            momentumTerm + regularizationTerm
+          //Calculate the net gradient due to all data points at the particular synapse
+          val (netGradientContribution, regularizationTerm) = preSN.getNeuronType() match {
+            case "bias" =>
+              (postG.sum, 0.0)
+            case _ =>
+              (postG.zip(preF).map(c => c._1*c._2).sum, regParam*origWeight)
+          }
 
-          synapse.setWeight(origWeight + weightUpdate)
+          //Calculate the synapse weight update
+          val weightUpdate = damping*netGradientContribution/effectiveDataSize +
+            momentumTerm +
+            regularizationTerm
+
+          //Update the synapse weight
+          synapse.setWeight(origWeight - weightUpdate)
           synapse.setPrevWeightUpdate(weightUpdate)
         })
       })
