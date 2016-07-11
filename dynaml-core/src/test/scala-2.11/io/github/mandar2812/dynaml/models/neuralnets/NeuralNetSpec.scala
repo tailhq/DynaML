@@ -8,7 +8,10 @@ import io.github.mandar2812.dynaml.graph.FFNeuralGraph
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
-  * Created by mandar on 10/7/16.
+  * @author mandar2812 date: 10/7/16.
+  *
+  * Test suite for neural network implementations
+  * in DynaML
   */
 class NeuralNetSpec extends FlatSpec with Matchers {
 
