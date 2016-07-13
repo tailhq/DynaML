@@ -19,9 +19,9 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.DynaMLPipe
+import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.graph.FFNeuralGraph
-import io.github.mandar2812.dynaml.graph.utils.Neuron
+import io.github.mandar2812.dynaml.graph.utils.Neuron._
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 import spire.implicits._
@@ -37,8 +37,15 @@ class BackPropagation extends RegularizedOptimizer[FFNeuralGraph,
 
   protected var momentum: Double = 0.0
 
+  protected var sparsityWeight: Double = 0.0
+
   def setMomentum(m: Double): this.type = {
     momentum = m
+    this
+  }
+
+  def setSparsityWeight(s: Double): this.type = {
+    sparsityWeight = s
     this
   }
 
@@ -50,13 +57,16 @@ class BackPropagation extends RegularizedOptimizer[FFNeuralGraph,
                         initialP: FFNeuralGraph): FFNeuralGraph = BackPropagation.run(
     nPoints, this.regParam, this.numIterations, this.miniBatchFraction,
     this.stepSize, this.momentum, initialP, ParamOutEdges,
-    DynaMLPipe.identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]]
+    identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]],
+    sparsityWeight
   )
 }
 
 object BackPropagation {
 
   val logger = Logger.getLogger(this.getClass)
+
+  var rho = 0.05
 
   /**
     * Processes the raw data into neuron buffers,
@@ -78,7 +88,8 @@ object BackPropagation {
   def run[T](nPoints: Long, regParam: Double, numIterations: Int,
              miniBatchFraction: Double, stepSize: Double, momentum: Double,
              initialP: FFNeuralGraph, ParamOutEdges: T,
-             transform: DataPipe[T, Stream[(DenseVector[Double], DenseVector[Double])]]) = {
+             transform: DataPipe[T, Stream[(DenseVector[Double], DenseVector[Double])]],
+             sparsityWeight: Double = 0.0) = {
 
     //log important backpropagation parameters to the screen
     logger.info(" Configuration ")
@@ -136,18 +147,22 @@ object BackPropagation {
 
         if(layer == initialP.hidden_layers+1) {
           initialP.getLayer(initialP.hidden_layers+1).foreach(node =>{
-            val (locfield, _) = Neuron.getLocalFieldBuffer(node)
+            val (locfield, _) = getLocalFieldBuffer(node)
             node.setLocalFieldBuffer(locfield)
 
             //Set gradient values for output node
-            node.setLocalGradBuffer(Neuron.getLocalGradientBuffer(node, initialP.hidden_layers))
+            node.setLocalGradBuffer(
+              getLocalGradientBuffer(
+                node, initialP.hidden_layers,
+                rho, sparsityWeight)
+            )
           })
 
         } else {
           initialP.getLayer(layer)
             .filter(_.getNeuronType() == "perceptron")
             .foreach(node => {
-              val (locfield, field) = Neuron.getLocalFieldBuffer(node)
+              val (locfield, field) = getLocalFieldBuffer(node)
               node.setLocalFieldBuffer(locfield)
               node.setValueBuffer(field)
             })
@@ -161,7 +176,9 @@ object BackPropagation {
         initialP.getLayer(layer)
           .filter(_.getNeuronType() == "perceptron")
           .foreach(node => {
-            node.setLocalGradBuffer(Neuron.getLocalGradientBuffer(node, initialP.hidden_layers))
+            node.setLocalGradBuffer(
+              getLocalGradientBuffer(node, initialP.hidden_layers, rho, sparsityWeight)
+            )
           })
       }}
 
@@ -182,12 +199,13 @@ object BackPropagation {
           val momentumTerm = momentum*synapse.getPrevWeightUpdate()
 
           //Calculate the net gradient due to all data points at the particular synapse
-          val (netGradientContribution, regularizationTerm) = preSN.getNeuronType() match {
-            case "bias" =>
-              (postG.sum, 0.0)
-            case _ =>
-              (postG.zip(preF).map(c => c._1*c._2).sum, regParam*origWeight)
-          }
+          val (netGradientContribution, regularizationTerm) =
+            preSN.getNeuronType() match {
+              case "bias" =>
+                (postG.sum, 0.0)
+              case _ =>
+                (postG.zip(preF).map(c => c._1*c._2).sum, regParam*origWeight)
+            }
 
           //Calculate the synapse weight update
           val weightUpdate = damping*netGradientContribution/effectiveDataSize +

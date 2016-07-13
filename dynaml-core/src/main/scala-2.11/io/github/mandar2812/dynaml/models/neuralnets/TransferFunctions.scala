@@ -28,6 +28,14 @@ import breeze.numerics.{cosh, sigmoid, sinh, tanh}
 
 object TransferFunctions {
 
+  val SIGMOID = "logsig"
+
+  val TANH = "tansig"
+
+  val LIN = "linear"
+
+  val RECLIN = "reclinear"
+
   /**
    * Hyperbolic tangent function
    * */

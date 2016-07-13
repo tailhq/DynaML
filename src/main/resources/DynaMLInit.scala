@@ -11,3 +11,4 @@ import org.apache.spark.SparkConf
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._
