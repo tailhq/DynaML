@@ -121,4 +121,15 @@ class QuadraticOptimizationSpec extends FlatSpec with Matchers {
     assert(norm(err) <= epsilon)
   }
 
+  "BackPropagation" should "have working input neuron buffers" in {
+
+    val data = Stream(
+      (DenseVector(1.0, 2.0, 3.0), DenseVector(1.0, 1.0)),
+      (DenseVector(4.0, 5.0, 6.0), DenseVector(2.0, 2.0)))
+
+    val result = BackPropagation.processDataToNeuronBuffers(data)
+
+    assert(result._1.length == 3 && result._2.length == 2)
+    assert(result._1.head == List(1.0, 4.0) && result._2.head == List(1.0, 2.0))
+  }
 }
