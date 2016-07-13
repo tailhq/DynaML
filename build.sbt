@@ -31,6 +31,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
+  .settings(commonSettings:_*)
   .settings(
     name := "dynaml-pipes",
     version := "1.0"
