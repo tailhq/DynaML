@@ -22,6 +22,7 @@ package io.github.mandar2812.dynaml.optimization
 import breeze.linalg.{DenseMatrix, DenseVector, inv}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.Logger
+import spire.implicits._
 
 /**
   * @author mandar2812 date: 16/4/16.
@@ -78,7 +79,7 @@ object QuasiNewtonOptimizer {
     var regInvHessian = inv(hessian + DenseMatrix.eye[Double](initial.length)*regParam)
     var oldCumGradient = DenseVector.zeros[Double](initial.length)
 
-    (1 to numIterations).foreach(iter => {
+    cfor(1)(iter => iter < numIterations, iter => iter + 1)( iter => {
       val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
       var cumLoss: Double = 0.0
       transform(POutEdges).foreach(ed => {

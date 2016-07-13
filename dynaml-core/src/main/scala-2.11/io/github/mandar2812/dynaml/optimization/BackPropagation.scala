@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.graph.FFNeuralGraph
 import io.github.mandar2812.dynaml.graph.utils.Neuron
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
-
+import spire.implicits._
 import scala.util.Random
 
 /**
@@ -125,7 +125,8 @@ object BackPropagation {
     })
 
     //Begin backpropagation iterations
-    (1 to numIterations).foreach{iteration =>
+
+    cfor(1)(iteration => iteration < numIterations, iteration => iteration + 1)( iteration => {
 
       val damping = stepSize/(1+0.5*iteration)
       logger.info(" ************** Iteration: "+iteration+" ************** ")
@@ -198,8 +199,7 @@ object BackPropagation {
           synapse.setPrevWeightUpdate(weightUpdate)
         })
       })
-    }
-
+    })
     initialP
   }
 }
