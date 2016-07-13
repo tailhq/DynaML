@@ -1,6 +1,14 @@
 language: scala
+
+script:
+  - sbt clean coverage test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)language: scala
+
 scala:
-   - 2.11.8
+   - 2.11.7
+
 jdk:
 - oraclejdk7
 notifications:
