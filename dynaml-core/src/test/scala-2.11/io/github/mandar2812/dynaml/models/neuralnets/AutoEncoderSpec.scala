@@ -5,6 +5,7 @@ import breeze.stats.distributions.{Gaussian, Uniform}
 import io.github.mandar2812.dynaml.evaluation.MultiRegressionMetrics
 import org.scalatest.{FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._
+import io.github.mandar2812.dynaml.optimization.BackPropagation
 
 /**
   * Created by mandar on 11/7/16.
@@ -20,11 +21,13 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
     val noise = new Gaussian(0.0, 0.02)
 
     val numPoints:Int = 4000
-    val epsilon = 0.85
+    val epsilon = 0.05
 
     val data = (1 to numPoints).map(_ => {
       val features = DenseVector.tabulate[Double](2)(_ => uni.draw)
       val augFeatures = DenseVector(
+        math.pow(0.85*features(1), 2.5) + noise.draw,
+        math.pow(0.45*features(0), 3.2) + noise.draw,
         math.pow(features(0)+0.85*features(1), 3) + noise.draw,
         math.pow(features(0)-0.5*features(1), 2) + noise.draw,
         math.pow(features(0)+features(1), 3) + noise.draw,
@@ -37,14 +40,15 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
 
     val (trainingData, testData) = (data.take(3000), data.takeRight(1000))
 
-    val enc = new AutoEncoder(6, 3, List(SIGMOID, LIN))
+    val enc = new AutoEncoder(8, 2, List(SIGMOID, LIN))
 
+    BackPropagation.rho = 0.5
     enc.optimizer
-      .setRegParam(0.1)
-      .setStepSize(1.2)
+      .setRegParam(0.0)
+      .setStepSize(1.5)
       .setNumIterations(200)
-      .setMomentum(0.8)
-      .setSparsityWeight(0.1)
+      .setMomentum(0.4)
+      .setSparsityWeight(0.4)
 
     enc.learn(trainingData.toStream)
 
@@ -53,8 +57,8 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
       testData.map(c => (enc.i(enc(c._1)), c._2)).toList,
       testData.length)
 
-    metrics.print()
-    assert(sum(metrics.corr)/metrics.corr.length >= epsilon)
+    println("Corr: "+metrics.corr)
+    assert(sum(metrics.mae)/metrics.corr.length <= epsilon)
 
   }
 
