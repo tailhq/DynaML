@@ -40,7 +40,7 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
 
     val (trainingData, testData) = (data.take(3000), data.takeRight(1000))
 
-    val enc = new AutoEncoder(8, 2, List(SIGMOID, LIN))
+    val enc = new AutoEncoder(8, 4, List(SIGMOID, LIN))
 
     BackPropagation.rho = 0.5
     enc.optimizer
@@ -48,7 +48,7 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
       .setStepSize(1.5)
       .setNumIterations(200)
       .setMomentum(0.4)
-      .setSparsityWeight(0.4)
+      .setSparsityWeight(0.9)
 
     enc.learn(trainingData.toStream)
 

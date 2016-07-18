@@ -42,12 +42,9 @@ class NeuralNetSpec extends FlatSpec with Matchers {
 
     val epsilon = 0.85
 
-    val model = new FeedForwardNetwork[Stream[(DenseVector[Double], DenseVector[Double])]](
-      trainingData.toStream,
-      FFNeuralGraph(4,2,0,
-        List("logsig", "linear"),
-        List(10), biasFlag = true),
-      DynaMLPipe.identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]])
+    val model = new FeedForwardNetwork[Stream[(DenseVector[Double], DenseVector[Double])]](trainingData.toStream, FFNeuralGraph(4,2,0,
+            List("logsig", "linear"),
+            List(10), biasFlag = true))(DynaMLPipe.identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]])
 
     model.setLearningRate(1.0)
       .setRegParam(0.01)

@@ -39,9 +39,8 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
   *                  returns a [[Stream]] of input, output tuples.
   *
   * */
-class FeedForwardNetwork[D](
-  data: D, netgraph: FFNeuralGraph,
-  transform: DataPipe[D, Stream[(DenseVector[Double], DenseVector[Double])]])
+class FeedForwardNetwork[D](data: D, netgraph: FFNeuralGraph)(
+  implicit val transform: DataPipe[D, Stream[(DenseVector[Double], DenseVector[Double])]])
   extends NeuralNetwork[D, FramedGraph[Graph], FFNeuralGraph,
     (DenseVector[Double], DenseVector[Double])]{
 

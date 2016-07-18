@@ -59,7 +59,6 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
   .settings(commonSettings: _*)
   .dependsOn(core, examples, pipes)
   .settings(
-    //aggregate in update := false,
     name := "DynaML",
     version := mainVersion,
     fork in run := true,

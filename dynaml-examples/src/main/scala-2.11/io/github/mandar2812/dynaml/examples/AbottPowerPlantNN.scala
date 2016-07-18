@@ -35,6 +35,8 @@ object AbottPowerPlantNN {
 
   private val logger = Logger.getLogger(this.getClass)
 
+  implicit val transform = DataPipe((d: Stream[(DenseVector[Double], DenseVector[Double])]) => d)
+
   def apply(delta: Int, hidden: Int = 2,
             nCounts:List[Int] = List(),
             acts:List[String],
@@ -77,10 +79,10 @@ object AbottPowerPlantNN {
 
         val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 4, hidden, act, nCounts)
 
-        val transform = DataPipe((d: Stream[(DenseVector[Double], DenseVector[Double])]) => d)
+
 
         val model = new FeedForwardNetwork[Stream[(DenseVector[Double],
-          DenseVector[Double])]](trainTest._1._1, gr, transform)
+                  DenseVector[Double])]](trainTest._1._1, gr)(transform)
 
         model.setLearningRate(opt("step").toDouble)
           .setMaxIterations(opt("maxIterations").toInt)

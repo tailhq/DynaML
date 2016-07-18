@@ -31,6 +31,12 @@ import io.github.mandar2812.dynaml.{DynaMLPipe, utils}
   * Created by mandar on 11/1/16.
   */
 object TestNNDelve {
+
+  implicit val transform: DataPipe[
+    Stream[(BDV[Double], Double)],
+    Stream[(BDV[Double], BDV[Double])]] =
+    DataPipe((d: Stream[(BDV[Double], Double)]) => d.map(el => (el._1, BDV(el._2))))
+
   def apply (hidden: Int = 2, nCounts:List[Int] = List(), acts:List[String],
              training: Int = 100, test: Int = 1000,
              columns: List[Int] = List(10,0,1,2,3,4,5,6,7,8,9),
@@ -76,10 +82,7 @@ object TestNNDelve {
         val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 1, hidden,
           acts, nCounts)
 
-        val transform = DataPipe((d: Stream[(BDV[Double], Double)]) =>
-          d.map(el => (el._1, BDV(el._2))))
-
-        val model = new FeedForwardNetwork[Stream[(BDV[Double], Double)]](trainTest._1._1, gr, transform)
+        val model = new FeedForwardNetwork[Stream[(BDV[Double], Double)]](trainTest._1._1, gr)
 
         model.setLearningRate(stepSize)
           .setMaxIterations(maxIt)

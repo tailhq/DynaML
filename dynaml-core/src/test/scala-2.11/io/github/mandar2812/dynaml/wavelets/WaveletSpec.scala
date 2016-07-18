@@ -20,7 +20,7 @@ class WaveletSpec extends FlatSpec with Matchers {
     assert(hWavelet(1.0) == -1.0)
   }
 
-  "A trivial vector input haar wavelet" should "have consistent values" in {
+  "A vector input Haar wavelet" should "have consistent values" in {
     val (sc, sf) = (
       DenseVector(1.0, 1.0),
       DenseVector(0.5, 0.5))

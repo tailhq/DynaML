@@ -60,8 +60,8 @@ object TestNNWineQuality {
         )
 
         val model = new FeedForwardNetwork[
-          Stream[(BDV[Double], Double)]
-          ](trainTest._1._1, gr, transform)
+                  Stream[(BDV[Double], Double)]
+                  ](trainTest._1._1, gr)(transform)
 
         model.setLearningRate(stepSize)
           .setMaxIterations(maxIt)

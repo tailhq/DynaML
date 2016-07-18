@@ -1,6 +1,5 @@
 package io.github.mandar2812.dynaml.wavelets
 
-import breeze.linalg.DenseVector
 import spire.algebra.{Field, NRoot}
 
 /**
@@ -18,14 +17,18 @@ class Wavelet[I](mother: (I) => I)(scale: I, shift: I)(implicit ev: Field[I], ev
 
 object Wavelet {
 
-  def apply[I](mother: (I) => I)(scale: I, shift: I)(implicit ev: Field[I], ev1: NRoot[I]): (I) => I =
+  def apply[I](mother: (I) => I)(scale: I, shift: I)(
+    implicit ev: Field[I],
+    ev1: NRoot[I]): (I) => I =
     (x: I) => ev.times(
       mother(
         ev.times(
-          ev.minus(x,shift),
-          ev.div(ev.one, scale))
-      ),
-      ev.div(ev.one, ev1.sqrt(scale)))
+          ev.minus(x, shift),
+          ev.div(ev.one, scale))),
+      ev.div(
+        ev.one,
+        ev1.sqrt(scale))
+    )
 }
 
 
