@@ -253,7 +253,7 @@ package object utils {
   def haarMatrix(n: Int) = {
     val pos = DenseMatrix(Array(1.0, 1.0))
     val neg = DenseMatrix(Array(-1.0, 1.0))
-    val hMat = DenseMatrix(Array(1.0, 1.0), Array(-1, 1.0))
+    val hMat = DenseMatrix(Array(1.0, 1.0), Array(-1.0, 1.0))
     def haarMatrixAcc(i: Int, hMatAcc: DenseMatrix[Double]): DenseMatrix[Double] = i match {
       case `n` => hMatAcc
       case index =>

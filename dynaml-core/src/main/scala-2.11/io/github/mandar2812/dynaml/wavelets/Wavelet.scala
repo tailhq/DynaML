@@ -1,5 +1,6 @@
 package io.github.mandar2812.dynaml.wavelets
 
+import breeze.linalg.DenseVector
 import spire.algebra.{Field, NRoot}
 
 /**
@@ -22,6 +23,9 @@ object Wavelet {
       mother(
         ev.times(
           ev.minus(x,shift),
-          ev.pow(scale, -1))
-      ), ev.pow(ev1.sqrt(scale), -1))
+          ev.div(ev.one, scale))
+      ),
+      ev.div(ev.one, ev1.sqrt(scale)))
 }
+
+
