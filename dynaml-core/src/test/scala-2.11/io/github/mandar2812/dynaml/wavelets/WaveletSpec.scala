@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.wavelets
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.math.VectorField
+import io.github.mandar2812.dynaml.analysis.VectorField
 import spire.std.any._
 import org.scalatest.{FlatSpec, Matchers}
 

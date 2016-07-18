@@ -1,4 +1,4 @@
-package io.github.mandar2812.dynaml.math
+package io.github.mandar2812.dynaml.analysis
 
 import breeze.linalg.DenseVector
 import spire.algebra.{Field, NRoot}

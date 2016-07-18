@@ -61,7 +61,6 @@ package object utils {
    * which is a [[List]] of [[DenseVector]].
    *
    * @param data The data set.
-   *
    * @return A [[Tuple2]] containing the mean
    *         and variance * n-1.
    *
@@ -138,7 +137,6 @@ package object utils {
    * which is a [[List]] of [[DenseVector]].
    *
    * @param data The data set.
-   *
    * @return A [[Tuple2]] containing the mean
    *         and variance.
    *
