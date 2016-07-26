@@ -16,11 +16,11 @@ import org.apache.log4j.Logger
   *
   * @tparam I The index set of the GP.
   */
-abstract class MOGPRegressionModel[T, I](cov: CovarianceFunction[I, DenseMatrix[Double], DenseMatrix[Double]],
-                                         n: CovarianceFunction[I, DenseVector[Double], DenseMatrix[Double]],
-                                         data: T, num: Int, numOutputs: Int) extends
-  GaussianProcessModel[
-    T, I, DenseVector[Double],
+abstract class MOGPRegressionModel[T, I](
+  cov: CovarianceFunction[I, DenseMatrix[Double], DenseMatrix[Double]],
+  n: CovarianceFunction[I, DenseVector[Double], DenseMatrix[Double]],
+  data: T, num: Int, numOutputs: Int) extends
+  GaussianProcessModel[T, I, DenseVector[Double],
     DenseMatrix[Double], DenseMatrix[Double],
     (DenseVector[Double], DenseMatrix[Double])] {
 
