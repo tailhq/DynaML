@@ -11,6 +11,10 @@ import spire.algebra.{Field, NRoot}
   * Represents a bare bones representation
   * of a random variable only in terms of
   * samples.
+  *
+  * @tparam Domain The domain or space over which
+  *                the random variable is defined;
+  *                i.e. the range of values it can take
   */
 trait RandomVariable[Domain] {
 
@@ -21,24 +25,54 @@ trait RandomVariable[Domain] {
     * */
   val sample: DataPipe[Unit, Domain]
 
+  /**
+    * Outputs the cartesian product between
+    * two random variables.
+    *
+    * @tparam Domain1 The domain of the other random variable
+    *
+    * @param other The random variable which forms the second
+    *              component of the cartesian product.
+    *
+    * */
   def :*:[Domain1](other: RandomVariable[Domain1]): RandomVariable[(Domain, Domain1)] = {
     val sam = this.sample
     RandomVariable(BifurcationPipe(sam,other.sample))
   }
 }
 
-
+/**
+  * This trait is used to denote
+  * random variables which have an
+  * underlying probability density function.
+  *
+  * */
 trait HasDistribution[Domain] {
+
+  /**
+    * The actual probability density
+    * function is represented as a breeze
+    * [[Density]] object.
+    * */
   val underlyingDist: Density[Domain]
 }
 
-trait RandomVarDistribution[Domain] extends RandomVariable[Domain] with HasDistribution[Domain] {
-  override val underlyingDist: Density[Domain]
-
-}
-
+/**
+  * A (univariate) continuous random variable that has an associated
+  * probability density function.
+  *
+  * @tparam Domain The domain over which the random variable takes values.
+  * @param ev An implicit parameter, which represents a [[Field]] defined over
+  *           the set [[Domain]].
+  * */
 abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) extends RandomVariable[Domain] {
 
+  /**
+    * Return the random variable that results from adding a provided
+    * random variable to the current random variable.
+    *
+    * @param other The random variable to be added to this.
+    * */
   def +(other: ContinuousRandomVariable[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
@@ -48,6 +82,12 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     }
   }
 
+  /**
+    * Return the random variable that results from subtracting a provided
+    * random variable to the current random variable.
+    *
+    * @param other The random variable to be subtracted from this.
+    * */
   def -(other: ContinuousRandomVariable[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
@@ -57,6 +97,12 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     }
   }
 
+  /**
+    * Return the random variable that results from multiplying a provided
+    * random variable to the current random variable.
+    *
+    * @param other The random variable to be multiplied to this.
+    * */
   def *(other: ContinuousRandomVariable[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
@@ -66,6 +112,12 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     }
   }
 
+  /**
+    * Return the random variable that results from adding a provided
+    * quantity in the [[Domain]] to the current random variable.
+    *
+    * @param other The value to be added to this random variable.
+    * */
   def +(other: Domain): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
@@ -74,6 +126,13 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     }
   }
 
+
+  /**
+    * Return the random variable that results from subtracting a provided
+    * quantity in the [[Domain]] from the current random variable.
+    *
+    * @param other The value to be subtracted from this random variable.
+    * */
   def -(other: Domain): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
@@ -82,6 +141,12 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     }
   }
 
+  /**
+    * Return the random variable that results from multiplying a provided
+    * quantity in the [[Domain]] to the current random variable.
+    *
+    * @param other The value to be multiplied to this random variable.
+    * */
   def *(other: Domain): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
@@ -93,14 +158,16 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
 
 trait ContinuousDistrRV[Domain]
   extends ContinuousRandomVariable[Domain]
-  with HasDistribution[Domain] {
+    with HasDistribution[Domain] {
 
   override val underlyingDist: ContinuousDistr[Domain]
 
   override val sample = DataPipe(() => underlyingDist.sample())
 }
 
-trait DiscreteDistrRV[Domain] extends RandomVarDistribution[Domain] {
+trait DiscreteDistrRV[Domain]
+  extends RandomVariable[Domain]
+    with HasDistribution[Domain] {
 
   override val underlyingDist: DiscreteDistr[Domain]
 
