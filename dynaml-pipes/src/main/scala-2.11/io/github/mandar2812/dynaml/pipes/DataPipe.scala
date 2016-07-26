@@ -75,6 +75,11 @@ trait SideEffectPipe[I] extends DataPipe[I, Unit] {
 }
 
 object DataPipe {
+
+  def apply[D](func: () => D): DataPipe[Unit, D] = new DataPipe[Unit, D] {
+    def run(x: Unit) = func()
+  }
+
   def apply[S,D](func: (S) => D):
   DataPipe[S, D] = {
     new DataPipe[S,D] {
