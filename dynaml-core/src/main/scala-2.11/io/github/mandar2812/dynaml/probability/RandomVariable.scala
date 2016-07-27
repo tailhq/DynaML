@@ -193,3 +193,27 @@ object RandomVariable {
     override val underlyingDist = d
   }
 }
+
+/**
+  * An independent and identically distributed
+  * [[RandomVariable]] represented as a [[Stream]]
+  *
+  * */
+trait IIDRandomVariable[D, R[D] <: RandomVariable[D]] extends RandomVariable[Stream[D]] {
+
+  val baseRandomVariable: R[D]
+
+  val num: Int
+
+  override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.sample()))
+}
+
+object IIDRandomVariable {
+
+  def apply[D, R[D] <: RandomVariable[D]](base: R[D])(n: Int) = new IIDRandomVariable[D, R] {
+
+    val baseRandomVariable = base
+
+    val num = n
+  }
+}
