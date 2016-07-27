@@ -16,7 +16,7 @@ import spire.algebra.{Field, NRoot}
   *                the random variable is defined;
   *                i.e. the range of values it can take
   */
-trait RandomVariable[Domain] {
+abstract class RandomVariable[Domain] {
 
   /**
     * Generate a sample from

@@ -7,17 +7,25 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
   */
 
 class ProbabilityModel[ConditioningSet, Domain,
-R1 <: RandomVariable[ConditioningSet],
-R2 <: RandomVariable[Domain]](p: R1, c: DataPipe[ConditioningSet, R2])
+R1[ConditioningSet] <: RandomVariable[ConditioningSet],
+R2[Domain] <: RandomVariable[Domain]](p: R1[ConditioningSet], c: DataPipe[ConditioningSet, R2[Domain]])
   extends RandomVariable[(ConditioningSet, Domain)] {
 
-  val conditionalRV: DataPipe[ConditioningSet, R2] = c
+  val conditionalRV: DataPipe[ConditioningSet, R2[Domain]] = c
 
-  val priorRV: R1 = p
+  val priorRV: R1[ConditioningSet] = p
 
   val sample = priorRV.sample >
     DataPipe(
       (c: ConditioningSet) => (c, conditionalRV(c).sample())
     )
 
+}
+
+object ProbabilityModel {
+  def apply[ConditioningSet, Domain,
+  R1[ConditioningSet] <: RandomVariable[ConditioningSet],
+  R2[Domain] <: RandomVariable[Domain]](
+  p: R1[ConditioningSet],
+  c: DataPipe[ConditioningSet, R2[Domain]]) = new ProbabilityModel(p,c)
 }
