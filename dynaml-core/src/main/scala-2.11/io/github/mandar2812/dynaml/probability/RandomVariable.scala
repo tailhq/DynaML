@@ -3,6 +3,7 @@ package io.github.mandar2812.dynaml.probability
 import breeze.stats.distributions.{ContinuousDistr, Density, DiscreteDistr}
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
 import spire.algebra.{Field, NRoot}
+import io.github.mandar2812.dynaml.utils._
 
 
 /**
@@ -188,6 +189,33 @@ abstract class ContinuousDistrRV[Domain](implicit ev: Field[Domain])
   override val underlyingDist: ContinuousDistr[Domain]
 
   override val sample = DataPipe(() => underlyingDist.sample())
+
+  def :*:[Domain1](other: ContinuousDistrRV[Domain1])(implicit ev1: Field[Domain1])
+  : ContinuousDistrRV[(Domain, Domain1)] = {
+    val sam = this.underlyingDist.draw _
+    val dist = this.underlyingDist
+    val sampleFirst = this.sample
+
+    implicit val ev3: Field[(Domain, Domain1)] = productField(ev, ev1)
+
+    new ContinuousDistrRV[(Domain, Domain1)] {
+
+      val underlyingDist: ContinuousDistr[(Domain, Domain1)] = new ContinuousDistr[(Domain, Domain1)] {
+        override def unnormalizedLogPdf(x: (Domain, Domain1)): Double =
+          dist.unnormalizedLogPdf(x._1) +
+          other.underlyingDist.unnormalizedLogPdf(x._2)
+
+        override def logNormalizer: Double = dist.logNormalizer + other.underlyingDist.logNormalizer
+
+        override def draw(): (Domain, Domain1) = (sam(), other.underlyingDist.draw())
+      }
+
+      override val sample = BifurcationPipe(sampleFirst, other.sample)
+    }
+
+  }
+
+
 }
 
 abstract class DiscreteDistrRV[Domain]
@@ -196,6 +224,24 @@ abstract class DiscreteDistrRV[Domain]
   override val underlyingDist: DiscreteDistr[Domain]
 
   override val sample = DataPipe(() => underlyingDist.sample())
+
+  def :*:[Domain1](other: DiscreteDistrRV[Domain1]): DiscreteDistrRV[(Domain, Domain1)] = {
+
+    val dist = this.underlyingDist
+    val sam = this.underlyingDist.draw _
+
+    new DiscreteDistrRV[(Domain, Domain1)] {
+      override val underlyingDist: DiscreteDistr[(Domain, Domain1)] = new DiscreteDistr[(Domain, Domain1)] {
+
+        override def probabilityOf(x: (Domain, Domain1)): Double =
+          dist.probabilityOf(x._1)*other.underlyingDist.probabilityOf(x._2)
+
+        override def draw(): (Domain, Domain1) = (sam(), other.underlyingDist.draw())
+      }
+    }
+
+  }
+
 }
 
 object RandomVariable {

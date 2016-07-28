@@ -31,23 +31,24 @@ import scala.annotation.tailrec
 import scala.util.matching.Regex
 import sys.process._
 import java.net.URL
+import spire.algebra.Field
 
 /**
- * A set of pre-processing utilities
- * and library functions.
- */
+  * A set of pre-processing utilities
+  * and library functions.
+  */
 package object utils {
   val log1pExp: (Double) => Double = (x) => {x + math.log1p(math.exp(-x))}
   /**
-   * Get a [[CSVReader]] object from a file name and delimiter
-   * character.
-   *
-   * @param file The file pathname as a String
-   * @param delim The delimiter character used
-   *              to split the csv file.
-   * @return A [[CSVReader]] object which can be
-   *         iterated for each line.
-   * */
+    * Get a [[CSVReader]] object from a file name and delimiter
+    * character.
+    *
+    * @param file The file pathname as a String
+    * @param delim The delimiter character used
+    *              to split the csv file.
+    * @return A [[CSVReader]] object which can be
+    *         iterated for each line.
+    * */
   def getCSVReader(file: String, delim: Char): CSVReader = {
     implicit object MyFormat extends DefaultCSVFormat {
       override val delimiter = delim
@@ -57,14 +58,14 @@ package object utils {
   }
 
   /**
-   * Get the mean and variance of a data set
-   * which is a [[List]] of [[DenseVector]].
-   *
-   * @param data The data set.
-   * @return A [[Tuple2]] containing the mean
-   *         and variance * n-1.
-   *
-   * */
+    * Get the mean and variance of a data set
+    * which is a [[List]] of [[DenseVector]].
+    *
+    * @param data The data set.
+    * @return A [[Tuple2]] containing the mean
+    *         and variance * n-1.
+    *
+    * */
   def getStats(data: List[DenseVector[Double]]):
   (DenseVector[Double], DenseVector[Double]) = {
     @tailrec
@@ -133,14 +134,14 @@ package object utils {
   }
 
   /**
-   * Get the mean and variance of a data set
-   * which is a [[List]] of [[DenseVector]].
-   *
-   * @param data The data set.
-   * @return A [[Tuple2]] containing the mean
-   *         and variance.
-   *
-   * */
+    * Get the mean and variance of a data set
+    * which is a [[List]] of [[DenseVector]].
+    *
+    * @param data The data set.
+    * @return A [[Tuple2]] containing the mean
+    *         and variance.
+    *
+    * */
 
   def getStatsMult(data: List[DenseVector[Double]]):
   (DenseVector[Double], DenseMatrix[Double]) = {
@@ -220,10 +221,10 @@ package object utils {
   }
 
   def transformData(transform: (String) => String)(lines: Stream[String]): Stream[String] =
-  lines.map(transform)
+    lines.map(transform)
 
   def extractColumns(lines: Stream[String], sep: String,
-  columns: List[Int], naStrings:Map[Int, String]): Stream[String] = {
+                     columns: List[Int], naStrings:Map[Int, String]): Stream[String] = {
     val tFunc = (line: String) => {
       val fields = line.split(sep)
 
@@ -262,5 +263,34 @@ package object utils {
     }
     haarMatrixAcc(2, hMat)
   }
+
+  def productField[Domain, Domain1](ev: Field[Domain], ev1: Field[Domain1]): Field[(Domain, Domain1)] =
+    new Field[(Domain, Domain1)] {
+      override def gcd(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
+        (ev.gcd(a._1, b._1), ev1.gcd(a._2, b._2))
+
+      override def quot(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
+        (ev.quot(a._1, b._1), ev1.quot(a._2, b._2))
+
+      override def mod(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
+        (ev.mod(a._1, b._1), ev1.mod(a._2, b._2))
+
+      override def negate(x: (Domain, Domain1)): (Domain, Domain1) =
+        (ev.negate(x._1), ev1.negate(x._2))
+
+      override def zero: (Domain, Domain1) = (ev.zero, ev1.zero)
+
+      override def one: (Domain, Domain1) = (ev.one, ev1.one)
+
+      override def plus(x: (Domain, Domain1), y: (Domain, Domain1)): (Domain, Domain1) =
+        (ev.plus(x._1, y._1), ev1.plus(x._2, y._2))
+
+      override def div(x: (Domain, Domain1), y: (Domain, Domain1)): (Domain, Domain1) =
+        (ev.div(x._1, y._1), ev1.div(x._2, y._2))
+
+      override def times(x: (Domain, Domain1), y: (Domain, Domain1)): (Domain, Domain1) =
+        (ev.times(x._1, y._1), ev1.times(x._2, y._2))
+    }
+
 }
 

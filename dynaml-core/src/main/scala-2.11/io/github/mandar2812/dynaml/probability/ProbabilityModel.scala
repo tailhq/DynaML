@@ -7,14 +7,17 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
   * Created by mandar on 26/7/16.
   */
 
-class ProbabilityModel[ConditioningSet, Domain, Dist <: Density[ConditioningSet], DistL <: Density[Domain]](
+class ProbabilityModel[
+ConditioningSet, Domain,
+Dist <: Density[ConditioningSet],
+DistL <: Density[Domain]](
   p: RandomVarWithDistr[ConditioningSet, Dist],
   c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]])
   extends RandomVarWithDistr[(ConditioningSet, Domain), Density[(ConditioningSet, Domain)]] {
 
-  val likelihood: DataPipe[ConditioningSet, RandomVariable[Domain] with HasDistribution[Domain]] = c
+  val prior: RandomVarWithDistr[ConditioningSet, Dist] = p
 
-  val prior: RandomVariable[ConditioningSet] with HasDistribution[ConditioningSet] = p
+  val likelihood: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]] = c
 
   override val underlyingDist = new Density[(ConditioningSet, Domain)] {
     override def apply(x: (ConditioningSet, Domain)): Double =
