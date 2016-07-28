@@ -7,10 +7,9 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
   * Created by mandar on 26/7/16.
   */
 
-class ProbabilityModel[
-ConditioningSet, Domain](
-  p: RandomVariable[ConditioningSet] with HasDistribution[ConditioningSet],
-  c: DataPipe[ConditioningSet, RandomVariable[Domain] with HasDistribution[Domain]])
+class ProbabilityModel[ConditioningSet, Domain, Dist <: Density[ConditioningSet], DistL <: Density[Domain]](
+  p: RandomVarWithDistr[ConditioningSet, Dist],
+  c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]])
   extends RandomVarWithDistr[(ConditioningSet, Domain), Density[(ConditioningSet, Domain)]] {
 
   val likelihood: DataPipe[ConditioningSet, RandomVariable[Domain] with HasDistribution[Domain]] = c
@@ -31,7 +30,9 @@ ConditioningSet, Domain](
 
 object ProbabilityModel {
   def apply[
-  ConditioningSet, Domain](
-  p: RandomVariable[ConditioningSet] with HasDistribution[ConditioningSet],
-  c: DataPipe[ConditioningSet, RandomVariable[Domain] with HasDistribution[Domain]]) = new ProbabilityModel(p,c)
+  ConditioningSet, Domain,
+  Dist <: Density[ConditioningSet],
+  DistL <: Density[Domain]
+  ](p: RandomVarWithDistr[ConditioningSet, Dist],
+    c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]]) = new ProbabilityModel(p,c)
 }
