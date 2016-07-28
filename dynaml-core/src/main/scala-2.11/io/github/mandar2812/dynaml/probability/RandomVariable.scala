@@ -156,24 +156,47 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
   }
 }
 
-trait ContinuousDistrRV[Domain]
-  extends ContinuousRandomVariable[Domain]
+trait RandomVarWithDistr[Domain, Dist <: Density[Domain]]
+  extends RandomVariable[Domain]
     with HasDistribution[Domain] {
+
+  override val underlyingDist: Dist
+
+  def :*:[Domain1, Dist1 <: Density[Domain1]](other: RandomVarWithDistr[Domain1, Dist1]):
+  RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] = {
+    val sam = this.sample
+    val dist = this.underlyingDist
+    //RandomVariable(BifurcationPipe(sam,other.sample))
+
+    new RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] {
+
+      val underlyingDist: Density[(Domain, Domain1)] = new Density[(Domain, Domain1)] {
+        override def apply(x: (Domain, Domain1)): Double = dist(x._1)*other.underlyingDist(x._2)
+      }
+
+      val sample = BifurcationPipe(sam,other.sample)
+    }
+
+  }
+
+}
+
+abstract class ContinuousDistrRV[Domain](implicit ev: Field[Domain])
+  extends ContinuousRandomVariable[Domain]
+    with RandomVarWithDistr[Domain, ContinuousDistr[Domain]] {
 
   override val underlyingDist: ContinuousDistr[Domain]
 
   override val sample = DataPipe(() => underlyingDist.sample())
 }
 
-trait DiscreteDistrRV[Domain]
-  extends RandomVariable[Domain]
-    with HasDistribution[Domain] {
+abstract class DiscreteDistrRV[Domain]
+  extends RandomVarWithDistr[Domain, DiscreteDistr[Domain]] {
 
   override val underlyingDist: DiscreteDistr[Domain]
 
   override val sample = DataPipe(() => underlyingDist.sample())
 }
-
 
 object RandomVariable {
 
@@ -199,21 +222,63 @@ object RandomVariable {
   * [[RandomVariable]] represented as a [[Stream]]
   *
   * */
-trait IIDRandomVariable[D, R[D] <: RandomVariable[D]] extends RandomVariable[Stream[D]] {
+trait IIDRandomVariable[D, R <: RandomVariable[D]] extends RandomVariable[Stream[D]] {
 
-  val baseRandomVariable: R[D]
+  val baseRandomVariable: R
 
   val num: Int
 
   override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.sample()))
 }
 
+trait IIDRandomVarDistr[
+D, Dist <: Density[D],
+R <: RandomVarWithDistr[D, Dist]] extends IIDRandomVariable[D, R]
+  with RandomVarWithDistr[Stream[D], Density[Stream[D]]] {
+
+  val baseRandomVariable: R
+
+  val num: Int
+
+  override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.sample()))
+
+  override val underlyingDist = new Density[Stream[D]] {
+    override def apply(x: Stream[D]): Double = x.map(baseRandomVariable.underlyingDist(_)).product
+  }
+}
+
+object IIDRandomVarDistr {
+  def apply[D](base : RandomVarWithDistr[D, Density[D]])(n: Int) =
+    new IIDRandomVarDistr[D, Density[D], RandomVarWithDistr[D, Density[D]]] {
+      val baseRandomVariable = base
+      val num = n
+    }
+
+  def apply[D](base : ContinuousDistrRV[D])(n: Int) =
+    new IIDRandomVarDistr[D, ContinuousDistr[D], ContinuousDistrRV[D]] {
+      val baseRandomVariable = base
+      val num = n
+    }
+}
+
 object IIDRandomVariable {
 
-  def apply[D, R[D] <: RandomVariable[D]](base: R[D])(n: Int) = new IIDRandomVariable[D, R] {
+  def apply[D, R <: RandomVariable[D]](base: R)(n: Int) = new IIDRandomVariable[D, R] {
 
     val baseRandomVariable = base
 
     val num = n
   }
+
+  def apply[C, D, R <: RandomVariable[D]](base: DataPipe[C, R])(n: Int) =
+    DataPipe((c: C) => new IIDRandomVariable[D, R] {
+
+      val baseRandomVariable = base(c)
+
+      val num = n
+
+    })
+
+
+
 }

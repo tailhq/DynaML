@@ -25,7 +25,7 @@ package io.github.mandar2812.dynaml.pipes
   * abstract pipe that defines a transformation
   * between two data types, i.e. [[Source]] and [[Destination]]
   * */
-trait DataPipe[Source, Destination] {
+trait DataPipe[-Source, +Destination] {
 
   def run(data: Source): Destination
 
@@ -50,7 +50,7 @@ trait DataPipe[Source, Destination] {
   :ParallelPipe[Source, Destination, OtherSource, OtherDestination] = ParallelPipe(this.run, that.run)
 }
 
-trait ParallelPipe[Source1, Result1, Source2, Result2]
+trait ParallelPipe[-Source1, +Result1, -Source2, +Result2]
   extends DataPipe[(Source1, Source2), (Result1, Result2)] {
 
 }
