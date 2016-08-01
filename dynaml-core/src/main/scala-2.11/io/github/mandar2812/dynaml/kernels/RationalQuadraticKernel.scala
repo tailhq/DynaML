@@ -6,28 +6,43 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
   * Rational Quadratic Kernel given by the expression
   * K(x,y) = 1 - ||x-y||<sup>2</sup>/(||x-y||<sup>2</sup> + c<sup>2</sup>)
   * */
-class RationalQuadraticKernel(si: Double = 1.0)
+class RationalQuadraticKernel(shape: Double = 1.0, l: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
-  override val hyper_parameters = List("c")
+  override val hyper_parameters = List("mu", "l")
 
-  state = Map("c" -> si)
+  state = Map("mu" -> shape, "l" -> l)
 
-  private var c: Double = si
+  private var mu: Double = shape
 
-  def setc(b: Double): Unit = {
-    this.c = b
-    state += ("c" -> b)
+  private var lambda: Double = l
+
+  def setShape(b: Double): Unit = {
+    this.mu = b
+    state += ("mu" -> b)
+  }
+
+  def setScale(lam: Double): Unit = {
+    this.lambda = lam
+    state += ("l" -> lam)
   }
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    1 - math.pow(norm(x-y, 2), 2)/(math.pow(norm(x-y, 2), 2) + state("c"))
+    math.pow(1 + math.pow(norm(x-y, 2), 2)/(state("mu")*state("l")*state("l")), -0.5*(x.length+state("mu")))
 
   override def gradient(x: DenseVector[Double], y: DenseVector[Double]): Map[String, Double] = {
-    Map("c" ->
-      2.0*math.pow(norm(x-y, 2), 2)*state("c")/
-        math.pow(math.pow(norm(x-y, 2), 2) + math.pow(state("c"), 2), 2)
+
+    val base = 1 + math.pow(norm(x-y, 2), 2)/(state("mu")*state("l")*state("l"))
+    val exponent = -0.5*(x.length+state("mu"))
+
+    Map(
+      "l" ->
+        -2.0*exponent*math.pow(norm(x-y, 2), 2.0)*math.pow(base, exponent - 1.0)/(state("mu")*math.pow(state("l"), 3.0)),
+      "mu" -> this.evaluate(x, y) * (
+        -1.0*exponent*math.pow(base, -1.0)*math.pow(norm(x-y, 2.0), 2.0)/math.pow(state("mu")*state("l"), 2.0) -
+        0.5*math.log(base)
+        )
     )
   }
 
