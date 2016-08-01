@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg._
 import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, DiracKernel}
 import io.github.mandar2812.dynaml.optimization.{GloballyOptWithGrad, GloballyOptimizable}
+import io.github.mandar2812.dynaml.probability.MultGaussianRV
 import org.apache.log4j.Logger
 
 /**
@@ -41,7 +42,7 @@ abstract class AbstractGPRegressionModel[T, I](
   n: CovarianceFunction[I, Double, DenseMatrix[Double]],
   data: T, num: Int) extends
   GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
-  (DenseVector[Double], DenseMatrix[Double])]
+  MultGaussianRV]
 with GloballyOptWithGrad {
 
   private val logger = Logger.getLogger(this.getClass)
@@ -162,7 +163,7 @@ with GloballyOptWithGrad {
    *             storing the values of the input patters.
    **/
   override def predictiveDistribution[U <: Seq[I]](test: U):
-  (DenseVector[Double], DenseMatrix[Double]) = {
+  MultGaussianRV = {
 
     logger.info("Calculating posterior predictive distribution")
     //Calculate the kernel matrix on the training data
@@ -185,7 +186,9 @@ with GloballyOptWithGrad {
 
     //Calculate the predictive mean and co-variance
     val inverse = inv(kernelTraining + noiseMat)
-    (crossKernel.t * (inverse * trainingLabels),
+
+    MultGaussianRV(test.length)(
+      crossKernel.t * (inverse * trainingLabels),
       kernelTest - (crossKernel.t * (inverse * crossKernel)))
   }
 
@@ -199,8 +202,10 @@ with GloballyOptWithGrad {
   Seq[(I, Double, Double, Double)] = {
 
     val posterior = predictiveDistribution(testData)
-    val stdDev = (1 to testData.length).map(i => math.sqrt(posterior._2(i-1, i-1)))
-    val mean = posterior._1.toArray.toSeq
+    val postcov = posterior.covariance
+    val postmean = posterior.mu
+    val stdDev = (1 to testData.length).map(i => math.sqrt(postcov(i-1, i-1)))
+    val mean = postmean.toArray.toSeq
 
     logger.info("Generating error bars")
     val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
