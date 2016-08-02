@@ -185,11 +185,20 @@ with GloballyOptWithGrad {
     val crossKernel = covariance.buildCrossKernelMatrix(training, test)
 
     //Calculate the predictive mean and co-variance
-    val inverse = inv(kernelTraining + noiseMat)
+    val smoothingMat = kernelTraining + noiseMat
+    val Lmat = cholesky(smoothingMat)
+    val alpha = Lmat.t \ (Lmat \ trainingLabels)
+    val v = Lmat \ crossKernel
+
+    val varianceReducer = v.t * v
+    //Ensure that v is symmetric
+
+    val adjustedVarReducer = DenseMatrix.tabulate[Double](varianceReducer.rows, varianceReducer.cols)(
+      (i,j) => if(i <= j) varianceReducer(i,j) else varianceReducer(j,i))
 
     MultGaussianRV(test.length)(
-      crossKernel.t * (inverse * trainingLabels),
-      kernelTest - (crossKernel.t * (inverse * crossKernel)))
+      crossKernel.t * alpha,
+      kernelTest - adjustedVarReducer)
   }
 
   /**
