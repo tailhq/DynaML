@@ -34,6 +34,7 @@ class MOGPRegressionModel[I](
     **/
   override def dataAsSeq(data: Stream[(I, DenseVector[Double])]): Seq[((I, Int), Double)] =
     data.map((patternAndLabel) =>
-      patternAndLabel._2.mapPairs((i, label) => ((patternAndLabel._1, i), label)).toArray.toSeq)
-      .reduce[Seq[((I, Int), Double)]]((s1, s2) => s1 ++ s2)
+      patternAndLabel._2.mapPairs((i, label) =>
+        ((patternAndLabel._1, i), label)
+      ).toArray.toSeq).reduceLeft((s1, s2) => s1 ++ s2)
 }

@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-
+import spire.algebra.Field
 
 /**
  * Defines a base class for kernels
@@ -31,7 +31,7 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
   def effective_state:Map[String, Double] =
     state.filterNot(h => blocked_hyper_parameters.contains(h._1))
 
-  def effective_hyper_parameters:List[String] =
+  def effective_hyper_parameters: List[String] =
     hyper_parameters.filterNot(h => blocked_hyper_parameters.contains(h))
 
   def setHyperParameters(h: Map[String, Double]): this.type = {
@@ -49,6 +49,7 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
                                      length: Int): KernelMatrix[M]
 
   def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): M
+
 }
 
 object CovarianceFunction {
@@ -98,7 +99,7 @@ abstract class CompositeCovariance[T]
 trait LocalScalarKernel[Index] extends
 CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
-  def gradient(x: Index, y: Index): Map[String, Double] = hyper_parameters.map((_, 0.0)).toMap
+  def gradient(x: Index, y: Index): Map[String, Double] = effective_hyper_parameters.map((_, 0.0)).toMap
 
   /**
     *  Create composite kernel k = k<sub>1</sub> + k<sub>2</sub>
@@ -118,6 +119,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
       state = firstKern.state ++ otherKernel.state
 
+      blocked_hyper_parameters = firstKern.blocked_hyper_parameters ++ otherKernel.blocked_hyper_parameters
+
       override def gradient(x: Index, y: Index): Map[String, Double] =
         firstKern.gradient(x, y) ++ otherKernel.gradient(x,y)
 
@@ -129,7 +132,6 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
     }
   }
-
 
   /**
     *  Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
@@ -149,6 +151,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
       state = firstKern.state ++ otherKernel.state
 
+      blocked_hyper_parameters = firstKern.blocked_hyper_parameters ++ otherKernel.blocked_hyper_parameters
+
       override def gradient(x: Index, y: Index): Map[String, Double] =
         firstKern.gradient(x, y).map((couple) => (couple._1, couple._2*otherKernel.evaluate(x,y))) ++
           otherKernel.gradient(x,y).map((couple) => (couple._1, couple._2*firstKern.evaluate(x,y)))
@@ -161,6 +165,51 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
     }
   }
+
+  def :*:[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] = {
+
+    val evalF = this.evaluate _
+
+    val gradF = this.gradient _
+
+    val hyp = this.hyper_parameters
+
+    val blockedHyp = this.blocked_hyper_parameters
+
+    val st = this.state
+
+    val buildMat = this.buildKernelMatrix _
+
+    val buildCMat = this.buildCrossKernelMatrix _
+
+    new CompositeCovariance[(Index, T1)] {
+
+      override val hyper_parameters: List[String] = hyp ++ otherKernel.hyper_parameters
+
+      state = st ++ otherKernel.state
+
+      blocked_hyper_parameters = otherKernel.blocked_hyper_parameters ++ blockedHyp
+
+      override def gradient(x: (Index, T1), y: (Index, T1)): Map[String, Double] =
+        gradF(x._1, y._1).mapValues(v => v*otherKernel.evaluate(x._2, y._2)) ++
+          otherKernel.gradient(x._2, y._2).mapValues(v => v*evalF(x._1, y._1))
+
+      def buildKernelMatrix[S <: Seq[(Index, T1)]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
+        new SVMKernelMatrix(
+          buildMat(mappedData.map(_._1), length).getKernelMatrix() :*
+            otherKernel.buildKernelMatrix(mappedData.map(_._2), length).getKernelMatrix(),
+          length)
+
+      def buildCrossKernelMatrix[S <: Seq[(Index, T1)]](dataset1: S, dataset2: S): DenseMatrix[Double] =
+        buildCMat(dataset1.map(_._1), dataset2.map(_._1)) :*
+          otherKernel.buildCrossKernelMatrix(dataset1.map(_._2), dataset2.map(_._2))
+
+      override def evaluate(x: (Index, T1), y: (Index, T1)): Double =
+        evalF(x._1, y._1)*otherKernel.evaluate(x._2, y._2)
+    }
+
+  }
+
 
 }
 
