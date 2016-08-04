@@ -21,7 +21,7 @@ class MOGPRegressionModel[I](
   num: Int, numOutputs: Int) extends
   AbstractGPRegressionModel[
     Stream[(I, DenseVector[Double])],
-    (I, Int)](cov, n, data, num) {
+    (I, Int)](cov, n, data, num*numOutputs) {
 
   private val logger = Logger.getLogger(this.getClass)
 
