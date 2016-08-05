@@ -1,7 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import spire.algebra.Field
 
 /**
  * Defines a base class for kernels
@@ -121,6 +120,12 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
       blocked_hyper_parameters = firstKern.blocked_hyper_parameters ++ otherKernel.blocked_hyper_parameters
 
+      override def setHyperParameters(h: Map[String, Double]): this.type = {
+        firstKern.setHyperParameters(h)
+        otherKernel.setHyperParameters(h)
+        super.setHyperParameters(h)
+      }
+
       override def gradient(x: Index, y: Index): Map[String, Double] =
         firstKern.gradient(x, y) ++ otherKernel.gradient(x,y)
 
@@ -153,6 +158,12 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
       blocked_hyper_parameters = firstKern.blocked_hyper_parameters ++ otherKernel.blocked_hyper_parameters
 
+      override def setHyperParameters(h: Map[String, Double]): this.type = {
+        firstKern.setHyperParameters(h)
+        otherKernel.setHyperParameters(h)
+        super.setHyperParameters(h)
+      }
+
       override def gradient(x: Index, y: Index): Map[String, Double] =
         firstKern.gradient(x, y).map((couple) => (couple._1, couple._2*otherKernel.evaluate(x,y))) ++
           otherKernel.gradient(x,y).map((couple) => (couple._1, couple._2*firstKern.evaluate(x,y)))
@@ -168,44 +179,38 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
   def :*:[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] = {
 
-    val evalF = this.evaluate _
-
-    val gradF = this.gradient _
-
-    val hyp = this.hyper_parameters
-
-    val blockedHyp = this.blocked_hyper_parameters
-
-    val st = this.state
-
-    val buildMat = this.buildKernelMatrix _
-
-    val buildCMat = this.buildCrossKernelMatrix _
+    val firstkernel = this
 
     new CompositeCovariance[(Index, T1)] {
 
-      override val hyper_parameters: List[String] = hyp ++ otherKernel.hyper_parameters
+      override val hyper_parameters: List[String] = firstkernel.hyper_parameters ++ otherKernel.hyper_parameters
 
-      state = st ++ otherKernel.state
+      state = firstkernel.state ++ otherKernel.state
 
-      blocked_hyper_parameters = otherKernel.blocked_hyper_parameters ++ blockedHyp
+      blocked_hyper_parameters = otherKernel.blocked_hyper_parameters ++ firstkernel.blocked_hyper_parameters
+
+      override def setHyperParameters(h: Map[String, Double]): this.type = {
+        firstkernel.setHyperParameters(h)
+        otherKernel.setHyperParameters(h)
+        super.setHyperParameters(h)
+      }
 
       override def gradient(x: (Index, T1), y: (Index, T1)): Map[String, Double] =
-        gradF(x._1, y._1).mapValues(v => v*otherKernel.evaluate(x._2, y._2)) ++
-          otherKernel.gradient(x._2, y._2).mapValues(v => v*evalF(x._1, y._1))
+        firstkernel.gradient(x._1, y._1).mapValues(v => v*otherKernel.evaluate(x._2, y._2)) ++
+          otherKernel.gradient(x._2, y._2).mapValues(v => v*firstkernel.evaluate(x._1, y._1))
 
       def buildKernelMatrix[S <: Seq[(Index, T1)]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
         new SVMKernelMatrix(
-          buildMat(mappedData.map(_._1), length).getKernelMatrix() :*
+          firstkernel.buildKernelMatrix(mappedData.map(_._1), length).getKernelMatrix() :*
             otherKernel.buildKernelMatrix(mappedData.map(_._2), length).getKernelMatrix(),
           length)
 
       def buildCrossKernelMatrix[S <: Seq[(Index, T1)]](dataset1: S, dataset2: S): DenseMatrix[Double] =
-        buildCMat(dataset1.map(_._1), dataset2.map(_._1)) :*
+        firstkernel.buildCrossKernelMatrix(dataset1.map(_._1), dataset2.map(_._1)) :*
           otherKernel.buildCrossKernelMatrix(dataset1.map(_._2), dataset2.map(_._2))
 
       override def evaluate(x: (Index, T1), y: (Index, T1)): Double =
-        evalF(x._1, y._1)*otherKernel.evaluate(x._2, y._2)
+        firstkernel.evaluate(x._1, y._1)*otherKernel.evaluate(x._2, y._2)
     }
 
   }

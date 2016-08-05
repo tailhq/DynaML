@@ -3,7 +3,7 @@
   */
 
 import breeze.stats.distributions._
-import io.github.mandar2812.dynaml.probability.{ProbabilityModel, RandomVariable}
+import io.github.mandar2812.dynaml.probability.{IIDRandomVarDistr, ProbabilityModel, RandomVariable}
 import spire.implicits._
 
 val n = RandomVariable(Gaussian(0.0, 0.25))
@@ -38,3 +38,22 @@ val post = c_model.posterior(375)
 histogram((1 to 2000).map(_ => p.sample()))
 
 histogram((1 to 2000).map(_ => post.sample()))
+
+val priorMean = RandomVariable(new Gaussian(0.0, 1.0))
+
+val priorSigma = RandomVariable(new Gamma(7.5, 1.0))
+
+val prior = priorSigma :*: priorMean
+
+val iidPrior = IIDRandomVarDistr(prior) _
+
+scatter(iidPrior(1000).sample())
+
+val likelihood = DataPipe((params: (Double, Double)) =>
+  IIDRandomVarDistr(RandomVariable(new Gaussian(params._1, params._2)))(2000))
+
+val gModel = ProbabilityModel(prior, likelihood)
+
+val posterior = gModel.posterior(new Gaussian(-1.0, 2.0).sample(2000).toStream)
+
+scatter((1 to 2000).map(_ => posterior.sample()))
