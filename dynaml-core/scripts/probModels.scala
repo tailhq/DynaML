@@ -3,6 +3,7 @@
   */
 
 import breeze.stats.distributions._
+import io.github.mandar2812.dynaml.probability.{ProbabilityModel, RandomVariable}
 import spire.implicits._
 
 val n = RandomVariable(Gaussian(0.0, 0.25))
@@ -24,3 +25,16 @@ val cointoss = RandomVariable(new Binomial(1, 0.5))
 val mixture = DataPipe((toss: Int) => if(toss == 1) mod else mod1)
 
 val mixtureModel = ProbabilityModel(cointoss, mixture)
+
+
+val p = RandomVariable(new Beta(5.0, 5.0))
+
+val coinLikihood = DataPipe((p: Double) => new BinomialRV(100, p))
+
+val c_model = ProbabilityModel(p, coinLikihood)
+
+val post = c_model.posterior(40)
+
+histogram((1 to 2000).map(_ => p.sample()))
+
+histogram((1 to 200).map(_ => post.sample()))
