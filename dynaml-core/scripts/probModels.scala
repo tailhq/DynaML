@@ -27,14 +27,14 @@ val mixture = DataPipe((toss: Int) => if(toss == 1) mod else mod1)
 val mixtureModel = ProbabilityModel(cointoss, mixture)
 
 
-val p = RandomVariable(new Beta(5.0, 5.0))
+val p = RandomVariable(new Beta(0.5, 0.5))
 
-val coinLikihood = DataPipe((p: Double) => new BinomialRV(100, p))
+val coinLikihood = DataPipe((p: Double) => new BinomialRV(500, p))
 
 val c_model = ProbabilityModel(p, coinLikihood)
 
-val post = c_model.posterior(40)
+val post = c_model.posterior(375)
 
 histogram((1 to 2000).map(_ => p.sample()))
 
-histogram((1 to 200).map(_ => post.sample()))
+histogram((1 to 2000).map(_ => post.sample()))
