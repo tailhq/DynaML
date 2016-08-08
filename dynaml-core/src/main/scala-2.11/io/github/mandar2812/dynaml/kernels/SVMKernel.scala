@@ -1,7 +1,10 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg._
-import org.apache.log4j.{Priority, Logger}
+import io.github.mandar2812.dynaml.utils
+import org.apache.log4j.{Logger, Priority}
+
+import scala.collection.immutable.HashMap
 /**
  * Defines an abstract class outlines the basic
  * functionality requirements of an SVM Kernel
@@ -74,9 +77,12 @@ object SVMKernel {
 
     logger.info("Constructing kernel matrix.")
 
+    val kernelIndex = utils.combine(Seq(mappedData.zipWithIndex, mappedData.zipWithIndex))
+      .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+      .toMap
 
     val kernel = DenseMatrix.tabulate[Double](length, length){
-      (i, j) => eval(mappedData(i), mappedData(j))
+      (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
     }
 
     logger.info("Dimension: " + kernel.rows + " x " + kernel.cols)
@@ -90,8 +96,12 @@ object SVMKernel {
     logger.info("Constructing cross kernel matrix.")
     logger.info("Dimension: " + data1.length + " x " + data2.length)
 
+    val kernelIndex = utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
+      .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+      .toMap
+
     DenseMatrix.tabulate[Double](data1.length, data2.length){
-      (i, j) => eval(data1(i), data2(j))
+      (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
     }
   }
 

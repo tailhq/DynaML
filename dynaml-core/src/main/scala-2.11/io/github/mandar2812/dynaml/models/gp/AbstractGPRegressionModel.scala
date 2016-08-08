@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg._
+import breeze.numerics.log
 import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, DiracKernel}
 import io.github.mandar2812.dynaml.optimization.{GloballyOptWithGrad, GloballyOptimizable}
 import io.github.mandar2812.dynaml.probability.MultGaussianRV
@@ -279,12 +280,14 @@ object AbstractGPRegressionModel {
                     kernelMatrix: DenseMatrix[Double],
                     noiseMatrix: DenseMatrix[Double]): Double = {
 
-    val kernelTraining: DenseMatrix[Double] =
-      kernelMatrix + noiseMatrix
-    val Kinv = inv(kernelTraining)
+    val smoothingMat = kernelMatrix + noiseMatrix
+    val Lmat = cholesky(smoothingMat)
+    val alpha = Lmat.t \ (Lmat \ trainingData)
 
-    0.5*(trainingData.t * (Kinv * trainingData) + math.log(det(kernelTraining)) +
+    0.5*((trainingData dot alpha) +
+      trace(log(Lmat)) +
       trainingData.length*math.log(2*math.Pi))
+
   }
 
   def apply[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
