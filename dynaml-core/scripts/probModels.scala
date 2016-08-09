@@ -54,7 +54,7 @@ val likelihood = DataPipe((params: (Double, Double)) =>
 
 val gModel = ProbabilityModel(prior, likelihood)
 
-val posterior = gModel.posterior(new Gaussian(-1.0, 2.0).sample(2000).toStream)
+val posterior = gModel.posterior(new Gaussian(-2.0, 0.25).sample(2000).toStream)
 
 val samples = (1 to 1000).map(i => {posterior.sample()})
 
