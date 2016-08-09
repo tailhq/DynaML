@@ -101,7 +101,7 @@ object SVMKernel {
       .toMap
 
     DenseMatrix.tabulate[Double](data1.length, data2.length){
-      (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
+      (i, j) => kernelIndex((i,j))
     }
   }
 
