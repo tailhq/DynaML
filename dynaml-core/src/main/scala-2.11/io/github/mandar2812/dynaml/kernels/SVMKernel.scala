@@ -78,6 +78,7 @@ object SVMKernel {
     logger.info("Constructing kernel matrix.")
 
     val kernelIndex = utils.combine(Seq(mappedData.zipWithIndex, mappedData.zipWithIndex))
+      .filter(s => s.head._2 >= s.last._2)
       .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
       .toMap
 
