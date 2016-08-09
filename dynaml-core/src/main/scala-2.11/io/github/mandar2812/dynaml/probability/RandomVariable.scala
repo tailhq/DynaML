@@ -36,7 +36,7 @@ abstract class RandomVariable[Domain] {
     *              component of the cartesian product.
     *
     * */
-  def :*:[Domain1](other: RandomVariable[Domain1]): RandomVariable[(Domain, Domain1)] = {
+  def :*[Domain1](other: RandomVariable[Domain1]): RandomVariable[(Domain, Domain1)] = {
     val sam = this.sample
     RandomVariable(BifurcationPipe(sam,other.sample))
   }
@@ -163,7 +163,7 @@ trait RandomVarWithDistr[Domain, Dist <: Density[Domain]]
 
   override val underlyingDist: Dist
 
-  def :*:[Domain1, Dist1 <: Density[Domain1]](other: RandomVarWithDistr[Domain1, Dist1]):
+  def :*[Domain1, Dist1 <: Density[Domain1]](other: RandomVarWithDistr[Domain1, Dist1]):
   RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] = {
     val sam = this.sample
     val dist = this.underlyingDist
@@ -190,7 +190,7 @@ abstract class ContinuousDistrRV[Domain](implicit ev: Field[Domain])
 
   override val sample = DataPipe(() => underlyingDist.sample())
 
-  def :*:[Domain1](other: ContinuousDistrRV[Domain1])(implicit ev1: Field[Domain1])
+  def :*[Domain1](other: ContinuousDistrRV[Domain1])(implicit ev1: Field[Domain1])
   : ContinuousDistrRV[(Domain, Domain1)] = {
     val sam = this.underlyingDist.draw _
     val dist = this.underlyingDist
@@ -225,7 +225,7 @@ abstract class DiscreteDistrRV[Domain]
 
   override val sample = DataPipe(() => underlyingDist.sample())
 
-  def :*:[Domain1](other: DiscreteDistrRV[Domain1]): DiscreteDistrRV[(Domain, Domain1)] = {
+  def :*[Domain1](other: DiscreteDistrRV[Domain1]): DiscreteDistrRV[(Domain, Domain1)] = {
 
     val dist = this.underlyingDist
     val sam = this.underlyingDist.draw _

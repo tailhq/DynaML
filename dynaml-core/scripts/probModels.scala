@@ -9,13 +9,13 @@ import spire.implicits._
 val n = RandomVariable(Gaussian(0.0, 0.25))
 val n1 = RandomVariable(Laplace(0.0, 0.25))
 
-val combinedDist = n :*: n1
+val combinedDist = n :* n1
 
 val cond2 = DataPipe((xy: (Double, Double)) => RandomVariable(new Gumbel(0.4*xy._1 + 0.6*xy._2, math.sin(xy._1+xy._2)/2.0)))
 
 val mod = ProbabilityModel(combinedDist, cond2)
 
-val combinedDist2 = n1 :*: n
+val combinedDist2 = n1 :* n
 
 val mod1 = ProbabilityModel(combinedDist2, cond2)
 
@@ -43,7 +43,7 @@ val priorMean = RandomVariable(new Gaussian(0.0, 1.0))
 
 val priorSigma = RandomVariable(new Gamma(7.5, 1.0))
 
-val prior = priorSigma :*: priorMean
+val prior = priorMean :* priorSigma
 
 val iidPrior = IIDRandomVarDistr(prior) _
 

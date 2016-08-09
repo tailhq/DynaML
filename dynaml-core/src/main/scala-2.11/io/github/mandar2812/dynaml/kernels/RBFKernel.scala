@@ -195,3 +195,17 @@ class SECovFunc(private var band: Double = 1.0, private var h: Double = 2.0)
     Map("amplitude" -> 2.0*state("amplitude")*super.evaluate(x,y)) ++ super.gradient(x,y)
 
 }
+
+class CoRegRBFKernel(bandwidth: Double) extends LocalSVMKernel[Int] {
+
+  override val hyper_parameters: List[String] = List("coRegB")
+
+  state = Map("coRegB" -> bandwidth)
+
+  override def gradient(x: Int, y: Int): Map[String, Double] =
+    Map("coRegB" -> 1.0*evaluate(x,y)*math.pow(x-y,2)/math.pow(math.abs(state("coRegB")), 3))
+
+  override def evaluate(x: Int, y: Int): Double = {
+    math.exp(-1.0*math.pow(x-y, 2.0)/state("coRegB"))
+  }
+}

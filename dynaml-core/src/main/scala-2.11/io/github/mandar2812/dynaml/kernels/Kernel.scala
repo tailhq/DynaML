@@ -177,7 +177,7 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
     }
   }
 
-  def :*:[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] = {
+  def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] = {
 
     val firstkernel = this
 

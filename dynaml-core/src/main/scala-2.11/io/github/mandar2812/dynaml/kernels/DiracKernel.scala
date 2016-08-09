@@ -64,3 +64,11 @@ class MAKernel(private var noiseLevel: Double = 1.0)
     new SVMKernelMatrix(DenseMatrix.eye[Double](length)*state("noiseLevel"), length)
 
 }
+
+class CoRegDiracKernel extends LocalSVMKernel[Int] {
+  override val hyper_parameters: List[String] = List()
+
+  override def gradient(x: Int, y: Int): Map[String, Double] = Map()
+
+  override def evaluate(x: Int, y: Int): Double = if(x == y) 1.0 else 0.0
+}
