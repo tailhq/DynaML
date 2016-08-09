@@ -56,4 +56,6 @@ val gModel = ProbabilityModel(prior, likelihood)
 
 val posterior = gModel.posterior(new Gaussian(-1.0, 2.0).sample(2000).toStream)
 
-scatter((1 to 2000).map(_ => posterior.sample()))
+val samples = (1 to 1000).map(i => {posterior.sample()})
+
+scatter(samples)
