@@ -17,7 +17,7 @@ val post = c_model.posterior(350)
 histogram((1 to 2000).map(_ => p.sample()))
 histogram((1 to 2000).map(_ => post.sample()))
 
-val data = new Gaussian(-2.0, 3.25).sample(3000).toStream
+val data = new Gaussian(-2.0, 3.25).sample(2000).toStream
 histogram(data)
 title("Histogram of data")
 
@@ -32,7 +32,7 @@ val iidPrior = IIDRandomVarDistr(prior) _
 scatter(iidPrior(1000).sample())
 hold()
 val likelihood = DataPipe((params: (Double, Double)) =>
-  IIDRandomVarDistr(RandomVariable(new Gaussian(params._1, params._2)))(3000))
+  IIDRandomVarDistr(RandomVariable(new Gaussian(params._1, params._2)))(2000))
 
 val gModel = ProbabilityModel(prior, likelihood)
 

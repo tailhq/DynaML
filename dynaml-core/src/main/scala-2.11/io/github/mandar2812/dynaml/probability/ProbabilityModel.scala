@@ -21,7 +21,9 @@ DistL <: Density[Domain]](
 
   val likelihood: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]] = c
 
-  var Max_Candidates: Int = 10000
+  var Max_Candidates: Int = 1000
+
+  var Max_Estimations: Int = 100000
 
   override val underlyingDist = new Density[(ConditioningSet, Domain)] {
     override def apply(x: (ConditioningSet, Domain)): Double =
@@ -38,9 +40,9 @@ DistL <: Density[Domain]](
     val sampl = this.prior.sample
     val q = this.prior.underlyingDist
 
-    val M = (1 to Max_Candidates).map(i => {
+    val M = (1 to Max_Estimations).map(i => {
       likelihood(sampl()).underlyingDist(data)
-    }).sum/Max_Candidates.toDouble
+    }).sum/Max_Estimations.toDouble
 
     val postD = new Density[ConditioningSet] {
       override def apply(x: ConditioningSet): Double =

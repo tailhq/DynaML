@@ -45,3 +45,17 @@ class LaplaceCovFunc(private var beta: Double)
   override def gradient(x: Double, y: Double): Map[String, Double] =
     Map("beta" -> 1.0*evaluate(x,y)*math.abs(x-y)/math.pow(state("beta"), 2))
 }
+
+class CoRegLaplaceKernel(bandwidth: Double) extends LocalSVMKernel[Int] {
+
+  override val hyper_parameters: List[String] = List("coRegLB")
+
+  state = Map("coRegLB" -> bandwidth)
+
+  override def gradient(x: Int, y: Int): Map[String, Double] =
+    Map("coRegLB" -> 1.0*evaluate(x,y)*math.abs(x-y)/math.pow(state("coRegLB"), 2))
+
+  override def evaluate(x: Int, y: Int): Double = {
+    math.exp(-1.0*math.abs(x-y)/state("coRegLB"))
+  }
+}
