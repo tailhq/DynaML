@@ -25,7 +25,7 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler, Scaler, StreamDataPipe}
-import io.github.mandar2812.dynaml.utils.{GaussianScaler, MinMaxScaler}
+import io.github.mandar2812.dynaml.utils.{GaussianScaler, MinMaxScaler, MVGaussianScaler}
 import org.apache.log4j.Logger
 
 /**
@@ -340,6 +340,33 @@ object DynaMLPipe {
       (scaler(trainTest), (featuresScaler, targetsScaler))
     })
 
+  /**
+    * Scale a data set which is stored as a [[Stream]],
+    * return the scaled data as well as a [[MVGaussianScaler]] instance
+    * which can be used to reverse the scaled values to the original
+    * data.
+    * */
+  val multivariateGaussianScaling =
+  DataPipe((trainTest: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+
+    val (num_features, num_targets) = (trainTest.head._1.length, trainTest.head._2.length)
+
+    val (m, sigma) = utils.getStatsMult(trainTest.map(tup =>
+      DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+    val featuresScaler = new MVGaussianScaler(
+      m(0 until num_features),
+      sigma(0 until num_features, 0 until num_features))
+
+    val targetsScaler = new MVGaussianScaler(
+      m(num_features until num_features + num_targets),
+      sigma(num_features until num_features + num_targets, num_features until num_features + num_targets))
+
+    val scaler: ReversibleScaler[(DenseVector[Double], DenseVector[Double])] = featuresScaler * targetsScaler
+
+    (scaler(trainTest), (featuresScaler, targetsScaler))
+  })
+
 
   /**
     * Perform gaussian normalization on a data stream which
@@ -370,6 +397,36 @@ object DynaMLPipe {
 
       (scaler(trainTest._1), scaler(trainTest._2), (featuresScaler, targetsScaler))
     })
+
+  /**
+    * Scale a data set which is stored as a [[Stream]],
+    * return the scaled data as well as a [[MVGaussianScaler]] instance
+    * which can be used to reverse the scaled values to the original
+    * data.
+    * */
+  val multivariateGaussianScalingTrainTest =
+  DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
+    Stream[(DenseVector[Double], DenseVector[Double])])) => {
+
+    val (num_features, num_targets) = (trainTest._1.head._1.length, trainTest._1.head._2.length)
+
+    val (m, sigma) = utils.getStatsMult(trainTest._1.map(tup =>
+      DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+    val featuresScaler = new MVGaussianScaler(
+      m(0 until num_features),
+      sigma(0 until num_features, 0 until num_features))
+
+    val targetsScaler = new MVGaussianScaler(
+      m(num_features until num_features + num_targets),
+      sigma(num_features until num_features + num_targets, num_features until num_features + num_targets))
+
+    val scaler: ReversibleScaler[(DenseVector[Double], DenseVector[Double])] = featuresScaler * targetsScaler
+
+    (scaler(trainTest._1), scaler(trainTest._2), (featuresScaler, targetsScaler))
+
+  })
+
 
   /**
     * Scale a data set which is stored as a [[Stream]],
