@@ -1,6 +1,5 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
-import model.POMP._
 import breeze.linalg.DenseVector
 
 sealed trait State {

@@ -1,8 +1,8 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
 import breeze.linalg.{DenseMatrix, DenseVector, diag}
-import breeze.stats.distributions.{Rand, Gaussian, MultivariateGaussian}
 import breeze.numerics.exp
+import breeze.stats.distributions.{Gaussian, Rand}
 
 sealed trait Parameters {
   override def toString = Parameters.flatten(this).mkString(", ")

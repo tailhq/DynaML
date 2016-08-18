@@ -16,7 +16,8 @@ object Dependencies {
     "org.scala-lang" % "scala-pickling_2.11" % "0.9.1" % "compile",
     "org.scalaz" %% "scalaz-core" % "7.2.0",
     "org.scalactic" % "scalactic_2.11" % "2.2.6",
-    "org.scalatest" % "scalatest_2.11" % "2.2.6" % "test"
+    "org.scalatest" % "scalatest_2.11" % "2.2.6" % "test",
+    "com.typesafe.akka" %% "akka-stream" % "2.4.6"
   )
 
   val apacheSpark = Seq(

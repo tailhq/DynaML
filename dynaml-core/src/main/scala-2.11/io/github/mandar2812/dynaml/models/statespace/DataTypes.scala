@@ -1,13 +1,12 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
-import model.POMP.Observation
-import model.Utilities._
+import POMP._
+//import Utilities._
 import java.io.Serializable
 import scala.util.parsing.json.JSONObject
 import breeze.linalg.{DenseVector, DenseMatrix, diag}
 
 object DataTypes {
-  import model.POMP._
 
   /**
     * A description containing the modelled quantities and observations
@@ -22,8 +21,6 @@ object DataTypes {
     eta: Option[Eta],
     gamma: Option[Gamma],
     sdeState: Option[State]) {
-
-    import Data._
 
     override def toString = {
       if (!sdeState.isEmpty) {
@@ -57,7 +54,7 @@ object DataTypes {
     * @param time the time of the process
     * @param observation an optional observation, note discretely observed processes cannot be seen at all time points continuously
     * @param state the mean of the empirical filtering distribution at time 'time'
-    * @param intervals the credible intervals of the filtering distribution
+    * @param stateIntervals the credible intervals of the filtering distribution
     */
   case class PfOut(
     time: Time,

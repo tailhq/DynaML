@@ -1,10 +1,10 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
-import model.POMP._
-import model.DataTypes._
+import POMP._
 import breeze.stats.distributions.{Rand, Gaussian, MultivariateGaussian}
 import breeze.linalg.{diag, DenseVector}
 import breeze.numerics.{exp, sqrt}
+import breeze.stats.distributions.{Gaussian, Rand}
 
 object StateSpace {
     /**

@@ -1,13 +1,13 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
-import model.DataTypes._
 import java.io.Serializable
-import model.POMP._
-import model.Model._
+import POMP._
+import StateSpaceModel._
 import breeze.stats.distributions.{Rand, Density}
 import breeze.linalg.DenseVector
+import breeze.stats.distributions.Rand
 
-trait Model extends Serializable {
+trait StateSpaceModel extends Serializable {
   // The observation model
   def observation: Eta => Rand[Observation]
   // the link function
@@ -22,8 +22,8 @@ trait Model extends Serializable {
   def dataLikelihood: (Eta, Observation) => LogLikelihood
 }
 
-object Model {
-  def op(mod1: Parameters => Model, mod2: Parameters => Model): Parameters => Model = p => new Model {
+object StateSpaceModel {
+  def op(mod1: Parameters => StateSpaceModel, mod2: Parameters => StateSpaceModel): Parameters => StateSpaceModel = p => new StateSpaceModel {
 
     def observation = x => p match {
       case BranchParameter(lp,_) => mod1(lp).observation(x)
@@ -68,7 +68,7 @@ object Model {
       }
   }
 
-  def zeroModel(stepFun: SdeParameter => (State, TimeIncrement) => Rand[State]): Parameters => Model = p => new Model {
+  def zeroModel(stepFun: SdeParameter => (State, TimeIncrement) => Rand[State]): Parameters => StateSpaceModel = p => new StateSpaceModel {
     def observation = x => new Rand[Observation] { def draw = x.head }
     def f(s: State, t: Time) = s.head
     def x0 = new Rand[State] { def draw = LeafState(DenseVector[Double]()) }

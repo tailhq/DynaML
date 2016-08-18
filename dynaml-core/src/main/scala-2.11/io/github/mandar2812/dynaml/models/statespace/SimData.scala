@@ -1,22 +1,16 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
 import breeze.linalg.DenseVector
 import breeze.numerics.{exp, log}
-import breeze.stats.distributions.{Gaussian, Uniform, Exponential, Rand}
-import model.POMP._
-import model.Utilities._
-import model.DataTypes._
-import model.State._
+import breeze.stats.distributions.{Exponential, Gaussian, Rand, Uniform}
+import POMP._
+import akka.stream.scaladsl.Source
+import DataTypes._
+import State._
 import breeze.linalg.linspace
 import breeze.stats.distributions.Rand._
 
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.Source
-import java.io.File
-import akka.stream.scaladsl._
-import akka.util.ByteString
-import Stream._
+import scala.Stream._
 
 
 object SimData {
@@ -69,7 +63,7 @@ object SimData {
   def simLGCP(
     start: Time,
     end: Time,
-    mod: Model,
+    mod: StateSpaceModel,
     precision: Int): Vector[Data] = {
 
     // generate an SDE Stream
@@ -115,7 +109,7 @@ object SimData {
   def simLGCPEvents(
     start: Time,
     end: Time,
-    mod: Model,
+    mod: StateSpaceModel,
     precision: Int): Vector[Data] = {
 
     // generate an SDE Stream
@@ -154,7 +148,7 @@ object SimData {
     x0: State,
     t0: Time,
     deltat: TimeIncrement,
-    mod: Model): Data = {
+    mod: StateSpaceModel): Data = {
 
     val x1 = mod.stepFunction(x0, deltat).draw
     val gamma = mod.f(x1, t0)
@@ -166,7 +160,7 @@ object SimData {
   /**
     * Simulate data from a list of times, allowing for irregular observations
     */
-  def simData(times: Seq[Time], mod: Model): Vector[Data] = {
+  def simData(times: Seq[Time], mod: StateSpaceModel): Vector[Data] = {
 
     val x0 = mod.x0.draw
     val d0 = simStep(x0, times.head, 0, mod)
@@ -185,9 +179,9 @@ object SimData {
   /**
     * Simulate data as an Akka Stream, with regular time intervals
     * @param mod The model to simulate from, can be composed or single
-    * @param precision Used to determine the step length, dt = 10^-precision
+    * @param precision Used to determine the step length, dt = 10**(-precision)
     */
-  def simStream(mod: Model, precision: Int, t0: Time): Source[Data, Any] = {
+  def simStream(mod: StateSpaceModel, precision: Int, t0: Time): Source[Data, Any] = {
     val dt = math.pow(10, -precision)
 
     val x0 = mod.x0.draw

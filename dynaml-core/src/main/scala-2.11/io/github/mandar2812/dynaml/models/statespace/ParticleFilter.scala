@@ -1,21 +1,20 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
-import model.POMP._
-import model.Utilities._
-import model.DataTypes._
-import model.State._
-import model.SimData._
+import POMP._
+import DataTypes._
+import State._
+import SimData._
+import akka.stream.scaladsl.Source
+
 import scala.language.higherKinds._
-
-import breeze.stats.distributions.{Rand, Uniform, Multinomial}
+import breeze.stats.distributions.{Multinomial, Rand, Uniform}
 import breeze.stats.distributions.Rand._
 import breeze.numerics.exp
 import breeze.linalg.DenseVector
-import ParticleFilter._
-import Filtering._
-
-import akka.stream.scaladsl.Source
-import akka.stream.scaladsl._
+import breeze.numerics.exp
+import breeze.stats.distributions.Rand._
+import breeze.stats.distributions.{Multinomial, Rand, Uniform}
+import io.github.mandar2812.dynaml.models.statespace.ParticleFilter._
 
 /**
   * Representation of the state of the particle filter, at each step the previous observation time, t0, and 
@@ -39,7 +38,7 @@ case class PfState(
 
 trait ParticleFilter {
 
-  val unparamMod: Parameters => Model
+  val unparamMod: Parameters => StateSpaceModel
   val t0: Time
 
   def advanceState(x: Vector[State], dt: TimeIncrement, t: Time)(p: Parameters): Vector[(State, Eta)]
@@ -250,7 +249,7 @@ object ParticleFilter {
   }
 }
 
-case class Filter(model: Parameters => Model, resamplingScheme: Resample[State], t0: Time) extends ParticleFilter {
+case class Filter(model: Parameters => StateSpaceModel, resamplingScheme: Resample[State], t0: Time) extends ParticleFilter {
   
   val unparamMod = model
 
@@ -273,7 +272,7 @@ case class Filter(model: Parameters => Model, resamplingScheme: Resample[State],
 /**
   * In order to calculate Eta in the LGCP model, we need to merge the advance state and transform state functions
   */
-case class FilterLgcp(model: Parameters => Model, resamplingScheme: Resample[State], precision: Int, t0: Time) extends ParticleFilter {
+case class FilterLgcp(model: Parameters => StateSpaceModel, resamplingScheme: Resample[State], precision: Int, t0: Time) extends ParticleFilter {
 
   val unparamMod = model
 

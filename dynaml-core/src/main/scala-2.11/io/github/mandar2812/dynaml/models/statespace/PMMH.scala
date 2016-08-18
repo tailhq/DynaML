@@ -1,11 +1,10 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
 import breeze.stats.distributions.{Uniform, Rand, MultivariateGaussian, Process, MarkovChain}
 import breeze.stats.distributions.Rand._
 import breeze.stats.distributions.MarkovChain._
 import breeze.linalg.DenseMatrix
-import model.POMP._
-import akka.stream.scaladsl.Source
+import POMP._
 import akka.stream.scaladsl._
 import Stream._
 

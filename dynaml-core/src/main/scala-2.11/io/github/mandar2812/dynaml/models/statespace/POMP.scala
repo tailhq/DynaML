@@ -1,10 +1,12 @@
-package model
+package io.github.mandar2812.dynaml.models.statespace
 
-import breeze.numerics.{cos, sin, sqrt, exp, log}
-import breeze.stats.distributions.{Bernoulli, Poisson, Gaussian, Rand, MultivariateGaussian, StudentsT}
-import breeze.linalg.{DenseMatrix, DenseVector}
-import scala.language.implicitConversions
 import java.io.Serializable
+
+import breeze.linalg.DenseVector
+import breeze.numerics._
+import breeze.stats.distributions._
+
+import scala.language.implicitConversions
 
 object POMP {
   type Eta = Vector[Double]
@@ -17,7 +19,7 @@ object POMP {
   implicit def bool2obs(b: Boolean): Observation = if (b) 1.0 else 0.0
   implicit def obs2bool(o: Observation): Boolean = if (o == 0.0) false else true
 
-  def studentTModel(stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State], df: Int): Parameters => Model = p => new Model {
+  def studentTModel(stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State], df: Int): Parameters => StateSpaceModel = p => new StateSpaceModel {
     def observation = x => {
       new Rand[Observation] { 
         def draw = p match {
@@ -53,7 +55,7 @@ object POMP {
   def SeasonalModel(
     period: Int,
     harmonics: Int,
-    stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => Model = p => new Model {
+    stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => StateSpaceModel = p => new StateSpaceModel {
 
     def observation = x => {
       new Rand[Observation] { 
@@ -95,7 +97,7 @@ object POMP {
         }
   }
 
-  def LinearModel(stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => Model = p => new Model {
+  def LinearModel(stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => StateSpaceModel = p => new StateSpaceModel {
 
     def observation = x => new Rand[Observation] {
       def draw = {
@@ -127,7 +129,7 @@ object POMP {
     }
   }
 
-  def PoissonModel(stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => Model = p => new Model with Serializable {
+  def PoissonModel(stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => StateSpaceModel = p => new StateSpaceModel with Serializable {
 
     def observation = lambda => new Rand[Observation] { def draw = Poisson(lambda.head).draw }
 
@@ -151,7 +153,7 @@ object POMP {
       (Poisson(s.head).logProbabilityOf(y.toInt))
   }
 
-  def BernoulliModel(stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => Model = params => new Model {
+  def BernoulliModel(stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => StateSpaceModel = params => new StateSpaceModel {
 
     def observation = p => new Rand[Observation] {
       def draw = {
@@ -201,7 +203,7 @@ object POMP {
     * log-gaussian varying hazard rate
     */
   def LogGaussianCox(
-    stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => Model = p => new Model {
+    stepFun: (SdeParameter) => (State, TimeIncrement) => Rand[State]): Parameters => StateSpaceModel = p => new StateSpaceModel {
 
     def observation = ???
 
