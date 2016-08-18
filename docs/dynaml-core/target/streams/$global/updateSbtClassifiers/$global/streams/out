@@ -1,0 +1,1262 @@
+[debug] Other repositories:
+[debug] Default repositories:
+[debug] Using inline dependencies specified in Scala.
+[debug] :: resolving dependencies :: io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29
+[debug] 	confs: [default]
+[debug] 	validate = true
+[debug] 	refresh = false
+[debug] resolving dependencies for configuration 'default'
+[debug] == resolving dependencies for io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29 [default]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scala-sbt#sbt;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#sbt;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#sbt;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#sbt;0.13.8
+[debug] 	found org.scala-sbt#sbt;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[info] Resolving org.scala-lang#scala-library;2.10.4 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-lang#scala-library;2.10.4 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-lang#scala-library;2.10.4
+[debug] 	found org.scala-lang#scala-library;2.10.4 in sbt-chain
+[debug] 	[2.10.4] org.scala-lang#scala-library;2.10.4
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-sbt#main;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#main;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#main;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#main;0.13.8
+[debug] 	found org.scala-sbt#main;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#actions;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#actions;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#actions;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#actions;0.13.8
+[debug] 	found org.scala-sbt#actions;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#classpath;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#classpath;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#classpath;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#classpath;0.13.8
+[debug] 	found org.scala-sbt#classpath;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-lang#scala-compiler;2.10.4 [compile->default(compile)]
+[info] Resolving org.scala-lang#scala-compiler;2.10.4 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-lang#scala-compiler;2.10.4 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-lang#scala-compiler;2.10.4
+[debug] 	found org.scala-lang#scala-compiler;2.10.4 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-lang#scala-compiler;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-lang#scala-compiler;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->runtime(*)]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-reflect;2.10.4 [compile->master(*)]
+[info] Resolving org.scala-lang#scala-reflect;2.10.4 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-lang#scala-reflect;2.10.4 {compile=[compile(*), master(*)], runtime=[runtime(*)]}
+[debug] sbt-chain: module revision found in cache: org.scala-lang#scala-reflect;2.10.4
+[debug] 	found org.scala-lang#scala-reflect;2.10.4 in sbt-chain
+[debug] 	[2.10.4] org.scala-lang#scala-reflect;2.10.4
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-reflect;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scala-lang#scala-reflect;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.scala-lang#scala-reflect;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-reflect;2.10.4 [compile->runtime(*)]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-reflect;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-lang#scala-reflect;2.10.4->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scala-lang#scala-reflect;2.10.4->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-reflect;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-reflect;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-lang#scala-compiler;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-sbt#launcher-interface;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#launcher-interface;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#launcher-interface;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#launcher-interface;0.13.8
+[debug] 	found org.scala-sbt#launcher-interface;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#launcher-interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#launcher-interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#launcher-interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#launcher-interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#interface;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#interface;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#interface;0.13.8
+[debug] 	found org.scala-sbt#interface;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#classpath;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#io;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#io;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#io;0.13.8
+[debug] 	found org.scala-sbt#io;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#io;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#io;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#io;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#io;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#io;0.13.8->org.scala-sbt#control;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#control;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#control;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#control;0.13.8
+[debug] 	found org.scala-sbt#control;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#control;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#control;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#control;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#control;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#completion;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#completion;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#completion;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#completion;0.13.8
+[debug] 	found org.scala-sbt#completion;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->org.scala-sbt#collections;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#collections;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#collections;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#collections;0.13.8
+[debug] 	found org.scala-sbt#collections;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#collections;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#collections;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#collections;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#collections;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->org.scala-sbt#control;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->jline#jline;2.11 [compile->default(compile)]
+[info] Resolving jline#jline;2.11 ...
+[debug] sbt-chain: Checking cache for: dependency: jline#jline;2.11 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: jline#jline;2.11
+[debug] 	found jline#jline;2.11 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->jline#jline;2.11 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->jline#jline;2.11 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#completion;0.13.8->jline#jline;2.11 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#api;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#api;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#api;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#api;0.13.8
+[debug] 	found org.scala-sbt#api;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#api;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#api;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#api;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#api;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#api;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#compiler-integration;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#compiler-integration;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#compiler-integration;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#compiler-integration;0.13.8
+[debug] 	found org.scala-sbt#compiler-integration;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-sbt#incremental-compiler;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#incremental-compiler;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#incremental-compiler;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#incremental-compiler;0.13.8
+[debug] 	found org.scala-sbt#incremental-compiler;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-sbt#api;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#logging;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#logging;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#logging;0.13.8
+[debug] 	found org.scala-sbt#logging;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->org.scala-sbt#process;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#process;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#process;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#process;0.13.8
+[debug] 	found org.scala-sbt#process;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#process;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#process;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#process;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#process;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->jline#jline;2.11 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->jline#jline;2.11 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->jline#jline;2.11 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#logging;0.13.8->jline#jline;2.11 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-sbt#classpath;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#incremental-compiler;0.13.8->org.scala-sbt#relation;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#relation;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#relation;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#relation;0.13.8
+[debug] 	found org.scala-sbt#relation;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#relation;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#relation;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#relation;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#relation;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#relation;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#relation;0.13.8->org.scala-sbt#process;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-sbt#compile;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#compile;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#compile;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#compile;0.13.8
+[debug] 	found org.scala-sbt#compile;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-sbt#launcher-interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-sbt#classpath;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-sbt#api;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compile;0.13.8->org.scala-sbt#classfile;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#classfile;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#classfile;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#classfile;0.13.8
+[debug] 	found org.scala-sbt#classfile;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#classfile;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#classfile;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#classfile;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#classfile;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#classfile;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#classfile;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#classfile;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-sbt#persist;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#persist;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#persist;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#persist;0.13.8
+[debug] 	found org.scala-sbt#persist;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#persist;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#persist;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#persist;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#persist;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#persist;0.13.8->org.scala-sbt#incremental-compiler;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#persist;0.13.8->org.scala-sbt#api;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#persist;0.13.8->org.scala-tools.sbinary#sbinary_2.10;0.4.2 [compile->default(compile)]
+[info] Resolving org.scala-tools.sbinary#sbinary_2.10;0.4.2 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-tools.sbinary#sbinary_2.10;0.4.2 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-tools.sbinary#sbinary_2.10;0.4.2
+[debug] 	found org.scala-tools.sbinary#sbinary_2.10;0.4.2 in sbt-chain
+[debug] == resolving dependencies org.scala-tools.sbinary#sbinary_2.10;0.4.2->org.scala-lang#scala-library;2.10.2 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-tools.sbinary#sbinary_2.10;0.4.2->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-tools.sbinary#sbinary_2.10;0.4.2->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-tools.sbinary#sbinary_2.10;0.4.2->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-tools.sbinary#sbinary_2.10;0.4.2->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-sbt#api;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compiler-integration;0.13.8->org.scala-sbt#classfile;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#compiler-ivy-integration;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#compiler-ivy-integration;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#compiler-ivy-integration;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#compiler-ivy-integration;0.13.8
+[debug] 	found org.scala-sbt#compiler-ivy-integration;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#compiler-ivy-integration;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compiler-ivy-integration;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#compiler-ivy-integration;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#compiler-ivy-integration;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#compiler-ivy-integration;0.13.8->org.scala-sbt#ivy;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#ivy;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#ivy;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#ivy;0.13.8
+[debug] 	found org.scala-sbt#ivy;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-sbt#launcher-interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-sbt#cross;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#cross;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#cross;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#cross;0.13.8
+[debug] 	found org.scala-sbt#cross;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#cross;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#cross;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#cross;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#cross;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-sbt#collections;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f [compile->default(compile)]
+[info] Resolving org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f
+[debug] 	found org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->com.jcraft#jsch;0.1.46 [compile->default(compile)]
+[info] Resolving com.jcraft#jsch;0.1.46 ...
+[debug] sbt-chain: Checking cache for: dependency: com.jcraft#jsch;0.1.46 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: com.jcraft#jsch;0.1.46
+[debug] 	found com.jcraft#jsch;0.1.46 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->com.jcraft#jsch;0.1.46 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->com.jcraft#jsch;0.1.46 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->com.jcraft#jsch;0.1.46 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#ivy;0.13.8->org.scala-sbt#serialization_2.10;0.1.1 [compile->default(compile)]
+[info] Resolving org.scala-sbt#serialization_2.10;0.1.1 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#serialization_2.10;0.1.1 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#serialization_2.10;0.1.1
+[debug] 	found org.scala-sbt#serialization_2.10;0.1.1 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.scala-lang.modules#scala-pickling_2.10;0.10.0 [compile->default(compile)]
+[info] Resolving org.scala-lang.modules#scala-pickling_2.10;0.10.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-lang.modules#scala-pickling_2.10;0.10.0 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-lang.modules#scala-pickling_2.10;0.10.0
+[debug] 	found org.scala-lang.modules#scala-pickling_2.10;0.10.0 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.scala-lang.modules#scala-pickling_2.10;0.10.0 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.scala-lang.modules#scala-pickling_2.10;0.10.0 [compile->compile]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-compiler;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-compiler;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-compiler;2.10.4 [compile->runtime(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-compiler;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-reflect;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-reflect;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scalamacros#quasiquotes_2.10;2.0.1 [compile->master(*)]
+[info] Resolving org.scalamacros#quasiquotes_2.10;2.0.1 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scalamacros#quasiquotes_2.10;2.0.1 {compile=[compile(*), master(*)], runtime=[runtime(*)]}
+[debug] sbt-chain: module revision found in cache: org.scalamacros#quasiquotes_2.10;2.0.1
+[debug] 	found org.scalamacros#quasiquotes_2.10;2.0.1 in sbt-chain
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scalamacros#quasiquotes_2.10;2.0.1 [compile->compile(*)]
+[debug] == resolving dependencies org.scalamacros#quasiquotes_2.10;2.0.1->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.scalamacros#quasiquotes_2.10;2.0.1->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scalamacros#quasiquotes_2.10;2.0.1->org.scala-lang#scala-reflect;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.scalamacros#quasiquotes_2.10;2.0.1->org.scala-lang#scala-reflect;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scalamacros#quasiquotes_2.10;2.0.1 [compile->runtime(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scalamacros#quasiquotes_2.10;2.0.1 [compile->compile]
+[debug] == resolving dependencies org.scalamacros#quasiquotes_2.10;2.0.1->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scalamacros#quasiquotes_2.10;2.0.1->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scalamacros#quasiquotes_2.10;2.0.1->org.scala-lang#scala-reflect;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scalamacros#quasiquotes_2.10;2.0.1->org.scala-lang#scala-reflect;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-compiler;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-compiler;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-reflect;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scala-lang#scala-reflect;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scalamacros#quasiquotes_2.10;2.0.1 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scala-lang.modules#scala-pickling_2.10;0.10.0->org.scalamacros#quasiquotes_2.10;2.0.1 [runtime->compile]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.scala-lang.modules#scala-pickling_2.10;0.10.0 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.json4s#json4s-core_2.10;3.2.10 [compile->default(compile)]
+[info] Resolving org.json4s#json4s-core_2.10;3.2.10 ...
+[debug] sbt-chain: Checking cache for: dependency: org.json4s#json4s-core_2.10;3.2.10 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.json4s#json4s-core_2.10;3.2.10
+[debug] 	found org.json4s#json4s-core_2.10;3.2.10 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.json4s#json4s-core_2.10;3.2.10 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.json4s#json4s-core_2.10;3.2.10 [compile->compile]
+[debug] excluding dependency: org.scala-lang#scalap;2.10.0 {compile=[compile(*), master(*)], runtime=[runtime(*)]} in compile
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.scala-lang#scala-library;2.10.0 [compile->master(*)]
+[debug] excluding dependency: org.scala-lang#scalap;2.10.0 {compile=[compile(*), master(*)], runtime=[runtime(*)]} in compile
+[debug] excluding dependency: org.scala-lang#scalap;2.10.0 {compile=[compile(*), master(*)], runtime=[runtime(*)]} in runtime
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.scala-lang#scala-library;2.10.0 [compile->compile(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.json4s#json4s-ast_2.10;3.2.10 [compile->master(*)]
+[debug] excluding dependency: org.scala-lang#scalap;2.10.0 {compile=[compile(*), master(*)], runtime=[runtime(*)]} in compile
+[debug] excluding dependency: org.scala-lang#scalap;2.10.0 {compile=[compile(*), master(*)], runtime=[runtime(*)]} in runtime
+[info] Resolving org.json4s#json4s-ast_2.10;3.2.10 ...
+[debug] sbt-chain: Checking cache for: dependency: org.json4s#json4s-ast_2.10;3.2.10 {compile=[compile(*), master(*)], runtime=[runtime(*)]}
+[debug] sbt-chain: module revision found in cache: org.json4s#json4s-ast_2.10;3.2.10
+[debug] 	found org.json4s#json4s-ast_2.10;3.2.10 in sbt-chain
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.json4s#json4s-ast_2.10;3.2.10 [compile->compile(*)]
+[debug] == resolving dependencies org.json4s#json4s-ast_2.10;3.2.10->org.scala-lang#scala-library;2.10.0 [compile->master(*)]
+[debug] == resolving dependencies org.json4s#json4s-ast_2.10;3.2.10->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.json4s#json4s-ast_2.10;3.2.10->org.scala-lang#scala-library;2.10.0 [compile->compile(*)]
+[debug] == resolving dependencies org.json4s#json4s-ast_2.10;3.2.10->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.json4s#json4s-ast_2.10;3.2.10 [compile->runtime(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.json4s#json4s-ast_2.10;3.2.10 [compile->compile]
+[debug] == resolving dependencies org.json4s#json4s-ast_2.10;3.2.10->org.scala-lang#scala-library;2.10.0 [runtime->runtime(*)]
+[debug] == resolving dependencies org.json4s#json4s-ast_2.10;3.2.10->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.json4s#json4s-ast_2.10;3.2.10->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->com.thoughtworks.paranamer#paranamer;2.6 [compile->master(*)]
+[debug] excluding dependency: org.scala-lang#scalap;2.10.0 {compile=[compile(*), master(*)], runtime=[runtime(*)]} in compile
+[debug] excluding dependency: org.scala-lang#scalap;2.10.0 {compile=[compile(*), master(*)], runtime=[runtime(*)]} in runtime
+[info] Resolving com.thoughtworks.paranamer#paranamer;2.6 ...
+[debug] sbt-chain: Checking cache for: dependency: com.thoughtworks.paranamer#paranamer;2.6 {compile=[compile(*), master(*)], runtime=[runtime(*)]}
+[debug] sbt-chain: module revision found in cache: com.thoughtworks.paranamer#paranamer;2.6
+[debug] 	found com.thoughtworks.paranamer#paranamer;2.6 in sbt-chain
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->com.thoughtworks.paranamer#paranamer;2.6 [compile->compile(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->com.thoughtworks.paranamer#paranamer;2.6 [compile->runtime(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->com.thoughtworks.paranamer#paranamer;2.6 [compile->compile]
+[debug] excluding dependency: org.scala-lang#scalap;2.10.0 {compile=[compile(*), master(*)], runtime=[runtime(*)]} in runtime
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.scala-lang#scala-library;2.10.0 [runtime->runtime(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.json4s#json4s-ast_2.10;3.2.10 [runtime->runtime(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->org.json4s#json4s-ast_2.10;3.2.10 [runtime->compile]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->com.thoughtworks.paranamer#paranamer;2.6 [runtime->runtime(*)]
+[debug] == resolving dependencies org.json4s#json4s-core_2.10;3.2.10->com.thoughtworks.paranamer#paranamer;2.6 [runtime->compile]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.json4s#json4s-core_2.10;3.2.10 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.spire-math#jawn-parser_2.10;0.6.0 [compile->default(compile)]
+[info] Resolving org.spire-math#jawn-parser_2.10;0.6.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.spire-math#jawn-parser_2.10;0.6.0 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.spire-math#jawn-parser_2.10;0.6.0
+[debug] 	found org.spire-math#jawn-parser_2.10;0.6.0 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.spire-math#jawn-parser_2.10;0.6.0 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.spire-math#jawn-parser_2.10;0.6.0 [compile->compile]
+[debug] == resolving dependencies org.spire-math#jawn-parser_2.10;0.6.0->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.spire-math#jawn-parser_2.10;0.6.0->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.spire-math#jawn-parser_2.10;0.6.0->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.spire-math#jawn-parser_2.10;0.6.0->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.spire-math#jawn-parser_2.10;0.6.0 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.spire-math#json4s-support_2.10;0.6.0 [compile->default(compile)]
+[info] Resolving org.spire-math#json4s-support_2.10;0.6.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.spire-math#json4s-support_2.10;0.6.0 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.spire-math#json4s-support_2.10;0.6.0
+[debug] 	found org.spire-math#json4s-support_2.10;0.6.0 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.spire-math#json4s-support_2.10;0.6.0 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.spire-math#json4s-support_2.10;0.6.0 [compile->compile]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.spire-math#jawn-parser_2.10;0.6.0 [compile->master(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.spire-math#jawn-parser_2.10;0.6.0 [compile->compile(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.spire-math#jawn-parser_2.10;0.6.0 [compile->runtime(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.spire-math#jawn-parser_2.10;0.6.0 [compile->compile]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.json4s#json4s-ast_2.10;3.2.10 [compile->master(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.json4s#json4s-ast_2.10;3.2.10 [compile->compile(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.spire-math#jawn-parser_2.10;0.6.0 [runtime->runtime(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.spire-math#jawn-parser_2.10;0.6.0 [runtime->compile]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.json4s#json4s-ast_2.10;3.2.10 [runtime->runtime(*)]
+[debug] == resolving dependencies org.spire-math#json4s-support_2.10;0.6.0->org.json4s#json4s-ast_2.10;3.2.10 [runtime->compile]
+[debug] == resolving dependencies org.scala-sbt#serialization_2.10;0.1.1->org.spire-math#json4s-support_2.10;0.6.0 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#compiler-ivy-integration;0.13.8->org.scala-sbt#compile;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#ivy;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#process;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#run;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#run;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#run;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#run;0.13.8
+[debug] 	found org.scala-sbt#run;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#run;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#run;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#run;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#run;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#run;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#run;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#run;0.13.8->org.scala-sbt#classpath;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#run;0.13.8->org.scala-sbt#process;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#relation;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#task-system;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#task-system;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#task-system;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#task-system;0.13.8
+[debug] 	found org.scala-sbt#task-system;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-sbt#tasks;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#tasks;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#tasks;0.13.8 {compile=[default(compile)], test=[test]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#tasks;0.13.8
+[debug] 	found org.scala-sbt#tasks;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#tasks;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#tasks;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#tasks;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#tasks;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#tasks;0.13.8->org.scala-sbt#control;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#tasks;0.13.8->org.scala-sbt#collections;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-sbt#collections;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#task-system;0.13.8->org.scala-sbt#process;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#tasks;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#tracking;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#tracking;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#tracking;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#tracking;0.13.8
+[debug] 	found org.scala-sbt#tracking;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#tracking;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#tracking;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#tracking;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#tracking;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#tracking;0.13.8->org.scala-sbt#cache;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#cache;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#cache;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#cache;0.13.8
+[debug] 	found org.scala-sbt#cache;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#cache;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#cache;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#cache;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#cache;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#cache;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#cache;0.13.8->org.scala-sbt#collections;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#cache;0.13.8->org.scala-tools.sbinary#sbinary_2.10;0.4.2 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#cache;0.13.8->org.scala-sbt#serialization_2.10;0.1.1 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#tracking;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#actions;0.13.8->org.scala-sbt#testing;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#testing;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#testing;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#testing;0.13.8
+[debug] 	found org.scala-sbt#testing;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#classpath;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#launcher-interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#test-agent;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#test-agent;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#test-agent;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#test-agent;0.13.8
+[debug] 	found org.scala-sbt#test-agent;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#test-agent;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#test-agent;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#test-agent;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#test-agent;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#test-agent;0.13.8->org.scala-sbt#test-interface;1.0 [compile->default(compile)]
+[info] Resolving org.scala-sbt#test-interface;1.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#test-interface;1.0 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#test-interface;1.0
+[debug] 	found org.scala-sbt#test-interface;1.0 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#test-agent;0.13.8->org.scala-sbt#test-interface;1.0 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#test-agent;0.13.8->org.scala-sbt#test-interface;1.0 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#test-agent;0.13.8->org.scala-sbt#test-interface;1.0 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#test-interface;1.0 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#test-interface;1.0 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#test-interface;1.0 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#testing;0.13.8->org.scala-sbt#test-interface;1.0 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#main-settings;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#main-settings;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#main-settings;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#main-settings;0.13.8
+[debug] 	found org.scala-sbt#main-settings;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#apply-macro;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#apply-macro;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#apply-macro;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#apply-macro;0.13.8
+[debug] 	found org.scala-sbt#apply-macro;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-lang#scala-compiler;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-lang#scala-compiler;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-lang#scala-compiler;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-lang#scala-compiler;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#apply-macro;0.13.8->org.scala-sbt#collections;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#ivy;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#relation;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#command;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#command;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#command;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#command;0.13.8
+[debug] 	found org.scala-sbt#command;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-sbt#launcher-interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-sbt#completion;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-sbt#classpath;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#command;0.13.8->org.scala-sbt#cross;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#completion;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#classpath;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#task-system;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-sbt#process;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main-settings;0.13.8->org.scala-tools.sbinary#sbinary_2.10;0.4.2 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#io;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#ivy;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#launcher-interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#logging;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#logic;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#logic;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#logic;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#logic;0.13.8
+[debug] 	found org.scala-sbt#logic;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#logic;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#logic;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#logic;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#logic;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#logic;0.13.8->org.scala-sbt#collections;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#logic;0.13.8->org.scala-sbt#relation;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#process;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#run;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#main;0.13.8->org.scala-sbt#command;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-sbt#compiler-interface;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#compiler-interface;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#compiler-interface;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#compiler-interface;0.13.8
+[debug] 	found org.scala-sbt#compiler-interface;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#compiler-interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#compiler-interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#compiler-interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#compiler-interface;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#compiler-interface;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-sbt#precompiled-2_8_2;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#precompiled-2_8_2;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#precompiled-2_8_2;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#precompiled-2_8_2;0.13.8
+[debug] 	found org.scala-sbt#precompiled-2_8_2;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_8_2;0.13.8->org.scala-lang#scala-library;2.8.2 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_8_2;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_8_2;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_8_2;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_8_2;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_8_2;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-sbt#precompiled-2_9_2;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#precompiled-2_9_2;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#precompiled-2_9_2;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#precompiled-2_9_2;0.13.8
+[debug] 	found org.scala-sbt#precompiled-2_9_2;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_2;0.13.8->org.scala-lang#scala-library;2.9.2 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_2;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_2;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_2;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_2;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_2;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#sbt;0.13.8->org.scala-sbt#precompiled-2_9_3;0.13.8 [compile->default(compile)]
+[info] Resolving org.scala-sbt#precompiled-2_9_3;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#precompiled-2_9_3;0.13.8 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#precompiled-2_9_3;0.13.8
+[debug] 	found org.scala-sbt#precompiled-2_9_3;0.13.8 in sbt-chain
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_3;0.13.8->org.scala-lang#scala-library;2.9.3 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_3;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_3;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->runtime]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_3;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->compile]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_3;0.13.8->org.scala-lang#scala-library;2.10.4 [compile->master]
+[debug] == resolving dependencies org.scala-sbt#precompiled-2_9_3;0.13.8->org.scala-sbt#interface;0.13.8 [compile->default(compile)]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->com.typesafe.sbt#sbt-native-packager;1.1.1 [default->default(compile)]
+[info] Resolving com.typesafe.sbt#sbt-native-packager;1.1.1 ...
+[debug] sbt-chain: Checking cache for: dependency: com.typesafe.sbt#sbt-native-packager;1.1.1 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: com.typesafe.sbt#sbt-native-packager;1.1.1
+[debug] 	found com.typesafe.sbt#sbt-native-packager;1.1.1 in sbt-chain
+[debug] 	[1.1.1] com.typesafe.sbt#sbt-native-packager;1.1.1
+[debug] == resolving dependencies com.typesafe.sbt#sbt-native-packager;1.1.1->org.apache.commons#commons-compress;1.4.1 [compile->default(compile)]
+[debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.10.4 {default=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.5 {default=[default(compile)]}
+[info] Resolving org.apache.commons#commons-compress;1.4.1 ...
+[debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-compress;1.4.1 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.apache.commons#commons-compress;1.4.1
+[debug] 	found org.apache.commons#commons-compress;1.4.1 in sbt-chain
+[debug] == resolving dependencies com.typesafe.sbt#sbt-native-packager;1.1.1->org.apache.commons#commons-compress;1.4.1 [compile->runtime]
+[debug] == resolving dependencies com.typesafe.sbt#sbt-native-packager;1.1.1->org.apache.commons#commons-compress;1.4.1 [compile->compile]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [compile->compile(*)]
+[debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.10.4 {default=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.5 {default=[default(compile)]}
+[info] Resolving org.tukaani#xz;1.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.tukaani#xz;1.0 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
+[debug] sbt-chain: module revision found in cache: org.tukaani#xz;1.0
+[debug] 	found org.tukaani#xz;1.0 in sbt-chain
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [compile->master(compile)]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [compile->default(compile)]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [compile->runtime]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [compile->compile]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [compile->master]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [compile->runtime(*)]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [compile->compile]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [runtime->runtime(*)]
+[debug] == resolving dependencies org.apache.commons#commons-compress;1.4.1->org.tukaani#xz;1.0 [runtime->compile]
+[debug] == resolving dependencies com.typesafe.sbt#sbt-native-packager;1.1.1->org.apache.commons#commons-compress;1.4.1 [compile->master]
+[debug] == resolving dependencies com.typesafe.sbt#sbt-native-packager;1.1.1->org.apache.ant#ant;1.9.6 [compile->default(compile)]
+[debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.10.4 {default=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.5 {default=[default(compile)]}
+[info] Resolving org.apache.ant#ant;1.9.6 ...
+[debug] sbt-chain: Checking cache for: dependency: org.apache.ant#ant;1.9.6 {compile=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.apache.ant#ant;1.9.6
+[debug] 	found org.apache.ant#ant;1.9.6 in sbt-chain
+[debug] == resolving dependencies com.typesafe.sbt#sbt-native-packager;1.1.1->org.apache.ant#ant;1.9.6 [compile->runtime]
+[debug] == resolving dependencies com.typesafe.sbt#sbt-native-packager;1.1.1->org.apache.ant#ant;1.9.6 [compile->compile]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [compile->compile(*)]
+[debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.10.4 {default=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.5 {default=[default(compile)]}
+[info] Resolving org.apache.ant#ant-launcher;1.9.6 ...
+[debug] sbt-chain: Checking cache for: dependency: org.apache.ant#ant-launcher;1.9.6 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
+[debug] sbt-chain: module revision found in cache: org.apache.ant#ant-launcher;1.9.6
+[debug] 	found org.apache.ant#ant-launcher;1.9.6 in sbt-chain
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [compile->master(compile)]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [compile->default(compile)]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [compile->runtime]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [compile->compile]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [compile->master]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [compile->runtime(*)]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [compile->compile]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [runtime->runtime(*)]
+[debug] == resolving dependencies org.apache.ant#ant;1.9.6->org.apache.ant#ant-launcher;1.9.6 [runtime->compile]
+[debug] == resolving dependencies com.typesafe.sbt#sbt-native-packager;1.1.1->org.apache.ant#ant;1.9.6 [compile->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.commons#commons-compress;1.4.1 [default->default(compile)]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.commons#commons-compress;1.4.1 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.commons#commons-compress;1.4.1 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.commons#commons-compress;1.4.1 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.tukaani#xz;1.0 [default->default(compile)]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.tukaani#xz;1.0 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.tukaani#xz;1.0 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.tukaani#xz;1.0 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.ant#ant;1.9.6 [default->default(compile)]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.ant#ant;1.9.6 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.ant#ant;1.9.6 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.ant#ant;1.9.6 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.ant#ant-launcher;1.9.6 [default->default(compile)]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.ant#ant-launcher;1.9.6 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.ant#ant-launcher;1.9.6 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.apache.ant#ant-launcher;1.9.6 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->com.eed3si9n#sbt-buildinfo;0.6.1 [default->default(compile)]
+[info] Resolving com.eed3si9n#sbt-buildinfo;0.6.1 ...
+[debug] sbt-chain: Checking cache for: dependency: com.eed3si9n#sbt-buildinfo;0.6.1 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: com.eed3si9n#sbt-buildinfo;0.6.1
+[debug] 	found com.eed3si9n#sbt-buildinfo;0.6.1 in sbt-chain
+[debug] 	[0.6.1] com.eed3si9n#sbt-buildinfo;0.6.1
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scoverage#sbt-scoverage;1.3.5 [default->default(compile)]
+[info] Resolving org.scoverage#sbt-scoverage;1.3.5 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scoverage#sbt-scoverage;1.3.5 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scoverage#sbt-scoverage;1.3.5
+[debug] 	found org.scoverage#sbt-scoverage;1.3.5 in sbt-chain
+[debug] 	[1.3.5] org.scoverage#sbt-scoverage;1.3.5
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scoverage#sbt-scoverage;1.3.5 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scoverage#sbt-scoverage;1.3.5 [default->compile]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [compile->compile(*)]
+[info] Resolving org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
+[debug] sbt-chain: module revision found in cache: org.scoverage#scalac-scoverage-plugin_2.10;1.1.1
+[debug] 	found org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 in sbt-chain
+[debug] == resolving dependencies org.scoverage#scalac-scoverage-plugin_2.10;1.1.1->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
+[debug] == resolving dependencies org.scoverage#scalac-scoverage-plugin_2.10;1.1.1->org.scala-lang#scala-library;2.10.4 [compile->master(compile)]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [compile->master(compile)]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [compile->default(compile)]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [compile->runtime]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [compile->compile]
+[debug] == resolving dependencies org.scoverage#scalac-scoverage-plugin_2.10;1.1.1->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scoverage#scalac-scoverage-plugin_2.10;1.1.1->org.scala-lang#scala-library;2.10.4 [runtime->compile]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [compile->master]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [compile->runtime(*)]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [compile->compile]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [runtime->runtime(*)]
+[debug] == resolving dependencies org.scoverage#sbt-scoverage;1.3.5->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [runtime->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scoverage#sbt-scoverage;1.3.5 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [default->default(compile)]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scala-lang#scala-library;2.10.4 [default->default(compile)]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scala-lang#scala-library;2.10.4 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scala-lang#scala-library;2.10.4 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29->org.scala-lang#scala-library;2.10.4 [default->master]
+[debug] 	resolved ivy file produced in cache
+[debug] :: downloading artifacts ::
+[debug] 	[NOT REQUIRED] org.scala-sbt#sbt;0.13.8!sbt.jar
+[debug] 	[NOT REQUIRED] com.typesafe.sbt#sbt-native-packager;1.1.1!sbt-native-packager.jar
+[debug] 	[NOT REQUIRED] org.apache.commons#commons-compress;1.4.1!commons-compress.jar
+[debug] 	[NOT REQUIRED] org.tukaani#xz;1.0!xz.jar
+[debug] 	[NOT REQUIRED] org.apache.ant#ant;1.9.6!ant.jar
+[debug] 	[NOT REQUIRED] org.apache.ant#ant-launcher;1.9.6!ant-launcher.jar
+[debug] 	[NOT REQUIRED] com.eed3si9n#sbt-buildinfo;0.6.1!sbt-buildinfo.jar
+[debug] 	[NOT REQUIRED] org.scoverage#sbt-scoverage;1.3.5!sbt-scoverage.jar
+[debug] 	[NOT REQUIRED] org.scoverage#scalac-scoverage-plugin_2.10;1.1.1!scalac-scoverage-plugin_2.10.jar
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-library;2.10.4!scala-library.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#main;0.13.8!main.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#compiler-interface;0.13.8!compiler-interface-bin.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#compiler-interface;0.13.8!compiler-interface-src.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#precompiled-2_8_2;0.13.8!compiler-interface-bin.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#precompiled-2_9_2;0.13.8!compiler-interface-bin.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#precompiled-2_9_3;0.13.8!compiler-interface-bin.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#actions;0.13.8!actions.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#main-settings;0.13.8!main-settings.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#interface;0.13.8!interface.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#io;0.13.8!io.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#ivy;0.13.8!ivy.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#launcher-interface;0.13.8!launcher-interface.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#logging;0.13.8!logging.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#logic;0.13.8!logic.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#process;0.13.8!process.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#run;0.13.8!run.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#command;0.13.8!command.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#classpath;0.13.8!classpath.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#completion;0.13.8!completion.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#api;0.13.8!api.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#compiler-integration;0.13.8!compiler-integration.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#compiler-ivy-integration;0.13.8!compiler-ivy-integration.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#relation;0.13.8!relation.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#task-system;0.13.8!task-system.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#tasks;0.13.8!tasks.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#tracking;0.13.8!tracking.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#testing;0.13.8!testing.jar
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-compiler;2.10.4!scala-compiler.jar
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-reflect;2.10.4!scala-reflect.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#control;0.13.8!control.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#collections;0.13.8!collections.jar
+[debug] 	[NOT REQUIRED] jline#jline;2.11!jline.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#incremental-compiler;0.13.8!incremental-compiler.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#compile;0.13.8!compile.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#persist;0.13.8!persist.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#classfile;0.13.8!classfile.jar
+[debug] 	[NOT REQUIRED] org.scala-tools.sbinary#sbinary_2.10;0.4.2!sbinary_2.10.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#cross;0.13.8!cross.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f!ivy.jar
+[debug] 	[NOT REQUIRED] com.jcraft#jsch;0.1.46!jsch.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#serialization_2.10;0.1.1!serialization_2.10.jar
+[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-pickling_2.10;0.10.0!scala-pickling_2.10.jar
+[debug] 	[NOT REQUIRED] org.json4s#json4s-core_2.10;3.2.10!json4s-core_2.10.jar
+[debug] 	[NOT REQUIRED] org.spire-math#jawn-parser_2.10;0.6.0!jawn-parser_2.10.jar
+[debug] 	[NOT REQUIRED] org.spire-math#json4s-support_2.10;0.6.0!json4s-support_2.10.jar
+[debug] 	[NOT REQUIRED] org.scalamacros#quasiquotes_2.10;2.0.1!quasiquotes_2.10.jar
+[debug] 	[NOT REQUIRED] org.json4s#json4s-ast_2.10;3.2.10!json4s-ast_2.10.jar
+[debug] 	[NOT REQUIRED] com.thoughtworks.paranamer#paranamer;2.6!paranamer.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#cache;0.13.8!cache.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#test-agent;0.13.8!test-agent.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#test-interface;1.0!test-interface.jar
+[debug] 	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.8!apply-macro.jar
+[debug] :: resolution report :: resolve 702ms :: artifacts dl 33ms
+[debug] 	report for io.github.mandar2812#dynaml-core$sbt_2.11;v1.4-beta.29 default produced in /Users/mandar/Development/DynaML/dynaml-core/target/resolution-cache/reports/io.github.mandar2812-dynaml-core$sbt_2.11-default.xml
+[debug] 	resolve done (702ms resolve - 33ms download)
+[debug] Using inline dependencies specified in Scala.
+[debug] :: resolving dependencies :: io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29
+[debug] 	confs: [default]
+[debug] 	validate = true
+[debug] 	refresh = false
+[debug] resolving dependencies for configuration 'default'
+[debug] == resolving dependencies for io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29 [default]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#sbt;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#sbt;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#sbt;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#sbt;0.13.8
+[debug] 	found org.scala-sbt#sbt;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-library;2.10.4 [default->default(compile)]
+[info] Resolving org.scala-lang#scala-library;2.10.4 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-lang#scala-library;2.10.4 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-lang#scala-library;2.10.4
+[debug] 	found org.scala-lang#scala-library;2.10.4 in sbt-chain
+[debug] 	[2.10.4] org.scala-lang#scala-library;2.10.4
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-library;2.10.4 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-library;2.10.4 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-library;2.10.4 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#main;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#main;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#main;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#main;0.13.8
+[debug] 	found org.scala-sbt#main;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#actions;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#actions;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#actions;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#actions;0.13.8
+[debug] 	found org.scala-sbt#actions;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#classpath;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#classpath;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#classpath;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#classpath;0.13.8
+[debug] 	found org.scala-sbt#classpath;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-compiler;2.10.4 [default->default(compile)]
+[info] Resolving org.scala-lang#scala-compiler;2.10.4 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-lang#scala-compiler;2.10.4 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-lang#scala-compiler;2.10.4
+[debug] 	found org.scala-lang#scala-compiler;2.10.4 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-compiler;2.10.4 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-compiler;2.10.4 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-compiler;2.10.4 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-reflect;2.10.4 [default->default(compile)]
+[info] Resolving org.scala-lang#scala-reflect;2.10.4 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-lang#scala-reflect;2.10.4 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-lang#scala-reflect;2.10.4
+[debug] 	found org.scala-lang#scala-reflect;2.10.4 in sbt-chain
+[debug] 	[2.10.4] org.scala-lang#scala-reflect;2.10.4
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-reflect;2.10.4 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-reflect;2.10.4 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang#scala-reflect;2.10.4 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#launcher-interface;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#launcher-interface;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#launcher-interface;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#launcher-interface;0.13.8
+[debug] 	found org.scala-sbt#launcher-interface;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#interface;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#interface;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#interface;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#interface;0.13.8
+[debug] 	found org.scala-sbt#interface;0.13.8 in sbt-chain
+[debug] 	[0.13.8] org.scala-sbt#interface;0.13.8
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#io;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#io;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#io;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#io;0.13.8
+[debug] 	found org.scala-sbt#io;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#control;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#control;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#control;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#control;0.13.8
+[debug] 	found org.scala-sbt#control;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#completion;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#completion;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#completion;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#completion;0.13.8
+[debug] 	found org.scala-sbt#completion;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#collections;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#collections;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#collections;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#collections;0.13.8
+[debug] 	found org.scala-sbt#collections;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->jline#jline;2.11 [default->default(compile)]
+[info] Resolving jline#jline;2.11 ...
+[debug] sbt-chain: Checking cache for: dependency: jline#jline;2.11 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: jline#jline;2.11
+[debug] 	found jline#jline;2.11 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->jline#jline;2.11 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->jline#jline;2.11 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->jline#jline;2.11 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#api;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#api;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#api;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#api;0.13.8
+[debug] 	found org.scala-sbt#api;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#compiler-integration;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#compiler-integration;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#compiler-integration;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#compiler-integration;0.13.8
+[debug] 	found org.scala-sbt#compiler-integration;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#incremental-compiler;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#incremental-compiler;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#incremental-compiler;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#incremental-compiler;0.13.8
+[debug] 	found org.scala-sbt#incremental-compiler;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#logging;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#logging;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#logging;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#logging;0.13.8
+[debug] 	found org.scala-sbt#logging;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#process;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#process;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#process;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#process;0.13.8
+[debug] 	found org.scala-sbt#process;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#relation;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#relation;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#relation;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#relation;0.13.8
+[debug] 	found org.scala-sbt#relation;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#compile;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#compile;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#compile;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#compile;0.13.8
+[debug] 	found org.scala-sbt#compile;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#classfile;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#classfile;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#classfile;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#classfile;0.13.8
+[debug] 	found org.scala-sbt#classfile;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#persist;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#persist;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#persist;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#persist;0.13.8
+[debug] 	found org.scala-sbt#persist;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-tools.sbinary#sbinary_2.10;0.4.2 [default->default(compile)]
+[info] Resolving org.scala-tools.sbinary#sbinary_2.10;0.4.2 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-tools.sbinary#sbinary_2.10;0.4.2 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-tools.sbinary#sbinary_2.10;0.4.2
+[debug] 	found org.scala-tools.sbinary#sbinary_2.10;0.4.2 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#compiler-ivy-integration;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#compiler-ivy-integration;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#compiler-ivy-integration;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#compiler-ivy-integration;0.13.8
+[debug] 	found org.scala-sbt#compiler-ivy-integration;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#ivy;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#ivy;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#ivy;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#ivy;0.13.8
+[debug] 	found org.scala-sbt#ivy;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#cross;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#cross;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#cross;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#cross;0.13.8
+[debug] 	found org.scala-sbt#cross;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f [default->default(compile)]
+[info] Resolving org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f
+[debug] 	found org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.jcraft#jsch;0.1.46 [default->default(compile)]
+[info] Resolving com.jcraft#jsch;0.1.46 ...
+[debug] sbt-chain: Checking cache for: dependency: com.jcraft#jsch;0.1.46 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: com.jcraft#jsch;0.1.46
+[debug] 	found com.jcraft#jsch;0.1.46 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.jcraft#jsch;0.1.46 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.jcraft#jsch;0.1.46 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.jcraft#jsch;0.1.46 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#serialization_2.10;0.1.1 [default->default(compile)]
+[info] Resolving org.scala-sbt#serialization_2.10;0.1.1 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#serialization_2.10;0.1.1 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#serialization_2.10;0.1.1
+[debug] 	found org.scala-sbt#serialization_2.10;0.1.1 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang.modules#scala-pickling_2.10;0.10.0 [default->default(compile)]
+[info] Resolving org.scala-lang.modules#scala-pickling_2.10;0.10.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-lang.modules#scala-pickling_2.10;0.10.0 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-lang.modules#scala-pickling_2.10;0.10.0
+[debug] 	found org.scala-lang.modules#scala-pickling_2.10;0.10.0 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang.modules#scala-pickling_2.10;0.10.0 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang.modules#scala-pickling_2.10;0.10.0 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-lang.modules#scala-pickling_2.10;0.10.0 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scalamacros#quasiquotes_2.10;2.0.1 [default->default(compile)]
+[info] Resolving org.scalamacros#quasiquotes_2.10;2.0.1 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scalamacros#quasiquotes_2.10;2.0.1 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scalamacros#quasiquotes_2.10;2.0.1
+[debug] 	found org.scalamacros#quasiquotes_2.10;2.0.1 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scalamacros#quasiquotes_2.10;2.0.1 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scalamacros#quasiquotes_2.10;2.0.1 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scalamacros#quasiquotes_2.10;2.0.1 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.json4s#json4s-core_2.10;3.2.10 [default->default(compile)]
+[info] Resolving org.json4s#json4s-core_2.10;3.2.10 ...
+[debug] sbt-chain: Checking cache for: dependency: org.json4s#json4s-core_2.10;3.2.10 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.json4s#json4s-core_2.10;3.2.10
+[debug] 	found org.json4s#json4s-core_2.10;3.2.10 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.json4s#json4s-core_2.10;3.2.10 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.json4s#json4s-core_2.10;3.2.10 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.json4s#json4s-core_2.10;3.2.10 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.json4s#json4s-ast_2.10;3.2.10 [default->default(compile)]
+[info] Resolving org.json4s#json4s-ast_2.10;3.2.10 ...
+[debug] sbt-chain: Checking cache for: dependency: org.json4s#json4s-ast_2.10;3.2.10 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.json4s#json4s-ast_2.10;3.2.10
+[debug] 	found org.json4s#json4s-ast_2.10;3.2.10 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.json4s#json4s-ast_2.10;3.2.10 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.json4s#json4s-ast_2.10;3.2.10 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.json4s#json4s-ast_2.10;3.2.10 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.thoughtworks.paranamer#paranamer;2.6 [default->default(compile)]
+[info] Resolving com.thoughtworks.paranamer#paranamer;2.6 ...
+[debug] sbt-chain: Checking cache for: dependency: com.thoughtworks.paranamer#paranamer;2.6 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: com.thoughtworks.paranamer#paranamer;2.6
+[debug] 	found com.thoughtworks.paranamer#paranamer;2.6 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.thoughtworks.paranamer#paranamer;2.6 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.thoughtworks.paranamer#paranamer;2.6 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.thoughtworks.paranamer#paranamer;2.6 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.spire-math#jawn-parser_2.10;0.6.0 [default->default(compile)]
+[info] Resolving org.spire-math#jawn-parser_2.10;0.6.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.spire-math#jawn-parser_2.10;0.6.0 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.spire-math#jawn-parser_2.10;0.6.0
+[debug] 	found org.spire-math#jawn-parser_2.10;0.6.0 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.spire-math#jawn-parser_2.10;0.6.0 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.spire-math#jawn-parser_2.10;0.6.0 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.spire-math#jawn-parser_2.10;0.6.0 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.spire-math#json4s-support_2.10;0.6.0 [default->default(compile)]
+[info] Resolving org.spire-math#json4s-support_2.10;0.6.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.spire-math#json4s-support_2.10;0.6.0 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.spire-math#json4s-support_2.10;0.6.0
+[debug] 	found org.spire-math#json4s-support_2.10;0.6.0 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.spire-math#json4s-support_2.10;0.6.0 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.spire-math#json4s-support_2.10;0.6.0 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.spire-math#json4s-support_2.10;0.6.0 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#run;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#run;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#run;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#run;0.13.8
+[debug] 	found org.scala-sbt#run;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#task-system;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#task-system;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#task-system;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#task-system;0.13.8
+[debug] 	found org.scala-sbt#task-system;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#tasks;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#tasks;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#tasks;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#tasks;0.13.8
+[debug] 	found org.scala-sbt#tasks;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#tracking;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#tracking;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#tracking;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#tracking;0.13.8
+[debug] 	found org.scala-sbt#tracking;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#cache;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#cache;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#cache;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#cache;0.13.8
+[debug] 	found org.scala-sbt#cache;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#testing;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#testing;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#testing;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#testing;0.13.8
+[debug] 	found org.scala-sbt#testing;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#test-agent;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#test-agent;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#test-agent;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#test-agent;0.13.8
+[debug] 	found org.scala-sbt#test-agent;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#test-interface;1.0 [default->default(compile)]
+[info] Resolving org.scala-sbt#test-interface;1.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#test-interface;1.0 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#test-interface;1.0
+[debug] 	found org.scala-sbt#test-interface;1.0 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#test-interface;1.0 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#test-interface;1.0 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#test-interface;1.0 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#main-settings;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#main-settings;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#main-settings;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#main-settings;0.13.8
+[debug] 	found org.scala-sbt#main-settings;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#apply-macro;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#apply-macro;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#apply-macro;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#apply-macro;0.13.8
+[debug] 	found org.scala-sbt#apply-macro;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#command;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#command;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#command;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#command;0.13.8
+[debug] 	found org.scala-sbt#command;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#logic;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#logic;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#logic;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#logic;0.13.8
+[debug] 	found org.scala-sbt#logic;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#precompiled-2_8_2;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#precompiled-2_8_2;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#precompiled-2_8_2;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#precompiled-2_8_2;0.13.8
+[debug] 	found org.scala-sbt#precompiled-2_8_2;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#precompiled-2_9_2;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#precompiled-2_9_2;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#precompiled-2_9_2;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#precompiled-2_9_2;0.13.8
+[debug] 	found org.scala-sbt#precompiled-2_9_2;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scala-sbt#precompiled-2_9_3;0.13.8 [default->default(compile)]
+[info] Resolving org.scala-sbt#precompiled-2_9_3;0.13.8 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#precompiled-2_9_3;0.13.8 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scala-sbt#precompiled-2_9_3;0.13.8
+[debug] 	found org.scala-sbt#precompiled-2_9_3;0.13.8 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.typesafe.sbt#sbt-native-packager;1.1.1 [default->default(compile)]
+[info] Resolving com.typesafe.sbt#sbt-native-packager;1.1.1 ...
+[debug] sbt-chain: Checking cache for: dependency: com.typesafe.sbt#sbt-native-packager;1.1.1 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: com.typesafe.sbt#sbt-native-packager;1.1.1
+[debug] 	found com.typesafe.sbt#sbt-native-packager;1.1.1 in sbt-chain
+[debug] 	[1.1.1] com.typesafe.sbt#sbt-native-packager;1.1.1
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.commons#commons-compress;1.4.1 [default->default(compile)]
+[info] Resolving org.apache.commons#commons-compress;1.4.1 ...
+[debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-compress;1.4.1 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.apache.commons#commons-compress;1.4.1
+[debug] 	found org.apache.commons#commons-compress;1.4.1 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.commons#commons-compress;1.4.1 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.commons#commons-compress;1.4.1 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.commons#commons-compress;1.4.1 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.tukaani#xz;1.0 [default->default(compile)]
+[info] Resolving org.tukaani#xz;1.0 ...
+[debug] sbt-chain: Checking cache for: dependency: org.tukaani#xz;1.0 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.tukaani#xz;1.0
+[debug] 	found org.tukaani#xz;1.0 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.tukaani#xz;1.0 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.tukaani#xz;1.0 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.tukaani#xz;1.0 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.ant#ant;1.9.6 [default->default(compile)]
+[info] Resolving org.apache.ant#ant;1.9.6 ...
+[debug] sbt-chain: Checking cache for: dependency: org.apache.ant#ant;1.9.6 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.apache.ant#ant;1.9.6
+[debug] 	found org.apache.ant#ant;1.9.6 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.ant#ant;1.9.6 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.ant#ant;1.9.6 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.ant#ant;1.9.6 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.ant#ant-launcher;1.9.6 [default->default(compile)]
+[info] Resolving org.apache.ant#ant-launcher;1.9.6 ...
+[debug] sbt-chain: Checking cache for: dependency: org.apache.ant#ant-launcher;1.9.6 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.apache.ant#ant-launcher;1.9.6
+[debug] 	found org.apache.ant#ant-launcher;1.9.6 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.ant#ant-launcher;1.9.6 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.ant#ant-launcher;1.9.6 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.apache.ant#ant-launcher;1.9.6 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->com.eed3si9n#sbt-buildinfo;0.6.1 [default->default(compile)]
+[info] Resolving com.eed3si9n#sbt-buildinfo;0.6.1 ...
+[debug] sbt-chain: Checking cache for: dependency: com.eed3si9n#sbt-buildinfo;0.6.1 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: com.eed3si9n#sbt-buildinfo;0.6.1
+[debug] 	found com.eed3si9n#sbt-buildinfo;0.6.1 in sbt-chain
+[debug] 	[0.6.1] com.eed3si9n#sbt-buildinfo;0.6.1
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scoverage#sbt-scoverage;1.3.5 [default->default(compile)]
+[info] Resolving org.scoverage#sbt-scoverage;1.3.5 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scoverage#sbt-scoverage;1.3.5 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scoverage#sbt-scoverage;1.3.5
+[debug] 	found org.scoverage#sbt-scoverage;1.3.5 in sbt-chain
+[debug] 	[1.3.5] org.scoverage#sbt-scoverage;1.3.5
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scoverage#sbt-scoverage;1.3.5 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scoverage#sbt-scoverage;1.3.5 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scoverage#sbt-scoverage;1.3.5 [default->master]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [default->default(compile)]
+[info] Resolving org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 ...
+[debug] sbt-chain: Checking cache for: dependency: org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 {default=[default(compile)]}
+[debug] sbt-chain: module revision found in cache: org.scoverage#scalac-scoverage-plugin_2.10;1.1.1
+[debug] 	found org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 in sbt-chain
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [default->runtime]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [default->compile]
+[debug] == resolving dependencies io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29->org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 [default->master]
+[debug] 	resolved ivy file produced in cache
+[debug] :: downloading artifacts ::
+[debug] 	[NOT REQUIRED] org.scala-sbt#sbt;0.13.8!sbt.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-library;2.10.4!scala-library.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#main;0.13.8!main.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#actions;0.13.8!actions.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#classpath;0.13.8!classpath.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-compiler;2.10.4!scala-compiler.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-reflect;2.10.4!scala-reflect.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#launcher-interface;0.13.8!launcher-interface.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#interface;0.13.8!interface.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#io;0.13.8!io.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#control;0.13.8!control.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#completion;0.13.8!completion.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#collections;0.13.8!collections.jar(src)
+[debug] 	[NOT REQUIRED] jline#jline;2.11!jline.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#api;0.13.8!api.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#compiler-integration;0.13.8!compiler-integration.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#incremental-compiler;0.13.8!incremental-compiler.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#logging;0.13.8!logging.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#process;0.13.8!process.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#relation;0.13.8!relation.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#compile;0.13.8!compile.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#classfile;0.13.8!classfile.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#persist;0.13.8!persist.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-tools.sbinary#sbinary_2.10;0.4.2!sbinary_2.10.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#compiler-ivy-integration;0.13.8!compiler-ivy-integration.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#ivy;0.13.8!ivy.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#cross;0.13.8!cross.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt.ivy#ivy;2.3.0-sbt-fccfbd44c9f64523b61398a0155784dcbaeae28f!ivy.jar(src)
+[debug] 	[NOT REQUIRED] com.jcraft#jsch;0.1.46!jsch.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#serialization_2.10;0.1.1!serialization_2.10.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-pickling_2.10;0.10.0!scala-pickling_2.10.jar(src)
+[debug] 	[NOT REQUIRED] org.scalamacros#quasiquotes_2.10;2.0.1!quasiquotes_2.10.jar(src)
+[debug] 	[NOT REQUIRED] org.json4s#json4s-core_2.10;3.2.10!json4s-core_2.10.jar(src)
+[debug] 	[NOT REQUIRED] org.json4s#json4s-ast_2.10;3.2.10!json4s-ast_2.10.jar(src)
+[debug] 	[NOT REQUIRED] com.thoughtworks.paranamer#paranamer;2.6!paranamer.jar(src)
+[debug] 	[NOT REQUIRED] org.spire-math#jawn-parser_2.10;0.6.0!jawn-parser_2.10.jar(src)
+[debug] 	[NOT REQUIRED] org.spire-math#json4s-support_2.10;0.6.0!json4s-support_2.10.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#run;0.13.8!run.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#task-system;0.13.8!task-system.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#tasks;0.13.8!tasks.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#tracking;0.13.8!tracking.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#cache;0.13.8!cache.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#testing;0.13.8!testing.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#test-agent;0.13.8!test-agent.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#test-interface;1.0!test-interface.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#main-settings;0.13.8!main-settings.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.8!apply-macro.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#command;0.13.8!command.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#logic;0.13.8!logic.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#precompiled-2_8_2;0.13.8!precompiled-2_8_2.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#precompiled-2_9_2;0.13.8!precompiled-2_9_2.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-sbt#precompiled-2_9_3;0.13.8!precompiled-2_9_3.jar(src)
+[debug] 	[NOT REQUIRED] com.typesafe.sbt#sbt-native-packager;1.1.1!sbt-native-packager.jar(src)
+[debug] 	[NOT REQUIRED] org.apache.commons#commons-compress;1.4.1!commons-compress.jar(src)
+[debug] 	[NOT REQUIRED] org.tukaani#xz;1.0!xz.jar(src)
+[debug] 	[NOT REQUIRED] org.apache.ant#ant;1.9.6!ant.jar(src)
+[debug] 	[NOT REQUIRED] org.apache.ant#ant-launcher;1.9.6!ant-launcher.jar(src)
+[debug] 	[NOT REQUIRED] com.eed3si9n#sbt-buildinfo;0.6.1!sbt-buildinfo.jar(src)
+[debug] 	[NOT REQUIRED] org.scoverage#sbt-scoverage;1.3.5!sbt-scoverage.jar(src)
+[debug] 	[NOT REQUIRED] org.scoverage#scalac-scoverage-plugin_2.10;1.1.1!scalac-scoverage-plugin_2.10.jar(src)
+[debug] :: resolution report :: resolve 186ms :: artifacts dl 40ms
+[debug] 	report for io.github.mandar2812#dynaml-core$sources_2.11;v1.4-beta.29 default produced in /Users/mandar/Development/DynaML/dynaml-core/target/resolution-cache/reports/io.github.mandar2812-dynaml-core$sources_2.11-default.xml
+[debug] 	resolve done (186ms resolve - 40ms download)

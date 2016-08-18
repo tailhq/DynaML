@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:e="http://ant.apache.org/ivy/extra">
+	<info organisation="io.github.mandar2812"
+		module="dynaml-core_2.11"
+		revision="v1.4-beta.29"
+		status="integration"
+		publication="20160818164822"
+	>
+		<description>
+		dynaml-core
+		</description>
+	</info>
+	<configurations>
+		<conf name="universal" visibility="public" description=""/>
+		<conf name="universal-docs" visibility="public" description=""/>
+		<conf name="universal-src" visibility="public" description=""/>
+		<conf name="compile" visibility="public" description=""/>
+		<conf name="runtime" visibility="public" description="" extends="compile"/>
+		<conf name="test" visibility="public" description="" extends="runtime"/>
+		<conf name="provided" visibility="public" description=""/>
+		<conf name="optional" visibility="public" description=""/>
+		<conf name="windows" visibility="public" description=""/>
+		<conf name="docker" visibility="public" description=""/>
+		<conf name="linux" visibility="public" description=""/>
+		<conf name="rpm" visibility="public" description="" extends="linux"/>
+		<conf name="debian" visibility="public" description="" extends="linux"/>
+		<conf name="compile-internal" visibility="private" description="" extends="compile,optional,provided"/>
+		<conf name="runtime-internal" visibility="private" description="" extends="runtime,optional"/>
+		<conf name="test-internal" visibility="private" description="" extends="test,optional,provided"/>
+		<conf name="plugin" visibility="private" description=""/>
+		<conf name="sources" visibility="public" description=""/>
+		<conf name="docs" visibility="public" description=""/>
+		<conf name="pom" visibility="public" description=""/>
+		<conf name="scala-tool" visibility="private" description=""/>
+	</configurations>
+	<publications>
+		<artifact name="dynaml-core_2.11" type="pom" ext="pom" conf="pom"/>
+		<artifact name="dynaml-core_2.11" type="jar" ext="jar" conf="compile"/>
+		<artifact name="dynaml-core_2.11" type="src" ext="jar" conf="sources" e:classifier="sources"/>
+		<artifact name="dynaml-core_2.11" type="doc" ext="jar" conf="docs" e:classifier="javadoc"/>
+	</publications>
+	<dependencies>
+		<dependency org="org.scala-lang" name="scala-compiler" rev="2.11.7" conf="scala-tool->default,optional(default);compile->default(compile)"/>
+		<dependency org="org.scala-lang" name="scala-library" rev="2.11.7" conf="scala-tool->default,optional(default);compile->default(compile)"/>
+		<dependency org="io.github.mandar2812" name="dynaml-pipes_2.11" rev="1.0" conf="compile->default(compile)"/>
+		<dependency org="org.scoverage" name="scalac-scoverage-runtime_2.11" rev="1.1.1" transitive="false" conf="provided->default(compile)"/>
+		<dependency org="org.scoverage" name="scalac-scoverage-plugin_2.11" rev="1.1.1" transitive="false" conf="provided->default(compile)"/>
+		<dependency org="org.scala-lang" name="scala-reflect" rev="2.11.7" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe" name="config" rev="1.2.1" conf="compile->default(compile)"/>
+		<dependency org="junit" name="junit" rev="4.4" conf="compile->default(compile)"/>
+		<dependency org="com.github.tototoshi" name="scala-csv_2.11" rev="1.1.2" conf="compile->default(compile)"/>
+		<dependency org="org.scala-lang" name="jline" rev="2.11.0-M3" conf="compile->default(compile)"/>
+		<dependency org="org.scalaforge" name="scalax" rev="0.1" conf="compile->default(compile)"/>
+		<dependency org="org.scala-lang" name="scala-pickling_2.11" rev="0.9.1" conf="compile->default(compile)"/>
+		<dependency org="org.scalaz" name="scalaz-core_2.11" rev="7.2.0" conf="compile->default(compile)"/>
+		<dependency org="org.scalactic" name="scalactic_2.11" rev="2.2.6" conf="compile->default(compile)"/>
+		<dependency org="org.scalatest" name="scalatest_2.11" rev="2.2.6" conf="test->default(compile)"/>
+		<dependency org="org.apache.spark" name="spark-core_2.11" rev="1.6.1" conf="compile->default(compile)"/>
+		<dependency org="org.apache.spark" name="spark-mllib_2.11" rev="1.6.1" conf="compile->default(compile)"/>
+		<dependency org="com.lihaoyi" name="ammonite-repl_2.11.7" rev="0.5.8" conf="compile->default(compile)"/>
+		<dependency org="log4j" name="log4j" rev="1.2.17" conf="compile->default(compile)"/>
+		<dependency org="org.scalanlp" name="breeze_2.11" rev="0.11.2" conf="compile->default(compile)"/>
+		<dependency org="org.scalanlp" name="breeze-natives_2.11" rev="0.11.2" conf="compile->default(compile)"/>
+		<dependency org="com.github.wookietreiber" name="scala-chart_2.11" rev="0.4.2" conf="compile->default(compile)"/>
+		<dependency org="org.jzy3d" name="jzy3d-api" rev="0.9.1" conf="compile->default(compile)"/>
+		<dependency org="com.quantifind" name="wisp_2.11" rev="0.0.4" conf="compile->default(compile)"/>
+		<dependency org="com.tinkerpop.gremlin" name="gremlin-java" rev="2.6.0" conf="compile->default(compile)"/>
+		<dependency org="com.tinkerpop" name="frames" rev="2.5.0" conf="compile->default(compile)"/>
+	</dependencies>
+</ivy-module>
