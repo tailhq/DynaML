@@ -4,6 +4,8 @@ import breeze.stats.distributions.Density
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 import scala.util.Random
+import org.apache.log4j.Logger
+
 
 /**
   * Created by mandar on 26/7/16.
@@ -23,7 +25,7 @@ DistL <: Density[Domain]](
 
   var Max_Candidates: Int = 1000
 
-  var Max_Estimations: Int = 100000
+  var Max_Estimations: Int = 10000
 
   override val underlyingDist = new Density[(ConditioningSet, Domain)] {
     override def apply(x: (ConditioningSet, Domain)): Double =
@@ -51,6 +53,8 @@ DistL <: Density[Domain]](
 
     new RandomVarWithDistr[ConditioningSet, Density[ConditioningSet]] {
 
+      val logger = Logger.getLogger(this.getClass)
+
       override val underlyingDist: Density[ConditioningSet] = postD
 
       override val sample: DataPipe[Unit, ConditioningSet] = DataPipe(() => {
@@ -63,6 +67,7 @@ DistL <: Density[Domain]](
           val candidate = sampl()
           val a = underlyingDist(candidate)/(M*q(candidate))
           if(Random.nextDouble() <= a) {
+            logger.info("... Sample Accepted ...")
             accepted = true
             accepted_sample = candidate
           }
