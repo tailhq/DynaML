@@ -28,8 +28,8 @@ object SimData {
     val deltat: TimeIncrement = Math.pow(10, -precision)
 
     // define a recursive stream from t0 to t = t0 + totalIncrement stepping by 10e-precision
-    lazy val stream: Stream[Sde] = (Stream.cons(Sde(t0, x0),
-      stream map (x => Sde(x.time + deltat, stepFun(x.state, deltat).draw)))).
+    lazy val stream: Stream[Sde] = Stream.cons(Sde(t0, x0),
+      stream map (x => Sde(x.time + deltat, stepFun(x.state, deltat).draw))).
       takeWhile (s => s.time <= t0 + totalIncrement)
 
     stream
