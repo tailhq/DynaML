@@ -1,10 +1,6 @@
 package io.github.mandar2812.dynaml.models.statespace
 
 import POMP._
-//import Utilities._
-import java.io.Serializable
-import scala.util.parsing.json.JSONObject
-import breeze.linalg.{DenseVector, DenseMatrix, diag}
 
 object DataTypes {
 

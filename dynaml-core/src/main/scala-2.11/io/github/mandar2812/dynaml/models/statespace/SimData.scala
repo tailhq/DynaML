@@ -1,14 +1,10 @@
 package io.github.mandar2812.dynaml.models.statespace
 
-import breeze.linalg.DenseVector
 import breeze.numerics.{exp, log}
-import breeze.stats.distributions.{Exponential, Gaussian, Rand, Uniform}
+import breeze.stats.distributions.{Exponential, Rand, Uniform}
 import POMP._
 import akka.stream.scaladsl.Source
 import DataTypes._
-import State._
-import breeze.linalg.linspace
-import breeze.stats.distributions.Rand._
 
 import scala.Stream._
 

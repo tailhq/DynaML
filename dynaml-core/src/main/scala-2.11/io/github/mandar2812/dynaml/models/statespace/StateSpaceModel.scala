@@ -2,8 +2,6 @@ package io.github.mandar2812.dynaml.models.statespace
 
 import java.io.Serializable
 import POMP._
-import StateSpaceModel._
-import breeze.stats.distributions.{Rand, Density}
 import breeze.linalg.DenseVector
 import breeze.stats.distributions.Rand
 

@@ -1,12 +1,8 @@
 package io.github.mandar2812.dynaml.models.statespace
 
-import breeze.stats.distributions.{Uniform, Rand, MultivariateGaussian, Process, MarkovChain}
-import breeze.stats.distributions.Rand._
-import breeze.stats.distributions.MarkovChain._
-import breeze.linalg.DenseMatrix
+import breeze.stats.distributions.{Uniform, Rand, Process, MarkovChain}
 import POMP._
 import akka.stream.scaladsl._
-import Stream._
 
 case class MetropState(ll: LogLikelihood, params: Parameters, accepted: Int)
 
