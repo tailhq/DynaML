@@ -32,9 +32,9 @@ import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
   */
 object TestGPHousing {
 
-  def apply(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  def apply(kernel: LocalScalarKernel[DenseVector[Double]],
             bandwidth: Double = 0.5,
-            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+            noise: LocalScalarKernel[DenseVector[Double]],
             trainFraction: Double = 0.75,
             columns: List[Int] = List(13,0,1,2,3,4,5,6,7,8,9,10,11,12),
             grid: Int = 5, step: Double = 0.2, globalOpt: String = "ML",
@@ -50,13 +50,13 @@ object TestGPHousing {
 
   def apply(kern: String,
             bandwidth: Double,
-            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+            noise: LocalScalarKernel[DenseVector[Double]],
             trainFraction: Double,
             columns: List[Int],
             grid: Int, step: Double, globalOpt: String,
             stepSize: Double, maxIt: Int): Unit = {
 
-    val kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] =
+    val kernel: LocalScalarKernel[DenseVector[Double]] =
       kern match {
         case "RBF" =>
           new RBFKernel(bandwidth)
@@ -84,9 +84,9 @@ object TestGPHousing {
 
   }
 
-  def runExperiment(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  def runExperiment(kernel: LocalScalarKernel[DenseVector[Double]],
                     bandwidth: Double = 0.5,
-                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+                    noise: LocalScalarKernel[DenseVector[Double]],
                     num_training: Int = 200, columns: List[Int] = List(40,16,21,23,24,22,25),
                     grid: Int = 5, step: Double = 0.2,
                     globalOpt: String = "ML", opt: Map[String, String]): Unit = {

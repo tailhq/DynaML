@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.Logger
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.kernels.CovarianceFunction
+import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalScalarKernel}
 import io.github.mandar2812.dynaml.models.gp.GPNarModel
 import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.DataPipe
@@ -34,16 +34,16 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
   * Created by mandar on 4/3/16.
   */
 object SantaFeLaser {
-  def apply(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-            noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  def apply(kernel: LocalScalarKernel[DenseVector[Double]],
+            noise: LocalScalarKernel[DenseVector[Double]],
             deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
             num_training: Int = 150, num_test:Int = 1000,
             opt: Map[String, String]) =
     runExperiment(kernel, noise, deltaT, timelag,
       stepPred, num_training, num_test, opt)
 
-  def runExperiment(kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
-                    noise: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]],
+  def runExperiment(kernel: LocalScalarKernel[DenseVector[Double]],
+                    noise: LocalScalarKernel[DenseVector[Double]],
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
                     num_training: Int = 150, num_test:Int,
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {

@@ -18,8 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{DenseMatrix, DenseVector}
-import io.github.mandar2812.dynaml.kernels.CovarianceFunction
+import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 
 /**
   * @author mandar2812
@@ -36,10 +36,8 @@ import io.github.mandar2812.dynaml.kernels.CovarianceFunction
   */
 class GPNarXModel(order: Int,
                   ex: Int,
-                  cov: CovarianceFunction[DenseVector[Double],
-                    Double, DenseMatrix[Double]],
-                  nL: CovarianceFunction[DenseVector[Double],
-                    Double, DenseMatrix[Double]],
+                  cov: LocalScalarKernel[DenseVector[Double]],
+                  nL: LocalScalarKernel[DenseVector[Double]],
                   trainingdata: Seq[(DenseVector[Double], Double)]) extends
 GPRegression(cov, nL, trainingdata) {
 

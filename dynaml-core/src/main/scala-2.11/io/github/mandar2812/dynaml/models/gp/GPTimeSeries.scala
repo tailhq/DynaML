@@ -18,9 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.DenseMatrix
 import com.github.tototoshi.csv.CSVReader
-import io.github.mandar2812.dynaml.kernels.CovarianceFunction
+import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 
 /**
   * @author mandar2812 datum 16/11/15.
@@ -31,8 +30,8 @@ import io.github.mandar2812.dynaml.kernels.CovarianceFunction
   * f(t) ~ GP(0, cov(t, t'))
   * e|f(t) ~ N(0, noise(t, t'))
   */
-class GPTimeSeries(cov: CovarianceFunction[Double, Double, DenseMatrix[Double]],
-                   n: CovarianceFunction[Double, Double, DenseMatrix[Double]],
+class GPTimeSeries(cov: LocalScalarKernel[Double],
+                   n: LocalScalarKernel[Double],
                    trainingdata: Seq[(Double, Double)])
   extends AbstractGPRegressionModel[Seq[(Double, Double)],Double](cov, n, trainingdata,
     trainingdata.length){

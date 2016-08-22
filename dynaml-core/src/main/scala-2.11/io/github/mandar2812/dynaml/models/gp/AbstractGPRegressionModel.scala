@@ -20,8 +20,8 @@ package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg._
 import breeze.numerics.log
-import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, DiracKernel}
-import io.github.mandar2812.dynaml.optimization.{GloballyOptWithGrad, GloballyOptimizable}
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel}
+import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.probability.MultGaussianRV
 import org.apache.log4j.Logger
 
@@ -39,8 +39,8 @@ import org.apache.log4j.Logger
   *
   */
 abstract class AbstractGPRegressionModel[T, I](
-  cov: CovarianceFunction[I, Double, DenseMatrix[Double]],
-  n: CovarianceFunction[I, Double, DenseMatrix[Double]],
+  cov: LocalScalarKernel[I],
+  n: LocalScalarKernel[I],
   data: T, num: Int) extends
   GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
   MultGaussianRV]
@@ -58,14 +58,14 @@ with GloballyOptWithGrad {
 
   override val covariance = cov
 
-  val noiseModel: CovarianceFunction[I, Double, DenseMatrix[Double]] = n
+  val noiseModel = n
 
   override protected val g: T = data
 
   val npoints = num
 
-  protected var (caching, kernelMatrixCache, noiseCache)
-  : (Boolean, DenseMatrix[Double], DenseMatrix[Double]) = (false, null, null)
+  protected var (caching, kernelMatrixCache)
+  : (Boolean, DenseMatrix[Double]) = (false, null)
 
 
   /**
@@ -107,12 +107,12 @@ with GloballyOptWithGrad {
     val training = dataAsIndexSeq(g)
     val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
 
+    val effectiveTrainingKernel = covariance + noiseModel
+
     val kernelTraining: DenseMatrix[Double] =
-      covariance.buildKernelMatrix(training, npoints).getKernelMatrix()
+      effectiveTrainingKernel.buildKernelMatrix(training, npoints).getKernelMatrix()
 
-    val noiseMat = noiseModel.buildKernelMatrix(training, npoints).getKernelMatrix()
-
-    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining, noiseMat)
+    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining)
   }
 
   /**
@@ -171,22 +171,24 @@ with GloballyOptWithGrad {
     val training = dataAsIndexSeq(g)
     val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
 
-    val kernelTraining = if(!caching)
-      covariance.buildKernelMatrix(training, npoints).getKernelMatrix()
+    val effectiveTrainingKernel = covariance + noiseModel
+
+    val smoothingMat = if(!caching)
+      effectiveTrainingKernel.buildKernelMatrix(training, npoints).getKernelMatrix()
     else
       kernelMatrixCache
 
-    val noiseMat = if(!caching)
+    /*val noiseMat = if(!caching)
       noiseModel.buildKernelMatrix(training, npoints).getKernelMatrix()
     else
-      noiseCache
+      noiseCache*/
 
     val kernelTest = covariance.buildKernelMatrix(test, test.length)
       .getKernelMatrix()
     val crossKernel = covariance.buildCrossKernelMatrix(training, test)
 
     //Calculate the predictive mean and co-variance
-    val smoothingMat = kernelTraining + noiseMat
+    //val smoothingMat = kernelTraining + noiseMat
     val Lmat = cholesky(smoothingMat)
     val alpha = Lmat.t \ (Lmat \ trainingLabels)
     val v = Lmat \ crossKernel
@@ -243,11 +245,14 @@ with GloballyOptWithGrad {
     * for fast access in future predictions.
     * */
   def persist(): Unit = {
+
+    val effectiveTrainingKernel = covariance + noiseModel
+
     kernelMatrixCache =
-      covariance.buildKernelMatrix(dataAsIndexSeq(g), npoints)
+      effectiveTrainingKernel.buildKernelMatrix(dataAsIndexSeq(g), npoints)
         .getKernelMatrix()
-    noiseCache = noiseModel.buildKernelMatrix(dataAsIndexSeq(g), npoints)
-      .getKernelMatrix()
+    //noiseCache = noiseModel.buildKernelMatrix(dataAsIndexSeq(g), npoints)
+    //  .getKernelMatrix()
     caching = true
 
   }
@@ -257,7 +262,7 @@ with GloballyOptWithGrad {
     * */
   def unpersist(): Unit = {
     kernelMatrixCache = null
-    noiseCache = null
+    //noiseCache = null
     caching = false
   }
 
@@ -274,13 +279,11 @@ object AbstractGPRegressionModel {
     *
     * @param kernelMatrix The kernel matrix of the training features
     *
-    * @param noiseMatrix The noise matrix with respect to the training data features
     * */
   def logLikelihood(trainingData: DenseVector[Double],
-                    kernelMatrix: DenseMatrix[Double],
-                    noiseMatrix: DenseMatrix[Double]): Double = {
+                    kernelMatrix: DenseMatrix[Double]): Double = {
 
-    val smoothingMat = kernelMatrix + noiseMatrix
+    val smoothingMat = kernelMatrix
     val Lmat = cholesky(smoothingMat)
     val alpha = Lmat.t \ (Lmat \ trainingData)
 
@@ -292,10 +295,8 @@ object AbstractGPRegressionModel {
 
   def apply[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     DenseVector[Double]]](data: Seq[(DenseVector[Double], Double)],
-                          cov: CovarianceFunction[DenseVector[Double],
-                            Double, DenseMatrix[Double]],
-                          noise: CovarianceFunction[DenseVector[Double],
-                            Double, DenseMatrix[Double]] = new DiracKernel(1.0),
+                          cov: LocalScalarKernel[DenseVector[Double]],
+                          noise: LocalScalarKernel[DenseVector[Double]] = new DiracKernel(1.0),
                           order: Int = 0, ex: Int = 0): M = {
     assert(ex >= 0 && order >= 0, "Non Negative values for order and ex")
     if(order == 0) new GPRegression(cov, noise, data).asInstanceOf[M]

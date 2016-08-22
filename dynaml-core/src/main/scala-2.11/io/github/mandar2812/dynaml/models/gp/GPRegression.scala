@@ -18,9 +18,9 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, CovarianceFunction => CovFunc}
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel, CovarianceFunction => CovFunc}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 
 /**
@@ -48,8 +48,8 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
   *
   */
 class GPRegression(
-  cov: CovFunc[DenseVector[Double], Double, DenseMatrix[Double]],
-  noise: CovFunc[DenseVector[Double], Double, DenseMatrix[Double]] = new DiracKernel(1.0),
+  cov: LocalScalarKernel[DenseVector[Double]],
+  noise: LocalScalarKernel[DenseVector[Double]] = new DiracKernel(1.0),
   trainingdata: Seq[(DenseVector[Double], Double)]) extends
 AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   DenseVector[Double]](cov, noise, trainingdata,

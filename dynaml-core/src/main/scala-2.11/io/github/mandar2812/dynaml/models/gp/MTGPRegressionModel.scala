@@ -1,7 +1,6 @@
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{DenseMatrix, DenseVector}
-import io.github.mandar2812.dynaml.kernels.CovarianceFunction
+import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import org.apache.log4j.Logger
 
 /**
@@ -12,9 +11,9 @@ import org.apache.log4j.Logger
   * @tparam I The index set of the GP.
   */
 class MTGPRegressionModel[I](
-  cov: CovarianceFunction[(I, Int), Double, DenseMatrix[Double]],
-  n: CovarianceFunction[(I, Int), Double, DenseMatrix[Double]],
-  data: Seq[Stream[(I, Double)]],
+                              cov: LocalScalarKernel[(I, Int)],
+                              n: LocalScalarKernel[(I, Int)],
+                              data: Seq[Stream[(I, Double)]],
   num: Int, numOutputs: Int) extends
   AbstractGPRegressionModel[
     Seq[Stream[(I, Double)]],

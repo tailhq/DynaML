@@ -16,7 +16,7 @@ object TestGPDelve {
              training: Int = 100, test: Int = 1000,
              columns: List[Int] = List(10,0,1,2,3,4,5,6,7,8,9)): Unit = {
 
-    val kernel: CovarianceFunction[DenseVector[Double], Double, DenseMatrix[Double]] =
+    val kernel: LocalScalarKernel[DenseVector[Double]] =
       kern match {
         case "RBF" =>
           new RBFKernel(bandwidth)
@@ -66,7 +66,7 @@ object TestGPDelve {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
         val model = new GPRegression(kernel, new DiracKernel(noise), trainTest._1._1.toSeq)
-        val res = model.test(trainTest._1._2.toSeq)
+        val res = model.test(trainTest._1._2)
         val scoresAndLabelsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>

@@ -19,8 +19,6 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.stats.distributions.CauchyDistribution
-import spire.implicits._
-
 import scala.util.Random
 
 /**
@@ -56,10 +54,8 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
     this
   }
 
-  protected def acceptance(energy: Double, oldEnergy: Double, coupling: Double, temperature: Double) = {
-    val prob = math.exp(-1.0*energy/temperature)
-    prob/(prob+coupling)
-  }
+  protected def acceptance(energy: Double, oldEnergy: Double, coupling: Double, temperature: Double) =
+    CoupledSimulatedAnnealing.acceptanceProbability(variant)(energy, oldEnergy, coupling, temperature)
 
   protected val mutate = (config: Map[String, Double], temperature: Double) => {
     config.map((param) => {
@@ -86,11 +82,42 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
     var accTemp = iTemp
     var mutTemp = iTemp
 
-    val energyLandscape = getEnergyLandscape(initialConfig, options)
+    var initialEnergyLandscape = getEnergyLandscape(initialConfig, options)
 
-    var currentEnergyLandscape = energyLandscape
+    def CSATRec(eLandscape: Seq[(Double, Map[String, Double])], it: Int): Seq[(Double, Map[String, Double])] =
+      it match {
+        case 0 => eLandscape
+        case num =>
+          logger.info("**************************")
+          logger.info("CSA Iteration: "+it)
+          //mutate each element of the grid with
+          //the generating distribution
+          //and accept using the acceptance distribution
+          mutTemp = mutationTemperature(iTemp)(it)
+          accTemp = acceptanceTemperature(iTemp)(it)
 
-    cfor(1)(iteration => iteration < MAX_ITERATIONS, iteration => iteration + 1)( iteration => {
+          val maxEnergy = eLandscape.map(_._1).max
+
+          val couplingFactor = gamma(eLandscape.map(t => t._1 - maxEnergy))(accTemp)
+          //Now mutate each solution and accept/reject
+          //according to the acceptance probability
+          val newEnergyLandscape = eLandscape.map((config) => {
+            //mutate this config
+            val new_config = mutate(config._2, mutTemp)
+            val new_energy = system.energy(new_config, options)
+            val ans = if(new_energy < config._1) {
+              (new_energy, new_config)
+            } else {
+              val acc = acceptance(new_energy - maxEnergy, config._1, couplingFactor, accTemp)
+              if(Random.nextDouble <= acc) (new_energy, new_config) else config
+            }
+            ans
+          })
+          CSATRec(newEnergyLandscape, it-1)
+      }
+
+
+    /*cfor(1)(iteration => iteration <= MAX_ITERATIONS, iteration => iteration + 1)( iteration => {
       logger.info("**************************")
       logger.info("CSA Iteration: "+iteration)
       //mutate each element of the grid with
@@ -119,9 +146,9 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
       currentEnergyLandscape = newEnergyLandscape
 
-    })
+    })*/
 
-    val landscape = currentEnergyLandscape.toMap
+    val landscape = CSATRec(initialEnergyLandscape, MAX_ITERATIONS).toMap
     val optimum = landscape.keys.min
 
     logger.info("Optimum value of energy is: "+optimum+
