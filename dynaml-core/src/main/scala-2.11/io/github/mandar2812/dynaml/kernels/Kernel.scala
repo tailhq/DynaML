@@ -199,15 +199,11 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
         firstkernel.gradient(x._1, y._1).mapValues(v => v*otherKernel.evaluate(x._2, y._2)) ++
           otherKernel.gradient(x._2, y._2).mapValues(v => v*firstkernel.evaluate(x._1, y._1))
 
-      def buildKernelMatrix[S <: Seq[(Index, T1)]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
-        new SVMKernelMatrix(
-          firstkernel.buildKernelMatrix(mappedData.map(_._1), length).getKernelMatrix() :*
-            otherKernel.buildKernelMatrix(mappedData.map(_._2), length).getKernelMatrix(),
-          length)
+      override def buildKernelMatrix[S <: Seq[(Index, T1)]](mappedData: S, length: Int) =
+        SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
 
-      def buildCrossKernelMatrix[S <: Seq[(Index, T1)]](dataset1: S, dataset2: S): DenseMatrix[Double] =
-        firstkernel.buildCrossKernelMatrix(dataset1.map(_._1), dataset2.map(_._1)) :*
-          otherKernel.buildCrossKernelMatrix(dataset1.map(_._2), dataset2.map(_._2))
+      override def buildCrossKernelMatrix[S <: Seq[(Index, T1)]](dataset1: S, dataset2: S) =
+        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
       override def evaluate(x: (Index, T1), y: (Index, T1)): Double =
         firstkernel.evaluate(x._1, y._1)*otherKernel.evaluate(x._2, y._2)
