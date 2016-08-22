@@ -284,13 +284,18 @@ object AbstractGPRegressionModel {
                     kernelMatrix: DenseMatrix[Double]): Double = {
 
     val smoothingMat = kernelMatrix
-    val Lmat = cholesky(smoothingMat)
-    val alpha = Lmat.t \ (Lmat \ trainingData)
 
-    0.5*((trainingData dot alpha) +
-      trace(log(Lmat)) +
-      trainingData.length*math.log(2*math.Pi))
+    try {
+      val Lmat = cholesky(smoothingMat)
+      val alpha = Lmat.t \ (Lmat \ trainingData)
 
+      0.5*((trainingData dot alpha) +
+        trace(log(Lmat)) +
+        trainingData.length*math.log(2*math.Pi))
+    } catch {
+      case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
+      case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
+    }
   }
 
   def apply[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],

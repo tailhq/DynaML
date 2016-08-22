@@ -58,6 +58,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
     CoupledSimulatedAnnealing.acceptanceProbability(variant)(energy, oldEnergy, coupling, temperature)
 
   protected val mutate = (config: Map[String, Double], temperature: Double) => {
+    logger.info("Mutating configuration: "+config)
     config.map((param) => {
       val dist = new CauchyDistribution(0.0, temperature)
       val mutated = param._2 + dist.sample()
@@ -78,18 +79,18 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
                         options: Map[String, String] = Map()) = {
 
     //create grid
-    val iTemp = 1.0
+    val iTemp = 2.0
     var accTemp = iTemp
     var mutTemp = iTemp
 
-    var initialEnergyLandscape = getEnergyLandscape(initialConfig, options)
+    val initialEnergyLandscape = getEnergyLandscape(initialConfig, options)
 
     def CSATRec(eLandscape: Seq[(Double, Map[String, Double])], it: Int): Seq[(Double, Map[String, Double])] =
       it match {
         case 0 => eLandscape
         case num =>
           logger.info("**************************")
-          logger.info("CSA Iteration: "+it)
+          logger.info("CSA Iteration: "+(MAX_ITERATIONS-it+1))
           //mutate each element of the grid with
           //the generating distribution
           //and accept using the acceptance distribution
