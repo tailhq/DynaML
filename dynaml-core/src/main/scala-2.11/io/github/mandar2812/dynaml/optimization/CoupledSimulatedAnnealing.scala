@@ -54,6 +54,8 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
     this
   }
 
+  var iTemp = 1.0
+
   protected def acceptance(energy: Double, oldEnergy: Double, coupling: Double, temperature: Double) =
     CoupledSimulatedAnnealing.acceptanceProbability(variant)(energy, oldEnergy, coupling, temperature)
 
@@ -79,13 +81,13 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
                         options: Map[String, String] = Map()) = {
 
     //create grid
-    val iTemp = 2.0
+
     var accTemp = iTemp
     var mutTemp = iTemp
 
     val initialEnergyLandscape = getEnergyLandscape(initialConfig, options)
 
-    def CSATRec(eLandscape: Seq[(Double, Map[String, Double])], it: Int): Seq[(Double, Map[String, Double])] =
+    def CSATRec(eLandscape: List[(Double, Map[String, Double])], it: Int): List[(Double, Map[String, Double])] =
       it match {
         case 0 => eLandscape
         case num =>
