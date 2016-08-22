@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
 
-  val scala = "2.11.7"
+  val scala = "2.11.8"
 
   val baseDependencies = Seq(
     "org.scala-lang" % "scala-compiler" % scala % "compile",
@@ -38,7 +38,7 @@ object Dependencies {
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" % "ammonite-repl_2.11.7" % "0.5.8"
+    "com.lihaoyi" % "ammonite-repl_2.11.8" % "0.5.8"
   )
 
   val tinkerpopDependency = Seq(
