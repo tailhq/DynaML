@@ -12,7 +12,7 @@ packageDescription := "DynaML is a scala library/repl for implementing and worki
   "which can be extended easily to implement advanced models for small and large scale applications.\n\n"+
   "But the library can also be used as an educational/research tool for data analysis."
 
-val mainVersion = "v1.4-beta.34"
+val mainVersion = "v1.4-beta.35"
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 

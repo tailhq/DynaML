@@ -18,7 +18,10 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
+import breeze.linalg.DenseVector
 import breeze.stats.distributions.CauchyDistribution
+import io.github.mandar2812.dynaml.utils
+
 import scala.util.Random
 
 /**
@@ -32,7 +35,12 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
   protected var MAX_ITERATIONS: Int = 10
 
-  var variant = CoupledSimulatedAnnealing.MuSA
+  protected var variant = CoupledSimulatedAnnealing.MuSA
+
+  def setVariant(v: String) = {
+    variant = v
+    this
+  }
 
   def setMaxIterations(m: Int) = {
     MAX_ITERATIONS = m
@@ -56,8 +64,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
   var iTemp = 1.0
 
-  protected def acceptance(energy: Double, oldEnergy: Double, coupling: Double, temperature: Double) =
-    CoupledSimulatedAnnealing.acceptanceProbability(variant)(energy, oldEnergy, coupling, temperature)
+  var alpha = 0.05
 
   protected val mutate = (config: Map[String, Double], temperature: Double) => {
     logger.info("Mutating configuration: "+GlobalOptimizer.prettyPrint(config))
@@ -74,18 +81,26 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
   def mutationTemperature(initialTemp: Double)(k: Int): Double =
     initialTemp/k.toDouble
 
-  def gamma(landscape: Seq[Double])(accTemp: Double): Double =
-    CoupledSimulatedAnnealing.couplingFactor(variant)(landscape, accTemp)
-
   override def optimize(initialConfig: Map[String, Double],
                         options: Map[String, String] = Map()) = {
 
-    //create grid
+    logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    logger.info("Coupled Simulated Annealing: "+CoupledSimulatedAnnealing.algorithm(variant))
+    logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
 
     var accTemp = iTemp
     var mutTemp = iTemp
 
+    //Calculate desired variance
+    val sigmaD = CoupledSimulatedAnnealing.varianceDesired(variant)(math.pow(gridsize, initialConfig.size).toInt)
+
     val initialEnergyLandscape = getEnergyLandscape(initialConfig, options)
+
+
+    val gamma_init = CoupledSimulatedAnnealing.couplingFactor(variant)(initialEnergyLandscape.map(_._1), accTemp)
+    var acceptanceProbs: List[Double] = initialEnergyLandscape.map(c => {
+      CoupledSimulatedAnnealing.acceptanceProbability(variant)(c._1, c._1, gamma_init, accTemp)
+    })
 
     def CSATRec(eLandscape: List[(Double, Map[String, Double])], it: Int): List[(Double, Map[String, Double])] =
       it match {
@@ -97,59 +112,46 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
           //the generating distribution
           //and accept using the acceptance distribution
           mutTemp = mutationTemperature(iTemp)(it)
-          accTemp = acceptanceTemperature(iTemp)(it)
+          accTemp = variant match {
+            case CoupledSimulatedAnnealing.MwVC =>
+              val (_,variance) = utils.getStats(acceptanceProbs.map(DenseVector(_)))
+
+              if (variance(0) < sigmaD)
+                accTemp * (1-alpha)
+              else accTemp * (1+alpha)
+            case _ =>
+              acceptanceTemperature(iTemp)(it)
+          }
 
           val maxEnergy = eLandscape.map(_._1).max
 
-          val couplingFactor = gamma(eLandscape.map(t => t._1 - maxEnergy))(accTemp)
+          val couplingFactor = CoupledSimulatedAnnealing.couplingFactor(variant)(
+            eLandscape.map(t => t._1 - maxEnergy),
+            accTemp)
+
           //Now mutate each solution and accept/reject
           //according to the acceptance probability
-          val newEnergyLandscape = eLandscape.map((config) => {
+          val (newEnergyLandscape,probabilities) = eLandscape.map((config) => {
             //mutate this config
             val new_config = mutate(config._2, mutTemp)
             val new_energy = system.energy(new_config, options)
+
+            //Calculate the acceptance probability
+            val acceptanceProbability = CoupledSimulatedAnnealing.acceptanceProbability(variant)(
+              new_energy - maxEnergy, config._1,
+              couplingFactor, accTemp)
+
             val ans = if(new_energy < config._1) {
-              (new_energy, new_config)
+              ((new_energy, new_config), acceptanceProbability)
             } else {
-              val acc = acceptance(new_energy - maxEnergy, config._1, couplingFactor, accTemp)
-              if(Random.nextDouble <= acc) (new_energy, new_config) else config
+              if(Random.nextDouble <= acceptanceProbability) ((new_energy, new_config), acceptanceProbability)
+              else (config, acceptanceProbability)
             }
             ans
-          })
+          }).unzip
+          acceptanceProbs = probabilities
           CSATRec(newEnergyLandscape, it-1)
       }
-
-
-    /*cfor(1)(iteration => iteration <= MAX_ITERATIONS, iteration => iteration + 1)( iteration => {
-      logger.info("**************************")
-      logger.info("CSA Iteration: "+iteration)
-      //mutate each element of the grid with
-      //the generating distribution
-      //and accept using the acceptance distribution
-      mutTemp = mutationTemperature(iTemp)(iteration)
-      accTemp = acceptanceTemperature(iTemp)(iteration)
-
-      val maxEnergy = currentEnergyLandscape.map(_._1).max
-
-      val couplingFactor = gamma(currentEnergyLandscape.map(t => t._1 - maxEnergy))(accTemp)
-      //Now mutate each solution and accept/reject
-      //according to the acceptance probability
-      val newEnergyLandscape = currentEnergyLandscape.map((config) => {
-        //mutate this config
-        val new_config = mutate(config._2, mutTemp)
-        val new_energy = system.energy(new_config, options)
-        val ans = if(new_energy < config._1) {
-          (new_energy, new_config)
-        } else {
-          val acc = acceptance(new_energy - maxEnergy, config._1, couplingFactor, accTemp)
-          if(Random.nextDouble <= acc) (new_energy, new_config) else config
-        }
-        ans
-      })
-
-      currentEnergyLandscape = newEnergyLandscape
-
-    })*/
 
     val landscape = CSATRec(initialEnergyLandscape, MAX_ITERATIONS).toMap
     val optimum = landscape.keys.min
@@ -171,6 +173,13 @@ object CoupledSimulatedAnnealing {
   val MwVC = "CSA-MwVC"
   val SA = "SA"
 
+  def algorithm(variant: String): String = variant match {
+    case MuSA => "Multi-state Simulated Annealing"
+    case BA => "Blind Acceptance"
+    case M => "Modified"
+    case MwVC => "Modified with Variance Control"
+  }
+
   def couplingFactor(variant: String)(landscape: Seq[Double], Tacc: Double): Double = {
     if(variant == MuSA || variant == BA)
       landscape.map(energy => math.exp(-1.0*energy/Tacc)).sum
@@ -187,6 +196,14 @@ object CoupledSimulatedAnnealing {
     else if (variant == M || variant == MwVC)
       math.exp(oldEnergy/temperature)/gamma
     else gamma/(1.0 + math.exp((energy - oldEnergy)/temperature))
+  }
+
+  def varianceDesired(variant: String)(m: Int):Double = {
+    if(variant == MuSA || variant == BA)
+      0.99
+    else
+      0.99*(m-1)/math.pow(m, 2.0)
+
   }
 
 

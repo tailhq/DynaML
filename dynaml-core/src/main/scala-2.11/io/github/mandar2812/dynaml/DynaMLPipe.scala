@@ -599,6 +599,7 @@ object DynaMLPipe {
           .setGridSize(grid)
           .setStepSize(step)
           .setLogScale(false)
+          .setVariant(CoupledSimulatedAnnealing.MwVC)
       }
 
       gs.optimize(startingState, Map("tolerance" -> "0.0001",
