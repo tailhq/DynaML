@@ -50,3 +50,17 @@ class TStudentCovFunc(private var d: Double) extends LocalSVMKernel[Double] {
   override def evaluate(x: Double, y: Double): Double =
     1.0/(1.0 + math.pow(math.abs(x-y), state("d")))
 }
+
+class CoRegTStudentKernel(bandwidth: Double) extends LocalSVMKernel[Int] {
+
+  override val hyper_parameters: List[String] = List("d")
+
+  state = Map("d" -> bandwidth)
+
+  override def evaluate(x: Int, y: Int): Double = {
+    val diff = x - y
+    1.0/(1.0 + math.pow(math.abs(diff.toDouble), state("d")))
+  }
+
+  def getD: Double = state("d")
+}

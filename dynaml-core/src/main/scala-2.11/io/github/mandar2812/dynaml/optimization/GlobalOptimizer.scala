@@ -77,7 +77,7 @@ trait GlobalOptimizer[T <: GloballyOptimizable] {
 
     grid.map((config) => {
       val configMap = List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
-      logger.info("Evaluating Configuration: "+configMap)
+      logger.info("""Evaluating Configuration: """+GlobalOptimizer.prettyPrint(configMap))
 
       val configEnergy = system.energy(configMap, options)
 
@@ -90,5 +90,12 @@ trait GlobalOptimizer[T <: GloballyOptimizable] {
 
   def optimize(initialConfig: Map[String, Double],
                options: Map[String, String] = Map()): (T, Map[String, Double])
+
+}
+
+object GlobalOptimizer {
+
+  def prettyPrint(configuration: Map[String, Double]): String = configuration.foldLeft("""""")(
+    (str, mapping) => str+""" """+mapping._1+""" = """+mapping._2.toString)
 
 }
