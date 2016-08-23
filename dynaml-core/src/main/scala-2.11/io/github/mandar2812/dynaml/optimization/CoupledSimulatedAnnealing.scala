@@ -156,8 +156,9 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
     val landscape = CSATRec(initialEnergyLandscape, MAX_ITERATIONS).toMap
     val optimum = landscape.keys.min
 
-    logger.info("Optimum value of energy is: "+optimum+
-      "\nConfiguration: "+landscape(optimum))
+    logger.info(
+      "Optimum value of energy is: "+optimum+
+      " at: "+GlobalOptimizer.prettyPrint(landscape(optimum)))
 
     system.energy(landscape(optimum), options)
     (system, landscape(optimum))
