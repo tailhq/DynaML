@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg.{DenseMatrix, DenseVector, det, inv}
 import breeze.numerics._
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
-import io.github.mandar2812.dynaml.models.ParameterizedLearner
+import io.github.mandar2812.dynaml.models.{ParameterizedLearner, SecondOrderProcess}
 import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LaplacePosteriorMode, Likelihood}
 
 /**
@@ -39,7 +39,7 @@ abstract class AbstractGPClassification[T, I](
   data: T, kernel: LocalScalarKernel[I],
   likelihood: Likelihood[DenseVector[Double], DenseVector[Double],
     DenseMatrix[Double], (DenseVector[Double], DenseVector[Double])])
-  extends GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double], DenseVector[Double]]
+  extends SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], DenseVector[Double]]
     with ParameterizedLearner[T, DenseVector[Double], I,
     Double, (DenseMatrix[Double], DenseVector[Double])]
     with GloballyOptimizable {

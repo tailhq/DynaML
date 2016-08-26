@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg._
 import breeze.numerics.log
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel}
+import io.github.mandar2812.dynaml.models.SecondOrderProcess
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.probability.MultGaussianRV
 import org.apache.log4j.Logger
@@ -42,7 +43,7 @@ abstract class AbstractGPRegressionModel[T, I](
   cov: LocalScalarKernel[I],
   n: LocalScalarKernel[I],
   data: T, num: Int) extends
-  GaussianProcessModel[T, I, Double, Double, DenseMatrix[Double],
+  SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double],
   MultGaussianRV]
 with GloballyOptWithGrad {
 
@@ -177,11 +178,6 @@ with GloballyOptWithGrad {
       effectiveTrainingKernel.buildKernelMatrix(training, npoints).getKernelMatrix()
     else
       kernelMatrixCache
-
-    /*val noiseMat = if(!caching)
-      noiseModel.buildKernelMatrix(training, npoints).getKernelMatrix()
-    else
-      noiseCache*/
 
     val kernelTest = covariance.buildKernelMatrix(test, test.length)
       .getKernelMatrix()
