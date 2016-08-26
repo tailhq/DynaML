@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, DenseVector}
+import spire.algebra.Field
 
 /**
  * Defines a base class for kernels
@@ -80,6 +81,19 @@ object CovarianceFunction {
         SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
     }
+}
+
+
+/**
+  * An abstract representation of stationary kernel functions,
+  * this requires an implicit variable which represents how addition, subtraction etc
+  * are carried out for the input domain [[T]]
+  * */
+abstract class StationaryKernel[T, V, M](implicit ev: Field[T]) extends CovarianceFunction[T, V, M] {
+
+  override def evaluate(x: T, y: T): V = eval(ev.minus(x,y))
+
+  def eval(x: T): V
 }
 
 abstract class CompositeCovariance[T]
@@ -211,7 +225,28 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
   }
 
+}
 
+/**
+  * Implementation of locally stationary kernels as defined in
+  * http://jmlr.csail.mit.edu/papers/volume2/genton01a/genton01a.pdf
+  *
+  * K(x,y) = K1(x+y/2)&times;K2(x-y)
+  *
+  * @tparam I The index set or input domain over which the kernel function is evaluated.
+  * @param baseKernel The kernel given by K2, it is assumed that the user inputs a valid stationary kernel
+  * @param scalingFunc The non-negative scaling function K1(.)
+  *
+  * */
+class LocallyStationaryKernel[I](baseKernel: LocalScalarKernel[I], scalingFunc: (I) => Double)(implicit ev: Field[I])
+  extends LocalSVMKernel[I] {
+
+  state = baseKernel.state
+
+  override val hyper_parameters: List[String] = baseKernel.hyper_parameters
+
+  override def evaluate(x: I, y: I): Double =
+    scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5)))*baseKernel.evaluate(x,y)
 }
 
 

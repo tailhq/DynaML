@@ -19,8 +19,9 @@ package io.github.mandar2812.dynaml.models.svm
 import breeze.linalg.{DenseMatrix, DenseVector, norm}
 import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.frames.FramedGraph
+import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.graph.utils.{CausalEdge, Parameter, Point}
-import io.github.mandar2812.dynaml.kernels.{GaussianDensityKernel, RBFKernel, SVMKernel}
+import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.KernelizedModel
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient
 import io.github.mandar2812.dynaml.prototype.{GreedyEntropySelector, QuadraticRenyiEntropy}
@@ -47,6 +48,8 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
   protected var (phi_mean, phi_var) = (mean, variance)
 
   override protected val optimizer: ConjugateGradient
+
+  implicit val vecField = VectorField(featuredims)
 
   def getRegParam: Double
 
@@ -238,6 +241,53 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
       avg_metrics(2))
   }
 
+  /**
+    * Calculates the energy of the configuration,
+    * in most global optimization algorithms
+    * we aim to find an approximate value of
+    * the hyper-parameters such that this function
+    * is minimized.
+    *
+    * @param h The value of the hyper-parameters in the configuration space
+    * @param options Optional parameters about configuration
+    * @return Configuration Energy E(h)
+    **/
+  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
+    //set the kernel paramters if options is defined
+    //then set model parameters and cross validate
+    var kernelflag = true
+    if(options.contains("kernel")) {
+      val kern = options("kernel") match {
+        case "RBF" => new RBFKernel().setHyperParameters(h)
+        case "Polynomial" => new PolynomialKernel().setHyperParameters(h)
+        case "Exponential" => new ExponentialKernel().setHyperParameters(h)
+        case "Laplacian" => new LaplacianKernel().setHyperParameters(h)
+        case "Cauchy" => new CauchyKernel().setHyperParameters(h)
+        case "RationalQuadratic" => new RationalQuadraticKernel().setHyperParameters(h)
+        case "Wave" => new WaveKernel().setHyperParameters(h)
+      }
+      //check if h and this.current_state have the same kernel params
+      //calculate kernParam(h)
+      //calculate kernParam(current_state)
+      //if both differ in any way then apply
+      //the kernel
+      val nprototypes = if(options.contains("subset")) options("subset").toInt
+      else math.sqrt(this.npoints).toInt
+      val kernh = h.filter((couple) => kern.hyper_parameters.contains(couple._1))
+      val kerncs = current_state.filter((couple) => kern.hyper_parameters.contains(couple._1))
+      if(!(kernh sameElements kerncs)) {
+        this.applyKernel(kern, nprototypes)
+        kernelflag = false
+      }
+    }
+    this.applyFeatureMap
+
+    val (_,_,e) = this.crossvalidate(4, h("RegParam"), optionalStateFlag = kernelflag)
+    current_state = h
+    1.0-e
+  }
+
+  @deprecated
   def tuneRBFKernel(prot: Int = math.sqrt(this.nPoints.toDouble).toInt,
                     folds: Int,
                     task: String = this.task): Unit = {

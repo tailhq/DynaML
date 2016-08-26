@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.DynaMLPipe
+import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.GPRegressionPipe
@@ -55,6 +56,8 @@ object TestGPHousing {
             columns: List[Int],
             grid: Int, step: Double, globalOpt: String,
             stepSize: Double, maxIt: Int): Unit = {
+
+    implicit val field = VectorField(columns.length - 1)
 
     val kernel: LocalScalarKernel[DenseVector[Double]] =
       kern match {

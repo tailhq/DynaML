@@ -40,6 +40,8 @@ class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
 
   override def fpow(a: DenseVector[Double], b: DenseVector[Double]): DenseVector[Double] =
     DenseVector((a.toArray zip b.toArray).map(couple => math.pow(couple._1, couple._2)))
+
+  override def fromDouble(a: Double): DenseVector[Double] = DenseVector.fill[Double](num_dim)(a)
 }
 
 object VectorField {

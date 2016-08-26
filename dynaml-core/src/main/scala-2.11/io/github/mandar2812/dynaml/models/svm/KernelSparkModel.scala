@@ -1,15 +1,16 @@
 package io.github.mandar2812.dynaml.models.svm
 
-import breeze.linalg.{DenseMatrix, norm, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, norm}
 import breeze.numerics.sqrt
+import io.github.mandar2812.dynaml.analysis.VectorField
 import org.apache.log4j.Logger
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.rdd.RDD
 import io.github.mandar2812.dynaml.models.KernelizedModel
-import io.github.mandar2812.dynaml.kernels.{SVMKernel, GaussianDensityKernel}
-import io.github.mandar2812.dynaml.prototype.{QuadraticRenyiEntropy, GreedyEntropySelector}
+import io.github.mandar2812.dynaml.kernels._
+import io.github.mandar2812.dynaml.prototype.{GreedyEntropySelector, QuadraticRenyiEntropy}
 import org.apache.spark.storage.StorageLevel
 
 import scala.util.Random
@@ -46,6 +47,8 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
   protected var effectivedims: Int = featuredims + 1
 
   protected var prototypes: List[DenseVector[Double]] = List()
+
+  implicit val vecField = VectorField(featuredims)
 
   val logger = Logger.getLogger(this.getClass)
 
@@ -164,6 +167,52 @@ abstract class KernelSparkModel(data: RDD[LabeledPoint], task: String)
     training_data.persist(StorageLevel.MEMORY_AND_DISK)
     test_data.persist(StorageLevel.MEMORY_AND_DISK)
     (training_data, test_data)
+  }
+
+  /**
+    * Calculates the energy of the configuration,
+    * in most global optimization algorithms
+    * we aim to find an approximate value of
+    * the hyper-parameters such that this function
+    * is minimized.
+    *
+    * @param h The value of the hyper-parameters in the configuration space
+    * @param options Optional parameters about configuration
+    * @return Configuration Energy E(h)
+    **/
+  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
+    //set the kernel paramters if options is defined
+    //then set model parameters and cross validate
+    var kernelflag = true
+    if(options.contains("kernel")) {
+      val kern = options("kernel") match {
+        case "RBF" => new RBFKernel().setHyperParameters(h)
+        case "Polynomial" => new PolynomialKernel().setHyperParameters(h)
+        case "Exponential" => new ExponentialKernel().setHyperParameters(h)
+        case "Laplacian" => new LaplacianKernel().setHyperParameters(h)
+        case "Cauchy" => new CauchyKernel().setHyperParameters(h)
+        case "RationalQuadratic" => new RationalQuadraticKernel().setHyperParameters(h)
+        case "Wave" => new WaveKernel().setHyperParameters(h)
+      }
+      //check if h and this.current_state have the same kernel params
+      //calculate kernParam(h)
+      //calculate kernParam(current_state)
+      //if both differ in any way then apply
+      //the kernel
+      val nprototypes = if(options.contains("subset")) options("subset").toInt
+      else math.sqrt(this.npoints).toInt
+      val kernh = h.filter((couple) => kern.hyper_parameters.contains(couple._1))
+      val kerncs = current_state.filter((couple) => kern.hyper_parameters.contains(couple._1))
+      if(!(kernh sameElements kerncs)) {
+        this.applyKernel(kern, nprototypes)
+        kernelflag = false
+      }
+    }
+    this.applyFeatureMap
+
+    val (_,_,e) = this.crossvalidate(4, h("RegParam"), optionalStateFlag = kernelflag)
+    current_state = h
+    1.0-e
   }
 
 }

@@ -19,14 +19,16 @@ under the License.
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
+import spire.algebra.Field
 
 /**
  * RBF Kernel of the form
  * K(x,y) = exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
  */
 
-class RBFKernel(private var bandwidth: Double = 1.0)
-  extends SVMKernel[DenseMatrix[Double]]
+class RBFKernel(private var bandwidth: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
+  extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
+  with SVMKernel[DenseMatrix[Double]]
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
 
@@ -38,6 +40,9 @@ class RBFKernel(private var bandwidth: Double = 1.0)
     this.state += ("bandwidth" -> d)
     this.bandwidth = d
   }
+
+  override def eval(x: DenseVector[Double]): Double =
+    Math.exp(-1*math.pow(norm(x, 2), 2)/(2*math.pow(this.state("bandwidth"), 2)))
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
     val diff = x - y
@@ -100,7 +105,7 @@ class RBFKernel(private var bandwidth: Double = 1.0)
   * Squared Exponential Kernel is a generalized RBF Kernel
   * K(x,y) = h<sup>2</sup>*exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
   */
-class SEKernel(private var band: Double = 1.0, private var h: Double = 2.0)
+class SEKernel(private var band: Double = 1.0, private var h: Double = 2.0)(implicit ev: Field[DenseVector[Double]])
   extends RBFKernel(band) {
 
   state = Map("bandwidth" -> band, "amplitude" -> h)

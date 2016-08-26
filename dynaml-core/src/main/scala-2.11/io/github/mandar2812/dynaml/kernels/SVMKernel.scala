@@ -9,7 +9,7 @@ import scala.collection.immutable.HashMap
  * Defines an abstract class outlines the basic
  * functionality requirements of an SVM Kernel
  */
-abstract class SVMKernel[M] extends
+trait SVMKernel[M] extends
 CovarianceFunction[DenseVector[Double], Double, M]
 with Serializable {
 

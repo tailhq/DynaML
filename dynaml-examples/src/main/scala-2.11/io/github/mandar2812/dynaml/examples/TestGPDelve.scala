@@ -1,10 +1,11 @@
 package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.{DenseMatrix, DenseVector}
+import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.gp.GPRegression
-import io.github.mandar2812.dynaml.pipes.{StreamDataPipe, DataPipe}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import io.github.mandar2812.dynaml.utils
 
 /**
@@ -15,6 +16,8 @@ object TestGPDelve {
              bandwidth: Double = 0.5, noise: Double = 0.0,
              training: Int = 100, test: Int = 1000,
              columns: List[Int] = List(10,0,1,2,3,4,5,6,7,8,9)): Unit = {
+
+    implicit val field = VectorField(columns.length - 1)
 
     val kernel: LocalScalarKernel[DenseVector[Double]] =
       kern match {
