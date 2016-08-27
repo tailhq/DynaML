@@ -26,9 +26,6 @@ case class MultivariateStudentsT(
 
   def draw() = {
     val z: DenseVector[Double] = DenseVector.rand(mean.length, new StudentsT(mu))
-    //val chi = new ChiSquared(mu)
-    //val w = chi.draw()
-    /*sqrt(w)**/
     (root * z) += mean
   }
 
