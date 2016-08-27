@@ -25,11 +25,11 @@ case class MultivariateStudentsT(
   assert(mu > 2.0, "Parameter mu in Multivariate Students T must be greater than 2.0")
 
   def draw() = {
-    val z: DenseVector[Double] = DenseVector.rand(mean.length, new StudentsT(1.0))
-    val chi = new ChiSquared(mu)
-    val w = chi.draw()
-
-    sqrt(w)*(root * z) += mean
+    val z: DenseVector[Double] = DenseVector.rand(mean.length, new StudentsT(mu))
+    //val chi = new ChiSquared(mu)
+    //val w = chi.draw()
+    /*sqrt(w)**/
+    (root * z) += mean
   }
 
   private val root:DenseMatrix[Double] = cholesky(covariance)
