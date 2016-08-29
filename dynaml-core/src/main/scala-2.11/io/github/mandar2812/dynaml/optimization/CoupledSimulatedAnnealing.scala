@@ -67,7 +67,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
   var alpha = 0.05
 
   protected val mutate = (config: Map[String, Double], temperature: Double) => {
-    logger.info("Mutating configuration: "+GlobalOptimizer.prettyPrint(config))
+    logger.info("Mutating configuration: "+GlobalOptimizer.prettyPrint(config)+"\n")
     config.map((param) => {
       val dist = new CauchyDistribution(0.0, temperature)
       val mutated = param._2 + dist.sample()

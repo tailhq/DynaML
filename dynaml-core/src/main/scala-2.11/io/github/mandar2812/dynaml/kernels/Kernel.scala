@@ -238,7 +238,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
   * @param scalingFunc The non-negative scaling function K1(.)
   *
   * */
-class LocallyStationaryKernel[I](baseKernel: LocalScalarKernel[I], scalingFunc: (I) => Double)(implicit ev: Field[I])
+class LocallyStationaryKernel[I](baseKernel: StationaryKernel[I, Double, DenseMatrix[Double]],
+                                 scalingFunc: (I) => Double)(implicit ev: Field[I])
   extends LocalSVMKernel[I] {
 
   state = baseKernel.state

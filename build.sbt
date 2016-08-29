@@ -19,15 +19,17 @@ val dataDirectory = settingKey[File]("The directory holding the data files for r
 val baseSettings = Seq(
   organization := "io.github.mandar2812",
   scalaVersion in ThisBuild := scala,
-  resolvers in ThisBuild ++= Seq("jzy3d-releases" at "http://maven.jzy3d.org/releases")
+  resolvers in ThisBuild ++= Seq(
+    "jzy3d-releases" at "http://maven.jzy3d.org/releases",
+    "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases")
 )
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= (
     baseDependencies ++ apacheSpark ++
       replDependency ++ loggingDependency ++
-      linearAlgebraDependencies ++
-      chartsDependencies ++ tinkerpopDependency)
+      linearAlgebraDependencies ++ chartsDependencies ++
+      tinkerpopDependency ++ notebookInterfaceDependency)
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)

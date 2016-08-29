@@ -4,8 +4,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
   * @author mandar2812
-  * Cauchy Kernel given by the expression
-  * K(x,y) = 1/(1 + ||x-y||**2/sigma**2)
+  * Annova Kernel
   */
 class AnovaKernel(si: Double = 1.0,
                   exp: Double = 4.0,
