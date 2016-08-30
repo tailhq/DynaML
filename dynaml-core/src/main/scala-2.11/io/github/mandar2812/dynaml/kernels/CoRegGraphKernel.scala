@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{DenseMatrix, inv, pinv}
+import breeze.linalg.{DenseMatrix, pinv}
 import io.github.mandar2812.dynaml.utils
 
 /**
@@ -39,11 +39,15 @@ class CoRegGraphKernel(m: DenseMatrix[Double]) extends LocalSVMKernel[Int] {
     DenseMatrix.eye[Double](dimensions) :*
       ((adjecancyMatrix * DenseMatrix.ones[Double](dimensions, dimensions)) + adjecancyMatrix)
 
-  def l: DenseMatrix[Double] = pinv(degreeMatrix - adjecancyMatrix)
-
+  var l: DenseMatrix[Double] = pinv(degreeMatrix - adjecancyMatrix)
 
   override def gradient(x: Int, y: Int): Map[String, Double] = hyper_parameters.map(_ -> 1.0).toMap
 
   override def evaluate(x: Int, y: Int): Double = l(x,y)
 
+  override def setHyperParameters(h: Map[String, Double]): CoRegGraphKernel.this.type = {
+    super.setHyperParameters(h)
+    l = pinv(degreeMatrix - adjecancyMatrix)
+    this
+  }
 }
