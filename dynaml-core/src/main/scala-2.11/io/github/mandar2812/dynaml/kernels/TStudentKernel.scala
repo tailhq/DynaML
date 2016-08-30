@@ -18,25 +18,25 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{norm, DenseVector, DenseMatrix}
+import breeze.linalg.{DenseMatrix, DenseVector, norm}
+import spire.algebra.Field
 
 /**
   * T-Student Kernel
   * K(x,y) = 1/(1 + ||x - y||<sup>d</sup>)
   */
-class TStudentKernel(private var d: Double = 1.0)
-  extends SVMKernel[DenseMatrix[Double]]
-  with LocalSVMKernel[DenseVector[Double]]
+class TStudentKernel(private var d: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
+  extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
+    with SVMKernel[DenseMatrix[Double]]
+    with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
 
   override val hyper_parameters = List("d")
 
   state = Map("d" -> d)
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
-    val diff = x - y
-    1.0/(1.0 + math.pow(norm(diff, 2), state("d")))
-  }
+  override def eval(x: DenseVector[Double]): Double =
+    1.0/(1.0 + math.pow(norm(x, 2), state("d")))
 
   def getD: Double = state("d")
 

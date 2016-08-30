@@ -44,11 +44,6 @@ class RBFKernel(private var bandwidth: Double = 1.0)(implicit ev: Field[DenseVec
   override def eval(x: DenseVector[Double]): Double =
     Math.exp(-1*math.pow(norm(x, 2), 2)/(2*math.pow(this.state("bandwidth"), 2)))
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
-    val diff = x - y
-    Math.exp(-1*math.pow(norm(diff, 2), 2)/(2*math.pow(this.state("bandwidth"), 2)))
-  }
-
   override def gradient(x: DenseVector[Double],
                         y: DenseVector[Double]): Map[String, Double] =
     Map("bandwidth" -> 1.0*evaluate(x,y)*math.pow(norm(x-y,2),2)/math.pow(math.abs(state("bandwidth")), 3))

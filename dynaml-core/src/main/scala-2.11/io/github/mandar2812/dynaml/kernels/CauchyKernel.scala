@@ -1,14 +1,16 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{DenseMatrix, norm, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, norm}
+import spire.algebra.Field
 
 /**
  * Cauchy Kernel given by the expression
  * K(x,y) = 1/(1 + ||x-y||<sup>2</sup>/sigma<sup>2</sup>)
  */
-class CauchyKernel(si: Double = 1.0)
-  extends SVMKernel[DenseMatrix[Double]]
-  with LocalSVMKernel[DenseVector[Double]]
+class CauchyKernel(si: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
+  extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
+    with SVMKernel[DenseMatrix[Double]]
+    with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
   override val hyper_parameters = List("sigma")
 
@@ -21,8 +23,8 @@ class CauchyKernel(si: Double = 1.0)
     state += ("sigma" -> b)
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    1/(1 + math.pow(norm(x-y, 2)/state("sigma"), 2))
+  override def eval(x: DenseVector[Double]): Double =
+    1/(1 + math.pow(norm(x, 2)/state("sigma"), 2))
 
   override def gradient(x: DenseVector[Double], y: DenseVector[Double]): Map[String, Double] = {
     Map("sigma" -> 2.0*math.pow(evaluate(x,y),2)*math.pow(norm(x-y, 2), 2)/math.pow(state("sigma"), 3))
