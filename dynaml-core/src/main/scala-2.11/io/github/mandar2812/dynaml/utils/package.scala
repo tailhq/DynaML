@@ -20,7 +20,7 @@ package io.github.mandar2812.dynaml
 
 import java.io.{BufferedWriter, File, FileWriter}
 
-import breeze.linalg.{DenseMatrix, DenseVector, kron}
+import breeze.linalg.{DenseMatrix, DenseVector, Matrix, MatrixNotSquareException, MatrixNotSymmetricException, kron}
 import com.github.tototoshi.csv.{CSVReader, DefaultCSVFormat, QUOTE_NONNUMERIC}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
@@ -31,6 +31,7 @@ import scala.annotation.tailrec
 import scala.util.matching.Regex
 import sys.process._
 import java.net.URL
+
 import spire.algebra.Field
 
 /**
@@ -291,6 +292,19 @@ package object utils {
       override def times(x: (Domain, Domain1), y: (Domain, Domain1)): (Domain, Domain1) =
         (ev.times(x._1, y._1), ev1.times(x._2, y._2))
     }
+
+
+  def isSquareMatrix[V](mat: Matrix[V]): Unit =
+    if (mat.rows != mat.cols)
+      throw new MatrixNotSquareException
+
+  def isSymmetricMatrix[V](mat: Matrix[V]): Unit = {
+    isSquareMatrix(mat)
+
+    for (i <- 0 until mat.rows; j <- 0 until i)
+      if (mat(i,j) != mat(j,i))
+        throw new MatrixNotSymmetricException
+  }
 
 }
 
