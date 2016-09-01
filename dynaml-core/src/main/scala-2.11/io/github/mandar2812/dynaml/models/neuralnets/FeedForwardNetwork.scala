@@ -32,9 +32,12 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
   * backed by an underlying graph.
   *
   * @tparam D The type of the underlying training data structure.
+  *
   * @param data The training data
+  *
   * @param netgraph The [[FFNeuralGraph]] object which represents the
   *                 network.
+  *
   * @param transform A [[DataPipe]] which takes input of type [[D]] and
   *                  returns a [[Stream]] of input, output tuples.
   *

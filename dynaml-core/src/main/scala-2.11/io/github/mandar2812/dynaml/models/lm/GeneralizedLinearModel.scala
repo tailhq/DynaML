@@ -46,6 +46,9 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
 
   def dimensions = featureMap(data.head._1).length
 
+  /**
+    * Initialize parameters to a vector of ones.
+    * */
   override def initParams(): DenseVector[Double] =
     DenseVector.ones[Double](dimensions + 1)
 
@@ -146,13 +149,23 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
 }
 
 object GeneralizedLinearModel {
+
+  /**
+    *  Create a generalized linear model.
+    *
+    *  @param data The training data as a stream of tuples
+    *  @param task Set to 'regression' or 'classification'
+    *  @param map Feature map or basis functions
+    *  @param modeltype Set to either 'logit' or 'probit'
+    *
+    * */
   def apply[T](data: Stream[(DenseVector[Double], Double)],
                task: String = "regression",
                map: (DenseVector[Double]) => DenseVector[Double] =
                identity[DenseVector[Double]] _,
                modeltype: String = "") = task match {
     case "regression" => new RegularizedGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
-    case "classification" => task match {
+    case "classification" => modeltype match {
       case "probit" => new ProbitGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
       case _ => new LogisticGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
     }

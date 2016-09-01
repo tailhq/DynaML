@@ -25,7 +25,13 @@ import io.github.mandar2812.dynaml.optimization._
 import org.apache.commons.math3.distribution.NormalDistribution
 
 /**
-  * Created by mandar on 31/3/16.
+  * @author mandar2812 date: 31/3/16.
+  *
+  * Logistic model for binary classification.
+  * @param data The training data as a stream of tuples
+  * @param numPoints The number of training data points
+  * @param map The basis functions used to map the input
+  *            features to a possible higher dimensional space
   */
 class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
                   numPoints: Int,
@@ -49,7 +55,13 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
 
 }
 
-
+/**
+  * Probit model for binary classification.
+  * @param data The training data as a stream of tuples
+  * @param numPoints The number of training data points
+  * @param map The basis functions used to map the input
+  *            features to a possible higher dimensional space
+  */
 class ProbitGLM(data: Stream[(DenseVector[Double], Double)],
                 numPoints: Int,
                 map: (DenseVector[Double]) => DenseVector[Double] =

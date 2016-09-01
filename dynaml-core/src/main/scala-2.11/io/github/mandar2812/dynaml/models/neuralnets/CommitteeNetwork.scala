@@ -25,7 +25,18 @@ import io.github.mandar2812.dynaml.optimization.{BackPropagation, CommitteeModel
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
-  * Created by mandar on 9/2/16.
+  * @author mandar2812 date: 9/2/16.
+  *
+  * A Neural committee is an ensemble of feedforward
+  * neural networks whose predictions are weighted
+  * inorder to generate a model prediction for an input
+  * data point.
+  *
+  * @tparam D The type of the training data
+  * @param data The training data
+  * @param transform A data pipe which transforms the training data from its type [[D]]
+  *                  to a stream of vector tuples.
+  * @param networks A collection of neural networks which will form the committee.
   */
 class CommitteeNetwork[D](data: D,
                           transform: DataPipe[D, Stream[(DenseVector[Double],
@@ -100,6 +111,12 @@ LinearModel[D, DenseVector[Double], DenseVector[Double],
   }
 
 
+  /**
+    * Generate predictions (as a stream of tuples representing the predicted and actual output respectively)
+    * for a test set
+    *
+    * @param d The test set.
+    * */
   def test(d: D): Stream[(DenseVector[Double], DenseVector[Double])] = {
     val (procInputs, _) =
       dataAsStream(d)

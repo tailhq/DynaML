@@ -24,7 +24,14 @@ import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable,
 RegularizedLSSolver, RegularizedOptimizer}
 
 /**
-  * Created by mandar on 29/3/16.
+  * @author mandar2812 date: 29/3/16.
+  *
+  * Represents a normal distribution based regression GLM.
+  *
+  * @param data The training data as a stream of tuples
+  * @param numPoints The number of training data points
+  * @param map The basis functions used to map the input
+  *            features to a possible higher dimensional space
   */
 class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
                      numPoints: Int,

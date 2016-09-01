@@ -34,6 +34,8 @@ import io.github.mandar2812.dynaml.optimization.{GloballyOptWithGrad, GloballyOp
   *             input data.
   *
   * @param numPoints The number of data points in [[data]]
+  *
+  * @param modelTask Set to 'regression' or 'classification'
   */
 class DLSSVM(data: Stream[(DenseVector[Double], Double)], numPoints: Int,
              kern: LocalScalarKernel[DenseVector[Double]],
