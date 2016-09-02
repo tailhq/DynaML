@@ -300,14 +300,14 @@ KernelizedModel[FramedGraph[Graph], Iterable[CausalEdge],
 
     val gammagrid = List.tabulate(30)((i) => i.toDouble/10.0)
 
-    val grid = (for{s <- sigmagrid; g <- gammagrid} yield (s,g)).groupBy((c) => c._1).map((hyper) => {
+    val grid = (for{s <- sigmagrid; g <- gammagrid} yield (s,g)).groupBy((c) => c._1).flatMap((hyper) => {
       this.applyKernel(new RBFKernel(hyper._1), prot)
       hyper._2.map((sigmaAndGamma) => {
         logger.info("sigma = "+sigmaAndGamma._1+" gamma = "+sigmaAndGamma._2)
         val (a, b, c) = this.crossvalidate(folds, sigmaAndGamma._2)
         (c, sigmaAndGamma)
       })
-    }).flatten
+    })
     logger.info("Grid: \n"+grid.toList)
     val maximum = grid.max
     logger.log(Priority.INFO, "Best value: "+maximum)

@@ -1,15 +1,18 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, norm, DenseVector}
+import spire.algebra.Field
+
 
 /**
   * Rational Quadratic Kernel given by the expression
-  * K(x,y) = 1 - ||x-y||<sup>2</sup>/(||x-y||<sup>2</sup> + c<sup>2</sup>)
+  * K(x,y) = (1 + ||x-y||<sup>2</sup>/2&mu;l^2^)^-0.5 &#215; &mu;^
   * */
-class RationalQuadraticKernel(shape: Double = 1.0, l: Double = 1.0)
-  extends SVMKernel[DenseMatrix[Double]]
-  with LocalSVMKernel[DenseVector[Double]]
-  with Serializable {
+class RationalQuadraticKernel(shape: Double = 1.0, l: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
+  extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
+    with SVMKernel[DenseMatrix[Double]]
+    with LocalSVMKernel[DenseVector[Double]]
+    with Serializable {
   override val hyper_parameters = List("mu", "l")
 
   state = Map("mu" -> shape, "l" -> l)
@@ -28,8 +31,8 @@ class RationalQuadraticKernel(shape: Double = 1.0, l: Double = 1.0)
     state += ("l" -> lam)
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    math.pow(1 + math.pow(norm(x-y, 2), 2)/(state("mu")*state("l")*state("l")), -0.5*(x.length+state("mu")))
+  override def eval(x: DenseVector[Double]): Double =
+    math.pow(1 + math.pow(norm(x, 2), 2)/(state("mu")*state("l")*state("l")), -0.5*(x.length+state("mu")))
 
   override def gradient(x: DenseVector[Double], y: DenseVector[Double]): Map[String, Double] = {
 

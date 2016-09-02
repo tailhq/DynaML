@@ -18,15 +18,17 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.{DenseMatrix, DenseVector}
+import spire.algebra.Field
 
 /**
-  * Created by mandar on 24/11/15.
+  * @author mandar2812 date: 24/11/15.
   */
-class WaveletKernel(func: (Double) => Double)(private var scale: Double)
-  extends SVMKernel[DenseMatrix[Double]]
-  with LocalSVMKernel[DenseVector[Double]]
-  with Serializable {
+class WaveletKernel(func: (Double) => Double)(private var scale: Double)(implicit ev: Field[DenseVector[Double]])
+  extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
+    with SVMKernel[DenseMatrix[Double]]
+    with LocalSVMKernel[DenseVector[Double]]
+    with Serializable {
 
   override val hyper_parameters = List("scale")
 
@@ -39,10 +41,7 @@ class WaveletKernel(func: (Double) => Double)(private var scale: Double)
     state += ("scale" -> d)
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
-    val diff = x - y
-    diff.map(i => mother(math.abs(i)/scale)).toArray.product
-  }
+  override def eval(x: DenseVector[Double]): Double = x.map(i => mother(math.abs(i)/scale)).toArray.product
 
   def getscale: Double = state("scale")
 
