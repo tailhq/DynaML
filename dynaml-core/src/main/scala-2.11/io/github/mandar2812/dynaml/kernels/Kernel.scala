@@ -1,8 +1,5 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{DenseMatrix, DenseVector}
-import spire.algebra.Field
-
 /**
  * Defines a base class for kernels
  * defined on arbitrary objects.

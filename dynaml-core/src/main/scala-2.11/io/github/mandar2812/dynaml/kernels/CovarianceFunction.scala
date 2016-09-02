@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, DenseVector}
+import io.github.mandar2812.dynaml.analysis.KernelMatrix
 
 /**
   * A covariance function implementation. Covariance functions are
@@ -41,8 +42,13 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
 object CovarianceFunction {
 
   /**
+    * Create a kernel from a feature mapping.
+    * K(x,y) = phi^T^(x) . phi(y)
     *
+    * @param phi A general non linear transformation from the domain to
+    *            a multidimensional vector.
     *
+    * @return A kernel instance defined for that particular feature transformation.
     * */
   def apply[T](phi: T => DenseVector[Double]) = new LocalScalarKernel[T] {
     override val hyper_parameters: List[String] = List()
@@ -58,7 +64,13 @@ object CovarianceFunction {
   }
 
   /**
+    * Create a kernel from a symmetric function.
     *
+    * K(x,y) = f(state)(x,y)
+    *
+    * @param phi  A function which for every state outputs a symmetric kernel
+    *             evaluation function for inputs.
+    * @param s The (beginning) state of the kernel.
     *
     * */
   def apply[T](phi: Map[String, Double] => (T, T) => Double)(s: Map[String, Double]) =

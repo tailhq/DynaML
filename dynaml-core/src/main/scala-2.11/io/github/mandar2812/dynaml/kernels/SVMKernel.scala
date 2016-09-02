@@ -1,10 +1,10 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg._
+import io.github.mandar2812.dynaml.analysis.{KernelMatrix, SVMKernelMatrix}
 import io.github.mandar2812.dynaml.utils
-import org.apache.log4j.{Logger, Priority}
+import org.apache.log4j.Logger
 
-import scala.collection.immutable.HashMap
 /**
  * Defines an abstract class outlines the basic
  * functionality requirements of an SVM Kernel
@@ -108,62 +108,9 @@ object SVMKernel {
 
 }
 
-/**
-  * Kernels with a locally stored matrix in the form
-  * of a breeze [[DenseMatrix]] instance.
-  * */
-trait LocalSVMKernel[Index] extends LocalScalarKernel[Index] {
-  override def buildKernelMatrix[S <: Seq[Index]](
-    mappedData: S,
-    length: Int): KernelMatrix[DenseMatrix[Double]] =
-    SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
 
-  override def buildCrossKernelMatrix[S <: Seq[Index]](dataset1: S, dataset2: S) =
-    SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
-}
 
-/**
- * Defines a trait which outlines the basic
- * functionality of Kernel Matrices.
- * */
-trait KernelMatrix[T] extends Serializable {
-  protected val kernel: T
 
-  def eigenDecomposition(dimensions: Int): (DenseVector[Double], DenseMatrix[Double])
 
-  def getKernelMatrix(): T = this.kernel
-}
 
-class SVMKernelMatrix(
-    override protected val kernel: DenseMatrix[Double],
-    private val dimension: Long)
-  extends KernelMatrix[DenseMatrix[Double]]
-  with Serializable {
-  private val logger = Logger.getLogger(this.getClass)
-
-  /**
-   * Calculates the approximate eigen-decomposition of the
-   * kernel matrix
-   *
-   * @param dimensions The effective number of dimensions
-   *                   to be calculated in the feature map
-   *
-   * @return A Scala [[Tuple2]] containing the eigenvalues
-   *         and eigenvectors.
-   *
-   * */
-  override def eigenDecomposition(dimensions: Int = this.dimension.toInt):
-  (DenseVector[Double], DenseMatrix[Double]) = {
-    logger.log(Priority.INFO, "Eigenvalue decomposition of the kernel matrix using JBlas.")
-    val decomp = eig(this.kernel)
-    logger.log(Priority.INFO, "Eigenvalue stats: "
-      +min(decomp.eigenvalues)
-      +" =< lambda =< "
-      +max(decomp.eigenvalues)
-    )
-    (decomp.eigenvalues, decomp.eigenvectors)
-
-  }
-
-}
 
