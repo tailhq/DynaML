@@ -1,67 +1,83 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  {% include head.html %}
-  {% assign base = '' %}
-  {% assign depth = page.url | split: '/' | size | minus: 1 %}
-  {% if    depth == 1 %}{% assign base = '.' %}
-  {% elsif depth == 2 %}{% assign base = '..' %}
-  {% elsif depth == 3 %}{% assign base = '../..' %}
-  {% elsif depth == 4 %}{% assign base = '../../..' %}{% endif %}
-  {% include head.html %}
-  <body class="sidebar-overlay">
+<head>
+    {% include head.html %}
+    <script type="text/javascript"
+      src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
 
-    {% include sidebar.html %}
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
 
-    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
-         content to avoid any CSS collisions with our real content. -->
-    <div class="wrap">
-      <div class="masthead">
-        <div class="container">
-          <h3 class="masthead-title">
-            <a href="{{ site.baseurl }}/" title="Home">{{ site.title }}</a>
-            <small>{{ site.tagline }}</small>
-          </h3>
-        </div>
-      </div>
-      <div class="container content">
-        <div id="toc"></div>
-	<br/>
-	{{ content}}
-      </div>
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    {% if page.datatable == true %}
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            $('table.datatable').DataTable( {
+                        paging: false,
+                        stateSave: true
+                    }
+            );
+    </script>
+    {% endif %}
+
+</head>
+<body>
+{% include topnav.html %}
+<!-- Page Content -->
+<div class="container">
+    <div class="col-lg-12">&nbsp;</div>
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Sidebar Column -->
+        <div class="col-md-3">
+
+          {% include sidebar.html %}
+    <!-- Content Column -->
+    <div class="col-md-9">
+        {{content}}
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
     </div>
 
-    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-    
-    <script type="text/javascript" 
-	    src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
-    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script type="text/javascript" 
-	    src="/DynaML/javascripts/toc.js">
-    </script>
-    
-    <script>
-      (function(document) {
-        var toggle = document.querySelector('.sidebar-toggle');
-        var sidebar = document.querySelector('#sidebar');
-        var checkbox = document.querySelector('#sidebar-checkbox');
-
-        document.addEventListener('click', function(e) {
-          var target = e.target;
-
-          if(!checkbox.checked ||
-             sidebar.contains(target) ||
-             (target === checkbox || target === toggle)) return;
-
-          checkbox.checked = false;
-        }, false);
-      })(document);
-    </script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-      $('#toc').toc({ listType: 'ul', headers: 'h1, h2, h3'});
-      });
-    </script>
-    {% include google_analytics.html %}
-  </body>
+</body>
+{% if site.google_analytics %}
+{% include google_analytics.html %}
+{% endif %}
 </html>

@@ -1,0 +1,102 @@
+#Side bar for core api
+
+entries:
+
+- title: Sidebar
+  product: Core API
+  version: 1.4
+
+  folders:
+
+  - title:
+    output: pdf
+    type: frontmatter
+    folderitems:
+    - title:
+      url: /titlepage
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage
+      output: pdf
+      type: frontmatter
+
+  - title: Models
+    output: web, pdf
+    folderitems:
+
+    - title: Introduction to the Model Hierarchy
+      url: /core_model_hierarchy.html
+      output: web
+
+    - title: Generalized Linear Models
+      url: /core_glm.html
+      output: web
+
+    - title: Feed Forward Neural Networks
+      url: /core_ann.html
+      output: web
+
+    - title: Least Squares SVM
+      url: /core_lssvm.html
+      output: web
+
+    - title: Gaussian Processes
+      url: /core_gp.html
+      output: web
+
+    - title: Student T Processes
+      url: /core_stp.html
+      output: web
+
+  - title: Optimization
+    output: web, pdf
+    folderitems:
+
+    #- title: Introduction to the Optimization toolkit
+    #  url: /core_opt_hierarchy.html
+    #  output: web
+
+    - title: Convex Optimization
+      url: /core_opt_convex.html
+      output: web
+
+    - title: Global Optimization
+      url: /core_opt_global.html
+      output: web
+
+  - title: Probability
+    output: web, pdf
+    folderitems:
+
+    - title: Random Variables
+      url: /core_prob_randomvar.html
+      output: web
+
+    - title: Representing Distributions
+      url: /core_prob_dist.html
+      output: web
+
+    - title: Probability Model
+      url: /core_prob_model.html
+      output: web
+
+  - title: Kernels
+    output: web, pdf
+    folderitems:
+
+    - title: Introduction
+      url: /core_kernels.html
+      output: web
+
+    - title: Statationary Kernels
+      url: /core_kernel_stat.html
+      output: web
+
+    - title: Non Stationary Kernels
+      url: /core_kernel_nonstat.html
+      output: web
+
+    - title: Kernel Feature Extraction
+      url: /core_kernel_nystrom.html
+      output: web

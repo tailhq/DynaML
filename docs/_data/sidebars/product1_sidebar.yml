@@ -1,0 +1,65 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+
+entries:
+- title: Pipes
+  product: Pipes
+  version: 1.0
+  folders:
+
+  - title:
+    output: pdf
+    type: frontmatter
+    folderitems:
+    - title:
+      url: /titlepage
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage
+      output: pdf
+      type: frontmatter
+
+  - title: Getting Started
+    output: web, pdf
+    folderitems:
+    - title: Introduction to Data Pipes
+      url: /p1_pipes.html
+      output: web
+
+    - title: Data Pipes API
+      url: /p1_pipes_api.html
+      output: web
+
+    - title: Using the Pipes Library
+      url: /p1_sample1.html
+      output: web, pdf
+
+
+  - title: DynaML Workflow Library
+    output: web, pdf
+    folderitems:
+
+    - title: Data Pre-processing
+      url: /p1_sample2.html
+      output: web, pdf
+
+    - title: Feature Pre-processing
+      url: /p1_sample3.html
+      output: web, pdf
+
+    - title: Workflows for Time Series Data
+      url: /p1_sample4.html
+      output: web, pdf
+
+    - title: Miscelleneous Workflows
+      url: /p1_sample5.html
+      output: web, pdf
+
+    - title: Workflows on Models
+      url: /p1_sample6.html
+      output: web, pdf
+
+    - title: Model Pipe API
+      url: /p1_sample7.html
+      output: web, pdf

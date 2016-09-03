@@ -1,8 +1,0 @@
-[debug] Other repositories:
-[debug] Default repositories:
-[debug] Using inline dependencies specified in Scala.
-[warn] Binary version (2.11.0-M3) for dependency org.scala-lang#jline;2.11.0-M3
-[warn] 	in io.github.mandar2812#dynaml-pipes_2.11;1.0 differs from Scala binary version in project (2.11).
-[debug] Using inline dependencies specified in Scala.
-[warn] Binary version (2.11.0-M3) for dependency org.scala-lang#jline;2.11.0-M3
-[warn] 	in io.github.mandar2812#dynaml-pipes$sources_javadoc_2.11;1.0 differs from Scala binary version in project (2.11).

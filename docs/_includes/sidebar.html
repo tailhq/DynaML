@@ -1,40 +1,56 @@
-<!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
-     styles, `#sidebar-checkbox` for behavior. -->
-<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+{% include custom/sidebarconfigs.html %}
 
-<!-- Toggleable sidebar -->
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-item">
-    <p>{{ site.description }}</p>
-  </div>
-
-  <nav class="sidebar-nav">
-    <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="{{ site.baseurl }}/">Home</a>
-    <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="{{ site.baseurl }}/quick-start">Quick Start</a>
-    {% comment %}
-      The code below dynamically generates a sidebar nav of pages with
-      `layout: page` in the front-matter. See readme for usage.
-    {% endcomment %}
-
-    {% assign pages_list = site.pages | sort:"url" %}
-    {% for node in pages_list %}
-      {% if node.title != null %}
-        {% if node.layout == "page" %}
-          <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{site.baseurl}}{{ node.url }}">{{ node.title }}</a>
+<ul id="mysidebar" class="nav">
+    <li class="sidebarTitle">{{sidebar[0].product}} {{sidebar[0].version}}</li>
+    {% for entry in sidebar %}
+    {% for folder in entry.folders %}
+    {% if folder.output contains "web" %}
+    <li>
+        <a href="#">{{ folder.title }}</a>
+        <ul>
+            {% for folderitem in folder.folderitems %}
+            {% if folderitem.output contains "web" %}
+            {% if folderitem.external_url %}
+            <li><a href="{{folderitem.external_url}}" target="_blank">{{folderitem.title}}</a></li>
+            {% elsif page.url == folderitem.url %}
+            <li class="active"><a href="{{folderitem.url | remove: "/"}}">{{folderitem.title}}</a></li>
+            {% else %}
+            <li><a href="{{folderitem.url | remove: "/"}}">{{folderitem.title}}</a></li>
+            {% endif %}
+            {% for subfolders in folderitem.subfolders %}
+            {% if subfolders.output contains "web" %}
+            <li class="subfolders">
+                <a href="#">{{ subfolders.title }}</a>
+                <ul>
+                    {% for subfolderitem in subfolders.subfolderitems %}
+                    {% if subfolderitem.output contains "web" %}
+                    {% if subfolderitem.external_url %}
+                    <li><a href="{{subfolderitem.external_url}}" target="_blank">{{subfolderitem.title}}</a></li>
+                    {% elsif page.url == subfolderitem.url %}
+                    <li class="active"><a href="{{subfolderitem.url | remove: "/"}}">{{subfolderitem.title}}</a></li>
+                    {% else %}
+                    <li><a href="{{subfolderitem.url | remove: "/"}}">{{subfolderitem.title}}</a></li>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+        </ul>
         {% endif %}
-      {% endif %}
-    {% endfor %}
-    <a class="sidebar-nav-item" href="https://github.com/mandar2812/DynaML/wiki">Project Wiki</a>
-    <a class="sidebar-nav-item" href="{{site.url}}/target/site/scaladocs/index.html#package">API Documentation</a>
-    <!--<a class="sidebar-nav-item" href="{{ site.github.repository_url }}/archive/v{{ site.version }}.zip">Download</a>-->
-    <a class="sidebar-nav-item" href="https://github.com/mandar2812/DynaML/">GitHub project</a>
-    <a class="sidebar-nav-item" href="{{site.baseurl}}/about">About</a>
-    <span class="sidebar-nav-item">Currently v{{ site.version }}</span>
-  </nav>
-
-  <div class="sidebar-item">
-    <p>
-      &copy; {{ site.time | date: '%Y' }}. All rights reserved.
-    </p>
-  </div>
+        {% endfor %}
+        {% endfor %}
+        <!-- if you aren't using the accordion, uncomment this block:
+           <p class="external">
+               <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+           </p>
+           -->
+    </li>
+</ul>
 </div>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>

@@ -1,62 +1,54 @@
 ---
-layout: default
-title: Home
-noToc: true
+title: User Guide
+keywords: home page
+tags: [getting_started]
+sidebar: mydoc_sidebar
+permalink: index.html
 ---
 
-[![Join the chat at https://gitter.im/mandar2812/DynaML](https://badges.gitter.im/mandar2812/DynaML.svg)](https://gitter.im/mandar2812/DynaML?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)[![Build Status](https://travis-ci.org/mandar2812/DynaML.svg?branch=branch-1.0)](https://travis-ci.org/mandar2812/DynaML)
+[![Join the chat at https://gitter.im/mandar2812/DynaML](https://badges.gitter.im/mandar2812/DynaML.svg)](https://gitter.im/mandar2812/DynaML?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)[![Build Status](https://travis-ci.org/mandar2812/DynaML.svg?branch=branch-1.0)](https://travis-ci.org/mandar2812/DynaML) [![](https://jitpack.io/v/mandar2812/DynaML.svg)](https://jitpack.io/#mandar2812/DynaML)
 
-What is DynaML?
-=================
+## What is DynaML?
+
 DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows.
 
 ![dynaml]({{site.baseurl}}/images/screenshot.png)
 
-DynaML uses the newly minted [Wisp](https://github.com/quantifind/wisp) plotting library to generate aesthetic charts of common model validation metrics.
+## Hello World
 
-![plots]({{site.baseurl}}/images/plot-screen.png)
-
-Motivation behind DynaML
-=================
-
-DynaML was born out of the need to have a performant, extensible and easy to use Machine Learning research environment. Scala was a natural choice for these requirements due to its sprawling data science ecosystem (i.e. [Apache Spark](http://spark.apache.org/)), its functional object-oriented duality and its interoperability with the Java Virtual Machine.
-
-Current status/Road ahead
-=================
-
-DynaML is a fledgling open source project that is in a phase of rapid expansion. Currently it supports.
-
-* Generalized Linear Models
-  - [Regularized Ordinary Least Squares]({{site.baseurl}}/models/#regularized-least-squares)
-  - [Logistic and Probit Models]({{site.baseurl}}/models/#logistic--probit-regression) for binary classification
-* Regression and Classification with kernel based [Dual LS-SVM]({{site.baseurl}}/models/#least-squares-support-vector-machines)
-* Regression and binary classificationwith [Gaussian Processes]({{site.baseurl}}/models/#gaussian-processes)
-* Feed forward [Neural Networks]({{site.baseurl}}/models/#feed-forward-neural-networks)
-* Committee Models
-  - [Neural Committee Models]({{site.baseurl}}/models/#neural-committee-models)
-  - Gaussian Process Committee Models
-* Model Learning and Optimization
-  - Gradient Descent
-  - [Conjugate Gradient]({{site.baseurl}}/optimization-primitives/#conjugate-gradient)
-  - [Committee Model Solver]({{site.baseurl}}/optimization-primitives/#committee-model-solver)
-  - [Back propogation with momentum]({{site.baseurl}}/optimization-primitives/#backpropagation-with-momentum)
-  - [LSSVM linear solver]({{site.baseurl}}/optimization-primitives/#dual-lssvm-solver)
-* Model tuning
-  * [Grid Search]({{site.baseurl}}/optimization-primitives/#grid-search)
-  * [Maximum Likelihood (ML-II)]({{site.baseurl}}/optimization-primitives/#maximum-likelihood-ml-ii)
-  * [Coupled Simulated Annealing]({{site.baseurl}}/optimization-primitives/#coupled-simulated-annealing)
-* Model validation metrics (RMSE, Area under ROC)
-* Entropy based data subset selection
-* [Data Pipes]({{site.baseurl}}/data-pipes/) for configurable workflows
-
-Going ahead we aim to introduce (but not limit to)
-
-* Sampling based Bayesian models
-* Large scale committee models ([Apache Spark](http://spark.apache.org/) RDD based implementations)
-* GPU support
+Refer to the [installation](/mydoc_dynaml_install.html) guide for getting up and running. The `data/` directory contains a few data sets, which are used by the programs in the `dynaml-examples/` module. Lets run a Gaussian Process (GP) regression model on the synthetic 'delve' data set.
 
 
+```scala
+DynaML>TestGPDelve("RBF", 2.0, 1.0, 500, 1000)
+Feb 23, 2016 6:35:08 PM com.github.fommil.jni.JniLoader liberalLoad
+INFO: successfully loaded /tmp/jniloader4173849050766409147netlib-native_system-linux-x86_64.so
+16/02/23 18:35:09 INFO GPRegression: Generating predictions for test set
+16/02/23 18:35:09 INFO GPRegression: Calculating posterior predictive distribution
+16/02/23 18:35:09 INFO SVMKernel$: Constructing kernel matrix.
+16/02/23 18:35:10 INFO SVMKernel$: Dimension: 500 x 500
+16/02/23 18:35:10 INFO SVMKernel$: Constructing kernel matrix.
+16/02/23 18:35:13 INFO SVMKernel$: Dimension: 1000 x 1000
+16/02/23 18:35:13 INFO SVMKernel$: Constructing cross kernel matrix.
+16/02/23 18:35:13 INFO SVMKernel$: Dimension: 500 x 1000
+Feb 23, 2016 6:35:15 PM com.github.fommil.jni.JniLoader load
+INFO: already loaded netlib-native_system-linux-x86_64.so
+16/02/23 18:35:15 INFO GPRegression: Generating error bars
+16/02/23 18:35:15 INFO RegressionMetrics: Regression Model Performance
+16/02/23 18:35:15 INFO RegressionMetrics: ============================
+16/02/23 18:35:15 INFO RegressionMetrics: MAE: 0.832018817808599
+16/02/23 18:35:15 INFO RegressionMetrics: RMSE: 1.2904097720941374
+16/02/23 18:35:15 INFO RegressionMetrics: RMSLE: 0.10885967880476728
+16/02/23 18:35:15 INFO RegressionMetrics: R^2: 0.9339831074509592
+16/02/23 18:35:15 INFO RegressionMetrics: Corr. Coefficient: 0.9731513401331606
+16/02/23 18:35:15 INFO RegressionMetrics: Model Yield: 0.8073520083122128
+16/02/23 18:35:15 INFO RegressionMetrics: Std Dev of Residuals: 1.270213452763595
+16/02/23 18:35:15 INFO RegressionMetrics: Generating Plot of Residuals
+16/02/23 18:35:15 INFO RegressionMetrics: Generating plot of residuals vs labels
 
-Documentation
-=============
-You can refer to the project [wiki](https://github.com/mandar2812/DynaML/wiki) or [API](http://mandar2812.github.io/DynaML/target/site/index.html#package) docs. Bear in mind that this is still at its infancy and there will be many more improvements/tweaks in the future.
+
+```
+
+In this example `TestGPDelve` we train a GP model based on the RBF Kernel with its bandwidth/length scale set to `2.0` and the noise level set to `1.0`, we use 500 input output patterns to train and test on an independent sample of 1000 data points. Apart from printing a bunch of evaluation metrics in the console DynaML also generates Javascript plots using Wisp in the browser.
+
+![plots1](https://cloud.githubusercontent.com/assets/1389553/13259040/ff9bfa84-da55-11e5-9325-f58a73ebf532.png)
