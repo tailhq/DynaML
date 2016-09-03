@@ -52,7 +52,7 @@ abstract class AbstractSTPRegressionModel[T, I](
     covariance.setHyperParameters(s)
     noiseModel.setHyperParameters(s)
     current_state = covariance.state ++ noiseModel.state
-    current_state += ("degrees_of_freedom" -> s("degrees_of_freedom"))
+    current_state += ("degrees_of_freedom" -> (s("degrees_of_freedom")+2.0))
     this
   }
 
@@ -61,7 +61,7 @@ abstract class AbstractSTPRegressionModel[T, I](
 
 
   override protected var current_state: Map[String, Double] =
-    covariance.state ++ noiseModel.state ++ Map("degrees_of_freedom" -> mu)
+    covariance.state ++ noiseModel.state ++ Map("degrees_of_freedom" -> (2.0+mu))
 
   /**
     * Predict the value of the
