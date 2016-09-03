@@ -58,4 +58,6 @@ featureMapping(
       data: DenseVector[Double]): DenseVector[Double]
 ```
 
+The ```SVMKernel``` class is extended by all the implemented library kernels in DynaML thereby enabling the use of AFE in potentially any model employing kernels.
+
 {% include links.html %}
