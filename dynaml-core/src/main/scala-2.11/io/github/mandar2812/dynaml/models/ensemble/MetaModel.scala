@@ -24,8 +24,6 @@ import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork
 
 /**
-  *
-  * w1*y1(x) + w2*y2(x) + ... + wb*yb(x)
   * Defines the basic skeleton of a "meta-model" or
   * a model of models.
   *
