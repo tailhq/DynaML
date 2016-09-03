@@ -15,7 +15,6 @@ target/*
 dynaml-core/target/*
 dynaml-examples/target/*
 dynaml-pipes/target/*
-docs/api_docs/.DS_Store
 release.properties
 *.log
 data/results*
@@ -27,7 +26,7 @@ data/ForestCover.csv
 data/*Res.csv
 Gemfile.lock
 index*.html
-!docs/api_docs/*
+*.DS_Store
 javascripts
 stylesheets
 project/project
