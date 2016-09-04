@@ -1,5 +1,5 @@
 ---
-title: Random Variables: Operations
+title: "Random Variables: Operations"
 sidebar: coreapi_sidebar
 tags: [probability]
 permalink: core_prob_operations.html

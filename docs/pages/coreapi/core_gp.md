@@ -14,7 +14,6 @@ The base trait is extended by [```SecondOrderProcess[T, I, Y, K, M, W]```]({{sit
 Since for most applications it is assumed that the training data is standardized, the mean function is often chosen to be zero $$\mu(\mathbf{x}) = 0$$, thus the covariance function or kernel defines all the interesting behavior of _second order processes_. For a more in depth information on the types of covariance functions available visit the [kernels]({{site.baseurl}}/core_kernels.html) page.
 
 
-
 ## Gaussian Process Regression
 
 The GP regression framework aims to infer an unknown function $$f(x)$$ given $$y_i$$ which are noise corrupted observations of this unknown function. This is done by adopting an explicit probabilistic formulation to the multi-variate distribution of the noise corrupted observations $$y_i$$ conditioned on the input features (or design matrix) $$X$$
@@ -52,6 +51,13 @@ $$
 	\end{align}
 $$
 
+### GP models for a single output
+
+For univariate GP models (single output), use the [```GPRegression```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel) class (an extension of ```AbstractGPRegressionModel```). To construct a GP regression model you would need:
+
+* Training data
+* Kernel/covariance instance to model correlation between values of the latent function at each pair of input features.
+* Kernel instance to model the correlation of the additive noise, generally the ```DiracKernel``` (white noise) is used.
 
 ```scala
 val trainingdata: Stream[(DenseVector[Double], Double)] = ...
@@ -66,6 +72,59 @@ val noiseKernel = new DiracKernel(1.5)
 val model = new GPRegression(kernel, noiseKernel, trainingData)
 ```
 
+### GP models for multiple outputs
+
+As reviewed in [Lawrence et.al](https://arxiv.org/abs/1106.6251), Gaussian Processes for multiple outputs can be interpreted as single output GP models with an expanded index set. Recall that GPs are stochastic processes and thus are defined on some _index set_, for example in the equations above it is noted that $$x \in \mathbb{R}^p$$ making $$\mathbb{R}^p$$ the _index set_ of the process.
+
+In case of multiple outputs the index set is expressed as a cartesian product $$x \in \mathbb{R}^{p} \times \{1,2, \cdots, d \}$$, where $$d$$ is the number of outputs to be modeled.
+
+It needs to be noted that now we will also have to define the kernel function on the same index set i.e. $$\mathbb{R}^{p} \times \{1,2, \cdots, d \}$$.
+
+In multi-output GP literature a common way to construct kernels on such index sets is to multiply base kernels on each of the parts $$\mathbb{R}^p$$ and $$\{1,2,\cdots,d\}$$, such kernels are known as _separable kernels_.
+
+$$
+\begin{equation}
+K((\mathbf{x}, d), (\mathbf{x}', d')) = K_{x}(\mathbf{x}, \mathbf{x}') . K_{d}(d, d')
+\end{equation}
+$$
+
+Taking this idea further _sum of separable kernels_ (SoS) are often employed in multi-output GP models. These models are also known as _Linear Models of Co-Regionalization_ (LMC) and the kernels which encode correlation between the outputs $$K_d(.,.)$$ are known as _co-regionalization kernels_.
+
+$$
+\begin{equation}
+K((\mathbf{x}, d), (\mathbf{x}', d')) = \sum_{i = 1}^{D} K^{i}_{x}(\mathbf{x}, \mathbf{x}') . K^{i}_{d}(d, d')
+\end{equation}
+$$
+
+Creating such SoS kernels in DynaML is quite straightforward, use the ```:*``` operator to multiply a kernel defined on ```DenseVector[Double]``` with a kernel defined on ```Int```.
+
+```scala
+
+val linearK = new PolynomialKernel(2, 1.0)
+val tKernel = new TStudentKernel(0.2)
+val d = new DiracKernel(0.037)
+
+val mixedEffects = new MixedEffectRegularizer(0.5)
+val coRegCauchyMatrix = new CoRegCauchyKernel(10.0)
+val coRegDiracMatrix = new CoRegDiracKernel
+
+val sos_kernel: CompositeCovariance[(DenseVector[Double], Int)] =
+  (linearK :* mixedEffects)  + (tKernel :* coRegCauchyMatrix)
+
+val sos_noise: CompositeCovariance[(DenseVector[Double], Int)] = d :* coRegDiracMatrix
+
+```
+
+You can use the [```MOGPRegressionModel[I]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.MOGPRegressionModel) class to create multi-output GP models.
+
+```scala
+val trainingdata: Stream[(DenseVector[Double], DenseVector[Double])] = ...
+
+val model = new new MOGPRegressionModel[DenseVector[Double]](
+          sos_kernel, sos_noise, trainingdata,
+          trainingdata.length, trainingdata.head._2.length)
+
+```
 
 <br/>
 
