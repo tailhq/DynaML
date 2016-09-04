@@ -47,7 +47,7 @@ $$
 \end{equation}
 $$
 
-## AFE in DnyaML Kernels
+## AFE in DynaML Kernels
 
 The [```SVMKernel[M]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.SVMKernel) contains an implementation of AFE in the method
 
