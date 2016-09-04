@@ -1,5 +1,6 @@
 ---
 title: Random Variables with Distributions
+tags: [probability]
 sidebar: coreapi_sidebar
 permalink: core_prob_dist.html
 folder: coreapi

@@ -17,11 +17,13 @@ Since for most applications it is assumed that the training data is standardized
 
 ## Gaussian Process Regression
 
+The GP regression framework aims to infer an unknown function $$f(x)$$ given $$y_i$$ which are noise corrupted observations of this unknown function. This is done by adopting an explicit probabilistic formulation to the multi-variate distribution of the noise corrupted observations $$y_i$$ conditioned on the input features (or design matrix) $$X$$
+
 $$
 	\begin{align}
 		& y = f(x) + \epsilon \\
 		& f \sim \mathcal{GP}(m(x), C(x,x')) \\
-		& \left(\mathbf{y} \ \ \mathbf{f_*} \right)^T \sim \mathcal{N}\left(\mathbf{0}, \left[ \begin{matrix} K(X, X) + \sigma^{2} \it{I} & K(X, X_*) \\ K(X_*, X) & K(X_*, X_*) \end{matrix} \right ] \right)
+		& \left(\mathbf{y} \ \ \mathbf{f_*} \right)^T | X \sim \mathcal{N}\left(\mathbf{0}, \left[ \begin{matrix} K(X, X) + \sigma^{2} \it{I} & K(X, X_*) \\ K(X_*, X) & K(X_*, X_*) \end{matrix} \right ] \right)
 
 	\end{align}
 $$

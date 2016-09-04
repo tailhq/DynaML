@@ -1,15 +1,6 @@
 allowed-tags:
   - getting_started
-  - content_types
-  - navigation
-  - formatting
-  - publishing
-  - single_sourcing
-  - special_layouts
-  - collaboration
-  - news
   - troubleshooting
-  - mobile
   - kernels
   - covariance_functions
   - stationary_kernels
@@ -17,3 +8,4 @@ allowed-tags:
   - neural_networks
   - pipes
   - workflow
+  - probability

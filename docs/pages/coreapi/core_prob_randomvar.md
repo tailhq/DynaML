@@ -1,6 +1,7 @@
 ---
 title: Random Variables
 sidebar: coreapi_sidebar
+tags: [probability]
 permalink: core_prob_randomvar.html
 folder: coreapi
 ---
