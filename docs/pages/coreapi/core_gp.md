@@ -53,7 +53,7 @@ $$
 
 ### GP models for a single output
 
-For univariate GP models (single output), use the [```GPRegression```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel) class (an extension of ```AbstractGPRegressionModel```). To construct a GP regression model you would need:
+For univariate GP models (single output), use the [```GPRegression```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.GPRegressionModel) class (an extension of ```AbstractGPRegressionModel```). To construct a GP regression model you would need:
 
 * Training data
 * Kernel/covariance instance to model correlation between values of the latent function at each pair of input features.
@@ -120,7 +120,7 @@ You can use the [```MOGPRegressionModel[I]```]({{site.baseurl}}/api_docs/dynaml-
 ```scala
 val trainingdata: Stream[(DenseVector[Double], DenseVector[Double])] = ...
 
-val model = new new MOGPRegressionModel[DenseVector[Double]](
+val model = new MOGPRegressionModel[DenseVector[Double]](
           sos_kernel, sos_noise, trainingdata,
           trainingdata.length, trainingdata.head._2.length)
 

@@ -42,7 +42,7 @@ $$
 
 ## Logit GLM
 
-In binary classification the most common GLM used is the _logistic regression_ model which is given by:
+In binary classification the most common GLM used is the _logistic regression_ model which is given by
 $$
 	\begin{equation}
 		P(y \ = 1 \ | \ \mathbf{x}) = \sigma(w^T \varphi(\mathbf{x}) + b)
