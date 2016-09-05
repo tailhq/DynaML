@@ -65,6 +65,16 @@ entries:
       url: /core_opt_global.html
       output: web
 
+  - title: Evaluation & Validation
+    output: web, pdf
+    folderitems:
+
+    - title: Calculating performance
+      url: /core_model_evaluation.html
+      output: web
+
+
+
   - title: Probability
     output: web, pdf
     folderitems:
