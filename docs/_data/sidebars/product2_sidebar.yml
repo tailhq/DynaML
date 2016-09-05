@@ -39,10 +39,6 @@ entries:
     output: web, pdf
     folderitems:
 
-    - title: Sample 6
-      url: /p2_sample6.html
-      output: web, pdf
-
   - title: System Identification
     output: web, pdf
     folderitems:
