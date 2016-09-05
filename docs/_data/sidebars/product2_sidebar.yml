@@ -2,7 +2,7 @@
 
 entries:
 - title: Shell Examples
-  product: Examples
+  product: Shell Examples
   version: 1.0
   folders:
 
@@ -24,34 +24,18 @@ entries:
     folderitems:
 
     - title: Overview
-      url: /p2_landing_page.html
+      url: /p2_examples.html
       output: web
 
-  - title: Simple Workflow
+  - title: Regression
     output: web, pdf
     folderitems:
 
-    - title: Sample 1
-      url: /p2_sample1.html
+    - title: Boston Housing
+      url: /p2_boston_housing.html
       output: web, pdf
 
-    - title: Sample 2
-      url: /p2_sample2.html
-      output: web, pdf
-
-    - title: Sample 3
-      url: /p2_sample3.html
-      output: web, pdf
-
-    - title: Sample 4
-      url: /p2_sample4.html
-      output: web, pdf
-
-    - title: Sample 5
-      url: /p2_sample5.html
-      output: web, pdf
-
-  - title: Complex Workflow
+  - title: Classification
     output: web, pdf
     folderitems:
 
@@ -59,34 +43,6 @@ entries:
       url: /p2_sample6.html
       output: web, pdf
 
-    - title: Sample 7
-      url: /p2_sample7.html
-      output: web, pdf
-
-    - title: Sample 8
-      url: /p2_sample8.html
-      output: web, pdf
-
-    - title: Sample 9
-      url: /p2_sample9.html
-      output: web, pdf
-
-    - title: Sample 10
-      url: /p2_sample10.html
-      output: web, pdf
-
-    - title: Sample 11
-      url: /p2_sample11.html
-      output: web, pdf
-
-    - title: Sample 12
-      url: /p2_sample12.html
-      output: web, pdf
-
-    - title: Sample 13
-      url: /p2_sample13.html
-      output: web, pdf
-
-    - title: Sample 14
-      url: /p2_sample14.html
-      output: web, pdf
+  - title: System Identification
+    output: web, pdf
+    folderitems:

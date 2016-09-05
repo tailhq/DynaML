@@ -30,7 +30,7 @@ trait Kernel[T, V] {
 
 This outlines only one key feature for kernel functions i.e. their evaluation functional which takes two inputs from $$\mathcal{X}$$ and yields a scalar value.
 
-For practical purposes, the [```Kernel[T, V]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) trait does not have enough functionality for usage in varied models like _Gaussian Processes_, _Student's T Processes_, _LS-SVM_ etc. For this purpose there is the [```CovarianceFunction[T, V, M]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) abstract class. It contains methods to construct kernel matrices, keep track of hyper-parameter assignments among other things.
+For practical purposes, the [```Kernel[T, V]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.Kernel) trait does not have enough functionality for usage in varied models like _Gaussian Processes_, _Student's T Processes_, _LS-SVM_ etc. For this purpose there is the [```CovarianceFunction[T, V, M]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) abstract class. It contains methods to construct kernel matrices, keep track of hyper-parameter assignments among other things.
 
 ## Creating arbitrary kernel functions
 

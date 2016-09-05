@@ -22,5 +22,5 @@ topnav_dropdowns:
           url: /core_model_hierarchy.html
         - title: DynaML Pipes
           url: /p1_pipes.html
-        #- title: Examples
-        #  url: /p2_landing_page.html
+        - title: Shell Examples
+          url: /p2_examples.html
