@@ -79,7 +79,8 @@ Instead of defining a feature representation like $$\varphi(.)$$ as in the secti
 ```scala
 
 // Create the expression for the required kernel.
-val mapFunc = (state: Map[String, Double]) => (x: DenseVector[Double], y: DenseVector[Double]) => {
+val mapFunc =
+(state: Map[String, Double]) => (x: DenseVector[Double], y: DenseVector[Double]) => {
 	state("alpha")*(x dot y) + state("intercept")
 }
 
