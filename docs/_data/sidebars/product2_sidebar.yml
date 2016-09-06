@@ -46,3 +46,7 @@ entries:
   - title: System Identification
     output: web, pdf
     folderitems:
+
+      - title: "Pont Sur-Sambre Power Plant: LSSVM"
+        url: /p2_lssvm_powerplant.html
+        output: web, pdf
