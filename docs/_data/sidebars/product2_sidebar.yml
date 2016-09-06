@@ -39,6 +39,10 @@ entries:
     output: web, pdf
     folderitems:
 
+      - title: "Wine Quality: Logit & Probit"
+        url: /p2_winequality_logistic.html
+        output: web, pdf
+
   - title: System Identification
     output: web, pdf
     folderitems:
