@@ -3,9 +3,16 @@ package io.github.mandar2812.dynaml
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.commons.io.FileUtils
 import org.openml.apiconnector.io.OpenmlConnector
-import org.openml.apiconnector.xml.DataSetDescription
-
+import org.openml.apiconnector.xml.{DataSetDescription, Task}
 import scala.io.Source
+
+
+case class OpenMLTask(t: Task) {
+
+  def inputs(): Array[Task#Input] = t.getInputs
+
+}
+
 
 /**
   * @author mandar date 07/09/16.
@@ -43,6 +50,13 @@ object OpenML {
     * @param id The numeric id of the data set in the OpenML data collection
     * */
   def dataset(id: Int): DataSetDescription = client.dataGet(id)
+
+  /**
+    * Download information on an OpenML task
+    *
+    * @param id The task id on the OpenML server.
+    * */
+  def task(id: Int):OpenMLTask = new OpenMLTask(client.taskGet(id))
 
   /**
     * Download an OpenML data set as a [[java.io.File]]
