@@ -6,6 +6,8 @@ permalink: core_ann.html
 folder: coreapi
 ---
 
+## Feed-forward Network
+
 To create a feedforward network we need three entities.
 
 * The training data (type parameter `D`)
@@ -13,7 +15,7 @@ To create a feedforward network we need three entities.
 * The network architecture (i.e. the network as a graph object)
 
 
-## Network graph
+### Network graph
 
 A standard feedforward network can be created by first initializing the network architecture/graph.
 
@@ -35,7 +37,7 @@ val transform = DataPipe(
 )
 ```
 
-## Model Building
+### Model Building
 
 We are now in a position to initialize a feed forward neural network model.
 
@@ -63,6 +65,70 @@ The trained model can now be used for prediction, by using either the `predict()
 ```scala
 val pattern = DenseVector(2.0, 3.5, 2.5)
 val prediction = model.predict(pattern)
+```
+
+## Sparse Autoencoder
+
+[Sparse autoencoders](https://web.stanford.edu/class/cs294a/sparseAutoencoder.pdf) are a feedforward architecture that are useful for unsupervised feature learning. They learn a compressed (or expanded) vector representation of the original data features. This process is known by various terms like _feature learning_, _feature engineering_, _representation learning_ etc. Autoencoders are amongst several models used for feature learning. Other notable examples include _convolutional neural networks_ (CNN), _principal component analysis_ (PCA), _Singular Value Decomposition_ (PCA) (a variant of  PCA), _Discrete Wavelet Transform_ (DWT), etc.
+
+### Creation
+
+Autoencoders can be created using the [```AutoEncoder```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder) class. Its constructor has the following arguments.
+
+
+```scala
+import io.github.mandar2812.dynaml.models.neuralnets._
+import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._
+import io.github.mandar2812.dynaml.optimization.BackPropagation
+
+//Cast the training data as a stream of (x,x),
+//where x are the DenseVector of features
+val trainingData: Stream[(DenseVector[Double], DenseVector[Double])] = ...
+
+val testData = ...
+
+val enc = new AutoEncoder(
+	inDim = trainingData.head._1.length,
+	outDim = 4, acts = List(SIGMOID, LIN))
+```
+
+### Training
+
+The training algorithm used is a modified version of standard back-propagation. The objective function can be seen as an addition of three terms.
+
+$$
+\begin{align}
+
+\mathcal{J}(\mathbf{W}, \mathbf{X}; \lambda, \rho) &= \mathcal{L}(\mathbf{W}, \mathbf{X}) + \lambda \mathcal{R}(\mathbf{W}) + KL(\hat{\rho}\ ||\ \rho) \\
+KL(\hat{\rho}\ ||\ \rho) &= \sum_{i = 1}^{n_h} \rho log(\frac{\rho}{\hat{\rho}_i}) + (1 - \rho) log(\frac{1-\rho}{1-\hat{\rho}_i}) \\
+\hat{\rho}_i &= \frac{1}{m} \sum_{j = 1}^{N} a_{i}(x_j)
+
+\end{align}
+$$  
+
+* $$\mathcal{L}(\mathbf{W}, \mathbf{X})$$ is the least squares loss.
+
+* $$\mathcal{R}(\mathbf{W})$$ is the regularization penalty, with parameter $$\lambda$$.
+
+* $$KL(\hat{\rho} \| \rho)$$ is the [_Kullback Leibler_](https://en.wikipedia.org/wiki/Kullback–Leibler_divergence) divergence, between the average activation (over all data instances $$x \in \mathbf{X}$$) of each hidden node and a specified value $$\rho \in [0,1]$$ which is also known as the _sparsity weight_.
+
+```scala
+//Set sparsity parameter for back propagation
+BackPropagation.rho = 0.5
+
+enc.optimizer
+  .setRegParam(0.0)
+  .setStepSize(1.5)
+  .setNumIterations(200)
+  .setMomentum(0.4)
+  .setSparsityWeight(0.9)
+
+enc.learn(trainingData.toStream)
+
+val metrics = new MultiRegressionMetrics(
+	testData.map(c => (enc.i(enc(c._1)), c._2)).toList,
+	testData.length)
+
 ```
 
 {% include links.html %}
