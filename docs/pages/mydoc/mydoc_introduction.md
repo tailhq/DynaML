@@ -55,7 +55,7 @@ The core api consists of :
 <h4>Pipes & Workflows</h4>
 
 <p>
-The pipes module aims to separate model pre-processing tasks such as cleaning data files, replacing missing or corrupt records, applying transformations on data etc:
+The [pipes]({{site.baseurl}}/p1_pipes.html) module aims to separate model pre-processing tasks such as cleaning data files, replacing missing or corrupt records, applying transformations on data etc:
 
 <ol>
   <li>Ability to create arbitrary workflows from scala functions and join them</li>
@@ -73,7 +73,7 @@ The pipes module aims to separate model pre-processing tasks such as cleaning da
 
 <div class="tab-pane fade" id="service-four">
 <h4>REPL Examples</h4>
-<p markdown="1">The module ```dynaml-examples``` contains programs which build regression and classification models on various data sets. These examples serve as case studies as well as instructional material to show the capabilities of DynaML in a hands on manner. Click [here]({{site.baseurl}}/p2_landing_page.html) to get started with the examples.</p>
+<p markdown="1">The module ```dynaml-examples``` contains programs which build regression and classification models on various data sets. These examples serve as case studies as well as instructional material to show the capabilities of DynaML in a hands on manner. Click [here]({{site.baseurl}}/p2_examples.html) to get started with the examples.</p>
 
 </div>
 </div>
