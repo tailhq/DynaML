@@ -47,8 +47,7 @@ By supplying a function of type ```(Source) => (Result1, Result2)``` to the ```D
 ```scala
 val pipe1 = DataPipe((x: Double) => (1.0*math.sin(2.0*x)*math.exp(-2.0*x), math.exp(-2.0*x)))
 
-val pipe3 = DataPipe(pipe1)
-pipe3(2.0)
+pipe1(2.0)
 
 ```
 
