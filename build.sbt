@@ -29,7 +29,8 @@ lazy val commonSettings = Seq(
     baseDependencies ++ apacheSpark ++
       replDependency ++ loggingDependency ++
       linearAlgebraDependencies ++ chartsDependencies ++
-      tinkerpopDependency ++ notebookInterfaceDependency)
+      tinkerpopDependency ++ notebookInterfaceDependency ++
+      openMLDependency)
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
@@ -58,7 +59,6 @@ lazy val examples = (project in file("dynaml-examples"))
 
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .settings(baseSettings:_*)
-  .settings(commonSettings: _*)
   .dependsOn(core, examples, pipes)
   .settings(
     name := "DynaML",

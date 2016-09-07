@@ -42,6 +42,8 @@ object Dependencies {
     "com.lihaoyi" % "ammonite-repl_2.11.8" % "0.5.8"
   )
 
+  val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")
+
   val tinkerpopDependency = Seq(
     "com.tinkerpop.gremlin" % "gremlin-java" % "2.6.0" % "compile",
     "com.tinkerpop" % "frames" % "2.5.0" % "compile"
