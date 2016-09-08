@@ -17,7 +17,8 @@ object Dependencies {
     "org.scalaz" %% "scalaz-core" % "7.2.0",
     "org.scalactic" % "scalactic_2.11" % "2.2.6",
     "org.scalatest" % "scalatest_2.11" % "2.2.6" % "test",
-    "com.typesafe.akka" %% "akka-stream" % "2.4.6"
+    "com.typesafe.akka" %% "akka-stream" % "2.4.6",
+    "com.github.scopt" % "scopt_2.11" % "3.5.0"
   )
 
   val apacheSpark = Seq(
@@ -39,7 +40,7 @@ object Dependencies {
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" % "ammonite-repl_2.11.8" % "0.5.8"
+    "com.lihaoyi" % "ammonite-repl_2.11.8" % "0.7.6"
   )
 
   val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")

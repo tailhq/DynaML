@@ -21,7 +21,8 @@ val baseSettings = Seq(
   scalaVersion in ThisBuild := scala,
   resolvers in ThisBuild ++= Seq(
     "jzy3d-releases" at "http://maven.jzy3d.org/releases",
-    "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases")
+    "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
+    Resolver.sonatypeRepo("public"))
 )
 
 lazy val commonSettings = Seq(
@@ -83,8 +84,7 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-J-Xms64m"
     ),
     dataDirectory := new File("data/"),
-    initialCommands in console := """io.github.mandar2812.dynaml.DynaML.run(banner="""" +
-      target.value.getPath + """/universal/stage/conf/banner.txt");"""
+    initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())"""
   ).aggregate(core, pipes, examples).settings(
     aggregate in publishM2 := true)
 

@@ -17,7 +17,7 @@ case class OpenMLTask(t: Task) {
 /**
   * @author mandar date 07/09/16.
   *
-  * Object is the one stop for interacting with
+  * The OpenML object is the one stop for interacting with
   * the OpenML api. It can be used to download and apply
   * DynaML flows on data sets and uplaoding the results
   * back to the OpenML server.
@@ -56,7 +56,7 @@ object OpenML {
     *
     * @param id The task id on the OpenML server.
     * */
-  def task(id: Int):OpenMLTask = new OpenMLTask(client.taskGet(id))
+  def task(id: Int):Task = client.taskGet(id)
 
   /**
     * Download an OpenML data set as a [[java.io.File]]
