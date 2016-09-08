@@ -2,8 +2,10 @@ package io.github.mandar2812.dynaml
 
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.commons.io.FileUtils
+import org.apache.log4j.Logger
 import org.openml.apiconnector.io.OpenmlConnector
 import org.openml.apiconnector.xml.{DataSetDescription, Task}
+
 import scala.io.Source
 
 
@@ -24,6 +26,8 @@ case class OpenMLTask(t: Task) {
   */
 object OpenML {
 
+  private val logger = Logger.getLogger(this.getClass)
+
   val client: OpenmlConnector = new OpenmlConnector()
 
   private var _cacheLocation = "~/.openml/cache/"
@@ -38,8 +42,13 @@ object OpenML {
     * Establish connection with openml server
     * and log in as per the user API Key provided
     * */
-  def connect(apiKey: String): Unit = {
-    client.setApiKey(apiKey)
+  def login(): Unit = {
+    val standardIn = System.console()
+    logger.info("Please enter your OpenML API Key Below: ")
+    var apiKey = standardIn.readPassword()
+    client.setApiKey(apiKey.mkString(""))
+    apiKey = null
+    logger.info("API key set")
   }
 
   def clearCache(): Unit = FileUtils.cleanDirectory(new java.io.File(cacheLocation))
