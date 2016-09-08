@@ -1,11 +1,15 @@
 package io.github.mandar2812.dynaml
 
+import java.io.{BufferedReader, FileReader}
+
+import io.github.mandar2812.dynaml.dataformat.ArffFile
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.commons.io.FileUtils
 import org.apache.log4j.Logger
 import org.openml.apiconnector.io.OpenmlConnector
 import org.openml.apiconnector.xml.{DataSetDescription, Task}
 
+import scala.collection.JavaConversions
 import scala.io.Source
 
 
@@ -71,6 +75,16 @@ object OpenML {
     * Download an OpenML data set as a [[java.io.File]]
     * */
   def downloadDataSet(id: Int): java.io.File = dataset(id).getDataset(client.getApiKey)
+
+
+  def loadData(id: Int): ArffFile = {
+    val arff = new ArffFile()
+    arff.parse(new BufferedReader(new FileReader(downloadDataSet(id))))
+    arff
+  }
+
+  def asStream(f: ArffFile): Stream[String] =
+    JavaConversions.asScalaBuffer(f.getData).toStream.map(_.map(_.toString).mkString(","))
 
   /**
     * Download data set from OpenML and load the
