@@ -37,16 +37,6 @@ class DynaMLRepl(input: InputStream,
 
   override val prompt = Ref("DynaML>")
 
-  //val banner = Source.fromFile(bannerText).getLines.mkString("\n")
-
-  /*override def printBanner(): Unit = {
-    printStream.println(banner)
-    val version = BuildInfo.version
-    printStream.println("\nWelcome to DynaML "+version+
-      "\nInteractive Scala shell for Machine Learning Research")
-    //printStream.println(s"(Scala $scalaVersion Java $javaVersion)")
-  }*/
-
 }
 
 object Defaults{
