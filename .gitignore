@@ -31,3 +31,5 @@ javascripts
 stylesheets
 project/project
 project/target
+.ensime
+.ensime_cache
