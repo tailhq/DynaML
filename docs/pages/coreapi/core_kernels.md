@@ -103,7 +103,7 @@ val k1 = new RBFKernel(2.5)
 val k2 = new RationalQuadraticKernel(2.0)
 
 val k = k1 + k2
-vak k3 = k*k2
+val k3 = k*k2
 ```
 
 -----
