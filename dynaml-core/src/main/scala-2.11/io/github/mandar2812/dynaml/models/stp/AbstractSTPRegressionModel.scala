@@ -224,8 +224,8 @@ object AbstractSTPRegressionModel {
 
 
     try {
-      val dist = new MultivariateStudentsT(mu, DenseVector.zeros[Double](trainingData.length), kernelMatrix)
-      dist.logPdf(trainingData)
+      val dist = MultivariateStudentsT(mu, DenseVector.zeros[Double](trainingData.length), kernelMatrix)
+      -1.0*dist.logPdf(trainingData)
     } catch {
       case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
       case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity

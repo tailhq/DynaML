@@ -9,7 +9,6 @@ import org.apache.log4j.Logger
 import org.openml.apiconnector.io.OpenmlConnector
 import org.openml.apiconnector.xml.{DataSetDescription, Task}
 
-import scala.collection.JavaConversions
 import scala.io.Source
 
 /**
@@ -61,14 +60,19 @@ object OpenML {
     *
     * @param id The task id on the OpenML server.
     * */
-  def task(id: Int):OpenMLTask = new OpenMLTask(client.taskGet(id))
+  def task(id: Int):OpenMLTask = OpenMLTask(client.taskGet(id))
 
   /**
     * Download an OpenML data set as a [[java.io.File]]
     * */
   def downloadDataSet(id: Int): java.io.File = dataset(id).getDataset(client.getApiKey)
 
-
+  /**
+    * Loads an Open ML data set into
+    * an [[ArffFile]] object.
+    *
+    * @param id The data set id on Open ML
+    * */
   def loadDataIntoARFF(id: Int): ArffFile = {
     val arff = new ArffFile()
     arff.parse(new BufferedReader(new FileReader(downloadDataSet(id))))

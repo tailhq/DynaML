@@ -12,7 +12,7 @@ case class OpenMLTask(t: Task) {
 
   def inputs(): Array[Task#Input] = t.getInputs
 
-  def getDataSplitsAsStream(): Stream[String] = {
+  def getDataSplitsAsStream: Stream[String] = {
     val estimation_procedure_index = inputs().map(_.getName).indexOf("estimation_procedure")
 
     val splits = inputs()(estimation_procedure_index)
@@ -23,7 +23,7 @@ case class OpenMLTask(t: Task) {
     ARFF.asStream(arff)
   }
 
-  def getDataAsStream(): Stream[String] = {
+  def getDataAsStream: Stream[String] = {
     val data_index = inputs().map(_.getName).indexOf("source_data")
     val data_id = inputs()(data_index).getData_set.getData_set_id
     val data = dataset(data_id)
