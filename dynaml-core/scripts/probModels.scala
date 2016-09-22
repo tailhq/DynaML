@@ -2,8 +2,12 @@
   * Created by mandar on 28/7/16.
   */
 
+import breeze.linalg.DenseVector
 import breeze.stats.distributions._
-import io.github.mandar2812.dynaml.probability.{IIDRandomVarDistr, ProbabilityModel, RandomVariable}
+import io.github.mandar2812.dynaml.kernels.PeriodicKernel
+import io.github.mandar2812.dynaml.models.gp.GPRegression
+import io.github.mandar2812.dynaml.optimization.GridSearch
+import io.github.mandar2812.dynaml.probability.{GaussianRV, IIDRandomVarDistr, ProbabilityModel, RandomVariable}
 import spire.implicits._
 
 val p = RandomVariable(new Beta(7.5, 7.5))
