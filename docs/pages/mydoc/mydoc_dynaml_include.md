@@ -25,7 +25,7 @@ To include DynaML in your maven JVM project edit your ```pom.xml``` file as foll
 <dependency>
     <groupId>com.github.mandar2812</groupId>
     <artifactId>DynaML</artifactId>
-    <version>v1.4-beta.3</version>
+    <version>v1.4</version>
 </dependency>
 ```
 
