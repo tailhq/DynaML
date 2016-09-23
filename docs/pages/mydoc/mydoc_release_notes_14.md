@@ -28,6 +28,8 @@ The following inference models have been added.
 
 * Added ```StationaryKernel``` and ```LocallyStationaryKernel``` classes in the kernel APIs, converted ```RBFKernel```, ```CauchyKernel```, ```RationalQuadraticKernel``` & ```LaplacianKernel``` to subclasses of ```StationaryKernel```
 
+* Added ```MLPKernel``` which implements the _maximum likelihood perceptron_ kernel as shown [here](http://gpss.cc/gpuqss16/slides/gp_gpss16_session2.pdf).
+
 * Added _co-regionalization kernels_ which are used in [Lawrence et. al](https://arxiv.org/abs/1106.6251) to formulate kernels for vector valued functions. In this category the following co-regionalization kernels were implemented.
   - ```CoRegRBFKernel```
   - ```CoRegCauchyKernel```
