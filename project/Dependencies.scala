@@ -36,7 +36,7 @@ object Dependencies {
     "com.github.wookietreiber" % "scala-chart_2.11" % "0.4.2" % "compile",
     "org.jzy3d" % "jzy3d-api" % "0.9.1" % "compile",
     "com.quantifind" % "wisp_2.11" % "0.0.4" % "compile",
-    "org.plotly-scala" %% "plotly-render" % "0.1.0"
+    "co.theasi" % "plotly_2.11" % "0.1"
   )
 
   val replDependency = Seq(
