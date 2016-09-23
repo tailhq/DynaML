@@ -25,7 +25,7 @@ class MLPKernel(w: Double, b: Double) extends SVMKernel[DenseMatrix[Double]]
 
   override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
     math.asin(
-      state("w")*(x.t*y) + state("b")/
+      (state("w")*(x.t*y) + state("b"))/
       (math.sqrt(state("w")*(x.t*x) + state("b") + 1) * math.sqrt(state("w")*(y.t*y) + state("b") + 1)))
 
 }
