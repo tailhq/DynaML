@@ -64,7 +64,46 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.DynaML" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DynaMLextendsProductwithSerializable"></a>
+      <a id="DynaML:DynaML"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DynaML.html"><span class="name">DynaML</span></a><span class="params">(<span name="predef">predef: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="defaultPredef">defaultPredef: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="storageBackend">storageBackend: <span class="extype" name="ammonite.runtime.Storage">Storage</span> = <span class="defval" name='<span class="name"><a href="../../../package.html">new Storage.Folder(Defaults.ammoniteHome)</a></span>'>...</span></span>, <span name="wd">wd: <span class="extype" name="ammonite.ops.Path">Path</span> = <span class="symbol"><span class="name"><a href="../../../../ammonite/package.html">ammonite.ops.pwd</a></span></span></span>, <span name="welcomeBanner">welcomeBanner: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol"><span class="name"><a href="../../../package.html">Some(Defaults.welcomeBanner)</a></span></span></span>, <span name="inputStream">inputStream: <span class="extype" name="java.io.InputStream">InputStream</span> = <span class="symbol">System.in</span></span>, <span name="outputStream">outputStream: <span class="extype" name="java.io.OutputStream">OutputStream</span> = <span class="symbol">System.out</span></span>, <span name="errorStream">errorStream: <span class="extype" name="java.io.OutputStream">OutputStream</span> = <span class="symbol">System.err</span></span>, <span name="verboseOutput">verboseOutput: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.package@DynaMLextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Contains the various entry points to the DynaML REPL.</p><div class="fullcomment"><div class="comment cmt"><p>Contains the various entry points to the DynaML REPL.</p><p>Configuration of the basic REPL is done by passing in arguments when
+constructing the <a href="DynaML.html" class="extype" name="io.github.mandar2812.dynaml.DynaML">DynaML</a> instance, and the various entrypoints such
+as <a href="DynaML.html#run(replArgs:ammonite.util.Bind[_]*):Any" class="extmbr" name="io.github.mandar2812.dynaml.DynaML#run">run</a> <a href="DynaML.html#runScript(path:ammonite.ops.Path,args:Seq[String],kwargs:Seq[(String,String)],replApi:Boolean):ammonite.util.Res[ammonite.util.Imports]" class="extmbr" name="io.github.mandar2812.dynaml.DynaML#runScript">runScript</a> and so on are methods on that instance.</p><p>It is more or less equivalent to the <a href="repl/DynaMLRepl.html" class="extype" name="io.github.mandar2812.dynaml.repl.DynaMLRepl">io.github.mandar2812.dynaml.repl.DynaMLRepl</a>
+] object itself, and has
+a similar set of parameters, but does not have any of the <a href="repl/DynaMLRepl.html" class="extype" name="io.github.mandar2812.dynaml.repl.DynaMLRepl">io.github.mandar2812.dynaml.repl.DynaMLRepl</a>'s
+implementation-related code and provides a more convenient set of
+entry-points that a user can call.</p><p>Note that the <a href="DynaML.html#instantiateRepl(replArgs:Seq[ammonite.util.Bind[_]]):io.github.mandar2812.dynaml.repl.DynaMLRepl" class="extmbr" name="io.github.mandar2812.dynaml.DynaML#instantiateRepl">instantiateRepl</a> function generates a new <span class="extype" name="Repl">Repl</span>
+every time it is called!
+</p></div><dl class="paramcmts block"><dt class="param">predef</dt><dd class="cmt"><p>Any additional code you want to run before the REPL session
+              starts. Can contain multiple blocks separated by <code>@</code>s</p></dd><dt class="param">defaultPredef</dt><dd class="cmt"><p>Do you want to include the &quot;standard&quot; predef imports
+                     provided by Ammonite? These include tools like <code>time</code>,
+                     <code>grep</code>, the <code>|</code> or <code>|?</code> pipes from ammonite-ops, and
+                     other helpers. Can be disabled to give a clean
+                     namespace for you to fill using your own predef.</p></dd><dt class="param">storageBackend</dt><dd class="cmt"><p>Where will all of Ammonite's persistent data get
+                      stored? Things like any <code>predef.sc</code> file,
+                      compilation/ivy caches, etc.. Defaults include
+                      <span class="extype" name="Storage.Folder">Storage.Folder</span> and <span class="extype" name="Storage.InMemory">Storage.InMemory</span>, though
+                      you can create your own.</p></dd><dt class="param">wd</dt><dd class="cmt"><p>The working directory of the REPL; when it load scripts, where
+          the scripts will be considered relative to when assigning them
+          packages</p></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -79,10 +118,27 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="DynaML$.html"><span class="name">DynaML</span></a>
+        <a href="DynaML$.html"><span class="name">DynaML</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#io.github.mandar2812.dynaml.package@DynaML" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.openml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="openml"></a>
+      <a id="openml:openml"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="openml/package.html"><span class="name">openml</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.package@openml" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
