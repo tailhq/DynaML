@@ -3,7 +3,7 @@ title: Release notes 1.4
 tags: [getting_started,release_notes]
 keywords: release notes, announcements, what's new, new features
 last_updated: July 16, 2016
-summary: "Version 1.4 of DynaML, released Sept 2, 2016, implements a number of new models (multi-output GP, student T process, random variables, etc) and features (Variance control for CSA, etc)."
+summary: "Version 1.4 of DynaML, released Sept 23, 2016, implements a number of new models (multi-output GP, student T process, random variables, etc) and features (Variance control for CSA, etc)."
 sidebar: mydoc_sidebar
 permalink: mydoc_release_notes_14.html
 folder: mydoc
