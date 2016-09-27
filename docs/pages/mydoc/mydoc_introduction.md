@@ -56,7 +56,9 @@ The core api consists of :
 
 <p markdown="1">
 The [pipes]({{site.baseurl}}/p1_pipes.html) module aims to separate model pre-processing tasks such as cleaning data files, replacing missing or corrupt records, applying transformations on data etc:
+</p>
 
+<p>
 <ol>
   <li>Ability to create arbitrary workflows from scala functions and join them</li>
   <li>Feature transformations such as wavelet transform, gaussian scaling, auto-encoders etc</li>
