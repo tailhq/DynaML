@@ -18,7 +18,7 @@ case class MultGaussianRV(
   implicit ev: Field[DenseVector[Double]])
   extends ContinuousDistrRV[DenseVector[Double]] {
 
-  override val underlyingDist = new MultivariateGaussian(mu, covariance)
+  override val underlyingDist = MultivariateGaussian(mu, covariance)
 
 }
 
