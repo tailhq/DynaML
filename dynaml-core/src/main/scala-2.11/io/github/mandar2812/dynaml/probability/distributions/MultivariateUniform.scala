@@ -10,7 +10,7 @@ case class MultivariateUniform(low: DenseVector[Double], high: DenseVector[Doubl
   extends ContinuousDistr[DenseVector[Double]] with Moments[DenseVector[Double], DenseVector[Double]] {
 
   assert(low.length == high.length, "Number of dimensions in lower and upper limit vectors must match!")
-  assert((0 to low.length).forall(index => low(index) < high(index)),
+  assert((0 until low.length).forall(index => low(index) < high(index)),
     "Lower limit must be actually lesser than upper limit")
 
   val marginalDistributions: Array[Uniform] = Array.tabulate[Uniform](low.length)(i => new Uniform(low(i), high(i)))
