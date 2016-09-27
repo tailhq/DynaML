@@ -54,7 +54,7 @@ The core api consists of :
 <div class="tab-pane fade" id="service-two">
 <h4>Pipes & Workflows</h4>
 
-<p>
+<p markdown="1">
 The [pipes]({{site.baseurl}}/p1_pipes.html) module aims to separate model pre-processing tasks such as cleaning data files, replacing missing or corrupt records, applying transformations on data etc:
 
 <ol>
