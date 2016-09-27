@@ -130,4 +130,4 @@ DynaML>
 
 Getting Started
 ===============
-Refer to the DynaML [wiki](https://github.com/mandar2812/DynaML/wiki) to learn more.
+Refer to the [user guide](https://mandar2812.github.io/DynaML/mydoc_introduction.html) for a more detailed introduction, for contributing; refer to the [wiki](https://github.com/mandar2812/DynaML/wiki).
