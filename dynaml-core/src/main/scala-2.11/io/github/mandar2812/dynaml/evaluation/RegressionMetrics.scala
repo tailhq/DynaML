@@ -23,7 +23,7 @@ import breeze.numerics.{abs, log, sqrt}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.{Logger, Priority}
 import com.quantifind.charts.Highcharts._
-import io.github.mandar2812.dynaml.utils.square
+import io.github.mandar2812.dynaml.algebra.square
 
 /**
  * Class implementing the calculation

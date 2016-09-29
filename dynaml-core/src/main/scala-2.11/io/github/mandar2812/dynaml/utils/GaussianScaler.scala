@@ -19,6 +19,8 @@ case class GaussianScaler(mean: DenseVector[Double], sigma: DenseVector[Double])
     Scaler((pattern: DenseVector[Double]) => (pattern :* sigma) + mean)
 
   override def run(data: DenseVector[Double]): DenseVector[Double] = (data-mean) :/ sigma
+
+  def apply(r: Range): GaussianScaler = GaussianScaler(mean(r), sigma(r))
 }
 
 

@@ -1,4 +1,4 @@
-package io.github.mandar2812.dynaml.utils
+package io.github.mandar2812.dynaml.algebra
 
 import breeze.generic.UFunc
 import breeze.linalg.DenseVector
