@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import io.github.mandar2812.dynaml.analysis.KernelMatrix
+import io.github.mandar2812.dynaml.algebra.KernelMatrix
 
 /**
   * A covariance function implementation. Covariance functions are

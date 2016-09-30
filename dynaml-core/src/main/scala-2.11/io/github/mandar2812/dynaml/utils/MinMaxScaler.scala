@@ -8,9 +8,12 @@ import io.github.mandar2812.dynaml.pipes.{ReversibleScaler, Scaler}
   */
 case class MinMaxScaler(min: DenseVector[Double], max: DenseVector[Double])
   extends ReversibleScaler[DenseVector[Double]] {
+
   override val i: Scaler[DenseVector[Double]] =
     Scaler((data: DenseVector[Double]) => (data :* (max-min)) + min)
 
   override def run(data: DenseVector[Double]): DenseVector[Double] =
     (data-min) :/ (max-min)
+
+  def apply(r: Range): MinMaxScaler = MinMaxScaler(min(r), max(r))
 }

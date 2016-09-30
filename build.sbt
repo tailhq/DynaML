@@ -47,7 +47,8 @@ lazy val core = (project in file("dynaml-core")).settings(baseSettings)
   .dependsOn(pipes)
   .settings(
     name := "dynaml-core",
-    version := mainVersion
+    version := mainVersion,
+    parallelExecution in Test := false
   )
 
 lazy val examples = (project in file("dynaml-examples"))

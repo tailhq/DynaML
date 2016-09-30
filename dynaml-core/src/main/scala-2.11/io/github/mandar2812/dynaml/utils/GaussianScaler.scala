@@ -41,4 +41,6 @@ case class MVGaussianScaler(mean: DenseVector[Double], sigma: DenseMatrix[Double
     Scaler((pattern: DenseVector[Double]) => (inv(sigmaInverse.t) * pattern) + mean)
 
   override def run(data: DenseVector[Double]): DenseVector[Double] = sigmaInverse.t * (data - mean)
+
+  def apply(r: Range): MVGaussianScaler = MVGaussianScaler(mean(r), sigma(r,r))
 }

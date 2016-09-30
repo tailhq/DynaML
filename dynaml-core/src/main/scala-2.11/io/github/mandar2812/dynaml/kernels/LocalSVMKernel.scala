@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.DenseMatrix
-import io.github.mandar2812.dynaml.analysis.KernelMatrix
+import io.github.mandar2812.dynaml.algebra.KernelMatrix
 
 /**
   * Kernels with a locally stored matrix in the form
