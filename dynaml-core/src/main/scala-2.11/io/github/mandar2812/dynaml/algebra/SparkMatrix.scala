@@ -21,6 +21,8 @@ package io.github.mandar2812.dynaml.algebra
 import breeze.linalg.NumericOps
 import org.apache.spark.rdd.RDD
 
+import scala.collection.immutable.NumericRange
+
 /**
   *  @author mandar2812 date: 28/09/2016
   *
@@ -41,5 +43,14 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
 
   def t: SparkMatrix = new SparkMatrix(this.baseMatrix.map(c => ((c._1._2, c._1._1), c._2)))
 
+  def apply(r: NumericRange[Long], c: NumericRange[Long]): SparkMatrix =
+    new SparkMatrix(matrix.filterByRange((r.min, c.min), (r.max, c.max)))
+
+}
+
+
+class SparkSquareMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends SparkMatrix(baseMatrix) {
+
+  assert(rows == cols, "For a square matrix, rows must be equal to columns")
 
 }

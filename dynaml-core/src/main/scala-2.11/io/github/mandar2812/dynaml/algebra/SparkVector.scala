@@ -21,6 +21,8 @@ package io.github.mandar2812.dynaml.algebra
 import breeze.linalg.NumericOps
 import org.apache.spark.rdd.RDD
 
+import scala.collection.immutable.NumericRange
+
 /**
   * @author mandar2812 date: 28/09/2016.
   *
@@ -37,6 +39,9 @@ class SparkVector(baseVector: RDD[(Long, Double)])
   override def repr: SparkVector = this
 
   override def t: DualSparkVector = new DualSparkVector(baseVector)
+
+  def apply(r: NumericRange[Long]): SparkVector =
+    new SparkVector(_baseVector.filterByRange(r.min, r.max))
 
 
 }
