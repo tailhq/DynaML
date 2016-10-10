@@ -51,6 +51,6 @@ object Dependencies {
     "com.tinkerpop" % "frames" % "2.5.0" % "compile"
   )
 
-  val notebookInterfaceDependency = Seq("com.github.alexarchambault.jupyter" % "scala-kernel_2.11.8" % "0.3.0-M3-2")
+  val notebookInterfaceDependency = Seq()//Seq("com.github.alexarchambault.jupyter" % "scala-kernel_2.11.8" % "0.3.0-M3-2")
 
 }
