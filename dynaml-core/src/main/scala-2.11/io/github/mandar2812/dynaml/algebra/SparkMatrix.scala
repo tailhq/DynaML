@@ -26,7 +26,7 @@ import scala.collection.immutable.NumericRange
 /**
   *  @author mandar2812 date: 28/09/2016
   *
-  *  A Distributed kernel matrix backed by a spark [[RDD]]
+  *  A distributed matrix backed by a spark [[RDD]]
   *
   */
 class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[SparkMatrix] {
@@ -39,18 +39,49 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
 
   override def repr: SparkMatrix = this
 
+  /**
+    * @return The backing [[RDD]]
+    */
   def _matrix = matrix
 
+  /**
+    * Obtain transpose of the matrix.
+    *
+    */
   def t: SparkMatrix = new SparkMatrix(this.baseMatrix.map(c => ((c._1._2, c._1._1), c._2)))
 
+  /**
+    * Get a sub-matrix based on a range of rows and columns
+    *
+    */
   def apply(r: NumericRange[Long], c: NumericRange[Long]): SparkMatrix =
     new SparkMatrix(matrix.filterByRange((r.min, c.min), (r.max, c.max)))
 
 }
 
-
+/**
+  * @author mandar2812 date: 09/10/2016
+  *
+  * A distributed square matrix backed by a spark [[RDD]]
+  *
+  */
 class SparkSquareMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends SparkMatrix(baseMatrix) {
 
   assert(rows == cols, "For a square matrix, rows must be equal to columns")
+
+  /**
+    * Extract diagonal elements into a new [[SparkSquareMatrix]]
+    *
+    */
+  def diag: SparkSquareMatrix = new SparkSquareMatrix(
+    baseMatrix.map(c => if(c._1._1 == c._1._2) c else (c._1, 0.0))
+  )
+
+  /**
+    * Extract lower triangular elements into a new [[SparkSquareMatrix]]
+    */
+  def LowerTri: SparkSquareMatrix = new SparkSquareMatrix(
+    baseMatrix.map(c => if(c._1._1 <= c._1._2) c else (c._1, 0.0))
+  )
 
 }
