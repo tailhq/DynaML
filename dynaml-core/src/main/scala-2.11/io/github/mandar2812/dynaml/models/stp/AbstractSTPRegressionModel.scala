@@ -1,10 +1,9 @@
 package io.github.mandar2812.dynaml.models.stp
 
 import breeze.linalg.{DenseMatrix, DenseVector, cholesky}
-import breeze.numerics._
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
-import io.github.mandar2812.dynaml.models.SecondOrderProcess
-import io.github.mandar2812.dynaml.optimization.{GloballyOptWithGrad, GloballyOptimizable}
+import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
+import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.probability.MultStudentsTRV
 import io.github.mandar2812.dynaml.probability.distributions.MultivariateStudentsT
 import org.apache.log4j.Logger
@@ -16,7 +15,8 @@ abstract class AbstractSTPRegressionModel[T, I](
   mu: Double, cov: LocalScalarKernel[I],
   n: LocalScalarKernel[I],
   data: T, num: Int)
-  extends SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultStudentsTRV]
+  extends ContinuousProcess[T, I, Double, MultStudentsTRV]
+  with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultStudentsTRV]
   with GloballyOptimizable {
 
 
@@ -164,19 +164,6 @@ abstract class AbstractSTPRegressionModel[T, I](
       effectiveTrainingKernel.buildKernelMatrix(training, npoints).getKernelMatrix()
 
     AbstractSTPRegressionModel.logLikelihood(current_state("degrees_of_freedom"),trainingLabels, kernelTraining)
-  }
-
-  /**
-    * Returns a prediction with error bars for a test set of indexes and labels.
-    * (Index, Actual Value, Prediction, Lower Bar, Higher Bar)
-    * */
-  def test(testData: T): Seq[(I, Double, Double, Double, Double)] = {
-    logger.info("Generating predictions for test set")
-    //Calculate the posterior predictive distribution for the test points.
-    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 1)
-    //Collate the test data with the predictions and error bars
-    dataAsSeq(testData).zip(predictionWithError).map(i => (i._1._1, i._1._2,
-      i._2._2, i._2._3, i._2._4))
   }
 
   /**

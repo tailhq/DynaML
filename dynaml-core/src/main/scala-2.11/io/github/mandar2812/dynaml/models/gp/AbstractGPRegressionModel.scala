@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg._
 import breeze.numerics.log
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel}
-import io.github.mandar2812.dynaml.models.SecondOrderProcess
+import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.probability.MultGaussianRV
 import org.apache.log4j.Logger
@@ -40,12 +40,11 @@ import org.apache.log4j.Logger
   *
   */
 abstract class AbstractGPRegressionModel[T, I](
-  cov: LocalScalarKernel[I],
-  n: LocalScalarKernel[I],
-  data: T, num: Int) extends
-  SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double],
-  MultGaussianRV]
-with GloballyOptWithGrad {
+  cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
+  data: T, num: Int)
+  extends ContinuousProcess[T, I, Double, MultGaussianRV]
+  with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultGaussianRV]
+  with GloballyOptWithGrad {
 
   private val logger = Logger.getLogger(this.getClass)
 
@@ -223,18 +222,6 @@ with GloballyOptWithGrad {
 
   override def predict(point: I): Double = predictionWithErrorBars(Seq(point), 1).head._2
 
-  /**
-    * Returns a prediction with error bars for a test set of indexes and labels.
-    * (Index, Actual Value, Prediction, Lower Bar, Higher Bar)
-    * */
-  def test(testData: T): Seq[(I, Double, Double, Double, Double)] = {
-    logger.info("Generating predictions for test set")
-    //Calculate the posterior predictive distribution for the test points.
-    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), 1)
-    //Collate the test data with the predictions and error bars
-    dataAsSeq(testData).zip(predictionWithError).map(i => (i._1._1, i._1._2,
-      i._2._2, i._2._3, i._2._4))
-  }
 
   /**
     * Cache the training kernel and noise matrices
