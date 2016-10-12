@@ -54,4 +54,14 @@ object DualSparkVector {
     * Tabulate a [[DualSparkVector]]
     */
   def apply(list: RDD[Long])(eval: (Long) => Double) = new DualSparkVector(list.map(e => (e, eval(e))))
+
+
+  def horzcat(vectors: DualSparkVector*): DualSparkVector = {
+    val sizes = vectors.map(_.cols)
+    new DualSparkVector(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._baseDualVector.map(c => (c._1+offset, c._2))
+    }).reduce((a,b) => a.union(b)))
+  }
+
 }

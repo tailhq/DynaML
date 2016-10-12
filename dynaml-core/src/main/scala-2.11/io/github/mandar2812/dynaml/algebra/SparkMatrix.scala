@@ -93,6 +93,32 @@ object SparkMatrix {
   def apply(data1: RDD[Long], data2: RDD[Long])(ev: (Long, Long) => Double) =
     new SparkMatrix(data1.cartesian(data2).map(c => (c, ev(c._1, c._2))))
 
+
+  def vertcat(vectors: SparkMatrix*): SparkMatrix = {
+    //sanity check
+    assert(vectors.map(_.cols).distinct.length == 1,
+      "In case of vertical concatenation of matrices their columns sizes must be equal")
+
+    val sizes = vectors.map(_.rows)
+    new SparkMatrix(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._matrix.map(c => ((c._1._1+offset, c._1._2), c._2))
+    }).reduce((a,b) => a.union(b)))
+  }
+
+  def horzcat(vectors: SparkMatrix*): SparkMatrix = {
+    //sanity check
+    assert(vectors.map(_.rows).distinct.length == 1,
+      "In case of horizontal concatenation of matrices their row sizes must be equal")
+
+    val sizes = vectors.map(_.cols)
+    new SparkMatrix(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._matrix.map(c => ((c._1._1, c._1._2+offset), c._2))
+    }).reduce((a,b) => a.union(b)))
+  }
+
+
 }
 
 /**
@@ -128,8 +154,8 @@ object SparkSquareMatrix {
   /**
     * Populate a square matrix defined as M(i,j) = ev(i,j)
     */
-  def apply(data1: RDD[Long], data2: RDD[Long])(ev: (Long, Long) => Double) =
-  new SparkMatrix(data1.cartesian(data2)
+  def apply(data: RDD[Long])(ev: (Long, Long) => Double) =
+  new SparkSquareMatrix(data.cartesian(data)
     .map(c => (c, ev(c._1, c._2))))
 
 }

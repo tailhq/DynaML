@@ -55,4 +55,14 @@ object SparkVector {
     * Tabulate a [[SparkVector]]
     */
   def apply(list: RDD[Long])(eval: (Long) => Double) = new SparkVector(list.map(e => (e, eval(e))))
+
+
+  def vertcat(vectors: SparkVector*): SparkVector = {
+    val sizes = vectors.map(_.rows)
+    new SparkVector(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._baseVector.map(c => (c._1+offset, c._2))
+    }).reduce((a,b) => a.union(b)))
+  }
+
 }

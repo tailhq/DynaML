@@ -91,5 +91,30 @@ class DistributedLinearAlgebraSpec extends FlatSpec
 
   }
 
+  "Distributed matrices " should " concatenate in a consistent manner" in {
+
+    val length = 100
+
+    val nFeat = 10
+    implicit val ev = VectorField(nFeat)
+    val vec = new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
+
+    val k1 = new RBFKernel(1.5)
+    val k2 = new RBFKernel(2.5)
+
+    val list = sc.parallelize(0L until length).map(l => (l, DenseVector.tabulate(nFeat)(_ => Random.nextGaussian())))
+
+    val mat1 = SparkPSDMatrix(list)(k1)
+    val mat2 = SparkPSDMatrix(list)(k2)
+
+    val res1 = SparkMatrix.vertcat(mat1, mat2)
+    val res2 = SparkMatrix.horzcat(mat1, mat2)
+
+    assert(res1.rows == mat1.rows + mat2.rows, "R = R1 + R2")
+    assert(res2.cols == mat1.cols + mat2.cols, "C = C1 + C2")
+
+  }
+
+
 
 }
