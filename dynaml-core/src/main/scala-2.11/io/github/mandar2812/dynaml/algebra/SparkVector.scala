@@ -29,7 +29,7 @@ import scala.collection.immutable.NumericRange
   * A distributed vector backed by a spark [[RDD]]
   */
 class SparkVector(baseVector: RDD[(Long, Double)])
-  extends SparkMatrix(baseVector.map(c => ((c._1, 1L), c._2)))
+  extends SparkMatrix(baseVector.map(c => ((c._1, 0L), c._2)))
     with NumericOps[SparkVector] {
 
   def _baseVector = baseVector
@@ -41,7 +41,9 @@ class SparkVector(baseVector: RDD[(Long, Double)])
   override def t: DualSparkVector = new DualSparkVector(baseVector)
 
   def apply(r: NumericRange[Long]): SparkVector =
-    new SparkVector(_baseVector.filterByRange(r.min, r.max))
+    new SparkVector(_baseVector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
 
+  def apply(r: Range): SparkVector =
+    new SparkVector(_baseVector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
 
 }

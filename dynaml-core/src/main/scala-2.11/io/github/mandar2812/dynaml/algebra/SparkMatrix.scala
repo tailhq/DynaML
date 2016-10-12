@@ -35,6 +35,11 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
 
   lazy val cols = baseMatrix.map(_._1._2).max() + 1L
 
+  //Perform sanity checks
+  assert(baseMatrix.keys.distinct.count == rows*cols, "Matrix Indices must be unique")
+  assert(baseMatrix.map(_._1._1).min() == 0L && baseMatrix.map(_._1._2).min() == 0L && rows > 0L && cols > 0L,
+  "Row and column indices must be between 0 -> N-1")
+
   protected val matrix: RDD[((Long, Long), Double)] = baseMatrix
 
   override def repr: SparkMatrix = this
@@ -55,7 +60,16 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
     *
     */
   def apply(r: NumericRange[Long], c: NumericRange[Long]): SparkMatrix =
-    new SparkMatrix(matrix.filterByRange((r.min, c.min), (r.max, c.max)))
+    new SparkMatrix(
+      matrix.filterByRange((r.min, c.min), (r.max, c.max))
+        .map(e => ((e._1._1 - r.min, e._1._2 - c.min), e._2))
+    )
+
+  def apply(r: Range, c: Range): SparkMatrix =
+    new SparkMatrix(
+      matrix.filterByRange((r.min, c.min), (r.max, c.max))
+        .map(e => ((e._1._1 - r.min, e._1._2 - c.min), e._2))
+    )
 
 }
 
@@ -67,6 +81,7 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
   */
 class SparkSquareMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends SparkMatrix(baseMatrix) {
 
+  //Sanity Checks
   assert(rows == cols, "For a square matrix, rows must be equal to columns")
 
   /**
@@ -80,8 +95,33 @@ class SparkSquareMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends SparkMa
   /**
     * Extract lower triangular elements into a new [[SparkSquareMatrix]]
     */
-  def LowerTri: SparkSquareMatrix = new SparkSquareMatrix(
+  def L: SparkSquareMatrix = new SparkSquareMatrix(
     baseMatrix.map(c => if(c._1._1 <= c._1._2) c else (c._1, 0.0))
   )
 
+}
+
+
+/**
+  * @author mandar2812 date: 12/10/2016
+  *
+  * A distributed square positive semi-definite matrix backed by a
+  * spark [[org.apache.spark.rdd.RDD]] by convention this stores only
+  * the lower triangular portion exploiting the symmetry in the matrix
+  * structure.
+  *
+  * A set of sanity checks are run during object creation
+  * to confirm (loosely) the positive semi-definiteness of the matrix.
+  *
+  */
+class SparkPSDMatrix(basePSDMat: RDD[((Long, Long), Double)])
+  extends SparkSquareMatrix(baseMatrix = basePSDMat.flatMap(e => {
+    //If element is diagonal just emit otherwise reflect indices and emit
+    if(e._1._1 == e._1._1) Seq(e) else Seq(e, (e._1.swap, e._2))
+  })) {
+  //Carry out sanity checks to prevent obvious errors from non PSD arguments
+
+  assert(
+    this.diag._matrix.filter(e => e._1._1 == e._1._2 && e._2 > 0.0).count() == rows,
+    "All diagonal elements must be positive !!")
 }
