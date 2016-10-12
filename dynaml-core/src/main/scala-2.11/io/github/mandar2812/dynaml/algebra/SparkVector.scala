@@ -47,3 +47,12 @@ class SparkVector(baseVector: RDD[(Long, Double)])
     new SparkVector(_baseVector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
 
 }
+
+
+object SparkVector {
+
+  /**
+    * Tabulate a [[SparkVector]]
+    */
+  def apply(list: RDD[Long])(eval: (Long) => Double) = new SparkVector(list.map(e => (e, eval(e))))
+}

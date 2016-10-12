@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.algebra
 
 import breeze.linalg.NumericOps
+import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, Kernel}
 import org.apache.spark.rdd.RDD
 
 import scala.collection.immutable.NumericRange
@@ -73,13 +74,34 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
 
 }
 
+object SparkMatrix {
+
+  /**
+    * Populate a matrix using a DynaML [[Kernel]] instance
+    * applied on pairs of instances contained in the data.
+    *
+    * @tparam T The type of input features of the data
+    *
+    */
+  def apply[T](data1: RDD[(Long, T)], data2: RDD[(Long, T)])(kernel: Kernel[T, Double]) =
+    new SparkMatrix(data1.cartesian(data2).map(c => ((c._1._1, c._2._1), kernel.evaluate(c._1._2, c._2._2))))
+
+
+  /**
+    * Populate a matrix defined as M(i,j) = ev(i,j)
+    */
+  def apply(data1: RDD[Long], data2: RDD[Long])(ev: (Long, Long) => Double) =
+    new SparkMatrix(data1.cartesian(data2).map(c => (c, ev(c._1, c._2))))
+
+}
+
 /**
   * @author mandar2812 date: 09/10/2016
   *
   * A distributed square matrix backed by a spark [[RDD]]
   *
   */
-class SparkSquareMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends SparkMatrix(baseMatrix) {
+class SparkSquareMatrix(baseSqMatrix: RDD[((Long, Long), Double)]) extends SparkMatrix(baseMatrix = baseSqMatrix) {
 
   //Sanity Checks
   assert(rows == cols, "For a square matrix, rows must be equal to columns")
@@ -89,15 +111,26 @@ class SparkSquareMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends SparkMa
     *
     */
   def diag: SparkSquareMatrix = new SparkSquareMatrix(
-    baseMatrix.map(c => if(c._1._1 == c._1._2) c else (c._1, 0.0))
+    _matrix.map(c => if(c._1._1 == c._1._2) c else (c._1, 0.0))
   )
 
   /**
     * Extract lower triangular elements into a new [[SparkSquareMatrix]]
     */
   def L: SparkSquareMatrix = new SparkSquareMatrix(
-    baseMatrix.map(c => if(c._1._1 <= c._1._2) c else (c._1, 0.0))
+    _matrix.map(c => if(c._1._1 <= c._1._2) c else (c._1, 0.0))
   )
+
+}
+
+object SparkSquareMatrix {
+
+  /**
+    * Populate a square matrix defined as M(i,j) = ev(i,j)
+    */
+  def apply(data1: RDD[Long], data2: RDD[Long])(ev: (Long, Long) => Double) =
+  new SparkMatrix(data1.cartesian(data2)
+    .map(c => (c, ev(c._1, c._2))))
 
 }
 
@@ -115,13 +148,42 @@ class SparkSquareMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends SparkMa
   *
   */
 class SparkPSDMatrix(basePSDMat: RDD[((Long, Long), Double)])
-  extends SparkSquareMatrix(baseMatrix = basePSDMat.flatMap(e => {
+  extends SparkSquareMatrix(baseSqMatrix = basePSDMat.flatMap(e => {
     //If element is diagonal just emit otherwise reflect indices and emit
-    if(e._1._1 == e._1._1) Seq(e) else Seq(e, (e._1.swap, e._2))
+    if(e._1._1 == e._1._2) Seq(e) else Seq(e, (e._1.swap, e._2))
   })) {
   //Carry out sanity checks to prevent obvious errors from non PSD arguments
 
   assert(
     this.diag._matrix.filter(e => e._1._1 == e._1._2 && e._2 > 0.0).count() == rows,
     "All diagonal elements must be positive !!")
+}
+
+object SparkPSDMatrix {
+
+  /**
+    * Populate a positive semi-definite matrix using a DynaML [[Kernel]] instance
+    * applied on pairs of instances contained in the data.
+    *
+    * @tparam T The type of input features of the data
+    *
+    */
+  def apply[T](data: RDD[(Long, T)])(kernel: Kernel[T, Double]) = {
+    new SparkPSDMatrix(
+      data.cartesian(data)
+        .map(c => ((c._1._1, c._2._1), kernel.evaluate(c._1._2, c._2._2)))
+        .filter(e => e._1._1 >= e._1._2)
+    )
+  }
+
+  /**
+    * Populate a positive semi-definite matrix defined as M(i,j) = ev(i,j)
+    *
+    */
+  def apply(data1: RDD[Long], data2: RDD[Long])(ev: (Long, Long) => Double) =
+    new SparkMatrix(data1.cartesian(data2)
+      .map(c => (c, ev(c._1, c._2)))
+      .filter(e => e._1._1 >= e._1._2))
+
+
 }

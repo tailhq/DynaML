@@ -47,3 +47,11 @@ class DualSparkVector(baseDualVector: RDD[(Long, Double)])
     new DualSparkVector(_baseDualVector.filterByRange(r.min.toLong, r.max.toLong).map(e => (e._1-r.min, e._2)))
 
 }
+
+object DualSparkVector {
+
+  /**
+    * Tabulate a [[DualSparkVector]]
+    */
+  def apply(list: RDD[Long])(eval: (Long) => Double) = new DualSparkVector(list.map(e => (e, eval(e))))
+}

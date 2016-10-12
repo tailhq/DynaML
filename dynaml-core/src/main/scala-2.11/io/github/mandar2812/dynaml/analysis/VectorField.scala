@@ -7,7 +7,7 @@ import spire.algebra.{Field, NRoot}
   * Created by mandar on 18/7/16.
   */
 class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
-  with NRoot[DenseVector[Double]] {
+  with NRoot[DenseVector[Double]] with Serializable {
   override def quot(a: DenseVector[Double],
                     b: DenseVector[Double]): DenseVector[Double] =
     div(a, b) - mod(a, b)
