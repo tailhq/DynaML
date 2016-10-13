@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.algebra
 import breeze.linalg.NumericOps
 import io.github.mandar2812.dynaml.kernels.Kernel
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
 
 import scala.collection.immutable.NumericRange
 
@@ -30,18 +31,22 @@ import scala.collection.immutable.NumericRange
   *  A distributed matrix backed by a spark [[RDD]]
   *
   */
-class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[SparkMatrix] {
+class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)],
+                  num_rows: Long = -1L, num_cols: Long = -1L,
+                  sanityChecks: Boolean = true) extends NumericOps[SparkMatrix] {
 
-  lazy val rows = baseMatrix.map(_._1._1).max() + 1L
+  lazy val rows = if(num_rows == -1L) baseMatrix.map(_._1._1).max() + 1L else num_rows
 
-  lazy val cols = baseMatrix.map(_._1._2).max() + 1L
+  lazy val cols = if(num_cols == -1L) baseMatrix.map(_._1._2).max() + 1L else num_cols
 
-  //Perform sanity checks
-  assert(baseMatrix.keys.distinct.count == rows*cols,
-    "Matrix Indices must be unique")
-  assert(
-    baseMatrix.map(_._1._1).min() == 0L && baseMatrix.map(_._1._2).min() == 0L && rows > 0L && cols > 0L,
-    "Row and column indices must be between 0 -> N-1")
+  if(sanityChecks) {
+    //Perform sanity checks
+    assert(baseMatrix.keys.distinct.count == rows*cols,
+      "Matrix Indices must be unique")
+    assert(
+      baseMatrix.map(_._1._1).min() == 0L && baseMatrix.map(_._1._2).min() == 0L && rows > 0L && cols > 0L,
+      "Row and column indices must be between 0 -> N-1")
+  }
 
   protected var matrix: RDD[((Long, Long), Double)] = baseMatrix
 
@@ -73,6 +78,14 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
       matrix.filterByRange((r.min, c.min), (r.max, c.max))
         .map(e => ((e._1._1 - r.min, e._1._2 - c.min), e._2))
     )
+
+  def persist: Unit = {
+    matrix.persist(StorageLevel.MEMORY_AND_DISK)
+  }
+
+  def unpersist: Unit = {
+    matrix.unpersist()
+  }
 
 }
 
@@ -129,10 +142,17 @@ object SparkMatrix {
   * A distributed square matrix backed by a spark [[RDD]]
   *
   */
-class SparkSquareMatrix(baseSqMatrix: RDD[((Long, Long), Double)]) extends SparkMatrix(baseMatrix = baseSqMatrix) {
+class SparkSquareMatrix(baseSqMatrix: RDD[((Long, Long), Double)],
+                        num_rows: Long = -1L,
+                        sanityChecks: Boolean = true)
+  extends SparkMatrix(
+    baseMatrix = baseSqMatrix,
+    num_rows, num_rows, sanityChecks) {
 
-  //Sanity Checks
-  assert(rows == cols, "For a square matrix, rows must be equal to columns")
+  if(sanityChecks) {
+    //Sanity Checks
+    assert(rows == cols, "For a square matrix, rows must be equal to columns")
+  }
 
   /**
     * Extract diagonal elements into a new [[SparkSquareMatrix]]
@@ -175,16 +195,20 @@ object SparkSquareMatrix {
   * to confirm (loosely) the positive semi-definiteness of the matrix.
   *
   */
-class SparkPSDMatrix(basePSDMat: RDD[((Long, Long), Double)])
+class SparkPSDMatrix(basePSDMat: RDD[((Long, Long), Double)],
+                     num_rows: Long = -1L,
+                     sanityChecks: Boolean = true)
   extends SparkSquareMatrix(baseSqMatrix = basePSDMat.flatMap(e => {
     //If element is diagonal just emit otherwise reflect indices and emit
     if(e._1._1 == e._1._2) Seq(e) else Seq(e, (e._1.swap, e._2))
-  })) {
+  }), num_rows, sanityChecks) {
   //Carry out sanity checks to prevent obvious errors from non PSD arguments
 
-  assert(
-    this.diag._matrix.filter(e => e._1._1 == e._1._2 && e._2 > 0.0).count() == rows,
-    "All diagonal elements must be positive !!")
+  if(sanityChecks) {
+    assert(
+      this.diag._matrix.filter(e => e._1._1 == e._1._2 && e._2 > 0.0).count() == rows,
+      "All diagonal elements must be positive !!")
+  }
 }
 
 object SparkPSDMatrix {
@@ -208,8 +232,8 @@ object SparkPSDMatrix {
     * Populate a positive semi-definite matrix defined as M(i,j) = ev(i,j)
     *
     */
-  def apply(data1: RDD[Long], data2: RDD[Long])(ev: (Long, Long) => Double) =
-    new SparkMatrix(data1.cartesian(data2)
+  def apply(data: RDD[Long])(ev: (Long, Long) => Double) =
+    new SparkPSDMatrix(data.cartesian(data)
       .map(c => (c, ev(c._1, c._2)))
       .filter(e => e._1._1 >= e._1._2))
 

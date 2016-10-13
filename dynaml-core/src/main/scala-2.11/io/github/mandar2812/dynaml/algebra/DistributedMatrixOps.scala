@@ -46,7 +46,7 @@ object DistributedMatrixOps extends UFunc {
       val mat1 = a._matrix
       val mat2 = b._matrix
 
-      new SparkMatrix(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)))
+      new SparkMatrix(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)), a.rows, a.cols, false)
 
     }
   }
@@ -66,7 +66,7 @@ object DistributedMatrixOps extends UFunc {
       val mat1 = a._vector
       val mat2 = b._vector
 
-      new SparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)))
+      new SparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)), a.rows, false)
 
     }
   }
@@ -76,17 +76,17 @@ object DistributedMatrixOps extends UFunc {
     * two [[DualSparkVector]] objects.
     *
     */
-  implicit object addDVecAandB extends
+  implicit object addDualVecAandB extends
     OpAdd.Impl2[DualSparkVector, DualSparkVector, DualSparkVector] {
     def apply(a: DualSparkVector, b: DualSparkVector) = {
       assert(
-        a.rows == b.rows,
+        a.cols == b.cols,
         "For vector addition A + B, their dimensions must match")
 
       val mat1 = a._vector
       val mat2 = b._vector
 
-      new DualSparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)))
+      new DualSparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)), a.cols, false)
 
     }
   }
@@ -95,14 +95,14 @@ object DistributedMatrixOps extends UFunc {
   implicit object inPlaceAddVec extends OpAdd.InPlaceImpl2[SparkVector, SparkVector] {
     override def apply(v: SparkVector, v2: SparkVector): Unit = {
       val inter: SparkVector = v + v2
-      v.assign(inter)
+      v.<~(inter)
     }
   }
 
   implicit object inPlaceAddDVec extends OpAdd.InPlaceImpl2[DualSparkVector, DualSparkVector] {
     override def apply(v: DualSparkVector, v2: DualSparkVector): Unit = {
       val inter: DualSparkVector = v + v2
-      v.assign(inter)
+      v.<~(inter)
     }
   }
 
@@ -122,7 +122,7 @@ object DistributedMatrixOps extends UFunc {
       val mat1 = a._matrix
       val mat2 = b._matrix
 
-      new SparkMatrix(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)))
+      new SparkMatrix(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)), a.rows, a.cols, false)
 
     }
   }
@@ -142,10 +142,31 @@ object DistributedMatrixOps extends UFunc {
       val mat1 = a._vector
       val mat2 = b._vector
 
-      new SparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)))
+      new SparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)), a.rows, false)
 
     }
   }
+
+  /**
+    * Reference implementation for subtracting
+    * two [[DualSparkVector]] objects.
+    *
+    */
+  implicit object subDVecAandB extends
+    OpSub.Impl2[DualSparkVector, DualSparkVector, DualSparkVector] {
+    def apply(a: DualSparkVector, b: DualSparkVector) = {
+      assert(
+        a.cols == b.cols,
+        "For vector addition A + B, their dimensions must match")
+
+      val mat1 = a._vector
+      val mat2 = b._vector
+
+      new DualSparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)), a.cols, false)
+
+    }
+  }
+
 
   /**
     * Reference implementation for multiplying
@@ -166,7 +187,7 @@ object DistributedMatrixOps extends UFunc {
           .groupBy(_._1)
           .map(c =>
             (c._1, c._2.map(_._2).sum)
-          ))
+          ), a.rows, b.cols, false)
     }
   }
 
@@ -189,7 +210,7 @@ object DistributedMatrixOps extends UFunc {
           .groupBy(_._1)
           .map(c =>
             (c._1._1, c._2.map(_._2).sum)
-          ))
+          ), b.rows, false)
     }
   }
 
@@ -212,7 +233,7 @@ object DistributedMatrixOps extends UFunc {
           .groupBy(_._1)
           .map(c =>
             (c._1._2, c._2.map(_._2).sum)
-          ))
+          ), a.cols, false)
     }
   }
 
@@ -234,8 +255,8 @@ object DistributedMatrixOps extends UFunc {
           .cartesian(b._vector)
           .map(c => (
             (c._1._1, c._2._1),
-            c._1._2 * c._2._2))
-      )
+            c._1._2 * c._2._2)),
+        a.rows, b.cols, false)
     }
   }
 
@@ -247,7 +268,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object multMatAScalar extends
     OpMulMatrix.Impl2[SparkMatrix, Double, SparkMatrix] {
     def apply(a: SparkMatrix, b: Double) =
-      new SparkMatrix(a._matrix.map(c => (c._1, c._2*b)))
+      new SparkMatrix(a._matrix.map(c => (c._1, c._2*b)), a.rows, a.cols, false)
 
   }
 
@@ -259,8 +280,17 @@ object DistributedMatrixOps extends UFunc {
   implicit object multVecAScalar extends
     OpMulMatrix.Impl2[SparkVector, Double, SparkVector] {
     def apply(a: SparkVector, b: Double) =
-      new SparkVector(a._vector.map(c => (c._1, c._2*b)))
+      new SparkVector(a._vector.map(c => (c._1, c._2*b)), a.rows, false)
   }
+
+  implicit object inPLaceMultVecAScalar extends
+    OpMulScalar.InPlaceImpl2[SparkVector, Double] {
+    override def apply(v: SparkVector, v2: Double): Unit = {
+      val inter: SparkVector = v * v2
+      v <~ inter
+    }
+  }
+
 
   /**
     * Reference implementation for multiplying
@@ -270,8 +300,17 @@ object DistributedMatrixOps extends UFunc {
   implicit object multDualVecAScalar extends
     OpMulMatrix.Impl2[DualSparkVector, Double, DualSparkVector] {
     def apply(a: DualSparkVector, b: Double) =
-      new DualSparkVector(a._vector.map(c => (c._1, c._2*b)))
+      new DualSparkVector(a._vector.map(c => (c._1, c._2*b)), a.cols, false)
   }
+
+  implicit object inPLaceMultDVecAScalar extends
+    OpMulScalar.InPlaceImpl2[DualSparkVector, Double] {
+    override def apply(v: DualSparkVector, v2: Double): Unit = {
+      val inter: DualSparkVector = v * v2
+      v <~ inter
+    }
+  }
+
 
   /**
     * Reference implementation for inner product
@@ -290,7 +329,8 @@ object DistributedMatrixOps extends UFunc {
 
   implicit object axpyVec extends scaleAdd.InPlaceImpl3[SparkVector, Double, SparkVector] {
     override def apply(v: SparkVector, v2: Double, v3: SparkVector): Unit = {
-      v :+= (v3*v2)
+      val inter: SparkVector = v + (v3*v2)
+      v <~ inter
     }
   }
 
@@ -299,5 +339,4 @@ object DistributedMatrixOps extends UFunc {
       v :+= (v2*v3)
     }
   }
-
 }

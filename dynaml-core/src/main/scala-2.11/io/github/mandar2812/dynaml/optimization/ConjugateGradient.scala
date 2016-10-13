@@ -19,6 +19,9 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg._
+import io.github.mandar2812.dynaml.algebra.{SparkPSDMatrix, SparkVector, normDist}
+import io.github.mandar2812.dynaml.algebra._
+import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
 import io.github.mandar2812.dynaml.graph.utils.CausalEdge
 import org.apache.log4j.Logger
 
@@ -107,6 +110,68 @@ object ConjugateGradient {
       axpy(1.0, residual, p)
       count += 1
     }
+    x
+  }
+
+  /**
+    * Solves for x in A.x = b (where A is symmetric +ve semi-definite [[SparkPSDMatrix]])
+    * iteratively using the Conjugate Gradient algorithm.
+    * */
+  def runCG(A: SparkPSDMatrix,
+            b: SparkVector,
+            x: SparkVector,
+            epsilon: Double,
+            MAX_ITERATIONS: Int): SparkVector = {
+
+    A.persist
+    val residual: SparkVector = b - (A*x)
+    val p: SparkVector = b - (A*x)
+
+    var count = 1.0
+    var alpha = 0.0
+    var beta = 0.0
+
+    var netError: Double = normDist(residual, 2.0)
+    var inter: SparkVector = null
+
+    while(netError >= epsilon && count <= MAX_ITERATIONS) {
+
+      inter = A*p
+      inter.persist
+
+      //update alpha
+      alpha = math.pow(netError, 2.0)/(p dot inter)
+      logger.info("Iteration: "+count)
+      logger.info("----------------------------------")
+      logger.info("Residual: "+netError)
+
+      //update x
+      axpyDist(alpha, p, x)
+      x.persist
+
+      //before updating residual, calculate norm (required for beta)
+      val de = math.pow(netError, 2.0)
+
+      //update residual
+      axpyDist(-1.0*alpha, inter, residual)
+      residual.persist
+
+      netError = normDist(residual, 2.0)
+
+      //calculate beta
+      beta = math.pow(netError, 2.0)/de
+      //update p
+      p :*= beta
+      axpyDist(1.0, residual, p)
+      p.persist
+
+      count += 1
+    }
+    p.unpersist
+    residual.unpersist
+    inter.unpersist
+    A.unpersist
+
     x
   }
 

@@ -4,6 +4,7 @@ import breeze.linalg._
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, RBFKernel}
 import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
 import io.github.mandar2812.dynaml.analysis.VectorField
+import io.github.mandar2812.dynaml.optimization.ConjugateGradient
 import org.apache.spark.{SparkConf, SparkContext}
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
@@ -31,10 +32,7 @@ class DistributedLinearAlgebraSpec extends FlatSpec
   private var sc: SparkContext = _
 
   before {
-    val conf = new SparkConf()
-      .setMaster(master)
-      .setAppName(appName)
-
+    val conf = new SparkConf().setMaster(master).setAppName(appName)
     sc = new SparkContext(conf)
   }
 
@@ -142,6 +140,27 @@ class DistributedLinearAlgebraSpec extends FlatSpec
       "Multiplication x += A*y should have consistent value")
 
 
+  }
+
+  "Distributed Conjugate Gradient " should "be able to solve linear systems "+
+    "of the form A.x = b, where A is symmetric positive definite. " in {
+
+    val length = 100
+    val list = sc.parallelize(0L until length.toLong)
+    val A = SparkPSDMatrix(list)((i,j) => if(i == j) 0.5 else 0.0)
+    val b = SparkVector(list)(i => 1.0)
+
+    val x = new SparkVector(sc.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
+      length, false)
+
+    val epsilon = 1E-6
+
+    val xnew = ConjugateGradient.runCG(
+      A, b,
+      new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1))),
+      epsilon, 3)
+
+    assert(normDist(xnew-x, 1.0) <= epsilon)
   }
 
 

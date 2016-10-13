@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.algebra
 
 import breeze.linalg.NumericOps
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
 
 import scala.collection.immutable.NumericRange
 
@@ -28,8 +29,8 @@ import scala.collection.immutable.NumericRange
   *
   * A distributed vector backed by a spark [[RDD]]
   */
-class SparkVector(baseVector: RDD[(Long, Double)])
-  extends SparkMatrix(baseVector.map(c => ((c._1, 0L), c._2)))
+class SparkVector(baseVector: RDD[(Long, Double)], size: Long = -1L, sanityChecks: Boolean = true)
+  extends SparkMatrix(baseVector.map(c => ((c._1, 0L), c._2)), size, 1L, sanityChecks)
     with NumericOps[SparkVector] with SparkVectorLike[Double] {
 
   protected var vector = baseVector
@@ -45,6 +46,14 @@ class SparkVector(baseVector: RDD[(Long, Double)])
 
   def apply(r: Range): SparkVector =
     new SparkVector(_vector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
+
+  override def persist: Unit = {
+    vector.persist(StorageLevel.MEMORY_AND_DISK)
+  }
+
+  override def unpersist: Unit = {
+    vector.unpersist()
+  }
 
 }
 

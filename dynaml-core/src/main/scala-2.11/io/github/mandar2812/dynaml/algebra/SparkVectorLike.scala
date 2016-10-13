@@ -15,7 +15,7 @@ trait SparkVectorLike[V] {
     vector = other
   }
 
-  def assign(other: SparkVectorLike[V]): Unit = {
+  def <~(other: SparkVectorLike[V]): Unit = {
     vector_(other._vector)
   }
 
