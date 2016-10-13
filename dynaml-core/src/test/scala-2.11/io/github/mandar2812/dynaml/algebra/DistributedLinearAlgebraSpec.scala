@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.algebra
 
-import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.kernels.{CoRegDiracKernel, DiracKernel, RBFKernel}
+import breeze.linalg._
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, RBFKernel}
 import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import org.apache.spark.{SparkConf, SparkContext}
@@ -115,6 +115,34 @@ class DistributedLinearAlgebraSpec extends FlatSpec
 
   }
 
+  "In Place operations " should "have consistent results" in {
+
+
+    val length = 100
+
+    val nFeat = 10
+    implicit val ev = VectorField(nFeat)
+
+    val vec = new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
+
+    val vec1 = new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
+
+    val list = sc.parallelize(0L until length.toLong)
+
+    val mat = SparkSquareMatrix(list)((i,j) => if(i == j) 1.0 else 0.0)
+
+
+    axpy(-1.0,vec1,vec)
+
+    assert(vec._vector.values.map(math.abs).sum() == 0.0,
+      "Multiplication x += a*y should have consistent value")
+
+    axpy(mat*(-1.5), vec1, vec)
+    assert(vec._vector.values.sum() == -1.5*length,
+      "Multiplication x += A*y should have consistent value")
+
+
+  }
 
 
 

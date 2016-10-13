@@ -245,7 +245,7 @@ object DistributedMatrixOps extends UFunc {
     *
     */
   implicit object multMatAScalar extends
-    OpMulScalar.Impl2[SparkMatrix, Double, SparkMatrix] {
+    OpMulMatrix.Impl2[SparkMatrix, Double, SparkMatrix] {
     def apply(a: SparkMatrix, b: Double) =
       new SparkMatrix(a._matrix.map(c => (c._1, c._2*b)))
 
