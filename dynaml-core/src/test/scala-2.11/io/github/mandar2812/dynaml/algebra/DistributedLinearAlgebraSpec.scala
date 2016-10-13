@@ -16,7 +16,7 @@ import scala.util.Random
 object LinAlgebra {
   def mult(matrix: SparkMatrix, vector: SparkVector): Array[Double] = {
     val ans: SparkVector = matrix*vector
-    ans._baseVector.map(_._2).collect()
+    ans._vector.map(_._2).collect()
   }
 }
 
@@ -114,6 +114,7 @@ class DistributedLinearAlgebraSpec extends FlatSpec
     assert(res2.cols == mat1.cols + mat2.cols, "C = C1 + C2")
 
   }
+
 
 
 

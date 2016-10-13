@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.algebra
 
 import breeze.generic.UFunc
 import breeze.linalg.operators._
+import breeze.linalg.scaleAdd
 
 /**
   * @author mandar2812 date: 28/09/2016.
@@ -51,6 +52,62 @@ object DistributedMatrixOps extends UFunc {
   }
 
   /**
+    * Reference implementation for adding
+    * two [[SparkVector]] objects.
+    *
+    */
+  implicit object addVecAandB extends
+    OpAdd.Impl2[SparkVector, SparkVector, SparkVector] {
+    def apply(a: SparkVector, b: SparkVector) = {
+      assert(
+        a.rows == b.rows,
+        "For vector addition A + B, their dimensions must match")
+
+      val mat1 = a._vector
+      val mat2 = b._vector
+
+      new SparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)))
+
+    }
+  }
+
+  /**
+    * Reference implementation for adding
+    * two [[DualSparkVector]] objects.
+    *
+    */
+  implicit object addDVecAandB extends
+    OpAdd.Impl2[DualSparkVector, DualSparkVector, DualSparkVector] {
+    def apply(a: DualSparkVector, b: DualSparkVector) = {
+      assert(
+        a.rows == b.rows,
+        "For vector addition A + B, their dimensions must match")
+
+      val mat1 = a._vector
+      val mat2 = b._vector
+
+      new DualSparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)))
+
+    }
+  }
+
+
+  implicit object inPlaceAddVec extends OpAdd.InPlaceImpl2[SparkVector, SparkVector] {
+    override def apply(v: SparkVector, v2: SparkVector): Unit = {
+      val inter: SparkVector = v + v2
+      v.assign(inter)
+    }
+  }
+
+  implicit object inPlaceAddDVec extends OpAdd.InPlaceImpl2[DualSparkVector, DualSparkVector] {
+    override def apply(v: DualSparkVector, v2: DualSparkVector): Unit = {
+      val inter: DualSparkVector = v + v2
+      v.assign(inter)
+    }
+  }
+
+
+  /**
     * Reference implementation for subtracting
     * two [[SparkMatrix]] objects.
     *
@@ -71,26 +128,6 @@ object DistributedMatrixOps extends UFunc {
   }
 
   /**
-    * Reference implementation for adding
-    * two [[SparkVector]] objects.
-    *
-    */
-  implicit object addVecAandB extends
-    OpAdd.Impl2[SparkVector, SparkVector, SparkVector] {
-    def apply(a: SparkVector, b: SparkVector) = {
-      assert(
-        a.rows == b.rows,
-        "For vector addition A + B, their dimensions must match")
-
-      val mat1 = a._baseVector
-      val mat2 = b._baseVector
-
-      new SparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)))
-
-    }
-  }
-
-  /**
     * Reference implementation for subtracting
     * two [[SparkVector]] objects.
     *
@@ -102,8 +139,8 @@ object DistributedMatrixOps extends UFunc {
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
 
-      val mat1 = a._baseVector
-      val mat2 = b._baseVector
+      val mat1 = a._vector
+      val mat2 = b._vector
 
       new SparkVector(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)))
 
@@ -180,18 +217,6 @@ object DistributedMatrixOps extends UFunc {
   }
 
   /**
-    * Reference implementation for multiplying
-    * a [[SparkMatrix]] with a scalar value.
-    *
-    */
-  implicit object multMatAScalar extends
-    OpMulScalar.Impl2[SparkMatrix, Double, SparkMatrix] {
-    def apply(a: SparkMatrix, b: Double) =
-      new SparkMatrix(a._matrix.map(c => (c._1, c._2*b)))
-
-  }
-
-  /**
     * Reference implementation taking outer product
     * between a [[SparkVector]] and [[DualSparkVector]] yielding
     * a [[SparkMatrix]].
@@ -205,8 +230,8 @@ object DistributedMatrixOps extends UFunc {
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
       new SparkMatrix(
-        a._baseVector
-          .cartesian(b._baseDualVector)
+        a._vector
+          .cartesian(b._vector)
           .map(c => (
             (c._1._1, c._2._1),
             c._1._2 * c._2._2))
@@ -216,13 +241,25 @@ object DistributedMatrixOps extends UFunc {
 
   /**
     * Reference implementation for multiplying
+    * a [[SparkMatrix]] with a scalar value.
+    *
+    */
+  implicit object multMatAScalar extends
+    OpMulScalar.Impl2[SparkMatrix, Double, SparkMatrix] {
+    def apply(a: SparkMatrix, b: Double) =
+      new SparkMatrix(a._matrix.map(c => (c._1, c._2*b)))
+
+  }
+
+  /**
+    * Reference implementation for multiplying
     * a [[SparkVector]] with a scalar value.
     *
     */
   implicit object multVecAScalar extends
-    OpMulScalar.Impl2[SparkVector, Double, SparkVector] {
+    OpMulMatrix.Impl2[SparkVector, Double, SparkVector] {
     def apply(a: SparkVector, b: Double) =
-      new SparkVector(a._baseVector.map(c => (c._1, c._2*b)))
+      new SparkVector(a._vector.map(c => (c._1, c._2*b)))
   }
 
   /**
@@ -231,9 +268,9 @@ object DistributedMatrixOps extends UFunc {
     *
     */
   implicit object multDualVecAScalar extends
-    OpMulScalar.Impl2[DualSparkVector, Double, DualSparkVector] {
+    OpMulMatrix.Impl2[DualSparkVector, Double, DualSparkVector] {
     def apply(a: DualSparkVector, b: Double) =
-      new DualSparkVector(a._baseDualVector.map(c => (c._1, c._2*b)))
+      new DualSparkVector(a._vector.map(c => (c._1, c._2*b)))
   }
 
   /**
@@ -247,7 +284,19 @@ object DistributedMatrixOps extends UFunc {
         a.rows == b.rows,
         "In vector dot product A.B, their dimensions must match")
 
-      a._baseVector.join(b._baseVector).map(c => c._2._1*c._2._2).sum()
+      a._vector.join(b._vector).map(c => c._2._1*c._2._2).sum()
+    }
+  }
+
+  implicit object axpyVec extends scaleAdd.InPlaceImpl3[SparkVector, Double, SparkVector] {
+    override def apply(v: SparkVector, v2: Double, v3: SparkVector): Unit = {
+      v :+= (v3*v2)
+    }
+  }
+
+  implicit object axpyMatVec extends scaleAdd.InPlaceImpl3[SparkVector, SparkMatrix, SparkVector] {
+    override def apply(v: SparkVector, v2: SparkMatrix, v3: SparkVector): Unit = {
+      v :+= (v2*v3)
     }
   }
 

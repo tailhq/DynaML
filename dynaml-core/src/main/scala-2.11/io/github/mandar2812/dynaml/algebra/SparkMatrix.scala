@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.algebra
 
 import breeze.linalg.NumericOps
-import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, Kernel}
+import io.github.mandar2812.dynaml.kernels.Kernel
 import org.apache.spark.rdd.RDD
 
 import scala.collection.immutable.NumericRange
@@ -37,11 +37,13 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
   lazy val cols = baseMatrix.map(_._1._2).max() + 1L
 
   //Perform sanity checks
-  assert(baseMatrix.keys.distinct.count == rows*cols, "Matrix Indices must be unique")
-  assert(baseMatrix.map(_._1._1).min() == 0L && baseMatrix.map(_._1._2).min() == 0L && rows > 0L && cols > 0L,
-  "Row and column indices must be between 0 -> N-1")
+  assert(baseMatrix.keys.distinct.count == rows*cols,
+    "Matrix Indices must be unique")
+  assert(
+    baseMatrix.map(_._1._1).min() == 0L && baseMatrix.map(_._1._2).min() == 0L && rows > 0L && cols > 0L,
+    "Row and column indices must be between 0 -> N-1")
 
-  protected val matrix: RDD[((Long, Long), Double)] = baseMatrix
+  protected var matrix: RDD[((Long, Long), Double)] = baseMatrix
 
   override def repr: SparkMatrix = this
 
@@ -54,7 +56,7 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)]) extends NumericOps[Sp
     * Obtain transpose of the matrix.
     *
     */
-  def t: SparkMatrix = new SparkMatrix(this.baseMatrix.map(c => ((c._1._2, c._1._1), c._2)))
+  def t: SparkMatrix = new SparkMatrix(_matrix.map(c => ((c._1._2, c._1._1), c._2)))
 
   /**
     * Get a sub-matrix based on a range of rows and columns

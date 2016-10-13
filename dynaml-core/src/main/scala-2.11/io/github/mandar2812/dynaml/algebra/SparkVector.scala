@@ -30,21 +30,21 @@ import scala.collection.immutable.NumericRange
   */
 class SparkVector(baseVector: RDD[(Long, Double)])
   extends SparkMatrix(baseVector.map(c => ((c._1, 0L), c._2)))
-    with NumericOps[SparkVector] {
+    with NumericOps[SparkVector] with SparkVectorLike[Double] {
 
-  def _baseVector = baseVector
+  protected var vector = baseVector
 
   override lazy val cols = 1L
 
   override def repr: SparkVector = this
 
-  override def t: DualSparkVector = new DualSparkVector(baseVector)
+  override def t: DualSparkVector = new DualSparkVector(_vector)
 
   def apply(r: NumericRange[Long]): SparkVector =
-    new SparkVector(_baseVector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
+    new SparkVector(_vector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
 
   def apply(r: Range): SparkVector =
-    new SparkVector(_baseVector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
+    new SparkVector(_vector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
 
 }
 
@@ -61,7 +61,7 @@ object SparkVector {
     val sizes = vectors.map(_.rows)
     new SparkVector(vectors.zipWithIndex.map(couple => {
       val offset = sizes.slice(0, couple._2).sum
-      couple._1._baseVector.map(c => (c._1+offset, c._2))
+      couple._1._vector.map(c => (c._1+offset, c._2))
     }).reduce((a,b) => a.union(b)))
   }
 

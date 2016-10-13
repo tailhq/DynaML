@@ -30,21 +30,21 @@ import scala.collection.immutable.NumericRange
   */
 class DualSparkVector(baseDualVector: RDD[(Long, Double)])
   extends SparkMatrix(baseDualVector.map(c => ((0L, c._1), c._2)))
-    with NumericOps[DualSparkVector] {
+    with NumericOps[DualSparkVector] with SparkVectorLike[Double] {
 
   override lazy val rows = 1L
 
   override def repr: DualSparkVector = this
 
-  def _baseDualVector = baseDualVector
+  protected var vector = baseDualVector
 
-  override def t: SparkVector = new SparkVector(_baseDualVector)
+  override def t: SparkVector = new SparkVector(_vector)
 
   def apply(r: NumericRange[Long]): DualSparkVector =
-    new DualSparkVector(_baseDualVector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
+    new DualSparkVector(_vector.filterByRange(r.min, r.max).map(e => (e._1-r.min, e._2)))
 
   def apply(r: Range): DualSparkVector =
-    new DualSparkVector(_baseDualVector.filterByRange(r.min.toLong, r.max.toLong).map(e => (e._1-r.min, e._2)))
+    new DualSparkVector(_vector.filterByRange(r.min.toLong, r.max.toLong).map(e => (e._1-r.min, e._2)))
 
 }
 
@@ -60,7 +60,7 @@ object DualSparkVector {
     val sizes = vectors.map(_.cols)
     new DualSparkVector(vectors.zipWithIndex.map(couple => {
       val offset = sizes.slice(0, couple._2).sum
-      couple._1._baseDualVector.map(c => (c._1+offset, c._2))
+      couple._1._vector.map(c => (c._1+offset, c._2))
     }).reduce((a,b) => a.union(b)))
   }
 
