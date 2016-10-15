@@ -63,7 +63,9 @@ object SparkVector {
   /**
     * Tabulate a [[SparkVector]]
     */
-  def apply(list: RDD[Long])(eval: (Long) => Double) = new SparkVector(list.map(e => (e, eval(e))))
+  def apply(list: RDD[Long])(eval: (Long) => Double) = new SparkVector(
+    list.map(e => (e, eval(e))),
+    sanityChecks = false)
 
 
   def vertcat(vectors: SparkVector*): SparkVector = {

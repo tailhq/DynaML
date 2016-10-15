@@ -283,7 +283,7 @@ object DistributedMatrixOps extends UFunc {
       new SparkVector(a._vector.map(c => (c._1, c._2*b)), a.rows, false)
   }
 
-  implicit object inPLaceMultVecAScalar extends
+  implicit object inPlaceMultVecAScalar extends
     OpMulScalar.InPlaceImpl2[SparkVector, Double] {
     override def apply(v: SparkVector, v2: Double): Unit = {
       val inter: SparkVector = v * v2
@@ -303,7 +303,7 @@ object DistributedMatrixOps extends UFunc {
       new DualSparkVector(a._vector.map(c => (c._1, c._2*b)), a.cols, false)
   }
 
-  implicit object inPLaceMultDVecAScalar extends
+  implicit object inPlaceMultDVecAScalar extends
     OpMulScalar.InPlaceImpl2[DualSparkVector, Double] {
     override def apply(v: DualSparkVector, v2: Double): Unit = {
       val inter: DualSparkVector = v * v2

@@ -22,6 +22,7 @@ import breeze.linalg._
 import io.github.mandar2812.dynaml.algebra.{SparkPSDMatrix, SparkVector, normDist}
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
+import io.github.mandar2812.dynaml.algebra.BlockedMatrixOps._
 import io.github.mandar2812.dynaml.graph.utils.CausalEdge
 import org.apache.log4j.Logger
 
@@ -174,6 +175,66 @@ object ConjugateGradient {
 
     x
   }
+
+  def runCG(A: BlockedMatrix,
+            b: BlockedVector,
+            x: BlockedVector,
+            epsilon: Double,
+            MAX_ITERATIONS: Int): BlockedVector = {
+
+    A.persist
+    val residual: BlockedVector = b - (A*x)
+    val p: BlockedVector = b - (A*x)
+
+    var count = 1.0
+    var alpha = 0.0
+    var beta = 0.0
+
+    var netError: Double = normBDist(residual, 2.0)
+    var inter: BlockedVector = null
+
+    while(netError >= epsilon && count <= MAX_ITERATIONS) {
+
+      inter = A*p
+      inter.persist
+
+      //update alpha
+      alpha = math.pow(netError, 2.0)/(p dot inter)
+      logger.info("Iteration: "+count)
+      logger.info("----------------------------------")
+      logger.info("Residual: "+netError)
+
+      //update x
+      axpyDist(alpha, p, x)
+      x.persist
+
+      //before updating residual, calculate norm (required for beta)
+      val de = math.pow(netError, 2.0)
+
+      //update residual
+      axpyDist(-1.0*alpha, inter, residual)
+      residual.persist
+
+      netError = normBDist(residual, 2.0)
+
+      //calculate beta
+      beta = math.pow(netError, 2.0)/de
+      //update p
+      p :*= beta
+      axpyDist(1.0, residual, p)
+      p.persist
+
+      count += 1
+    }
+    p.unpersist
+    residual.unpersist
+    inter.unpersist
+    A.unpersist
+
+    x
+  }
+
+
 
   /**
    * Solves for X in A.X = B (where A is symmetric +ve semi-definite)

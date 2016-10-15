@@ -12,4 +12,9 @@ package object algebra {
     axpy(y, a, x)
   }
 
+  def axpyDist(a: Double, x: BlockedVector, y: BlockedVector)(
+    implicit axpy: scaleAdd.InPlaceImpl3[BlockedVector, Double, BlockedVector]): Unit = {
+    axpy(y, a, x)
+  }
+
 }
