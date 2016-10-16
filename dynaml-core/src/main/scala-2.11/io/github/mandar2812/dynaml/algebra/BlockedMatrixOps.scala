@@ -134,7 +134,7 @@ object BlockedMatrixOps extends UFunc {
 
       assert(
         a.colBlocks == b.rowBlocks,
-        "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
+        "In matrix multiplication A.B, Num_Column_Blocks(A) = Num_Row_Blocks(B)")
 
       new BlockedMatrix(
         a._data.cartesian(b._data)
@@ -156,7 +156,7 @@ object BlockedMatrixOps extends UFunc {
 
       assert(
         a.colBlocks == b.rowBlocks,
-        "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
+        "In matrix multiplication A.B, Num_Column_Blocks(A) = Num_Row_Blocks(B)")
 
       new BlockedVector(
         a._data.cartesian(b._data)

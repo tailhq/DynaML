@@ -1,8 +1,30 @@
+/*
+Copyright 2016 Mandar Chandorkar
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+* */
 package io.github.mandar2812.dynaml.algebra
 
 import breeze.linalg.{DenseMatrix, NumericOps}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
+
+import scala.collection.immutable.NumericRange
 
 /**
   * @author mandar2812 date 13/10/2016.
@@ -22,9 +44,9 @@ private[dynaml] class BlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Double]
   lazy val colBlocks = if(num_col_blocks == -1L) data.keys.map(_._2).max else num_col_blocks
 
 
-  lazy val rows: Long = if(num_rows == -1L) data.filter(_._1._2 == 1).map(_._2.rows).sum().toLong else num_rows
+  lazy val rows: Long = if(num_rows == -1L) data.filter(_._1._2 == 0L).map(_._2.rows).sum().toLong else num_rows
 
-  lazy val cols: Long = if(num_cols == -1L) data.filter(_._1._1 == 1).map(_._2.cols).sum().toLong else num_cols
+  lazy val cols: Long = if(num_cols == -1L) data.filter(_._1._1 == 0L).map(_._2.cols).sum().toLong else num_cols
 
   def _data = data
 
@@ -38,6 +60,9 @@ private[dynaml] class BlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Double]
     data.map(c => (c._1.swap, c._2.t)),
     cols, rows, colBlocks, rowBlocks)
 
+  /**
+    * Persist blocked matrix in memory
+    */
   def persist: Unit = {
     data.persist(StorageLevel.MEMORY_AND_DISK)
   }
@@ -45,6 +70,24 @@ private[dynaml] class BlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Double]
   def unpersist: Unit = {
     data.unpersist()
   }
+
+  def map(f: (((Long, Long), DenseMatrix[Double])) => ((Long, Long), DenseMatrix[Double])): BlockedMatrix =
+    new BlockedMatrix(data.map(f), rows, cols, rowBlocks, colBlocks)
+
+  /**
+    * Slice a blocked matrix to produce a new block matrix.
+    */
+  def apply(r: NumericRange[Long], c: NumericRange[Long]): BlockedMatrix = {
+
+    new BlockedMatrix(
+      data.filter(e => r.contains(e._1._1) && c.contains(e._1._2))
+        .map(e => ((e._1._1 - r.min, e._1._2 - c.min), e._2)),
+      num_row_blocks = r.length, num_col_blocks = c.length
+    )
+  }
+
+  def apply(f: ((Long, Long)) => Boolean): RDD[((Long, Long), DenseMatrix[Double])] =
+      data.filter(c => f(c._1))
 
 }
 
@@ -86,4 +129,30 @@ object BlockedMatrix {
       num_col_blocks = m.cols/numElementsColBlock
     )
   }
+
+  def vertcat(vectors: BlockedMatrix*): BlockedMatrix = {
+    //sanity check
+    assert(vectors.map(_.colBlocks).distinct.length == 1,
+      "In case of vertical concatenation of matrices their columns sizes must be equal")
+
+    val sizes = vectors.map(_.rowBlocks)
+    new BlockedMatrix(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._data.map(c => ((c._1._1+offset, c._1._2), c._2))
+    }).reduce((a,b) => a.union(b)))
+  }
+
+  def horzcat(vectors: BlockedMatrix*): BlockedMatrix = {
+    //sanity check
+    assert(vectors.map(_.rowBlocks).distinct.length == 1,
+      "In case of horizontal concatenation of matrices their row sizes must be equal")
+
+    val sizes = vectors.map(_.colBlocks)
+    new BlockedMatrix(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._data.map(c => ((c._1._1, c._1._2+offset), c._2))
+    }).reduce((a,b) => a.union(b)))
+  }
+
+
 }
