@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.algebra
 
-import breeze.linalg.{DenseVector, NumericOps, Transpose}
+import breeze.linalg.{DenseVector, NumericOps}
 import org.apache.spark.rdd.RDD
 
 /**

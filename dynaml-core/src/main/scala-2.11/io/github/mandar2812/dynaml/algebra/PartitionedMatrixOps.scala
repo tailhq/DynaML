@@ -176,6 +176,29 @@ object PartitionedMatrixOps extends UFunc {
     }
   }
 
+  /**
+    * Reference implementation taking outer product
+    * between a [[PartitionedVector]] and [[PartitionedDualVector]] yielding
+    * a [[PartitionedMatrix]].
+    *
+    */
+  implicit object outMultPartitionedVecAandB extends
+    OpMulMatrix.Impl2[PartitionedVector, PartitionedDualVector, PartitionedMatrix] {
+    def apply(a: PartitionedVector, b: PartitionedDualVector) = {
+      assert(
+        a.cols == b.rows,
+        "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
+
+      new PartitionedMatrix(
+        utils.combine(Seq(a._data, b.t._data)).toStream
+          .map(c => (
+            (c.head._1, c.last._1),
+            c.head._2 * c.last._2.t)),
+        a.rows, b.cols, a.rowBlocks, b.colBlocks)
+    }
+  }
+
+
 
   /*
   * In place update operations
