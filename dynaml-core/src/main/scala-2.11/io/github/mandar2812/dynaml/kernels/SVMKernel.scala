@@ -1,11 +1,9 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg._
-import io.github.mandar2812.dynaml.algebra.{KernelMatrix, PartitionedMatrix, SVMKernelMatrix}
+import io.github.mandar2812.dynaml.algebra.{KernelMatrix, PartitionedMatrix, PartitionedPSDMatrix, SVMKernelMatrix}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
-
-import scala.collection.GenTraversable
 
 /**
  * Defines an abstract class outlines the basic
@@ -52,10 +50,9 @@ with Serializable {
 }
 
 /**
- * Defines a global singleton object
- * [[SVMKernel]] which has useful functions
- *
- * */
+  * Defines a global singleton object [[SVMKernel]]
+  * having functions which can construct kernel matrices.
+  */
 object SVMKernel {
 
   private val logger = Logger.getLogger(this.getClass)
@@ -112,7 +109,7 @@ object SVMKernel {
     data: S,
     length: Long,
     numElementsPerRowBlock: Int,
-    numElementsPerColBlock: Int)(eval: (T, T) =>  Double): PartitionedMatrix = {
+    numElementsPerColBlock: Int)(eval: (T, T) =>  Double): PartitionedPSDMatrix = {
 
     val (rows, cols) = (length, length)
 
@@ -125,8 +122,9 @@ object SVMKernel {
 
     val partitionedData = data.grouped(numElementsPerRowBlock).zipWithIndex.toStream
 
-    new PartitionedMatrix(
+    new PartitionedPSDMatrix(
       utils.combine(Seq(partitionedData, partitionedData))
+        .filter(c => c.head._2 <= c.last._2)
         .toStream.map(c => {
           val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
           val matrix = crossKernelMatrix(c.head._1, c.last._1, eval)

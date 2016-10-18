@@ -41,9 +41,9 @@ class SparkMatrix(baseMatrix: RDD[((Long, Long), Double)],
 
   if(sanityChecks) {
     //Perform sanity checks
-    assert(baseMatrix.keys.distinct.count == rows*cols,
+    require(baseMatrix.keys.distinct.count == rows*cols,
       "Matrix Indices must be unique")
-    assert(
+    require(
       baseMatrix.map(_._1._1).min() == 0L && baseMatrix.map(_._1._2).min() == 0L && rows > 0L && cols > 0L,
       "Row and column indices must be between 0 -> N-1")
   }
@@ -111,7 +111,7 @@ object SparkMatrix {
 
   def vertcat(vectors: SparkMatrix*): SparkMatrix = {
     //sanity check
-    assert(vectors.map(_.cols).distinct.length == 1,
+    require(vectors.map(_.cols).distinct.length == 1,
       "In case of vertical concatenation of matrices their columns sizes must be equal")
 
     val sizes = vectors.map(_.rows)
@@ -123,7 +123,7 @@ object SparkMatrix {
 
   def horzcat(vectors: SparkMatrix*): SparkMatrix = {
     //sanity check
-    assert(vectors.map(_.rows).distinct.length == 1,
+    require(vectors.map(_.rows).distinct.length == 1,
       "In case of horizontal concatenation of matrices their row sizes must be equal")
 
     val sizes = vectors.map(_.cols)
@@ -151,7 +151,7 @@ class SparkSquareMatrix(baseSqMatrix: RDD[((Long, Long), Double)],
 
   if(sanityChecks) {
     //Sanity Checks
-    assert(rows == cols, "For a square matrix, rows must be equal to columns")
+    require(rows == cols, "For a square matrix, rows must be equal to columns")
   }
 
   /**
@@ -205,7 +205,7 @@ class SparkPSDMatrix(basePSDMat: RDD[((Long, Long), Double)],
   //Carry out sanity checks to prevent obvious errors from non PSD arguments
 
   if(sanityChecks) {
-    assert(
+    require(
       this.diag._matrix.filter(e => e._1._1 == e._1._2 && e._2 > 0.0).count() == rows,
       "All diagonal elements must be positive !!")
   }

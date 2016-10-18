@@ -21,11 +21,11 @@ object BlockedMatrixOps extends UFunc {
   implicit object addBlockedMatAandB extends
     OpAdd.Impl2[SparkBlockedMatrix, SparkBlockedMatrix, SparkBlockedMatrix] {
     def apply(a: SparkBlockedMatrix, b: SparkBlockedMatrix) = {
-      assert(
+      require(
         a.rows == b.rows && a.cols == b.cols,
         "For matrix addition A + B, their dimensions must match")
 
-      assert(
+      require(
         a.rowBlocks == b.rowBlocks && a.colBlocks == b.colBlocks,
         "For blocked matrix addition A + B, they must have equal number of blocks")
 
@@ -47,11 +47,11 @@ object BlockedMatrixOps extends UFunc {
   implicit object addBlockVecAandB extends
     OpAdd.Impl2[SparkBlockedVector, SparkBlockedVector, SparkBlockedVector] {
     def apply(a: SparkBlockedVector, b: SparkBlockedVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
 
-      assert(
+      require(
         a.rowBlocks == b.rowBlocks,
         "For blocked vector addition A + B, they must have equal number of blocks")
 
@@ -78,11 +78,11 @@ object BlockedMatrixOps extends UFunc {
   implicit object subBlockedMatAandB extends
     OpSub.Impl2[SparkBlockedMatrix, SparkBlockedMatrix, SparkBlockedMatrix] {
     def apply(a: SparkBlockedMatrix, b: SparkBlockedMatrix) = {
-      assert(
+      require(
         a.rows == b.rows && a.cols == b.cols,
         "For matrix addition A + B, their dimensions must match")
 
-      assert(
+      require(
         a.rowBlocks == b.rowBlocks && a.colBlocks == b.colBlocks,
         "For blocked matrix addition A + B, they must have equal number of blocks")
 
@@ -99,11 +99,11 @@ object BlockedMatrixOps extends UFunc {
   implicit object subBlockVecAandB extends
     OpSub.Impl2[SparkBlockedVector, SparkBlockedVector, SparkBlockedVector] {
     def apply(a: SparkBlockedVector, b: SparkBlockedVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
 
-      assert(
+      require(
         a.rowBlocks == b.rowBlocks,
         "For blocked vector addition A + B, they must have equal number of blocks")
 
@@ -129,11 +129,11 @@ object BlockedMatrixOps extends UFunc {
   implicit object multBlockedMatAandB extends
     OpMulMatrix.Impl2[SparkBlockedMatrix, SparkBlockedMatrix, SparkBlockedMatrix] {
     def apply(a: SparkBlockedMatrix, b: SparkBlockedMatrix) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
-      assert(
+      require(
         a.colBlocks == b.rowBlocks,
         "In matrix multiplication A.B, Num_Column_Blocks(A) = Num_Row_Blocks(B)")
 
@@ -151,11 +151,11 @@ object BlockedMatrixOps extends UFunc {
   implicit object multBlockedMatAVecB extends
     OpMulMatrix.Impl2[SparkBlockedMatrix, SparkBlockedVector, SparkBlockedVector] {
     def apply(a: SparkBlockedMatrix, b: SparkBlockedVector) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
-      assert(
+      require(
         a.colBlocks == b.rowBlocks,
         "In matrix multiplication A.B, Num_Column_Blocks(A) = Num_Row_Blocks(B)")
 
@@ -173,7 +173,7 @@ object BlockedMatrixOps extends UFunc {
   implicit object innerBlockedVecAandB extends
     OpMulInner.Impl2[SparkBlockedVector, SparkBlockedVector, Double] {
     def apply(a: SparkBlockedVector, b: SparkBlockedVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "In vector dot product A.B, their dimensions must match")
 

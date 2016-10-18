@@ -6,7 +6,9 @@ import breeze.linalg.{DenseMatrix, DenseVector, scaleAdd}
 import io.github.mandar2812.dynaml.utils
 
 /**
-  * Created by mandar on 17/10/2016.
+  * @author mandar2812 date: 17/10/2016.
+  * Reference implementations for linear algebra operations
+  * on partitioned vectors and matrices.
   */
 object PartitionedMatrixOps extends UFunc {
 
@@ -23,11 +25,11 @@ object PartitionedMatrixOps extends UFunc {
   implicit object addPartitionedMatAandB extends
     OpAdd.Impl2[PartitionedMatrix, PartitionedMatrix, PartitionedMatrix] {
     def apply(a: PartitionedMatrix, b: PartitionedMatrix) = {
-      assert(
+      require(
         a.rows == b.rows && a.cols == b.cols,
         "For matrix addition A + B, their dimensions must match")
 
-      assert(
+      require(
         a.rowBlocks == b.rowBlocks && a.colBlocks == b.colBlocks,
         "For blocked matrix addition A + B, they must have equal number of blocks")
 
@@ -49,11 +51,11 @@ object PartitionedMatrixOps extends UFunc {
   implicit object addPartitionedVecAandB extends
     OpAdd.Impl2[PartitionedVector, PartitionedVector, PartitionedVector] {
     def apply(a: PartitionedVector, b: PartitionedVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
 
-      assert(
+      require(
         a.rowBlocks == b.rowBlocks,
         "For blocked vector addition A + B, they must have equal number of blocks")
 
@@ -71,11 +73,11 @@ object PartitionedMatrixOps extends UFunc {
   implicit object subPartitionedMatAandB extends
     OpSub.Impl2[PartitionedMatrix, PartitionedMatrix, PartitionedMatrix] {
     def apply(a: PartitionedMatrix, b: PartitionedMatrix) = {
-      assert(
+      require(
         a.rows == b.rows && a.cols == b.cols,
         "For matrix addition A + B, their dimensions must match")
 
-      assert(
+      require(
         a.rowBlocks == b.rowBlocks && a.colBlocks == b.colBlocks,
         "For blocked matrix addition A + B, they must have equal number of blocks")
 
@@ -92,11 +94,11 @@ object PartitionedMatrixOps extends UFunc {
   implicit object subPartitionedVecAandB extends
     OpSub.Impl2[PartitionedVector, PartitionedVector, PartitionedVector] {
     def apply(a: PartitionedVector, b: PartitionedVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
 
-      assert(
+      require(
         a.rowBlocks == b.rowBlocks,
         "For blocked vector addition A + B, they must have equal number of blocks")
 
@@ -114,19 +116,22 @@ object PartitionedMatrixOps extends UFunc {
 
   implicit object multPartitionedVecAScalar extends
     OpMulMatrix.Impl2[PartitionedVector, Double, PartitionedVector] {
-    def apply(a: PartitionedVector, b: Double) =
-      new PartitionedVector(a._data.map(c => (c._1, c._2*b)), a.rows, a.rowBlocks)
+    def apply(a: PartitionedVector, b: Double) = a.map(c => (c._1, c._2*b))
   }
 
+  implicit object multPartitionedMatAScalar extends
+    OpMulMatrix.Impl2[PartitionedMatrix, Double, PartitionedMatrix] {
+    def apply(a: PartitionedMatrix, b: Double) = a.map(c => (c._1, c._2*b))
+  }
 
   implicit object multPartitionedMatAandB extends
     OpMulMatrix.Impl2[PartitionedMatrix, PartitionedMatrix, PartitionedMatrix] {
     def apply(a: PartitionedMatrix, b: PartitionedMatrix) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
-      assert(
+      require(
         a.colBlocks == b.rowBlocks,
         "In matrix multiplication A.B, Num_Column_Blocks(A) = Num_Row_Blocks(B)")
 
@@ -145,11 +150,11 @@ object PartitionedMatrixOps extends UFunc {
   implicit object multPartitionedMatAVecB extends
     OpMulMatrix.Impl2[PartitionedMatrix, PartitionedVector, PartitionedVector] {
     def apply(a: PartitionedMatrix, b: PartitionedVector) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
-      assert(
+      require(
         a.colBlocks == b.rowBlocks,
         "In matrix multiplication A.B, Num_Column_Blocks(A) = Num_Row_Blocks(B)")
 
@@ -168,7 +173,7 @@ object PartitionedMatrixOps extends UFunc {
   implicit object innerPartitionedVecAandB extends
     OpMulInner.Impl2[PartitionedVector, PartitionedVector, Double] {
     def apply(a: PartitionedVector, b: PartitionedVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "In vector dot product A.B, their dimensions must match")
 
@@ -185,7 +190,7 @@ object PartitionedMatrixOps extends UFunc {
   implicit object outMultPartitionedVecAandB extends
     OpMulMatrix.Impl2[PartitionedVector, PartitionedDualVector, PartitionedMatrix] {
     def apply(a: PartitionedVector, b: PartitionedDualVector) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
@@ -227,6 +232,14 @@ object PartitionedMatrixOps extends UFunc {
   * Linear solve operators for partitioend matrices
   * */
 
+  /**
+    * Tail recursive linear solve: x = L \ y
+    * @param X A lower triangular matrix (outputted by the [[bcholesky]] function)
+    * @param y A partitioned vector
+    * @param lAcc An accumulator storing the result block by block
+    * @param acc A vector containing values to add into the result
+    *
+    * */
   def recLTriagSolve(X: LowerTriPartitionedMatrix,
                      y: PartitionedVector,
                      lAcc: Stream[PartitionedVector],
@@ -263,6 +276,101 @@ object PartitionedMatrixOps extends UFunc {
           acc_r+ l_rh*y_r)
     }
 
+  /**
+    * Tail recursive linear solve: x = L \ y
+    * @param X An upper triangular matrix (transpose of matrix outputted by the [[bcholesky]] function)
+    * @param y A partitioned vector
+    * @param lAcc An accumulator storing the result block by block
+    * @param acc A vector containing values to add into the result
+    *
+    * */
+  def recUTriagSolve(X: UpperTriPartitionedMatrix,
+                     y: PartitionedVector,
+                     lAcc: Stream[PartitionedVector],
+                     acc: PartitionedVector): PartitionedVector =
+    X.colBlocks*X.rowBlocks match {
+      case 1L =>
+        val vSolved: DenseVector[Double] =
+          X(0L to 0L, 0L to 0L)._data.head._2 \ y(0L to 0L)._data.head._2 + acc.toBreezeVector
+        val vectorBlocks = lAcc ++ Stream(new PartitionedVector(Stream((0L, vSolved))))
+
+        PartitionedVector.vertcat(vectorBlocks.reverse:_*)
+
+      case _ =>
+        val (l_hh, l_rh, l_rr) = (
+          X(X.rowBlocks-1L to X.rowBlocks-1L, X.colBlocks-1L to X.colBlocks-1L),
+          X(0L until X.rowBlocks-1L, X.colBlocks-1 to X.colBlocks-1),
+          new UpperTriPartitionedMatrix(
+            X._underlyingdata
+              .filter(c =>
+                c._1._1 >= 1L && c._1._1 < X.rowBlocks &&
+                  c._1._2 >= 1L && c._1._2 < X.colBlocks),
+            num_row_blocks = X.rowBlocks - 1L,
+            num_col_blocks = X.colBlocks - 1L)
+          )
+
+        val (y_h, y_r) = (y(y.rowBlocks-1L to y.rowBlocks-1L), y(0L until y.rowBlocks-1L))
+        val (acc_h, acc_r) = (acc(acc.rowBlocks-1L to acc.rowBlocks-1L), acc(0L until acc.rowBlocks-1))
+
+        val vSolved: DenseVector[Double] = l_hh._data.head._2 \ y_h._data.head._2
+
+        recUTriagSolve(
+          l_rr, y_r,
+          lAcc ++ Stream(new PartitionedVector(Stream((0L, vSolved))) + acc_h),
+          acc_r+ l_rh*y_r)
+    }
+
+  /**
+    * Tail recursive linear solve: X = L \ Y
+    * @param X A lower triangular matrix (outputted by the [[bcholesky]] function)
+    * @param y A partitioned matrix
+    * @param lAcc An accumulator storing the result block by block
+    * @param acc A matrix containing values to add into the result
+    *
+    * */
+  def recLTriagMultiSolve(X: LowerTriPartitionedMatrix,
+                          y: PartitionedMatrix,
+                          lAcc: Stream[PartitionedMatrix],
+                          acc: PartitionedMatrix): PartitionedMatrix =
+    X.colBlocks*X.rowBlocks match {
+      case 1L =>
+        val X_hh = X(0L to 0L, 0L to 0L)._data.head._2
+        val y_hh = y(0L to 0L, 0L until y.colBlocks)
+        val vSolved = y_hh.map(c => (c._1, X_hh\c._2)) + acc
+
+        val vectorBlocks = lAcc ++ Stream(vSolved)
+
+        PartitionedMatrix.vertcat(vectorBlocks:_*)
+
+      case _ =>
+        val (l_hh, l_rh, l_rr) = (
+          X(0L to 0L, 0L to 0L)._data.head._2,
+          X(1L until X.rowBlocks, 0L to 0L),
+          new LowerTriPartitionedMatrix(
+            X._underlyingdata
+              .filter(c =>
+                c._1._1 >= 1L && c._1._1 < X.rowBlocks &&
+                  c._1._2 >= 1L && c._1._2 < X.colBlocks),
+            num_row_blocks = X.rowBlocks - 1L,
+            num_col_blocks = X.colBlocks - 1L)
+          )
+
+        val (y_h, y_r) = (
+          y(0L to 0L,0L until y.colBlocks),
+          y(1L until y.rowBlocks, 0L until y.colBlocks))
+
+        val (acc_h, acc_r) = (
+          acc(0L to 0L, 0L until acc.colBlocks),
+          acc(1L until acc.rowBlocks, 0L until acc.colBlocks))
+
+        val vSolved = y_h.map(c => (c._1, l_hh\c._2))
+
+        recLTriagMultiSolve(
+          l_rr, y_r,
+          lAcc ++ Stream(vSolved + acc_h),
+          acc_r + l_rh*y_r)
+    }
+
 
   implicit object implOpSolveLowerTriPartitionedMatrixByVector
     extends OpSolveMatrixBy.Impl2[LowerTriPartitionedMatrix, PartitionedVector, PartitionedVector] {
@@ -275,6 +383,17 @@ object PartitionedMatrixOps extends UFunc {
     }
   }
 
+  implicit object implOpSolveLowerTriPartitionedMatrixByMatrix
+    extends OpSolveMatrixBy.Impl2[LowerTriPartitionedMatrix, PartitionedMatrix, PartitionedMatrix] {
+
+    override def apply(A: LowerTriPartitionedMatrix, V: PartitionedMatrix): PartitionedMatrix = {
+      require(A.rows == V.rows && A.cols == V.rows, "Non-conformant matrix-vector sizes")
+      require(A.colBlocks == V.rowBlocks && A.rowBlocks == A.rowBlocks, "Non-conformant matrix-vector partitions")
+
+      recLTriagMultiSolve(A, V, Stream(), V.map(c => (c._1, DenseMatrix.zeros[Double](c._2.rows, c._2.cols))))
+    }
+  }
+
   implicit object implOpSolveUpperTriPartitionedMatrixByVector
     extends OpSolveMatrixBy.Impl2[UpperTriPartitionedMatrix, PartitionedVector, PartitionedVector] {
 
@@ -282,7 +401,7 @@ object PartitionedMatrixOps extends UFunc {
       require(A.rows == V.rows && A.cols == V.rows, "Non-conformant matrix-vector sizes")
       require(A.colBlocks == V.rowBlocks && A.rowBlocks == A.rowBlocks, "Non-conformant matrix-vector partitions")
 
-      recLTriagSolve(A.t, V, Stream(), V.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
+      recUTriagSolve(A, V, Stream(), V.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
     }
   }
 

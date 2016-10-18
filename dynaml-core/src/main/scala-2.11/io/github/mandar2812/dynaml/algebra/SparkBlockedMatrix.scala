@@ -131,7 +131,7 @@ object SparkBlockedMatrix {
 
   def vertcat(vectors: SparkBlockedMatrix*): SparkBlockedMatrix = {
     //sanity check
-    assert(vectors.map(_.colBlocks).distinct.length == 1,
+    require(vectors.map(_.colBlocks).distinct.length == 1,
       "In case of vertical concatenation of matrices their columns sizes must be equal")
 
     val sizes = vectors.map(_.rowBlocks)
@@ -143,7 +143,7 @@ object SparkBlockedMatrix {
 
   def horzcat(vectors: SparkBlockedMatrix*): SparkBlockedMatrix = {
     //sanity check
-    assert(vectors.map(_.rowBlocks).distinct.length == 1,
+    require(vectors.map(_.rowBlocks).distinct.length == 1,
       "In case of horizontal concatenation of matrices their row sizes must be equal")
 
     val sizes = vectors.map(_.colBlocks)

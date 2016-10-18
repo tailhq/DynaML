@@ -39,7 +39,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object addMatAandB extends
     OpAdd.Impl2[SparkMatrix, SparkMatrix, SparkMatrix] {
     def apply(a: SparkMatrix, b: SparkMatrix) = {
-      assert(
+      require(
         a.rows == b.rows && a.cols == b.cols,
         "For matrix addition A + B, their dimensions must match")
 
@@ -59,7 +59,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object addVecAandB extends
     OpAdd.Impl2[SparkVector, SparkVector, SparkVector] {
     def apply(a: SparkVector, b: SparkVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
 
@@ -79,7 +79,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object addDualVecAandB extends
     OpAdd.Impl2[DualSparkVector, DualSparkVector, DualSparkVector] {
     def apply(a: DualSparkVector, b: DualSparkVector) = {
-      assert(
+      require(
         a.cols == b.cols,
         "For vector addition A + B, their dimensions must match")
 
@@ -115,7 +115,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object subMatAandB extends
     OpSub.Impl2[SparkMatrix, SparkMatrix, SparkMatrix] {
     def apply(a: SparkMatrix, b: SparkMatrix) = {
-      assert(
+      require(
         a.rows == b.rows && a.cols == b.cols,
         "For matrix addition A + B, their dimensions must match")
 
@@ -135,7 +135,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object subVecAandB extends
     OpSub.Impl2[SparkVector, SparkVector, SparkVector] {
     def apply(a: SparkVector, b: SparkVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
 
@@ -155,7 +155,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object subDVecAandB extends
     OpSub.Impl2[DualSparkVector, DualSparkVector, DualSparkVector] {
     def apply(a: DualSparkVector, b: DualSparkVector) = {
-      assert(
+      require(
         a.cols == b.cols,
         "For vector addition A + B, their dimensions must match")
 
@@ -176,7 +176,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object multMatAandB extends
     OpMulMatrix.Impl2[SparkMatrix, SparkMatrix, SparkMatrix] {
     def apply(a: SparkMatrix, b: SparkMatrix) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
@@ -199,7 +199,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object multMatAVecB extends
     OpMulMatrix.Impl2[SparkMatrix, SparkVector, SparkVector] {
     def apply(a: SparkMatrix, b: SparkVector) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix-vector multiplication A.b, Num_Columns(A) = Num_Rows(b)")
 
@@ -222,7 +222,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object multDVecAMatB extends
     OpMulMatrix.Impl2[DualSparkVector, SparkMatrix, DualSparkVector] {
     def apply(a: DualSparkVector, b: SparkMatrix) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
@@ -246,7 +246,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object outMultVecAandB extends
     OpMulMatrix.Impl2[SparkVector, DualSparkVector, SparkMatrix] {
     def apply(a: SparkVector, b: DualSparkVector) = {
-      assert(
+      require(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
 
@@ -319,7 +319,7 @@ object DistributedMatrixOps extends UFunc {
   implicit object innerVecAandB extends
     OpMulInner.Impl2[SparkVector, SparkVector, Double] {
     def apply(a: SparkVector, b: SparkVector) = {
-      assert(
+      require(
         a.rows == b.rows,
         "In vector dot product A.B, their dimensions must match")
 

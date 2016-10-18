@@ -29,17 +29,20 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
 
   def _data = data
 
-
   override def repr: PartitionedMatrix = this
 
   /**
     * Transpose of blocked matrix
     * */
   def t: PartitionedMatrix = new PartitionedMatrix(
-    data.map(c => (c._1.swap, c._2.t)),
+    _data.map(c => (c._1.swap, c._2.t)),
     cols, rows, colBlocks, rowBlocks)
 
 
+  /**
+    * Map/transform each block matrix.
+    * @param f The mapping function
+    */
   def map(f: (((Long, Long), DenseMatrix[Double])) => ((Long, Long), DenseMatrix[Double])): PartitionedMatrix =
     new PartitionedMatrix(data.map(f), rows, cols, rowBlocks, colBlocks)
 
@@ -58,18 +61,30 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
   def apply(f: ((Long, Long)) => Boolean): Stream[((Long, Long), DenseMatrix[Double])] =
     data.filter(c => f(c._1))
 
+  /**
+    * Convert to breeze matrix. NOTE: do not use
+    * on large block matrices as it would cause JVM
+    * memory overflow
+    */
   def toBreezeMatrix =
     DenseMatrix.vertcat[Double](
-      _data.groupBy(_._1._1).map(row => DenseMatrix.horzcat(row._2.sortBy(_._1._2).map(_._2):_*)).toSeq:_*)
+      _data.groupBy(_._1._1).map(row => DenseMatrix.horzcat(row._2.sortBy(_._1._2).map(_._2):_*)).toSeq:_*
+    )
 
 }
 
 
 object PartitionedMatrix {
 
+  /**
+    * Construct a partitioned matrix from a stream of matrix blocks.
+    */
   def apply(d: Stream[((Long, Long), DenseMatrix[Double])], numrows: Long, numcols: Long): PartitionedMatrix =
     new PartitionedMatrix(d, num_rows = numrows, num_cols = numcols)
 
+  /**
+    * Construct a partitioned matrix using a tabulation function.
+    */
   def apply(nRows: Long, nCols: Long,
             numElementsPerRBlock: Int, numElementsPerCBlock: Int,
             tabFunc: (Long, Long) => Double) = {
@@ -105,12 +120,34 @@ object PartitionedMatrix {
 
   }
 
+  /**
+    * Vertically concatenate partitioned matrices
+    */
+  def vertcat(vectors: PartitionedMatrix*): PartitionedMatrix = {
+    //sanity check
+    require(vectors.map(_.colBlocks).distinct.length == 1,
+      "In case of vertical concatenation of matrices their columns sizes must be equal")
+
+    val sizes = vectors.map(_.rowBlocks)
+    new PartitionedMatrix(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._data.map(c => ((c._1._1+offset, c._1._2), c._2))
+    }).reduce((a,b) => a.union(b)).sortBy(_._1))
+  }
+
+
 }
 
-private[algebra] class LowerTriPartitionedMatrix(underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
-                                                 num_rows: Long = -1L, num_cols: Long = -1L,
-                                                 num_row_blocks: Long = -1L, num_col_blocks: Long = -1L) extends
-  PartitionedMatrix(
+/**
+  * @author mandar2812 date: 18/10/2016
+  *
+  * A partitioned lower triangular matrix.
+  */
+private[algebra] class LowerTriPartitionedMatrix(
+  underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
+  num_rows: Long = -1L, num_cols: Long = -1L,
+  num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
+  extends PartitionedMatrix(
     data = underlyingdata
       .map(c =>
         if(c._1._1 == c._1._2) Seq(c)
@@ -126,10 +163,16 @@ private[algebra] class LowerTriPartitionedMatrix(underlyingdata: Stream[((Long, 
 
 }
 
-private[algebra] class UpperTriPartitionedMatrix(underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
-                                                 num_rows: Long = -1L, num_cols: Long = -1L,
-                                                 num_row_blocks: Long = -1L, num_col_blocks: Long = -1L) extends
-  PartitionedMatrix(
+/**
+  * @author mandar2812 date: 18/10/2016
+  *
+  * A partitioned upper triangular matrix.
+  */
+private[algebra] class UpperTriPartitionedMatrix(
+  underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
+  num_rows: Long = -1L, num_cols: Long = -1L,
+  num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
+  extends PartitionedMatrix(
     data = underlyingdata
       .map(c =>
         if(c._1._1 == c._1._2) Seq(c)
@@ -143,5 +186,26 @@ private[algebra] class UpperTriPartitionedMatrix(underlyingdata: Stream[((Long, 
 
   override def t: LowerTriPartitionedMatrix =
     new LowerTriPartitionedMatrix(underlyingdata.map(c => (c._1.swap, c._2.t)), cols, rows, colBlocks, rowBlocks)
+
+}
+
+/**
+  * @author mandar2812 date: 18/10/2016
+  *
+  * A partitioned positive semi-definite matrix.
+  */
+private[dynaml] class PartitionedPSDMatrix(underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
+                                           num_rows: Long = -1L, num_cols: Long = -1L,
+                                           num_row_blocks: Long = -1L, num_col_blocks: Long = -1L) extends
+  PartitionedMatrix(
+    data = underlyingdata
+      .map(c =>
+        if(c._1._1 == c._1._2) Seq(c)
+        else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows))))
+      .reduce((a,b) => a ++ b).sortBy(_._1).toStream,
+    num_rows, num_cols,
+    num_row_blocks, num_col_blocks) {
+
+  override def t = this
 
 }
