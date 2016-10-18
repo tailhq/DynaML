@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg._
-import io.github.mandar2812.dynaml.algebra.{KernelMatrix, SVMKernelMatrix}
+import io.github.mandar2812.dynaml.algebra.{KernelMatrix, PartitionedMatrix, SVMKernelMatrix}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
 
@@ -105,6 +105,42 @@ object SVMKernel {
       (i, j) => kernelIndex((i,j))
     }
   }
+
+  /*def buildBlockedKernelMatrix[S <: Seq[T], T](mappedData: S,
+                                               length: Int,
+                                               eval: (T, T) =>  Double):
+  PartitionedMatrix = {
+
+    logger.info("Constructing kernel matrix.")
+
+    val kernelIndex = utils.combine(Seq(mappedData.zipWithIndex, mappedData.zipWithIndex))
+      .filter(s => s.head._2 >= s.last._2)
+      .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+      .toMap
+
+    val kernel = DenseMatrix.tabulate[Double](length, length){
+      (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
+    }
+
+    logger.info("Dimension: " + kernel.rows + " x " + kernel.cols)
+    PartitionedMatrix()
+  }
+
+  def crossBlockedKernelMatrix[S <: Seq[T], T](data1: S, data2: S,
+                                               eval: (T, T) =>  Double)
+  : DenseMatrix[Double] = {
+
+    logger.info("Constructing cross kernel matrix.")
+    logger.info("Dimension: " + data1.length + " x " + data2.length)
+
+    val kernelIndex = utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
+      .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+      .toMap
+
+    DenseMatrix.tabulate[Double](data1.length, data2.length){
+      (i, j) => kernelIndex((i,j))
+    }
+  }*/
 
 }
 

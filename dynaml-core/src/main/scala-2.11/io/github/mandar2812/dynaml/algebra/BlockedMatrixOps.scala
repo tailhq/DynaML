@@ -15,12 +15,12 @@ object BlockedMatrixOps extends UFunc {
 
   /**
     * Reference implementation for adding
-    * two [[BlockedMatrix]] objects.
+    * two [[SparkBlockedMatrix]] objects.
     *
     */
   implicit object addBlockedMatAandB extends
-    OpAdd.Impl2[BlockedMatrix, BlockedMatrix, BlockedMatrix] {
-    def apply(a: BlockedMatrix, b: BlockedMatrix) = {
+    OpAdd.Impl2[SparkBlockedMatrix, SparkBlockedMatrix, SparkBlockedMatrix] {
+    def apply(a: SparkBlockedMatrix, b: SparkBlockedMatrix) = {
       assert(
         a.rows == b.rows && a.cols == b.cols,
         "For matrix addition A + B, their dimensions must match")
@@ -32,7 +32,7 @@ object BlockedMatrixOps extends UFunc {
       val mat1 = a._data
       val mat2 = b._data
 
-      new BlockedMatrix(
+      new SparkBlockedMatrix(
         mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)),
         a.rows, a.cols, a.rowBlocks, a.colBlocks)
 
@@ -41,12 +41,12 @@ object BlockedMatrixOps extends UFunc {
 
   /**
     * Reference implementation for adding
-    * two [[BlockedVector]] objects.
+    * two [[SparkBlockedVector]] objects.
     *
     */
   implicit object addBlockVecAandB extends
-    OpAdd.Impl2[BlockedVector, BlockedVector, BlockedVector] {
-    def apply(a: BlockedVector, b: BlockedVector) = {
+    OpAdd.Impl2[SparkBlockedVector, SparkBlockedVector, SparkBlockedVector] {
+    def apply(a: SparkBlockedVector, b: SparkBlockedVector) = {
       assert(
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
@@ -58,14 +58,15 @@ object BlockedMatrixOps extends UFunc {
       val mat1 = a._data
       val mat2 = b._data
 
-      new BlockedVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)), a.rows, a.rowBlocks)
+      new SparkBlockedVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)), a.rows, a.rowBlocks)
 
     }
   }
 
-  implicit object inPlaceAddBlockedVec extends OpAdd.InPlaceImpl2[BlockedVector, BlockedVector] {
-    override def apply(v: BlockedVector, v2: BlockedVector): Unit = {
-      val inter: BlockedVector = v + v2
+  implicit object inPlaceAddBlockedVec extends
+    OpAdd.InPlaceImpl2[SparkBlockedVector, SparkBlockedVector] {
+    override def apply(v: SparkBlockedVector, v2: SparkBlockedVector): Unit = {
+      val inter: SparkBlockedVector = v + v2
       v.<~(inter)
     }
   }
@@ -75,8 +76,8 @@ object BlockedMatrixOps extends UFunc {
   * Subtraction
   * */
   implicit object subBlockedMatAandB extends
-    OpSub.Impl2[BlockedMatrix, BlockedMatrix, BlockedMatrix] {
-    def apply(a: BlockedMatrix, b: BlockedMatrix) = {
+    OpSub.Impl2[SparkBlockedMatrix, SparkBlockedMatrix, SparkBlockedMatrix] {
+    def apply(a: SparkBlockedMatrix, b: SparkBlockedMatrix) = {
       assert(
         a.rows == b.rows && a.cols == b.cols,
         "For matrix addition A + B, their dimensions must match")
@@ -88,7 +89,7 @@ object BlockedMatrixOps extends UFunc {
       val mat1 = a._data
       val mat2 = b._data
 
-      new BlockedMatrix(
+      new SparkBlockedMatrix(
         mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)),
         a.rows, a.cols, a.rowBlocks, a.colBlocks)
 
@@ -96,8 +97,8 @@ object BlockedMatrixOps extends UFunc {
   }
 
   implicit object subBlockVecAandB extends
-    OpSub.Impl2[BlockedVector, BlockedVector, BlockedVector] {
-    def apply(a: BlockedVector, b: BlockedVector) = {
+    OpSub.Impl2[SparkBlockedVector, SparkBlockedVector, SparkBlockedVector] {
+    def apply(a: SparkBlockedVector, b: SparkBlockedVector) = {
       assert(
         a.rows == b.rows,
         "For vector addition A + B, their dimensions must match")
@@ -109,7 +110,7 @@ object BlockedMatrixOps extends UFunc {
       val mat1 = a._data
       val mat2 = b._data
 
-      new BlockedVector(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)), a.rows, a.rowBlocks)
+      new SparkBlockedVector(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)), a.rows, a.rowBlocks)
 
     }
   }
@@ -119,15 +120,15 @@ object BlockedMatrixOps extends UFunc {
   * */
 
   implicit object multBlockedVecAScalar extends
-    OpMulMatrix.Impl2[BlockedVector, Double, BlockedVector] {
-    def apply(a: BlockedVector, b: Double) =
-      new BlockedVector(a._vector.map(c => (c._1, c._2*b)), a.rows, a.rowBlocks)
+    OpMulMatrix.Impl2[SparkBlockedVector, Double, SparkBlockedVector] {
+    def apply(a: SparkBlockedVector, b: Double) =
+      new SparkBlockedVector(a._vector.map(c => (c._1, c._2*b)), a.rows, a.rowBlocks)
   }
 
 
   implicit object multBlockedMatAandB extends
-    OpMulMatrix.Impl2[BlockedMatrix, BlockedMatrix, BlockedMatrix] {
-    def apply(a: BlockedMatrix, b: BlockedMatrix) = {
+    OpMulMatrix.Impl2[SparkBlockedMatrix, SparkBlockedMatrix, SparkBlockedMatrix] {
+    def apply(a: SparkBlockedMatrix, b: SparkBlockedMatrix) = {
       assert(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
@@ -136,7 +137,7 @@ object BlockedMatrixOps extends UFunc {
         a.colBlocks == b.rowBlocks,
         "In matrix multiplication A.B, Num_Column_Blocks(A) = Num_Row_Blocks(B)")
 
-      new BlockedMatrix(
+      new SparkBlockedMatrix(
         a._data.cartesian(b._data)
           .filter(c => c._1._1._2 == c._2._1._1)
           .map(c => ((c._1._1._1, c._2._1._2), c._1._2*c._2._2))
@@ -148,8 +149,8 @@ object BlockedMatrixOps extends UFunc {
   }
 
   implicit object multBlockedMatAVecB extends
-    OpMulMatrix.Impl2[BlockedMatrix, BlockedVector, BlockedVector] {
-    def apply(a: BlockedMatrix, b: BlockedVector) = {
+    OpMulMatrix.Impl2[SparkBlockedMatrix, SparkBlockedVector, SparkBlockedVector] {
+    def apply(a: SparkBlockedMatrix, b: SparkBlockedVector) = {
       assert(
         a.cols == b.rows,
         "In matrix multiplication A.B, Num_Columns(A) = Num_Rows(B)")
@@ -158,7 +159,7 @@ object BlockedMatrixOps extends UFunc {
         a.colBlocks == b.rowBlocks,
         "In matrix multiplication A.B, Num_Column_Blocks(A) = Num_Row_Blocks(B)")
 
-      new BlockedVector(
+      new SparkBlockedVector(
         a._data.cartesian(b._data)
           .filter(c => c._1._1._2 == c._2._1)
           .map(c => (c._1._1._1, c._1._2*c._2._2))
@@ -170,8 +171,8 @@ object BlockedMatrixOps extends UFunc {
   }
 
   implicit object innerBlockedVecAandB extends
-    OpMulInner.Impl2[BlockedVector, BlockedVector, Double] {
-    def apply(a: BlockedVector, b: BlockedVector) = {
+    OpMulInner.Impl2[SparkBlockedVector, SparkBlockedVector, Double] {
+    def apply(a: SparkBlockedVector, b: SparkBlockedVector) = {
       assert(
         a.rows == b.rows,
         "In vector dot product A.B, their dimensions must match")
@@ -185,17 +186,17 @@ object BlockedMatrixOps extends UFunc {
   * In place update operations
   * */
 
-  implicit object axpyBlockedVec extends scaleAdd.InPlaceImpl3[BlockedVector, Double, BlockedVector] {
-    override def apply(v: BlockedVector, v2: Double, v3: BlockedVector): Unit = {
-      val inter: BlockedVector = v + (v3*v2)
+  implicit object axpyBlockedVec extends scaleAdd.InPlaceImpl3[SparkBlockedVector, Double, SparkBlockedVector] {
+    override def apply(v: SparkBlockedVector, v2: Double, v3: SparkBlockedVector): Unit = {
+      val inter: SparkBlockedVector = v + (v3*v2)
       v <~ inter
     }
   }
 
   implicit object inPlaceMultBlockedVecAScalar extends
-    OpMulScalar.InPlaceImpl2[BlockedVector, Double] {
-    override def apply(v: BlockedVector, v2: Double): Unit = {
-      val inter: BlockedVector = v * v2
+    OpMulScalar.InPlaceImpl2[SparkBlockedVector, Double] {
+    override def apply(v: SparkBlockedVector, v2: Double): Unit = {
+      val inter: SparkBlockedVector = v * v2
       v <~ inter
     }
   }

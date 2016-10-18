@@ -34,10 +34,10 @@ import scala.collection.immutable.NumericRange
   *             block indices and a breeze [[DenseMatrix]] containing
   *             all the elements in the said block.
   */
-private[dynaml] class BlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Double])],
-                                     num_rows: Long = -1L, num_cols: Long = -1L,
-                                     num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
-  extends NumericOps[BlockedMatrix] {
+private[dynaml] class SparkBlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Double])],
+                                         num_rows: Long = -1L, num_cols: Long = -1L,
+                                         num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
+  extends NumericOps[SparkBlockedMatrix] {
 
   lazy val rowBlocks = if(num_row_blocks == -1L) data.keys.map(_._1).max else num_row_blocks
 
@@ -51,12 +51,12 @@ private[dynaml] class BlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Double]
   def _data = data
 
 
-  override def repr: BlockedMatrix = this
+  override def repr: SparkBlockedMatrix = this
 
   /**
     * Transpose of blocked matrix
     * */
-  def t: BlockedMatrix = new BlockedMatrix(
+  def t: SparkBlockedMatrix = new SparkBlockedMatrix(
     data.map(c => (c._1.swap, c._2.t)),
     cols, rows, colBlocks, rowBlocks)
 
@@ -71,15 +71,15 @@ private[dynaml] class BlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Double]
     data.unpersist()
   }
 
-  def map(f: (((Long, Long), DenseMatrix[Double])) => ((Long, Long), DenseMatrix[Double])): BlockedMatrix =
-    new BlockedMatrix(data.map(f), rows, cols, rowBlocks, colBlocks)
+  def map(f: (((Long, Long), DenseMatrix[Double])) => ((Long, Long), DenseMatrix[Double])): SparkBlockedMatrix =
+    new SparkBlockedMatrix(data.map(f), rows, cols, rowBlocks, colBlocks)
 
   /**
     * Slice a blocked matrix to produce a new block matrix.
     */
-  def apply(r: NumericRange[Long], c: NumericRange[Long]): BlockedMatrix = {
+  def apply(r: NumericRange[Long], c: NumericRange[Long]): SparkBlockedMatrix = {
 
-    new BlockedMatrix(
+    new SparkBlockedMatrix(
       data.filter(e => r.contains(e._1._1) && c.contains(e._1._2))
         .map(e => ((e._1._1 - r.min, e._1._2 - c.min), e._2)),
       num_row_blocks = r.length, num_col_blocks = c.length
@@ -91,22 +91,21 @@ private[dynaml] class BlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Double]
 
 }
 
-object BlockedMatrix {
+object SparkBlockedMatrix {
 
   /**
-    * Create a [[BlockedMatrix]] from a [[SparkMatrix]], this
+    * Create a [[SparkBlockedMatrix]] from a [[SparkMatrix]], this
     * method takes the underlying key-value [[RDD]] and groups it
     * by blocks converting each block to a breeze [[DenseMatrix]]
     *
     * @tparam T The type of the [[SparkMatrix]] instance
-    *
     * @param m The distributed matrix
     * @param numElementsRowBlock Maximum number of rows in each block
     * @param numElementsColBlock Maximum number of columns in each block matrix
     *
     */
-  def apply[T <: SparkMatrix](m: T, numElementsRowBlock: Int, numElementsColBlock: Int): BlockedMatrix = {
-    new BlockedMatrix(
+  def apply[T <: SparkMatrix](m: T, numElementsRowBlock: Int, numElementsColBlock: Int): SparkBlockedMatrix = {
+    new SparkBlockedMatrix(
       m._matrix
         .map(e => ((e._1._1/numElementsRowBlock, e._1._2/numElementsColBlock),e))
         .groupByKey().map(c => {
@@ -130,25 +129,25 @@ object BlockedMatrix {
     )
   }
 
-  def vertcat(vectors: BlockedMatrix*): BlockedMatrix = {
+  def vertcat(vectors: SparkBlockedMatrix*): SparkBlockedMatrix = {
     //sanity check
     assert(vectors.map(_.colBlocks).distinct.length == 1,
       "In case of vertical concatenation of matrices their columns sizes must be equal")
 
     val sizes = vectors.map(_.rowBlocks)
-    new BlockedMatrix(vectors.zipWithIndex.map(couple => {
+    new SparkBlockedMatrix(vectors.zipWithIndex.map(couple => {
       val offset = sizes.slice(0, couple._2).sum
       couple._1._data.map(c => ((c._1._1+offset, c._1._2), c._2))
     }).reduce((a,b) => a.union(b)))
   }
 
-  def horzcat(vectors: BlockedMatrix*): BlockedMatrix = {
+  def horzcat(vectors: SparkBlockedMatrix*): SparkBlockedMatrix = {
     //sanity check
     assert(vectors.map(_.rowBlocks).distinct.length == 1,
       "In case of horizontal concatenation of matrices their row sizes must be equal")
 
     val sizes = vectors.map(_.colBlocks)
-    new BlockedMatrix(vectors.zipWithIndex.map(couple => {
+    new SparkBlockedMatrix(vectors.zipWithIndex.map(couple => {
       val offset = sizes.slice(0, couple._2).sum
       couple._1._data.map(c => ((c._1._1, c._1._2+offset), c._2))
     }).reduce((a,b) => a.union(b)))

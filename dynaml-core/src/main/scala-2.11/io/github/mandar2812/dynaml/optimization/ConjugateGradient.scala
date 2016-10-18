@@ -23,6 +23,7 @@ import io.github.mandar2812.dynaml.algebra.{SparkPSDMatrix, SparkVector, normDis
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.BlockedMatrixOps._
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.graph.utils.CausalEdge
 import org.apache.log4j.Logger
 
@@ -176,22 +177,22 @@ object ConjugateGradient {
     x
   }
 
-  def runCG(A: BlockedMatrix,
-            b: BlockedVector,
-            x: BlockedVector,
+  def runCG(A: SparkBlockedMatrix,
+            b: SparkBlockedVector,
+            x: SparkBlockedVector,
             epsilon: Double,
-            MAX_ITERATIONS: Int): BlockedVector = {
+            MAX_ITERATIONS: Int): SparkBlockedVector = {
 
     A.persist
-    val residual: BlockedVector = b - (A*x)
-    val p: BlockedVector = b - (A*x)
+    val residual: SparkBlockedVector = b - (A*x)
+    val p: SparkBlockedVector = b - (A*x)
 
     var count = 1.0
     var alpha = 0.0
     var beta = 0.0
 
     var netError: Double = normBDist(residual, 2.0)
-    var inter: BlockedVector = null
+    var inter: SparkBlockedVector = null
 
     while(netError >= epsilon && count <= MAX_ITERATIONS) {
 
@@ -234,6 +235,57 @@ object ConjugateGradient {
     x
   }
 
+
+
+  def runCG(A: PartitionedMatrix,
+            b: PartitionedVector,
+            x: PartitionedVector,
+            epsilon: Double,
+            MAX_ITERATIONS: Int): PartitionedVector = {
+
+    val residual: PartitionedVector = b - (A*x)
+    val p: PartitionedVector = b - (A*x)
+
+    var count = 1.0
+    var alpha = 0.0
+    var beta = 0.0
+
+    var netError: Double = normBDist(residual, 2.0)
+    var inter: PartitionedVector = null
+
+    while(netError >= epsilon && count <= MAX_ITERATIONS) {
+
+      inter = A*p
+
+      //update alpha
+      alpha = math.pow(netError, 2.0)/(p dot inter)
+      logger.info("Iteration: "+count)
+      logger.info("----------------------------------")
+      logger.info("Residual: "+netError)
+
+      //update x
+      axpyDist(alpha, p, x)
+
+      //before updating residual, calculate norm (required for beta)
+      val de = math.pow(netError, 2.0)
+
+      //update residual
+      axpyDist(-1.0*alpha, inter, residual)
+
+
+      netError = normBDist(residual, 2.0)
+
+      //calculate beta
+      beta = math.pow(netError, 2.0)/de
+      //update p
+      p :*= beta
+      axpyDist(1.0, residual, p)
+
+      count += 1
+    }
+
+    x
+  }
 
 
   /**

@@ -11,10 +11,10 @@ import org.apache.spark.storage.StorageLevel
   *             block indices and a row vector containing
   *             all the elements in the said block.
   */
-private[dynaml] class BlockedDualVector(data: RDD[(Long, Transpose[DenseVector[Double]])],
-                                         num_cols: Long = -1L,
-                                         num_col_blocks: Long = -1L)
-  extends SparkVectorLike[Transpose[DenseVector[Double]]] with NumericOps[BlockedDualVector] {
+private[dynaml] class SparkBlockedDualVector(data: RDD[(Long, Transpose[DenseVector[Double]])],
+                                             num_cols: Long = -1L,
+                                             num_col_blocks: Long = -1L)
+  extends SparkVectorLike[Transpose[DenseVector[Double]]] with NumericOps[SparkBlockedDualVector] {
 
   lazy val colBlocks = if(num_col_blocks == -1L) data.keys.max else num_col_blocks
 
@@ -28,9 +28,9 @@ private[dynaml] class BlockedDualVector(data: RDD[(Long, Transpose[DenseVector[D
 
   def _data = vector
 
-  override def repr: BlockedDualVector = this
+  override def repr: SparkBlockedDualVector = this
 
-  def t: BlockedVector = new BlockedVector(data.map(c => (c._1, c._2.t)), cols, colBlocks)
+  def t: SparkBlockedVector = new SparkBlockedVector(data.map(c => (c._1, c._2.t)), cols, colBlocks)
 
   def persist: Unit = {
     data.persist(StorageLevel.MEMORY_AND_DISK)

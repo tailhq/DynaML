@@ -4,6 +4,7 @@ import breeze.linalg._
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, RBFKernel}
 import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.BlockedMatrixOps._
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient
 import org.apache.spark.{SparkConf, SparkContext}
@@ -172,22 +173,22 @@ class DistributedLinearAlgebraSpec extends FlatSpec
     val numRowsPerBlock = 1000
     val list = sc.parallelize(0L until length.toLong)
 
-    val A: BlockedMatrix = BlockedMatrix(
+    val A: SparkBlockedMatrix = SparkBlockedMatrix(
       SparkPSDMatrix(list)((i,j) => if(i == j) 0.5 else 0.0),
       numRowsPerBlock, numRowsPerBlock)
 
-    val b: BlockedVector = BlockedVector(SparkVector(list)(i => 1.0), numRowsPerBlock)
+    val b: SparkBlockedVector = SparkBlockedVector(SparkVector(list)(i => 1.0), numRowsPerBlock)
 
-    val x: BlockedVector =
-      BlockedVector(
+    val x: SparkBlockedVector =
+      SparkBlockedVector(
         new SparkVector(sc.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
           length, false), numRowsPerBlock)
 
     val epsilon = 1E-6
 
-    val xnew: BlockedVector = ConjugateGradient.runCG(
+    val xnew: SparkBlockedVector = ConjugateGradient.runCG(
       A, b,
-      BlockedVector(
+      SparkBlockedVector(
         new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)),
           length, false),
         numRowsPerBlock),
@@ -195,6 +196,28 @@ class DistributedLinearAlgebraSpec extends FlatSpec
 
 
     assert(normBDist(xnew-x, 1.0) <= epsilon)
+  }
+
+  "Blocked Cholesky" should "be able to factorize P.S.D matrices" in {
+    val length = 269L
+    val numRowsPerBlock = 100
+    val epsilon = 1E-6
+
+    val A: PartitionedMatrix = PartitionedMatrix(
+      length, length, numRowsPerBlock, numRowsPerBlock,
+      (i,j) => if(i == j) 0.25 else 0.0)
+
+    val A_ans: PartitionedMatrix = PartitionedMatrix(
+      length, length, numRowsPerBlock, numRowsPerBlock,
+      (i,j) => if(i == j) 0.5 else 0.0)
+
+
+    val l = bcholesky(A)
+
+    val error: PartitionedMatrix = l - A_ans
+    
+    assert(det(error.toBreezeMatrix) <= epsilon)
+
   }
 
 
