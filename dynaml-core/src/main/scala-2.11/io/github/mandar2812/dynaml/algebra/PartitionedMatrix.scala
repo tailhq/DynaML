@@ -1,7 +1,9 @@
 package io.github.mandar2812.dynaml.algebra
 
 import breeze.linalg.{DenseMatrix, NumericOps}
+import io.github.mandar2812.dynaml.kernels.Kernel
 import org.apache.spark.rdd.RDD
+
 import scala.collection.immutable.NumericRange
 
 /**
@@ -58,7 +60,7 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
 
   def toBreezeMatrix =
     DenseMatrix.vertcat[Double](
-      data.groupBy(_._1._1).map(row => DenseMatrix.horzcat(row._2.sortBy(_._1._2).map(_._2):_*)).toSeq:_*)
+      _data.groupBy(_._1._1).map(row => DenseMatrix.horzcat(row._2.sortBy(_._1._2).map(_._2):_*)).toSeq:_*)
 
 }
 
@@ -102,5 +104,44 @@ object PartitionedMatrix {
       num_row_blocks = nRblocks, num_col_blocks = nCblocks)
 
   }
+
+}
+
+private[algebra] class LowerTriPartitionedMatrix(underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
+                                                 num_rows: Long = -1L, num_cols: Long = -1L,
+                                                 num_row_blocks: Long = -1L, num_col_blocks: Long = -1L) extends
+  PartitionedMatrix(
+    data = underlyingdata
+      .map(c =>
+        if(c._1._1 == c._1._2) Seq(c)
+        else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows))))
+      .reduce((a,b) => a ++ b).sortBy(_._1).toStream,
+    num_rows, num_cols,
+    num_row_blocks, num_col_blocks) {
+
+  def _underlyingdata: Stream[((Long, Long), DenseMatrix[Double])] = underlyingdata
+
+  override def t: UpperTriPartitionedMatrix =
+    new UpperTriPartitionedMatrix(underlyingdata.map(c => (c._1.swap, c._2.t)), cols, rows, colBlocks, rowBlocks)
+
+}
+
+private[algebra] class UpperTriPartitionedMatrix(underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
+                                                 num_rows: Long = -1L, num_cols: Long = -1L,
+                                                 num_row_blocks: Long = -1L, num_col_blocks: Long = -1L) extends
+  PartitionedMatrix(
+    data = underlyingdata
+      .map(c =>
+        if(c._1._1 == c._1._2) Seq(c)
+        else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows))))
+      .reduce((a,b) => a ++ b).sortBy(_._1).toStream,
+    num_rows, num_cols,
+    num_row_blocks, num_col_blocks) {
+
+
+  def _underlyingdata: Stream[((Long, Long), DenseMatrix[Double])] = underlyingdata
+
+  override def t: LowerTriPartitionedMatrix =
+    new LowerTriPartitionedMatrix(underlyingdata.map(c => (c._1.swap, c._2.t)), cols, rows, colBlocks, rowBlocks)
 
 }

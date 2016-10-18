@@ -3,6 +3,8 @@ package io.github.mandar2812.dynaml.algebra
 import breeze.linalg.{DenseVector, NumericOps}
 import org.apache.spark.rdd.RDD
 
+import scala.collection.immutable.NumericRange
+
 /**
   * @author mandar2812 date 13/10/2016.
   * A distributed vector that is stored in blocks.
@@ -29,6 +31,22 @@ private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])
 
   def t: PartitionedDualVector = new PartitionedDualVector(data.map(c => (c._1, c._2.t)), rows, rowBlocks)
 
+  def map(func: ((Long, DenseVector[Double])) => (Long, DenseVector[Double])): PartitionedVector =
+    new PartitionedVector(data.map(func), rows, rowBlocks)
+
+  def apply(r: NumericRange[Long]): PartitionedVector = {
+
+    new PartitionedVector(
+      data.filter(e => r.contains(e._1))
+        .map(e => (e._1 - r.min, e._2)),
+      num_row_blocks = r.length
+    )
+  }
+
+  def toBreezeVector = DenseVector.vertcat(data.sortBy(_._1).map(_._2):_*)
+
+  def reverse: PartitionedVector = map(c => (rowBlocks - 1L - c._1, DenseVector(c._2.toArray.reverse)))
+
 }
 
 
@@ -52,5 +70,18 @@ object PartitionedVector {
       num_rows = length, num_row_blocks = num_blocks
     )
   }
+
+  def vertcat(vectors: PartitionedVector*): PartitionedVector = {
+    //sanity check
+    assert(vectors.map(_.colBlocks).distinct.length == 1,
+      "In case of vertical concatenation of matrices their columns sizes must be equal")
+
+    val sizes = vectors.map(_.rowBlocks)
+    new PartitionedVector(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._data.map(c => (c._1+offset, c._2))
+    }).reduce((a,b) => a.union(b)))
+  }
+
 
 }

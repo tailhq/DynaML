@@ -169,8 +169,8 @@ class DistributedLinearAlgebraSpec extends FlatSpec
   "Blocked CG " should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
-    val length = 2261
-    val numRowsPerBlock = 1000
+    val length = 1261
+    val numRowsPerBlock = 500
     val list = sc.parallelize(0L until length.toLong)
 
     val A: SparkBlockedMatrix = SparkBlockedMatrix(

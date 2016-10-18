@@ -122,11 +122,11 @@ object bcholesky extends UFunc {
 
     }
 
-  implicit object ImplPCholesky_DM extends Impl[PartitionedMatrix, PartitionedMatrix] {
-    def apply(X: PartitionedMatrix): PartitionedMatrix = {
+  implicit object ImplPCholesky_DM extends Impl[PartitionedMatrix, LowerTriPartitionedMatrix] {
+    def apply(X: PartitionedMatrix): LowerTriPartitionedMatrix = {
       //Sanity Checks
-      assert(X.rows == X.cols, "For performing a Cholesky decomposition, the blocked matrix must be square")
-      assert(X.rowBlocks == X.colBlocks,
+      require(X.rows == X.cols, "For performing a Cholesky decomposition, the blocked matrix must be square")
+      require(X.rowBlocks == X.colBlocks,
         "For performing a Cholesky decomposition the blocked matrix must be partitioned equally in rows and columns")
 
       /*
@@ -137,16 +137,16 @@ object bcholesky extends UFunc {
       * with these zero matrix blocks.
       * */
       val dat = choleskyPAcc(
-        X, 0L,
-        X._data
+        X, 0L, Stream()
+        /*X._data
           .filter(c => c._1._2 > c._1._1)
-          .map(c => (c._1, DenseMatrix.zeros[Double](c._2.rows, c._2.cols)))
+          .map(c => (c._1, DenseMatrix.zeros[Double](c._2.rows, c._2.cols)))*/
       ).sortBy(_._1)
 
       /*
       * Create new blocked matrix from accumulated Stream
       * */
-      new PartitionedMatrix(dat, X.rows, X.cols, X.rowBlocks, X.colBlocks)
+      new LowerTriPartitionedMatrix(dat, X.rows, X.cols, X.rowBlocks, X.colBlocks)
     }
   }
 

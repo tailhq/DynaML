@@ -2,7 +2,7 @@ package io.github.mandar2812.dynaml.algebra
 
 import breeze.generic.UFunc
 import breeze.linalg.operators._
-import breeze.linalg.scaleAdd
+import breeze.linalg.{DenseMatrix, DenseVector, scaleAdd}
 import io.github.mandar2812.dynaml.utils
 
 /**
@@ -220,6 +220,69 @@ object PartitionedMatrixOps extends UFunc {
     OpMulScalar.InPlaceImpl2[PartitionedVector, Double] {
     override def apply(v: PartitionedVector, v2: Double): Unit = {
       v._data.foreach(x => x._2 :*= v2)
+    }
+  }
+
+  /*
+  * Linear solve operators for partitioend matrices
+  * */
+
+  def recLTriagSolve(X: LowerTriPartitionedMatrix,
+                     y: PartitionedVector,
+                     lAcc: Stream[PartitionedVector],
+                     acc: PartitionedVector): PartitionedVector =
+    X.colBlocks*X.rowBlocks match {
+      case 1L =>
+        val vSolved: DenseVector[Double] =
+          X(0L to 0L, 0L to 0L)._data.head._2 \ y(0L to 0L)._data.head._2 + acc.toBreezeVector
+        val vectorBlocks = lAcc++ Stream(new PartitionedVector(Stream((0L, vSolved))))
+
+        PartitionedVector.vertcat(vectorBlocks:_*)
+
+      case _ =>
+        val (l_hh, l_rh, l_rr) = (
+          X(0L to 0L, 0L to 0L),
+          X(1L until X.rowBlocks, 0L to 0L),
+          new LowerTriPartitionedMatrix(
+            X._underlyingdata
+              .filter(c =>
+                c._1._1 >= 1L && c._1._1 < X.rowBlocks &&
+                  c._1._2 >= 1L && c._1._2 < X.colBlocks),
+            num_row_blocks = X.rowBlocks - 1L,
+            num_col_blocks = X.colBlocks - 1L)
+          )
+
+        val (y_h, y_r) = (y(0L to 0L), y(1L until y.rowBlocks))
+        val (acc_h, acc_r) = (acc(0L to 0L), acc(1L until acc.rowBlocks))
+
+        val vSolved: DenseVector[Double] = l_hh._data.head._2 \ y_h._data.head._2
+
+        recLTriagSolve(
+          l_rr, y_r,
+          lAcc ++ Stream(new PartitionedVector(Stream((0L, vSolved))) + acc_h),
+          acc_r+ l_rh*y_r)
+    }
+
+
+  implicit object implOpSolveLowerTriPartitionedMatrixByVector
+    extends OpSolveMatrixBy.Impl2[LowerTriPartitionedMatrix, PartitionedVector, PartitionedVector] {
+
+    override def apply(A: LowerTriPartitionedMatrix, V: PartitionedVector): PartitionedVector = {
+      require(A.rows == V.rows && A.cols == V.rows, "Non-conformant matrix-vector sizes")
+      require(A.colBlocks == V.rowBlocks && A.rowBlocks == A.rowBlocks, "Non-conformant matrix-vector partitions")
+
+      recLTriagSolve(A, V, Stream(), V.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
+    }
+  }
+
+  implicit object implOpSolveUpperTriPartitionedMatrixByVector
+    extends OpSolveMatrixBy.Impl2[UpperTriPartitionedMatrix, PartitionedVector, PartitionedVector] {
+
+    override def apply(A: UpperTriPartitionedMatrix, V: PartitionedVector): PartitionedVector = {
+      require(A.rows == V.rows && A.cols == V.rows, "Non-conformant matrix-vector sizes")
+      require(A.colBlocks == V.rowBlocks && A.rowBlocks == A.rowBlocks, "Non-conformant matrix-vector partitions")
+
+      recLTriagSolve(A.t, V, Stream(), V.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
     }
   }
 
