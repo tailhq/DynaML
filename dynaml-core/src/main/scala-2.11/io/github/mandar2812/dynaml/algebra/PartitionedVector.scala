@@ -25,7 +25,7 @@ private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])
 
   lazy val cols: Long = 1L
 
-  def _data = data
+  def _data = data.sortBy(_._1)
 
   override def repr: PartitionedVector = this
 
@@ -56,7 +56,7 @@ object PartitionedVector {
 
     val nC = if(num_rows == -1L) data.map(_._1).max else num_rows
 
-    new PartitionedVector(data.sortBy(_._1), num_rows = nC, num_row_blocks = data.length)
+    new PartitionedVector(data, num_rows = nC, num_row_blocks = data.length)
 
   }
 

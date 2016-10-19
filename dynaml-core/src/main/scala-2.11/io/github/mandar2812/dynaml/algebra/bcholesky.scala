@@ -122,8 +122,8 @@ object bcholesky extends UFunc {
 
     }
 
-  implicit object ImplPCholesky_DM extends Impl[PartitionedMatrix, LowerTriPartitionedMatrix] {
-    def apply(X: PartitionedMatrix): LowerTriPartitionedMatrix = {
+  implicit object ImplPCholesky_DM extends Impl[PartitionedPSDMatrix, LowerTriPartitionedMatrix] {
+    def apply(X: PartitionedPSDMatrix): LowerTriPartitionedMatrix = {
       //Sanity Checks
       require(X.rows == X.cols, "For performing a Cholesky decomposition, the blocked matrix must be square")
       require(X.rowBlocks == X.colBlocks,

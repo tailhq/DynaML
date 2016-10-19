@@ -4,7 +4,6 @@ import breeze.linalg._
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, RBFKernel}
 import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.BlockedMatrixOps._
-import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient
 import org.apache.spark.{SparkConf, SparkContext}
@@ -166,7 +165,7 @@ class DistributedLinearAlgebraSpec extends FlatSpec
   }
 
 
-  "Blocked CG " should "be able to solve linear systems "+
+  /*"Blocked CG " should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
     val length = 1261
@@ -196,29 +195,7 @@ class DistributedLinearAlgebraSpec extends FlatSpec
 
 
     assert(normBDist(xnew-x, 1.0) <= epsilon)
-  }
-
-  "Blocked Cholesky" should "be able to factorize P.S.D matrices" in {
-    val length = 269L
-    val numRowsPerBlock = 100
-    val epsilon = 1E-6
-
-    val A: PartitionedMatrix = PartitionedMatrix(
-      length, length, numRowsPerBlock, numRowsPerBlock,
-      (i,j) => if(i == j) 0.25 else 0.0)
-
-    val A_ans: PartitionedMatrix = PartitionedMatrix(
-      length, length, numRowsPerBlock, numRowsPerBlock,
-      (i,j) => if(i == j) 0.5 else 0.0)
-
-
-    val l = bcholesky(A)
-
-    val error: PartitionedMatrix = l - A_ans
-    
-    assert(det(error.toBreezeMatrix) <= epsilon)
-
-  }
+  }*/
 
 
 }

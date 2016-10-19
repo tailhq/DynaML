@@ -22,6 +22,8 @@ package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg._
 import breeze.numerics.log
+import io.github.mandar2812.dynaml.algebra._
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
@@ -282,6 +284,38 @@ object AbstractGPRegressionModel {
       case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
     }
   }
+
+
+  /**
+    * Calculate the marginal log likelihood
+    * of the training data for a pre-initialized
+    * kernel and noise matrices.
+    *
+    * @param trainingData The function values assimilated as a [[DenseVector]]
+    *
+    * @param kernelMatrix The kernel matrix of the training features
+    *
+    * */
+  def logLikelihood(trainingData: PartitionedVector,
+                    kernelMatrix: PartitionedPSDMatrix): Double = {
+
+    val smoothingMat = kernelMatrix
+
+    try {
+      val Lmat = bcholesky(smoothingMat)
+      val alpha: PartitionedVector = Lmat.t \ (Lmat \ trainingData)
+
+      val d: Double = trainingData dot alpha
+
+      0.5*(d +
+        btrace(blog(Lmat)) +
+        trainingData.rows*math.log(2*math.Pi))
+    } catch {
+      case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
+      case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
+    }
+  }
+
 
   def apply[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     DenseVector[Double]]](data: Seq[(DenseVector[Double], Double)],

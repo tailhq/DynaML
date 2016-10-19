@@ -27,7 +27,7 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
 
   lazy val cols: Long = if(num_cols == -1L) data.filter(_._1._1 == 0L).map(_._2.cols).sum.toLong else num_cols
 
-  def _data = data
+  def _data = data.sortBy(_._1)
 
   override def repr: PartitionedMatrix = this
 
@@ -58,8 +58,10 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
     )
   }
 
-  def apply(f: ((Long, Long)) => Boolean): Stream[((Long, Long), DenseMatrix[Double])] =
+  def filterBlocks(f: ((Long, Long)) => Boolean): Stream[((Long, Long), DenseMatrix[Double])] =
     data.filter(c => f(c._1))
+
+  //def filterElements(f: ((Long, Long)) => Boolean): Stream[((Long, Long), Double)]
 
   /**
     * Convert to breeze matrix. NOTE: do not use
@@ -143,7 +145,7 @@ object PartitionedMatrix {
   *
   * A partitioned lower triangular matrix.
   */
-private[algebra] class LowerTriPartitionedMatrix(
+private[dynaml] class LowerTriPartitionedMatrix(
   underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
   num_rows: Long = -1L, num_cols: Long = -1L,
   num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
@@ -152,7 +154,7 @@ private[algebra] class LowerTriPartitionedMatrix(
       .map(c =>
         if(c._1._1 == c._1._2) Seq(c)
         else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows))))
-      .reduce((a,b) => a ++ b).sortBy(_._1).toStream,
+      .reduce((a,b) => a ++ b).toStream,
     num_rows, num_cols,
     num_row_blocks, num_col_blocks) {
 
@@ -168,7 +170,7 @@ private[algebra] class LowerTriPartitionedMatrix(
   *
   * A partitioned upper triangular matrix.
   */
-private[algebra] class UpperTriPartitionedMatrix(
+private[dynaml] class UpperTriPartitionedMatrix(
   underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
   num_rows: Long = -1L, num_cols: Long = -1L,
   num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
@@ -177,7 +179,7 @@ private[algebra] class UpperTriPartitionedMatrix(
       .map(c =>
         if(c._1._1 == c._1._2) Seq(c)
         else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows))))
-      .reduce((a,b) => a ++ b).sortBy(_._1).toStream,
+      .reduce((a,b) => a ++ b).toStream,
     num_rows, num_cols,
     num_row_blocks, num_col_blocks) {
 
@@ -202,7 +204,7 @@ private[dynaml] class PartitionedPSDMatrix(underlyingdata: Stream[((Long, Long),
       .map(c =>
         if(c._1._1 == c._1._2) Seq(c)
         else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows))))
-      .reduce((a,b) => a ++ b).sortBy(_._1).toStream,
+      .reduce((a,b) => a ++ b).toStream,
     num_rows, num_cols,
     num_row_blocks, num_col_blocks) {
 

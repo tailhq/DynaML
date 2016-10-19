@@ -383,14 +383,21 @@ object PartitionedMatrixOps extends UFunc {
     }
   }
 
-  implicit object implOpSolveLowerTriPartitionedMatrixByMatrix
-    extends OpSolveMatrixBy.Impl2[LowerTriPartitionedMatrix, PartitionedMatrix, PartitionedMatrix] {
+  implicit object implOpSolvePartitionedMatrixByVector
+    extends OpSolveMatrixBy.Impl2[PartitionedMatrix, PartitionedVector, PartitionedVector] {
 
-    override def apply(A: LowerTriPartitionedMatrix, V: PartitionedMatrix): PartitionedMatrix = {
+    override def apply(A: PartitionedMatrix, V: PartitionedVector): PartitionedVector = {
+      require(A.rows == A.cols, "Matrix must be square")
       require(A.rows == V.rows && A.cols == V.rows, "Non-conformant matrix-vector sizes")
       require(A.colBlocks == V.rowBlocks && A.rowBlocks == A.rowBlocks, "Non-conformant matrix-vector partitions")
 
-      recLTriagMultiSolve(A, V, Stream(), V.map(c => (c._1, DenseMatrix.zeros[Double](c._2.rows, c._2.cols))))
+      val dat = bcholesky.choleskyPAcc(
+        A, 0L, Stream()
+      ).sortBy(_._1)
+
+      val L = new LowerTriPartitionedMatrix(dat, A.rows, A.cols, A.rowBlocks, A.colBlocks)
+
+      recLTriagSolve(L, V, Stream(), V.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
     }
   }
 
@@ -402,6 +409,17 @@ object PartitionedMatrixOps extends UFunc {
       require(A.colBlocks == V.rowBlocks && A.rowBlocks == A.rowBlocks, "Non-conformant matrix-vector partitions")
 
       recUTriagSolve(A, V, Stream(), V.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
+    }
+  }
+
+  implicit object implOpSolveLowerTriPartitionedMatrixByMatrix
+    extends OpSolveMatrixBy.Impl2[LowerTriPartitionedMatrix, PartitionedMatrix, PartitionedMatrix] {
+
+    override def apply(A: LowerTriPartitionedMatrix, V: PartitionedMatrix): PartitionedMatrix = {
+      require(A.rows == V.rows && A.cols == V.rows, "Non-conformant matrix-vector sizes")
+      require(A.colBlocks == V.rowBlocks && A.rowBlocks == A.rowBlocks, "Non-conformant matrix-vector partitions")
+
+      recLTriagMultiSolve(A, V, Stream(), V.map(c => (c._1, DenseMatrix.zeros[Double](c._2.rows, c._2.cols))))
     }
   }
 
