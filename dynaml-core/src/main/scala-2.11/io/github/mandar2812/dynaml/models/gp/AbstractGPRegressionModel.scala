@@ -20,14 +20,15 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg._
+import breeze.linalg.{DenseMatrix, DenseVector, cholesky, trace, inv}
 import breeze.numerics.log
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel}
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
-import io.github.mandar2812.dynaml.probability.MultGaussianRV
+import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import org.apache.log4j.Logger
 
 /**
@@ -46,8 +47,8 @@ import org.apache.log4j.Logger
 abstract class AbstractGPRegressionModel[T, I](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
   data: T, num: Int)
-  extends ContinuousProcess[T, I, Double, MultGaussianRV]
-  with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultGaussianRV]
+  extends ContinuousProcess[T, I, Double, MultGaussianPRV]
+  with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultGaussianPRV]
   with GloballyOptWithGrad {
 
   private val logger = Logger.getLogger(this.getClass)
@@ -68,9 +69,14 @@ abstract class AbstractGPRegressionModel[T, I](
 
   val npoints = num
 
+  private var blockSize = 1000
+
+  def blockSize_(b: Int):Unit = blockSize = b
+
   protected var (caching, kernelMatrixCache)
   : (Boolean, DenseMatrix[Double]) = (false, null)
 
+  protected var partitionedKernelMatrixCache: PartitionedPSDMatrix = _
 
   /**
     * Set the model "state" which
@@ -109,12 +115,15 @@ abstract class AbstractGPRegressionModel[T, I](
 
     setState(h)
     val training = dataAsIndexSeq(g)
-    val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
+    val trainingLabels = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._2),
+      training.length.toLong, blockSize
+      )
 
     val effectiveTrainingKernel = covariance + noiseModel
 
-    val kernelTraining: DenseMatrix[Double] =
-      effectiveTrainingKernel.buildKernelMatrix(training, npoints).getKernelMatrix()
+    val kernelTraining: PartitionedPSDMatrix =
+      effectiveTrainingKernel.buildBlockedKernelMatrix(training, npoints)
 
     AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining)
   }
@@ -168,39 +177,51 @@ abstract class AbstractGPRegressionModel[T, I](
    *             storing the values of the input patters.
    **/
   override def predictiveDistribution[U <: Seq[I]](test: U):
-  MultGaussianRV = {
+  MultGaussianPRV = {
 
     logger.info("Calculating posterior predictive distribution")
     //Calculate the kernel matrix on the training data
     val training = dataAsIndexSeq(g)
-    val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
+    val trainingLabels = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._2),
+      training.length.toLong, blockSize
+    )
 
     val effectiveTrainingKernel = covariance + noiseModel
 
     val smoothingMat = if(!caching)
-      effectiveTrainingKernel.buildKernelMatrix(training, npoints).getKernelMatrix()
+      SVMKernel.buildPartitionedKernelMatrix(training,
+        training.length, blockSize, blockSize,
+        effectiveTrainingKernel.evaluate)
     else
-      kernelMatrixCache
+      partitionedKernelMatrixCache
 
-    val kernelTest = covariance.buildKernelMatrix(test, test.length)
-      .getKernelMatrix()
-    val crossKernel = covariance.buildCrossKernelMatrix(training, test)
+    val kernelTest = SVMKernel.buildPartitionedKernelMatrix(
+      test, test.length.toLong,
+      blockSize, blockSize, covariance.evaluate)
+
+    val crossKernel = SVMKernel.crossPartitonedKernelMatrix(training, test, blockSize, blockSize, covariance.evaluate)
 
     //Calculate the predictive mean and co-variance
-    //val smoothingMat = kernelTraining + noiseMat
-    val Lmat = cholesky(smoothingMat)
-    val alpha = Lmat.t \ (Lmat \ trainingLabels)
-    val v = Lmat \ crossKernel
+    val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)//cholesky(smoothingMat)
 
-    val varianceReducer = v.t * v
+    val z: PartitionedVector = Lmat \ trainingLabels
+    val alpha: PartitionedVector = Lmat.t \ z
+
+    val v: PartitionedMatrix = Lmat \ crossKernel
+
+    val varianceReducer: PartitionedMatrix = v.t * v
     //Ensure that v is symmetric
 
-    val adjustedVarReducer = DenseMatrix.tabulate[Double](varianceReducer.rows, varianceReducer.cols)(
-      (i,j) => if(i <= j) varianceReducer(i,j) else varianceReducer(j,i))
+    val adjustedVarReducer: PartitionedMatrix = varianceReducer.L + varianceReducer.L.t
 
-    MultGaussianRV(test.length)(
+    val reducedVariance: PartitionedPSDMatrix =
+      new PartitionedPSDMatrix((kernelTest - adjustedVarReducer).filterBlocks(c => c._1 <= c._2),
+        kernelTest.rows, kernelTest.cols)
+
+    MultGaussianPRV(test.length.toLong, blockSize)(
       crossKernel.t * alpha,
-      kernelTest - adjustedVarReducer)
+      reducedVariance)
   }
 
   /**
@@ -215,8 +236,9 @@ abstract class AbstractGPRegressionModel[T, I](
     val posterior = predictiveDistribution(testData)
     val postcov = posterior.covariance
     val postmean = posterior.mu
-    val stdDev = (1 to testData.length).map(i => math.sqrt(postcov(i-1, i-1)))
-    val mean = postmean.toArray.toSeq
+    val varD: PartitionedVector = bdiag(postcov)
+    val stdDev = varD._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val mean = postmean._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
 
     logger.info("Generating error bars")
     val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
@@ -234,12 +256,10 @@ abstract class AbstractGPRegressionModel[T, I](
   def persist(): Unit = {
 
     val effectiveTrainingKernel = covariance + noiseModel
-
-    kernelMatrixCache =
-      effectiveTrainingKernel.buildKernelMatrix(dataAsIndexSeq(g), npoints)
-        .getKernelMatrix()
-    //noiseCache = noiseModel.buildKernelMatrix(dataAsIndexSeq(g), npoints)
-    //  .getKernelMatrix()
+    val training = dataAsIndexSeq(g)
+    partitionedKernelMatrixCache = SVMKernel.buildPartitionedKernelMatrix(training,
+      training.length, blockSize, blockSize,
+      effectiveTrainingKernel.evaluate)
     caching = true
 
   }
@@ -249,6 +269,7 @@ abstract class AbstractGPRegressionModel[T, I](
     * */
   def unpersist(): Unit = {
     kernelMatrixCache = null
+    partitionedKernelMatrixCache = null
     //noiseCache = null
     caching = false
   }

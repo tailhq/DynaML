@@ -109,11 +109,12 @@ object SVMKernel {
     data: S,
     length: Long,
     numElementsPerRowBlock: Int,
-    numElementsPerColBlock: Int)(eval: (T, T) =>  Double): PartitionedPSDMatrix = {
+    numElementsPerColBlock: Int,
+    eval: (T, T) =>  Double): PartitionedPSDMatrix = {
 
     val (rows, cols) = (length, length)
 
-    logger.info("Constructing partitiond kernel matrix.")
+    logger.info("Constructing partitioned kernel matrix.")
     logger.info("Dimension: " + rows + " x " + cols)
 
     val (num_R_blocks, num_C_blocks) = (
@@ -126,9 +127,14 @@ object SVMKernel {
       utils.combine(Seq(partitionedData, partitionedData))
         .filter(c => c.head._2 <= c.last._2)
         .toStream.map(c => {
-          val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
-          val matrix = crossKernelMatrix(c.head._1, c.last._1, eval)
-          (partitionIndex, matrix)
+
+        val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
+
+        val matrix =
+          if(partitionIndex._1 == partitionIndex._2) buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
+          else crossKernelMatrix(c.head._1, c.last._1, eval)
+
+        (partitionIndex, matrix)
       }), rows, cols, num_R_blocks, num_C_blocks)
 
   }
@@ -136,7 +142,8 @@ object SVMKernel {
   def crossPartitonedKernelMatrix[T, S <: Seq[T]](
     data1: S, data2: S,
     numElementsPerRowBlock: Int,
-    numElementsPerColBlock: Int)(eval: (T, T) => Double): PartitionedMatrix = {
+    numElementsPerColBlock: Int,
+    eval: (T, T) => Double): PartitionedMatrix = {
 
     val (rows, cols) = (data1.length, data2.length)
 

@@ -6,25 +6,26 @@ import math.{Pi, log1p}
 import breeze.stats.distributions.{ContinuousDistr, Moments, Rand, RandBasis}
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
-
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
+import io.github.mandar2812.dynaml.probability.GaussianRV
 import scala.runtime.ScalaRunTime
 
 /**
-  * Represents a Gaussian distribution over a single real variable.
+  * Represents a Gaussian distribution over a [[PartitionedVector]]
   *
-  * @author dlwh
+  * @author mandar2812
   */
 case class BlockedMultiVariateGaussian(mean: PartitionedVector,
                                        covariance: PartitionedPSDMatrix)(implicit rand: RandBasis = Rand)
   extends ContinuousDistr[PartitionedVector] with Moments[PartitionedVector, PartitionedPSDMatrix] {
   def draw() = {
     val nE: Int = (mean.rows/mean.rowBlocks).toInt
-    val z: PartitionedVector = PartitionedVector(mean.rows, nE, (c) => rand.gaussian(0, 1).draw())
+    val z: PartitionedVector = PartitionedVector.rand(mean.rows, nE, GaussianRV(0.0, 1.0))
     val m: PartitionedVector = root * z
     m + mean
   }
 
-  private val root: LowerTriPartitionedMatrix = bcholesky(covariance)
+  private lazy val root: LowerTriPartitionedMatrix = bcholesky(covariance)
 
   override def toString() =  ScalaRunTime._toString(this)
 

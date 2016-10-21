@@ -17,8 +17,7 @@ class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
     DenseVector((a.toArray zip b.toArray).map(couple => couple._1 % couple._2))
 
   override def mod(a: DenseVector[Double],
-                   b: DenseVector[Double]): DenseVector[Double] =
-    DenseVector((a.toArray zip b.toArray).map(couple => couple._1 % couple._2))
+                   b: DenseVector[Double]): DenseVector[Double] = a :% b
 
   override def one: DenseVector[Double] = DenseVector.ones[Double](num_dim)
 

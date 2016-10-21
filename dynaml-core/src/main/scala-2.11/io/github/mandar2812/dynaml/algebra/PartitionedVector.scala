@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.algebra
 
 import breeze.linalg.{DenseVector, NumericOps}
+import io.github.mandar2812.dynaml.probability.RandomVariable
 import org.apache.spark.rdd.RDD
 
 import scala.collection.immutable.NumericRange
@@ -17,7 +18,7 @@ private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])
                                         num_row_blocks: Long = -1L)
   extends NumericOps[PartitionedVector] {
 
-  lazy val rowBlocks = if(num_row_blocks == -1L) data.map(_._1).max else num_row_blocks
+  lazy val rowBlocks = if(num_row_blocks == -1L) data.map(_._1).max + 1L else num_row_blocks
 
   lazy val colBlocks = 1L
 
@@ -54,14 +55,14 @@ object PartitionedVector {
 
   def apply(data: Stream[(Long, DenseVector[Double])], num_rows: Long = -1L): PartitionedVector = {
 
-    val nC = if(num_rows == -1L) data.map(_._1).max else num_rows
+    val nC = if(num_rows == -1L) data.map(_._2.length).sum else num_rows
 
     new PartitionedVector(data, num_rows = nC, num_row_blocks = data.length)
 
   }
 
   def apply(length: Long, numElementsPerBlock: Int, tabFunc: (Long) => Double): PartitionedVector = {
-    val num_blocks: Long = length/numElementsPerBlock
+    val num_blocks: Long = math.ceil(length.toDouble/numElementsPerBlock).toLong
     val blockIndices = 0L until num_blocks
     val indices = (0L until length).grouped(numElementsPerBlock).toStream
 
@@ -71,6 +72,20 @@ object PartitionedVector {
     )
   }
 
+  def apply(d: Stream[Double], length: Long, numElementsPerBlock: Int): PartitionedVector = {
+    val num_blocks: Long = math.ceil(length.toDouble/numElementsPerBlock).toLong
+    val data = d.grouped(numElementsPerBlock)
+      .zipWithIndex
+      .map(c => (c._2.toLong, DenseVector(c._1.toArray)))
+      .toStream
+
+    new PartitionedVector(data, num_rows = length, num_row_blocks = num_blocks)
+  }
+
+
+  /**
+    * Vertically merge a number of partitioned vectors.
+    */
   def vertcat(vectors: PartitionedVector*): PartitionedVector = {
     //sanity check
     assert(vectors.map(_.colBlocks).distinct.length == 1,
@@ -82,6 +97,25 @@ object PartitionedVector {
       couple._1._data.map(c => (c._1+offset, c._2))
     }).reduce((a,b) => a.union(b)))
   }
+
+  /**
+    * Populate a partitioned vector with zeros.
+    */
+  def zeros(numElements: Long, numElementsPerBlock: Int): PartitionedVector =
+    PartitionedVector(numElements, numElementsPerBlock, _ => 0.0)
+
+  /**
+    * Populate a partitioned vector with ones.
+    */
+  def ones(numElements: Long, numElementsPerBlock: Int): PartitionedVector =
+    PartitionedVector(numElements, numElementsPerBlock, _ => 1.0)
+
+  /**
+    * Populate a partitioned vector with I.I.D samples from a
+    * specified [[RandomVariable]]
+    */
+  def rand(numElements: Long, numElementsPerBlock: Int, r: RandomVariable[Double]): PartitionedVector =
+    PartitionedVector(numElements, numElementsPerBlock, _ => r.sample())
 
 
 }

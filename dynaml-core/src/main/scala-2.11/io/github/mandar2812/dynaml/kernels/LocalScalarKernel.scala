@@ -129,6 +129,6 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 }
 
 abstract class CompositeCovariance[T]
-  extends LocalScalarKernel[T] {
+  extends LocalSVMKernel[T] {
 
 }

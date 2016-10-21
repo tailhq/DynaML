@@ -54,6 +54,15 @@ package object algebra {
       }
     }
 
+    implicit object implPartitionedPSDMatrix extends Impl[PartitionedPSDMatrix, PartitionedVector] {
+      override def apply(v: PartitionedPSDMatrix): PartitionedVector = {
+        require(v.rows == v.cols, "Matrix must be square")
+        require(v.rowBlocks == v.colBlocks, "Matrix partitioning must be uniform in rows and columns")
+        new PartitionedVector(v.filterBlocks(c => c._1 == c._2).map(c => (c._1._1, diag(c._2))), v.rows, v.rowBlocks)
+      }
+    }
+
+
   }
 
   object blog extends UFunc {

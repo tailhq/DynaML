@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.algebra
 
 import breeze.linalg.{DenseMatrix, NumericOps}
+import breeze.linalg._
 import io.github.mandar2812.dynaml.kernels.Kernel
 import org.apache.spark.rdd.RDD
 
@@ -18,9 +19,9 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
                                         num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
   extends NumericOps[PartitionedMatrix] {
 
-  lazy val rowBlocks = if(num_row_blocks == -1L) data.map(_._1._1).max else num_row_blocks
+  lazy val rowBlocks = if(num_row_blocks == -1L) data.map(_._1._1).max + 1L else num_row_blocks
 
-  lazy val colBlocks = if(num_col_blocks == -1L) data.map(_._1._2).max else num_col_blocks
+  lazy val colBlocks = if(num_col_blocks == -1L) data.map(_._1._2).max + 1L else num_col_blocks
 
 
   lazy val rows: Long = if(num_rows == -1L) data.filter(_._1._2 == 0L).map(_._2.rows).sum.toLong else num_rows
@@ -59,9 +60,32 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
   }
 
   def filterBlocks(f: ((Long, Long)) => Boolean): Stream[((Long, Long), DenseMatrix[Double])] =
-    data.filter(c => f(c._1))
+    _data.filter(c => f(c._1))
 
   //def filterElements(f: ((Long, Long)) => Boolean): Stream[((Long, Long), Double)]
+
+
+  def L: LowerTriPartitionedMatrix = {
+    require(rows == cols, "Matrix must be square for lower triangular component to make sense")
+    require(rowBlocks == colBlocks,
+      "Matrix must be uniformly partitioned for lower triangular component to be efficiently computed")
+    new LowerTriPartitionedMatrix(
+      filterBlocks(c => c._1 <= c._2)
+        .map(bl =>
+          if(bl._1._1 == bl._1._2) (bl._1, lowerTriangular(bl._2))
+          else bl), rows, cols, rowBlocks, colBlocks)
+  }
+
+  def U: UpperTriPartitionedMatrix = {
+    require(rows == cols, "Matrix must be square for lower triangular component to make sense")
+    require(rowBlocks == colBlocks,
+      "Matrix must be uniformly partitioned for lower triangular component to be efficiently computed")
+    new UpperTriPartitionedMatrix(
+      filterBlocks(c => c._1 >= c._2)
+        .map(bl =>
+          if(bl._1._1 == bl._1._2) (bl._1, upperTriangular(bl._2))
+          else bl), rows, cols, rowBlocks, colBlocks)
+  }
 
   /**
     * Convert to breeze matrix. NOTE: do not use
@@ -90,8 +114,8 @@ object PartitionedMatrix {
   def apply(nRows: Long, nCols: Long,
             numElementsPerRBlock: Int, numElementsPerCBlock: Int,
             tabFunc: (Long, Long) => Double) = {
-    val nRblocks = nRows/numElementsPerRBlock
-    val nCblocks = nCols/numElementsPerCBlock
+    val nRblocks = math.ceil(nRows.toDouble/numElementsPerRBlock).toLong
+    val nCblocks = math.ceil(nCols.toDouble/numElementsPerCBlock).toLong
 
     val resRows: Int = if(nRows%numElementsPerRBlock == 0) numElementsPerRBlock
     else (nRows%numElementsPerRBlock).toInt
@@ -203,7 +227,7 @@ private[dynaml] class PartitionedPSDMatrix(underlyingdata: Stream[((Long, Long),
     data = underlyingdata
       .map(c =>
         if(c._1._1 == c._1._2) Seq(c)
-        else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows))))
+        else Seq(c, (c._1.swap, c._2.t)))
       .reduce((a,b) => a ++ b).toStream,
     num_rows, num_cols,
     num_row_blocks, num_col_blocks) {

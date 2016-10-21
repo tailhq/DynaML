@@ -84,7 +84,7 @@ object TestGPDelve {
 
         //println(scoresAndLabels)
         metrics.print()
-        metrics.generatePlots()
+        //metrics.generatePlots()
       }
 
     val preProcessPipe = DataPipe(utils.textFileToStream _) >
