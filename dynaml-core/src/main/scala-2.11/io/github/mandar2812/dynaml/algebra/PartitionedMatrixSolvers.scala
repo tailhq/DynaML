@@ -7,7 +7,8 @@ import io.github.mandar2812.dynaml.utils
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 
 /**
-  * Created by mandar on 21/10/2016.
+  * @author mandar2812 date: 21/10/2016.
+  * Implementations of the `\` operator for [[PartitionedMatrix]] objects.
   */
 object PartitionedMatrixSolvers extends UFunc {
 
@@ -53,16 +54,10 @@ object PartitionedMatrixSolvers extends UFunc {
 
       val vSolved: DenseVector[Double] = l_hh._data.head._2 \ (y_h - acc_h)._data.head._2
 
-      //val blocks = l_rh._data.zip(y_r._data).map(co => (co._1._1._1, co._1._2*co._2._2))
-      val blocks = l_rh._data.map(co => (co._1._1, co._2 * vSolved))
-
-      //println("Calculated blocks: ")
-      //println(blocks.map(c => (c._1, c._2.length.toString + ", 1")).toList)
-
       recLTriagSolve(
         l_rr, y_r,
         lAcc ++ Stream(new PartitionedVector(Stream((0L, vSolved)))),
-        acc_r + PartitionedVector(blocks))
+        acc_r + PartitionedVector(l_rh._data.map(co => (co._1._1, co._2 * vSolved))))
   }
 
   /**
@@ -118,16 +113,6 @@ object PartitionedMatrixSolvers extends UFunc {
         ((first._1._1, second._1._2), first._2*second._2)
       }).toStream)
 
-      //println("****************")
-      //println("Dimensions: L_rh "+l_rh.rows+" "+l_rh.cols)
-      //println("Dimensions: y_r "+y_r.rows+" "+y_r.cols)
-      //println("Dimensions: acc_r "+acc_r.rows+" "+acc_r.cols)
-
-      //println("Dimensions: accMult "+accMult.rows+" "+accMult.cols)
-      //println(l_rh._data.map(c => (c._1, c._2.rows.toString + ", "+ c._2.cols.toString)).toList)
-      //println(y_r._data.map(c => (c._1, c._2.length.toString + ", 1")).toList)
-
-
       recLTriagMultiSolve(
         l_rr, y_r,
         lAcc ++ Stream(vSolved),
@@ -140,7 +125,7 @@ object PartitionedMatrixSolvers extends UFunc {
     * @param X An upper triangular matrix (transpose of matrix outputted by the [[bcholesky]] function)
     * @param y A partitioned vector
     * @param lAcc An accumulator storing the result block by block
-    * @param acc A vector containing values to add into the result
+    * @param acc A auxilarry vector containing historical values to add into the result
     *
     * */
   def recUTriagSolve(X: UpperTriPartitionedMatrix,
@@ -186,7 +171,7 @@ object PartitionedMatrixSolvers extends UFunc {
     * @param X A lower triangular matrix (outputted by the [[bcholesky]] function)
     * @param y A partitioned matrix
     * @param lAcc An accumulator storing the result block by block
-    * @param acc A matrix containing values to add into the result
+    * @param acc A auxillary matrix containing historical values to add into the result
     *
     * */
   def recUTriagMultiSolve(X: UpperTriPartitionedMatrix,
@@ -263,9 +248,7 @@ object PartitionedMatrixSolvers extends UFunc {
 
       val(lmat, umat): (LowerTriPartitionedMatrix, UpperTriPartitionedMatrix) = bLU(A)
       val z = recLTriagSolve(lmat, V, Stream(), V.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
-      val v = recUTriagSolve(umat, z, Stream(), z.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
-      //val ans = v :/ bdiag(umat)
-      v
+      recUTriagSolve(umat, z, Stream(), z.map(c => (c._1, DenseVector.zeros[Double](c._2.length))))
     }
   }
 

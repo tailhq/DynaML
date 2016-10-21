@@ -38,6 +38,7 @@ noise.blocked_hyper_parameters = noise.hyper_parameters
 
 val startConf = mlpkernel.effective_state ++ noise.effective_state
 val gpModel = new GPRegression(mlpkernel, noise, data)
+gpModel.blockSize_(100)
 
 val gs =
   new GridSearch(gpModel).setGridSize(3).setStepSize(0.2).setLogScale(false)

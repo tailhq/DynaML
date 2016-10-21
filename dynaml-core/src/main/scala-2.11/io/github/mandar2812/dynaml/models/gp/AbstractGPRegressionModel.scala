@@ -200,10 +200,13 @@ abstract class AbstractGPRegressionModel[T, I](
       test, test.length.toLong,
       blockSize, blockSize, covariance.evaluate)
 
-    val crossKernel = SVMKernel.crossPartitonedKernelMatrix(training, test, blockSize, blockSize, covariance.evaluate)
+    val crossKernel = SVMKernel.crossPartitonedKernelMatrix(
+      training, test,
+      blockSize, blockSize,
+      covariance.evaluate)
 
     //Calculate the predictive mean and co-variance
-    val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)//cholesky(smoothingMat)
+    val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
 
     val z: PartitionedVector = Lmat \ trainingLabels
     val alpha: PartitionedVector = Lmat.t \ z
@@ -211,12 +214,13 @@ abstract class AbstractGPRegressionModel[T, I](
     val v: PartitionedMatrix = Lmat \ crossKernel
 
     val varianceReducer: PartitionedMatrix = v.t * v
-    //Ensure that v is symmetric
 
+    //Ensure that v is symmetric
     val adjustedVarReducer: PartitionedMatrix = varianceReducer.L + varianceReducer.L.t
 
     val reducedVariance: PartitionedPSDMatrix =
-      new PartitionedPSDMatrix((kernelTest - adjustedVarReducer).filterBlocks(c => c._1 <= c._2),
+      new PartitionedPSDMatrix(
+        (kernelTest - adjustedVarReducer).filterBlocks(c => c._1 <= c._2),
         kernelTest.rows, kernelTest.cols)
 
     MultGaussianPRV(test.length.toLong, blockSize)(
@@ -270,7 +274,6 @@ abstract class AbstractGPRegressionModel[T, I](
   def unpersist(): Unit = {
     kernelMatrixCache = null
     partitionedKernelMatrixCache = null
-    //noiseCache = null
     caching = false
   }
 

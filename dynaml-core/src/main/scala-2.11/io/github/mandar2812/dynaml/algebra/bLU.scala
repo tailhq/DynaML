@@ -5,10 +5,22 @@ import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import breeze.linalg.{DenseMatrix, LU, inv, lowerTriangular, upperTriangular}
 
 /**
-  * Created by mandar on 20/10/2016.
+  * @author mandar2812 date: 20/10/2016.
+  *
+  * Blocked version of LU decomposition.
+  * Works on square partitioned matrices.
   */
 object bLU extends UFunc {
 
+  /**
+    * Calculates the LU factorization in a tail recursive manner.
+    *
+    * @param mat A square [[PartitionedMatrix]]
+    * @param Lacc An accumulator to store blocks of the lower triangular matrix
+    * @param Uacc An accumulator to store blocks of the upper triangular matrix
+    *
+    * @return The LU factors as streams.
+    */
   def LUAcc(mat: PartitionedMatrix, nAcc: Long,
             Lacc: Stream[((Long, Long), DenseMatrix[Double])],
             Uacc: Stream[((Long, Long), DenseMatrix[Double])]):
@@ -41,7 +53,8 @@ object bLU extends UFunc {
       LUAcc(
         A_rr - l_rh*u_hr, nAcc+1L,
         Lacc ++
-          Stream(((nAcc, nAcc), lowerTriangular(l._1).mapPairs((key, value) => if(key._1 == key._2) 1.0 else value))) ++
+          Stream(((nAcc, nAcc),
+            lowerTriangular(l._1).mapPairs((key, value) => if(key._1 == key._2) 1.0 else value))) ++
           l_rh._data.map(c => ((c._1._1 + nAcc + 1L, c._1._2 + nAcc), c._2)),
         Uacc ++
           Stream(((nAcc, nAcc), upperTriangular(l._1))) ++
