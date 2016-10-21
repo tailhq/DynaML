@@ -74,8 +74,6 @@ object SVMKernel {
       eval: (T, T) =>  Double):
   KernelMatrix[DenseMatrix[Double]] = {
 
-    logger.info("Constructing kernel matrix.")
-
     val kernelIndex = utils.combine(Seq(mappedData.zipWithIndex, mappedData.zipWithIndex))
       .filter(s => s.head._2 >= s.last._2)
       .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
@@ -85,7 +83,7 @@ object SVMKernel {
       (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
     }
 
-    logger.info("Dimension: " + kernel.rows + " x " + kernel.cols)
+    logger.info("   Dimensions: " + kernel.rows + " x " + kernel.cols)
     new SVMKernelMatrix(kernel, length)
   }
 
@@ -93,13 +91,11 @@ object SVMKernel {
                                         eval: (T, T) =>  Double)
   : DenseMatrix[Double] = {
 
-    logger.info("Constructing cross kernel matrix.")
-    logger.info("Dimension: " + data1.length + " x " + data2.length)
-
     val kernelIndex = utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
       .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
       .toMap
 
+    logger.info("   Dimensions: " + data1.length + " x " + data2.length)
     DenseMatrix.tabulate[Double](data1.length, data2.length){
       (i, j) => kernelIndex((i,j))
     }
@@ -121,7 +117,11 @@ object SVMKernel {
       math.ceil(rows.toDouble/numElementsPerRowBlock).toLong,
       math.ceil(cols.toDouble/numElementsPerColBlock).toLong)
 
+    logger.info("Blocks: " + num_R_blocks + " x " + num_C_blocks)
     val partitionedData = data.grouped(numElementsPerRowBlock).zipWithIndex.toStream
+
+    logger.info("~~~~~~~~~~~~~~~~~~~~~~~")
+    logger.info("Constructing Partitions")
 
     new PartitionedPSDMatrix(
       utils.combine(Seq(partitionedData, partitionedData))
@@ -129,9 +129,11 @@ object SVMKernel {
         .toStream.map(c => {
 
         val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
+        logger.info(":- Partition: "+partitionIndex)
 
         val matrix =
-          if(partitionIndex._1 == partitionIndex._2) buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
+          if(partitionIndex._1 == partitionIndex._2)
+            buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
           else crossKernelMatrix(c.head._1, c.last._1, eval)
 
         (partitionIndex, matrix)
@@ -154,11 +156,15 @@ object SVMKernel {
       math.ceil(rows.toDouble/numElementsPerRowBlock).toLong,
       math.ceil(cols.toDouble/numElementsPerColBlock).toLong)
 
+    logger.info("Blocks: " + num_R_blocks + " x " + num_C_blocks)
+    logger.info("~~~~~~~~~~~~~~~~~~~~~~~")
+    logger.info("Constructing Partitions")
     new PartitionedMatrix(utils.combine(Seq(
       data1.grouped(numElementsPerRowBlock).zipWithIndex.toStream,
       data2.grouped(numElementsPerColBlock).zipWithIndex.toStream)
     ).toStream.map(c => {
       val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
+      logger.info(":- Partition: "+partitionIndex)
       val matrix = crossKernelMatrix(c.head._1, c.last._1, eval)
       (partitionIndex, matrix)
     }), rows, cols, num_R_blocks, num_C_blocks)

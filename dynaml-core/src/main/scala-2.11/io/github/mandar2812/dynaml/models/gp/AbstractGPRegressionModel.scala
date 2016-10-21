@@ -189,17 +189,25 @@ abstract class AbstractGPRegressionModel[T, I](
 
     val effectiveTrainingKernel = covariance + noiseModel
 
-    val smoothingMat = if(!caching)
+    val smoothingMat = if(!caching) {
+      logger.info("---------------------------------------------------------------")
+      logger.info("Calculating covariance matrix for training points")
       SVMKernel.buildPartitionedKernelMatrix(training,
         training.length, blockSize, blockSize,
         effectiveTrainingKernel.evaluate)
-    else
+    } else {
+      logger.info("** Using cached training matrix **")
       partitionedKernelMatrixCache
+    }
 
+    logger.info("---------------------------------------------------------------")
+    logger.info("Calculating covariance matrix for test points")
     val kernelTest = SVMKernel.buildPartitionedKernelMatrix(
       test, test.length.toLong,
       blockSize, blockSize, covariance.evaluate)
 
+    logger.info("---------------------------------------------------------------")
+    logger.info("Calculating covariance matrix between training and test points")
     val crossKernel = SVMKernel.crossPartitonedKernelMatrix(
       training, test,
       blockSize, blockSize,
@@ -208,8 +216,8 @@ abstract class AbstractGPRegressionModel[T, I](
     //Calculate the predictive mean and co-variance
     val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
 
-    val z: PartitionedVector = Lmat \ trainingLabels
-    val alpha: PartitionedVector = Lmat.t \ z
+    //val z: PartitionedVector = Lmat \ trainingLabels
+    val alpha: PartitionedVector = Lmat.t \ (Lmat \ trainingLabels)
 
     val v: PartitionedMatrix = Lmat \ crossKernel
 
