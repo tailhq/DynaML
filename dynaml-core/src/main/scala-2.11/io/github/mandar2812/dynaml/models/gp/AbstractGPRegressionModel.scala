@@ -20,8 +20,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.gp
 
-import breeze.linalg.{DenseMatrix, DenseVector, cholesky, trace, inv}
-import breeze.numerics.log
+import breeze.linalg.{DenseMatrix, DenseVector, cholesky, inv, trace}
+import breeze.numerics.{log, sqrt}
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
@@ -249,7 +249,7 @@ abstract class AbstractGPRegressionModel[T, I](
     val postcov = posterior.covariance
     val postmean = posterior.mu
     val varD: PartitionedVector = bdiag(postcov)
-    val stdDev = varD._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
     val mean = postmean._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
 
     logger.info("Generating error bars")
