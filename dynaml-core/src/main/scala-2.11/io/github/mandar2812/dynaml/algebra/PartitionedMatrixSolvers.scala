@@ -60,6 +60,54 @@ object PartitionedMatrixSolvers extends UFunc {
         acc_r + PartitionedVector(l_rh._data.map(co => (co._1._1, co._2 * vSolved))))
   }
 
+
+  /**
+    * Tail recursive linear solve: x = U \ y
+    * @param X An upper triangular matrix (transpose of matrix outputted by the [[bcholesky]] function)
+    * @param y A partitioned vector
+    * @param lAcc An accumulator storing the result block by block
+    * @param acc A auxilarry vector containing historical values to add into the result
+    *
+    * */
+  def recUTriagSolve(X: UpperTriPartitionedMatrix,
+                     y: PartitionedVector,
+                     lAcc: Stream[PartitionedVector],
+                     acc: PartitionedVector): PartitionedVector =
+  X.colBlocks*X.rowBlocks match {
+    case 1L =>
+      val vSolved: DenseVector[Double] =
+        X(0L to 0L, 0L to 0L)._data.head._2 \ (y(0L to 0L) - acc(0L to 0L))._data.head._2
+      val vectorBlocks = lAcc ++ Stream(new PartitionedVector(Stream((0L, vSolved))))
+
+      PartitionedVector.vertcat(vectorBlocks.reverse:_*)
+
+    case _ =>
+      val (u_hh, u_rh, u_rr) = (
+        X(X.rowBlocks-1L to X.rowBlocks-1L, X.colBlocks-1L to X.colBlocks-1L),
+        X(0L until X.rowBlocks-1L, X.colBlocks-1 to X.colBlocks-1),
+        new UpperTriPartitionedMatrix(
+          X._underlyingdata
+            .filter(c =>
+              c._1._1 >= 0L && c._1._1 < X.rowBlocks-1L &&
+                c._1._2 >= 0L && c._1._2 < X.colBlocks-1L),
+          num_row_blocks = X.rowBlocks - 1L,
+          num_col_blocks = X.colBlocks - 1L)
+        )
+
+      val (y_h, y_r) = (y(y.rowBlocks-1L to y.rowBlocks-1L), y(0L until y.rowBlocks-1L))
+      val (acc_h, acc_r) = (acc(acc.rowBlocks-1L to acc.rowBlocks-1L), acc(0L until acc.rowBlocks-1))
+
+      val vSolved: DenseVector[Double] = u_hh._data.head._2 \ (y_h - acc_h)._data.head._2
+
+      val blocks = u_rh._data.map(co => (co._1._1, co._2*vSolved))
+
+      recUTriagSolve(
+        u_rr, y_r,
+        lAcc ++ Stream(new PartitionedVector(Stream((0L, vSolved)))),
+        acc_r+ PartitionedVector(blocks))
+  }
+
+
   /**
     * Tail recursive linear solve: X = L \ Y
     * @param X A lower triangular matrix (outputted by the [[bcholesky]] function)
@@ -119,52 +167,6 @@ object PartitionedMatrixSolvers extends UFunc {
         acc_r + accMult)
   }
 
-
-  /**
-    * Tail recursive linear solve: x = U \ y
-    * @param X An upper triangular matrix (transpose of matrix outputted by the [[bcholesky]] function)
-    * @param y A partitioned vector
-    * @param lAcc An accumulator storing the result block by block
-    * @param acc A auxilarry vector containing historical values to add into the result
-    *
-    * */
-  def recUTriagSolve(X: UpperTriPartitionedMatrix,
-                     y: PartitionedVector,
-                     lAcc: Stream[PartitionedVector],
-                     acc: PartitionedVector): PartitionedVector =
-  X.colBlocks*X.rowBlocks match {
-    case 1L =>
-      val vSolved: DenseVector[Double] =
-        X(0L to 0L, 0L to 0L)._data.head._2 \ (y(0L to 0L) - acc(0L to 0L))._data.head._2
-      val vectorBlocks = lAcc ++ Stream(new PartitionedVector(Stream((0L, vSolved))))
-
-      PartitionedVector.vertcat(vectorBlocks.reverse:_*)
-
-    case _ =>
-      val (u_hh, u_rh, u_rr) = (
-        X(X.rowBlocks-1L to X.rowBlocks-1L, X.colBlocks-1L to X.colBlocks-1L),
-        X(0L until X.rowBlocks-1L, X.colBlocks-1 to X.colBlocks-1),
-        new UpperTriPartitionedMatrix(
-          X._underlyingdata
-            .filter(c =>
-              c._1._1 >= 0L && c._1._1 < X.rowBlocks-1L &&
-                c._1._2 >= 0L && c._1._2 < X.colBlocks-1L),
-          num_row_blocks = X.rowBlocks - 1L,
-          num_col_blocks = X.colBlocks - 1L)
-        )
-
-      val (y_h, y_r) = (y(y.rowBlocks-1L to y.rowBlocks-1L), y(0L until y.rowBlocks-1L))
-      val (acc_h, acc_r) = (acc(acc.rowBlocks-1L to acc.rowBlocks-1L), acc(0L until acc.rowBlocks-1))
-
-      val vSolved: DenseVector[Double] = u_hh._data.head._2 \ (y_h - acc_h)._data.head._2
-
-      val blocks = u_rh._data.map(co => (co._1._1, co._2*vSolved))
-
-      recUTriagSolve(
-        u_rr, y_r,
-        lAcc ++ Stream(new PartitionedVector(Stream((0L, vSolved)))),
-        acc_r+ PartitionedVector(blocks))
-  }
 
   /**
     * Tail recursive linear solve: X = U \ Y

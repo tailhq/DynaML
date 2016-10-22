@@ -2,7 +2,7 @@ package io.github.mandar2812.dynaml.algebra
 
 import breeze.linalg.{DenseMatrix, NumericOps}
 import breeze.linalg._
-import io.github.mandar2812.dynaml.kernels.Kernel
+import breeze.linalg.operators.OpSolveMatrixBy
 import org.apache.spark.rdd.RDD
 
 import scala.collection.immutable.NumericRange
@@ -62,9 +62,9 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
   def filterBlocks(f: ((Long, Long)) => Boolean): Stream[((Long, Long), DenseMatrix[Double])] =
     _data.filter(c => f(c._1))
 
-  //def filterElements(f: ((Long, Long)) => Boolean): Stream[((Long, Long), Double)]
-
-
+  /**
+    * Get lower triangular portion of matrix
+    */
   def L: LowerTriPartitionedMatrix = {
     require(rows == cols, "Matrix must be square for lower triangular component to make sense")
     require(rowBlocks == colBlocks,
@@ -76,6 +76,9 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
           else bl), rows, cols, rowBlocks, colBlocks)
   }
 
+  /**
+    * Upper triangular portion of matrix
+    */
   def U: UpperTriPartitionedMatrix = {
     require(rows == cols, "Matrix must be square for lower triangular component to make sense")
     require(rowBlocks == colBlocks,
@@ -126,6 +129,7 @@ object PartitionedMatrix {
     val blockIndices = for(i <- 0L until nRblocks; j <- 0L until nCblocks) yield (i,j)
 
     val bMat = blockIndices.sorted.toStream.map(c => {
+
       val matDimensions =
         if(c._1 < nRblocks-1L && c._2 < nCblocks - 1L) (numElementsPerRBlock, numElementsPerCBlock)
         else if(c._1 == nRblocks-1L && c._2 < nCblocks - 1L) (resRows, numElementsPerCBlock)
@@ -185,7 +189,14 @@ private[dynaml] class LowerTriPartitionedMatrix(
   def _underlyingdata: Stream[((Long, Long), DenseMatrix[Double])] = underlyingdata
 
   override def t: UpperTriPartitionedMatrix =
-    new UpperTriPartitionedMatrix(underlyingdata.map(c => (c._1.swap, c._2.t)), cols, rows, colBlocks, rowBlocks)
+    new UpperTriPartitionedMatrix(
+      underlyingdata.map(c => (c._1.swap, c._2.t)),
+      cols, rows, colBlocks, rowBlocks)
+
+  override def repr: LowerTriPartitionedMatrix = this
+
+  def \\[B, That](b: B)(implicit op: OpSolveMatrixBy.Impl2[LowerTriPartitionedMatrix, B, That]) =
+    op.apply(repr, b)
 
 }
 
@@ -211,8 +222,14 @@ private[dynaml] class UpperTriPartitionedMatrix(
   def _underlyingdata: Stream[((Long, Long), DenseMatrix[Double])] = underlyingdata
 
   override def t: LowerTriPartitionedMatrix =
-    new LowerTriPartitionedMatrix(underlyingdata.map(c => (c._1.swap, c._2.t)), cols, rows, colBlocks, rowBlocks)
+    new LowerTriPartitionedMatrix(
+      underlyingdata.map(c => (c._1.swap, c._2.t)),
+      cols, rows, colBlocks, rowBlocks)
 
+  override def repr: UpperTriPartitionedMatrix = this
+
+  def \\[B, That](b: B)(implicit op: OpSolveMatrixBy.Impl2[UpperTriPartitionedMatrix, B, That]) =
+    op.apply(repr, b)
 }
 
 /**
@@ -220,10 +237,11 @@ private[dynaml] class UpperTriPartitionedMatrix(
   *
   * A partitioned positive semi-definite matrix.
   */
-private[dynaml] class PartitionedPSDMatrix(underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
-                                           num_rows: Long = -1L, num_cols: Long = -1L,
-                                           num_row_blocks: Long = -1L, num_col_blocks: Long = -1L) extends
-  PartitionedMatrix(
+private[dynaml] class PartitionedPSDMatrix(
+  underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
+  num_rows: Long = -1L, num_cols: Long = -1L,
+  num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
+  extends PartitionedMatrix(
     data = underlyingdata
       .map(c =>
         if(c._1._1 == c._1._2) Seq(c)
@@ -234,4 +252,5 @@ private[dynaml] class PartitionedPSDMatrix(underlyingdata: Stream[((Long, Long),
 
   override def t = this
 
+  override def repr: PartitionedPSDMatrix = this
 }

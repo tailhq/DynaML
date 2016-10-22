@@ -216,15 +216,16 @@ abstract class AbstractGPRegressionModel[T, I](
     //Calculate the predictive mean and co-variance
     val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
 
-    //val z: PartitionedVector = Lmat \ trainingLabels
-    val alpha: PartitionedVector = Lmat.t \ (Lmat \ trainingLabels)
+    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ trainingLabels)
 
-    val v: PartitionedMatrix = Lmat \ crossKernel
+    val v: PartitionedMatrix = Lmat \\ crossKernel
 
     val varianceReducer: PartitionedMatrix = v.t * v
 
-    //Ensure that v is symmetric
-    val adjustedVarReducer: PartitionedMatrix = varianceReducer.L + varianceReducer.L.t
+    //Ensure that the variance reduction is symmetric
+    val adjustedVarReducer: PartitionedMatrix = (varianceReducer.L + varianceReducer.L.t).map(bm =>
+      if(bm._1._1 == bm._1._2) (bm._1, bm._2*(DenseMatrix.eye[Double](bm._2.rows)*0.5))
+      else bm)
 
     val reducedVariance: PartitionedPSDMatrix =
       new PartitionedPSDMatrix(
@@ -335,7 +336,7 @@ object AbstractGPRegressionModel {
 
     try {
       val Lmat = bcholesky(smoothingMat)
-      val alpha: PartitionedVector = Lmat.t \ (Lmat \ trainingData)
+      val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ trainingData)
 
       val d: Double = trainingData dot alpha
 
