@@ -252,5 +252,7 @@ private[dynaml] class PartitionedPSDMatrix(
 
   override def t = this
 
+  def _underlyingdata = underlyingdata
+
   override def repr: PartitionedPSDMatrix = this
 }

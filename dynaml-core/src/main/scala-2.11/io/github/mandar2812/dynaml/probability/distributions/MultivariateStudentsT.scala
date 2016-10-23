@@ -29,7 +29,7 @@ case class MultivariateStudentsT(
     (root * z) += mean
   }
 
-  private val root:DenseMatrix[Double] = cholesky(covariance)
+  private val root: DenseMatrix[Double] = cholesky(covariance)
 
   override def toString() =  ScalaRunTime._toString(this)
 

@@ -185,9 +185,14 @@ object PartitionedMatrixOps extends UFunc {
     def apply(a: PartitionedVector, b: Double) = a.map(c => (c._1, c._2*b))
   }
 
-  implicit object multEPartitionedVecAScalar extends
+  implicit object multSPartitionedVecAScalar extends
     OpMulScalar.Impl2[PartitionedVector, Double, PartitionedVector] {
     def apply(a: PartitionedVector, b: Double) = a.map(c => (c._1, c._2*b))
+  }
+
+  implicit object multMPartitionedMatAScalar extends
+    OpMulMatrix.Impl2[PartitionedMatrix, Double, PartitionedMatrix] {
+    def apply(a: PartitionedMatrix, b: Double) = a.map(c => (c._1, c._2*b))
   }
 
   implicit object elemWisemultPartitionedVecAVecB extends
@@ -201,7 +206,7 @@ object PartitionedMatrixOps extends UFunc {
     }
   }
 
-  implicit object multPartitionedMatAScalar extends
+  implicit object multSPartitionedMatAScalar extends
     OpMulScalar.Impl2[PartitionedMatrix, Double, PartitionedMatrix] {
     def apply(a: PartitionedMatrix, b: Double) = a.map(c => (c._1, c._2*b))
   }
