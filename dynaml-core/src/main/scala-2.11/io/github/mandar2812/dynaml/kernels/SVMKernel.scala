@@ -125,7 +125,7 @@ object SVMKernel {
 
     new PartitionedPSDMatrix(
       utils.combine(Seq(partitionedData, partitionedData))
-        .filter(c => c.head._2 <= c.last._2)
+        .filter(c => c.head._2 >= c.last._2)
         .toStream.map(c => {
 
         val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
