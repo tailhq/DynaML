@@ -1,22 +1,47 @@
+/*
+Copyright 2015 Mandar Chandorkar
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+* */
 package io.github.mandar2812.dynaml.models.stp
 
-import breeze.linalg.{DenseMatrix, DenseVector, cholesky}
-import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
+import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.numerics._
+import io.github.mandar2812.dynaml.algebra._
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
+import io.github.mandar2812.dynaml.kernels.{LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
-import io.github.mandar2812.dynaml.probability.MultStudentsTRV
-import io.github.mandar2812.dynaml.probability.distributions.MultivariateStudentsT
+import io.github.mandar2812.dynaml.probability.MultStudentsTPRV
+import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultivariateStudentsT, MultivariateStudentsT}
 import org.apache.log4j.Logger
 
 /**
-  * Created by mandar on 26/08/16.
+  * @author mandar2812 date 26/08/16.
+  * Implementation of a Students' T Regression model.
   */
 abstract class AbstractSTPRegressionModel[T, I](
   mu: Double, cov: LocalScalarKernel[I],
   n: LocalScalarKernel[I],
   data: T, num: Int)
-  extends ContinuousProcess[T, I, Double, MultStudentsTRV]
-  with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultStudentsTRV]
+  extends ContinuousProcess[T, I, Double, MultStudentsTPRV]
+  with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultStudentsTPRV]
   with GloballyOptimizable {
 
 
@@ -38,9 +63,20 @@ abstract class AbstractSTPRegressionModel[T, I](
 
   val npoints = num
 
+  protected var blockSize = 1000
+
+  def blockSize_(b: Int): Unit = {
+    blockSize = b
+    covariance.setBlockSizes((b,b))
+    noiseModel.setBlockSizes((b,b))
+  }
+
+  def _blockSize: Int = blockSize
+
   protected var (caching, kernelMatrixCache)
   : (Boolean, DenseMatrix[Double]) = (false, null)
 
+  protected var partitionedKernelMatrixCache: PartitionedPSDMatrix = _
 
   /**
     * Set the model "state" which
@@ -77,34 +113,56 @@ abstract class AbstractSTPRegressionModel[T, I](
     * @param test A Sequence or Sequence like data structure
     *             storing the values of the input patters.
     **/
-  override def predictiveDistribution[U <: Seq[I]](test: U): MultStudentsTRV = {
+  override def predictiveDistribution[U <: Seq[I]](test: U): MultStudentsTPRV = {
     logger.info("Calculating posterior predictive distribution")
     //Calculate the kernel matrix on the training data
     val training = dataAsIndexSeq(g)
-    val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
+    val trainingLabels = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._2),
+      training.length.toLong, _blockSize
+    )
 
     val effectiveTrainingKernel = covariance + noiseModel
+    effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
-    val smoothingMat = if(!caching)
-      effectiveTrainingKernel.buildKernelMatrix(training, npoints).getKernelMatrix()
-    else
-      kernelMatrixCache
+    val smoothingMat = if(!caching) {
+      logger.info("---------------------------------------------------------------")
+      logger.info("Calculating covariance matrix for training points")
+      SVMKernel.buildPartitionedKernelMatrix(training,
+        training.length, _blockSize, _blockSize,
+        effectiveTrainingKernel.evaluate)
+    } else {
+      logger.info("** Using cached training matrix **")
+      partitionedKernelMatrixCache
+    }
 
-    val kernelTest = covariance.buildKernelMatrix(test, test.length)
-      .getKernelMatrix()
-    val crossKernel = covariance.buildCrossKernelMatrix(training, test)
+    logger.info("---------------------------------------------------------------")
+    logger.info("Calculating covariance matrix for test points")
+    val kernelTest = SVMKernel.buildPartitionedKernelMatrix(
+      test, test.length.toLong,
+      _blockSize, _blockSize, covariance.evaluate)
+
+    logger.info("---------------------------------------------------------------")
+    logger.info("Calculating covariance matrix between training and test points")
+    val crossKernel = SVMKernel.crossPartitonedKernelMatrix(
+      training, test,
+      _blockSize, _blockSize,
+      covariance.evaluate)
 
     //Calculate the predictive mean and co-variance
-    //val smoothingMat = kernelTraining + noiseMat
-    val Lmat = cholesky(smoothingMat)
-    val alpha = Lmat.t \ (Lmat \ trainingLabels)
-    val v = Lmat \ crossKernel
+    val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
 
-    val varianceReducer = v.t * v
-    //Ensure that v is symmetric
+    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ trainingLabels)
 
-    val adjustedVarReducer = DenseMatrix.tabulate[Double](varianceReducer.rows, varianceReducer.cols)(
-      (i,j) => if(i <= j) varianceReducer(i,j) else varianceReducer(j,i))
+    val v: PartitionedMatrix = Lmat \\ crossKernel
+
+    val varianceReducer: PartitionedMatrix = v.t * v
+
+    //Ensure that the variance reduction is symmetric
+    val adjustedVarReducer: PartitionedMatrix = (varianceReducer.L + varianceReducer.L.t).map(bm =>
+      if(bm._1._1 == bm._1._2) (bm._1, bm._2*(DenseMatrix.eye[Double](bm._2.rows)*0.5))
+      else bm)
+
 
     val degOfFreedom = current_state("degrees_of_freedom")
 
@@ -112,10 +170,18 @@ abstract class AbstractSTPRegressionModel[T, I](
 
     val varianceAdjustment = (degOfFreedom + beta - 2.0)/(degOfFreedom + training.length - 2.0)
 
-    MultStudentsTRV(test.length)(
+    val reducedVariance: PartitionedPSDMatrix =
+      new PartitionedPSDMatrix(
+        (kernelTest - adjustedVarReducer)
+          .filterBlocks(c => c._1 <= c._2)
+          .map(c => (c._1, c._2*varianceAdjustment)),
+        kernelTest.rows, kernelTest.cols)
+
+
+    MultStudentsTPRV(test.length.toLong, _blockSize)(
       training.length+degOfFreedom,
       crossKernel.t * alpha,
-      (kernelTest - adjustedVarReducer)*varianceAdjustment)
+      reducedVariance)
   }
 
   /**
@@ -130,11 +196,13 @@ abstract class AbstractSTPRegressionModel[T, I](
     val posterior = predictiveDistribution(testData)
     val postcov = posterior.covariance
     val postmean = posterior.mean
-    val stdDev = (1 to testData.length).map(i => math.sqrt(postcov(i-1, i-1)))
-    val mean = postmean.toArray.toSeq
+    val varD: PartitionedVector = bdiag(postcov)
+    val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val mean = postmean._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
 
     logger.info("Generating error bars")
     val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
+
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
   }
 
@@ -156,14 +224,23 @@ abstract class AbstractSTPRegressionModel[T, I](
 
     setState(h)
     val training = dataAsIndexSeq(g)
-    val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
+    val trainingLabels = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._2),
+      training.length.toLong, _blockSize
+    )
 
     val effectiveTrainingKernel = covariance + noiseModel
+    effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
-    val kernelTraining: DenseMatrix[Double] =
-      effectiveTrainingKernel.buildKernelMatrix(training, npoints).getKernelMatrix()
+    val kernelTraining: PartitionedPSDMatrix =
+      effectiveTrainingKernel.buildBlockedKernelMatrix(training, npoints)
 
-    AbstractSTPRegressionModel.logLikelihood(current_state("degrees_of_freedom"),trainingLabels, kernelTraining)
+    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1")) {
+      partitionedKernelMatrixCache = kernelTraining
+      caching = true
+    }
+
+    AbstractSTPRegressionModel.logLikelihood(current_state("degrees_of_freedom"), trainingLabels, kernelTraining)
   }
 
   /**
@@ -173,12 +250,12 @@ abstract class AbstractSTPRegressionModel[T, I](
   def persist(): Unit = {
 
     val effectiveTrainingKernel = covariance + noiseModel
+    effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
-    kernelMatrixCache =
-      effectiveTrainingKernel.buildKernelMatrix(dataAsIndexSeq(g), npoints)
-        .getKernelMatrix()
-    //noiseCache = noiseModel.buildKernelMatrix(dataAsIndexSeq(g), npoints)
-    //  .getKernelMatrix()
+    val training = dataAsIndexSeq(g)
+    partitionedKernelMatrixCache = SVMKernel.buildPartitionedKernelMatrix(training,
+      training.length, _blockSize, _blockSize,
+      effectiveTrainingKernel.evaluate)
     caching = true
   }
 
@@ -187,7 +264,7 @@ abstract class AbstractSTPRegressionModel[T, I](
     * */
   def unpersist(): Unit = {
     kernelMatrixCache = null
-    //noiseCache = null
+    partitionedKernelMatrixCache = null
     caching = false
   }
 
@@ -218,4 +295,25 @@ object AbstractSTPRegressionModel {
       case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
     }
   }
+
+  def logLikelihood(mu: Double, trainingData: PartitionedVector,
+                    kernelMatrix: PartitionedPSDMatrix): Double = {
+
+    try {
+      val nE =
+        if(trainingData.rowBlocks > 1L) trainingData(0L to 0L)._data.head._2.length
+        else trainingData.rows.toInt
+
+      val dist = BlockedMultivariateStudentsT(mu,
+        PartitionedVector.zeros(trainingData.rows, nE),
+        kernelMatrix)
+
+      -1.0*dist.logPdf(trainingData)
+    } catch {
+      case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
+      case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
+    }
+
+  }
+
 }

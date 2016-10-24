@@ -33,10 +33,10 @@ class PartitionedLinearAlgebraSpec extends FlatSpec with Matchers {
 
     val L = new LowerTriPartitionedMatrix(dat, A.rows, A.cols, A.rowBlocks, A.colBlocks)
 
-    println(L._underlyingdata.map(c => (c._1, c._2.rows.toString +"x"+ c._2.cols.toString)).toList)
+    //println(L._underlyingdata.map(c => (c._1, c._2.rows.toString +"x"+ c._2.cols.toString)).toList)
 
     val (l1, u1): (LowerTriPartitionedMatrix, UpperTriPartitionedMatrix) = bLU(A)
-    println(l1._underlyingdata.map(c => (c._1, c._2.rows.toString +"x"+ c._2.cols.toString)).toList)
+    //println(l1._underlyingdata.map(c => (c._1, c._2.rows.toString +"x"+ c._2.cols.toString)).toList)
     //println(u1._underlyingdata.map(c => (c._1, c._2.rows.toString +"x"+ c._2.cols.toString)).toList)
 
     val error: PartitionedMatrix = L - A_ans

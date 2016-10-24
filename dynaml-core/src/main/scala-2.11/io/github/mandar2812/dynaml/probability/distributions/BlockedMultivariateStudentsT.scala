@@ -26,7 +26,7 @@ case class BlockedMultivariateStudentsT(
   require(mu > 2.0, "Degrees of freedom must be greater than 2.0, for a multivariate t distribution to be defined")
 
   def draw() = {
-    val nE: Int = (mean.rows/mean.rowBlocks).toInt
+    val nE: Int = if(mean.rowBlocks > 1L) mean(0L to 0L)._data.head._2.length else mean.rows.toInt
     val z: PartitionedVector = PartitionedVector.rand(mean.rows, nE, RandomVariable(new StudentsT(mu)))
     val m: PartitionedVector = root * z
     m + mean

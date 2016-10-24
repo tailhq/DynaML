@@ -13,6 +13,13 @@ import breeze.linalg.DenseMatrix
 trait LocalScalarKernel[Index] extends
 CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
+  var (rowBlocking, colBlocking): (Int, Int) = (1000, 1000)
+
+  def setBlockSizes(s: (Int, Int)): Unit = {
+    rowBlocking = s._1
+    colBlocking = s._2
+  }
+
   def gradient(x: Index, y: Index): Map[String, Double] = effective_hyper_parameters.map((_, 0.0)).toMap
 
   /**

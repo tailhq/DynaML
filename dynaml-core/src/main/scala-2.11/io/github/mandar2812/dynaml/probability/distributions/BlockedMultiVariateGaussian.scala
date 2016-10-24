@@ -19,7 +19,7 @@ case class BlockedMultiVariateGaussian(mean: PartitionedVector,
                                        covariance: PartitionedPSDMatrix)(implicit rand: RandBasis = Rand)
   extends ContinuousDistr[PartitionedVector] with Moments[PartitionedVector, PartitionedPSDMatrix] {
   def draw() = {
-    val nE: Int = (mean.rows/mean.rowBlocks).toInt
+    val nE: Int = if(mean.rowBlocks > 1L) mean(0L to 0L)._data.head._2.length else mean.rows.toInt
     val z: PartitionedVector = PartitionedVector.rand(mean.rows, nE, GaussianRV(0.0, 1.0))
     val m: PartitionedVector = root * z
     m + mean

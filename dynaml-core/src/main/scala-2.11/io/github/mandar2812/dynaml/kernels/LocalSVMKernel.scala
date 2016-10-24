@@ -11,13 +11,6 @@ import io.github.mandar2812.dynaml.algebra.{KernelMatrix, PartitionedPSDMatrix}
   * */
 trait LocalSVMKernel[Index] extends LocalScalarKernel[Index] {
 
-  var (rowBlocking, colBlocking): (Int, Int) = (1000, 1000)
-
-  def setBlockSizes(s: (Int, Int)): Unit = {
-    rowBlocking = s._1
-    colBlocking = s._2
-  }
-
   override def buildKernelMatrix[S <: Seq[Index]](
     mappedData: S,
     length: Int): KernelMatrix[DenseMatrix[Double]] =
