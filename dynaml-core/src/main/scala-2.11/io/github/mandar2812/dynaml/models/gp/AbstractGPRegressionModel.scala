@@ -125,6 +125,11 @@ abstract class AbstractGPRegressionModel[T, I](
     val kernelTraining: PartitionedPSDMatrix =
       effectiveTrainingKernel.buildBlockedKernelMatrix(training, npoints)
 
+    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1")) {
+      partitionedKernelMatrixCache = kernelTraining
+      caching = true
+    }
+
     AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining)
   }
 
