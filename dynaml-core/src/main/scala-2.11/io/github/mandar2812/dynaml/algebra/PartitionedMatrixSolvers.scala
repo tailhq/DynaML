@@ -296,6 +296,16 @@ object PartitionedMatrixSolvers extends UFunc {
     }
   }
 
+  implicit object implOpSolveUpperTriPartitionedMatrixByMatrix
+    extends OpSolveMatrixBy.Impl2[UpperTriPartitionedMatrix, PartitionedMatrix, PartitionedMatrix] {
+
+    override def apply(A: UpperTriPartitionedMatrix, V: PartitionedMatrix): PartitionedMatrix = {
+      require(A.rows == V.rows && A.cols == V.rows, "Non-conformant matrix-vector sizes")
+      require(A.colBlocks == V.rowBlocks && A.rowBlocks == A.rowBlocks, "Non-conformant matrix-vector partitions")
+
+      recUTriagMultiSolve(A, V, Stream(), V.map(c => (c._1, DenseMatrix.zeros[Double](c._2.rows, c._2.cols))))
+    }
+  }
 
 
 }

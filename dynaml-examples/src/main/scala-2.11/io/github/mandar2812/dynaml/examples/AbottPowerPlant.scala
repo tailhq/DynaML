@@ -45,8 +45,8 @@ object AbottPowerPlant {
                     deltaT: Int = 2, timelag:Int = 0, stepPred: Int = 3,
                     num_training: Int = 150, num_test:Int, column: Int = 7,
                     opt: Map[String, String]): Seq[Seq[AnyVal]] = {
-    //Load Daisy data into a stream
-    //Extract the time and Dst values
+    //Load Abott power plant data into a stream
+    //Extract the time and target values
 
     val logger = Logger.getLogger(this.getClass)
 
@@ -77,15 +77,11 @@ object AbottPowerPlant {
             model.type](model)
         }
 
-        val startConf = kernel.state ++ noise.state
+        val startConf = kernel.effective_state ++ noise.effective_state
 
         val (_, conf) = gs.optimize(startConf, opt)
 
-        //model.setRegParam(opt("regularization").toDouble).learn()
-
-        //val res = trainTest._1._2.map(testpoint => (model.predict(testpoint._1), testpoint._2))
-
-        val res = model.test(trainTest._1._2.toSeq)
+        val res = model.test(trainTest._1._2)
 
         val deNormalize = DataPipe((list: List[(Double, Double, Double, Double)]) =>
           list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),

@@ -75,7 +75,7 @@ class GPMLOptimizer[I, T, M <: GloballyOptWithGrad](model: M)
       })
 
       count += 1
-    } while(count < maxit && gradNorm >= tolerance)
+    } while (count < maxit && gradNorm >= tolerance)
     logger.info("Stopped ML-II at "+count+" iterations")
     logger.info("Final state : "+working_solution)
     (system, working_solution)

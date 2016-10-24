@@ -2,18 +2,19 @@ package io.github.mandar2812.dynaml.probability.distributions
 
 import breeze.numerics._
 
-import math.{Pi, log1p}
+import math.Pi
 import breeze.stats.distributions._
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
-import io.github.mandar2812.dynaml.analysis.PartitionedVectorField
 import io.github.mandar2812.dynaml.probability.RandomVariable
 import spire.implicits._
 import scala.runtime.ScalaRunTime
 
 /**
-  * Created by mandar on 23/10/2016.
+  * @author mandar2812 date: 23/10/2016.
+  *
+  * Multivariate T distribution on [[PartitionedVector]]
   */
 case class BlockedMultivariateStudentsT(
   mu: Double,

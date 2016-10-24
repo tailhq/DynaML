@@ -148,11 +148,10 @@ package object algebra {
       override def apply(v: PartitionedMatrix): Double = {
         require(v.rows == v.cols, "Matrix must be square for its determinant to be defined")
         require(v.rowBlocks == v.colBlocks, "Matrix partitioning must be homogeneous")
-        val dat = bcholesky.choleskyPAcc(
-          v, 0L, Stream()
-        )
-        val L = new LowerTriPartitionedMatrix(dat, v.rows, v.cols, v.rowBlocks, v.colBlocks)
-        val ans: Double = bdet.apply(L)
+        val (ldat, udat) = bLU.LUAcc(v, 0L, Stream(), Stream())
+        val L = new LowerTriPartitionedMatrix(ldat, v.rows, v.cols, v.rowBlocks, v.colBlocks)
+        val U = new UpperTriPartitionedMatrix(udat, v.rows, v.cols, v.rowBlocks, v.colBlocks)
+        val ans: Double = bdet.apply(L) * bdet.apply(U)
         ans
       }
     }

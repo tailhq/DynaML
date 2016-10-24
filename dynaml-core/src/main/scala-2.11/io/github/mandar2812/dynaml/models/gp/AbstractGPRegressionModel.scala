@@ -145,27 +145,40 @@ abstract class AbstractGPRegressionModel[T, I](
     noiseModel.setHyperParameters(h)
 
     val training = dataAsIndexSeq(g)
-    val trainingLabels = DenseVector(dataAsSeq(g).map(_._2).toArray)
+    val trainingLabels = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._2),
+      training.length.toLong, blockSize
+    )
 
-    val inverse = inv(covariance.buildKernelMatrix(training, npoints).getKernelMatrix() +
-      noiseModel.buildKernelMatrix(training, npoints).getKernelMatrix())
+    val effectiveTrainingKernel = covariance + noiseModel
 
-    val hParams = covariance.hyper_parameters ++ noiseModel.hyper_parameters
-    val alpha = inverse * trainingLabels
+    val kernelTraining: PartitionedPSDMatrix =
+      effectiveTrainingKernel.buildBlockedKernelMatrix(training, npoints)
+
+    val Lmat = bcholesky(kernelTraining)
+
+    val hParams = covariance.effective_hyper_parameters ++ noiseModel.effective_hyper_parameters
+    val alpha = Lmat.t \\ (Lmat \\ trainingLabels)
+
     hParams.map(h => {
       //build kernel derivative matrix
-      val kernelDerivative =
+      val kernelDerivative: PartitionedMatrix =
         if(noiseModel.hyper_parameters.contains(h))
-          DenseMatrix.tabulate[Double](npoints, npoints){(i,j) => {
-            noiseModel.gradient(training(i), training(j))(h)
-          }}
+          SVMKernel.buildPartitionedKernelMatrix(
+            training, npoints.toLong,
+            blockSize, blockSize,
+            (x: I, y: I) => noiseModel.gradient(x, y)(h))
         else
-          DenseMatrix.tabulate[Double](npoints, npoints){(i,j) => {
-            covariance.gradient(training(i), training(j))(h)
-          }}
+          SVMKernel.buildPartitionedKernelMatrix(
+            training, npoints.toLong,
+            blockSize, blockSize,
+            (x: I, y: I) => covariance.gradient(x, y)(h))
+
       //Calculate gradient for the hyper parameter h
-      val grad: DenseMatrix[Double] = (alpha*alpha.t - inverse)*kernelDerivative
-      (h, trace(grad))
+      val grad: PartitionedMatrix =
+        alpha*alpha.t*kernelDerivative - (Lmat.t \\ (Lmat \\ kernelDerivative))
+
+      (h, btrace(grad))
     }).toMap
   }
 

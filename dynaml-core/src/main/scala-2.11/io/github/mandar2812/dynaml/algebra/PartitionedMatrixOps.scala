@@ -198,7 +198,8 @@ object PartitionedMatrixOps extends UFunc {
   implicit object elemWisemultPartitionedVecAVecB extends
     OpMulScalar.Impl2[PartitionedVector, PartitionedVector, PartitionedVector] {
     def apply(a: PartitionedVector, b: PartitionedVector) = {
-      require(a.rows == b.rows, "For element wise multiplication, partitioned vectors must be of same dimension")
+      require(a.rows == b.rows,
+        "For element wise multiplication, partitioned vectors must be of same dimension")
       require(a.rowBlocks == b.rowBlocks,
         "For element wise multiplication, partitioned vectors must have same number of blocks")
 
