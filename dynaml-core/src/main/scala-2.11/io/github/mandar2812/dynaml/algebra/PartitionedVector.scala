@@ -16,17 +16,18 @@ import scala.collection.immutable.NumericRange
 private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])],
                                         num_rows: Long = -1L,
                                         num_row_blocks: Long = -1L)
-  extends NumericOps[PartitionedVector] {
+  extends AbstractPartitionedVector[DenseVector[Double]](data, num_row_blocks)
+    with NumericOps[PartitionedVector] {
 
-  lazy val rowBlocks = if(num_row_blocks == -1L) data.map(_._1).max + 1L else num_row_blocks
+  //override lazy val rowBlocks = if(num_row_blocks == -1L) data.map(_._1).max + 1L else num_row_blocks
 
-  lazy val colBlocks = 1L
+  //override lazy val colBlocks = 1L
 
   lazy val rows: Long = if(num_rows == -1L) data.map(_._2.length).sum.toLong else num_rows
 
-  lazy val cols: Long = 1L
+  override lazy val cols: Long = 1L
 
-  def _data = data.sortBy(_._1)
+  //override def _data = data.sortBy(_._1)
 
   override def repr: PartitionedVector = this
 
@@ -53,6 +54,10 @@ private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])
 
 object PartitionedVector {
 
+  /**
+    * Create a [[PartitionedVector]] given the input blocks.
+    *
+    */
   def apply(data: Stream[(Long, DenseVector[Double])], num_rows: Long = -1L): PartitionedVector = {
 
     val nC = if(num_rows == -1L) data.map(_._2.length).sum else num_rows
@@ -61,6 +66,10 @@ object PartitionedVector {
 
   }
 
+  /**
+    * Create a [[PartitionedVector]] from a tabulation function
+    *
+    */
   def apply(length: Long, numElementsPerBlock: Int, tabFunc: (Long) => Double): PartitionedVector = {
     val num_blocks: Long = math.ceil(length.toDouble/numElementsPerBlock).toLong
     val blockIndices = 0L until num_blocks
@@ -72,14 +81,37 @@ object PartitionedVector {
     )
   }
 
-  def apply(d: Stream[Double], length: Long, numElementsPerBlock: Int): PartitionedVector = {
-    val num_blocks: Long = math.ceil(length.toDouble/numElementsPerBlock).toLong
-    val data = d.grouped(numElementsPerBlock)
+  /**
+    * Create a [[PartitionedVector]] from a stream
+    * @param d input stream
+    * @param length The size of the stream
+    * @param num_elements_per_block The size of each block
+    * @return A [[PartitionedVector]] instance.
+    */
+  def apply(d: Stream[Double], length: Long, num_elements_per_block: Int): PartitionedVector = {
+    val num_blocks: Long = math.ceil(length.toDouble/num_elements_per_block).toLong
+    val data = d.grouped(num_elements_per_block)
       .zipWithIndex
       .map(c => (c._2.toLong, DenseVector(c._1.toArray)))
       .toStream
 
     new PartitionedVector(data, num_rows = length, num_row_blocks = num_blocks)
+  }
+
+  /**
+    * Create a [[PartitionedVector]] from a breeze [[DenseVector]]
+    * @param v input vector
+    * @param num_elements_per_block The size of each block
+    * @return A [[PartitionedVector]] instance.
+    */
+  def apply(v: DenseVector[Double], num_elements_per_block: Int): PartitionedVector = {
+    val blocks = v.toArray
+      .grouped(num_elements_per_block)
+      .zipWithIndex
+      .map(c => (c._2.toLong, DenseVector(c._1)))
+      .toStream
+
+    new PartitionedVector(blocks)
   }
 
 

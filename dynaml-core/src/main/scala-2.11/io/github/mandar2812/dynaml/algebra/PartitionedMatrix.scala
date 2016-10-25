@@ -17,34 +17,28 @@ import scala.collection.immutable.NumericRange
 private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[Double])],
                                         num_rows: Long = -1L, num_cols: Long = -1L,
                                         num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
-  extends NumericOps[PartitionedMatrix] {
-
-  lazy val rowBlocks = if(num_row_blocks == -1L) data.map(_._1._1).max + 1L else num_row_blocks
-
-  lazy val colBlocks = if(num_col_blocks == -1L) data.map(_._1._2).max + 1L else num_col_blocks
-
+  extends AbstractPartitionedMatrix[DenseMatrix[Double]](data, num_row_blocks, num_col_blocks)
+    with NumericOps[PartitionedMatrix] {
 
   lazy val rows: Long = if(num_rows == -1L) data.filter(_._1._2 == 0L).map(_._2.rows).sum.toLong else num_rows
 
   lazy val cols: Long = if(num_cols == -1L) data.filter(_._1._1 == 0L).map(_._2.cols).sum.toLong else num_cols
-
-  def _data = data.sortBy(_._1)
 
   override def repr: PartitionedMatrix = this
 
   /**
     * Transpose of blocked matrix
     * */
-  def t: PartitionedMatrix = new PartitionedMatrix(
+  override def t: PartitionedMatrix = new PartitionedMatrix(
     _data.map(c => (c._1.swap, c._2.t)),
     cols, rows, colBlocks, rowBlocks)
-
 
   /**
     * Map/transform each block matrix.
     * @param f The mapping function
     */
-  def map(f: (((Long, Long), DenseMatrix[Double])) => ((Long, Long), DenseMatrix[Double])): PartitionedMatrix =
+  override def map(
+    f: (((Long, Long), DenseMatrix[Double])) => ((Long, Long), DenseMatrix[Double])): PartitionedMatrix =
     new PartitionedMatrix(data.map(f), rows, cols, rowBlocks, colBlocks)
 
   /**
@@ -58,9 +52,6 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
       num_row_blocks = r.length, num_col_blocks = c.length
     )
   }
-
-  def filterBlocks(f: ((Long, Long)) => Boolean): Stream[((Long, Long), DenseMatrix[Double])] =
-    _data.filter(c => f(c._1))
 
   /**
     * Get lower triangular portion of matrix
