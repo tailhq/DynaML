@@ -12,6 +12,7 @@ sealed trait KernelOpType
 sealed trait KernelOpAdd extends KernelOpType
 sealed trait KernelOpMult extends KernelOpType
 sealed trait KernelOuterMult extends KernelOpType
+sealed trait KernelOuterAdd extends KernelOpType
 
 object KernelOpAdd extends KernelOpAdd with UFunc {
   implicit def opAddFromSemiring[S:Semiring]: Impl2[S, S, S] = new Impl2[S, S, S] {
@@ -26,3 +27,5 @@ object KernelOpMult extends KernelOpMult with UFunc {
 }
 
 object KernelOuterMult extends KernelOuterMult with UFunc
+
+object KernelOuterAdd extends KernelOuterAdd with UFunc

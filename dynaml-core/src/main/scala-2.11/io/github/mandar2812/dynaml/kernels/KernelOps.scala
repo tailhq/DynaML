@@ -1,8 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.generic.UFunc
-import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.algebra.PartitionedVector
 
 /**
   * @author mandar2812 date: 26/10/2016.
@@ -16,6 +14,8 @@ trait KernelOps[+This] extends Any {
   final def *[TT >: This, B, That](b: B)(implicit op: KernelOpMult.Impl2[TT, B, That]) = op(repr, b)
 
   final def :*[TT >: This, B, That](b: B)(implicit op: KernelOuterMult.Impl2[TT, B, That]) = op(repr, b)
+
+  final def :+[TT >: This, B, That](b: B)(implicit op: KernelOuterAdd.Impl2[TT, B, That]) = op(repr, b)
 
 }
 
@@ -128,6 +128,43 @@ object KernelOps extends UFunc {
             firstkernel.evaluate(x._1, y._1)*otherKernel.evaluate(x._2, y._2)
         }
     }
+
+    implicit object tensorAddLocalScKernels
+      extends KernelOuterMult.Impl2[
+        LocalScalarKernel[Index],
+        LocalScalarKernel[Index1],
+        CompositeCovariance[(Index, Index1)]] {
+      override def apply(firstkernel: LocalScalarKernel[Index],
+                         otherKernel: LocalScalarKernel[Index1]): CompositeCovariance[(Index, Index1)] =
+
+        new CompositeCovariance[(Index, Index1)] {
+
+          override val hyper_parameters: List[String] = firstkernel.hyper_parameters ++ otherKernel.hyper_parameters
+
+          state = firstkernel.state ++ otherKernel.state
+
+          blocked_hyper_parameters = otherKernel.blocked_hyper_parameters ++ firstkernel.blocked_hyper_parameters
+
+          override def setHyperParameters(h: Map[String, Double]): this.type = {
+            firstkernel.setHyperParameters(h)
+            otherKernel.setHyperParameters(h)
+            super.setHyperParameters(h)
+          }
+
+          override def gradient(x: (Index, Index1), y: (Index, Index1)): Map[String, Double] =
+            firstkernel.gradient(x._1, y._1) ++ otherKernel.gradient(x._2,y._2)
+
+          override def buildKernelMatrix[S <: Seq[(Index, Index1)]](mappedData: S, length: Int) =
+            SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
+
+          override def buildCrossKernelMatrix[S <: Seq[(Index, Index1)]](dataset1: S, dataset2: S) =
+            SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
+
+          override def evaluate(x: (Index, Index1), y: (Index, Index1)): Double =
+            firstkernel.evaluate(x._1, y._1)+otherKernel.evaluate(x._2, y._2)
+        }
+    }
+
   }
 
 }

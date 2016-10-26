@@ -49,6 +49,9 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new KernelOps.PairOps[Index, T1].tensorMultLocalScKernels(this, otherKernel)
 
+  def :+[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
+    new KernelOps.PairOps[Index, T1].tensorAddLocalScKernels(this, otherKernel)
+
   def buildBlockedKernelMatrix[S <: Seq[Index]](mappedData: S, length: Long): PartitionedPSDMatrix =
     SVMKernel.buildPartitionedKernelMatrix(mappedData, length, rowBlocking, colBlocking, this.evaluate)
 
