@@ -17,7 +17,7 @@ trait KernelOps[+This] extends Any {
 
 object KernelOps extends UFunc {
 
-  class Ops[Index] {
+  class Ops[Index] extends Serializable {
     implicit object addLocalScKernels extends KernelOpAdd.Impl2[
         LocalScalarKernel[Index],
         LocalScalarKernel[Index],
