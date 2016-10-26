@@ -35,7 +35,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     *  return The kernel k defined above.
     *
     * */
-  def +[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] = this.+(otherKernel)
+  def +[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] =
+  kernelOps.addLocalScKernels(this, otherKernel)
 
   /**
     *  Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
@@ -44,7 +45,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     *  @return The kernel k defined above.
     *
     * */
-  def *[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] = this.*(otherKernel)
+  def *[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] =
+  kernelOps.multLocalScKernels(this, otherKernel)
 
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new KernelOps.PairOps[Index, T1].tensorMultLocalScKernels(this, otherKernel)
