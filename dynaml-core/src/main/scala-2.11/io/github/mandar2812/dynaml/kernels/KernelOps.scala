@@ -86,7 +86,5 @@ object KernelOps extends UFunc {
         }
     }
 
-    implicit object kroneckerProductKernels extends KernelKMult.Impl2
-
   }
 }
