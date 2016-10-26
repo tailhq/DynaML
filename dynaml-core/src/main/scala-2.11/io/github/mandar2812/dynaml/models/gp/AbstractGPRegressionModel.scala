@@ -30,7 +30,6 @@ import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import org.apache.log4j.Logger
-import io.github.mandar2812.dynaml.kernels.KernelOps._
 
 /**
   * Single-Output Gaussian Process Regression Model
