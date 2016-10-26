@@ -48,39 +48,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
   def *[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] =
   kernelOps.multLocalScKernels(this, otherKernel)
 
-  def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] = {
-
-    val firstkernel = this
-
-    new CompositeCovariance[(Index, T1)] {
-
-      override val hyper_parameters: List[String] = firstkernel.hyper_parameters ++ otherKernel.hyper_parameters
-
-      state = firstkernel.state ++ otherKernel.state
-
-      blocked_hyper_parameters = otherKernel.blocked_hyper_parameters ++ firstkernel.blocked_hyper_parameters
-
-      override def setHyperParameters(h: Map[String, Double]): this.type = {
-        firstkernel.setHyperParameters(h)
-        otherKernel.setHyperParameters(h)
-        super.setHyperParameters(h)
-      }
-
-      override def gradient(x: (Index, T1), y: (Index, T1)): Map[String, Double] =
-        firstkernel.gradient(x._1, y._1).mapValues(v => v*otherKernel.evaluate(x._2, y._2)) ++
-          otherKernel.gradient(x._2, y._2).mapValues(v => v*firstkernel.evaluate(x._1, y._1))
-
-      override def buildKernelMatrix[S <: Seq[(Index, T1)]](mappedData: S, length: Int) =
-        SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
-
-      override def buildCrossKernelMatrix[S <: Seq[(Index, T1)]](dataset1: S, dataset2: S) =
-        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
-
-      override def evaluate(x: (Index, T1), y: (Index, T1)): Double =
-        firstkernel.evaluate(x._1, y._1)*otherKernel.evaluate(x._2, y._2)
-    }
-
-  }
+  def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
+    new kernelOps.PairOps[T1].outerMultLocalScKernels(this, otherKernel)
 
   def buildBlockedKernelMatrix[S <: Seq[Index]](mappedData: S, length: Long): PartitionedPSDMatrix =
     SVMKernel.buildPartitionedKernelMatrix(mappedData, length, rowBlocking, colBlocking, this.evaluate)

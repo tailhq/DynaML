@@ -11,9 +11,6 @@ import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
   * */
 trait LocalSVMKernel[Index] extends LocalScalarKernel[Index] {
 
-
-
-
   override def buildKernelMatrix[S <: Seq[Index]](
     mappedData: S,
     length: Int): KernelMatrix[DenseMatrix[Double]] =
