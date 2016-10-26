@@ -1,4 +1,4 @@
-package io.github.mandar2812.dynaml.algebra
+package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 

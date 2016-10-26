@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg._
-import io.github.mandar2812.dynaml.algebra.{KernelMatrix, PartitionedMatrix, PartitionedPSDMatrix, SVMKernelMatrix}
+import io.github.mandar2812.dynaml.algebra.{PartitionedMatrix, PartitionedPSDMatrix}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
 

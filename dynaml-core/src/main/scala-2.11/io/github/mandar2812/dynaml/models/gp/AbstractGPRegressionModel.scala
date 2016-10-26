@@ -30,6 +30,7 @@ import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import org.apache.log4j.Logger
+import io.github.mandar2812.dynaml.kernels.KernelOps._
 
 /**
   * Single-Output Gaussian Process Regression Model
@@ -124,7 +125,7 @@ abstract class AbstractGPRegressionModel[T, I](
       training.length.toLong, _blockSize
       )
 
-    val effectiveTrainingKernel = covariance + noiseModel
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
 
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
@@ -161,7 +162,7 @@ abstract class AbstractGPRegressionModel[T, I](
       training.length.toLong, _blockSize
     )
 
-    val effectiveTrainingKernel = covariance + noiseModel
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
 
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
@@ -213,7 +214,7 @@ abstract class AbstractGPRegressionModel[T, I](
       training.length.toLong, _blockSize
     )
 
-    val effectiveTrainingKernel = covariance + noiseModel
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
     val smoothingMat = if(!caching) {
@@ -295,7 +296,7 @@ abstract class AbstractGPRegressionModel[T, I](
     * */
   def persist(): Unit = {
 
-    val effectiveTrainingKernel = covariance + noiseModel
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
     val training = dataAsIndexSeq(g)

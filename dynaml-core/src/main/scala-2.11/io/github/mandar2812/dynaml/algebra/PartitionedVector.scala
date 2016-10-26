@@ -19,15 +19,9 @@ private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])
   extends AbstractPartitionedVector[DenseVector[Double]](data, num_row_blocks)
     with NumericOps[PartitionedVector] {
 
-  //override lazy val rowBlocks = if(num_row_blocks == -1L) data.map(_._1).max + 1L else num_row_blocks
-
-  //override lazy val colBlocks = 1L
-
   lazy val rows: Long = if(num_rows == -1L) data.map(_._2.length).sum.toLong else num_rows
 
   override lazy val cols: Long = 1L
-
-  //override def _data = data.sortBy(_._1)
 
   override def repr: PartitionedVector = this
 

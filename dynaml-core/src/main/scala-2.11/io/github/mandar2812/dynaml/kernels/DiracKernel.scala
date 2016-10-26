@@ -1,7 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, DenseVector, norm}
-import io.github.mandar2812.dynaml.algebra.{KernelMatrix, SVMKernelMatrix}
 
 /**
   * Dirac kernel is equivalent to the

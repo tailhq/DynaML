@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.DenseMatrix
+import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 
 /**
   * Scalar Kernel defines algebraic behavior for kernels of the form
@@ -11,7 +12,12 @@ import breeze.linalg.DenseMatrix
   *
   * */
 trait LocalScalarKernel[Index] extends
-CovarianceFunction[Index, Double, DenseMatrix[Double]] {
+CovarianceFunction[Index, Double, DenseMatrix[Double]]
+  with KernelOps[LocalScalarKernel[Index]] {
+
+  override def repr: LocalScalarKernel[Index] = this
+
+  protected val kernelOps = new KernelOps.Ops[Index]
 
   var (rowBlocking, colBlocking): (Int, Int) = (1000, 1000)
 
@@ -25,40 +31,12 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
   /**
     *  Create composite kernel k = k<sub>1</sub> + k<sub>2</sub>
     *
-    *  @param otherKernel The kernel to add to the current one.
-    *  @return The kernel k defined above.
+    *  param otherKernel The kernel to add to the current one.
+    *  return The kernel k defined above.
     *
     * */
-  def +[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] = {
-
-    val firstKern = this
-
-    new CompositeCovariance[Index] {
-      override val hyper_parameters = firstKern.hyper_parameters ++ otherKernel.hyper_parameters
-
-      override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) + otherKernel.evaluate(x,y)
-
-      state = firstKern.state ++ otherKernel.state
-
-      blocked_hyper_parameters = firstKern.blocked_hyper_parameters ++ otherKernel.blocked_hyper_parameters
-
-      override def setHyperParameters(h: Map[String, Double]): this.type = {
-        firstKern.setHyperParameters(h)
-        otherKernel.setHyperParameters(h)
-        super.setHyperParameters(h)
-      }
-
-      override def gradient(x: Index, y: Index): Map[String, Double] =
-        firstKern.gradient(x, y) ++ otherKernel.gradient(x,y)
-
-      override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
-        SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
-
-      override def buildCrossKernelMatrix[S <: Seq[Index]](dataset1: S, dataset2: S) =
-        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
-
-    }
-  }
+  def +[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] =
+  kernelOps.addLocalScKernels(this, otherKernel)
 
   /**
     *  Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
@@ -67,37 +45,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
     *  @return The kernel k defined above.
     *
     * */
-  def *[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] = {
-
-    val firstKern = this
-
-    new CompositeCovariance[Index] {
-      override val hyper_parameters = firstKern.hyper_parameters ++ otherKernel.hyper_parameters
-
-      override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) * otherKernel.evaluate(x,y)
-
-      state = firstKern.state ++ otherKernel.state
-
-      blocked_hyper_parameters = firstKern.blocked_hyper_parameters ++ otherKernel.blocked_hyper_parameters
-
-      override def setHyperParameters(h: Map[String, Double]): this.type = {
-        firstKern.setHyperParameters(h)
-        otherKernel.setHyperParameters(h)
-        super.setHyperParameters(h)
-      }
-
-      override def gradient(x: Index, y: Index): Map[String, Double] =
-        firstKern.gradient(x, y).map((couple) => (couple._1, couple._2*otherKernel.evaluate(x,y))) ++
-          otherKernel.gradient(x,y).map((couple) => (couple._1, couple._2*firstKern.evaluate(x,y)))
-
-      override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
-        SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
-
-      override def buildCrossKernelMatrix[S <: Seq[Index]](dataset1: S, dataset2: S) =
-        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
-
-    }
-  }
+  def *[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] =
+  kernelOps.multLocalScKernels(this, otherKernel)
 
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] = {
 
@@ -133,9 +82,23 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]] {
 
   }
 
+  def buildBlockedKernelMatrix[S <: Seq[Index]](mappedData: S, length: Long): PartitionedPSDMatrix =
+    SVMKernel.buildPartitionedKernelMatrix(mappedData, length, rowBlocking, colBlocking, this.evaluate)
+
+  def buildBlockedCrossKernelMatrix[S <: Seq[Index]](dataset1: S, dataset2: S) =
+    SVMKernel.crossPartitonedKernelMatrix(dataset1, dataset2, rowBlocking, colBlocking, this.evaluate)
+
 }
 
 abstract class CompositeCovariance[T]
   extends LocalSVMKernel[T] {
-
+  override def repr: CompositeCovariance[T] = this
 }
+
+/**
+  * A kernel/covariance function which can be seen as a combination
+  * of base kernels over a subset of the input space.
+  *
+  * for example K((x1, y1), (x1, y2)) = k1(x1,x2) + k2(y1,y2)
+  */
+trait DecomposableCovariance extends CompositeCovariance[PartitionedVector]

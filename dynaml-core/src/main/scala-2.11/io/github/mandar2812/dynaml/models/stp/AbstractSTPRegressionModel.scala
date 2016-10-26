@@ -122,7 +122,7 @@ abstract class AbstractSTPRegressionModel[T, I](
       training.length.toLong, _blockSize
     )
 
-    val effectiveTrainingKernel = covariance + noiseModel
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
     val smoothingMat = if(!caching) {
@@ -229,7 +229,7 @@ abstract class AbstractSTPRegressionModel[T, I](
       training.length.toLong, _blockSize
     )
 
-    val effectiveTrainingKernel = covariance + noiseModel
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
     val kernelTraining: PartitionedPSDMatrix =
@@ -249,7 +249,7 @@ abstract class AbstractSTPRegressionModel[T, I](
     * */
   def persist(): Unit = {
 
-    val effectiveTrainingKernel = covariance + noiseModel
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
     val training = dataAsIndexSeq(g)

@@ -3,6 +3,7 @@ package io.github.mandar2812.dynaml.algebra
 import breeze.generic.UFunc
 import breeze.linalg.operators._
 import breeze.linalg.scaleAdd
+import io.github.mandar2812.dynaml.kernels
 
 /**
   * Created by mandar on 14/10/2016.
