@@ -14,4 +14,8 @@ Domain1, Domain2](baseRV: RandomVariable[Domain1])(func: DataPipe[Domain1, Domai
 object MeasurableFunction {
   def apply[Domain1, Domain2](baseRV: RandomVariable[Domain1])(func: DataPipe[Domain1, Domain2])
   : MeasurableFunction[Domain1, Domain2] = new MeasurableFunction[Domain1, Domain2](baseRV)(func)
+
+  def apply[Domain1, Domain2](baseRV: RandomVariable[Domain1])(func: Domain1 => Domain2)
+  : MeasurableFunction[Domain1, Domain2] = new MeasurableFunction[Domain1, Domain2](baseRV)(DataPipe(func))
+
 }
