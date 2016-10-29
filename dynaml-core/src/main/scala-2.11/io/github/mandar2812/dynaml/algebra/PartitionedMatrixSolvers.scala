@@ -5,6 +5,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.linalg.operators.OpSolveMatrixBy
 import io.github.mandar2812.dynaml.utils
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
+import io.github.mandar2812.dynaml.algebra.BlockedMatrixOps._
 
 /**
   * @author mandar2812 date: 21/10/2016.
@@ -227,6 +228,55 @@ object PartitionedMatrixSolvers extends UFunc {
         lAcc ++ Stream(vSolved + acc_h),
         acc_r+ accMult)
   }
+
+
+  /**
+    * Tail recursive linear solve: x = L \ y
+    * param X A lower triangular matrix (outputted by the [[bcholesky]] function)
+    * param y A partitioned vector
+    * param lAcc An accumulator storing the result block by block
+    * param acc A vector containing values to add into the result
+    *
+    * */
+/*
+  def recLTriagRDDSolve(
+    X: LowerTriSparkMatrix,
+    y: SparkBlockedVector,
+    lAcc: Stream[SparkBlockedVector],
+    acc: SparkBlockedVector): PartitionedVector =
+  X.colBlocks*X.rowBlocks match {
+    case 1L =>
+      val yMod: SparkBlockedVector = y(0L to 0L) - acc(0L to 0L)
+      val vSolved: DenseVector[Double] =
+        X(0L to 0L, 0L to 0L)._data.collect().head._2 \ yMod._data.collect().head._2
+      val vectorBlocks = lAcc++ Stream(new PartitionedVector(Stream((0L, vSolved))))
+
+      SparkBlockedVector.vertcat(vectorBlocks:_*)
+
+    case _ =>
+      val (l_hh, l_rh, l_rr) = (
+        X(0L to 0L, 0L to 0L),
+        X(1L until X.rowBlocks, 0L to 0L),
+        new LowerTriSparkMatrix(
+          X.filterBlocks(c =>
+            c._1 >= 1L && c._1 < X.rowBlocks &&
+              c._2 >= 1L && c._2 < X.colBlocks && c._1 <= c._2)
+            .map(c => ((c._1._1 - 1L, c._1._2-1L), c._2)),
+          num_row_blocks = X.rowBlocks - 1L,
+          num_col_blocks = X.colBlocks - 1L)
+        )
+
+      val (y_h, y_r) = (y(0L to 0L), y(1L until y.rowBlocks))
+      val (acc_h, acc_r) = (acc(0L to 0L), acc(1L until acc.rowBlocks))
+      val yMod: SparkBlockedVector = y_h - acc_h
+      val vSolved: DenseVector[Double] = l_hh._data.collect().head._2 \ yMod._data.collect().head._2
+
+      recLTriagRDDSolve(
+        l_rr, y_r,
+        lAcc ++ Stream(new SparkBlockedVector(l_hh._data..parallelize((0L, vSolved)))),
+        acc_r + SparkBlockedVector(l_rh._data.map(co => (co._1._1, co._2 * vSolved))))
+  }
+*/
 
 
   implicit object implOpSolveLowerTriPartitionedMatrixByVector

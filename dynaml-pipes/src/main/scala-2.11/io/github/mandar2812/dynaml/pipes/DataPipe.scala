@@ -24,7 +24,7 @@ package io.github.mandar2812.dynaml.pipes
   * Top level trait representing an
   * abstract pipe that defines a transformation
   * between two data types, i.e. [[Source]] and [[Destination]]
-  * */
+  */
 trait DataPipe[-Source, +Destination] {
 
   def run(data: Source): Destination
