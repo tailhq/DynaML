@@ -31,6 +31,10 @@ entries:
       url: /p1_pipes_api.html
       output: web
 
+    - title: "Scalers & Encoders"
+      url: /p1_scalers_encoders.html
+      output: web
+
     - title: Using the Pipes Library
       url: /p1_sample1.html
       output: web, pdf

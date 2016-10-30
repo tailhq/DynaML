@@ -19,7 +19,7 @@ The ```probability``` package class hierarchy consists of classes and traits whi
 
 ### DynaML Random Variable
 
-The [```RandomVariable[Domain]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.RandomVariable) forms the top of the class hierarchy in the ```probability``` package. It is a light weight trait which takes a form like so.
+The [```RandomVariable[Domain]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.RandomVariable) forms the top of the class hierarchy in the ```probability``` package. It is a light weight trait which takes a form like so.
 
 ```scala
 abstract class RandomVariable[Domain] {

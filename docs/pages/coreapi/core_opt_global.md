@@ -9,9 +9,9 @@ folder: coreapi
 
 These routines are also known as _global optimizers_, paradigms/algorithms such as genetic algorithms, gibbs sampling, simulated annealing, evolutionary optimization fall under this category. They can be used in situations when the objective function in not "smooth".
 
-In DynaML they are most prominently used in hyper-parameter optimization in kernel based learning methods. All _global optimizers_ in DynaML extend the [```GlobalOptimizer```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GlobalOptimizer) trait, which implies that they provide an implementation for its ```optimize``` method.
+In DynaML they are most prominently used in hyper-parameter optimization in kernel based learning methods. All _global optimizers_ in DynaML extend the [```GlobalOptimizer```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GlobalOptimizer) trait, which implies that they provide an implementation for its ```optimize``` method.
 
-In order to use a global optimization routine on an model, the model implementation in question must be extending the [```GloballyOptimizable```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptimizable) trait in the [```dynaml.optimization```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.package) package, this trait has only one method called ```energy``` which is to be implemented by all sub-classes/traits.
+In order to use a global optimization routine on an model, the model implementation in question must be extending the [```GloballyOptimizable```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptimizable) trait in the [```dynaml.optimization```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.package) package, this trait has only one method called ```energy``` which is to be implemented by all sub-classes/traits.
 
 The ```energy``` method calculates the value of the global objective function for a particular configuration i.e. for particular values of model hyper-parameters. This objective function can be defined differently for each model class (marginal likelihood for Gaussian Processes, cross validation score for parametric models, etc).
 
@@ -55,7 +55,7 @@ Coupled Simulated Annealing can be seen as an extension to the classical Simulat
 * An _annealing schedule_ $$T_{k}^{ac}, k = 0, 1, \cdots $$.
 
 <br/>
-The ```CoupledSimulatedAnnealing``` class has a companion [object]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing$) with the following available variants.
+The ```CoupledSimulatedAnnealing``` class has a companion [object]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing$) with the following available variants.
 <br/>
 
 Method | Variant |Acceptance Probability | Coupling term $$\gamma$$
@@ -88,7 +88,7 @@ model.setState(conf)
 
 ## Gradient based Model Selection
 
-Gradient based model selection can be used if the model fitness function implemented in the ```energy``` method has differentiability properties (e.g. using marginal likelihood in the case of stochastic process inference). The [```GloballyOptWithGrad```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad) trait is an extension of ```GlobalOptimizer``` and adds a method ```gradEnergy``` that should return the gradient of the fitness function in each hyper-parameter in the form of a ```Map[String, Double]```.
+Gradient based model selection can be used if the model fitness function implemented in the ```energy``` method has differentiability properties (e.g. using marginal likelihood in the case of stochastic process inference). The [```GloballyOptWithGrad```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad) trait is an extension of ```GlobalOptimizer``` and adds a method ```gradEnergy``` that should return the gradient of the fitness function in each hyper-parameter in the form of a ```Map[String, Double]```.
 
 ### Maximum Likelihood ML-II
 
@@ -110,7 +110,7 @@ $$
 
 $$
 
-The [```GPMLOptimizer[I, T, M]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer) class implements ML-II, by using the ```gradEnergy``` method implemented by the ```system: M``` member value (which refers to a model extending  [```GloballyOptWithGrad```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad)).
+The [```GPMLOptimizer[I, T, M]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer) class implements ML-II, by using the ```gradEnergy``` method implemented by the ```system: M``` member value (which refers to a model extending  [```GloballyOptWithGrad```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad)).
 
 ```scala
 val kernel = ...

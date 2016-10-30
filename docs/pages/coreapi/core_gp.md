@@ -5,11 +5,11 @@ permalink: core_gp.html
 folder: coreapi
 ---
 
-_Gaussian Process_ models are well supported in DynaML, the [```AbstractGPRegressionModel[T, I]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel) and [```AbstractGPClassification[T, I]```](/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPClassification) classes which extend the [```StochasticProcess[T, I, Y, W]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcess) base trait are the starting point for all GP implementations.
+_Gaussian Process_ models are well supported in DynaML, the [```AbstractGPRegressionModel[T, I]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel) and [```AbstractGPClassification[T, I]```](/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPClassification) classes which extend the [```StochasticProcess[T, I, Y, W]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcess) base trait are the starting point for all GP implementations.
 
 The ```StochasticProcess[T, I, Y, W]``` trait contains the ```predictiveDistribution[U <: Seq[I]](test: U): W``` method which returns the posterior predictive distribution (represented by the generic type ```W```).
 
-The base trait is extended by [```SecondOrderProcess[T, I, Y, K, M, W]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcess) which defines a skeleton for processes which are defined by their first and second order statistics (_mean functions_ and _covariance functions_).
+The base trait is extended by [```SecondOrderProcess[T, I, Y, K, M, W]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcess) which defines a skeleton for processes which are defined by their first and second order statistics (_mean functions_ and _covariance functions_).
 
 Since for most applications it is assumed that the training data is standardized, the mean function is often chosen to be zero $$\mu(\mathbf{x}) = 0$$, thus the covariance function or kernel defines all the interesting behavior of _second order processes_. For a more in depth information on the types of covariance functions available visit the [kernels]({{site.baseurl}}/core_kernels.html) page.
 
@@ -53,7 +53,7 @@ $$
 
 ### GP models for a single output
 
-For univariate GP models (single output), use the [```GPRegression```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.GPRegressionModel) class (an extension of ```AbstractGPRegressionModel```). To construct a GP regression model you would need:
+For univariate GP models (single output), use the [```GPRegression```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.GPRegressionModel) class (an extension of ```AbstractGPRegressionModel```). To construct a GP regression model you would need:
 
 * Training data
 * Kernel/covariance instance to model correlation between values of the latent function at each pair of input features.
@@ -115,7 +115,7 @@ val sos_noise: CompositeCovariance[(DenseVector[Double], Int)] = d :* coRegDirac
 
 ```
 
-You can use the [```MOGPRegressionModel[I]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.MOGPRegressionModel) class to create multi-output GP models.
+You can use the [```MOGPRegressionModel[I]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.MOGPRegressionModel) class to create multi-output GP models.
 
 ```scala
 val trainingdata: Stream[(DenseVector[Double], DenseVector[Double])] = ...

@@ -104,6 +104,7 @@ description: "Documentation for the DynaML machine learning toolkit"
 # needed for sitemap.xml file only
 url: mandar2812.github.io
 baseurl: /DynaML
+apiurl: /DynaML/api_docs/v1.4.1
 
-gems: 
+gems:
   - jekyll-gist

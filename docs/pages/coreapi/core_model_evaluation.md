@@ -83,6 +83,7 @@ The [```BinaryClassificationMetrics```]({{site.baseurl}}//api_docs/dynaml-core/i
 * F-measure
 * Precision-Recall Curve (and area under it).
 * Receiver Operating Characteristic (and area under it)
+* Matthew's Correlation Coefficient
 
 
 ```scala
