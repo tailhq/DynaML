@@ -1,4 +1,9 @@
+//External Imports
 import breeze.linalg._
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+import com.quantifind.charts.Highcharts._
+//DynaML imports
 import io.github.mandar2812.dynaml.models._
 import io.github.mandar2812.dynaml.models.neuralnets._
 import io.github.mandar2812.dynaml.models.svm._
@@ -6,12 +11,9 @@ import io.github.mandar2812.dynaml.models.lm._
 import io.github.mandar2812.dynaml.utils
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.examples._
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkConf
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._
 import io.github.mandar2812.dynaml.probability._
-import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.openml.OpenML
