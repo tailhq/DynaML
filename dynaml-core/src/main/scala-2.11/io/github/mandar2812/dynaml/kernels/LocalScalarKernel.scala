@@ -54,6 +54,12 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
   def :+[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new KernelOps.PairOps[Index, T1].tensorAddLocalScKernels(this, otherKernel)
 
+  override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
+    SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
+
+  override def buildCrossKernelMatrix[S <: Seq[Index]](dataset1: S, dataset2: S) =
+    SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
+
   def buildBlockedKernelMatrix[S <: Seq[Index]](mappedData: S, length: Long): PartitionedPSDMatrix =
     SVMKernel.buildPartitionedKernelMatrix(mappedData, length, rowBlocking, colBlocking, this.evaluate)
 

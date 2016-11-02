@@ -60,7 +60,7 @@ model.setLearningRate(0.09)
    .learn()
 ```
 
-The trained model can now be used for prediction, by using either the `predict()` method or the `feedForward()` value member both of which are members of `FeedForwardNetwork` (refer to the [api]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork) docs for more details).
+The trained model can now be used for prediction, by using either the `predict()` method or the `feedForward()` value member both of which are members of `FeedForwardNetwork` (refer to the [api]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork) docs for more details).
 
 ```scala
 val pattern = DenseVector(2.0, 3.5, 2.5)
@@ -73,7 +73,7 @@ val prediction = model.predict(pattern)
 
 ### Creation
 
-Autoencoders can be created using the [```AutoEncoder```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder) class. Its constructor has the following arguments.
+Autoencoders can be created using the [```AutoEncoder```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder) class. Its constructor has the following arguments.
 
 
 ```scala

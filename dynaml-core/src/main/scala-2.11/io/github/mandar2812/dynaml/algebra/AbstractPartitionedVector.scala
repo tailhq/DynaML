@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.algebra
 
-import breeze.linalg.NumericOps
+import breeze.linalg.{DenseVector, NumericOps}
 
 import scala.collection.immutable.NumericRange
 
@@ -26,5 +26,25 @@ abstract class AbstractPartitionedVector[T](
 
   def apply(r: NumericRange[Long]): AbstractPartitionedVector[T]
 
+
+}
+
+object AbstractPartitionedVector {
+
+  /**
+    * Create a [[PartitionedVector]] from a breeze [[DenseVector]]
+    * @param v input vector
+    * @param num_elements_per_block The size of each block
+    * @return A [[PartitionedVector]] instance.
+    */
+  def apply(v: DenseVector[Double], num_elements_per_block: Int): PartitionedVector = {
+    val blocks = v.toArray
+      .grouped(num_elements_per_block)
+      .zipWithIndex
+      .map(c => (c._2.toLong, DenseVector(c._1)))
+      .toStream
+
+    new PartitionedVector(blocks)
+  }
 
 }

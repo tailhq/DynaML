@@ -12,14 +12,17 @@ import spire.implicits._
 
 val p = RandomVariable(new Beta(7.5, 7.5))
 
-val coinLikihood = DataPipe((p: Double) => new BinomialRV(500, p))
+val coinLikelihood = DataPipe((p: Double) => new BinomialRV(500, p))
 
-val c_model = ProbabilityModel(p, coinLikihood)
+val c_model = ProbabilityModel(p, coinLikelihood)
 
 val post = c_model.posterior(350)
 
 histogram((1 to 2000).map(_ => p.sample()))
+hold()
 histogram((1 to 2000).map(_ => post.sample()))
+
+unhold()
 
 val data = new Gaussian(-2.0, 3.25).sample(2000).toStream
 histogram(data)

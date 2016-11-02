@@ -49,7 +49,7 @@ tunedGP.persist()
 
 val gpLikelihood = DataPipe((x: Double) => {
   val pD = tunedGP.predictiveDistribution(Seq(DenseVector(x)))
-  GaussianRV(pD.mu(0), pD.covariance(0,0))
+  GaussianRV(pD.mu.toBreezeVector(0), pD.covariance.toBreezeMatrix(0,0))
 })
 
 val gpProbModel = ProbabilityModel(xPrior, gpLikelihood)
@@ -110,7 +110,7 @@ val gpLikelihood2 = DataPipe((x: Double) => {
   //val xStream = x.map(DenseVector(_))
   //tunedGP.predictiveDistribution(xStream)
   val pD = tunedGP2.predictiveDistribution(Seq(DenseVector(x)))
-  GaussianRV(pD.mu(0), pD.covariance(0,0))
+  GaussianRV(pD.mu.toBreezeVector(0), pD.covariance.toBreezeMatrix(0,0))
 })
 
 val gpProbModel2 = ProbabilityModel(xPrior, gpLikelihood2)

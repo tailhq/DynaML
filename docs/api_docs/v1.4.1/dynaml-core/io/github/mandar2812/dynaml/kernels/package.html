@@ -1,0 +1,1264 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>kernels - io.github.mandar2812.dynaml.kernels</title>
+          <meta name="description" content="kernels - io.github.mandar2812.dynaml.kernels" />
+          <meta name="keywords" content="kernels io.github.mandar2812.dynaml.kernels" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'io.github.mandar2812.dynaml.kernels.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a></p>
+        <h1>kernels</h1><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kernels</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.kernels.AnovaCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AnovaCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="AnovaCovFunc:AnovaCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AnovaCovFunc.html"><span class="name">AnovaCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@AnovaCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.AnovaKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AnovaKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="AnovaKernel:AnovaKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AnovaKernel.html"><span class="name">AnovaKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@AnovaKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CauchyCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CauchyCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="CauchyCovFunc:CauchyCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CauchyCovFunc.html"><span class="name">CauchyCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CauchyCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.CauchyKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CauchyKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="CauchyKernel:CauchyKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CauchyKernel.html"><span class="name">CauchyKernel</span></a><span class="result"> extends <a href="StationaryKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel">StationaryKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CauchyKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Cauchy Kernel given by the expression
+K(x,y) = 1/(1 + ||x-y||<sup>2</sup>/sigma<sup>2</sup>)
+</sup></sup></p><div class="fullcomment"><div class="comment cmt"><p>Cauchy Kernel given by the expression
+K(x,y) = 1/(1 + ||x-y||<sup>2</sup>/sigma<sup>2</sup>)
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CoRegCauchyKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoRegCauchyKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]"></a>
+      <a id="CoRegCauchyKernel:CoRegCauchyKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoRegCauchyKernel.html"><span class="name">CoRegCauchyKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CoRegCauchyKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.CoRegDiracKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoRegDiracKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]"></a>
+      <a id="CoRegDiracKernel:CoRegDiracKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoRegDiracKernel.html"><span class="name">CoRegDiracKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CoRegDiracKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.CoRegGraphKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoRegGraphKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]"></a>
+      <a id="CoRegGraphKernel:CoRegGraphKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoRegGraphKernel.html"><span class="name">CoRegGraphKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CoRegGraphKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CoRegLaplaceKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoRegLaplaceKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]"></a>
+      <a id="CoRegLaplaceKernel:CoRegLaplaceKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoRegLaplaceKernel.html"><span class="name">CoRegLaplaceKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CoRegLaplaceKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.CoRegRBFKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoRegRBFKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]"></a>
+      <a id="CoRegRBFKernel:CoRegRBFKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoRegRBFKernel.html"><span class="name">CoRegRBFKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CoRegRBFKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.CoRegTStudentKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoRegTStudentKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]"></a>
+      <a id="CoRegTStudentKernel:CoRegTStudentKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoRegTStudentKernel.html"><span class="name">CoRegTStudentKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CoRegTStudentKernelextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.CompositeCovariance" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CompositeCovariance[T]extendsCovarianceFunction[T,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[T]"></a>
+      <a id="CompositeCovariance[T]:CompositeCovariance[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CompositeCovariance.html"><span class="name">CompositeCovariance</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance.T">T</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CompositeCovariance[T]extendsCovarianceFunction[T,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[T]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CovarianceFunction[T,V,M]extendsKernel[T,V]"></a>
+      <a id="CovarianceFunction[T,V,M]:CovarianceFunction[T,V,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CovarianceFunction.html"><span class="name">CovarianceFunction</span></a><span class="tparams">[<span name="T">T</span>, <span name="V">V</span>, <span name="M">M</span>]</span><span class="result"> extends <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.V">V</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CovarianceFunction[T,V,M]extendsKernel[T,V]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A covariance function implementation.</p><div class="fullcomment"><div class="comment cmt"><p>A covariance function implementation. Covariance functions are
+central to Stochastic Process Models as well as SVMs.
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="DecomposableCovarianceextendsCompositeCovariance[io.github.mandar2812.dynaml.algebra.PartitionedVector]"></a>
+      <a id="DecomposableCovariance:DecomposableCovariance"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DecomposableCovariance.html"><span class="name">DecomposableCovariance</span></a><span class="result"> extends <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@DecomposableCovarianceextendsCompositeCovariance[io.github.mandar2812.dynaml.algebra.PartitionedVector]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A kernel/covariance function which can be seen as a combination
+of base kernels over a subset of the input space.</p><div class="fullcomment"><div class="comment cmt"><p>A kernel/covariance function which can be seen as a combination
+of base kernels over a subset of the input space.</p><p>for example K((x1, y1), (x1, y2)) = k1(x1,x2) + k2(y1,y2)
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DensityKernel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DensityKernelextendsKernel[breeze.linalg.DenseVector[Double],Double]withSerializable"></a>
+      <a id="DensityKernel:DensityKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DensityKernel.html"><span class="name">DensityKernel</span></a><span class="result"> extends <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@DensityKernelextendsKernel[breeze.linalg.DenseVector[Double],Double]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Abstract class which can be extended to
+implement various Multivariate Density
+Kernels.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DiracKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DiracKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="DiracKernel:DiracKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DiracKernel.html"><span class="name">DiracKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@DiracKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Dirac kernel is equivalent to the
+classical Dirac delta function scaled by
+a hyper-parameter called the noise level.</p><div class="fullcomment"><div class="comment cmt"><p>Dirac kernel is equivalent to the
+classical Dirac delta function scaled by
+a hyper-parameter called the noise level.</p><p>K(x,y) = noise*DiracDelta(x,y)
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DistributedKernel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DistributedKernel[T]extendsKernel[T,Double]"></a>
+      <a id="DistributedKernel[T]:DistributedKernel[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DistributedKernel.html"><span class="name">DistributedKernel</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DistributedKernel.T">T</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@DistributedKernel[T]extendsKernel[T,Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Created by mandar on 28/09/2016.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.ExponentialKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ExponentialKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="ExponentialKernel:ExponentialKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ExponentialKernel.html"><span class="name">ExponentialKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@ExponentialKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the Normalized Exponential Kernel</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the Normalized Exponential Kernel</p><p>K(x,y) = exp(beta*(x.y))
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.FBMCovFunction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FBMCovFunctionextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="FBMCovFunction:FBMCovFunction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FBMCovFunction.html"><span class="name">FBMCovFunction</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@FBMCovFunctionextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Created by mandar on 20/11/15.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.FBMKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FBMKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="FBMKernel:FBMKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FBMKernel.html"><span class="name">FBMKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@FBMKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fractional Brownian Kernel:</p><div class="fullcomment"><div class="comment cmt"><p>Fractional Brownian Kernel:</p><p>Fractional Brownian Motion is a stochastic
+process first studied by Mandelbrot and Von Ness
+its covariance function generalized to multivariate
+index sets is.</p><p>K(x,y) = 1/2 &#215; (||x||<sup>2H</sup> + ||y||<sup>2H</sup> - ||x-y||<sup>2H</sup>)</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.GaussianDensityKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GaussianDensityKernelextendsDensityKernelwithSerializable"></a>
+      <a id="GaussianDensityKernel:GaussianDensityKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GaussianDensityKernel.html"><span class="name">GaussianDensityKernel</span></a><span class="result"> extends <a href="DensityKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.DensityKernel">DensityKernel</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@GaussianDensityKernelextendsDensityKernelwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.IdentityCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IdentityCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="IdentityCovFunc:IdentityCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="IdentityCovFunc.html"><span class="name">IdentityCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@IdentityCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Created by mandar on 23/11/15.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.Kernel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Kernel[T,V]extendsSerializable"></a>
+      <a id="Kernel[T,V]:Kernel[T,V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Kernel.html"><span class="name">Kernel</span></a><span class="tparams">[<span name="T">T</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@Kernel[T,V]extendsSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Defines a base class for kernels
+defined on arbitrary objects.</p><div class="fullcomment"><div class="comment cmt"><p>Defines a base class for kernels
+defined on arbitrary objects.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The domain over which kernel function
+          k(x, y) is defined. i.e. x,y belong to T</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>The type of value returned by the kernel function
+          k(x,y)</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelMatrix" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelMatrix[T]extendsSerializable"></a>
+      <a id="KernelMatrix[T]:KernelMatrix[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelMatrix.html"><span class="name">KernelMatrix</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelMatrix[T]extendsSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Defines a trait which outlines the basic
+functionality of Kernel Matrices.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOpAdd" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelOpAddextendsKernelOpType"></a>
+      <a id="KernelOpAdd:KernelOpAdd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOpAdd.html"><span class="name">KernelOpAdd</span></a><span class="result"> extends <a href="KernelOpType.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOpType">KernelOpType</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOpAddextendsKernelOpType" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOpMult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelOpMultextendsKernelOpType"></a>
+      <a id="KernelOpMult:KernelOpMult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOpMult.html"><span class="name">KernelOpMult</span></a><span class="result"> extends <a href="KernelOpType.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOpType">KernelOpType</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOpMultextendsKernelOpType" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOpType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelOpTypeextendsAnyRef"></a>
+      <a id="KernelOpType:KernelOpType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOpType.html"><span class="name">KernelOpType</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOpTypeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOps" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelOps[+This]extendsAny"></a>
+      <a id="KernelOps[+This]:KernelOps[This]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOps.html"><span class="name">KernelOps</span></a><span class="tparams">[<span name="This">+This</span>]</span><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOps[+This]extendsAny" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOuterAdd" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelOuterAddextendsKernelOpType"></a>
+      <a id="KernelOuterAdd:KernelOuterAdd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOuterAdd.html"><span class="name">KernelOuterAdd</span></a><span class="result"> extends <a href="KernelOpType.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOpType">KernelOpType</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOuterAddextendsKernelOpType" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOuterMult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KernelOuterMultextendsKernelOpType"></a>
+      <a id="KernelOuterMult:KernelOuterMult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOuterMult.html"><span class="name">KernelOuterMult</span></a><span class="result"> extends <a href="KernelOpType.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOpType">KernelOpType</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOuterMultextendsKernelOpType" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.LaplaceCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LaplaceCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="LaplaceCovFunc:LaplaceCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LaplaceCovFunc.html"><span class="name">LaplaceCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@LaplaceCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.LaplacianKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LaplacianKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="LaplacianKernel:LaplacianKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LaplacianKernel.html"><span class="name">LaplacianKernel</span></a><span class="result"> extends <a href="StationaryKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel">StationaryKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@LaplacianKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the Normalized Exponential Kernel</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the Normalized Exponential Kernel</p><p>K(x,y) = exp(-||x-y||/b)
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.LinearKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LinearKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="LinearKernel:LinearKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearKernel.html"><span class="name">LinearKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@LinearKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">18/8/15.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LocalSVMKernel[Index]extendsCovarianceFunction[Index,Double,breeze.linalg.DenseMatrix[Double]]withLocalScalarKernel[Index]"></a>
+      <a id="LocalSVMKernel[Index]:LocalSVMKernel[Index]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LocalSVMKernel.html"><span class="name">LocalSVMKernel</span></a><span class="tparams">[<span name="Index">Index</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel.Index">Index</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel.Index">Index</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@LocalSVMKernel[Index]extendsCovarianceFunction[Index,Double,breeze.linalg.DenseMatrix[Double]]withLocalScalarKernel[Index]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Kernels with a locally stored matrix in the form
+of a breeze <span class="extype" name="DenseMatrix">DenseMatrix</span> instance.</p><div class="fullcomment"><div class="comment cmt"><p>Kernels with a locally stored matrix in the form
+of a breeze <span class="extype" name="DenseMatrix">DenseMatrix</span> instance. Optionally
+a kernel matrix stored as a <span class="extype" name="PartitionedPSDMatrix">PartitionedPSDMatrix</span>
+can also be generated.
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LocalScalarKernel[Index]extendsCovarianceFunction[Index,Double,breeze.linalg.DenseMatrix[Double]]withKernelOps[io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]]"></a>
+      <a id="LocalScalarKernel[Index]:LocalScalarKernel[Index]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LocalScalarKernel.html"><span class="name">LocalScalarKernel</span></a><span class="tparams">[<span name="Index">Index</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.Index">Index</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a>[<a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.Index">Index</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@LocalScalarKernel[Index]extendsCovarianceFunction[Index,Double,breeze.linalg.DenseMatrix[Double]]withKernelOps[io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Scalar Kernel defines algebraic behavior for kernels of the form
+K: Index x Index -&gt; Double, i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Scalar Kernel defines algebraic behavior for kernels of the form
+K: Index x Index -&gt; Double, i.e. kernel functions whose output
+is a scalar/double value. Generic behavior for these kernels
+is given by the ability to add and multiply valid kernels to
+create new valid scalar kernel functions.</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.LocallyStationaryKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LocallyStationaryKernel[I]extendsCovarianceFunction[I,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[I]"></a>
+      <a id="LocallyStationaryKernel[I]:LocallyStationaryKernel[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LocallyStationaryKernel.html"><span class="name">LocallyStationaryKernel</span></a><span class="tparams">[<span name="I">I</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocallyStationaryKernel.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocallyStationaryKernel.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@LocallyStationaryKernel[I]extendsCovarianceFunction[I,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[I]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of locally stationary kernels as defined in
+http://jmlr.csail.mit.edu/papers/volume2/genton01a/genton01a.pdf</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of locally stationary kernels as defined in
+http://jmlr.csail.mit.edu/papers/volume2/genton01a/genton01a.pdf</p><p>K(x,y) = K1(x+y/2)&times;K2(x-y)
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The index set or input domain over which the kernel function is evaluated.</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.MAKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MAKernelextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]withSerializable"></a>
+      <a id="MAKernel:MAKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MAKernel.html"><span class="name">MAKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@MAKernelextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.MLPKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MLPKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="MLPKernel:MLPKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MLPKernel.html"><span class="name">MLPKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@MLPKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.MahalanobisKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MahalanobisKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="MahalanobisKernel:MahalanobisKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MahalanobisKernel.html"><span class="name">MahalanobisKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@MahalanobisKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Mahalanobis kernel is an anisotropic generalization of the
+RBF Kernel, its definition is based on the so called Mahalanobis
+distance between two vectors x and y.</p><div class="fullcomment"><div class="comment cmt"><p>Mahalanobis kernel is an anisotropic generalization of the
+RBF Kernel, its definition is based on the so called Mahalanobis
+distance between two vectors x and y.</p><p>K(x,y) = h*exp(-(x - y)<sup>T</sup> . M . (x - y))</p><p>In this implementation the symmetric
+positive semi-definite matrix M is assumed to
+be diagonal.
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.MixedEffectRegularizer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MixedEffectRegularizerextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]"></a>
+      <a id="MixedEffectRegularizer:MixedEffectRegularizer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MixedEffectRegularizer.html"><span class="name">MixedEffectRegularizer</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@MixedEffectRegularizerextendsCovarianceFunction[Int,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Created by mandar on 22/08/16.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.PeriodicCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PeriodicCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="PeriodicCovFunc:PeriodicCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PeriodicCovFunc.html"><span class="name">PeriodicCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@PeriodicCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.PeriodicKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PeriodicKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="PeriodicKernel:PeriodicKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PeriodicKernel.html"><span class="name">PeriodicKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@PeriodicKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.PolynomialKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PolynomialKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="PolynomialKernel:PolynomialKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PolynomialKernel.html"><span class="name">PolynomialKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@PolynomialKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Standard Polynomial SVM Kernel
+of the form K(x,y) = (x<sup>T</sup> .</sup></p><div class="fullcomment"><div class="comment cmt"><p>Standard Polynomial SVM Kernel
+of the form K(x,y) = (x<sup>T</sup> . y + 1.0)<sup>r</sup>
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.RBFCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RBFCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="RBFCovFunc:RBFCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RBFCovFunc.html"><span class="name">RBFCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@RBFCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.RBFKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RBFKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="RBFKernel:RBFKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RBFKernel.html"><span class="name">RBFKernel</span></a><span class="result"> extends <a href="StationaryKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel">StationaryKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@RBFKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">RBF Kernel of the form
+K(x,y) = exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
+</sup></sup></p><div class="fullcomment"><div class="comment cmt"><p>RBF Kernel of the form
+K(x,y) = exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.RationalQuadraticCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RationalQuadraticCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="RationalQuadraticCovFunc:RationalQuadraticCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RationalQuadraticCovFunc.html"><span class="name">RationalQuadraticCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@RationalQuadraticCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.RationalQuadraticKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RationalQuadraticKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="RationalQuadraticKernel:RationalQuadraticKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RationalQuadraticKernel.html"><span class="name">RationalQuadraticKernel</span></a><span class="result"> extends <a href="StationaryKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel">StationaryKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@RationalQuadraticKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Rational Quadratic Kernel given by the expression
+K(x,y) = (1 + ||x-y||<sup>2</sup>/2&mu;l<sup>2</sup>)<sup>-0.5 &#215; &mu;</sup>
+</sup></p><div class="fullcomment"><div class="comment cmt"><p>Rational Quadratic Kernel given by the expression
+K(x,y) = (1 + ||x-y||<sup>2</sup>/2&mu;l<sup>2</sup>)<sup>-0.5 &#215; &mu;</sup>
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.SECovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SECovFuncextendsRBFCovFunc"></a>
+      <a id="SECovFunc:SECovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SECovFunc.html"><span class="name">SECovFunc</span></a><span class="result"> extends <a href="RBFCovFunc.html" class="extype" name="io.github.mandar2812.dynaml.kernels.RBFCovFunc">RBFCovFunc</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@SECovFuncextendsRBFCovFunc" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.SEKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SEKernelextendsRBFKernel"></a>
+      <a id="SEKernel:SEKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SEKernel.html"><span class="name">SEKernel</span></a><span class="result"> extends <a href="RBFKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.RBFKernel">RBFKernel</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@SEKernelextendsRBFKernel" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Squared Exponential Kernel is a generalized RBF Kernel
+K(x,y) = h<sup>2</sup>*exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
+</sup></sup></sup></p><div class="fullcomment"><div class="comment cmt"><p>Squared Exponential Kernel is a generalized RBF Kernel
+K(x,y) = h<sup>2</sup>*exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SVMKernel[M]extendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,M]withSerializable"></a>
+      <a id="SVMKernel[M]:SVMKernel[M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SVMKernel.html"><span class="name">SVMKernel</span></a><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.M">M</span>] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@SVMKernel[M]extendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,M]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Defines an abstract class outlines the basic
+functionality requirements of an SVM Kernel
+</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernelMatrix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SVMKernelMatrixextendsKernelMatrix[breeze.linalg.DenseMatrix[Double]]withSerializable"></a>
+      <a id="SVMKernelMatrix:SVMKernelMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SVMKernelMatrix.html"><span class="name">SVMKernelMatrix</span></a><span class="result"> extends <a href="KernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelMatrix">KernelMatrix</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@SVMKernelMatrixextendsKernelMatrix[breeze.linalg.DenseMatrix[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.StationaryKernel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StationaryKernel[T,V,M]extendsCovarianceFunction[T,V,M]"></a>
+      <a id="StationaryKernel[T,V,M]:StationaryKernel[T,V,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StationaryKernel.html"><span class="name">StationaryKernel</span></a><span class="tparams">[<span name="T">T</span>, <span name="V">V</span>, <span name="M">M</span>]</span><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.V">V</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.M">M</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@StationaryKernel[T,V,M]extendsCovarianceFunction[T,V,M]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract representation of stationary kernel functions,
+this requires an implicit variable which represents how addition, subtraction etc
+are carried out for the input domain <span class="extype" name="T">T</span>
+</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.TStudentCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TStudentCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="TStudentCovFunc:TStudentCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TStudentCovFunc.html"><span class="name">TStudentCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@TStudentCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.TStudentKernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TStudentKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="TStudentKernel:TStudentKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TStudentKernel.html"><span class="name">TStudentKernel</span></a><span class="result"> extends <a href="StationaryKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel">StationaryKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@TStudentKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">T-Student Kernel
+K(x,y) = 1/(1 + ||x - y||<sup>d</sup>)
+</sup></p><div class="fullcomment"><div class="comment cmt"><p>T-Student Kernel
+K(x,y) = 1/(1 + ||x - y||<sup>d</sup>)
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.WaveCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WaveCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="WaveCovFunc:WaveCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WaveCovFunc.html"><span class="name">WaveCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@WaveCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.WaveKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WaveKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="WaveKernel:WaveKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WaveKernel.html"><span class="name">WaveKernel</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@WaveKernelextendsCovarianceFunction[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.WaveletCovFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WaveletCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]"></a>
+      <a id="WaveletCovFunc:WaveletCovFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WaveletCovFunc.html"><span class="name">WaveletCovFunc</span></a><span class="result"> extends <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@WaveletCovFuncextendsCovarianceFunction[Double,Double,breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.WaveletKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WaveletKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable"></a>
+      <a id="WaveletKernel:WaveletKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WaveletKernel.html"><span class="name">WaveletKernel</span></a><span class="result"> extends <a href="StationaryKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel">StationaryKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@WaveletKernelextendsStationaryKernel[breeze.linalg.DenseVector[Double],Double,breeze.linalg.DenseMatrix[Double]]withSVMKernel[breeze.linalg.DenseMatrix[Double]]withLocalSVMKernel[breeze.linalg.DenseVector[Double]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CovarianceFunction"></a>
+      <a id="CovarianceFunction:CovarianceFunction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CovarianceFunction$.html"><span class="name">CovarianceFunction</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@CovarianceFunction" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOpAdd" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KernelOpAdd"></a>
+      <a id="KernelOpAdd:KernelOpAdd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOpAdd$.html"><span class="name">KernelOpAdd</span></a><span class="result"> extends <a href="KernelOpAdd.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOpAdd">KernelOpAdd</a> with <span class="extype" name="breeze.generic.UFunc">UFunc</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOpAdd" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOpMult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KernelOpMult"></a>
+      <a id="KernelOpMult:KernelOpMult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOpMult$.html"><span class="name">KernelOpMult</span></a><span class="result"> extends <a href="KernelOpMult.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOpMult">KernelOpMult</a> with <span class="extype" name="breeze.generic.UFunc">UFunc</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOpMult" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KernelOps"></a>
+      <a id="KernelOps:KernelOps"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOps$.html"><span class="name">KernelOps</span></a><span class="result"> extends <span class="extype" name="breeze.generic.UFunc">UFunc</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOps" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOuterAdd" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KernelOuterAdd"></a>
+      <a id="KernelOuterAdd:KernelOuterAdd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOuterAdd$.html"><span class="name">KernelOuterAdd</span></a><span class="result"> extends <a href="KernelOuterAdd.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOuterAdd">KernelOuterAdd</a> with <span class="extype" name="breeze.generic.UFunc">UFunc</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOuterAdd" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.KernelOuterMult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KernelOuterMult"></a>
+      <a id="KernelOuterMult:KernelOuterMult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KernelOuterMult$.html"><span class="name">KernelOuterMult</span></a><span class="result"> extends <a href="KernelOuterMult.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOuterMult">KernelOuterMult</a> with <span class="extype" name="breeze.generic.UFunc">UFunc</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@KernelOuterMult" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SVMKernel"></a>
+      <a id="SVMKernel:SVMKernel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SVMKernel$.html"><span class="name">SVMKernel</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.package@SVMKernel" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Defines a global singleton object <a href="SVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel">SVMKernel</a>
+having functions which can construct kernel matrices.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

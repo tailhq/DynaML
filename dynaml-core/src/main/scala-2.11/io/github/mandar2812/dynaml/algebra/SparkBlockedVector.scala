@@ -24,6 +24,8 @@ import breeze.linalg.{DenseVector, NumericOps}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
+import scala.collection.immutable.NumericRange
+
 /**
   * @author mandar2812 date 13/10/2016.
   * A distributed vector that is stored in blocks.
@@ -47,12 +49,22 @@ private[dynaml] class SparkBlockedVector(data: RDD[(Long, DenseVector[Double])],
 
   lazy val cols: Long = 1L
 
-  def _data = vector
+  def _data = vector.sortByKey()
 
 
   override def repr: SparkBlockedVector = this
 
   def t: SparkBlockedDualVector = new SparkBlockedDualVector(data.map(c => (c._1, c._2.t)), rows, rowBlocks)
+
+  def apply(r: NumericRange[Long]): SparkBlockedVector = {
+
+    new SparkBlockedVector(
+      data.filter(e => r.contains(e._1))
+        .map(e => (e._1 - r.min, e._2)),
+      num_row_blocks = r.length
+    )
+  }
+
 
   def persist: Unit = {
     data.persist(StorageLevel.MEMORY_AND_DISK)
@@ -84,4 +96,20 @@ object SparkBlockedVector {
       })
     )
   }
+
+  /**
+    * Vertically merge a number of partitioned vectors.
+    */
+  def vertcat(vectors: SparkBlockedVector*): SparkBlockedVector = {
+    //sanity check
+    assert(vectors.map(_.colBlocks).distinct.length == 1,
+      "In case of vertical concatenation of matrices their columns sizes must be equal")
+
+    val sizes = vectors.map(_.rowBlocks)
+    new SparkBlockedVector(vectors.zipWithIndex.map(couple => {
+      val offset = sizes.slice(0, couple._2).sum
+      couple._1._data.map(c => (c._1+offset, c._2))
+    }).reduceLeft((a,b) => a.union(b)))
+  }
+
 }

@@ -37,7 +37,7 @@ $$
 
 ### STP models for a single output
 
-For univariate GP models (single output), use the [```StudentTRegressionModel```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.stp.StudentTRegression) class (an extension of [```AbstractSTPRegressionModel```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel)). To construct a STP regression model you would need:
+For univariate GP models (single output), use the [```StudentTRegressionModel```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.stp.StudentTRegression) class (an extension of [```AbstractSTPRegressionModel```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel)). To construct a STP regression model you would need:
 
 
 * The degrees of freedom $$\nu$$
@@ -79,7 +79,7 @@ val sos_noise: CompositeCovariance[(DenseVector[Double], Int)] = d :* coRegDirac
 
 ```
 
-You can use the [```MOStudentTRegression[I]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.MOGPRegressionModel) class to create multi-output GP models.
+You can use the [```MOStudentTRegression[I]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.MOGPRegressionModel) class to create multi-output GP models.
 
 ```scala
 val trainingdata: Stream[(DenseVector[Double], DenseVector[Double])] = ...

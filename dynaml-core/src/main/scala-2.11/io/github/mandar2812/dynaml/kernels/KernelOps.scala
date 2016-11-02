@@ -165,6 +165,44 @@ object KernelOps extends UFunc {
         }
     }
 
+    implicit object tensorAddPartLocalScKernels
+      extends KernelOuterMult.Impl2[
+        LocalSVMKernel[Index],
+        LocalSVMKernel[Index],
+        CompositeCovariance[(Index, Index)]] {
+      override def apply(firstkernel: LocalSVMKernel[Index],
+                         otherKernel: LocalSVMKernel[Index]): CompositeCovariance[(Index, Index)] =
+
+        new CompositeCovariance[(Index, Index)] {
+
+          override val hyper_parameters: List[String] = firstkernel.hyper_parameters ++ otherKernel.hyper_parameters
+
+          state = firstkernel.state ++ otherKernel.state
+
+          blocked_hyper_parameters = otherKernel.blocked_hyper_parameters ++ firstkernel.blocked_hyper_parameters
+
+          override def setHyperParameters(h: Map[String, Double]): this.type = {
+            firstkernel.setHyperParameters(h)
+            otherKernel.setHyperParameters(h)
+            super.setHyperParameters(h)
+          }
+
+          override def gradient(x: (Index, Index), y: (Index, Index)): Map[String, Double] =
+            firstkernel.gradient(x._1, y._1) ++ otherKernel.gradient(x._2,y._2)
+
+          override def buildKernelMatrix[S <: Seq[(Index, Index)]](mappedData: S, length: Int) =
+            SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
+
+          override def buildCrossKernelMatrix[S <: Seq[(Index, Index)]](dataset1: S, dataset2: S) =
+            SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
+
+          override def evaluate(x: (Index, Index), y: (Index, Index)): Double =
+            firstkernel.evaluate(x._1, y._1)+otherKernel.evaluate(x._2, y._2)
+        }
+    }
+
+
+
   }
 
 }

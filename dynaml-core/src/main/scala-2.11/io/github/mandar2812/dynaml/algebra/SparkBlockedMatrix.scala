@@ -20,7 +20,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.algebra
 
-import breeze.linalg.{DenseMatrix, NumericOps}
+import breeze.linalg.operators.OpSolveMatrixBy
+import breeze.linalg._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
@@ -48,10 +49,12 @@ private[dynaml] class SparkBlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Do
 
   lazy val cols: Long = if(num_cols == -1L) data.filter(_._1._1 == 0L).map(_._2.cols).sum().toLong else num_cols
 
-  def _data = data
-
+  def _data = data.sortByKey()
 
   override def repr: SparkBlockedMatrix = this
+
+  def filterBlocks(f: ((Long, Long)) => Boolean): RDD[((Long, Long), DenseMatrix[Double])] =
+    _data.filter(c => f(c._1))
 
   /**
     * Transpose of blocked matrix
@@ -59,6 +62,36 @@ private[dynaml] class SparkBlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Do
   def t: SparkBlockedMatrix = new SparkBlockedMatrix(
     data.map(c => (c._1.swap, c._2.t)),
     cols, rows, colBlocks, rowBlocks)
+
+
+  /**
+    * Get lower triangular portion of matrix
+    */
+  def L: LowerTriSparkMatrix = {
+    require(rows == cols, "Matrix must be square for lower triangular component to make sense")
+    require(rowBlocks == colBlocks,
+      "Matrix must be uniformly partitioned for lower triangular component to be efficiently computed")
+    new LowerTriSparkMatrix(
+      filterBlocks(c => c._1 <= c._2)
+        .map(bl =>
+          if(bl._1._1 == bl._1._2) (bl._1, lowerTriangular(bl._2))
+          else bl), rows, cols, rowBlocks, colBlocks)
+  }
+
+  /**
+    * Upper triangular portion of matrix
+    */
+  def U: UpperTriSparkMatrix = {
+    require(rows == cols, "Matrix must be square for lower triangular component to make sense")
+    require(rowBlocks == colBlocks,
+      "Matrix must be uniformly partitioned for lower triangular component to be efficiently computed")
+    new UpperTriSparkMatrix(
+      filterBlocks(c => c._1 >= c._2)
+        .map(bl =>
+          if(bl._1._1 == bl._1._2) (bl._1, upperTriangular(bl._2))
+          else bl), rows, cols, rowBlocks, colBlocks)
+  }
+
 
   /**
     * Persist blocked matrix in memory
@@ -90,6 +123,60 @@ private[dynaml] class SparkBlockedMatrix(data: RDD[((Long, Long), DenseMatrix[Do
       data.filter(c => f(c._1))
 
 }
+
+private[dynaml] class LowerTriSparkMatrix(
+  underlyingdata: RDD[((Long, Long), DenseMatrix[Double])],
+  num_rows: Long = -1L, num_cols: Long = -1L,
+  num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
+  extends SparkBlockedMatrix(
+    data = underlyingdata
+      .flatMap(c =>
+        if(c._1._1 == c._1._2) Seq(c)
+        else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows)))),
+    num_rows, num_cols,
+    num_row_blocks, num_col_blocks) {
+
+  def _underlyingdata: RDD[((Long, Long), DenseMatrix[Double])] = underlyingdata
+
+  override def t: UpperTriSparkMatrix =
+    new UpperTriSparkMatrix(
+      underlyingdata.map(c => (c._1.swap, c._2.t)),
+      cols, rows, colBlocks, rowBlocks)
+
+  override def repr: LowerTriSparkMatrix = this
+
+  def \\[B, That](b: B)(implicit op: OpSolveMatrixBy.Impl2[LowerTriSparkMatrix, B, That]) =
+    op.apply(repr, b)
+
+}
+
+
+private[dynaml] class UpperTriSparkMatrix(
+  underlyingdata: RDD[((Long, Long), DenseMatrix[Double])],
+  num_rows: Long = -1L, num_cols: Long = -1L,
+  num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
+  extends SparkBlockedMatrix(
+    data = underlyingdata
+      .flatMap(c =>
+        if(c._1._1 == c._1._2) Seq(c)
+        else Seq(c, (c._1.swap, DenseMatrix.zeros[Double](c._2.cols, c._2.rows)))),
+    num_rows, num_cols,
+    num_row_blocks, num_col_blocks) {
+
+
+  def _underlyingdata: RDD[((Long, Long), DenseMatrix[Double])] = underlyingdata
+
+  override def t: LowerTriSparkMatrix =
+    new LowerTriSparkMatrix(
+      underlyingdata.map(c => (c._1.swap, c._2.t)),
+      cols, rows, colBlocks, rowBlocks)
+
+  override def repr: UpperTriSparkMatrix = this
+
+  def \\[B, That](b: B)(implicit op: OpSolveMatrixBy.Impl2[UpperTriSparkMatrix, B, That]) =
+    op.apply(repr, b)
+}
+
 
 object SparkBlockedMatrix {
 

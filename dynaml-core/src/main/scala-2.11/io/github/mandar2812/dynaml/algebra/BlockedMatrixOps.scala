@@ -59,7 +59,7 @@ object BlockedMatrixOps extends UFunc {
       val mat1 = a._data
       val mat2 = b._data
 
-      new SparkBlockedVector(mat1.join(mat2).map(c => (c._1, c._2._1 + c._2._2)), a.rows, a.rowBlocks)
+      new SparkBlockedVector(mat1.zip(mat2).map(c => (c._1._1, c._1._2 + c._2._2)), a.rows, a.rowBlocks)
 
     }
   }
@@ -111,7 +111,7 @@ object BlockedMatrixOps extends UFunc {
       val mat1 = a._data
       val mat2 = b._data
 
-      new SparkBlockedVector(mat1.join(mat2).map(c => (c._1, c._2._1 - c._2._2)), a.rows, a.rowBlocks)
+      new SparkBlockedVector(mat1.zip(mat2).map(c => (c._1._1, c._1._2 - c._2._2)), a.rows, a.rowBlocks)
 
     }
   }

@@ -87,9 +87,9 @@ entries:
       url: /core_prob_dist.html
       output: web
 
-    #- title: Operations on Random Variables
-    #  url: /core_prob_operations.html
-    #  output: web
+    - title: Operations on Random Variables
+      url: /core_prob_operations.html
+      output: web
 
     - title: Probability Model
       url: /core_prob_model.html

@@ -8,7 +8,7 @@ folder: coreapi
 
 ## Model Classes
 
-In DynaML all model implementations fit into a well defined class hierarchy. In fact every DynaML machine learning model is an extension of the [```Model[T,Q,R]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.Model) trait. The ```Model``` trait is quite bare bones: machine learning models are viewed as objects containing two parts or components.
+In DynaML all model implementations fit into a well defined class hierarchy. In fact every DynaML machine learning model is an extension of the [```Model[T,Q,R]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.Model) trait. The ```Model``` trait is quite bare bones: machine learning models are viewed as objects containing two parts or components.
 
   1. A training data set (of type ```T```).  
 
@@ -17,13 +17,13 @@ In DynaML all model implementations fit into a well defined class hierarchy. In 
 
 ## Parameterized Models
 
-Many predictive models calculate predictions by formulating an expression which includes a set of parameters which are used along with the data points to generate predictions, the [```ParameterizedLearner[G, T, Q, R, S]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ParameterizedLearner) class represents a skeleton for all parametric machine learning models such as [_Generalized Linear Models_]({{site.baseurl}}/core_glm.html), [_Neural Networks_]({{site.baseurl}}/core_ann.html), etc.
+Many predictive models calculate predictions by formulating an expression which includes a set of parameters which are used along with the data points to generate predictions, the [```ParameterizedLearner[G, T, Q, R, S]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ParameterizedLearner) class represents a skeleton for all parametric machine learning models such as [_Generalized Linear Models_]({{site.baseurl}}/core_glm.html), [_Neural Networks_]({{site.baseurl}}/core_ann.html), etc.
 
-The defining characteristic of classes which extend ```ParameterizedLearner``` is that they must contain a member variable ```optimizer: RegularizedOptimizer[T, Q, R, S]``` which represents a [regularization enabled optimizer]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.RegularizedOptimizer) implementation along with a ```learn()``` method which uses the optimizer member to calculate approximate values of the model parameters given the training data.
+The defining characteristic of classes which extend ```ParameterizedLearner``` is that they must contain a member variable ```optimizer: RegularizedOptimizer[T, Q, R, S]``` which represents a [regularization enabled optimizer]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.RegularizedOptimizer) implementation along with a ```learn()``` method which uses the optimizer member to calculate approximate values of the model parameters given the training data.
 
 ### Linear Models
 
-Linear models; represented by the [```LinearModel[T, P, Q , R, S]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.LinearModel) trait are extensions of ```ParameterizedLearner```, this top level trait is extended to yield many useful linear prediction models.
+Linear models; represented by the [```LinearModel[T, P, Q , R, S]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.LinearModel) trait are extensions of ```ParameterizedLearner```, this top level trait is extended to yield many useful linear prediction models.
 
 [_Generalized Linear Models_]({{site.baseurl}}/core_glm.html) which are linear in parameters expression for the predictions $$y$$ given a vector of processed features $$\phi(x)$$ or basis functions.
 
@@ -68,7 +68,7 @@ Least Squares Support Vector Machines are a modification of the classical Suppor
 
 Stochastic processes are general probabilistic models which can be used to construct finite dimensional distributions over a set of sampled domain points. More specifically a stochastic process is a probabilistic function $$f(.)$$ defined on any _domain_ or _index set_ $$\mathcal{X}$$ such that for any finite collection $$x_i \in \mathcal{X}, i = 1 \cdots N$$, the finite dimensional distribution $$P(f(x_1), \cdots, f(x_N))$$ is coherently defined.
 
-In DynaML the [```StochasticProcess[T, I, Y, W]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcess) trait extends ```Model[T, I, Y]``` and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution ```predictiveDistribution()```.
+In DynaML the [```StochasticProcess[T, I, Y, W]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcess) trait extends ```Model[T, I, Y]``` and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution ```predictiveDistribution()```.
 
 ### Gaussian Processes
 
@@ -99,10 +99,10 @@ Currently the DynaML API has the following classes providing capabilities of met
 
 *Abstract Classes*
 
-* [```MetaModel[D, D1, BaseModel]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.MetaModel)
-* [```CommitteeModel[D, D1, BaseModel]```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.CommitteeModel)
+* [```MetaModel[D, D1, BaseModel]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.MetaModel)
+* [```CommitteeModel[D, D1, BaseModel]```]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.CommitteeModel)
 
 *Implementations*
 
-* [LS-SVM Committee]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.svm.LSSVMCommittee)
-* [Neural Committee]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.CommitteeNetwork)
+* [LS-SVM Committee]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.svm.LSSVMCommittee)
+* [Neural Committee]({{site.apiurl}}/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.CommitteeNetwork)
