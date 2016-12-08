@@ -67,7 +67,7 @@ defaults:
       layout: "page"
       comments: true
       search: true
-      sidebar: home_sidebar
+      sidebar: mydoc_sidebar
   -
     scope:
       path: ""
@@ -86,17 +86,15 @@ defaults:
       layout: "post"
       comments: true
       search: true
-      sidebar: home_sidebar
+      sidebar: mydoc_sidebar
 
 # these are defaults used for the frontmatter for these file types
 
 sidebars:
 - coreapi_sidebar
-- home_sidebar
 - mydoc_sidebar
 - product1_sidebar
 - product2_sidebar
-- other
 
 description: "Documentation for the DynaML machine learning toolkit"
 # the description is used in the feed.xml file
