@@ -86,7 +86,7 @@ defaults:
       layout: "post"
       comments: true
       search: true
-      sidebar: mydoc_sidebar
+      sidebar: home_sidebar
 
 # these are defaults used for the frontmatter for these file types
 
