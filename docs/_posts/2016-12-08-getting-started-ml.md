@@ -3,6 +3,7 @@ title:  "DynaML: Resources and Background"
 published: true
 permalink: mlintro.html
 summary: "Some resources for people interested in contributing code or starting ML research/applications"
+sidebar: mydoc_sidebar
 tags: [news, getting_started]
 ---
 
