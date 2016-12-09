@@ -5,6 +5,7 @@ import org.apache.spark.SparkConf
 import com.quantifind.charts.Highcharts._
 import spire.implicits._
 //DynaML imports
+import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.models._
 import io.github.mandar2812.dynaml.models.neuralnets._
 import io.github.mandar2812.dynaml.models.svm._

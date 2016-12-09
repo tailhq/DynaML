@@ -14,4 +14,8 @@ trait LocalSVMKernel[Index] extends LocalScalarKernel[Index] {
   def :+(otherKernel: LocalSVMKernel[Index]): CompositeCovariance[(Index, Index)] =
     new KernelOps.PairOps[Index, Index].tensorAddPartLocalScKernels(this, otherKernel)
 
+  /*def :*(otherKernel: LocalSVMKernel[Index]): CompositeCovariance[(Index, Index)] =
+    new KernelOps.PairOps[Index, Index].tensorMultLocalScKernels(this, otherKernel)*/
+
+
 }
