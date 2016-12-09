@@ -1,6 +1,6 @@
 ---
-title: Home
-sidebar: mydoc_sidebar
+title: DynaML Blog
+sidebar: home_sidebar
 permalink: dynaml_blog.html
 toc: false
 folder: blog
