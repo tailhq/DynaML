@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Home
 sidebar: mydoc_sidebar
 permalink: dynaml_blog.html
