@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Home
-keywords: news, blog, updates, release notes, announcements
 sidebar: mydoc_sidebar
 permalink: dynaml_blog.html
 toc: false
