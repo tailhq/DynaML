@@ -13,12 +13,10 @@ topnav_dropdowns:
         - title: Issue Tracker
           external_url: https://github.com/mandar2812/DynaML/issues
         - title: DynaML Blog
-          url: /dynaml_blog.html 
+          url: /dynaml_blog.html
 
     - title: Components
       folderitems:
-        - title: Home
-          url: /index.html
         - title: DynaML Core API
           url: /core_model_hierarchy.html
         - title: DynaML Pipes
