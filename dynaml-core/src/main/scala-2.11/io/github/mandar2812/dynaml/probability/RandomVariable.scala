@@ -2,7 +2,7 @@ package io.github.mandar2812.dynaml.probability
 
 import breeze.stats.distributions.{ContinuousDistr, Density, DiscreteDistr}
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
-import spire.algebra.{Field, NRoot}
+import spire.algebra.Field
 import io.github.mandar2812.dynaml.utils._
 
 
@@ -19,6 +19,7 @@ import io.github.mandar2812.dynaml.utils._
   */
 abstract class RandomVariable[Domain] {
 
+  self =>
   /**
     * Generate a sample from
     * the random variable
@@ -38,7 +39,17 @@ abstract class RandomVariable[Domain] {
     * */
   def :*[Domain1](other: RandomVariable[Domain1]): RandomVariable[(Domain, Domain1)] = {
     val sam = this.sample
-    RandomVariable(BifurcationPipe(sam,other.sample))
+    RandomVariable(BifurcationPipe(sam, other.sample))
+  }
+
+  /**
+    * Create an iid random variable from the current (this)
+    * @param n The number of iid samples of the base random variable.
+    * */
+  def iid(n: Int): IIDRandomVariable[Domain, RandomVariable[Domain]] =
+  new IIDRandomVariable[Domain, RandomVariable[Domain]] {
+    override val baseRandomVariable: RandomVariable[Domain] = self
+    override val num: Int = n
   }
 }
 
@@ -59,22 +70,21 @@ trait HasDistribution[Domain] {
 }
 
 /**
-  * A (univariate) continuous random variable that has an associated
-  * probability density function.
+  * Random variable defined over a continuous domain.
   *
   * @tparam Domain The domain over which the random variable takes values.
-  * @param ev An implicit parameter, which represents a [[Field]] defined over
-  *           the set [[Domain]].
   * */
-abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) extends RandomVariable[Domain] {
+trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
 
   /**
     * Return the random variable that results from adding a provided
     * random variable to the current random variable.
     *
     * @param other The random variable to be added to this.
+    * @param ev An implicit parameter, which represents a [[Field]] defined over
+    *           the set [[Domain]].
     * */
-  def +(other: ContinuousRandomVariable[Domain]): ContinuousRandomVariable[Domain] = {
+  def +(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
     new ContinuousRandomVariable[Domain] {
@@ -85,11 +95,13 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
 
   /**
     * Return the random variable that results from subtracting a provided
-    * random variable to the current random variable.
+    * random variable from the current random variable.
     *
     * @param other The random variable to be subtracted from this.
+    * @param ev An implicit parameter, which represents a [[Field]] defined over
+    *           the set [[Domain]].
     * */
-  def -(other: ContinuousRandomVariable[Domain]): ContinuousRandomVariable[Domain] = {
+  def -(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
     new ContinuousRandomVariable[Domain] {
@@ -103,8 +115,10 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     * random variable to the current random variable.
     *
     * @param other The random variable to be multiplied to this.
+    * @param ev An implicit parameter, which represents a [[Field]] defined over
+    *           the set [[Domain]].
     * */
-  def *(other: ContinuousRandomVariable[Domain]): ContinuousRandomVariable[Domain] = {
+  def *(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
     new ContinuousRandomVariable[Domain] {
@@ -118,8 +132,10 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     * quantity in the [[Domain]] to the current random variable.
     *
     * @param other The value to be added to this random variable.
+    * @param ev An implicit parameter, which represents a [[Field]] defined over
+    *           the set [[Domain]].
     * */
-  def +(other: Domain): ContinuousRandomVariable[Domain] = {
+  def +(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
     new ContinuousRandomVariable[Domain] {
@@ -133,8 +149,10 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     * quantity in the [[Domain]] from the current random variable.
     *
     * @param other The value to be subtracted from this random variable.
+    * @param ev An implicit parameter, which represents a [[Field]] defined over
+    *           the set [[Domain]].
     * */
-  def -(other: Domain): ContinuousRandomVariable[Domain] = {
+  def -(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
     new ContinuousRandomVariable[Domain] {
@@ -147,8 +165,10 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
     * quantity in the [[Domain]] to the current random variable.
     *
     * @param other The value to be multiplied to this random variable.
+    * @param ev An implicit parameter, which represents a [[Field]] defined over
+    *           the set [[Domain]].
     * */
-  def *(other: Domain): ContinuousRandomVariable[Domain] = {
+  def *(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
     val sam = this.sample.run _
 
     new ContinuousRandomVariable[Domain] {
@@ -157,32 +177,53 @@ abstract class ContinuousRandomVariable[Domain](implicit ev: Field[Domain]) exte
   }
 }
 
+/**
+  * A random variable which has a computable probability
+  * density.
+  *
+  * @tparam Domain The set over which the random variable takes its values.
+  * @tparam Dist A breeze probability density defined on the
+  *              [[Domain]]
+  * */
 trait RandomVarWithDistr[Domain, Dist <: Density[Domain]]
   extends RandomVariable[Domain]
     with HasDistribution[Domain] {
 
+  self =>
+
   override val underlyingDist: Dist
 
+  /**
+    * Cartesian product with another random variables which
+    * has a defined probability distribution.
+    *
+    * */
   def :*[Domain1, Dist1 <: Density[Domain1]](other: RandomVarWithDistr[Domain1, Dist1]):
-  RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] = {
-    val sam = this.sample
-    val dist = this.underlyingDist
-    //RandomVariable(BifurcationPipe(sam,other.sample))
+  RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] =
+  new RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] {
 
-    new RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] {
-
-      val underlyingDist: Density[(Domain, Domain1)] = new Density[(Domain, Domain1)] {
-        override def apply(x: (Domain, Domain1)): Double = dist(x._1)*other.underlyingDist(x._2)
-      }
-
-      val sample = BifurcationPipe(sam,other.sample)
+    val underlyingDist: Density[(Domain, Domain1)] = new Density[(Domain, Domain1)] {
+      override def apply(x: (Domain, Domain1)): Double = self.underlyingDist(x._1)*other.underlyingDist(x._2)
     }
 
+    val sample = BifurcationPipe(self.sample, other.sample)
   }
+
+  //TODO: Figure out implementation of following iid method
+  /*override def iid(n: Int): IIDRandomVariable[Domain, RandomVarWithDistr[Domain, Dist]] =
+    new IIDRandomVarDistr[Domain, Dist, RandomVarWithDistr[Domain, Dist]] {
+      override val baseRandomVariable: RandomVarWithDistr[Domain, Dist] = self
+      override val num: Int = n
+    }*/
 
 }
 
-abstract class ContinuousDistrRV[Domain](implicit ev: Field[Domain])
+/**
+  * A continuous random variable that has an associated
+  * probability density function.
+  *
+  * */
+abstract class ContinuousDistrRV[Domain]
   extends ContinuousRandomVariable[Domain]
     with RandomVarWithDistr[Domain, ContinuousDistr[Domain]] {
 
@@ -190,7 +231,7 @@ abstract class ContinuousDistrRV[Domain](implicit ev: Field[Domain])
 
   override val sample = DataPipe(() => underlyingDist.sample())
 
-  def :*[Domain1](other: ContinuousDistrRV[Domain1])(implicit ev1: Field[Domain1])
+  def :*[Domain1](other: ContinuousDistrRV[Domain1])(implicit ev: Field[Domain], ev1: Field[Domain1])
   : ContinuousDistrRV[(Domain, Domain1)] = {
     val sam = this.underlyingDist.draw _
     val dist = this.underlyingDist
@@ -218,6 +259,9 @@ abstract class ContinuousDistrRV[Domain](implicit ev: Field[Domain])
 
 }
 
+/**
+  * A random variable which takes discrete or categorical values.
+  * */
 abstract class DiscreteDistrRV[Domain]
   extends RandomVarWithDistr[Domain, DiscreteDistr[Domain]] {
 
@@ -225,6 +269,10 @@ abstract class DiscreteDistrRV[Domain]
 
   override val sample = DataPipe(() => underlyingDist.sample())
 
+  /**
+    * Cartesian product with another discrete valued random variable.
+    *
+    * */
   def :*[Domain1](other: DiscreteDistrRV[Domain1]): DiscreteDistrRV[(Domain, Domain1)] = {
 
     val dist = this.underlyingDist
@@ -244,8 +292,16 @@ abstract class DiscreteDistrRV[Domain]
 
 }
 
+/**
+  * Companion object of the [[RandomVariable]] class.
+  * Contains apply methods which can create random variables.
+  * */
 object RandomVariable {
 
+  /**
+    * @param f A function which generates samples from the random variable
+    *          to be created.
+    * */
   def apply[O](f: () => O) = new RandomVariable[O] {
     val sample = DataPipe(f)
   }
@@ -254,77 +310,24 @@ object RandomVariable {
     val sample = f
   }
 
+  /**
+    * Creates a continuous random variable with a specified distribution.
+    * @tparam O The domain of values over which the random variable is defined.
+    * @param d A breeze continuous distribution
+    * @param ev A spire [[Field]] implementation for the domain [[O]]
+    * @return A continuous random variable instance.
+    * */
   def apply[O](d: ContinuousDistr[O])(implicit ev: Field[O]) = new ContinuousDistrRV[O] {
     override val underlyingDist = d
   }
 
+  /**
+    * Creates a continuous random variable with a specified distribution.
+    * @tparam O The domain of values over which the random variable is defined.
+    * @param d A breeze discrete distribution
+    * @return A discrete random variable instance.
+    * */
   def apply[O](d: DiscreteDistr[O]) = new DiscreteDistrRV[O] {
     override val underlyingDist = d
   }
-}
-
-/**
-  * An independent and identically distributed
-  * [[RandomVariable]] represented as a [[Stream]]
-  *
-  * */
-trait IIDRandomVariable[D, R <: RandomVariable[D]] extends RandomVariable[Stream[D]] {
-
-  val baseRandomVariable: R
-
-  val num: Int
-
-  override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.sample()))
-}
-
-trait IIDRandomVarDistr[
-D, Dist <: Density[D],
-R <: RandomVarWithDistr[D, Dist]] extends IIDRandomVariable[D, R]
-  with RandomVarWithDistr[Stream[D], Density[Stream[D]]] {
-
-  val baseRandomVariable: R
-
-  val num: Int
-
-  override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.sample()))
-
-  override val underlyingDist = new Density[Stream[D]] {
-    override def apply(x: Stream[D]): Double = x.map(baseRandomVariable.underlyingDist(_)).product
-  }
-}
-
-object IIDRandomVarDistr {
-  def apply[D](base : RandomVarWithDistr[D, Density[D]])(n: Int) =
-    new IIDRandomVarDistr[D, Density[D], RandomVarWithDistr[D, Density[D]]] {
-      val baseRandomVariable = base
-      val num = n
-    }
-
-  def apply[D](base : ContinuousDistrRV[D])(n: Int) =
-    new IIDRandomVarDistr[D, ContinuousDistr[D], ContinuousDistrRV[D]] {
-      val baseRandomVariable = base
-      val num = n
-    }
-}
-
-object IIDRandomVariable {
-
-  def apply[D, R <: RandomVariable[D]](base: R)(n: Int) = new IIDRandomVariable[D, R] {
-
-    val baseRandomVariable = base
-
-    val num = n
-  }
-
-  def apply[C, D, R <: RandomVariable[D]](base: DataPipe[C, R])(n: Int) =
-    DataPipe((c: C) => new IIDRandomVariable[D, R] {
-
-      val baseRandomVariable = base(c)
-
-      val num = n
-
-    })
-
-
-
 }

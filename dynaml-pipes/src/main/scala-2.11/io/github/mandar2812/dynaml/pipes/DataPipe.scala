@@ -50,30 +50,6 @@ trait DataPipe[-Source, +Destination] {
   :ParallelPipe[Source, Destination, OtherSource, OtherDestination] = ParallelPipe(this.run, that.run)
 }
 
-trait ParallelPipe[-Source1, +Result1, -Source2, +Result2]
-  extends DataPipe[(Source1, Source2), (Result1, Result2)] {
-
-}
-
-object ParallelPipe {
-  def apply[S1, D1, S2, D2](func1: (S1) => D1, func2: (S2) => D2):
-  ParallelPipe[S1, D1, S2, D2] = {
-    new ParallelPipe[S1, D1, S2, D2] {
-      def run(data: (S1, S2)) = (func1(data._1), func2(data._2))
-    }
-  }
-}
-
-trait BifurcationPipe[Source, Result1, Result2]
-  extends DataPipe[Source, (Result1, Result2)] {
-
-
-}
-
-trait SideEffectPipe[I] extends DataPipe[I, Unit] {
-
-}
-
 object DataPipe {
 
   def apply[D](func: () => D): DataPipe[Unit, D] = new DataPipe[Unit, D] {
@@ -104,6 +80,29 @@ object DataPipe {
       def run(data: S) = func(data)
     }
   }
+}
+
+trait ParallelPipe[-Source1, +Result1, -Source2, +Result2]
+  extends DataPipe[(Source1, Source2), (Result1, Result2)] {
+
+}
+
+object ParallelPipe {
+  def apply[S1, D1, S2, D2](func1: (S1) => D1, func2: (S2) => D2):
+  ParallelPipe[S1, D1, S2, D2] = {
+    new ParallelPipe[S1, D1, S2, D2] {
+      def run(data: (S1, S2)) = (func1(data._1), func2(data._2))
+    }
+  }
+}
+
+trait BifurcationPipe[Source, Result1, Result2]
+  extends DataPipe[Source, (Result1, Result2)] {
+
+}
+
+trait SideEffectPipe[I] extends DataPipe[I, Unit] {
+
 }
 
 object BifurcationPipe {
