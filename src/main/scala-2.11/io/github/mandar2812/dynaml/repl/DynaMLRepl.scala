@@ -13,7 +13,7 @@ import ammonite.runtime.ImportHook
 import ammonite.ops._
 import ammonite.util.Name.backtickWrap
 import ammonite.util.{Res, Util}
-import fastparse.Utils._
+import fastparse.utils.Utils._
 import io.github.mandar2812.dynaml.repl.Router.{ArgSig, EntryPoint}
 import sourcecode.Compat.Context
 
@@ -398,7 +398,7 @@ class Router [C <: Context](val c: C) {
 object Scripts {
   def runScript(wd: Path,
                 path: Path,
-                interp: ammonite.runtime.Interpreter,
+                interp: ammonite.interp.Interpreter,
                 args: Seq[String],
                 kwargs: Seq[(String, String)]) = {
     val (pkg, wrapper) = Util.pathToPackageWrapper(path, wd)
