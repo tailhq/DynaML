@@ -91,9 +91,9 @@ defaults:
 # these are defaults used for the frontmatter for these file types
 
 sidebars:
-- coreapi_sidebar
 - home_sidebar
 - mydoc_sidebar
+- coreapi_sidebar
 - product1_sidebar
 - product2_sidebar
 - other

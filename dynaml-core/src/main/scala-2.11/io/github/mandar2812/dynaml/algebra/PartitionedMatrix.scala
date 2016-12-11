@@ -44,14 +44,13 @@ private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[
   /**
     * Slice a blocked matrix to produce a new block matrix.
     */
-  def apply(r: NumericRange[Long], c: NumericRange[Long]): PartitionedMatrix = {
-
+  def apply(r: NumericRange[Long], c: NumericRange[Long]): PartitionedMatrix =
     new PartitionedMatrix(
       data.filter(e => r.contains(e._1._1) && c.contains(e._1._2))
         .map(e => ((e._1._1 - r.min, e._1._2 - c.min), e._2)),
       num_row_blocks = r.length, num_col_blocks = c.length
     )
-  }
+
 
   /**
     * Get lower triangular portion of matrix

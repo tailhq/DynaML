@@ -27,18 +27,13 @@ private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])
 
   def t: PartitionedDualVector = new PartitionedDualVector(data.map(c => (c._1, c._2.t)), rows, rowBlocks)
 
-  def map(func: ((Long, DenseVector[Double])) => (Long, DenseVector[Double])): PartitionedVector =
+  override def map(func: ((Long, DenseVector[Double])) => (Long, DenseVector[Double])): PartitionedVector =
     new PartitionedVector(data.map(func), rows, rowBlocks)
 
-  def apply(r: NumericRange[Long]): PartitionedVector = {
-
-    new PartitionedVector(
-      data.filter(e => r.contains(e._1))
-        .map(e => (e._1 - r.min, e._2)),
-      num_row_blocks = r.length
-    )
-  }
-
+  override def apply(r: NumericRange[Long]): PartitionedVector = new PartitionedVector(
+    data.filter(e => r.contains(e._1)).map(e => (e._1 - r.min, e._2)),
+    num_row_blocks = r.length)
+  
   def toBreezeVector = DenseVector.vertcat(data.sortBy(_._1).map(_._2):_*)
 
   def reverse: PartitionedVector = map(c => (rowBlocks - 1L - c._1, DenseVector(c._2.toArray.reverse)))
