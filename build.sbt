@@ -22,6 +22,7 @@ val baseSettings = Seq(
   resolvers in ThisBuild ++= Seq(
     "jzy3d-releases" at "http://maven.jzy3d.org/releases",
     "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
+    "BeDataDriven" at "https://nexus.bedatadriven.com/content/groups/public",
     Resolver.sonatypeRepo("public"))
 )
 
@@ -31,7 +32,7 @@ lazy val commonSettings = Seq(
       replDependency ++ loggingDependency ++
       linearAlgebraDependencies ++ chartsDependencies ++
       tinkerpopDependency ++ notebookInterfaceDependency ++
-      openMLDependency)
+      openMLDependency ++ rejinDependency)
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)

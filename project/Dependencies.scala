@@ -52,5 +52,9 @@ object Dependencies {
     "com.tinkerpop" % "frames" % "2.5.0" % "compile"
   )
 
+  val rejinDependency = Seq(
+    "org.renjin" % "renjin-script-engine" % "0.8.2297"
+  )
+
   val notebookInterfaceDependency = Seq()
 }
