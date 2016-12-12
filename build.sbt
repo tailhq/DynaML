@@ -28,11 +28,11 @@ val baseSettings = Seq(
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= (
-    baseDependencies ++ apacheSpark ++
+    baseDependencies ++ apacheSparkDependency ++
       replDependency ++ loggingDependency ++
       linearAlgebraDependencies ++ chartsDependencies ++
       tinkerpopDependency ++ notebookInterfaceDependency ++
-      openMLDependency ++ rejinDependency)
+      openMLDependency ++ rejinDependency ++ rPackages)
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)

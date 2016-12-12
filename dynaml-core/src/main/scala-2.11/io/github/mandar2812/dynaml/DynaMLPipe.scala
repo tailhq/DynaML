@@ -25,8 +25,10 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler, Scaler, StreamDataPipe}
-import io.github.mandar2812.dynaml.utils.{GaussianScaler, MinMaxScaler, MVGaussianScaler}
+import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
 import org.apache.log4j.Logger
+import org.renjin.script.RenjinScriptEngine
+import org.renjin.sexp._
 
 /**
   * @author mandar2812 datum 3/2/16.
@@ -51,6 +53,16 @@ object DynaMLPipe {
     * [[String]] and returns a [[Stream]] of [[String]].
     * */
   val fileToStream = DataPipe(utils.textFileToStream _)
+
+  def csvToRDF(df: String, sep: Char)(implicit renjin: RenjinScriptEngine): DataPipe[String, ListVector] =
+    DataPipe((file: String) => renjin
+      .eval(df+""" <- read.csv(""""+file+"""", sep = '"""+sep+"""')""")
+      .asInstanceOf[ListVector])
+
+  def rdfToGLM(modelName: String, y: String, xs: Array[String])(implicit renjin: RenjinScriptEngine)
+  : DataPipe[String, ListVector] = DataPipe((df: String) => renjin
+    .eval(modelName+" <- lm("+y+" ~ "+xs.mkString(" + ")+", "+df+")")
+    .asInstanceOf[ListVector])
 
   /**
     * Writes a [[Stream]] of [[String]] to

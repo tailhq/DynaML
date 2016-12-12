@@ -22,7 +22,7 @@ object Dependencies {
     "com.github.scopt" % "scopt_2.11" % "3.5.0"
   )
 
-  val apacheSpark = Seq(
+  val apacheSparkDependency = Seq(
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
     "org.apache.spark" % "spark-core_2.11" % "2.0.0" % "compile",
     "org.apache.spark" % "spark-mllib_2.11" % "2.0.0" % "compile"
@@ -54,6 +54,11 @@ object Dependencies {
 
   val rejinDependency = Seq(
     "org.renjin" % "renjin-script-engine" % "0.8.2297"
+  )
+
+  val rPackages = Seq(
+    "org.renjin.cran" % "plyr" % "1.8.3-renjin-10",
+    "org.renjin.cran" % "abc" % "2.1-b274"
   )
 
   val notebookInterfaceDependency = Seq()
