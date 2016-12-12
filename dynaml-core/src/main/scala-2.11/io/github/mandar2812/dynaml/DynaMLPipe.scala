@@ -44,7 +44,6 @@ object DynaMLPipe {
   /**
     * A trivial identity data pipe
     * */
-
   def identityPipe[T] = DataPipe(identity[T] _)
 
 
@@ -54,11 +53,29 @@ object DynaMLPipe {
     * */
   val fileToStream = DataPipe(utils.textFileToStream _)
 
+  /**
+    * Read a csv text file and store it in a R data frame.
+    * @param df The name of the data frame variable
+    * @param sep Separation character in the csv file
+    * @return A [[DataPipe]] instance which takes as input a file name
+    *         and returns a renjin [[ListVector]] instance and stores data frame
+    *         in the variable nameed as df.
+    * */
   def csvToRDF(df: String, sep: Char)(implicit renjin: RenjinScriptEngine): DataPipe[String, ListVector] =
     DataPipe((file: String) => renjin
       .eval(df+""" <- read.csv(""""+file+"""", sep = '"""+sep+"""')""")
       .asInstanceOf[ListVector])
 
+  /**
+    * Create a linear model from a R data frame.
+    * @param modelName The name of the variable to store model
+    * @param y The name of the target variable
+    * @param xs A list of names denoting input variables
+    * @return A [[DataPipe]] which takes as input data frame variable name
+    *         and returns a [[ListVector]] containing linear model attributes.
+    *         Also stores the model in the variable given by modelName in the ongoing
+    *         R session.
+    * */
   def rdfToGLM(modelName: String, y: String, xs: Array[String])(implicit renjin: RenjinScriptEngine)
   : DataPipe[String, ListVector] = DataPipe((df: String) => renjin
     .eval(modelName+" <- lm("+y+" ~ "+xs.mkString(" + ")+", "+df+")")
