@@ -23,7 +23,9 @@ import breeze.linalg.{DenseMatrix, DenseVector, diag}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{
+CoupledSimulatedAnnealing, GPMLOptimizer,
+GloballyOptWithGrad, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler, Scaler, StreamDataPipe}
 import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
 import org.apache.log4j.Logger
@@ -657,7 +659,6 @@ object DynaMLPipe {
       val metrics = new RegressionMetrics(scoresAndLabels,
         scoresAndLabels.length)
 
-      //println(scoresAndLabels)
       metrics.print()
       metrics.generatePlots()
     })
