@@ -14,6 +14,10 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
 
   var state: Map[String, Double] = Map()
 
+  def block_all_hyper_parameters: Unit = {
+    blocked_hyper_parameters = hyper_parameters
+  }
+
   def effective_state:Map[String, Double] =
     state.filterNot(h => blocked_hyper_parameters.contains(h._1))
 
