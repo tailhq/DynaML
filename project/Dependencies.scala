@@ -19,7 +19,8 @@ object Dependencies {
     "org.scala-graph" %% "graph-core" % "1.11.3",
     "org.scalatest" % "scalatest_2.11" % "2.2.6" % "test",
     "com.typesafe.akka" %% "akka-stream" % "2.4.6",
-    "com.github.scopt" % "scopt_2.11" % "3.5.0"
+    "com.github.scopt" % "scopt_2.11" % "3.5.0",
+    "com.nativelibs4java" % "scalaxy-streams_2.11" % "0.3.4" % "provided"
   )
 
   val apacheSparkDependency = Seq(
@@ -59,6 +60,13 @@ object Dependencies {
   val rPackages = Seq(
     "org.renjin.cran" % "plyr" % "1.8.3-renjin-10",
     "org.renjin.cran" % "abc" % "2.1-b274"
+  )
+
+  val cppCompatDependencies = Seq(
+    "com.nativelibs4java" % "jnaerator" % "0.12",
+    "com.nativelibs4java" % "bridj" % "0.7.0",
+    "org.bytedeco" % "javacpp" % "1.3",
+    "org.bytedeco.javacpp-presets" % "tensorflow" % "0.11.0-1.3"
   )
 
   val notebookInterfaceDependency = Seq()

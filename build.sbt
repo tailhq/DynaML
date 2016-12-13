@@ -32,7 +32,18 @@ lazy val commonSettings = Seq(
       replDependency ++ loggingDependency ++
       linearAlgebraDependencies ++ chartsDependencies ++
       tinkerpopDependency ++ notebookInterfaceDependency ++
-      openMLDependency ++ rejinDependency ++ rPackages)
+      openMLDependency ++ rejinDependency ++
+      rPackages ++ cppCompatDependencies)/*,
+
+  scalacOptions ++= Seq("-Xplugin-require:scalaxy-streams", "-optimise", "-Yclosure-elim", "-Yinline"),
+
+  scalacOptions in Test ~= (_ filterNot (_ == "-Xplugin-require:scalaxy-streams")),
+
+  scalacOptions in Test += "-Xplugin-disable:scalaxy-streams",
+
+  autoCompilerPlugins := true,
+
+  addCompilerPlugin("com.nativelibs4java" % "scalaxy-streams_2.11" % "0.3.4")*/
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)

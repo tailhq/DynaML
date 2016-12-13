@@ -4,6 +4,7 @@ import breeze.linalg._
 import io.github.mandar2812.dynaml.algebra.{PartitionedMatrix, PartitionedPSDMatrix}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
+import scalaxy.streams.optimize
 
 /**
  * Defines an abstract class outlines the basic
@@ -122,23 +123,23 @@ object SVMKernel {
 
     logger.info("~~~~~~~~~~~~~~~~~~~~~~~")
     logger.info("Constructing Partitions")
+    optimize {
+      new PartitionedPSDMatrix(
+        utils.combine(Seq(partitionedData, partitionedData))
+          .filter(c => c.head._2 >= c.last._2)
+          .toStream.map(c => {
 
-    new PartitionedPSDMatrix(
-      utils.combine(Seq(partitionedData, partitionedData))
-        .filter(c => c.head._2 >= c.last._2)
-        .toStream.map(c => {
+          val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
+          logger.info(":- Partition: "+partitionIndex)
 
-        val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
-        logger.info(":- Partition: "+partitionIndex)
+          val matrix =
+            if(partitionIndex._1 == partitionIndex._2)
+              buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
+            else crossKernelMatrix(c.head._1, c.last._1, eval)
 
-        val matrix =
-          if(partitionIndex._1 == partitionIndex._2)
-            buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
-          else crossKernelMatrix(c.head._1, c.last._1, eval)
-
-        (partitionIndex, matrix)
-      }), rows, cols, num_R_blocks, num_C_blocks)
-
+          (partitionIndex, matrix)
+        }), rows, cols, num_R_blocks, num_C_blocks)
+    }
   }
 
   def crossPartitonedKernelMatrix[T, S <: Seq[T]](
