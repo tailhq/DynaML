@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.DenseMatrix
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
 
 /**
   * Scalar Kernel defines algebraic behavior for kernels of the form
@@ -79,4 +80,40 @@ abstract class CompositeCovariance[T]
   *
   * for example K((x1, y1), (x1, y2)) = k1(x1,x2) + k2(y1,y2)
   */
-trait DecomposableCovariance extends CompositeCovariance[PartitionedVector]
+class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
+  implicit encoding: Encoder[S, Array[S]],
+  reducer: DataPipe[Array[Double], Double]) extends CompositeCovariance[S] {
+
+  val kernelMap = kernels.map(k => (k.toString.split(".").last, k)).toMap
+
+  override val hyper_parameters: List[String] = kernels.map(k => {
+    val id = k.toString.split(".").last
+    k.hyper_parameters.map(h => id+"/"+h)
+  }).reduceLeft(_++_)
+
+  blocked_hyper_parameters = kernels.map(k => {
+    val id = k.toString.split(".").last
+    k.blocked_hyper_parameters.map(h => id+"/"+h)
+  }).reduceLeft(_++_)
+
+  override def setHyperParameters(h: Map[String, Double]): DecomposableCovariance.this.type = {
+    //group the hyper params by kernel id
+    h.toSeq.map(kv => {
+      val idS = kv._1.split("/")
+      (idS.head, (idS.last, kv._2))
+    }).groupBy(_._1).map(hypC => {
+      val kid = hypC._1
+      val hyper_params = hypC._2.map(_._2).toMap
+      kernelMap(kid).setHyperParameters(hyper_params)
+    })
+    this
+  }
+
+  override def evaluate(x: S, y: S): Double = {
+    val (xs, ys) = (encoding*encoding)((x,y))
+    reducer(xs.zip(ys).zip(kernels).map(coupleAndKern => {
+      val (u,v) = coupleAndKern._1
+      coupleAndKern._2.evaluate(u,v)
+    }))
+  }
+}
