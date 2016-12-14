@@ -23,11 +23,10 @@ import breeze.linalg.{DenseMatrix, DenseVector, diag}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.optimization.{
-CoupledSimulatedAnnealing, GPMLOptimizer,
-GloballyOptWithGrad, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler, Scaler, StreamDataPipe}
 import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
+import io.github.mandar2812.dynaml.wavelets.{HaarWaveletFilter, InverseHaarWaveletFilter}
 import org.apache.log4j.Logger
 import org.renjin.script.RenjinScriptEngine
 import org.renjin.sexp._
@@ -546,59 +545,13 @@ object DynaMLPipe {
     * Constructs a data pipe which performs discrete Haar wavelet transform
     * on a (breeze) vector signal.
     * */
-  val haarWaveletFilter = (order: Int) => new ReversibleScaler[DenseVector[Double]] {
-
-    override val i = invHaarWaveletFilter(order)
-
-    override def run(signal: DenseVector[Double]) = {
-      //Check size of signal before constructing DWT matrix
-      assert(
-        signal.length == math.pow(2.0, order).toInt,
-        "Signal: "+signal+"\n is of length "+signal.length+
-          "\nLength of signal must be : 2^"+order
-      )
-
-      // Now construct DWT matrix
-      val invSqrtTwo = 1.0/math.sqrt(2.0)
-
-      val rowFactors = (0 until order).reverse.map(i => {
-        (1 to math.pow(2.0, i).toInt).map(k =>
-          invSqrtTwo/math.sqrt(order-i))})
-        .reduceLeft((a,b) => a ++ b).reverse
-
-      val appRowFactors = Seq(rowFactors.head) ++ rowFactors
-
-      val dwtvec = utils.haarMatrix(math.pow(2.0, order).toInt)*signal
-
-      dwtvec.mapPairs((row, v) => v*appRowFactors(row))
-    }
-  }
+  val haarWaveletFilter = (order: Int) => HaarWaveletFilter(order)
 
   /**
-    * Implements the inverse Discrete Haar Wavelet Transform
-    *
+    * Constructs a data pipe which performs inverse discrete Haar wavelet transform
+    * on a (breeze) vector signal.
     * */
-  val invHaarWaveletFilter = (order: Int) => Scaler((signal: DenseVector[Double]) => {
-    //Check size of signal before constructing DWT matrix
-    assert(
-      signal.length == math.pow(2.0, order).toInt,
-      "Signal: "+signal+"\n is of length "+signal.length+
-        "\nLength of signal must be : 2^"+order
-    )
-
-    // Now construct DWT matrix
-    val invSqrtTwo = 1.0/math.sqrt(2.0)
-
-    val rowFactors = (0 until order).reverse.map(i => {
-      (1 to math.pow(2.0, i).toInt).map(k =>
-        invSqrtTwo/math.sqrt(order-i))})
-      .reduceLeft((a,b) => a ++ b).reverse
-
-    val appRowFactors = Seq(rowFactors.head) ++ rowFactors
-    val normalizationMat: DenseMatrix[Double] = diag(DenseVector(appRowFactors.toArray))
-
-    utils.haarMatrix(math.pow(2.0, order).toInt).t*(normalizationMat*signal)
-  })
+  val invHaarWaveletFilter = (order: Int) => InverseHaarWaveletFilter(order)
 
   def trainParametricModel[
   G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]
