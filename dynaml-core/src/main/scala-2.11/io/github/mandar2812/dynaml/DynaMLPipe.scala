@@ -26,7 +26,7 @@ import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler, Scaler, StreamDataPipe}
 import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
-import io.github.mandar2812.dynaml.wavelets.{HaarWaveletFilter, InverseHaarWaveletFilter}
+import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
 import org.apache.log4j.Logger
 import org.renjin.script.RenjinScriptEngine
 import org.renjin.sexp._
@@ -552,6 +552,10 @@ object DynaMLPipe {
     * on a (breeze) vector signal.
     * */
   val invHaarWaveletFilter = (order: Int) => InverseHaarWaveletFilter(order)
+
+  val groupedHaarWaveletFilter = (orders: Array[Int]) => GroupedHaarWaveletFilter(orders)
+
+  val invGroupedHaarWaveletFilter = (orders: Array[Int]) => InvGroupedHaarWaveletFilter(orders)
 
   def trainParametricModel[
   G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]

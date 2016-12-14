@@ -84,7 +84,7 @@ case class GroupedHaarWaveletFilter(orders: Array[Int]) extends ReversibleScaler
 
   assert(partitionIndices.length == orders.length, "Number of partitions must be equal to number of variable groups")
 
-  override val i: Scaler[DenseVector[Double]] = InvGroupedHaarWaveletFilter(orders)
+  override val i: InvGroupedHaarWaveletFilter = InvGroupedHaarWaveletFilter(orders)
 
   override def run(data: DenseVector[Double]): DenseVector[Double] = DenseVector(
     partitionIndices.zip(componentFilters).map(limitsAndFilter => {
@@ -107,7 +107,7 @@ case class InvGroupedHaarWaveletFilter(orders: Array[Int]) extends Scaler[DenseV
 
   val partitionIndices: Array[(Int, Int)] =
     orders.map(twoExp).scanLeft(0)(_+_).sliding(2).map(c => (c.head, c.last)).toArray
-  
+
   assert(partitionIndices.length == orders.length, "Number of partitions must be equal to number of variable groups")
 
   override def run(data: DenseVector[Double]): DenseVector[Double] = DenseVector(
