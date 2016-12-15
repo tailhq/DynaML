@@ -2,10 +2,11 @@ package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.DenseMatrix
 import io.github.mandar2812.dynaml.DynaMLPipe
-import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
-import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
+import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
+import io.github.mandar2812.dynaml.pipes._
 
 import scala.reflect.ClassTag
+
 
 /**
   * Scalar Kernel defines algebraic behavior for kernels of the form
@@ -39,8 +40,10 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     *  return The kernel k defined above.
     *
     * */
-  def +[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] =
-  kernelOps.addLocalScKernels(this, otherKernel)
+  def +[T <: LocalScalarKernel[Index]](otherKernel: T)(implicit ev: ClassTag[Index]): CompositeCovariance[Index] =
+  new DecomposableCovariance(this, otherKernel)(DynaMLPipe.genericReplicationEncoder[Index](2))
+  //kernelOps.addLocalScKernels(this, otherKernel)
+
 
   /**
     *  Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
@@ -49,8 +52,10 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     *  @return The kernel k defined above.
     *
     * */
-  def *[T <: LocalScalarKernel[Index]](otherKernel: T): CompositeCovariance[Index] =
-  kernelOps.multLocalScKernels(this, otherKernel)
+  def *[T <: LocalScalarKernel[Index]](otherKernel: T)(implicit ev: ClassTag[Index]): CompositeCovariance[Index] =
+  new DecomposableCovariance(this, otherKernel)(
+    DynaMLPipe.genericReplicationEncoder[Index](2),
+    DecomposableCovariance.:*:)
 
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new KernelOps.PairOps[Index, T1].tensorMultLocalScKernels(this, otherKernel)
@@ -85,7 +90,7 @@ abstract class CompositeCovariance[T]
   */
 class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
   implicit encoding: Encoder[S, Array[S]],
-  reducer: DataPipe[Array[Double], Double] = DecomposableCovariance.:+:) extends CompositeCovariance[S] {
+  reducer: Reducer = DecomposableCovariance.:+:) extends CompositeCovariance[S] {
 
   val kernelMap = kernels.map(k => (k.toString.split("\\.").last, k)).toMap
 
@@ -111,9 +116,9 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     assert(effective_hyper_parameters.forall(h.contains),
       "All hyper parameters must be contained in the arguments")
     //group the hyper params by kernel id
-    h.toSeq.map(kv => {
+    h.toSeq.filterNot(_._1.split("/").length == 1).map(kv => {
       val idS = kv._1.split("/")
-      (idS.head, (idS.last.mkString("/"), kv._2))
+      (idS.head, (idS.tail.mkString("/"), kv._2))
     }).groupBy(_._1).map(hypC => {
       val kid = hypC._1
       val hyper_params = hypC._2.map(_._2).toMap
@@ -130,19 +135,32 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     }))
   }
 
-  override def gradient(x: S, y: S): Map[String, Double] = {
-    val (xs, ys) = (encoding*encoding)((x,y))
-    xs.zip(ys).zip(kernels).map(coupleAndKern => {
-      val (u,v) = coupleAndKern._1
-      coupleAndKern._2.gradient(u,v)
-    }).reduceLeft(_++_)
+  override def gradient(x: S, y: S): Map[String, Double] = reducer match {
+    case SumReducer =>
+      val (xs, ys) = (encoding*encoding)((x,y))
+      xs.zip(ys).zip(kernels).map(coupleAndKern => {
+        val (u,v) = coupleAndKern._1
+        coupleAndKern._2.gradient(u,v)
+      }).reduceLeft(_++_)
+    case ProductReducer =>
+      val (xs, ys) = (encoding*encoding)((x,y))
+      xs.zip(ys).zip(kernels).map(coupleAndKern => {
+        val (u,v) = coupleAndKern._1
+        coupleAndKern._2.gradient(u,v).mapValues(_ * this.evaluate(x,y)/coupleAndKern._2.evaluate(x,y))
+      }).reduceLeft(_++_)
+    case _: Reducer =>
+      val (xs, ys) = (encoding*encoding)((x,y))
+      xs.zip(ys).zip(kernels).map(coupleAndKern => {
+        val (u,v) = coupleAndKern._1
+        coupleAndKern._2.gradient(u,v)
+      }).reduceLeft(_++_)
   }
 }
 
 object DecomposableCovariance {
 
-  val :+: = DataPipe((l: Array[Double]) => l.sum)
+  val :+: = SumReducer
 
-  val :*: = DataPipe((l: Array[Double]) => l.product)
+  val :*: = ProductReducer
 
 }

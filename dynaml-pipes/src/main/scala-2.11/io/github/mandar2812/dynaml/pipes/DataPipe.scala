@@ -116,3 +116,5 @@ object BifurcationPipe {
     DataPipe((x: Source) => (pipe1.run(x), pipe2.run(x)))
   }
 }
+
+trait ReducerPipe[I] extends DataPipe[Array[I], I]
