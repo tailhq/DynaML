@@ -31,6 +31,8 @@ import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import org.apache.log4j.Logger
 
+import scala.reflect.ClassTag
+
 /**
   * Single-Output Gaussian Process Regression Model
   * Performs gp/spline smoothing/regression with
@@ -46,7 +48,7 @@ import org.apache.log4j.Logger
   */
 abstract class AbstractGPRegressionModel[T, I](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
-  data: T, num: Int)
+  data: T, num: Int)(implicit ev: ClassTag[I])
   extends ContinuousProcess[T, I, Double, MultGaussianPRV]
   with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultGaussianPRV]
   with GloballyOptWithGrad {

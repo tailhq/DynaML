@@ -581,11 +581,7 @@ object DynaMLPipe {
     * Creates an [[Encoder]] which replicates a
     * [[DenseVector]] instance n times.
     * */
-  val breezeDVReplicationEncoder = (n: Int) => Encoder((v: DenseVector[Double]) => {
-    Array.fill(n)(v)
-  }, (vs: Array[DenseVector[Double]]) => {
-   vs.head
-  })
+  val breezeDVReplicationEncoder = (n: Int) => genericReplicationEncoder[DenseVector[Double]](n)
 
   def trainParametricModel[
   G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]

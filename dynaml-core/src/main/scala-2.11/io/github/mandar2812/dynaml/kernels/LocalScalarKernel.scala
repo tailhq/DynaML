@@ -5,6 +5,8 @@ import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
 
+import scala.reflect.ClassTag
+
 /**
   * Scalar Kernel defines algebraic behavior for kernels of the form
   * K: Index x Index -> Double, i.e. kernel functions whose output
@@ -127,12 +129,20 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
       coupleAndKern._2.evaluate(u,v)
     }))
   }
+
+  override def gradient(x: S, y: S): Map[String, Double] = {
+    val (xs, ys) = (encoding*encoding)((x,y))
+    xs.zip(ys).zip(kernels).map(coupleAndKern => {
+      val (u,v) = coupleAndKern._1
+      coupleAndKern._2.gradient(u,v)
+    }).reduceLeft(_++_)
+  }
 }
 
 object DecomposableCovariance {
 
   val :+: = DataPipe((l: Array[Double]) => l.sum)
 
-  val :*: = DataPipe((l: Array[Double]) => l.sum)
+  val :*: = DataPipe((l: Array[Double]) => l.product)
 
 }

@@ -32,6 +32,8 @@ import io.github.mandar2812.dynaml.probability.MultStudentsTPRV
 import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultivariateStudentsT, MultivariateStudentsT}
 import org.apache.log4j.Logger
 
+import scala.reflect.ClassTag
+
 /**
   * @author mandar2812 date 26/08/16.
   * Implementation of a Students' T Regression model.
@@ -39,7 +41,7 @@ import org.apache.log4j.Logger
 abstract class AbstractSTPRegressionModel[T, I](
   mu: Double, cov: LocalScalarKernel[I],
   n: LocalScalarKernel[I],
-  data: T, num: Int)
+  data: T, num: Int)(implicit ev: ClassTag[I])
   extends ContinuousProcess[T, I, Double, MultStudentsTPRV]
   with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultStudentsTPRV]
   with GloballyOptimizable {
