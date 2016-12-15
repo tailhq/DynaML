@@ -24,12 +24,14 @@ import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
-import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler, Scaler, StreamDataPipe}
+import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
 import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
 import org.apache.log4j.Logger
 import org.renjin.script.RenjinScriptEngine
 import org.renjin.sexp._
+
+import scala.reflect.ClassTag
 
 /**
   * @author mandar2812 datum 3/2/16.
@@ -556,6 +558,34 @@ object DynaMLPipe {
   val groupedHaarWaveletFilter = (orders: Array[Int]) => GroupedHaarWaveletFilter(orders)
 
   val invGroupedHaarWaveletFilter = (orders: Array[Int]) => InvGroupedHaarWaveletFilter(orders)
+
+
+  def genericReplicationEncoder[I](n: Int)(implicit tag: ClassTag[I]): Encoder[I, Array[I]] = Encoder[I, Array[I]]((v: I) => {
+    Array.fill[I](n)(v)
+  }, (vs: Array[I]) => {
+    vs.head
+  })
+
+  /**
+    * Creates an [[Encoder]] which can split
+    * [[DenseVector]] instances into uniform splits and
+    * put them back together.
+    * */
+  val breezeDVSplitEncoder = (n: Int) => Encoder((v: DenseVector[Double]) => {
+    v.toArray.grouped(n).map(DenseVector(_)).toArray
+  }, (vs: Array[DenseVector[Double]]) => {
+    DenseVector(vs.map(_.toArray).reduceLeft((a,b) => a++b))
+  })
+
+  /**
+    * Creates an [[Encoder]] which replicates a
+    * [[DenseVector]] instance n times.
+    * */
+  val breezeDVReplicationEncoder = (n: Int) => Encoder((v: DenseVector[Double]) => {
+    Array.fill(n)(v)
+  }, (vs: Array[DenseVector[Double]]) => {
+   vs.head
+  })
 
   def trainParametricModel[
   G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]

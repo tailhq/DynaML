@@ -40,13 +40,13 @@ object Scaler {
   *
   *
   * */
-trait ReversibleScaler[S] extends Scaler[S] {
+trait ReversibleScaler[S] extends Scaler[S] with Encoder[S, S]{
 
   /**
     * The inverse operation of this scaling.
     *
     * */
-  val i: Scaler[S]
+  override val i: Scaler[S]
 
   def *[T](that: ReversibleScaler[T]) = {
 

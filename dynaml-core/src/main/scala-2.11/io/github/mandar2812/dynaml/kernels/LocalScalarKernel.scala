@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.DenseMatrix
+import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
 
@@ -82,25 +83,35 @@ abstract class CompositeCovariance[T]
   */
 class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
   implicit encoding: Encoder[S, Array[S]],
-  reducer: DataPipe[Array[Double], Double]) extends CompositeCovariance[S] {
+  reducer: DataPipe[Array[Double], Double] = DecomposableCovariance.:+:) extends CompositeCovariance[S] {
 
-  val kernelMap = kernels.map(k => (k.toString.split(".").last, k)).toMap
+  val kernelMap = kernels.map(k => (k.toString.split("\\.").last, k)).toMap
+
+  state = kernels.map(k => {
+    val id = k.toString.split("\\.").last
+    k.state.map(h => (id+"/"+h._1, h._2))
+  }).reduceLeft(_++_)
 
   override val hyper_parameters: List[String] = kernels.map(k => {
-    val id = k.toString.split(".").last
+    val id = k.toString.split("\\.").last
     k.hyper_parameters.map(h => id+"/"+h)
   }).reduceLeft(_++_)
 
   blocked_hyper_parameters = kernels.map(k => {
-    val id = k.toString.split(".").last
+    val id = k.toString.split("\\.").last
     k.blocked_hyper_parameters.map(h => id+"/"+h)
   }).reduceLeft(_++_)
 
+  override def repr: DecomposableCovariance[S] = this
+
   override def setHyperParameters(h: Map[String, Double]): DecomposableCovariance.this.type = {
+    //Sanity Check
+    assert(effective_hyper_parameters.forall(h.contains),
+      "All hyper parameters must be contained in the arguments")
     //group the hyper params by kernel id
     h.toSeq.map(kv => {
       val idS = kv._1.split("/")
-      (idS.head, (idS.last, kv._2))
+      (idS.head, (idS.last.mkString("/"), kv._2))
     }).groupBy(_._1).map(hypC => {
       val kid = hypC._1
       val hyper_params = hypC._2.map(_._2).toMap
@@ -116,4 +127,12 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
       coupleAndKern._2.evaluate(u,v)
     }))
   }
+}
+
+object DecomposableCovariance {
+
+  val :+: = DataPipe((l: Array[Double]) => l.sum)
+
+  val :*: = DataPipe((l: Array[Double]) => l.sum)
+
 }
