@@ -75,10 +75,12 @@ object SVMKernel {
       eval: (T, T) =>  Double):
   KernelMatrix[DenseMatrix[Double]] = {
 
-    val kernelIndex = utils.combine(Seq(mappedData.zipWithIndex, mappedData.zipWithIndex))
-      .filter(s => s.head._2 >= s.last._2)
-      .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
-      .toMap
+    val kernelIndex = optimize {
+      utils.combine(Seq(mappedData.zipWithIndex, mappedData.zipWithIndex))
+        .filter(s => s.head._2 >= s.last._2)
+        .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+        .toMap
+    }
 
     val kernel = DenseMatrix.tabulate[Double](length, length){
       (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
@@ -92,9 +94,11 @@ object SVMKernel {
                                         eval: (T, T) =>  Double)
   : DenseMatrix[Double] = {
 
-    val kernelIndex = utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
-      .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
-      .toMap
+    val kernelIndex = optimize {
+      utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
+        .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+        .toMap
+    }
 
     logger.info("   Dimensions: " + data1.length + " x " + data2.length)
     DenseMatrix.tabulate[Double](data1.length, data2.length){
@@ -123,23 +127,23 @@ object SVMKernel {
 
     logger.info("~~~~~~~~~~~~~~~~~~~~~~~")
     logger.info("Constructing Partitions")
-    optimize {
-      new PartitionedPSDMatrix(
-        utils.combine(Seq(partitionedData, partitionedData))
-          .filter(c => c.head._2 >= c.last._2)
-          .toStream.map(c => {
+    new PartitionedPSDMatrix(optimize {
+      utils.combine(Seq(partitionedData, partitionedData))
+        .filter(c => c.head._2 >= c.last._2)
+        .toStream.map(c => {
 
-          val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
-          logger.info(":- Partition: "+partitionIndex)
+        val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
+        logger.info(":- Partition: "+partitionIndex)
 
-          val matrix =
-            if(partitionIndex._1 == partitionIndex._2)
-              buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
-            else crossKernelMatrix(c.head._1, c.last._1, eval)
+        val matrix =
+          if(partitionIndex._1 == partitionIndex._2)
+            buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
+          else crossKernelMatrix(c.head._1, c.last._1, eval)
 
-          (partitionIndex, matrix)
-        }), rows, cols, num_R_blocks, num_C_blocks)
-    }
+        (partitionIndex, matrix)
+      })
+    }, rows, cols, num_R_blocks, num_C_blocks)
+
   }
 
   def crossPartitonedKernelMatrix[T, S <: Seq[T]](

@@ -12,7 +12,7 @@ packageDescription := "DynaML is a scala library/repl for implementing and worki
   "which can be extended easily to implement advanced models for small and large scale applications.\n\n"+
   "But the library can also be used as an educational/research tool for data analysis."
 
-val mainVersion = "v1.4.1-beta.8"
+val mainVersion = "v1.4.1-beta.9"
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
@@ -42,7 +42,7 @@ lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
   .settings(commonSettings:_*)
   .settings(
     name := "dynaml-pipes",
-    version := "1.0"
+    version := mainVersion
   )
 
 lazy val core = (project in file("dynaml-core")).settings(baseSettings)
@@ -59,7 +59,7 @@ lazy val examples = (project in file("dynaml-examples"))
   .settings(commonSettings:_*)
   .settings(
     name := "dynaml-examples",
-    version := "1.0"
+    version := mainVersion
   ).dependsOn(pipes, core)
 
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)

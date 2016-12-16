@@ -13,6 +13,22 @@ object SumReducer extends Reducer {
   override def run(data: Array[Double]): Double = data.sum
 }
 
-object ProductReducer extends Reducer{
+object ProductReducer extends Reducer {
   override def run(data: Array[Double]): Double = data.product
+}
+
+/**
+  * Reducer companion object with
+  * default definitions
+  * */
+object Reducer {
+  /**
+    * Represents sum of values
+    * */
+  val :+: = SumReducer
+
+  /**
+    * Represents product of values
+    * */
+  val :*: = ProductReducer
 }

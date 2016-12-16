@@ -11,10 +11,10 @@ import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
   * */
 trait LocalSVMKernel[Index] extends LocalScalarKernel[Index] {
 
-  def :+(otherKernel: LocalSVMKernel[Index]): CompositeCovariance[(Index, Index)] =
+  /*def :+(otherKernel: LocalSVMKernel[Index]): CompositeCovariance[(Index, Index)] =
     new KernelOps.PairOps[Index, Index].tensorAddPartLocalScKernels(this, otherKernel)
 
-  /*def :*(otherKernel: LocalSVMKernel[Index]): CompositeCovariance[(Index, Index)] =
+  def :*(otherKernel: LocalSVMKernel[Index]): CompositeCovariance[(Index, Index)] =
     new KernelOps.PairOps[Index, Index].tensorMultLocalScKernels(this, otherKernel)*/
 
 
