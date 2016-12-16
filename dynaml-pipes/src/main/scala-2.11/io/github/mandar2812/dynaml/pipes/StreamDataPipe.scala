@@ -17,6 +17,8 @@ specific language governing permissions and limitations
 under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
+import scalaxy.streams.optimize
+
 
 /**
   * @author mandar2812 on 17/11/15.
@@ -44,15 +46,15 @@ trait StreamDataPipe[I, J, K] extends DataPipe[Stream[I], K]{
 }
 
 trait StreamMapPipe[I, J] extends StreamDataPipe[I, J, Stream[J]] {
-  override def run(data: Stream[I]): Stream[J] = data.map(pipe)
+  override def run(data: Stream[I]): Stream[J] = optimize { data.map(pipe) }
 }
 
 trait StreamFilterPipe[I] extends StreamDataPipe[I, Boolean, Stream[I]] {
-  override def run(data: Stream[I]): Stream[I] = data.filter(pipe)
+  override def run(data: Stream[I]): Stream[I] = optimize { data.filter(pipe) }
 }
 
 trait StreamPartitionPipe[I] extends StreamDataPipe[I, Boolean, (Stream[I], Stream[I])] {
-  override def run(data: Stream[I]): (Stream[I], Stream[I]) = data.partition(pipe)
+  override def run(data: Stream[I]): (Stream[I], Stream[I]) = optimize { data.partition(pipe) }
 }
 
 trait StreamSideEffectPipe[I] extends StreamDataPipe[I, Unit, Unit] {

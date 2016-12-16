@@ -1,0 +1,16 @@
+implicit val ev = VectorField(6)
+implicit val sp = genericReplicationEncoder[DenseVector[Double]](2)
+
+val sp1 = breezeDVSplitEncoder(2)
+val kernel = new LaplacianKernel(1.5)
+
+val other_kernel = new RBFKernel(4.5)
+val other_kernel1 = new CauchyKernel(1.0)
+
+val otherSumK = kernel + other_kernel
+val sumK2 = new DecomposableCovariance(otherSumK, other_kernel1)(sp1)
+
+AbottPowerPlant(sumK2, new DiracKernel(0.09),
+  opt = Map("globalOpt" -> "GS", "grid" -> "1", "step" -> "0.004"),
+  num_training = 3000, num_test = 1000, deltaT = 2, column = 7)
+

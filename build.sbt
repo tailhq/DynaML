@@ -12,7 +12,7 @@ packageDescription := "DynaML is a scala library/repl for implementing and worki
   "which can be extended easily to implement advanced models for small and large scale applications.\n\n"+
   "But the library can also be used as an educational/research tool for data analysis."
 
-val mainVersion = "v1.4.1-beta.7"
+val mainVersion = "v1.4.1-beta.8"
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
@@ -33,17 +33,9 @@ lazy val commonSettings = Seq(
       linearAlgebraDependencies ++ chartsDependencies ++
       tinkerpopDependency ++ notebookInterfaceDependency ++
       openMLDependency ++ rejinDependency ++
-      rPackages ++ cppCompatDependencies)/*,
+      rPackages ++ cppCompatDependencies),
 
-  scalacOptions ++= Seq("-Xplugin-require:scalaxy-streams", "-optimise", "-Yclosure-elim", "-Yinline"),
-
-  scalacOptions in Test ~= (_ filterNot (_ == "-Xplugin-require:scalaxy-streams")),
-
-  scalacOptions in Test += "-Xplugin-disable:scalaxy-streams",
-
-  autoCompilerPlugins := true,
-
-  addCompilerPlugin("com.nativelibs4java" % "scalaxy-streams_2.11" % "0.3.4")*/
+  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)

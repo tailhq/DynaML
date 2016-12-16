@@ -1,12 +1,11 @@
 package io.github.mandar2812.dynaml.kernels
 
+import scalaxy.streams.optimize
+import scala.reflect.ClassTag
 import breeze.linalg.DenseMatrix
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
 import io.github.mandar2812.dynaml.pipes._
-
-import scala.reflect.ClassTag
-
 
 /**
   * Scalar Kernel defines algebraic behavior for kernels of the form
@@ -129,10 +128,14 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
 
   override def evaluate(x: S, y: S): Double = {
     val (xs, ys) = (encoding*encoding)((x,y))
-    reducer(xs.zip(ys).zip(kernels).map(coupleAndKern => {
-      val (u,v) = coupleAndKern._1
-      coupleAndKern._2.evaluate(u,v)
-    }))
+      reducer(
+        optimize {
+          xs.zip(ys).zip(kernels).map(coupleAndKern => {
+            val (u,v) = coupleAndKern._1
+            coupleAndKern._2.evaluate(u,v)
+          })
+        }
+      )
   }
 
   override def gradient(x: S, y: S): Map[String, Double] = reducer match {

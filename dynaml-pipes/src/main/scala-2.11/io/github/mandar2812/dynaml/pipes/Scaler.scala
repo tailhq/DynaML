@@ -1,5 +1,7 @@
 package io.github.mandar2812.dynaml.pipes
 
+import scalaxy.streams._
+
 /**
   * @author mandar2812 17/6/16.
   *
@@ -8,7 +10,7 @@ package io.github.mandar2812.dynaml.pipes
   */
 trait Scaler[S] extends DataPipe[S, S]{
   def apply[T[S] <: Traversable[S]](data: T[S]) =
-    data.map(run _).asInstanceOf[T[S]]
+    optimize { data.map(run).asInstanceOf[T[S]] }
 
   def *[T](that: Scaler[T]) = {
     val firstRun = this.run _

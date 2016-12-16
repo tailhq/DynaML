@@ -30,7 +30,7 @@ import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWavel
 import org.apache.log4j.Logger
 import org.renjin.script.RenjinScriptEngine
 import org.renjin.sexp._
-
+import scalaxy.streams.optimize
 import scala.reflect.ClassTag
 
 /**
@@ -254,7 +254,7 @@ object DynaMLPipe {
     * (Stream(training data), Stream(test data))
     * */
   @deprecated("*Standardization pipes are deprecated as of v1.4,"+
-    " use pipes that output scaler objects instead")
+    " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
   val trainTestGaussianStandardization =
     DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
       Stream[(DenseVector[Double], Double)])) => {
@@ -286,7 +286,7 @@ object DynaMLPipe {
     * (Stream(training data), Stream(test data))
     * */
   @deprecated("*Standardization pipes are deprecated as of v1.4,"+
-    " use pipes that output scaler objects instead")
+    " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
   val featuresGaussianStandardization =
     DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
       Stream[(DenseVector[Double], Double)])) => {
@@ -315,7 +315,7 @@ object DynaMLPipe {
     * (Stream(training data), Stream(test data))
     * */
   @deprecated("*Standardization pipes are deprecated as of v1.4,"+
-    " use pipes that output scaler objects instead")
+    " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
   val trainTestGaussianStandardizationMO =
     DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
       Stream[(DenseVector[Double], DenseVector[Double])])) => {
@@ -361,9 +361,9 @@ object DynaMLPipe {
         math.sqrt(v/(trainTest.length.toDouble - 1.0)))
 
 
-      val featuresScaler = new GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
+      val featuresScaler = GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
 
-      val targetsScaler = new GaussianScaler(
+      val targetsScaler = GaussianScaler(
         mean(num_features until num_features + num_targets),
         stdDev(num_features until num_features + num_targets))
 
@@ -386,11 +386,11 @@ object DynaMLPipe {
     val (m, sigma) = utils.getStatsMult(trainTest.map(tup =>
       DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
 
-    val featuresScaler = new MVGaussianScaler(
+    val featuresScaler = MVGaussianScaler(
       m(0 until num_features),
       sigma(0 until num_features, 0 until num_features))
 
-    val targetsScaler = new MVGaussianScaler(
+    val targetsScaler = MVGaussianScaler(
       m(num_features until num_features + num_targets),
       sigma(num_features until num_features + num_targets, num_features until num_features + num_targets))
 
@@ -419,9 +419,9 @@ object DynaMLPipe {
         math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
 
 
-      val featuresScaler = new GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
+      val featuresScaler = GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
 
-      val targetsScaler = new GaussianScaler(
+      val targetsScaler = GaussianScaler(
         mean(num_features until num_features + num_targets),
         stdDev(num_features until num_features + num_targets))
 
@@ -445,11 +445,11 @@ object DynaMLPipe {
     val (m, sigma) = utils.getStatsMult(trainTest._1.map(tup =>
       DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
 
-    val featuresScaler = new MVGaussianScaler(
+    val featuresScaler = MVGaussianScaler(
       m(0 until num_features),
       sigma(0 until num_features, 0 until num_features))
 
-    val targetsScaler = new MVGaussianScaler(
+    val targetsScaler = MVGaussianScaler(
       m(num_features until num_features + num_targets),
       sigma(num_features until num_features + num_targets, num_features until num_features + num_targets))
 
@@ -475,9 +475,9 @@ object DynaMLPipe {
       val (min, max) = utils.getMinMax(trainTest.map(tup =>
         DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
 
-      val featuresScaler = new GaussianScaler(min(0 until num_features), max(0 until num_features))
+      val featuresScaler = MinMaxScaler(min(0 until num_features), max(0 until num_features))
 
-      val targetsScaler = new MinMaxScaler(
+      val targetsScaler = MinMaxScaler(
         min(num_features until num_features + num_targets),
         max(num_features until num_features + num_targets))
 
@@ -501,9 +501,9 @@ object DynaMLPipe {
       val (min, max) = utils.getMinMax(trainTest._1.map(tup =>
         DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
 
-      val featuresScaler = new GaussianScaler(min(0 until num_features), max(0 until num_features))
+      val featuresScaler = MinMaxScaler(min(0 until num_features), max(0 until num_features))
 
-      val targetsScaler = new MinMaxScaler(
+      val targetsScaler = MinMaxScaler(
         min(num_features until num_features + num_targets),
         max(num_features until num_features + num_targets))
 
@@ -572,9 +572,13 @@ object DynaMLPipe {
     * put them back together.
     * */
   val breezeDVSplitEncoder = (n: Int) => Encoder((v: DenseVector[Double]) => {
-    v.toArray.grouped(n).map(DenseVector(_)).toArray
+    optimize {
+      v.toArray.grouped(n).map(DenseVector(_)).toArray
+    }
   }, (vs: Array[DenseVector[Double]]) => {
-    DenseVector(vs.map(_.toArray).reduceLeft((a,b) => a++b))
+    optimize {
+      DenseVector(vs.map(_.toArray).reduceLeft((a,b) => a++b))
+    }
   })
 
   /**
