@@ -192,10 +192,11 @@ package object utils {
 
   def getTypeTag[T: ru.TypeTag](obj: T) = ru.typeTag[T]
 
-  def combine[A](xs: Traversable[Traversable[A]]): Seq[Seq[A]] =
+  def combine[A](xs: Traversable[Traversable[A]]): Seq[Seq[A]] = optimize {
     xs.foldLeft(Seq(Seq.empty[A])) {
       (x, y) => for (a <- x.view; b <- y) yield a :+ b
     }
+  }
 
   def downloadURL(url: String, saveAs: String): Unit =
     new URL(url) #> new File(saveAs) !!

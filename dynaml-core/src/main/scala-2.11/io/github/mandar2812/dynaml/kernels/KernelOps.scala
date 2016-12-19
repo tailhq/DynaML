@@ -30,18 +30,27 @@ object KernelOps extends UFunc {
         firstKern: LocalScalarKernel[Index],
         otherKernel: LocalScalarKernel[Index]): CompositeCovariance[Index] =
         new CompositeCovariance[Index] {
-          override val hyper_parameters = firstKern.hyper_parameters ++ otherKernel.hyper_parameters
+
+          val (fID, sID) = (firstKern.toString.split("\\.").last, otherKernel.toString.split("\\.").last)
+
+          override val hyper_parameters =
+            firstKern.hyper_parameters.map(h => fID+"/"+h) ++
+              otherKernel.hyper_parameters.map(h => sID+"/"+h)
 
           override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) + otherKernel.evaluate(x,y)
 
-          state = firstKern.state ++ otherKernel.state
+          state = firstKern.state.map(h => (fID+"/"+h._1, h._2)) ++ otherKernel.state.map(h => (sID+"/"+h._1, h._2))
 
-          blocked_hyper_parameters = firstKern.blocked_hyper_parameters ++ otherKernel.blocked_hyper_parameters
+          blocked_hyper_parameters =
+            firstKern.blocked_hyper_parameters.map(h => fID+"/"+h) ++
+              otherKernel.blocked_hyper_parameters.map(h => sID+"/"+h)
 
           override def setHyperParameters(h: Map[String, Double]): this.type = {
-            firstKern.setHyperParameters(h)
-            otherKernel.setHyperParameters(h)
-            super.setHyperParameters(h)
+            firstKern.setHyperParameters(h.filter(_._1.contains(fID))
+              .map(kv => (kv._1.split("/").tail.mkString("/"), kv._2)))
+            otherKernel.setHyperParameters(h.filter(_._1.contains(sID))
+              .map(kv => (kv._1.split("/").tail.mkString("/"), kv._2)))
+            this
           }
 
           override def gradient(x: Index, y: Index): Map[String, Double] =
@@ -63,18 +72,27 @@ object KernelOps extends UFunc {
       override def apply(firstKern: LocalScalarKernel[Index],
                          otherKernel: LocalScalarKernel[Index]): CompositeCovariance[Index] =
         new CompositeCovariance[Index] {
-          override val hyper_parameters = firstKern.hyper_parameters ++ otherKernel.hyper_parameters
+
+          val (fID, sID) = (firstKern.toString.split("\\.").last, otherKernel.toString.split("\\.").last)
+
+          override val hyper_parameters =
+            firstKern.hyper_parameters.map(h => fID+"/"+h) ++
+              otherKernel.hyper_parameters.map(h => sID+"/"+h)
 
           override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) * otherKernel.evaluate(x,y)
 
-          state = firstKern.state ++ otherKernel.state
+          state = firstKern.state.map(h => (fID+"/"+h._1, h._2)) ++ otherKernel.state.map(h => (sID+"/"+h._1, h._2))
 
-          blocked_hyper_parameters = firstKern.blocked_hyper_parameters ++ otherKernel.blocked_hyper_parameters
+          blocked_hyper_parameters =
+            firstKern.blocked_hyper_parameters.map(h => fID+"/"+h) ++
+              otherKernel.blocked_hyper_parameters.map(h => sID+"/"+h)
 
           override def setHyperParameters(h: Map[String, Double]): this.type = {
-            firstKern.setHyperParameters(h)
-            otherKernel.setHyperParameters(h)
-            super.setHyperParameters(h)
+            firstKern.setHyperParameters(h.filter(_._1.contains(fID))
+              .map(kv => (kv._1.split("/").tail.mkString("/"), kv._2)))
+            otherKernel.setHyperParameters(h.filter(_._1.contains(sID))
+              .map(kv => (kv._1.split("/").tail.mkString("/"), kv._2)))
+            this
           }
 
           override def gradient(x: Index, y: Index): Map[String, Double] =

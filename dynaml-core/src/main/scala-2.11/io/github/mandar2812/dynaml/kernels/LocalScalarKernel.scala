@@ -40,8 +40,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     *
     * */
   def +[T <: LocalScalarKernel[Index]](otherKernel: T)(implicit ev: ClassTag[Index]): CompositeCovariance[Index] =
-  new DecomposableCovariance(this, otherKernel)(DynaMLPipe.genericReplicationEncoder[Index](2))
-  //kernelOps.addLocalScKernels(this, otherKernel)
+  //new DecomposableCovariance(this, otherKernel)(DynaMLPipe.genericReplicationEncoder[Index](2))
+  kernelOps.addLocalScKernels(this, otherKernel)
 
 
   /**
@@ -52,9 +52,10 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     *
     * */
   def *[T <: LocalScalarKernel[Index]](otherKernel: T)(implicit ev: ClassTag[Index]): CompositeCovariance[Index] =
-  new DecomposableCovariance(this, otherKernel)(
+  kernelOps.multLocalScKernels(this, otherKernel)
+  /*new DecomposableCovariance(this, otherKernel)(
     DynaMLPipe.genericReplicationEncoder[Index](2),
-    Reducer.:*:)
+    Reducer.:*:)*/
 
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new TensorCombinationKernel[Index, T1](this, otherKernel)
@@ -100,6 +101,8 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     k.state.map(h => (id+"/"+h._1, h._2))
   }).reduceLeft(_++_)
 
+  val encodingTuple = encoding*encoding
+
   override val hyper_parameters: List[String] = kernels.map(k => {
     val id = k.toString.split("\\.").last
     k.hyper_parameters.map(h => id+"/"+h)
@@ -109,6 +112,16 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     val id = k.toString.split("\\.").last
     k.blocked_hyper_parameters.map(h => id+"/"+h)
   }).reduceLeft(_++_)
+
+  def kernelBind = DataPipe((xy: (Array[S], Array[S])) => {
+    optimize {
+      (xy._1, xy._2, kernels.map(k => k.evaluate _ ))
+        .zipped
+        .map((x, y, k) => k(x, y))
+    }
+  })
+
+  def kernelPipe = encodingTuple > kernelBind > reducer
 
   override def repr: DecomposableCovariance[S] = this
 
@@ -128,17 +141,7 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     this
   }
 
-  override def evaluate(x: S, y: S): Double = {
-    val (xs, ys) = (encoding*encoding)((x,y))
-      reducer(
-        optimize {
-          xs.zip(ys).zip(kernels).map(coupleAndKern => {
-            val (u,v) = coupleAndKern._1
-            coupleAndKern._2.evaluate(u,v)
-          })
-        }
-      )
-  }
+  override def evaluate(x: S, y: S): Double = kernelPipe run (x,y)
 
   override def gradient(x: S, y: S): Map[String, Double] = reducer match {
     case SumReducer =>
@@ -152,12 +155,6 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
       xs.zip(ys).zip(kernels).map(coupleAndKern => {
         val (u,v) = coupleAndKern._1
         coupleAndKern._2.gradient(u,v).mapValues(_ * this.evaluate(x,y)/coupleAndKern._2.evaluate(x,y))
-      }).reduceLeft(_++_)
-    case _: Reducer =>
-      val (xs, ys) = (encoding*encoding)((x,y))
-      xs.zip(ys).zip(kernels).map(coupleAndKern => {
-        val (u,v) = coupleAndKern._1
-        coupleAndKern._2.gradient(u,v)
       }).reduceLeft(_++_)
   }
 }
@@ -214,7 +211,5 @@ class TensorCombinationKernel[R, S](
     case ProductReducer =>
       firstK.gradient(x._1, y._1).map(k => (k._1, k._2*secondK.evaluate(x._2, y._2))) ++
         secondK.gradient(x._2, y._2).map(k => (k._1, k._2*firstK.evaluate(x._1, y._1)))
-    case _: Reducer =>
-      firstK.gradient(x._1, y._1) ++ secondK.gradient(x._2, y._2)
   }
 }
