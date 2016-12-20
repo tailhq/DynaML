@@ -18,9 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{DenseMatrix, DenseVector, norm}
+import breeze.linalg.{DenseMatrix, DenseVector}
 import spire.algebra.{Field, InnerProductSpace}
-import spire.implicits._
 
 /**
  * RBF Kernels of the form
@@ -41,7 +40,7 @@ class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
   }
 
   override def eval(x: T): Double =
-    math.exp(-1*math.pow(ev.dot(x, x), 2)/(2*math.pow(this.state("bandwidth"), 2)))
+    math.exp(-1*ev.dot(x, x)/(2*math.pow(this.state("bandwidth"), 2)))
 
   override def gradient(x: T,
                         y: T): Map[String, Double] =
