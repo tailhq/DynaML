@@ -573,7 +573,8 @@ object DynaMLPipe {
     * */
   val breezeDVSplitEncoder = (n: Int) => Encoder((v: DenseVector[Double]) => {
     optimize {
-      v.toArray.grouped(n).map(DenseVector(_)).toArray
+      //v.toArray.grouped(n).map(DenseVector(_)).toArray
+      Array.tabulate(v.length/n)(i => v(i*n until math.min((i+1)*n, v.length)))
     }
   }, (vs: Array[DenseVector[Double]]) => {
     optimize {
