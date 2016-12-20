@@ -1,13 +1,16 @@
 package io.github.mandar2812.dynaml.analysis
 
 import breeze.linalg.DenseVector
-import spire.algebra.{Field, NRoot}
+import spire.algebra.{Field, InnerProductSpace, NRoot}
+import spire.implicits._
 
 /**
   * Created by mandar on 18/7/16.
   */
 class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
-  with NRoot[DenseVector[Double]] with Serializable {
+  with NRoot[DenseVector[Double]]
+  with InnerProductSpace[DenseVector[Double], Double]
+  with Serializable {
   override def quot(a: DenseVector[Double],
                     b: DenseVector[Double]): DenseVector[Double] =
     div(a, b) - mod(a, b)
@@ -41,6 +44,12 @@ class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
     DenseVector((a.toArray zip b.toArray).map(couple => math.pow(couple._1, couple._2)))
 
   override def fromDouble(a: Double): DenseVector[Double] = DenseVector.fill[Double](num_dim)(a)
+
+  override def dot(v: DenseVector[Double], w: DenseVector[Double]) = v dot w
+
+  override implicit def scalar = Field[Double]
+
+  override def timesl(r: Double, v: DenseVector[Double]) = v*r
 }
 
 object VectorField {
