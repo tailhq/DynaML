@@ -3,7 +3,6 @@ package io.github.mandar2812.dynaml.kernels
 import scalaxy.streams.optimize
 import scala.reflect.ClassTag
 import breeze.linalg.DenseMatrix
-import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
 import io.github.mandar2812.dynaml.pipes._
 
@@ -40,9 +39,7 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     *
     * */
   def +[T <: LocalScalarKernel[Index]](otherKernel: T)(implicit ev: ClassTag[Index]): CompositeCovariance[Index] =
-  //new DecomposableCovariance(this, otherKernel)(DynaMLPipe.genericReplicationEncoder[Index](2))
   kernelOps.addLocalScKernels(this, otherKernel)
-
 
   /**
     *  Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
@@ -53,9 +50,6 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     * */
   def *[T <: LocalScalarKernel[Index]](otherKernel: T)(implicit ev: ClassTag[Index]): CompositeCovariance[Index] =
   kernelOps.multLocalScKernels(this, otherKernel)
-  /*new DecomposableCovariance(this, otherKernel)(
-    DynaMLPipe.genericReplicationEncoder[Index](2),
-    Reducer.:*:)*/
 
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new TensorCombinationKernel[Index, T1](this, otherKernel)
