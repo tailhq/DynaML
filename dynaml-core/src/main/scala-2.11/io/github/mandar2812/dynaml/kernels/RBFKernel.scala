@@ -34,7 +34,7 @@ class RBFKernel(private var bandwidth: Double = 1.0)(
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
 
-  val normedVectorSpace = ev.normed
+  //val normedVectorSpace = ev.normed
 
   override val hyper_parameters = List("bandwidth")
 

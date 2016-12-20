@@ -28,11 +28,11 @@ class WaveletSpec extends FlatSpec with Matchers {
     implicit val f = new VectorField(sc.length)
 
     val motherWav = (xVec: DenseVector[Double]) =>
-      xVec.map(x =>{
+      DenseVector(xVec.map(x =>{
         if (x >= 0.0 && x < 0.5) 1.0
         else if (x >= 0.5 && x < 1.0) -1.0
         else 0.0
-      }).reduce((a,b) => a*b).toDenseVector
+      }).reduce((a,b) => a*b))
 
     val hVecWavelet = new Wavelet[DenseVector[Double]](motherWav)(
       sc, sf
