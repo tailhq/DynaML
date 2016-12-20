@@ -23,19 +23,14 @@ import spire.algebra.{Field, InnerProductSpace}
 import spire.implicits._
 
 /**
- * RBF Kernel of the form
+ * RBF Kernels of the form
  * K(x,y) = exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
  */
 
-class RBFKernel(private var bandwidth: Double = 1.0)(
-  implicit ev: Field[DenseVector[Double]] with InnerProductSpace[DenseVector[Double], Double])
-  extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
-  with SVMKernel[DenseMatrix[Double]]
-  with LocalSVMKernel[DenseVector[Double]]
-  with Serializable {
-
-  //val normedVectorSpace = ev.normed
-
+class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
+  implicit ev: Field[T] with InnerProductSpace[T, Double])
+  extends StationaryKernel[T, Double, DenseMatrix[Double]]
+    with LocalScalarKernel[T] with Serializable { self =>
   override val hyper_parameters = List("bandwidth")
 
   state = Map("bandwidth" -> bandwidth)
@@ -45,23 +40,21 @@ class RBFKernel(private var bandwidth: Double = 1.0)(
     this.bandwidth = d
   }
 
-  override def eval(x: DenseVector[Double]): Double =
-    Math.exp(-1*math.pow(norm(x, 2), 2)/(2*math.pow(this.state("bandwidth"), 2)))
+  override def eval(x: T): Double =
+    math.exp(-1*math.pow(ev.dot(x, x), 2)/(2*math.pow(this.state("bandwidth"), 2)))
 
-  override def gradient(x: DenseVector[Double],
-                        y: DenseVector[Double]): Map[String, Double] =
-    Map("bandwidth" -> 1.0*evaluate(x,y)*math.pow(norm(x-y,2),2)/math.pow(math.abs(state("bandwidth")), 3))
+  override def gradient(x: T,
+                        y: T): Map[String, Double] =
+    Map("bandwidth" -> 1.0*evaluate(x,y)*math.pow(ev.dot(x, x),2)/math.pow(math.abs(state("bandwidth")), 3))
 
   def getBandwidth: Double = this.bandwidth
 
-  def >[T <: LocalScalarKernel[DenseVector[Double]]](otherKernel: T): CompositeCovariance[DenseVector[Double]] = {
+  def >[K <: LocalScalarKernel[T]](otherKernel: K): CompositeCovariance[T] = {
 
-    val RBFWrapper = this
+    new CompositeCovariance[T] {
+      override val hyper_parameters = self.hyper_parameters ++ otherKernel.hyper_parameters
 
-    new CompositeCovariance[DenseVector[Double]] {
-      override val hyper_parameters = RBFWrapper.hyper_parameters ++ otherKernel.hyper_parameters
-
-      override def evaluate(x: DenseVector[Double], y: DenseVector[Double]) = {
+      override def evaluate(x: T, y: T) = {
         val arg = otherKernel.evaluate(x,y) +
           otherKernel.evaluate(y,y) -
           2.0*otherKernel.evaluate(x,y)
@@ -69,9 +62,9 @@ class RBFKernel(private var bandwidth: Double = 1.0)(
         math.exp(-1.0*arg/(2.0*math.pow(state("bandwidth"), 2.0)))
       }
 
-      state = RBFWrapper.state ++ otherKernel.state
+      state = self.state ++ otherKernel.state
 
-      override def gradient(x: DenseVector[Double], y: DenseVector[Double]): Map[String, Double] = {
+      override def gradient(x: T, y: T): Map[String, Double] = {
         val arg = otherKernel.evaluate(x,y) +
           otherKernel.evaluate(y,y) -
           2.0*otherKernel.evaluate(x,y)
@@ -89,14 +82,25 @@ class RBFKernel(private var bandwidth: Double = 1.0)(
           })
       }
 
-      override def buildKernelMatrix[S <: Seq[DenseVector[Double]]](mappedData: S, length: Int) =
-        SVMKernel.buildSVMKernelMatrix[S, DenseVector[Double]](mappedData, length, this.evaluate)
+      override def buildKernelMatrix[S <: Seq[T]](mappedData: S, length: Int) =
+        SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
 
-      override def buildCrossKernelMatrix[S <: Seq[DenseVector[Double]]](dataset1: S, dataset2: S) =
+      override def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S) =
         SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
     }
   }
+
+}
+
+class RBFKernel(private var bandwidth: Double = 1.0)(
+  implicit ev: Field[DenseVector[Double]] with InnerProductSpace[DenseVector[Double], Double])
+  extends GenericRBFKernel[DenseVector[Double]](bandwidth)(ev)
+  with SVMKernel[DenseMatrix[Double]]
+  with Serializable { self =>
+
+  //val normedVectorSpace = ev.normed
+
 
 }
 
