@@ -1,3 +1,9 @@
+import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.analysis.VectorField
+import io.github.mandar2812.dynaml.kernels._
+import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.mandar2812.dynaml.examples.AbottPowerPlant
+
 implicit val ev = VectorField(6)
 implicit val sp = genericReplicationEncoder[DenseVector[Double]](2)
 

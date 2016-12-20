@@ -7,12 +7,15 @@ import breeze.stats.distributions._
 import io.github.mandar2812.dynaml.kernels.PeriodicKernel
 import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.optimization.GridSearch
-import io.github.mandar2812.dynaml.probability.{GaussianRV, IIDRandomVarDistr, ProbabilityModel, RandomVariable}
+import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.probability._
 import spire.implicits._
+import com.quantifind.charts.Highcharts._
+
 
 val p = RandomVariable(new Beta(7.5, 7.5))
 
-val coinLikelihood = DataPipe((p: Double) => new BinomialRV(500, p))
+val coinLikelihood = DataPipe((p: Double) => BinomialRV(500, p))
 
 val c_model = ProbabilityModel(p, coinLikelihood)
 

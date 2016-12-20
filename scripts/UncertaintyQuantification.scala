@@ -4,10 +4,12 @@ import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GridSearch}
 import breeze.stats.distributions.Uniform
-import io.github.mandar2812.dynaml.kernels.{MLPKernel, PeriodicKernel}
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, MLPKernel, PeriodicKernel, RBFKernel}
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.probability.distributions.MultivariateUniform
 import spire.implicits._
+import com.quantifind.charts.Highcharts._
 
 
 val num_features = 1
@@ -18,7 +20,6 @@ val xGaussianPrior = GaussianRV(0.0, 1.0)
 val iidXPrior = IIDRandomVarDistr(xPrior) _
 
 val (training, test, noiseLevel) = (100, 500, 0.05)
-
 
 val likelihood = DataPipe((x: Double) => GaussianRV(math.atan(1000.0*x*x*x), noiseLevel))
 
@@ -65,7 +66,7 @@ title("Comparison of Noisy Data versus inferred function")
 legend(List("Test Data samples", "Co-allocation/training data samples", "GP samples"))
 
 
-val rvFTanH = MeasurableFunction(xPrior)(DataPipe((x: Double) => math.atan(1000.0*x*x*x)))
+val rvFTanH = MeasurableFunction(xPrior)((x: Double) => math.atan(1000.0*x*x*x))
 
 //Histogram of test data
 histogram(testData.map(_._2))
@@ -91,7 +92,7 @@ val data2: Stream[(DenseVector[Double], Double)] =
 
 val testData2 = (1 to test).map(_ => model2.sample()).map(c => (DenseVector(c._1), c._2)).toStream
 
-val perKernel = new PeriodicKernel(2.0, 1.5)
+//val perKernel = new PeriodicKernel(2.0, 1.5)
 val noise = new DiracKernel(noiseLevel)
 noise.blocked_hyper_parameters = noise.hyper_parameters
 
