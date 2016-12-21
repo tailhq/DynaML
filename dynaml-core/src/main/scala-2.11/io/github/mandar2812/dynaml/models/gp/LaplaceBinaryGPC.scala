@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg.{DenseMatrix, DenseVector, cholesky, inv}
 import breeze.numerics.sqrt
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
-import io.github.mandar2812.dynaml.optimization.{LaplacePosteriorMode, Likelihood}
+import io.github.mandar2812.dynaml.probability.Likelihood
 
 /**
   * @author mandar2812 on 6/4/16.

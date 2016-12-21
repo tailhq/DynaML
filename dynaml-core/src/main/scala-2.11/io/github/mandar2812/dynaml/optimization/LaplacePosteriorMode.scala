@@ -22,6 +22,7 @@ import breeze.linalg.{DenseMatrix, DenseVector, cholesky, inv}
 import breeze.numerics.sqrt
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.probability.Likelihood
 
 /**
   * Created by mandar on 6/4/16.

@@ -22,7 +22,8 @@ import breeze.linalg.{DenseMatrix, DenseVector, det, inv}
 import breeze.numerics._
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.{ParameterizedLearner, SecondOrderProcess}
-import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LaplacePosteriorMode, Likelihood}
+import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LaplacePosteriorMode}
+import io.github.mandar2812.dynaml.probability.Likelihood
 
 /**
   * @author mandar on 6/4/16.
