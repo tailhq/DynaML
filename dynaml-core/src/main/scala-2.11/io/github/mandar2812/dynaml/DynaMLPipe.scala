@@ -255,7 +255,10 @@ object DynaMLPipe {
     * */
   @deprecated("*Standardization pipes are deprecated as of v1.4,"+
     " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
-  val trainTestGaussianStandardization =
+  val trainTestGaussianStandardization: DataPipe[(Stream[(DenseVector[Double], Double)],
+    Stream[(DenseVector[Double], Double)]),
+    ((Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+      (DenseVector[Double], DenseVector[Double]))] =
     DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
       Stream[(DenseVector[Double], Double)])) => {
 
@@ -287,7 +290,10 @@ object DynaMLPipe {
     * */
   @deprecated("*Standardization pipes are deprecated as of v1.4,"+
     " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
-  val featuresGaussianStandardization =
+  val featuresGaussianStandardization: DataPipe[(Stream[(DenseVector[Double], Double)],
+    Stream[(DenseVector[Double], Double)]),
+    ((Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+      (DenseVector[Double], DenseVector[Double]))] =
     DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
       Stream[(DenseVector[Double], Double)])) => {
 
@@ -316,7 +322,10 @@ object DynaMLPipe {
     * */
   @deprecated("*Standardization pipes are deprecated as of v1.4,"+
     " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
-  val trainTestGaussianStandardizationMO =
+  val trainTestGaussianStandardizationMO: DataPipe[
+    (Stream[(DenseVector[Double], DenseVector[Double])], Stream[(DenseVector[Double], DenseVector[Double])]),
+    ((Stream[(DenseVector[Double], DenseVector[Double])], Stream[(DenseVector[Double], DenseVector[Double])]),
+      (DenseVector[Double], DenseVector[Double]))] =
     DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
       Stream[(DenseVector[Double], DenseVector[Double])])) => {
 
@@ -349,7 +358,9 @@ object DynaMLPipe {
     * data.
     *
     * */
-  val gaussianScaling =
+  val gaussianScaling: DataPipe[
+    Stream[(DenseVector[Double], DenseVector[Double])],
+    (Stream[(DenseVector[Double], DenseVector[Double])], (GaussianScaler, GaussianScaler))] =
     DataPipe((trainTest: Stream[(DenseVector[Double], DenseVector[Double])]) => {
 
       val (num_features, num_targets) = (trainTest.head._1.length, trainTest.head._2.length)
@@ -378,7 +389,9 @@ object DynaMLPipe {
     * which can be used to reverse the scaled values to the original
     * data.
     * */
-  val multivariateGaussianScaling =
+  val multivariateGaussianScaling: DataPipe[
+    Stream[(DenseVector[Double], DenseVector[Double])],
+    (Stream[(DenseVector[Double], DenseVector[Double])], (MVGaussianScaler, MVGaussianScaler))] =
   DataPipe((trainTest: Stream[(DenseVector[Double], DenseVector[Double])]) => {
 
     val (num_features, num_targets) = (trainTest.head._1.length, trainTest.head._2.length)
@@ -406,7 +419,10 @@ object DynaMLPipe {
     *
     * (Stream(training data), Stream(test data))
     * */
-  val gaussianScalingTrainTest =
+  val gaussianScalingTrainTest: DataPipe[
+    (Stream[(DenseVector[Double], DenseVector[Double])], Stream[(DenseVector[Double], DenseVector[Double])]),
+    (Stream[(DenseVector[Double], DenseVector[Double])], Stream[(DenseVector[Double], DenseVector[Double])],
+    (GaussianScaler, GaussianScaler))] =
     DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
       Stream[(DenseVector[Double], DenseVector[Double])])) => {
 
@@ -467,7 +483,9 @@ object DynaMLPipe {
     * data.
     *
     * */
-  val minMaxScaling =
+  val minMaxScaling: DataPipe[
+    Stream[(DenseVector[Double], DenseVector[Double])],
+    (Stream[(DenseVector[Double], DenseVector[Double])], (MinMaxScaler, MinMaxScaler))] =
     DataPipe((trainTest: Stream[(DenseVector[Double], DenseVector[Double])]) => {
 
       val (num_features, num_targets) = (trainTest.head._1.length, trainTest.head._2.length)
@@ -518,8 +536,10 @@ object DynaMLPipe {
     *
     * Usage: DynaMLPipe.splitTrainingTest(num_training, num_test)
     * */
-  val splitTrainingTest = (num_training: Int, num_test: Int) =>
-    DataPipe((data: (Stream[(DenseVector[Double], Double)],
+  val splitTrainingTest: (Int, Int) => DataPipe[
+    (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+    (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)])] =
+    (num_training: Int, num_test: Int) => DataPipe((data: (Stream[(DenseVector[Double], Double)],
     Stream[(DenseVector[Double], Double)])) => {
       (data._1.take(num_training), data._2.takeRight(num_test))
     })
@@ -573,7 +593,6 @@ object DynaMLPipe {
     * */
   val breezeDVSplitEncoder = (n: Int) => Encoder((v: DenseVector[Double]) => {
     optimize {
-      //v.toArray.grouped(n).map(DenseVector(_)).toArray
       Array.tabulate(v.length/n)(i => v(i*n until math.min((i+1)*n, v.length)))
     }
   }, (vs: Array[DenseVector[Double]]) => {
