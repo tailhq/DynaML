@@ -31,4 +31,11 @@ object Reducer {
     * Represents product of values
     * */
   val :*: = ProductReducer
+
+  /**
+    * Create an arbitrary reducer
+    * */
+  def apply(reducerFunc: (Array[Double]) => Double): Reducer = new Reducer {
+    override def run(data: Array[Double]) = reducerFunc(data)
+  }
 }
