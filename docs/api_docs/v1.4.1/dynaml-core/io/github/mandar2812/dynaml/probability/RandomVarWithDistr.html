@@ -49,7 +49,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A random variable which has a computable probability
+density.
+</p></div><dl class="paramcmts block"><dt class="tparam">Domain</dt><dd class="cmt"><p>The set over which the random variable takes its values.</p></dd><dt class="tparam">Dist</dt><dd class="cmt"><p>A breeze probability density defined on the
+             <span class="extype" name="Domain">Domain</span></p></dd></dl><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr.Domain">Domain</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr.Dist">Dist</span>]</dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="HasDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.HasDistribution">HasDistribution</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr.Domain">Domain</span>], <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr.Domain">Domain</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -191,7 +194,8 @@ function is represented as a breeze
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Cartesian product with another random variables which
+has a defined probability distribution.</p>
     </li><li name="io.github.mandar2812.dynaml.probability.RandomVariable#:*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id=":*[Domain1](other:io.github.mandar2812.dynaml.probability.RandomVariable[Domain1]):io.github.mandar2812.dynaml.probability.RandomVariable[(Domain,Domain1)]"></a>
       <a id=":*[Domain1](RandomVariable[Domain1]):RandomVariable[(Domain,Domain1)]"></a>
@@ -361,6 +365,23 @@ two random variables.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.RandomVariable#iid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iid(n:Int):io.github.mandar2812.dynaml.probability.IIDRandomVariable[Domain,io.github.mandar2812.dynaml.probability.RandomVariable[Domain]]"></a>
+      <a id="iid(Int):IIDRandomVariable[Domain,RandomVariable[Domain]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iid</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="IIDRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVariable">IIDRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr.Domain">Domain</span>, <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr.Domain">Domain</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.RandomVarWithDistr@iid(n:Int):io.github.mandar2812.dynaml.probability.IIDRandomVariable[Domain,io.github.mandar2812.dynaml.probability.RandomVariable[Domain]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create an iid random variable from the current (this)</p><div class="fullcomment"><div class="comment cmt"><p>Create an iid random variable from the current (this)</p></div><dl class="paramcmts block"><dt class="param">n</dt><dd class="cmt"><p>The number of iid samples of the base random variable.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

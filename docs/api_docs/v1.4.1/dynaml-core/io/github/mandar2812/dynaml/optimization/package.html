@@ -497,23 +497,6 @@ This is correct for the averaged least squares loss function (mean squared error
              L = 1/2 (1 - y * weights dot x)**2
 See also the documentation for the precise formulation.
 </p></div></div>
-    </li><li name="io.github.mandar2812.dynaml.probability.Likelihood" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Likelihood[Q,R,S,W]extendsAnyRef"></a>
-      <a id="Likelihood[Q,R,S,W]:Likelihood[Q,R,S,W]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Likelihood.html"><span class="name">Likelihood</span></a><span class="tparams">[<span name="Q">Q</span>, <span name="R">R</span>, <span name="S">S</span>, <span name="W">W</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.package@Likelihood[Q,R,S,W]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="tparam">Q</dt><dd class="cmt"><p>The type of observed variable (y)</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of conditioning variable (f)</p></dd><dt class="tparam">W</dt><dd class="cmt"><p>The type representing a gaussian distribution for f</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.LogisticGradient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LogisticGradientextendsGradient"></a>
       <a id="LogisticGradient:LogisticGradient"></a>
@@ -726,44 +709,6 @@ Uses a step-size decreasing with the square root of the number of iterations.
       </a>
     </span>
       
-    </li><li name="io.github.mandar2812.dynaml.probability.VectorIIDProbit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="VectorIIDProbitextendsLikelihood[breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double],(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
-      <a id="VectorIIDProbit:VectorIIDProbit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="VectorIIDProbit.html"><span class="name">VectorIIDProbit</span></a><span class="result"> extends <a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.package@VectorIIDProbitextendsLikelihood[breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double],(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Represents an IID probit likelihood used
-in Gaussian Process binary classification models</p><div class="fullcomment"><div class="comment cmt"><p>Represents an IID probit likelihood used
-in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</p></div></div>
-    </li><li name="io.github.mandar2812.dynaml.probability.VectorIIDSigmoid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="VectorIIDSigmoidextendsLikelihood[breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double],(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
-      <a id="VectorIIDSigmoid:VectorIIDSigmoid"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="VectorIIDSigmoid.html"><span class="name">VectorIIDSigmoid</span></a><span class="result"> extends <a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.package@VectorIIDSigmoidextendsLikelihood[breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double],(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Represents an IID sigmoid likelihood used
-in Gaussian Process binary classification models</p><div class="fullcomment"><div class="comment cmt"><p>Represents an IID sigmoid likelihood used
-in Gaussian Process binary classification models</p><p>p(y = 1| f) = 1/(1 + exp(-yf))</p></div></div>
     </li></ol>
             </div>
 

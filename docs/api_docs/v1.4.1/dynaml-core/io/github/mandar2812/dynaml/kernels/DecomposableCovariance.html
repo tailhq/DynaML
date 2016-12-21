@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img alt="Trait" src="../../../../../lib/trait_big.png" />
+        <img alt="Class" src="../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.kernels">kernels</a></p>
         <h1>DecomposableCovariance</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.kernels">package kernels</a>
@@ -42,10 +42,10 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">DecomposableCovariance</span><span class="result"> extends <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>
+        <span class="name">DecomposableCovariance</span><span class="tparams">[<span name="S">S</span>]</span><span class="result"> extends <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>
       </span>
       </h4>
       
@@ -53,7 +53,7 @@
 of base kernels over a subset of the input space.</p><p>for example K((x1, y1), (x1, y2)) = k1(x1,x2) + k2(y1,y2)
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a>[<a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]], <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]], <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>], <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>], <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>], <a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a>[<a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]], <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]], <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -88,51 +88,34 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
 
       <div id="template">
         <div id="allMembers">
-        
-
-        
-
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.kernels.Kernel#evaluate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="evaluate(x:T,y:T):V"></a>
-      <a id="evaluate(PartitionedVector,PartitionedVector):Double"></a>
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(kernels:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[S]*)(implicitencoding:io.github.mandar2812.dynaml.pipes.Encoder[S,Array[S]],implicitreducer:io.github.mandar2812.dynaml.pipes.Reducer):io.github.mandar2812.dynaml.kernels.DecomposableCovariance[S]"></a>
+      <a id="&lt;init&gt;:DecomposableCovariance[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
+        <span class="modifier"></span>
+        <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">evaluate</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="y">y: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">DecomposableCovariance</span><span class="params">(<span name="kernels">kernels: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoding">encoding: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]]</span>, <span name="reducer">reducer: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Reducer">Reducer</span> = <span class="symbol"><span class="name"><a href="../../../../package.html">Reducer.:+:</a></span></span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@evaluate(x:T,y:T):V" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@&lt;init&gt;(kernels:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[S]*)(implicitencoding:io.github.mandar2812.dynaml.pipes.Encoder[S,Array[S]],implicitreducer:io.github.mandar2812.dynaml.pipes.Reducer):io.github.mandar2812.dynaml.kernels.DecomposableCovariance[S]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#hyper_parameters" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="hyper_parameters:List[String]"></a>
-      <a id="hyper_parameters:List[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hyper_parameters</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@hyper_parameters:List[String]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+      
     </li></ol>
             </div>
 
+        
+
+        
+
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -168,18 +151,18 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="*[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]"></a>
-      <a id="*[T&lt;:LocalScalarKernel[PartitionedVector]](T):CompositeCovariance[PartitionedVector]"></a>
+      <a id="*[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T)(implicitev:scala.reflect.ClassTag[Index]):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]"></a>
+      <a id="*[T&lt;:LocalScalarKernel[S]](T)(ClassTag[S]):CompositeCovariance[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="T">T &lt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.*.T">T</span></span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>
+        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="T">T &lt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.*.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@*[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@*[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T)(implicitev:scala.reflect.ClassTag[Index]):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -188,14 +171,14 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
 </p></div><dl class="paramcmts block"><dt class="param">otherKernel</dt><dd class="cmt"><p>The kernel to add to the current one.</p></dd><dt>returns</dt><dd class="cmt"><p>The kernel k defined above.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.KernelOps#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="*[TT&gt;:This,B,That](b:B)(implicitop:io.github.mandar2812.dynaml.kernels.KernelOpMult.Impl2[TT,B,That]):That"></a>
-      <a id="*[TT&gt;:LocalScalarKernel[PartitionedVector],B,That](B)(KernelOpMult.Impl2[TT,B,That]):That"></a>
+      <a id="*[TT&gt;:LocalScalarKernel[S],B,That](B)(KernelOpMult.Impl2[TT,B,That]):That"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="TT">TT &gt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="op">op: <a href="KernelOpMult$.html#Impl2[V1,V2,VR]=breeze.generic.UFunc.UImpl2[UFunc.this.type,V1,V2,VR]" class="extmbr" name="io.github.mandar2812.dynaml.kernels.KernelOpMult.Impl2">KernelOpMult.Impl2</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.TT">TT</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.B">B</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.That">That</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.That">That</span></span>
+        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="TT">TT &gt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="op">op: <a href="KernelOpMult$.html#Impl2[V1,V2,VR]=breeze.generic.UFunc.UImpl2[UFunc.this.type,V1,V2,VR]" class="extmbr" name="io.github.mandar2812.dynaml.kernels.KernelOpMult.Impl2">KernelOpMult.Impl2</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.TT">TT</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.B">B</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.That">That</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.*.That">That</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@*[TT&gt;:This,B,That](b:B)(implicitop:io.github.mandar2812.dynaml.kernels.KernelOpMult.Impl2[TT,B,That]):That" title="Permalink" target="_top">
@@ -204,18 +187,18 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="+[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]"></a>
-      <a id="+[T&lt;:LocalScalarKernel[PartitionedVector]](T):CompositeCovariance[PartitionedVector]"></a>
+      <a id="+[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T)(implicitev:scala.reflect.ClassTag[Index]):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]"></a>
+      <a id="+[T&lt;:LocalScalarKernel[S]](T)(ClassTag[S]):CompositeCovariance[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $plus" class="name">+</span><span class="tparams">[<span name="T">T &lt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.+.T">T</span></span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>
+        <span title="gt4s: $plus" class="name">+</span><span class="tparams">[<span name="T">T &lt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.+.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@+[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@+[T&lt;:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]](otherKernel:T)(implicitev:scala.reflect.ClassTag[Index]):io.github.mandar2812.dynaml.kernels.CompositeCovariance[Index]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -223,14 +206,14 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
  return The kernel k defined above.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.KernelOps#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="+[TT&gt;:This,B,That](b:B)(implicitop:io.github.mandar2812.dynaml.kernels.KernelOpAdd.Impl2[TT,B,That]):That"></a>
-      <a id="+[TT&gt;:LocalScalarKernel[PartitionedVector],B,That](B)(KernelOpAdd.Impl2[TT,B,That]):That"></a>
+      <a id="+[TT&gt;:LocalScalarKernel[S],B,That](B)(KernelOpAdd.Impl2[TT,B,That]):That"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $plus" class="name">+</span><span class="tparams">[<span name="TT">TT &gt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="op">op: <a href="KernelOpAdd$.html#Impl2[V1,V2,VR]=breeze.generic.UFunc.UImpl2[UFunc.this.type,V1,V2,VR]" class="extmbr" name="io.github.mandar2812.dynaml.kernels.KernelOpAdd.Impl2">KernelOpAdd.Impl2</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.TT">TT</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.B">B</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.That">That</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.That">That</span></span>
+        <span title="gt4s: $plus" class="name">+</span><span class="tparams">[<span name="TT">TT &gt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="op">op: <a href="KernelOpAdd$.html#Impl2[V1,V2,VR]=breeze.generic.UFunc.UImpl2[UFunc.this.type,V1,V2,VR]" class="extmbr" name="io.github.mandar2812.dynaml.kernels.KernelOpAdd.Impl2">KernelOpAdd.Impl2</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.TT">TT</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.B">B</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.That">That</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.+.That">That</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@+[TT&gt;:This,B,That](b:B)(implicitop:io.github.mandar2812.dynaml.kernels.KernelOpAdd.Impl2[TT,B,That]):That" title="Permalink" target="_top">
@@ -240,14 +223,14 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       <p class="shortcomment cmt">Alias for :+(b) for all b.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for :+(b) for all b.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#:*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id=":*[T1](otherKernel:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[T1]):io.github.mandar2812.dynaml.kernels.CompositeCovariance[(Index,T1)]"></a>
-      <a id=":*[T1](LocalScalarKernel[T1]):CompositeCovariance[(PartitionedVector,T1)]"></a>
+      <a id=":*[T1](LocalScalarKernel[T1]):CompositeCovariance[(S,T1)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $colon$times" class="name">:*</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.:*.T1">T1</span>]</span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[(<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.:*.T1">T1</span>)]</span>
+        <span title="gt4s: $colon$times" class="name">:*</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.:*.T1">T1</span>]</span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[(<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.:*.T1">T1</span>)]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@:*[T1](otherKernel:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[T1]):io.github.mandar2812.dynaml.kernels.CompositeCovariance[(Index,T1)]" title="Permalink" target="_top">
@@ -257,14 +240,14 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.KernelOps#:*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id=":*[TT&gt;:This,B,That](b:B)(implicitop:io.github.mandar2812.dynaml.kernels.KernelOuterMult.Impl2[TT,B,That]):That"></a>
-      <a id=":*[TT&gt;:LocalScalarKernel[PartitionedVector],B,That](B)(KernelOuterMult.Impl2[TT,B,That]):That"></a>
+      <a id=":*[TT&gt;:LocalScalarKernel[S],B,That](B)(KernelOuterMult.Impl2[TT,B,That]):That"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $colon$times" class="name">:*</span><span class="tparams">[<span name="TT">TT &gt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="op">op: <a href="KernelOuterMult$.html#Impl2[V1,V2,VR]=breeze.generic.UFunc.UImpl2[UFunc.this.type,V1,V2,VR]" class="extmbr" name="io.github.mandar2812.dynaml.kernels.KernelOuterMult.Impl2">KernelOuterMult.Impl2</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.TT">TT</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.B">B</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.That">That</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.That">That</span></span>
+        <span title="gt4s: $colon$times" class="name">:*</span><span class="tparams">[<span name="TT">TT &gt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="op">op: <a href="KernelOuterMult$.html#Impl2[V1,V2,VR]=breeze.generic.UFunc.UImpl2[UFunc.this.type,V1,V2,VR]" class="extmbr" name="io.github.mandar2812.dynaml.kernels.KernelOuterMult.Impl2">KernelOuterMult.Impl2</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.TT">TT</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.B">B</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.That">That</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:*.That">That</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@:*[TT&gt;:This,B,That](b:B)(implicitop:io.github.mandar2812.dynaml.kernels.KernelOuterMult.Impl2[TT,B,That]):That" title="Permalink" target="_top">
@@ -274,14 +257,14 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#:+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id=":+[T1](otherKernel:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[T1]):io.github.mandar2812.dynaml.kernels.CompositeCovariance[(Index,T1)]"></a>
-      <a id=":+[T1](LocalScalarKernel[T1]):CompositeCovariance[(PartitionedVector,T1)]"></a>
+      <a id=":+[T1](LocalScalarKernel[T1]):CompositeCovariance[(S,T1)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $colon$plus" class="name">:+</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.:+.T1">T1</span>]</span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[(<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.:+.T1">T1</span>)]</span>
+        <span title="gt4s: $colon$plus" class="name">:+</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="params">(<span name="otherKernel">otherKernel: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.:+.T1">T1</span>]</span>)</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[(<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.:+.T1">T1</span>)]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@:+[T1](otherKernel:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[T1]):io.github.mandar2812.dynaml.kernels.CompositeCovariance[(Index,T1)]" title="Permalink" target="_top">
@@ -291,14 +274,14 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.KernelOps#:+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id=":+[TT&gt;:This,B,That](b:B)(implicitop:io.github.mandar2812.dynaml.kernels.KernelOuterAdd.Impl2[TT,B,That]):That"></a>
-      <a id=":+[TT&gt;:LocalScalarKernel[PartitionedVector],B,That](B)(KernelOuterAdd.Impl2[TT,B,That]):That"></a>
+      <a id=":+[TT&gt;:LocalScalarKernel[S],B,That](B)(KernelOuterAdd.Impl2[TT,B,That]):That"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $colon$plus" class="name">:+</span><span class="tparams">[<span name="TT">TT &gt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="op">op: <a href="KernelOuterAdd$.html#Impl2[V1,V2,VR]=breeze.generic.UFunc.UImpl2[UFunc.this.type,V1,V2,VR]" class="extmbr" name="io.github.mandar2812.dynaml.kernels.KernelOuterAdd.Impl2">KernelOuterAdd.Impl2</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.TT">TT</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.B">B</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.That">That</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.That">That</span></span>
+        <span title="gt4s: $colon$plus" class="name">:+</span><span class="tparams">[<span name="TT">TT &gt;: <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="op">op: <a href="KernelOuterAdd$.html#Impl2[V1,V2,VR]=breeze.generic.UFunc.UImpl2[UFunc.this.type,V1,V2,VR]" class="extmbr" name="io.github.mandar2812.dynaml.kernels.KernelOuterAdd.Impl2">KernelOuterAdd.Impl2</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.TT">TT</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.B">B</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.That">That</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.:+.That">That</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@:+[TT&gt;:This,B,That](b:B)(implicitop:io.github.mandar2812.dynaml.kernels.KernelOuterAdd.Impl2[TT,B,That]):That" title="Permalink" target="_top">
@@ -340,6 +323,23 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#block_all_hyper_parameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="block_all_hyper_parameters:Unit"></a>
+      <a id="block_all_hyper_parameters:Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">block_all_hyper_parameters</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@block_all_hyper_parameters:Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#blocked_hyper_parameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="blocked_hyper_parameters:List[String]"></a>
       <a id="blocked_hyper_parameters:List[String]"></a>
@@ -359,14 +359,14 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#buildBlockedCrossKernelMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildBlockedCrossKernelMatrix[S&lt;:Seq[Index]](dataset1:S,dataset2:S):io.github.mandar2812.dynaml.algebra.PartitionedMatrix"></a>
-      <a id="buildBlockedCrossKernelMatrix[S&lt;:Seq[PartitionedVector]](S,S):PartitionedMatrix"></a>
+      <a id="buildBlockedCrossKernelMatrix[S&lt;:Seq[S]](S,S):PartitionedMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildBlockedCrossKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>]</span><span class="params">(<span name="dataset1">dataset1: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildBlockedCrossKernelMatrix.S">S</span></span>, <span name="dataset2">dataset2: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildBlockedCrossKernelMatrix.S">S</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedMatrix">PartitionedMatrix</span></span>
+        <span class="name">buildBlockedCrossKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>]</span><span class="params">(<span name="dataset1">dataset1: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildBlockedCrossKernelMatrix.S">S</span></span>, <span name="dataset2">dataset2: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildBlockedCrossKernelMatrix.S">S</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedMatrix">PartitionedMatrix</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@buildBlockedCrossKernelMatrix[S&lt;:Seq[Index]](dataset1:S,dataset2:S):io.github.mandar2812.dynaml.algebra.PartitionedMatrix" title="Permalink" target="_top">
@@ -376,14 +376,14 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#buildBlockedKernelMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildBlockedKernelMatrix[S&lt;:Seq[Index]](mappedData:S,length:Long):io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix"></a>
-      <a id="buildBlockedKernelMatrix[S&lt;:Seq[PartitionedVector]](S,Long):PartitionedPSDMatrix"></a>
+      <a id="buildBlockedKernelMatrix[S&lt;:Seq[S]](S,Long):PartitionedPSDMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildBlockedKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>]</span><span class="params">(<span name="mappedData">mappedData: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildBlockedKernelMatrix.S">S</span></span>, <span name="length">length: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>
+        <span class="name">buildBlockedKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>]</span><span class="params">(<span name="mappedData">mappedData: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildBlockedKernelMatrix.S">S</span></span>, <span name="length">length: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@buildBlockedKernelMatrix[S&lt;:Seq[Index]](mappedData:S,length:Long):io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix" title="Permalink" target="_top">
@@ -391,40 +391,40 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel#buildCrossKernelMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#buildCrossKernelMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildCrossKernelMatrix[S&lt;:Seq[Index]](dataset1:S,dataset2:S):breeze.linalg.DenseMatrix[Double]"></a>
-      <a id="buildCrossKernelMatrix[S&lt;:Seq[PartitionedVector]](S,S):DenseMatrix[Double]"></a>
+      <a id="buildCrossKernelMatrix[S&lt;:Seq[S]](S,S):DenseMatrix[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildCrossKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>]</span><span class="params">(<span name="dataset1">dataset1: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel.buildCrossKernelMatrix.S">S</span></span>, <span name="dataset2">dataset2: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel.buildCrossKernelMatrix.S">S</span></span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">buildCrossKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>]</span><span class="params">(<span name="dataset1">dataset1: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildCrossKernelMatrix.S">S</span></span>, <span name="dataset2">dataset2: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildCrossKernelMatrix.S">S</span></span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@buildCrossKernelMatrix[S&lt;:Seq[Index]](dataset1:S,dataset2:S):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel#buildKernelMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#buildKernelMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildKernelMatrix[S&lt;:Seq[Index]](mappedData:S,length:Int):io.github.mandar2812.dynaml.kernels.KernelMatrix[breeze.linalg.DenseMatrix[Double]]"></a>
-      <a id="buildKernelMatrix[S&lt;:Seq[PartitionedVector]](S,Int):KernelMatrix[DenseMatrix[Double]]"></a>
+      <a id="buildKernelMatrix[S&lt;:Seq[S]](S,Int):KernelMatrix[DenseMatrix[Double]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>]</span><span class="params">(<span name="mappedData">mappedData: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel.buildKernelMatrix.S">S</span></span>, <span name="length">length: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="KernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelMatrix">KernelMatrix</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">buildKernelMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>]</span><span class="params">(<span name="mappedData">mappedData: <span class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel.buildKernelMatrix.S">S</span></span>, <span name="length">length: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="KernelMatrix.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelMatrix">KernelMatrix</a>[<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@buildKernelMatrix[S&lt;:Seq[Index]](mappedData:S,length:Int):io.github.mandar2812.dynaml.kernels.KernelMatrix[breeze.linalg.DenseMatrix[Double]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -499,6 +499,23 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#encodingTuple" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="encodingTuple:io.github.mandar2812.dynaml.pipes.ParallelPipe[S,Array[S],S,Array[S]]"></a>
+      <a id="encodingTuple:ParallelPipe[S,Array[S],S,Array[S]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">encodingTuple</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe">ParallelPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>], <span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@encodingTuple:io.github.mandar2812.dynaml.pipes.ParallelPipe[S,Array[S],S,Array[S]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -533,6 +550,23 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#evaluate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evaluate(x:S,y:S):Double"></a>
+      <a id="evaluate(S,S):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">evaluate</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span></span>, <span name="y">y: <span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@evaluate(x:S,y:S):Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance">DecomposableCovariance</a> → <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -573,23 +607,23 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#gradient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="gradient(x:Index,y:Index):Map[String,Double]"></a>
-      <a id="gradient(PartitionedVector,PartitionedVector):Map[String,Double]"></a>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#gradient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="gradient(x:S,y:S):Map[String,Double]"></a>
+      <a id="gradient(S,S):Map[String,Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">gradient</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="y">y: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">gradient</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span></span>, <span name="y">y: <span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@gradient(x:Index,y:Index):Map[String,Double]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@gradient(x:S,y:S):Map[String,Double]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance">DecomposableCovariance</a> → <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -607,6 +641,23 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#hyper_parameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hyper_parameters:List[String]"></a>
+      <a id="hyper_parameters:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hyper_parameters</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@hyper_parameters:List[String]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance">DecomposableCovariance</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -624,16 +675,50 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#kernelBind" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="kernelBind:io.github.mandar2812.dynaml.pipes.DataPipe[(Array[S],Array[S]),Array[Double]]"></a>
+      <a id="kernelBind:DataPipe[(Array[S],Array[S]),Array[Double]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kernelBind</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[(<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>], <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]), <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@kernelBind:io.github.mandar2812.dynaml.pipes.DataPipe[(Array[S],Array[S]),Array[Double]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#kernelMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="kernelMap:scala.collection.immutable.Map[String,io.github.mandar2812.dynaml.kernels.LocalScalarKernel[S]]"></a>
+      <a id="kernelMap:Map[String,LocalScalarKernel[S]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kernelMap</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@kernelMap:scala.collection.immutable.Map[String,io.github.mandar2812.dynaml.kernels.LocalScalarKernel[S]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#kernelOps" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernelOps:io.github.mandar2812.dynaml.kernels.KernelOps.Ops[Index]"></a>
-      <a id="kernelOps:Ops[PartitionedVector]"></a>
+      <a id="kernelOps:Ops[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">kernelOps</span><span class="result">: <a href="KernelOps$$Ops.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.Ops">Ops</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>
+        <span class="name">kernelOps</span><span class="result">: <a href="KernelOps$$Ops.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps.Ops">Ops</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@kernelOps:io.github.mandar2812.dynaml.kernels.KernelOps.Ops[Index]" title="Permalink" target="_top">
@@ -641,6 +726,23 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#kernelPipe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="kernelPipe:io.github.mandar2812.dynaml.pipes.DataPipe[(S,S),Double]"></a>
+      <a id="kernelPipe:DataPipe[(S,S),Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kernelPipe</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[(<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>), <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@kernelPipe:io.github.mandar2812.dynaml.pipes.DataPipe[(S,S),Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -692,23 +794,23 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.CompositeCovariance#repr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="repr:io.github.mandar2812.dynaml.kernels.CompositeCovariance[T]"></a>
-      <a id="repr:CompositeCovariance[PartitionedVector]"></a>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#repr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="repr:io.github.mandar2812.dynaml.kernels.DecomposableCovariance[S]"></a>
+      <a id="repr:DecomposableCovariance[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">repr</span><span class="result">: <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>
+        <span class="name">repr</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance">DecomposableCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@repr:io.github.mandar2812.dynaml.kernels.CompositeCovariance[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@repr:io.github.mandar2812.dynaml.kernels.DecomposableCovariance[S]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a> → <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a> → <a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance">DecomposableCovariance</a> → <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a> → <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a> → <a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#rowBlocking" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rowBlocking:Int"></a>
       <a id="rowBlocking:Int"></a>
@@ -743,8 +845,8 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#setHyperParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setHyperParameters(h:Map[String,Double]):CovarianceFunction.this.type"></a>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#setHyperParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setHyperParameters(h:Map[String,Double]):DecomposableCovariance.this.type"></a>
       <a id="setHyperParameters(Map[String,Double]):DecomposableCovariance.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -755,11 +857,11 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
         <span class="name">setHyperParameters</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance">DecomposableCovariance</a>.this.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@setHyperParameters(h:Map[String,Double]):CovarianceFunction.this.type" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@setHyperParameters(h:Map[String,Double]):DecomposableCovariance.this.type" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance">DecomposableCovariance</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#state" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="state:Map[String,Double]"></a>
       <a id="state:Map[String,Double]"></a>
@@ -811,6 +913,23 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance#updateKernelPipe" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="updateKernelPipe():Unit"></a>
+      <a id="updateKernelPipe():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateKernelPipe</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.DecomposableCovariance@updateKernelPipe():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -890,17 +1009,17 @@ of base kernels over a subset of the input space.</p><p>for example K((x1, y1), 
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">
-              <h3>Inherited from <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
+              <h3>Inherited from <a href="CompositeCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CompositeCovariance">CompositeCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">
-              <h3>Inherited from <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
+              <h3>Inherited from <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">
-              <h3>Inherited from <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
+              <h3>Inherited from <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.kernels.KernelOps">
-              <h3>Inherited from <a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a>[<a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]]</h3>
+              <h3>Inherited from <a href="KernelOps.html" class="extype" name="io.github.mandar2812.dynaml.kernels.KernelOps">KernelOps</a>[<a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>]]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">
-              <h3>Inherited from <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
+              <h3>Inherited from <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.kernels.Kernel">
-              <h3>Inherited from <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="scala.Double">Double</span>]</h3>
+              <h3>Inherited from <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.DecomposableCovariance.S">S</span>, <span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">

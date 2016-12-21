@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ReversibleScaler</span><span class="tparams">[<span name="S">S</span>]</span><span class="result"> extends <a href="Scaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>]</span>
+        <span class="name">ReversibleScaler</span><span class="tparams">[<span name="S">S</span>]</span><span class="result"> extends <a href="Scaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>] with <a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Scaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>], <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>], <a href="Scaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>], <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler"><span>ReversibleScaler</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.Scaler"><span>Scaler</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.DataPipe"><span>DataPipe</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler"><span>ReversibleScaler</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.Encoder"><span>Encoder</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.Scaler"><span>Scaler</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.DataPipe"><span>DataPipe</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -92,7 +92,7 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.pipes.ReversibleScaler#i" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="io.github.mandar2812.dynaml.pipes.ReversibleScaler#i" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="i:io.github.mandar2812.dynaml.pipes.Scaler[S]"></a>
       <a id="i:Scaler[S]"></a>
       <h4 class="signature">
@@ -108,7 +108,7 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">The inverse operation of this scaling.</p>
+      <p class="shortcomment cmt">The inverse operation of this scaling.</p><div class="fullcomment"><div class="comment cmt"><p>The inverse operation of this scaling.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</a> → <a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#run" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="run(data:Source):Destination"></a>
       <a id="run(S):S"></a>
@@ -250,6 +250,28 @@
       </a>
     </span>
       
+    </li><li name="io.github.mandar2812.dynaml.pipes.Encoder#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;[Further](that:io.github.mandar2812.dynaml.pipes.Encoder[D,Further]):io.github.mandar2812.dynaml.pipes.Encoder[S,Further]"></a>
+      <a id="&gt;[Further](Encoder[S,Further]):Encoder[S,Further]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder.&gt;.Further">Further</span>]</span>)</span><span class="result">: <a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder.&gt;.Further">Further</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.ReversibleScaler@&gt;[Further](that:io.github.mandar2812.dynaml.pipes.Encoder[D,Further]):io.github.mandar2812.dynaml.pipes.Encoder[S,Further]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents the composition of two
+encoders, resulting in a third encoder
+Schematically represented as:</p><div class="fullcomment"><div class="comment cmt"><p>Represents the composition of two
+encoders, resulting in a third encoder
+Schematically represented as:</p><p><span class="extype" name="S">S</span> -&gt; <span class="extype" name="D">D</span> :: <span class="extype" name="D">D</span> -&gt; <span class="extype" name="Further">Further</span> ==
+<span class="extype" name="S">S</span> -&gt; <span class="extype" name="Further">Further</span></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.Scaler#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&gt;(otherScaler:io.github.mandar2812.dynaml.pipes.Scaler[S]):io.github.mandar2812.dynaml.pipes.Scaler[S]"></a>
       <a id="&gt;(Scaler[S]):Scaler[S]"></a>
@@ -634,7 +656,9 @@ Schematically represented as:</p><p><span class="extype" name="Source">Source</s
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="io.github.mandar2812.dynaml.pipes.Scaler">
+        <div class="parent" name="io.github.mandar2812.dynaml.pipes.Encoder">
+              <h3>Inherited from <a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>]</h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.Scaler">
               <h3>Inherited from <a href="Scaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.DataPipe">
               <h3>Inherited from <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.S">S</span>]</h3>

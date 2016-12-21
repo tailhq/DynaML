@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>VectorIIDProbit - io.github.mandar2812.dynaml.probability.VectorIIDProbit</title>
-          <meta name="description" content="VectorIIDProbit - io.github.mandar2812.dynaml.probability.VectorIIDProbit" />
-          <meta name="keywords" content="VectorIIDProbit io.github.mandar2812.dynaml.probability.VectorIIDProbit" />
+          <title>Likelihood - io.github.mandar2812.dynaml.probability.Likelihood</title>
+          <meta name="description" content="Likelihood - io.github.mandar2812.dynaml.probability.Likelihood" />
+          <meta name="keywords" content="Likelihood io.github.mandar2812.dynaml.probability.Likelihood" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'io.github.mandar2812.dynaml.optimization.VectorIIDProbit';
+            var hash = 'io.github.mandar2812.dynaml.probability.Likelihood';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,12 +28,12 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img alt="Class" src="../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.optimization">optimization</a></p>
-        <h1>VectorIIDProbit</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.optimization">package optimization</a>
+        <img alt="Trait" src="../../../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.probability">probability</a></p>
+        <h1>Likelihood</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.probability">package probability</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -42,18 +42,20 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">VectorIIDProbit</span><span class="result"> extends <a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+        <span class="name">Likelihood</span><span class="tparams">[<span name="Q">Q</span>, <span name="R">R</span>, <span name="S">S</span>, <span name="W">W</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents an IID probit likelihood used
-in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="tparam">Q</dt><dd class="cmt"><p>The type of observed variable (y)</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of conditioning variable (f)</p></dd><dt class="tparam">W</dt><dd class="cmt"><p>The type representing a gaussian distribution for f</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="VectorIIDProbit.html" class="extype" name="io.github.mandar2812.dynaml.probability.VectorIIDProbit">VectorIIDProbit</a>, <a href="VectorIIDSigmoid.html" class="extype" name="io.github.mandar2812.dynaml.probability.VectorIIDSigmoid">VectorIIDSigmoid</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -70,7 +72,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.probability.VectorIIDProbit"><span>VectorIIDProbit</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.Likelihood"><span>Likelihood</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.probability.Likelihood"><span>Likelihood</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -87,34 +89,91 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="io.github.mandar2812.dynaml.optimization.VectorIIDProbit#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():io.github.mandar2812.dynaml.probability.VectorIIDProbit"></a>
-      <a id="&lt;init&gt;:VectorIIDProbit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">VectorIIDProbit</span><span class="params">()</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@&lt;init&gt;():io.github.mandar2812.dynaml.probability.VectorIIDProbit" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
-
         
 
         
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.probability.Likelihood#gaussianExpectation" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="gaussianExpectation(normalDistParams:W):Q"></a>
+      <a id="gaussianExpectation(W):Q"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gaussianExpectation</span><span class="params">(<span name="normalDistParams">normalDistParams: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.W">W</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.Q">Q</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@gaussianExpectation(normalDistParams:W):Q" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Computes the value of the expectation</p><div class="fullcomment"><div class="comment cmt"><p>Computes the value of the expectation</p><p>E<sup>q</sup>[p(y_test = 1| x_test)| X, y]</p><p>where E<sup>q</sup> denotes (approximate) expectation with
+respect to the nuisance function distribution.
+</p></div><dl class="paramcmts block"><dt class="param">normalDistParams</dt><dd class="cmt"><p>The normal approximation to p(f_test| X, y, x_test)</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.Likelihood#gradient" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="gradient(q:Q,r:R):R"></a>
+      <a id="gradient(Q,R):R"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gradient</span><span class="params">(<span name="q">q: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.Q">Q</span></span>, <span name="r">r: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.R">R</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.R">R</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@gradient(q:Q,r:R):R" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Computes d(log p(y|f))/dr
+</p>
+    </li><li name="io.github.mandar2812.dynaml.probability.Likelihood#hessian" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="hessian(q:Q,r:R):S"></a>
+      <a id="hessian(Q,R):S"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hessian</span><span class="params">(<span name="q">q: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.Q">Q</span></span>, <span name="r">r: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.R">R</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.S">S</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@hessian(q:Q,r:R):S" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Computes d<sup>2</sup>(log p(y|f))/dr<sup>2</sup>
+</sup></sup></p><div class="fullcomment"><div class="comment cmt"><p>Computes d<sup>2</sup>(log p(y|f))/dr<sup>2</sup>
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.Likelihood#loglikelihood" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="loglikelihood(q:Q,r:R):Double"></a>
+      <a id="loglikelihood(Q,R):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loglikelihood</span><span class="params">(<span name="q">q: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.Q">Q</span></span>, <span name="r">r: <span class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood.R">R</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@loglikelihood(q:Q,r:R):Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Computes - log p(y|f)
+</p>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -127,7 +186,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -144,7 +203,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@##():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -161,7 +220,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -178,7 +237,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -195,7 +254,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -218,7 +277,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -235,7 +294,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -252,7 +311,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -263,25 +322,6 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = &Phi;(yf)</
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.VectorIIDProbit#gaussianExpectation" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="gaussianExpectation(normalDistParams:(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])):breeze.linalg.DenseVector[Double]"></a>
-      <a id="gaussianExpectation((DenseVector[Double],DenseVector[Double])):DenseVector[Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">gaussianExpectation</span><span class="params">(<span name="normalDistParams">normalDistParams: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@gaussianExpectation(normalDistParams:(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Computes the value of the expectation</p><div class="fullcomment"><div class="comment cmt"><p>Computes the value of the expectation</p><p>E<sup>q</sup>[p(y_test = 1| x_test)| X, y]</p><p>where E<sup>q</sup> denotes (approximate) expectation with
-respect to the nuisance function distribution.
-</p></div><dl class="paramcmts block"><dt class="param">normalDistParams</dt><dd class="cmt"><p>The normal approximation to p(f_test| X, y, x_test)</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.probability.VectorIIDProbit">VectorIIDProbit</a> → <a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -294,47 +334,11 @@ respect to the nuisance function distribution.
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.VectorIIDProbit#gradient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="gradient(y:breeze.linalg.DenseVector[Double],f:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
-      <a id="gradient(DenseVector[Double],DenseVector[Double]):DenseVector[Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">gradient</span><span class="params">(<span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="f">f: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@gradient(y:breeze.linalg.DenseVector[Double],f:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Computes d(log p(y|f))/df
-</p><div class="fullcomment"><div class="comment cmt"><p>Computes d(log p(y|f))/df
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.probability.VectorIIDProbit">VectorIIDProbit</a> → <a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.VectorIIDProbit#h" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="h:Double=&gt;Double"></a>
-      <a id="h:(Double)⇒Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">h</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@h:Double=&gt;Double" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -347,30 +351,11 @@ respect to the nuisance function distribution.
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.VectorIIDProbit#hessian" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hessian(y:breeze.linalg.DenseVector[Double],f:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseMatrix[Double]"></a>
-      <a id="hessian(DenseVector[Double],DenseVector[Double]):DenseMatrix[Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hessian</span><span class="params">(<span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="f">f: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@hessian(y:breeze.linalg.DenseVector[Double],f:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Computes d<sup>2</sup>(log p(y|f))/df<sup>2</sup>
-</sup></sup></p><div class="fullcomment"><div class="comment cmt"><p>Computes d<sup>2</sup>(log p(y|f))/df<sup>2</sup>
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.probability.VectorIIDProbit">VectorIIDProbit</a> → <a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -383,30 +368,11 @@ respect to the nuisance function distribution.
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.VectorIIDProbit#loglikelihood" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="loglikelihood(y:breeze.linalg.DenseVector[Double],f:breeze.linalg.DenseVector[Double]):Double"></a>
-      <a id="loglikelihood(DenseVector[Double],DenseVector[Double]):Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">loglikelihood</span><span class="params">(<span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="f">f: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@loglikelihood(y:breeze.linalg.DenseVector[Double],f:breeze.linalg.DenseVector[Double]):Double" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Computes - log p(y|f)
-</p><div class="fullcomment"><div class="comment cmt"><p>Computes - log p(y|f)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.probability.VectorIIDProbit">VectorIIDProbit</a> → <a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -419,7 +385,7 @@ respect to the nuisance function distribution.
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -436,7 +402,7 @@ respect to the nuisance function distribution.
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -453,7 +419,7 @@ respect to the nuisance function distribution.
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -470,7 +436,7 @@ respect to the nuisance function distribution.
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -487,7 +453,7 @@ respect to the nuisance function distribution.
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@toString():String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -504,7 +470,7 @@ respect to the nuisance function distribution.
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -527,7 +493,7 @@ respect to the nuisance function distribution.
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -550,7 +516,7 @@ respect to the nuisance function distribution.
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.VectorIIDProbit@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.Likelihood@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -570,9 +536,7 @@ respect to the nuisance function distribution.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="io.github.mandar2812.dynaml.probability.Likelihood">
-              <h3>Inherited from <a href="Likelihood.html" class="extype" name="io.github.mandar2812.dynaml.probability.Likelihood">Likelihood</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

@@ -179,6 +179,43 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#breezeDVReplicationEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="breezeDVReplicationEncoder:Int=&gt;io.github.mandar2812.dynaml.pipes.Encoder[breeze.linalg.DenseVector[Double],Array[breeze.linalg.DenseVector[Double]]]"></a>
+      <a id="breezeDVReplicationEncoder:(Int)⇒Encoder[DenseVector[Double],Array[DenseVector[Double]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">breezeDVReplicationEncoder</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@breezeDVReplicationEncoder:Int=&gt;io.github.mandar2812.dynaml.pipes.Encoder[breeze.linalg.DenseVector[Double],Array[breeze.linalg.DenseVector[Double]]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Creates an <span class="extype" name="Encoder">Encoder</span> which replicates a
+<span class="extype" name="DenseVector">DenseVector</span> instance n times.</p>
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#breezeDVSplitEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="breezeDVSplitEncoder:Int=&gt;io.github.mandar2812.dynaml.pipes.Encoder[breeze.linalg.DenseVector[Double],Array[breeze.linalg.DenseVector[Double]]]"></a>
+      <a id="breezeDVSplitEncoder:(Int)⇒Encoder[DenseVector[Double],Array[DenseVector[Double]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">breezeDVSplitEncoder</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@breezeDVSplitEncoder:Int=&gt;io.github.mandar2812.dynaml.pipes.Encoder[breeze.linalg.DenseVector[Double],Array[breeze.linalg.DenseVector[Double]]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Creates an <span class="extype" name="Encoder">Encoder</span> which can split
+<span class="extype" name="DenseVector">DenseVector</span> instances into uniform splits and
+put them back together.</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -202,6 +239,25 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#csvToRDF" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="csvToRDF(df:String,sep:Char)(implicitrenjin:org.renjin.script.RenjinScriptEngine):io.github.mandar2812.dynaml.pipes.DataPipe[String,org.renjin.sexp.ListVector]"></a>
+      <a id="csvToRDF(String,Char)(RenjinScriptEngine):DataPipe[String,ListVector]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">csvToRDF</span><span class="params">(<span name="df">df: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="sep">sep: <span class="extype" name="scala.Char">Char</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="renjin">renjin: <span class="extype" name="org.renjin.script.RenjinScriptEngine">RenjinScriptEngine</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="org.renjin.sexp.ListVector">ListVector</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@csvToRDF(df:String,sep:Char)(implicitrenjin:org.renjin.script.RenjinScriptEngine):io.github.mandar2812.dynaml.pipes.DataPipe[String,org.renjin.sexp.ListVector]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Read a csv text file and store it in a R data frame.</p><div class="fullcomment"><div class="comment cmt"><p>Read a csv text file and store it in a R data frame.</p></div><dl class="paramcmts block"><dt class="param">df</dt><dd class="cmt"><p>The name of the data frame variable</p></dd><dt class="param">sep</dt><dd class="cmt"><p>Separation character in the csv file</p></dd><dt>returns</dt><dd class="cmt"><p>A <span class="extype" name="DataPipe">DataPipe</span> instance which takes as input a file name
+        and returns a renjin <span class="extype" name="ListVector">ListVector</span> instance and stores data frame
+        in the variable nameed as df.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#deltaOperation" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="deltaOperation:(Int,Int)=&gt;io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]]"></a>
       <a id="deltaOperation:(Int,Int)⇒DataPipe[Stream[(Double,Double)],Stream[(DenseVector[Double],Double)]]"></a>
@@ -434,18 +490,18 @@ also replace any missing value strings with the empty string.</p><p>Usage: DynaM
               
         </dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#gaussianScaling" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="gaussianScaling:io.github.mandar2812.dynaml.pipes.BifurcationPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.GaussianScaler,io.github.mandar2812.dynaml.utils.GaussianScaler)]"></a>
-      <a id="gaussianScaling:BifurcationPipe[Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])],(GaussianScaler,GaussianScaler)]"></a>
+      <a id="gaussianScaling:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.GaussianScaler,io.github.mandar2812.dynaml.utils.GaussianScaler))]"></a>
+      <a id="gaussianScaling:DataPipe[Stream[(DenseVector[Double],DenseVector[Double])],(Stream[(DenseVector[Double],DenseVector[Double])],(GaussianScaler,GaussianScaler))]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">gaussianScaling</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<a href="utils/GaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.GaussianScaler">GaussianScaler</a>, <a href="utils/GaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.GaussianScaler">GaussianScaler</a>)]</span>
+        <span class="name">gaussianScaling</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<a href="utils/GaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.GaussianScaler">GaussianScaler</a>, <a href="utils/GaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.GaussianScaler">GaussianScaler</a>))]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@gaussianScaling:io.github.mandar2812.dynaml.pipes.BifurcationPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.GaussianScaler,io.github.mandar2812.dynaml.utils.GaussianScaler)]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@gaussianScaling:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.GaussianScaler,io.github.mandar2812.dynaml.utils.GaussianScaler))]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -473,6 +529,23 @@ data.</p>
 is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><div class="fullcomment"><div class="comment cmt"><p>Perform gaussian normalization on a data stream which
 is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><p>(Stream(training data), Stream(test data))
 </p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#genericReplicationEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="genericReplicationEncoder[I](n:Int)(implicittag:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.pipes.Encoder[I,Array[I]]"></a>
+      <a id="genericReplicationEncoder[I](Int)(ClassTag[I]):Encoder[I,Array[I]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">genericReplicationEncoder</span><span class="tparams">[<span name="I">I</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tag">tag: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.DynaMLPipe.genericReplicationEncoder.I">I</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="io.github.mandar2812.dynaml.DynaMLPipe.genericReplicationEncoder.I">I</span>, <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="io.github.mandar2812.dynaml.DynaMLPipe.genericReplicationEncoder.I">I</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@genericReplicationEncoder[I](n:Int)(implicittag:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.pipes.Encoder[I,Array[I]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -490,19 +563,36 @@ is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><p>(Stream
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#haarWaveletFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="haarWaveletFilter:Int=&gt;io.github.mandar2812.dynaml.pipes.ReversibleScaler[breeze.linalg.DenseVector[Double]]"></a>
-      <a id="haarWaveletFilter:(Int)⇒ReversibleScaler[DenseVector[Double]]"></a>
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#groupedHaarWaveletFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="groupedHaarWaveletFilter:Array[Int]=&gt;io.github.mandar2812.dynaml.wavelets.GroupedHaarWaveletFilter"></a>
+      <a id="groupedHaarWaveletFilter:(Array[Int])⇒GroupedHaarWaveletFilter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">haarWaveletFilter</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">groupedHaarWaveletFilter</span><span class="result">: (<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Int">Int</span>]) ⇒ <a href="wavelets/GroupedHaarWaveletFilter.html" class="extype" name="io.github.mandar2812.dynaml.wavelets.GroupedHaarWaveletFilter">GroupedHaarWaveletFilter</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@haarWaveletFilter:Int=&gt;io.github.mandar2812.dynaml.pipes.ReversibleScaler[breeze.linalg.DenseVector[Double]]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@groupedHaarWaveletFilter:Array[Int]=&gt;io.github.mandar2812.dynaml.wavelets.GroupedHaarWaveletFilter" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#haarWaveletFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="haarWaveletFilter:Int=&gt;io.github.mandar2812.dynaml.wavelets.HaarWaveletFilter"></a>
+      <a id="haarWaveletFilter:(Int)⇒HaarWaveletFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">haarWaveletFilter</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>) ⇒ <a href="wavelets/HaarWaveletFilter.html" class="extype" name="io.github.mandar2812.dynaml.wavelets.HaarWaveletFilter">HaarWaveletFilter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@haarWaveletFilter:Int=&gt;io.github.mandar2812.dynaml.wavelets.HaarWaveletFilter" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -543,23 +633,41 @@ on a (breeze) vector signal.</p>
     </span>
       <p class="shortcomment cmt">A trivial identity data pipe
 </p>
-    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#invHaarWaveletFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="invHaarWaveletFilter:Int=&gt;io.github.mandar2812.dynaml.pipes.Scaler[breeze.linalg.DenseVector[Double]]"></a>
-      <a id="invHaarWaveletFilter:(Int)⇒Scaler[DenseVector[Double]]"></a>
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#invGroupedHaarWaveletFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="invGroupedHaarWaveletFilter:Array[Int]=&gt;io.github.mandar2812.dynaml.wavelets.InvGroupedHaarWaveletFilter"></a>
+      <a id="invGroupedHaarWaveletFilter:(Array[Int])⇒InvGroupedHaarWaveletFilter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">invHaarWaveletFilter</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">invGroupedHaarWaveletFilter</span><span class="result">: (<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Int">Int</span>]) ⇒ <a href="wavelets/InvGroupedHaarWaveletFilter.html" class="extype" name="io.github.mandar2812.dynaml.wavelets.InvGroupedHaarWaveletFilter">InvGroupedHaarWaveletFilter</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@invHaarWaveletFilter:Int=&gt;io.github.mandar2812.dynaml.pipes.Scaler[breeze.linalg.DenseVector[Double]]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@invGroupedHaarWaveletFilter:Array[Int]=&gt;io.github.mandar2812.dynaml.wavelets.InvGroupedHaarWaveletFilter" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Implements the inverse Discrete Haar Wavelet Transform</p>
+      
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#invHaarWaveletFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="invHaarWaveletFilter:Int=&gt;io.github.mandar2812.dynaml.wavelets.InverseHaarWaveletFilter"></a>
+      <a id="invHaarWaveletFilter:(Int)⇒InverseHaarWaveletFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invHaarWaveletFilter</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>) ⇒ <a href="wavelets/InverseHaarWaveletFilter.html" class="extype" name="io.github.mandar2812.dynaml.wavelets.InverseHaarWaveletFilter">InverseHaarWaveletFilter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@invHaarWaveletFilter:Int=&gt;io.github.mandar2812.dynaml.wavelets.InverseHaarWaveletFilter" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Constructs a data pipe which performs inverse discrete Haar wavelet transform
+on a (breeze) vector signal.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -595,18 +703,18 @@ on a (breeze) vector signal.</p>
     </span>
       
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#minMaxScaling" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="minMaxScaling:io.github.mandar2812.dynaml.pipes.BifurcationPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.GaussianScaler,io.github.mandar2812.dynaml.utils.MinMaxScaler)]"></a>
-      <a id="minMaxScaling:BifurcationPipe[Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])],(GaussianScaler,MinMaxScaler)]"></a>
+      <a id="minMaxScaling:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.MinMaxScaler,io.github.mandar2812.dynaml.utils.MinMaxScaler))]"></a>
+      <a id="minMaxScaling:DataPipe[Stream[(DenseVector[Double],DenseVector[Double])],(Stream[(DenseVector[Double],DenseVector[Double])],(MinMaxScaler,MinMaxScaler))]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">minMaxScaling</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<a href="utils/GaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.GaussianScaler">GaussianScaler</a>, <a href="utils/MinMaxScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a>)]</span>
+        <span class="name">minMaxScaling</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<a href="utils/MinMaxScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a>, <a href="utils/MinMaxScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a>))]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@minMaxScaling:io.github.mandar2812.dynaml.pipes.BifurcationPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.GaussianScaler,io.github.mandar2812.dynaml.utils.MinMaxScaler)]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@minMaxScaling:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.MinMaxScaler,io.github.mandar2812.dynaml.utils.MinMaxScaler))]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -615,18 +723,18 @@ return the scaled data as well as a <span class="extype" name="MinMaxScaler">Min
 which can be used to reverse the scaled values to the original
 data.</p>
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#minMaxScalingTrainTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="minMaxScalingTrainTest:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.GaussianScaler,io.github.mandar2812.dynaml.utils.MinMaxScaler))]"></a>
-      <a id="minMaxScalingTrainTest:DataPipe[(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])]),(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])],(GaussianScaler,MinMaxScaler))]"></a>
+      <a id="minMaxScalingTrainTest:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.MinMaxScaler,io.github.mandar2812.dynaml.utils.MinMaxScaler))]"></a>
+      <a id="minMaxScalingTrainTest:DataPipe[(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])]),(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])],(MinMaxScaler,MinMaxScaler))]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">minMaxScalingTrainTest</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]), (<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<a href="utils/GaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.GaussianScaler">GaussianScaler</a>, <a href="utils/MinMaxScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a>))]</span>
+        <span class="name">minMaxScalingTrainTest</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]), (<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<a href="utils/MinMaxScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a>, <a href="utils/MinMaxScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a>))]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@minMaxScalingTrainTest:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.GaussianScaler,io.github.mandar2812.dynaml.utils.MinMaxScaler))]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@minMaxScalingTrainTest:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.MinMaxScaler,io.github.mandar2812.dynaml.utils.MinMaxScaler))]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -652,18 +760,18 @@ is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><p>(Stream
     </span>
       
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#multivariateGaussianScaling" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="multivariateGaussianScaling:io.github.mandar2812.dynaml.pipes.BifurcationPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.MVGaussianScaler,io.github.mandar2812.dynaml.utils.MVGaussianScaler)]"></a>
-      <a id="multivariateGaussianScaling:BifurcationPipe[Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])],(MVGaussianScaler,MVGaussianScaler)]"></a>
+      <a id="multivariateGaussianScaling:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.MVGaussianScaler,io.github.mandar2812.dynaml.utils.MVGaussianScaler))]"></a>
+      <a id="multivariateGaussianScaling:DataPipe[Stream[(DenseVector[Double],DenseVector[Double])],(Stream[(DenseVector[Double],DenseVector[Double])],(MVGaussianScaler,MVGaussianScaler))]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">multivariateGaussianScaling</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<a href="utils/MVGaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MVGaussianScaler">MVGaussianScaler</a>, <a href="utils/MVGaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MVGaussianScaler">MVGaussianScaler</a>)]</span>
+        <span class="name">multivariateGaussianScaling</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], (<a href="utils/MVGaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MVGaussianScaler">MVGaussianScaler</a>, <a href="utils/MVGaussianScaler.html" class="extype" name="io.github.mandar2812.dynaml.utils.MVGaussianScaler">MVGaussianScaler</a>))]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@multivariateGaussianScaling:io.github.mandar2812.dynaml.pipes.BifurcationPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.MVGaussianScaler,io.github.mandar2812.dynaml.utils.MVGaussianScaler)]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@multivariateGaussianScaling:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],(io.github.mandar2812.dynaml.utils.MVGaussianScaler,io.github.mandar2812.dynaml.utils.MVGaussianScaler))]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -742,6 +850,26 @@ data.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#rdfToGLM" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rdfToGLM(modelName:String,y:String,xs:Array[String])(implicitrenjin:org.renjin.script.RenjinScriptEngine):io.github.mandar2812.dynaml.pipes.DataPipe[String,org.renjin.sexp.ListVector]"></a>
+      <a id="rdfToGLM(String,String,Array[String])(RenjinScriptEngine):DataPipe[String,ListVector]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rdfToGLM</span><span class="params">(<span name="modelName">modelName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="y">y: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="renjin">renjin: <span class="extype" name="org.renjin.script.RenjinScriptEngine">RenjinScriptEngine</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="org.renjin.sexp.ListVector">ListVector</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@rdfToGLM(modelName:String,y:String,xs:Array[String])(implicitrenjin:org.renjin.script.RenjinScriptEngine):io.github.mandar2812.dynaml.pipes.DataPipe[String,org.renjin.sexp.ListVector]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create a linear model from a R data frame.</p><div class="fullcomment"><div class="comment cmt"><p>Create a linear model from a R data frame.</p></div><dl class="paramcmts block"><dt class="param">modelName</dt><dd class="cmt"><p>The name of the variable to store model</p></dd><dt class="param">y</dt><dd class="cmt"><p>The name of the target variable</p></dd><dt class="param">xs</dt><dd class="cmt"><p>A list of names denoting input variables</p></dd><dt>returns</dt><dd class="cmt"><p>A <span class="extype" name="DataPipe">DataPipe</span> which takes as input data frame variable name
+        and returns a <span class="extype" name="ListVector">ListVector</span> containing linear model attributes.
+        Also stores the model in the variable given by modelName in the ongoing
+        R session.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#removeMissingLines" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="removeMissingLines:io.github.mandar2812.dynaml.pipes.StreamFilterPipe[String]"></a>
       <a id="removeMissingLines:StreamFilterPipe[String]"></a>
@@ -820,18 +948,18 @@ all but the last element into a feature vector and leave the last
 element as the &quot;target&quot; value.</p><p>This pipe outputs data in a <span class="extype" name="Stream">Stream</span> of <span class="extype" name="Tuple2">Tuple2</span> in the following form</p><p>(Vector(features), value)
 </p></div></div>
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#splitTrainingTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="splitTrainingTest:(Int,Int)=&gt;io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]]"></a>
-      <a id="splitTrainingTest:(Int,Int)⇒BifurcationPipe[(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]]"></a>
+      <a id="splitTrainingTest:(Int,Int)=&gt;io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)])]"></a>
+      <a id="splitTrainingTest:(Int,Int)⇒DataPipe[(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)])]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">splitTrainingTest</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]]</span>
+        <span class="name">splitTrainingTest</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), (<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@splitTrainingTest:(Int,Int)=&gt;io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@splitTrainingTest:(Int,Int)=&gt;io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)])]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1026,18 +1154,18 @@ a file.</p><p>Usage: DynaMLPipe.valuesToFile(&quot;abc.csv&quot;)
         <div id="values" class="values members">
               <h3>Deprecated Value Members</h3>
               <ol><li name="io.github.mandar2812.dynaml.DynaMLPipe#featuresGaussianStandardization" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="featuresGaussianStandardization:io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
-      <a id="featuresGaussianStandardization:BifurcationPipe[(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),(DenseVector[Double],DenseVector[Double])]"></a>
+      <a id="featuresGaussianStandardization:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),((Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double]))]"></a>
+      <a id="featuresGaussianStandardization:DataPipe[(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),((Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),(DenseVector[Double],DenseVector[Double]))]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: ">featuresGaussianStandardization</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), (<span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+        <span class="name deprecated" title="Deprecated: ">featuresGaussianStandardization</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), ((<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]))]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@featuresGaussianStandardization:io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@featuresGaussianStandardization:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),((Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double]))]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1049,18 +1177,18 @@ is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><p>(Stream
               
         </dd><dt>Deprecated</dt><dd class="cmt"></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#trainTestGaussianStandardization" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trainTestGaussianStandardization:io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
-      <a id="trainTestGaussianStandardization:BifurcationPipe[(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),(DenseVector[Double],DenseVector[Double])]"></a>
+      <a id="trainTestGaussianStandardization:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),((Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double]))]"></a>
+      <a id="trainTestGaussianStandardization:DataPipe[(Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),((Stream[(DenseVector[Double],Double)],Stream[(DenseVector[Double],Double)]),(DenseVector[Double],DenseVector[Double]))]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: ">trainTestGaussianStandardization</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), (<span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+        <span class="name deprecated" title="Deprecated: ">trainTestGaussianStandardization</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), ((<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]), (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]))]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@trainTestGaussianStandardization:io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],Double)]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@trainTestGaussianStandardization:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),((Stream[(breeze.linalg.DenseVector[Double],Double)],Stream[(breeze.linalg.DenseVector[Double],Double)]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double]))]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1072,18 +1200,18 @@ is a <span class="extype" name="Tuple2">Tuple2</span> of the form.</p><p>(Stream
               
         </dd><dt>Deprecated</dt><dd class="cmt"></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.DynaMLPipe#trainTestGaussianStandardizationMO" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trainTestGaussianStandardizationMO:io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]"></a>
-      <a id="trainTestGaussianStandardizationMO:BifurcationPipe[(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])]),(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])]),(DenseVector[Double],DenseVector[Double])]"></a>
+      <a id="trainTestGaussianStandardizationMO:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),((Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double]))]"></a>
+      <a id="trainTestGaussianStandardizationMO:DataPipe[(Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])]),((Stream[(DenseVector[Double],DenseVector[Double])],Stream[(DenseVector[Double],DenseVector[Double])]),(DenseVector[Double],DenseVector[Double]))]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: ">trainTestGaussianStandardizationMO</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]), (<span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]), (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+        <span class="name deprecated" title="Deprecated: ">trainTestGaussianStandardizationMO</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[(<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]), ((<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]), (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]))]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@trainTestGaussianStandardizationMO:io.github.mandar2812.dynaml.pipes.BifurcationPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],scala.collection.immutable.Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.DynaMLPipe$@trainTestGaussianStandardizationMO:io.github.mandar2812.dynaml.pipes.DataPipe[(Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),((Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])],Stream[(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double])]),(breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double]))]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
