@@ -9,6 +9,10 @@ class MeasurableFunction[
 Domain1, Domain2](baseRV: RandomVariable[Domain1])(func: DataPipe[Domain1, Domain2])
   extends RandomVariable[Domain2] {
   override val sample: DataPipe[Unit, Domain2] = baseRV.sample > func
+
+  def _baseRandomVar = baseRV
+
+  //def asProbabilityModel = new ProbabilityModel()
 }
 
 object MeasurableFunction {
@@ -23,6 +27,6 @@ class RealValuedMeasurableFunction[Domain1](baseRV: RandomVariable[Domain1])(fun
 
 object RealValuedMeasurableFunction {
 
-  def apply[Domain1](baseRV: RandomVariable[Domain1])(func: DataPipe[Domain1, Double])
-  : RealValuedMeasurableFunction[Domain1] = new RealValuedMeasurableFunction(baseRV)(func)
+  def apply[Domain1](baseRV: RandomVariable[Domain1])(func: (Domain1) => Double)
+  : RealValuedMeasurableFunction[Domain1] = new RealValuedMeasurableFunction(baseRV)(DataPipe(func))
 }

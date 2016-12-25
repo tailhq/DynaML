@@ -44,7 +44,8 @@ class LaplacePosteriorMode[I](l: Likelihood[DenseVector[Double],
     LaplacePosteriorMode.run(
       nPoints, ParamOutEdges,
       this.likelihood, initialP,
-      this.numIterations, identityPipe[(DenseMatrix[Double], DenseVector[Double])])
+      this.numIterations,
+      identityPipe[(DenseMatrix[Double], DenseVector[Double])])
 }
 
 object LaplacePosteriorMode {

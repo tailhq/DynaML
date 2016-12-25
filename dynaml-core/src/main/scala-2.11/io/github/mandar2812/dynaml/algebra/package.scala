@@ -3,6 +3,7 @@ package io.github.mandar2812.dynaml
 import breeze.generic.UFunc
 import breeze.linalg.{DenseVector, diag, product, scaleAdd, sum}
 import breeze.numerics._
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.spark.annotation.Experimental
 
 /**

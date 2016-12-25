@@ -1,5 +1,7 @@
 package io.github.mandar2812.dynaml.pipes
 
+import scalaxy.streams.optimize
+
 /**
   * @author mandar2812 date 23/10/2016.
   *
@@ -14,6 +16,9 @@ trait Encoder[S, D] extends DataPipe[S, D] {
     * Represents the decoding operation.
     */
   val i: DataPipe[D, S]
+
+  def apply[T[S] <: Traversable[S]](data: T[S]):T[D] =
+    optimize { data.map(run).asInstanceOf[T[D]] }
 
   /**
     * Represents the composition of two

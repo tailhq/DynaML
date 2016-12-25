@@ -82,6 +82,8 @@ object DataPipe {
   }
 }
 
+
+
 trait ParallelPipe[-Source1, +Result1, -Source2, +Result2]
   extends DataPipe[(Source1, Source2), (Result1, Result2)] {
 

@@ -25,6 +25,7 @@ package io.github.mandar2812.dynaml.probability
   *
   * @tparam Q The type of observed variable (y)
   * @tparam R The type of conditioning variable (f)
+  * @tparam S Result type of the hessian method.
   * @tparam W The type representing a gaussian distribution for f
   *
   */

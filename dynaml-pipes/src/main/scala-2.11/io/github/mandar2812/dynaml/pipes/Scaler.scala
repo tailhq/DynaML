@@ -50,6 +50,9 @@ trait ReversibleScaler[S] extends Scaler[S] with Encoder[S, S]{
     * */
   override val i: Scaler[S]
 
+  override def apply[T[S] <: Traversable[S]](data: T[S]):T[S] =
+    optimize { data.map(run).asInstanceOf[T[S]] }
+
   def *[T](that: ReversibleScaler[T]) = {
 
     val firstInv = this.i

@@ -19,15 +19,15 @@ trait IIDRandomVariable[D, R <: RandomVariable[D]] extends RandomVariable[Stream
 
 object IIDRandomVariable {
 
-  def apply[D, R <: RandomVariable[D]](base: R)(n: Int) = new IIDRandomVariable[D, R] {
+  def apply[D](base: RandomVariable[D])(n: Int) = new IIDRandomVariable[D, RandomVariable[D]] {
 
     val baseRandomVariable = base
 
     val num = n
   }
 
-  def apply[C, D, R <: RandomVariable[D]](base: DataPipe[C, R])(n: Int) =
-    DataPipe((c: C) => new IIDRandomVariable[D, R] {
+  def apply[C, D](base: DataPipe[C, RandomVariable[D]])(n: Int) =
+    DataPipe((c: C) => new IIDRandomVariable[D, RandomVariable[D]] {
 
       val baseRandomVariable = base(c)
 
