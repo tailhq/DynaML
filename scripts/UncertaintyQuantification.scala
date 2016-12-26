@@ -12,14 +12,14 @@ import spire.implicits._
 import com.quantifind.charts.Highcharts._
 
 
-val num_features = 1
+val num_features: Int = 1
 implicit val ev = VectorField(num_features)
 
 val xPrior = RandomVariable(new Uniform(-4.0, 4.0))
 val xGaussianPrior = GaussianRV(0.0, 1.0)
 val iidXPrior = IIDRandomVarDistr(xPrior) _
 
-val (training, test, noiseLevel) = (100, 500, 0.05)
+val (training, test, noiseLevel): (Int, Int, Double) = (100, 500, 0.05)
 
 val likelihood = DataPipe((x: Double) => GaussianRV(math.atan(1000.0*x*x*x), noiseLevel))
 
@@ -92,7 +92,7 @@ val data2: Stream[(DenseVector[Double], Double)] =
 
 val testData2 = (1 to test).map(_ => model2.sample()).map(c => (DenseVector(c._1), c._2)).toStream
 
-//val perKernel = new PeriodicKernel(2.0, 1.5)
+val perKernel = new PeriodicKernel(2.0, 1.5)
 val noise = new DiracKernel(noiseLevel)
 noise.blocked_hyper_parameters = noise.hyper_parameters
 
