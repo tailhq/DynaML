@@ -32,8 +32,8 @@ DistL <: Density[Domain]](
       prior.underlyingDist(x._1)*likelihood(x._1).underlyingDist(x._2)
   }
 
-  val sample = prior.sample >
-    DataPipe(
+  override val sample = prior.sample >
+    DataPipe[ConditioningSet, ConditioningSet, Domain](
       (c: ConditioningSet) => (c, likelihood(c).sample())
     )
 

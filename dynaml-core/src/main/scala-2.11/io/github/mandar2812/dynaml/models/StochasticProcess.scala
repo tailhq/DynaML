@@ -73,8 +73,6 @@ trait StochasticProcess[T, I, Y, W] extends Model[T, I, Y] {
   * */
 trait SecondOrderProcess[T, I, Y, K, M, W] extends StochasticProcess[T, I, Y, W] {
 
-  private val logger = Logger.getLogger(this.getClass)
-
   /**
     * Mean Function: Takes a member of the index set (input)
     * and returns the corresponding mean of the distribution
@@ -127,10 +125,14 @@ abstract class ContinuousProcess[T, I, Y, W] extends StochasticProcess[T, I, Y, 
   def test(testData: T): Seq[(I, Y, Y, Y, Y)] = {
     logger.info("Generating predictions for test set")
     //Calculate the posterior predictive distribution for the test points.
-    val predictionWithError = this.predictionWithErrorBars(dataAsIndexSeq(testData), errorSigma)
+    val predictionWithError = predictionWithErrorBars(dataAsIndexSeq(testData), errorSigma)
     //Collate the test data with the predictions and error bars
-    dataAsSeq(testData).zip(predictionWithError).map(i => (i._1._1, i._1._2,
-      i._2._2, i._2._3, i._2._4))
+    dataAsSeq(testData)
+      .zip(predictionWithError)
+      .map(i => (
+        i._1._1, i._1._2,
+        i._2._2, i._2._3,
+        i._2._4))
   }
 
 }
