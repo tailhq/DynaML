@@ -35,6 +35,7 @@ import io.github.mandar2812.dynaml.examples._
 import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._
 //The probability API
 import io.github.mandar2812.dynaml.probability._
+import io.github.mandar2812.dynaml.probability.distributions._
 //Wavelet API
 import io.github.mandar2812.dynaml.wavelets._
 //OpenML support
