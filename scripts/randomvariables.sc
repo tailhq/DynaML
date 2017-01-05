@@ -33,3 +33,4 @@ val x = Array.tabulate[(Double, Double)](100)(n => (n*0.03, p.underlyingDist.pdf
 spline(x.toIterable)
 unhold()
 legend(List("Log Skew Gaussian", "Log Gaussian"))
+title("Probability Density Functions")
