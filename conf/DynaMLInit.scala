@@ -4,6 +4,7 @@
 
 //Import breeze for linear algebra
 import breeze.linalg._
+import breeze.stats.distributions._
 //Apache Spark for big data support
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
