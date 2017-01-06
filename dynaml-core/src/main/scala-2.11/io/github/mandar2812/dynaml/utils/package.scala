@@ -268,7 +268,7 @@ package object utils {
     haarMatrixAcc(2, hMat)
   }
 
-  def productField[Domain, Domain1](ev: Field[Domain], ev1: Field[Domain1]): Field[(Domain, Domain1)] =
+  def productField[Domain, Domain1](implicit ev: Field[Domain], ev1: Field[Domain1]): Field[(Domain, Domain1)] =
     new Field[(Domain, Domain1)] {
       override def gcd(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
         (ev.gcd(a._1, b._1), ev1.gcd(a._2, b._2))

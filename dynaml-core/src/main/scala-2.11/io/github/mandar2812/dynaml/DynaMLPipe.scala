@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml
 
 import scala.collection.mutable.{MutableList => ML}
 import breeze.linalg.{DenseMatrix, DenseVector, diag}
+import breeze.math.VectorSpace
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
@@ -30,6 +31,7 @@ import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWavel
 import org.apache.log4j.Logger
 import org.renjin.script.RenjinScriptEngine
 import org.renjin.sexp._
+
 import scalaxy.streams.optimize
 import scala.reflect.ClassTag
 

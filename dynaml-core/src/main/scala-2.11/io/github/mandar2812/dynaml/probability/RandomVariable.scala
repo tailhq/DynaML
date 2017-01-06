@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.probability
 
-import breeze.stats.distributions.{ContinuousDistr, Density, DiscreteDistr}
+import breeze.stats.distributions.{ContinuousDistr, Density, DiscreteDistr, Rand}
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
 import spire.algebra.Field
 import io.github.mandar2812.dynaml.utils._

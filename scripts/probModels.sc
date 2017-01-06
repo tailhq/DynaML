@@ -11,6 +11,7 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability._
 import spire.implicits._
 import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.utils
 
 
 val p = RandomVariable(new Beta(7.5, 7.5))
@@ -44,7 +45,12 @@ hold()
 val likelihood = DataPipe((params: (Double, Double)) =>
   IIDRandomVarDistr(RandomVariable(new Gaussian(params._1, params._2)))(2000))
 
-val gModel = ProbabilityModel(prior, likelihood)
+implicit val pField = utils.productField[Double, Double]
+
+val prop =
+  RandomVariable(new Gaussian(0.0, 1.5)) :* RandomVariable(new Gaussian(0.0, 1.0))
+
+val gModel = new MCMCProbModel(prior, likelihood, prop)
 
 val posterior = gModel.posterior(data)
 

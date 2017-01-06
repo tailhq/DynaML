@@ -37,7 +37,8 @@ DistL <: Density[Domain]](
       (c: ConditioningSet) => (c, likelihood(c).sample())
     )
 
-  val posterior = DataPipe((data: Domain) => {
+  val posterior: DataPipe[Domain, RandomVariable[ConditioningSet]] =
+    DataPipe((data: Domain) => {
 
     val sampl = this.prior.sample
     val q = this.prior.underlyingDist
@@ -76,7 +77,6 @@ DistL <: Density[Domain]](
         accepted_sample
       })
     }
-
   })
 
 }
