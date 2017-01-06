@@ -1,7 +1,8 @@
 package io.github.mandar2812.dynaml.probability
 
-import breeze.stats.distributions.Density
+import breeze.stats.distributions.{Density, Rand}
 import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.probability.distributions.GenericDistribution
 
 import scala.util.Random
 import org.apache.log4j.Logger
@@ -13,11 +14,11 @@ import org.apache.log4j.Logger
 
 class ProbabilityModel[
 ConditioningSet, Domain,
-Dist <: Density[ConditioningSet],
-DistL <: Density[Domain]](
+Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
+DistL <: Density[Domain] with Rand[Domain]](
   p: RandomVarWithDistr[ConditioningSet, Dist],
   c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]])
-  extends RandomVarWithDistr[(ConditioningSet, Domain), Density[(ConditioningSet, Domain)]] {
+  extends RandomVarWithDistr[(ConditioningSet, Domain), GenericDistribution[(ConditioningSet, Domain)]] { self =>
 
   val prior: RandomVarWithDistr[ConditioningSet, Dist] = p
 
@@ -27,9 +28,14 @@ DistL <: Density[Domain]](
 
   var Max_Estimations: Int = 10000
 
-  override val underlyingDist = new Density[(ConditioningSet, Domain)] {
+  override val underlyingDist = new GenericDistribution[(ConditioningSet, Domain)] {
     override def apply(x: (ConditioningSet, Domain)): Double =
       prior.underlyingDist(x._1)*likelihood(x._1).underlyingDist(x._2)
+
+    override def draw() = {
+      val ps = prior.underlyingDist.draw()
+      (ps, likelihood(ps).underlyingDist.draw())
+    }
   }
 
   override val sample = prior.sample >
@@ -47,16 +53,9 @@ DistL <: Density[Domain]](
       likelihood(sampl()).underlyingDist(data)
     }).sum/Max_Estimations.toDouble
 
-    val postD = new Density[ConditioningSet] {
-      override def apply(x: ConditioningSet): Double =
-        prior.underlyingDist(x)*likelihood(x).underlyingDist(data)
-    }
-
-    new RandomVarWithDistr[ConditioningSet, Density[ConditioningSet]] {
+    new RandomVarWithDistr[ConditioningSet, GenericDistribution[ConditioningSet]] { innerself =>
 
       val logger = Logger.getLogger(this.getClass)
-
-      override val underlyingDist: Density[ConditioningSet] = postD
 
       override val sample: DataPipe[Unit, ConditioningSet] = DataPipe(() => {
         val iterations = 0
@@ -76,6 +75,14 @@ DistL <: Density[Domain]](
 
         accepted_sample
       })
+
+      override val underlyingDist: GenericDistribution[ConditioningSet] = new GenericDistribution[ConditioningSet] {
+        override def apply(x: ConditioningSet): Double =
+          prior.underlyingDist(x)*likelihood(x).underlyingDist(data)
+
+        override def draw() = innerself.sample()
+      }
+
     }
   })
 
@@ -84,8 +91,8 @@ DistL <: Density[Domain]](
 object ProbabilityModel {
   def apply[
   ConditioningSet, Domain,
-  Dist <: Density[ConditioningSet],
-  DistL <: Density[Domain]
+  Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
+  DistL <: Density[Domain] with Rand[Domain]
   ](p: RandomVarWithDistr[ConditioningSet, Dist],
     c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]]) = new ProbabilityModel(p,c)
 }
