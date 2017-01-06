@@ -36,13 +36,13 @@ val gModel = new ContinuousMCMCModel(prior, likelihood, prop, 10000L)
 
 val posterior = gModel.posterior(data)
 
-val samples = (1 to 1000).map(_ => {posterior.sample()})
+val samples = (1 to 3000).map(_ => {posterior.sample()})
 
 histogram(data)
 title("Histogram of data")
 
 
-scatter(iidPrior(1000).sample())
+scatter(iidPrior(3000).sample())
 hold()
 scatter(samples)
 legend(List("Prior", "Posterior"))

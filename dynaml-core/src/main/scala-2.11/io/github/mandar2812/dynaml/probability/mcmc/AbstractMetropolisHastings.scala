@@ -13,16 +13,11 @@ case class AbstractMetropolisHastings[T, Dist <: Density[T] with Rand[T]](
   implicit rand:RandBasis=Rand, f: Field[T]) extends
   BaseMetropolisHastings[T](logLikelihoodF, init, burnIn, dropCount)(rand) { self =>
 
-  def proposalDraw(x: T): T = f.plus(proposalStep.draw(),x)
-
-  //val likelihood = logLikelihood
+  override def proposalDraw(x: T): T = f.plus(proposalStep.draw(),x)
 
   val proposal = proposalStep
 
-
   def observe(x: T) = this.copy(logLikelihoodF, proposal, burnIn = 0L, init = x)
-
-  //override def likelihoodRatio(start: T, end: T): Double = math.exp(logLikelihoodFunc(end) - logLikelihoodFunc(start))
 
   override def logTransitionProbability(start: T, end: T) = 0.0
 }
