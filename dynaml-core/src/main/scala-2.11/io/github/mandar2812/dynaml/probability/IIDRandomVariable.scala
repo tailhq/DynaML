@@ -1,7 +1,8 @@
 package io.github.mandar2812.dynaml.probability
 
-import breeze.stats.distributions.{ContinuousDistr, Density}
+import breeze.stats.distributions.{ContinuousDistr, Density, Rand}
 import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.probability.distributions.GenericDistribution
 
 /**
   * An independent and identically distributed
@@ -41,9 +42,10 @@ object IIDRandomVariable {
   * An i.i.d random variable with a defined distribution.
   * */
 trait IIDRandomVarDistr[
-D, Dist <: Density[D],
-R <: RandomVarWithDistr[D, Dist]] extends IIDRandomVariable[D, R]
-  with RandomVarWithDistr[Stream[D], Density[Stream[D]]] {
+D, Dist <: Density[D] with Rand[D],
+R <: RandomVarWithDistr[D, Dist]] extends
+  RandomVarWithDistr[Stream[D], Density[Stream[D]] with Rand[Stream[D]]] with
+  IIDRandomVariable[D, R] {
 
   val baseRandomVariable: R
 
@@ -51,20 +53,36 @@ R <: RandomVarWithDistr[D, Dist]] extends IIDRandomVariable[D, R]
 
   override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.sample()))
 
-  override val underlyingDist = new Density[Stream[D]] {
+  override val underlyingDist = new GenericDistribution[Stream[D]] {
     override def apply(x: Stream[D]): Double = x.map(baseRandomVariable.underlyingDist(_)).product
+
+    override def draw() = Stream.tabulate[D](num)(_ => baseRandomVariable.underlyingDist.draw())
   }
 }
 
+trait IIDContinuousRV[D] extends
+  ContinuousDistrRV[Stream[D]] with IIDRandomVariable[D, ContinuousDistrRV[D]] {
+
+  override val underlyingDist = new ContinuousDistr[Stream[D]] {
+
+    override def unnormalizedLogPdf(x: Stream[D]) = x.map(baseRandomVariable.underlyingDist.unnormalizedLogPdf).sum
+
+    override def logNormalizer = num*baseRandomVariable.underlyingDist.logNormalizer
+
+    override def draw() = Stream.tabulate[D](num)(_ => baseRandomVariable.underlyingDist.draw())
+  }
+
+}
+
 object IIDRandomVarDistr {
-  def apply[D](base : RandomVarWithDistr[D, Density[D]])(n: Int) =
-    new IIDRandomVarDistr[D, Density[D], RandomVarWithDistr[D, Density[D]]] {
+  def apply[D, Dist <: Density[D] with Rand[D]](base : RandomVarWithDistr[D, Dist])(n: Int) =
+    new IIDRandomVarDistr[D, Dist, RandomVarWithDistr[D, Dist]] {
       val baseRandomVariable = base
       val num = n
     }
 
   def apply[D](base : ContinuousDistrRV[D])(n: Int) =
-    new IIDRandomVarDistr[D, ContinuousDistr[D], ContinuousDistrRV[D]] {
+    new IIDContinuousRV[D] {
       val baseRandomVariable = base
       val num = n
     }

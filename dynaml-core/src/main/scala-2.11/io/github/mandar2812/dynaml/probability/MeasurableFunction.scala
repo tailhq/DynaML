@@ -77,7 +77,7 @@ object RealValuedMeasurableFunction {
 class MeasurableDistrRV[Domain1, Domain2, Jacobian](
   baseRV: ContinuousDistrRV[Domain1])(p: PushforwardMap[Domain1, Domain2, Jacobian])
   extends MeasurableFunction[Domain1, Domain2](baseRV)(p)
-    with ContinuousDistrRV[Domain2] {
+    with RandomVarWithDistr[Domain2, ContinuousDistr[Domain2]] {
 
   override val underlyingDist = new ContinuousDistr[Domain2] {
     override def unnormalizedLogPdf(x: Domain2) =

@@ -1,7 +1,8 @@
 package io.github.mandar2812.dynaml.probability
 
+import breeze.numerics.log1p
 import spire.algebra.Field
-import breeze.stats.distributions.{Density, Rand}
+import breeze.stats.distributions.{ContinuousDistr, Density, Rand}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.mcmc.AbstractMetropolisHastings
 
@@ -14,10 +15,11 @@ import io.github.mandar2812.dynaml.probability.mcmc.AbstractMetropolisHastings
 class MCMCProbModel[
 ConditioningSet, Domain,
 Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
-DistL <: Density[Domain]](
+DistL <: Density[Domain] with Rand[Domain]](
   p: RandomVarWithDistr[ConditioningSet, Dist],
   c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]],
-  proposalDist: RandomVarWithDistr[ConditioningSet, Dist])(
+  proposalDist: RandomVarWithDistr[ConditioningSet, Dist],
+  burnIn: Long = 1000L)(
   implicit vectorSpace: Field[ConditioningSet])
   extends ProbabilityModel[ConditioningSet, Domain, Dist, DistL](p, c) {
 
@@ -30,9 +32,9 @@ DistL <: Density[Domain]](
     }
 
     //Initialize an MCMC sampler
-    val sampler = new AbstractMetropolisHastings[ConditioningSet](
+    val sampler = new AbstractMetropolisHastings[ConditioningSet, Dist](
       logLikelihoodFunc, proposalDist.underlyingDist,
-      prior.sample(), burnIn = 1000L)
+      prior.sample(), burnIn)
 
     RandomVariable(() => sampler.draw())
   })
@@ -42,9 +44,37 @@ object MCMCProbModel {
   def apply[
   ConditioningSet, Domain,
   Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
-  DistL <: Density[Domain]
+  DistL <: Density[Domain] with Rand[Domain]
   ](p: RandomVarWithDistr[ConditioningSet, Dist],
     c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]],
     proposalDist: RandomVarWithDistr[ConditioningSet, Dist])(
     implicit vectorSpace: Field[ConditioningSet]) = new MCMCProbModel(p, c, proposalDist)
 }
+
+class ContinuousMCMCModel[
+ConditioningSet, Domain](
+  p: ContinuousDistrRV[ConditioningSet],
+  c: DataPipe[ConditioningSet, ContinuousDistrRV[Domain]],
+  proposalDist: RandomVarWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]],
+  burnIn: Long = 1000L)(
+  implicit vectorSpace: Field[ConditioningSet])
+  extends MCMCProbModel[ConditioningSet, Domain,
+    ContinuousDistr[ConditioningSet], ContinuousDistr[Domain]](p, c, proposalDist, burnIn) {
+
+
+  override val posterior = DataPipe((data: Domain) => {
+
+    val logLikelihoodFunc = (candidate: ConditioningSet) => {
+      log1p(prior.underlyingDist.pdf(candidate)) +
+        log1p(likelihood(candidate).underlyingDist.pdf(data))
+    }
+
+    //Initialize an MCMC sampler
+    val sampler = AbstractMetropolisHastings(
+      logLikelihoodFunc, proposalDist.underlyingDist,
+      prior.sample(), burnIn)
+
+    RandomVariable(() => sampler.draw())
+  })
+}
+

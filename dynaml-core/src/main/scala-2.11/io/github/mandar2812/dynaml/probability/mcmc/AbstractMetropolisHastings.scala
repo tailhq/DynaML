@@ -2,21 +2,25 @@ package io.github.mandar2812.dynaml.probability.mcmc
 
 import spire.algebra.Field
 import breeze.stats.distributions.{Density, Rand, RandBasis}
-import breeze.stats.mcmc.BaseMetropolisHastings
+import breeze.stats.mcmc.{BaseMetropolisHastings, SymmetricMetropolisHastings}
 
 /**
   * Created by mandar on 06/01/2017.
   */
-case class AbstractMetropolisHastings[T](
-  logLikelihood: T => Double, proposalStep: Density[T] with Rand[T],
+case class AbstractMetropolisHastings[T, Dist <: Density[T] with Rand[T]](
+  logLikelihood: T => Double, proposalStep: Dist,
   init: T, burnIn: Long = 0, dropCount: Int = 0)(
   implicit rand:RandBasis=Rand, f: Field[T]) extends
-  BaseMetropolisHastings[T](logLikelihood, init, burnIn, dropCount)(rand) {
+  BaseMetropolisHastings[T](logLikelihood, init, burnIn, dropCount)(rand)
+  with SymmetricMetropolisHastings[T] { self =>
 
   def proposalDraw(x: T): T = f.plus(proposalStep.draw(),x)
 
+  val likelihood = logLikelihood
 
-  def observe(x: T) = this.copy(burnIn=0, init = x)
+  val proposal = proposalStep
 
-  override def logTransitionProbability(start: T, end: T) = proposalStep.logApply(f.minus(end, start))
+
+  def observe(x: T) = this.copy(likelihood, proposal, burnIn = 0L, init = x)
+
 }
