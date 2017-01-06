@@ -19,7 +19,9 @@ under the License.
 package io.github.mandar2812.dynaml.probability
 
 import breeze.stats.distributions.{ContinuousDistr, Density, DiscreteDistr, Rand}
+import breeze.stats.mcmc.ThreadedBufferedRand
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
+import io.github.mandar2812.dynaml.probability.distributions.GenericDistribution
 import spire.algebra.Field
 import io.github.mandar2812.dynaml.utils._
 
@@ -84,7 +86,7 @@ trait HasDistribution[Domain] {
     * function is represented as a breeze
     * [[Density]] object.
     * */
-  val underlyingDist: Density[Domain]
+  val underlyingDist: Density[Domain] with Rand[Domain]
 }
 
 /**
@@ -203,7 +205,7 @@ trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
   * @tparam Dist A breeze probability density defined on the
   *              [[Domain]]
   * */
-trait RandomVarWithDistr[Domain, Dist <: Density[Domain]]
+trait RandomVarWithDistr[Domain, Dist <: Density[Domain] with Rand[Domain]]
   extends RandomVariable[Domain]
     with HasDistribution[Domain] {
 
@@ -216,12 +218,14 @@ trait RandomVarWithDistr[Domain, Dist <: Density[Domain]]
     * has a defined probability distribution.
     *
     * */
-  def :*[Domain1, Dist1 <: Density[Domain1]](other: RandomVarWithDistr[Domain1, Dist1]):
-  RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] =
-  new RandomVarWithDistr[(Domain, Domain1), Density[(Domain, Domain1)]] {
+  def :*[Domain1, Dist1 <: Density[Domain1] with Rand[Domain1]](other: RandomVarWithDistr[Domain1, Dist1]):
+  RandomVarWithDistr[(Domain, Domain1), GenericDistribution[(Domain, Domain1)]] =
+  new RandomVarWithDistr[(Domain, Domain1), GenericDistribution[(Domain, Domain1)]] {
 
-    val underlyingDist: Density[(Domain, Domain1)] = new Density[(Domain, Domain1)] {
+    val underlyingDist = new GenericDistribution[(Domain, Domain1)] {
       override def apply(x: (Domain, Domain1)): Double = self.underlyingDist(x._1)*other.underlyingDist(x._2)
+
+      override def draw() = (self.underlyingDist.draw(), other.underlyingDist.draw())
     }
 
     val sample = BifurcationPipe(self.sample, other.sample)
@@ -242,8 +246,8 @@ trait RandomVarWithDistr[Domain, Dist <: Density[Domain]]
   *
   * */
 trait ContinuousDistrRV[Domain]
-  extends ContinuousRandomVariable[Domain]
-    with RandomVarWithDistr[Domain, ContinuousDistr[Domain]] {
+  extends RandomVarWithDistr[Domain, ContinuousDistr[Domain]]
+    with ContinuousRandomVariable[Domain] { self =>
 
   override val underlyingDist: ContinuousDistr[Domain]
 
@@ -251,25 +255,21 @@ trait ContinuousDistrRV[Domain]
 
   def :*[Domain1](other: ContinuousDistrRV[Domain1])(implicit ev: Field[Domain], ev1: Field[Domain1])
   : ContinuousDistrRV[(Domain, Domain1)] = {
-    val sam = this.underlyingDist.draw _
-    val dist = this.underlyingDist
-    val sampleFirst = this.sample
-
     implicit val ev3: Field[(Domain, Domain1)] = productField(ev, ev1)
 
     new ContinuousDistrRV[(Domain, Domain1)] {
 
       val underlyingDist: ContinuousDistr[(Domain, Domain1)] = new ContinuousDistr[(Domain, Domain1)] {
         override def unnormalizedLogPdf(x: (Domain, Domain1)): Double =
-          dist.unnormalizedLogPdf(x._1) +
+          self.underlyingDist.unnormalizedLogPdf(x._1) +
           other.underlyingDist.unnormalizedLogPdf(x._2)
 
-        override def logNormalizer: Double = dist.logNormalizer + other.underlyingDist.logNormalizer
+        override def logNormalizer: Double = self.underlyingDist.logNormalizer + other.underlyingDist.logNormalizer
 
-        override def draw(): (Domain, Domain1) = (sam(), other.underlyingDist.draw())
+        override def draw(): (Domain, Domain1) = (self.underlyingDist.draw(), other.underlyingDist.draw())
       }
 
-      override val sample = BifurcationPipe(sampleFirst, other.sample)
+      override val sample = BifurcationPipe(self.sample, other.sample)
     }
 
   }
@@ -310,6 +310,15 @@ abstract class DiscreteDistrRV[Domain]
 
 }
 
+class ThreadedRandomVariable[Domain](generator: ThreadedBufferedRand[Domain]) extends RandomVariable[Domain] {
+  /**
+    * Generate a sample from
+    * the random variable
+    *
+    **/
+  override val sample = DataPipe(() => generator.draw)
+}
+
 /**
   * Companion object of the [[RandomVariable]] class.
   * Contains apply methods which can create random variables.
@@ -348,4 +357,11 @@ object RandomVariable {
   def apply[O](d: DiscreteDistr[O]) = new DiscreteDistrRV[O] {
     override val underlyingDist = d
   }
+
+  def apply[O](g: ThreadedBufferedRand[O]) = new ThreadedRandomVariable[O](g)
+
+  def apply[O](r: Rand[O]) = new RandomVariable[O] {
+    val sample = DataPipe(() => r.draw)
+  }
+
 }
