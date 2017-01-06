@@ -65,8 +65,8 @@ ConditioningSet, Domain](
   override val posterior = DataPipe((data: Domain) => {
 
     val logLikelihoodFunc = (candidate: ConditioningSet) => {
-      log1p(prior.underlyingDist.pdf(candidate)) +
-        log1p(likelihood(candidate).underlyingDist.pdf(data))
+      prior.underlyingDist.logPdf(candidate) +
+        likelihood(candidate).underlyingDist.logPdf(data)
     }
 
     //Initialize an MCMC sampler

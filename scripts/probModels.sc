@@ -32,7 +32,7 @@ implicit val pField = utils.productField[Double, Double]
 val prop =
   RandomVariable(new Gaussian(0.0, 0.4)) :* RandomVariable(new Gaussian(0.0, 0.1))
 
-val gModel = new ContinuousMCMCModel(prior, likelihood, prop, 100000L)
+val gModel = new ContinuousMCMCModel(prior, likelihood, prop, 10000L)
 
 val posterior = gModel.posterior(data)
 
