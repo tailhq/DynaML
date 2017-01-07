@@ -64,7 +64,7 @@ class ContinuousMCMCModel[ConditioningSet, Domain](
 
     //Initialize an MCMC sampler
     val sampler = GeneralMetropolisHastings(
-      logLikelihoodFunc, proposalDist.underlyingDist,
+      LikelihoodModel(logLikelihoodFunc), proposalDist.underlyingDist,
       prior.sample(), burnIn)
 
     RandomVariable(() => sampler.draw())
