@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.probability
 
-import breeze.stats.distributions.{Density, Rand}
+import spire.algebra.Field
+import breeze.stats.distributions.{ContinuousDistr, Density, Rand}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.distributions.GenericDistribution
 
@@ -12,13 +13,14 @@ import org.apache.log4j.Logger
   * Created by mandar on 26/7/16.
   */
 
-class ProbabilityModel[
+abstract class ProbabilityModel[
 ConditioningSet, Domain,
 Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
-DistL <: Density[Domain] with Rand[Domain]](
+DistL <: Density[Domain] with Rand[Domain],
+JointDist <: Density[(ConditioningSet, Domain)] with Rand[(ConditioningSet, Domain)]](
   p: RandomVarWithDistr[ConditioningSet, Dist],
   c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]])
-  extends RandomVarWithDistr[(ConditioningSet, Domain), GenericDistribution[(ConditioningSet, Domain)]] { self =>
+  extends RandomVarWithDistr[(ConditioningSet, Domain), JointDist] { self =>
 
   val prior: RandomVarWithDistr[ConditioningSet, Dist] = p
 
@@ -27,16 +29,6 @@ DistL <: Density[Domain] with Rand[Domain]](
   var Max_Candidates: Int = 1000
 
   var Max_Estimations: Int = 10000
-
-  override val underlyingDist = new GenericDistribution[(ConditioningSet, Domain)] {
-    override def apply(x: (ConditioningSet, Domain)): Double =
-      prior.underlyingDist(x._1)*likelihood(x._1).underlyingDist(x._2)
-
-    override def draw() = {
-      val ps = prior.underlyingDist.draw()
-      (ps, likelihood(ps).underlyingDist.draw())
-    }
-  }
 
   override val sample = prior.sample >
     DataPipe[ConditioningSet, ConditioningSet, Domain](
@@ -89,10 +81,9 @@ DistL <: Density[Domain] with Rand[Domain]](
 }
 
 object ProbabilityModel {
-  def apply[
-  ConditioningSet, Domain,
-  Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
-  DistL <: Density[Domain] with Rand[Domain]
-  ](p: RandomVarWithDistr[ConditioningSet, Dist],
-    c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]]) = new ProbabilityModel(p,c)
+  def apply[ConditioningSet, Domain](
+    p: ContinuousDistrRV[ConditioningSet], c: DataPipe[ConditioningSet, ContinuousDistrRV[Domain]],
+    proposalDist: RandomVarWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]])(
+     implicit vectorSpace: Field[ConditioningSet]) =
+    new ContinuousMCMCModel(p, c, proposalDist)
 }

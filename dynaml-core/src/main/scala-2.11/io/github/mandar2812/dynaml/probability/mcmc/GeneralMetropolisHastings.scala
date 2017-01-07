@@ -1,14 +1,14 @@
 package io.github.mandar2812.dynaml.probability.mcmc
 
 import spire.algebra.Field
-import breeze.stats.distributions.{Density, Rand, RandBasis}
-import breeze.stats.mcmc.{BaseMetropolisHastings, SymmetricMetropolisHastings}
+import breeze.stats.distributions.{ContinuousDistr, Density, Rand, RandBasis}
+import breeze.stats.mcmc.BaseMetropolisHastings
 
 /**
   * Created by mandar on 06/01/2017.
   */
-case class AbstractMetropolisHastings[T, Dist <: Density[T] with Rand[T]](
-  logLikelihoodF: T => Double, proposalStep: Dist,
+case class GeneralMetropolisHastings[T](
+  logLikelihoodF: T => Double, proposalStep: ContinuousDistr[T],
   init: T, burnIn: Long = 0, dropCount: Int = 0)(
   implicit rand:RandBasis=Rand, f: Field[T]) extends
   BaseMetropolisHastings[T](logLikelihoodF, init, burnIn, dropCount)(rand) { self =>

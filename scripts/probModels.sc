@@ -32,9 +32,10 @@ implicit val pField = utils.productField[Double, Double]
 val prop =
   RandomVariable(new Gaussian(0.0, 0.4)) :* RandomVariable(new Gaussian(0.0, 0.1))
 
-val gModel = new ContinuousMCMCModel(prior, likelihood, prop, 10000L)
+val gModel: ContinuousMCMCModel[(Double, Double), Stream[Double]] =
+  new ContinuousMCMCModel(prior, likelihood, prop, 10000L)
 
-val posterior = gModel.posterior(data)
+val posterior: RandomVariable[(Double, Double)] = gModel.posterior(data)
 
 val samples = (1 to 3000).map(_ => {posterior.sample()})
 
@@ -51,7 +52,7 @@ yAxis("Std Deviation")
 unhold()
 
 
-
+/*
 val p = RandomVariable(new Beta(7.5, 7.5))
 
 val coinLikelihood = DataPipe((p: Double) => BinomialRV(500, p))
@@ -65,3 +66,4 @@ hold()
 histogram((1 to 2000).map(_ => post.sample()))
 
 unhold()
+*/
