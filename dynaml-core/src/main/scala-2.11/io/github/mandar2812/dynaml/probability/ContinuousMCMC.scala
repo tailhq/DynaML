@@ -1,42 +1,33 @@
 package io.github.mandar2812.dynaml.probability
 
 import spire.algebra.Field
-import breeze.stats.distributions.{ContinuousDistr, Density, Rand}
+import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.distributions.{AbstractContinuousDistr, GenericDistribution}
+import io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr
 import io.github.mandar2812.dynaml.probability.mcmc.GeneralMetropolisHastings
 
 /**
-  * @author mandar2812 date 05/01/2017.
+  * @author mandar2812 date 06/01/2017
   *
-  * A Bayesian inference model using Metropolis-Hastings
-  * to sample from the posterior distribution.
-  */
-abstract class MCMCProbModel[
-ConditioningSet, Domain,
-Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
-DistL <: Density[Domain] with Rand[Domain],
-JointDist <: GenericDistribution[(ConditioningSet, Domain)]](
-  p: RandomVarWithDistr[ConditioningSet, Dist],
-  c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]],
-  proposalDist: RandomVarWithDistr[ConditioningSet, Dist],
-  burnIn: Long = 1000L)(
-  implicit vectorSpace: Field[ConditioningSet])
-  extends ProbabilityModel[ConditioningSet, Domain, Dist, DistL, JointDist](p, c) {
-
-}
-
-class ContinuousMCMCModel[ConditioningSet, Domain](
+  * Monte Carlo based bayesian inference model where the parameter
+  * space is known to be continuous and hence represented via
+  * a [[ContinuousDistrRV]] instance.
+  *
+  * @tparam ConditioningSet The type representing the model parameters
+  * @tparam Domain The type representing the observed data.
+  *
+  * @param p The prior distribution on model parameters
+  * @param c The likelihood of the data given a particular value of parameters
+  * */
+class ContinuousMCMC[ConditioningSet, Domain](
   p: ContinuousDistrRV[ConditioningSet],
   c: DataPipe[ConditioningSet, ContinuousDistrRV[Domain]],
   proposalDist: RandomVarWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]],
   burnIn: Long = 1000L)(implicit vectorSpace: Field[ConditioningSet])
-  extends MCMCProbModel[
-    ConditioningSet, Domain,
+  extends RejectionSamplingScheme[ConditioningSet, Domain,
     ContinuousDistr[ConditioningSet],
     ContinuousDistr[Domain],
-    AbstractContinuousDistr[(ConditioningSet, Domain)]
-    ](p, c, proposalDist, burnIn) {
+    AbstractContinuousDistr[(ConditioningSet, Domain)]](p, c) {
 
 
   override val underlyingDist = new AbstractContinuousDistr[(ConditioningSet, Domain)] {

@@ -32,8 +32,16 @@ implicit val pField = utils.productField[Double, Double]
 val prop =
   RandomVariable(new Gaussian(0.0, 0.4)) :* RandomVariable(new Gaussian(0.0, 0.1))
 
-val gModel: ContinuousMCMCModel[(Double, Double), Stream[Double]] =
-  new ContinuousMCMCModel(prior, likelihood, prop, 10000L)
+val gModel: ContinuousMCMC[(Double, Double), Stream[Double]] =
+  new ContinuousMCMC(prior, likelihood, prop, 10000L)
+
+val dataM: (Stream[Double], Stream[Double]) => Double = (xs, ys) => {
+  val n = xs.length.toDouble
+  xs.zip(ys).map(c => math.abs(c._1 - c._2)).sum/n
+}
+
+val abcModel = ApproxBayesComputation(prior, likelihood, dataM)
+val abcPosterior = abcModel.posterior(data)
 
 val posterior: RandomVariable[(Double, Double)] = gModel.posterior(data)
 
@@ -52,18 +60,24 @@ yAxis("Std Deviation")
 unhold()
 
 
-/*
+
 val p = RandomVariable(new Beta(7.5, 7.5))
 
 val coinLikelihood = DataPipe((p: Double) => BinomialRV(500, p))
 
-val c_model = ProbabilityModel(p, coinLikelihood)
+val m: (Int, Int) => Double = (nh, nh1) => math.abs(math.log(nh.toDouble/nh1))
+
+val c_model = ApproxBayesComputation(p, coinLikelihood, m)
+
+c_model.tolerance_(0.05)
 
 val post = c_model.posterior(350)
 
+val postSamples = (1 to 2000).map(_ => post.sample())
+
 histogram((1 to 2000).map(_ => p.sample()))
 hold()
-histogram((1 to 2000).map(_ => post.sample()))
+histogram(postSamples)
 
 unhold()
-*/
+

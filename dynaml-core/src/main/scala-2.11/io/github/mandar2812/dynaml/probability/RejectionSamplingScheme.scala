@@ -13,18 +13,22 @@ import org.apache.log4j.Logger
   * Created by mandar on 26/7/16.
   */
 
-abstract class ProbabilityModel[
+abstract class RejectionSamplingScheme[
 ConditioningSet, Domain,
 Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
 DistL <: Density[Domain] with Rand[Domain],
 JointDist <: Density[(ConditioningSet, Domain)] with Rand[(ConditioningSet, Domain)]](
   p: RandomVarWithDistr[ConditioningSet, Dist],
   c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]])
-  extends RandomVarWithDistr[(ConditioningSet, Domain), JointDist] { self =>
+  extends RandomVarWithDistr[(ConditioningSet, Domain), JointDist]
+    with BayesJointProbabilityScheme[
+    ConditioningSet, Domain,
+    RandomVarWithDistr[ConditioningSet, Dist],
+    RandomVarWithDistr[Domain, DistL]] { self =>
 
-  val prior: RandomVarWithDistr[ConditioningSet, Dist] = p
+  override val prior: RandomVarWithDistr[ConditioningSet, Dist] = p
 
-  val likelihood: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]] = c
+  override val likelihood: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]] = c
 
   var Max_Candidates: Int = 1000
 
@@ -35,7 +39,7 @@ JointDist <: Density[(ConditioningSet, Domain)] with Rand[(ConditioningSet, Doma
       (c: ConditioningSet) => (c, likelihood(c).sample())
     )
 
-  val posterior: DataPipe[Domain, RandomVariable[ConditioningSet]] =
+  override val posterior: DataPipe[Domain, RandomVariable[ConditioningSet]] =
     DataPipe((data: Domain) => {
 
     val sampl = this.prior.sample
@@ -80,10 +84,10 @@ JointDist <: Density[(ConditioningSet, Domain)] with Rand[(ConditioningSet, Doma
 
 }
 
-object ProbabilityModel {
+object RejectionSamplingScheme {
   def apply[ConditioningSet, Domain](
     p: ContinuousDistrRV[ConditioningSet], c: DataPipe[ConditioningSet, ContinuousDistrRV[Domain]],
     proposalDist: RandomVarWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]])(
      implicit vectorSpace: Field[ConditioningSet]) =
-    new ContinuousMCMCModel(p, c, proposalDist)
+    new ContinuousMCMC(p, c, proposalDist)
 }

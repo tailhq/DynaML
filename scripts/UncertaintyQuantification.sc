@@ -23,7 +23,7 @@ val (training, test, noiseLevel): (Int, Int, Double) = (100, 500, 0.05)
 
 val likelihood = DataPipe((x: Double) => GaussianRV(math.atan(1000.0*x*x*x), noiseLevel))
 
-val model = ProbabilityModel(xPrior, likelihood)
+val model = RejectionSamplingScheme(xPrior, likelihood)
 
 val data: Stream[(DenseVector[Double], Double)] =
   (1 to training).map(_ => model.sample()).map(c => (DenseVector(c._1), c._2)).toStream
@@ -53,7 +53,7 @@ val gpLikelihood = DataPipe((x: Double) => {
   GaussianRV(pD.mu.toBreezeVector(0), pD.covariance.toBreezeMatrix(0,0))
 })
 
-val gpProbModel = ProbabilityModel(xPrior, gpLikelihood)
+val gpProbModel = RejectionSamplingScheme(xPrior, gpLikelihood)
 
 val gpTestSet = (1 to testData.length).map(_ => gpProbModel.sample()).toStream
 
@@ -85,7 +85,7 @@ legend(List("Histogram of actual test data",
 // Example 2
 val likelihood2 = DataPipe((x: Double) => GaussianRV(1/math.pow(2.0 + math.sin(3*math.Pi*x), 2.0), noiseLevel))
 
-val model2 = ProbabilityModel(xPrior, likelihood2)
+val model2 = RejectionSamplingScheme(xPrior, likelihood2)
 
 val data2: Stream[(DenseVector[Double], Double)] =
   (1 to training).map(_ => model2.sample()).map(c => (DenseVector(c._1), c._2)).toStream
@@ -114,7 +114,7 @@ val gpLikelihood2 = DataPipe((x: Double) => {
   GaussianRV(pD.mu.toBreezeVector(0), pD.covariance.toBreezeMatrix(0,0))
 })
 
-val gpProbModel2 = ProbabilityModel(xPrior, gpLikelihood2)
+val gpProbModel2 = RejectionSamplingScheme(xPrior, gpLikelihood2)
 
 val gpTestSet2 = (1 to testData2.length).map(_ => gpProbModel2.sample()).toStream
 //scatter(gpTestSet2)
@@ -161,7 +161,7 @@ val omega = featuresPrior.sample()
 val likelihoodMult = DataPipe((x: DenseVector[Double]) =>
   GaussianRV(1/math.pow(2.0 + math.sin(omega dot x), 2.0), noiseLevel))
 
-val model3 = ProbabilityModel(featuresPrior, likelihoodMult)
+val model3 = RejectionSamplingScheme(featuresPrior, likelihoodMult)
 
 val data3: Stream[(DenseVector[Double], Double)] =
   (1 to training).map(_ => model3.sample()).toStream
@@ -197,7 +197,7 @@ val gpLikelihood3 = DataPipe((x: DenseVector[Double]) => {
   GaussianRV(pD.mu(0), pD.covariance(0,0))
 })
 
-val gpProbModel3 = ProbabilityModel(featuresPrior, gpLikelihood3)
+val gpProbModel3 = RejectionSamplingScheme(featuresPrior, gpLikelihood3)
 
 val gpTestSet3 = (1 to testData3.length).map(_ => gpProbModel3.sample()).toStream
 
