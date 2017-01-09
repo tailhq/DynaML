@@ -149,6 +149,40 @@ Contains apply methods which can create random variables.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.RandomVariable#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply[O](r:breeze.stats.distributions.Rand[O]):io.github.mandar2812.dynaml.probability.RandomVariable[O]"></a>
+      <a id="apply[O](Rand[O]):RandomVariable[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="O">O</span>]</span><span class="params">(<span name="r">r: <span class="extype" name="breeze.stats.distributions.Rand">Rand</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>)</span><span class="result">: <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.RandomVariable$@apply[O](r:breeze.stats.distributions.Rand[O]):io.github.mandar2812.dynaml.probability.RandomVariable[O]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.probability.RandomVariable#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply[O](g:breeze.stats.mcmc.ThreadedBufferedRand[O]):io.github.mandar2812.dynaml.probability.ThreadedRandomVariable[O]"></a>
+      <a id="apply[O](ThreadedBufferedRand[O]):ThreadedRandomVariable[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="O">O</span>]</span><span class="params">(<span name="g">g: <span class="extype" name="breeze.stats.mcmc.ThreadedBufferedRand">ThreadedBufferedRand</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>)</span><span class="result">: <a href="ThreadedRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ThreadedRandomVariable">ThreadedRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.RandomVariable$@apply[O](g:breeze.stats.mcmc.ThreadedBufferedRand[O]):io.github.mandar2812.dynaml.probability.ThreadedRandomVariable[O]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="io.github.mandar2812.dynaml.probability.RandomVariable#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply[O](d:breeze.stats.distributions.DiscreteDistr[O]):io.github.mandar2812.dynaml.probability.DiscreteDistrRV[O]"></a>
       <a id="apply[O](DiscreteDistr[O]):DiscreteDistrRV[O]"></a>
@@ -167,18 +201,18 @@ Contains apply methods which can create random variables.
     </span>
       <p class="shortcomment cmt">Creates a continuous random variable with a specified distribution.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a continuous random variable with a specified distribution.</p></div><dl class="paramcmts block"><dt class="tparam">O</dt><dd class="cmt"><p>The domain of values over which the random variable is defined.</p></dd><dt class="param">d</dt><dd class="cmt"><p>A breeze discrete distribution</p></dd><dt>returns</dt><dd class="cmt"><p>A discrete random variable instance.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.RandomVariable#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[O](d:breeze.stats.distributions.ContinuousDistr[O])(implicitev:spire.algebra.Field[O]):io.github.mandar2812.dynaml.probability.ContinuousDistrRV[O]"></a>
-      <a id="apply[O](ContinuousDistr[O])(Field[O]):ContinuousDistrRV[O]"></a>
+      <a id="apply[O](d:breeze.stats.distributions.ContinuousDistr[O])(implicitev:spire.algebra.Field[O]):io.github.mandar2812.dynaml.probability.RandomVariable[O]withio.github.mandar2812.dynaml.probability.ContinuousDistrRV[O]"></a>
+      <a id="apply[O](ContinuousDistr[O])(Field[O]):RandomVariable[O]withContinuousDistrRV[O]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="O">O</span>]</span><span class="params">(<span name="d">d: <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>)</span><span class="result">: <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="O">O</span>]</span><span class="params">(<span name="d">d: <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>)</span><span class="result">: <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable.apply.O">O</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.RandomVariable$@apply[O](d:breeze.stats.distributions.ContinuousDistr[O])(implicitev:spire.algebra.Field[O]):io.github.mandar2812.dynaml.probability.ContinuousDistrRV[O]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.RandomVariable$@apply[O](d:breeze.stats.distributions.ContinuousDistr[O])(implicitev:spire.algebra.Field[O]):io.github.mandar2812.dynaml.probability.RandomVariable[O]withio.github.mandar2812.dynaml.probability.ContinuousDistrRV[O]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
