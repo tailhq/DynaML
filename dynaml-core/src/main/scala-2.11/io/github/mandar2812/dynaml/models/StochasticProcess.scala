@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models
 
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
+import io.github.mandar2812.dynaml.probability.{ContinuousRandomVariable, RandomVariable}
 import org.apache.log4j.Logger
 
 /**
@@ -97,7 +98,7 @@ trait SecondOrderProcess[T, I, Y, K, M, W] extends StochasticProcess[T, I, Y, W]
   * [[io.github.mandar2812.dynaml.models.stp.StudentTRegression]] and others.
   *
   */
-abstract class ContinuousProcess[T, I, Y, W] extends StochasticProcess[T, I, Y, W] {
+abstract class ContinuousProcess[T, I, Y, W <: ContinuousRandomVariable[_]] extends StochasticProcess[T, I, Y, W] {
 
   private val logger = Logger.getLogger(this.getClass)
 
