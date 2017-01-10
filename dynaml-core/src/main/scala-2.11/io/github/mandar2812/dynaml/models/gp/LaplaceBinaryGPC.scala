@@ -27,9 +27,10 @@ import io.github.mandar2812.dynaml.probability.Likelihood
   * @author mandar2812 on 6/4/16.
   */
 class LaplaceBinaryGPC(data: Stream[(DenseVector[Double], Double)],
-                                kernel: LocalScalarKernel[DenseVector[Double]],
-                                l: Likelihood[DenseVector[Double], DenseVector[Double], DenseMatrix[Double],
-                                  (DenseVector[Double], DenseVector[Double])]) extends
+                       kernel: LocalScalarKernel[DenseVector[Double]],
+                       l: Likelihood[
+                         DenseVector[Double], DenseVector[Double], DenseMatrix[Double],
+                         (DenseVector[Double], DenseVector[Double])]) extends
   AbstractGPClassification[Stream[(DenseVector[Double], Double)],
     DenseVector[Double]](data, kernel, l) {
 

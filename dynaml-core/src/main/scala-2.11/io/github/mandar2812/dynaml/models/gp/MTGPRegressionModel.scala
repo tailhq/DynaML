@@ -11,9 +11,9 @@ import org.apache.log4j.Logger
   * @tparam I The index set of the GP.
   */
 class MTGPRegressionModel[I](
-                              cov: LocalScalarKernel[(I, Int)],
-                              n: LocalScalarKernel[(I, Int)],
-                              data: Seq[Stream[(I, Double)]],
+  cov: LocalScalarKernel[(I, Int)],
+  n: LocalScalarKernel[(I, Int)],
+  data: Seq[Stream[(I, Double)]],
   num: Int, numOutputs: Int) extends
   AbstractGPRegressionModel[
     Seq[Stream[(I, Double)]],
