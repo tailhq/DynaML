@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalScalarKernel}
 import io.github.mandar2812.dynaml.models.gp.GPNarXModel
-import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
@@ -72,9 +72,7 @@ object AbottPowerPlant {
             .setStepSize(opt("step").toDouble)
             .setLogScale(false)
 
-          case "ML" => new GPMLOptimizer[DenseVector[Double],
-            Stream[(DenseVector[Double], Double)],
-            model.type](model)
+          case "ML" => new GradBasedGlobalOptimizer[model.type](model)
         }
 
         val startConf = kernel.effective_state ++ noise.effective_state

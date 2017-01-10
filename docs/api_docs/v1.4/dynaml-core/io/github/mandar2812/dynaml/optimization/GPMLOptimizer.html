@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>GPMLOptimizer - io.github.mandar2812.dynaml.optimization.GPMLOptimizer</title>
-          <meta name="description" content="GPMLOptimizer - io.github.mandar2812.dynaml.optimization.GPMLOptimizer" />
-          <meta name="keywords" content="GPMLOptimizer io.github.mandar2812.dynaml.optimization.GPMLOptimizer" />
+          <title>GPMLOptimizer - io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer</title>
+          <meta name="description" content="GPMLOptimizer - io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer" />
+          <meta name="keywords" content="GPMLOptimizer io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -45,13 +45,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">GPMLOptimizer</span><span class="tparams">[<span name="I">I</span>, <span name="T">T</span>, <span name="M">M &lt;: <a href="GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></span>]</span><span class="result"> extends <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span>]</span>
+        <span class="name">GPMLOptimizer</span><span class="tparams">[<span name="I">I</span>, <span name="T">T</span>, <span name="M">M &lt;: <a href="GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></span>]</span><span class="result"> extends <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer"><span>GPMLOptimizer</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer"><span>GlobalOptimizer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer"><span>GPMLOptimizer</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer"><span>GlobalOptimizer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -97,7 +97,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">GPMLOptimizer</span><span class="params">(<span name="model">model: <span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span></span>)</span>
+        <span class="name">GPMLOptimizer</span><span class="params">(<span name="model">model: <span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span></span>)</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer@&lt;init&gt;(model:M):io.github.mandar2812.dynaml.optimization.GPMLOptimizer[I,T,M]" title="Permalink" target="_top">
@@ -380,7 +380,7 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer">GPMLOptimizer</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer">GPMLOptimizer</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -441,14 +441,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optimize</span><span class="params">(<span name="initialConfig">initialConfig: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="defval" name="Map(&quot;tolerance&quot; -&gt; &quot;0.0001&quot;,<br/>                          &quot;step&quot; -&gt; &quot;0.005&quot;,<br/>                          &quot;maxIterations&quot; -&gt; &quot;50&quot;)">...</span></span>)</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>])</span>
+        <span class="name">optimize</span><span class="params">(<span name="initialConfig">initialConfig: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="defval" name="Map(&quot;tolerance&quot; -&gt; &quot;0.0001&quot;,<br/>                          &quot;step&quot; -&gt; &quot;0.005&quot;,<br/>                          &quot;maxIterations&quot; -&gt; &quot;50&quot;)">...</span></span>)</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>])</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer@optimize(initialConfig:Map[String,Double],options:Map[String,String]):(M,Map[String,Double])" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer">GPMLOptimizer</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer">GPMLOptimizer</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#setGridSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setGridSize(s:Int):io.github.mandar2812.dynaml.optimization.GlobalOptimizer[T]"></a>
       <a id="setGridSize(Int):GlobalOptimizer[M]"></a>
@@ -458,7 +458,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setGridSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span>]</span>
+        <span class="name">setGridSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer@setGridSize(s:Int):io.github.mandar2812.dynaml.optimization.GlobalOptimizer[T]" title="Permalink" target="_top">
@@ -475,7 +475,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setLogScale</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span>]</span>
+        <span class="name">setLogScale</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer@setLogScale(t:Boolean):io.github.mandar2812.dynaml.optimization.GlobalOptimizer[T]" title="Permalink" target="_top">
@@ -492,7 +492,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setStepSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span>]</span>
+        <span class="name">setStepSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer@setStepSize(s:Double):io.github.mandar2812.dynaml.optimization.GlobalOptimizer[T]" title="Permalink" target="_top">
@@ -543,14 +543,14 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">system</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span></span>
+        <span class="name">system</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer@system:M" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer">GPMLOptimizer</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer">GPMLOptimizer</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -647,7 +647,7 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">
-              <h3>Inherited from <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GPMLOptimizer.M">M</span>]</h3>
+              <h3>Inherited from <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GradBasedGlobalOptimizer.M">M</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

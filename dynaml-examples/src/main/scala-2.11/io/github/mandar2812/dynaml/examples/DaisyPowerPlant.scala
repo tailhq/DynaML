@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalScalarKernel}
 import io.github.mandar2812.dynaml.models.svm.DLSSVM
-import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
@@ -67,9 +67,7 @@ object DaisyPowerPlant {
             .setStepSize(opt("step").toDouble)
             .setLogScale(false)
 
-          case "ML" => new GPMLOptimizer[DenseVector[Double],
-            Stream[(DenseVector[Double], Double)],
-            DLSSVM](model)
+          case "ML" => new GradBasedGlobalOptimizer[DLSSVM](model)
         }
 
         val startConf = kernel.state ++ Map("regularization" ->

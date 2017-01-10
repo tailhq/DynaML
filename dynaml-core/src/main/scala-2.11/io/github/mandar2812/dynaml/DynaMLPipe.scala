@@ -24,7 +24,7 @@ import breeze.math.VectorSpace
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GPMLOptimizer, GloballyOptWithGrad, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GradBasedGlobalOptimizer, GloballyOptWithGrad, GridSearch}
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
 import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
@@ -632,8 +632,7 @@ object DynaMLPipe {
           .setStepSize(step)
           .setLogScale(false)
 
-        case "ML" => new GPMLOptimizer[DenseVector[Double],
-          Seq[(DenseVector[Double], Double)], M](model)
+        case "ML" => new GradBasedGlobalOptimizer[M](model)
 
         case "CSA" => new CoupledSimulatedAnnealing(model)
           .setGridSize(grid)

@@ -25,7 +25,7 @@ import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.GPRegressionPipe
 import io.github.mandar2812.dynaml.models.gp.GPRegression
-import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
 
 /**

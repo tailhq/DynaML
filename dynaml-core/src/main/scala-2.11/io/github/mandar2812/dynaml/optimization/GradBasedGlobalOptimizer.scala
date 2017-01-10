@@ -24,14 +24,15 @@ import org.apache.log4j.Logger
 /**
   * @author mandar2812 datum 16/1/16.
   *
-  * Performs ML-II gradient based hyper-parameter
-  * optimization for Gaussian Process regression models
+  * Performs gradient based hyper-parameter
+  * optimization for any model implementing
+  * the [[GloballyOptWithGrad]] trait.
   */
-class GPMLOptimizer[I, T, M <: GloballyOptWithGrad](model: M)
+class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
   extends GlobalOptimizer[M] {
   override val system: M = model
 
-  override protected val logger = Logger.getLogger(this.getClass)
+  override protected val logger: Logger = Logger.getLogger(this.getClass)
 
   override def optimize(initialConfig: Map[String, Double],
                         options: Map[String, String] = Map("tolerance" -> "0.0001",

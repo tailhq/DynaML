@@ -26,7 +26,7 @@ import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalScalarKernel}
 import io.github.mandar2812.dynaml.models.gp.{GPNarModel, GPTimeSeries}
-import io.github.mandar2812.dynaml.optimization.{GPMLOptimizer, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 
@@ -68,9 +68,7 @@ object LightCurveAGN {
             .setStepSize(opt("step").toDouble)
             .setLogScale(false)
 
-          case "ML" => new GPMLOptimizer[DenseVector[Double],
-            Stream[(DenseVector[Double], Double)],
-            model.type](model)
+          case "ML" => new GradBasedGlobalOptimizer[model.type](model)
         }
 
         val startConf = kernel.state ++ noise.state
@@ -157,9 +155,7 @@ object LightCurveAGN {
             .setStepSize(opt("step").toDouble)
             .setLogScale(false)
 
-          case "ML" => new GPMLOptimizer[DenseVector[Double],
-            Stream[(DenseVector[Double], Double)],
-            model.type](model)
+          case "ML" => new GradBasedGlobalOptimizer[model.type](model)
         }
 
         val startConf = kernel.state ++ noise.state
