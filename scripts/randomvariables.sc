@@ -1,7 +1,7 @@
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.analysis.{DifferentiableMap, PushforwardMap}
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.{GaussianRV, RandomVariable}
+import io.github.mandar2812.dynaml.probability.{E, GaussianRV, RandomVariable}
 import spire.implicits._
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.probability.distributions.SkewGaussian
@@ -34,3 +34,5 @@ spline(x.toIterable)
 unhold()
 legend(List("Log Skew Gaussian", "Log Gaussian"))
 title("Probability Density Functions")
+
+println("E[Q] = "+E(q))
