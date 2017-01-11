@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.analysis
 
+import io.github.mandar2812.dynaml.models.ContinuousProcess
 import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
 import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, MeasurableDistrRV}
 import spire.algebra.Field
@@ -42,6 +43,8 @@ abstract class PushforwardMap[
 
   def ->[R <: ContinuousDistrRV[Source]](r: R): MeasurableDistrRV[Source, Destination, Jacobian] =
     new MeasurableDistrRV[Source, Destination, Jacobian](r)(self)
+
+  //def ->[P <: ContinuousProcess[_, _, ]]
 
   /**
     * Return the implementation used for calculating

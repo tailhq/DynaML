@@ -39,6 +39,10 @@ trait GloballyOptimizable {
    * */
   protected var current_state: Map[String, Double]
 
+  def _current_state = current_state
+
+  def _hyper_parameters = hyper_parameters
+
   /**
    * Calculates the energy of the configuration,
    * in most global optimization algorithms

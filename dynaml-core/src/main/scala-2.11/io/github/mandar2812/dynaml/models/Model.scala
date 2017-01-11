@@ -45,6 +45,8 @@ trait Model[T, Q, R] {
     * */
   protected val g: T
 
+  def data = g
+
   /**
     * Predict the value of the
     * target variable given a

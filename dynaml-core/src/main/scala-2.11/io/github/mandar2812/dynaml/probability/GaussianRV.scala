@@ -8,17 +8,19 @@ import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariate
 import spire.implicits._
 import spire.algebra.Field
 
+abstract class AbstractGaussianRV[T, V] extends ContinuousDistrRV[T]
+
 /**
   * Created by mandar on 26/7/16.
   */
-case class GaussianRV(mu: Double, sigma: Double) extends ContinuousDistrRV[Double] {
+case class GaussianRV(mu: Double, sigma: Double) extends AbstractGaussianRV[Double, Double] {
   override val underlyingDist = new Gaussian(mu, sigma)
 }
 
 case class MultGaussianRV(
   mu: DenseVector[Double], covariance: DenseMatrix[Double])(
   implicit ev: Field[DenseVector[Double]])
-  extends ContinuousDistrRV[DenseVector[Double]] {
+  extends AbstractGaussianRV[DenseVector[Double], DenseMatrix[Double]] {
 
   override val underlyingDist = MultivariateGaussian(mu, covariance)
 
@@ -39,7 +41,7 @@ object MultGaussianRV {
 
 case class MultGaussianPRV(mu: PartitionedVector, covariance: PartitionedPSDMatrix)(
   implicit ev: Field[PartitionedVector])
-  extends ContinuousDistrRV[PartitionedVector] {
+  extends AbstractGaussianRV[PartitionedVector, PartitionedPSDMatrix] {
 
   override val underlyingDist: ContinuousDistr[PartitionedVector] = BlockedMultiVariateGaussian(mu, covariance)
 
