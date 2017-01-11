@@ -28,6 +28,7 @@ import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import org.apache.log4j.Logger
 
@@ -391,4 +392,18 @@ object AbstractGPRegressionModel {
     else if(order > 0 && ex == 0) new GPNarModel(order, cov, noise, data).asInstanceOf[M]
     else new GPNarXModel(order, ex, cov, noise, data).asInstanceOf[M]
   }
+
+  def apply[T, I](
+    cov: LocalScalarKernel[I],
+    noise: LocalScalarKernel[I])(
+    trainingdata: T, num: Int)(
+    implicit transform: DataPipe[T, Seq[(I, Double)]], ct: ClassTag[I]) =
+    new AbstractGPRegressionModel[T, I](cov, noise, trainingdata, num) {
+      /**
+        * Convert from the underlying data structure to
+        * Seq[(I, Y)] where I is the index set of the GP
+        * and Y is the value/label type.
+        **/
+      override def dataAsSeq(data: T) = transform(data)
+    }
 }
