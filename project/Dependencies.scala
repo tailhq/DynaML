@@ -41,7 +41,7 @@ object Dependencies {
     "org.scala-lang" % "scala-library" % scala % "compile",
     "org.scala-lang" % "scala-reflect" % scala % "compile",
     "com.typesafe" % "config" % "1.2.1" % "compile",
-    "junit" % "junit" % "4.4",
+    "junit" % "junit" % "4.11",
     "com.github.tototoshi" % "scala-csv_2.11" % "1.1.2" % "compile",
     "org.scala-lang" % "jline" % "2.11.0-M3" % "compile",
     "org.scalaforge" % "scalax" % "0.1" % "compile",
