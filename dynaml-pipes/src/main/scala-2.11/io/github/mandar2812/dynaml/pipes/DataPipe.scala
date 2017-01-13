@@ -98,7 +98,7 @@ object ParallelPipe {
   }
 }
 
-trait BifurcationPipe[Source, Result1, Result2]
+trait BifurcationPipe[-Source, +Result1, +Result2]
   extends DataPipe[Source, (Result1, Result2)] {
 
 }
