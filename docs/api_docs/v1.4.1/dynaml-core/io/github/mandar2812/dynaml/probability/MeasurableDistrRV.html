@@ -45,7 +45,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">MeasurableDistrRV</span><span class="tparams">[<span name="Domain1">Domain1</span>, <span name="Domain2">Domain2</span>, <span name="Jacobian">Jacobian</span>]</span><span class="result"> extends <a href="MeasurableFunction.html" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableFunction">MeasurableFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>] with <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]]</span>
+        <span class="name">MeasurableDistrRV</span><span class="tparams">[<span name="Domain1">Domain1</span>, <span name="Domain2">Domain2</span>, <span name="Jacobian">Jacobian</span>]</span><span class="result"> extends <a href="MeasurableFunction.html" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableFunction">MeasurableFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
       </span>
       </h4>
       
@@ -53,7 +53,7 @@
 with a defined probability density function.
 </p></div><dl class="paramcmts block"><dt class="tparam">Domain1</dt><dd class="cmt"><p>The domain of the base random variable</p></dd><dt class="tparam">Domain2</dt><dd class="cmt"><p>The output set of the function</p></dd><dt class="tparam">Jacobian</dt><dd class="cmt"><p>The type representing the Jacobian of inverse of the map <span class="extype" name="p">p</span></p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]], <a href="HasDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.HasDistribution">HasDistribution</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <a href="MeasurableFunction.html" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableFunction">MeasurableFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]], <a href="HasDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.HasDistribution">HasDistribution</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <a href="MeasurableFunction.html" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableFunction">MeasurableFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@ with a defined probability density function.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV"><span>MeasurableDistrRV</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr"><span>RandomVarWithDistr</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.HasDistribution"><span>HasDistribution</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.MeasurableFunction"><span>MeasurableFunction</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.RandomVariable"><span>RandomVariable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV"><span>MeasurableDistrRV</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV"><span>ContinuousDistrRV</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable"><span>ContinuousRandomVariable</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr"><span>RandomVarWithDistr</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.HasDistribution"><span>HasDistribution</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.MeasurableFunction"><span>MeasurableFunction</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.RandomVariable"><span>RandomVariable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -151,6 +151,149 @@ with a defined probability density function.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*(other:Domain)(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]"></a>
+      <a id="*(Domain2)(Field[Domain2]):ContinuousRandomVariable[Domain2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="other">other: <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="result">: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@*(other:Domain)(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return the random variable that results from multiplying a provided
+quantity in the <span class="extype" name="Domain">Domain</span> to the current random variable.</p><div class="fullcomment"><div class="comment cmt"><p>Return the random variable that results from multiplying a provided
+quantity in the <span class="extype" name="Domain">Domain</span> to the current random variable.
+</p></div><dl class="paramcmts block"><dt class="param">other</dt><dd class="cmt"><p>The value to be multiplied to this random variable.</p></dd><dt class="param">ev</dt><dd class="cmt"><p>An implicit parameter, which represents a <span class="extype" name="Field">Field</span> defined over
+          the set <span class="extype" name="Domain">Domain</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*(other:io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain])(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]"></a>
+      <a id="*(ContinuousRandomVariable[Domain2])(Field[Domain2]):ContinuousRandomVariable[Domain2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="other">other: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="result">: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@*(other:io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain])(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return the random variable that results from multiplying a provided
+random variable to the current random variable.</p><div class="fullcomment"><div class="comment cmt"><p>Return the random variable that results from multiplying a provided
+random variable to the current random variable.
+</p></div><dl class="paramcmts block"><dt class="param">other</dt><dd class="cmt"><p>The random variable to be multiplied to this.</p></dd><dt class="param">ev</dt><dd class="cmt"><p>An implicit parameter, which represents a <span class="extype" name="Field">Field</span> defined over
+          the set <span class="extype" name="Domain">Domain</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+(other:Domain)(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]"></a>
+      <a id="+(Domain2)(Field[Domain2]):ContinuousRandomVariable[Domain2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="other">other: <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="result">: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@+(other:Domain)(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return the random variable that results from adding a provided
+quantity in the <span class="extype" name="Domain">Domain</span> to the current random variable.</p><div class="fullcomment"><div class="comment cmt"><p>Return the random variable that results from adding a provided
+quantity in the <span class="extype" name="Domain">Domain</span> to the current random variable.
+</p></div><dl class="paramcmts block"><dt class="param">other</dt><dd class="cmt"><p>The value to be added to this random variable.</p></dd><dt class="param">ev</dt><dd class="cmt"><p>An implicit parameter, which represents a <span class="extype" name="Field">Field</span> defined over
+          the set <span class="extype" name="Domain">Domain</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+(other:io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain])(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]"></a>
+      <a id="+(ContinuousRandomVariable[Domain2])(Field[Domain2]):ContinuousRandomVariable[Domain2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="other">other: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="result">: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@+(other:io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain])(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return the random variable that results from adding a provided
+random variable to the current random variable.</p><div class="fullcomment"><div class="comment cmt"><p>Return the random variable that results from adding a provided
+random variable to the current random variable.
+</p></div><dl class="paramcmts block"><dt class="param">other</dt><dd class="cmt"><p>The random variable to be added to this.</p></dd><dt class="param">ev</dt><dd class="cmt"><p>An implicit parameter, which represents a <span class="extype" name="Field">Field</span> defined over
+          the set <span class="extype" name="Domain">Domain</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable#-" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="-(other:Domain)(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]"></a>
+      <a id="-(Domain2)(Field[Domain2]):ContinuousRandomVariable[Domain2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $minus" class="name">-</span><span class="params">(<span name="other">other: <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="result">: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@-(other:Domain)(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return the random variable that results from subtracting a provided
+quantity in the <span class="extype" name="Domain">Domain</span> from the current random variable.</p><div class="fullcomment"><div class="comment cmt"><p>Return the random variable that results from subtracting a provided
+quantity in the <span class="extype" name="Domain">Domain</span> from the current random variable.
+</p></div><dl class="paramcmts block"><dt class="param">other</dt><dd class="cmt"><p>The value to be subtracted from this random variable.</p></dd><dt class="param">ev</dt><dd class="cmt"><p>An implicit parameter, which represents a <span class="extype" name="Field">Field</span> defined over
+          the set <span class="extype" name="Domain">Domain</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable#-" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="-(other:io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain])(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]"></a>
+      <a id="-(ContinuousRandomVariable[Domain2])(Field[Domain2]):ContinuousRandomVariable[Domain2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $minus" class="name">-</span><span class="params">(<span name="other">other: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>)</span><span class="result">: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@-(other:io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain])(implicitev:spire.algebra.Field[Domain]):io.github.mandar2812.dynaml.probability.ContinuousRandomVariable[Domain]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return the random variable that results from subtracting a provided
+random variable from the current random variable.</p><div class="fullcomment"><div class="comment cmt"><p>Return the random variable that results from subtracting a provided
+random variable from the current random variable.
+</p></div><dl class="paramcmts block"><dt class="param">other</dt><dd class="cmt"><p>The random variable to be subtracted from this.</p></dd><dt class="param">ev</dt><dd class="cmt"><p>An implicit parameter, which represents a <span class="extype" name="Field">Field</span> defined over
+          the set <span class="extype" name="Domain">Domain</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV#:*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id=":*[Domain1](other:io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Domain1])(implicitev:spire.algebra.Field[Domain],implicitev1:spire.algebra.Field[Domain1]):io.github.mandar2812.dynaml.probability.ContinuousDistrRV[(Domain,Domain1)]"></a>
+      <a id=":*[Domain1](ContinuousDistrRV[Domain1])(Field[Domain2],Field[Domain1]):ContinuousDistrRV[(Domain2,Domain1)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $colon$times" class="name">:*</span><span class="tparams">[<span name="Domain1">Domain1</span>]</span><span class="params">(<span name="other">other: <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV.:*.Domain1">Domain1</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>, <span name="ev1">ev1: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV.:*.Domain1">Domain1</span>]</span>)</span><span class="result">: <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[(<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV.:*.Domain1">Domain1</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@:*[Domain1](other:io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Domain1])(implicitev:spire.algebra.Field[Domain],implicitev1:spire.algebra.Field[Domain1]):io.github.mandar2812.dynaml.probability.ContinuousDistrRV[(Domain,Domain1)]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr#:*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id=":*[Domain1,Dist1&lt;:breeze.stats.distributions.Density[Domain1]withbreeze.stats.distributions.Rand[Domain1]](other:io.github.mandar2812.dynaml.probability.RandomVarWithDistr[Domain1,Dist1]):io.github.mandar2812.dynaml.probability.RandomVarWithDistr[(Domain,Domain1),io.github.mandar2812.dynaml.probability.distributions.GenericDistribution[(Domain,Domain1)]]"></a>
       <a id=":*[Domain1,Dist1&lt;:Density[Domain1]withRand[Domain1]](RandomVarWithDistr[Domain1,Dist1]):RandomVarWithDistr[(Domain2,Domain1),GenericDistribution[(Domain2,Domain1)]]"></a>
@@ -356,23 +499,23 @@ two random variables.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.probability.RandomVariable#iid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="iid(n:Int):io.github.mandar2812.dynaml.probability.IIDRandomVariable[Domain,io.github.mandar2812.dynaml.probability.RandomVariable[Domain]]"></a>
-      <a id="iid(Int):IIDRandomVariable[Domain2,RandomVariable[Domain2]]"></a>
+    </li><li name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr#iid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iid(n:Int):io.github.mandar2812.dynaml.probability.RandomVariable[Stream[Domain]]withio.github.mandar2812.dynaml.probability.IIDRandomVarDistr[Domain,Dist,io.github.mandar2812.dynaml.probability.RandomVarWithDistr[Domain,Dist]]"></a>
+      <a id="iid(Int):RandomVariable[Stream[Domain2]]withIIDRandomVarDistr[Domain2,ContinuousDistr[Domain2],RandomVarWithDistr[Domain2,ContinuousDistr[Domain2]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">iid</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="IIDRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVariable">IIDRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]]</span>
+        <span class="name">iid</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]] with <a href="IIDRandomVarDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr">IIDRandomVarDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>], <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@iid(n:Int):io.github.mandar2812.dynaml.probability.IIDRandomVariable[Domain,io.github.mandar2812.dynaml.probability.RandomVariable[Domain]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@iid(n:Int):io.github.mandar2812.dynaml.probability.RandomVariable[Stream[Domain]]withio.github.mandar2812.dynaml.probability.IIDRandomVarDistr[Domain,Dist,io.github.mandar2812.dynaml.probability.RandomVarWithDistr[Domain,Dist]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Create an iid random variable from the current (this)</p><div class="fullcomment"><div class="comment cmt"><p>Create an iid random variable from the current (this)</p></div><dl class="paramcmts block"><dt class="param">n</dt><dd class="cmt"><p>The number of iid samples of the base random variable.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a></dd></dl></div>
+      <p class="shortcomment cmt">Create an iid random variable from the current (this)</p><div class="fullcomment"><div class="comment cmt"><p>Create an iid random variable from the current (this)</p></div><dl class="paramcmts block"><dt class="param">n</dt><dd class="cmt"><p>The number of iid samples of the base random variable.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a> → <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -441,8 +584,8 @@ two random variables.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.probability.MeasurableFunction#sample" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sample:io.github.mandar2812.dynaml.pipes.DataPipe[Unit,Domain2]"></a>
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV#sample" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sample:io.github.mandar2812.dynaml.pipes.DataPipe[Unit,Domain]"></a>
       <a id="sample:DataPipe[Unit,Domain2]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -453,13 +596,13 @@ two random variables.
         <span class="name">sample</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@sample:io.github.mandar2812.dynaml.pipes.DataPipe[Unit,Domain2]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.MeasurableDistrRV@sample:io.github.mandar2812.dynaml.pipes.DataPipe[Unit,Domain]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Generate a sample from
 the random variable</p><div class="fullcomment"><div class="comment cmt"><p>Generate a sample from
-the random variable</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MeasurableFunction.html" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableFunction">MeasurableFunction</a> → <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a></dd></dl></div>
+the random variable</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a> → <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -515,7 +658,7 @@ function is represented as a breeze
 <span class="extype" name="Density">Density</span> object.</p><div class="fullcomment"><div class="comment cmt"><p>The actual probability density
 function is represented as a breeze
 <span class="extype" name="Density">Density</span> object.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV">MeasurableDistrRV</a> → <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a> → <a href="HasDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.HasDistribution">HasDistribution</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV">MeasurableDistrRV</a> → <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a> → <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a> → <a href="HasDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.HasDistribution">HasDistribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -594,7 +737,11 @@ function is represented as a breeze
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">
+        <div class="parent" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">
+              <h3>Inherited from <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">
+              <h3>Inherited from <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">
               <h3>Inherited from <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.probability.HasDistribution">
               <h3>Inherited from <a href="HasDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.HasDistribution">HasDistribution</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</h3>

@@ -89,7 +89,24 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.probability.ApproxBayesComputation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="io.github.mandar2812.dynaml.probability.AbstractGaussianRV" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AbstractGaussianRV[T,V]extendsRandomVariable[T]withContinuousDistrRV[T]"></a>
+      <a id="AbstractGaussianRV[T,V]:AbstractGaussianRV[T,V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AbstractGaussianRV.html"><span class="name">AbstractGaussianRV</span></a><span class="tparams">[<span name="T">T</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.AbstractGaussianRV.T">T</span>] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.AbstractGaussianRV.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@AbstractGaussianRV[T,V]extendsRandomVariable[T]withContinuousDistrRV[T]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.probability.ApproxBayesComputation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ApproxBayesComputation[ConditioningSet,Domain]extendsRandomVariable[(ConditioningSet,Domain)]withBayesJointProbabilityScheme[ConditioningSet,Domain,io.github.mandar2812.dynaml.probability.RandomVariable[ConditioningSet],io.github.mandar2812.dynaml.probability.RandomVariable[Domain]]"></a>
       <a id="ApproxBayesComputation[ConditioningSet,Domain]:ApproxBayesComputation[ConditioningSet,Domain]"></a>
       <h4 class="signature">
@@ -228,7 +245,7 @@ probability density function.</p>
     </span>
       <p class="shortcomment cmt">A random variable which takes discrete or categorical values.</p>
     </li><li name="io.github.mandar2812.dynaml.probability.GaussianRV" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GaussianRVextendsRandomVariable[Double]withContinuousDistrRV[Double]withProductwithSerializable"></a>
+      <a id="GaussianRVextendsAbstractGaussianRV[Double,Double]withProductwithSerializable"></a>
       <a id="GaussianRV:GaussianRV"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -236,10 +253,10 @@ probability density function.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="GaussianRV.html"><span class="name">GaussianRV</span></a><span class="params">(<span name="mu">mu: <span class="extype" name="scala.Double">Double</span></span>, <span name="sigma">sigma: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="scala.Double">Double</span>] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="scala.Double">Double</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="GaussianRV.html"><span class="name">GaussianRV</span></a><span class="params">(<span name="mu">mu: <span class="extype" name="scala.Double">Double</span></span>, <span name="sigma">sigma: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="AbstractGaussianRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.AbstractGaussianRV">AbstractGaussianRV</a>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@GaussianRVextendsRandomVariable[Double]withContinuousDistrRV[Double]withProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@GaussianRVextendsAbstractGaussianRV[Double,Double]withProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -281,7 +298,7 @@ underlying probability density function.</p>
     </span>
       
     </li><li name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="IIDRandomVarDistr[D,Dist&lt;:breeze.stats.distributions.Density[D]withbreeze.stats.distributions.Rand[D],R&lt;:io.github.mandar2812.dynaml.probability.RandomVarWithDistr[D,Dist]]extendsRandomVariable[Stream[D]]withRandomVarWithDistr[Stream[D],breeze.stats.distributions.Density[Stream[D]]withbreeze.stats.distributions.Rand[Stream[D]]]withIIDRandomVariable[D,R]"></a>
+      <a id="IIDRandomVarDistr[D,Dist&lt;:breeze.stats.distributions.Density[D]withbreeze.stats.distributions.Rand[D],R&lt;:io.github.mandar2812.dynaml.probability.RandomVarWithDistr[D,Dist]]extendsRandomVariable[Stream[D]]withIIDRandomVariable[D,R]withRandomVarWithDistr[Stream[D],breeze.stats.distributions.Density[Stream[D]]withbreeze.stats.distributions.Rand[Stream[D]]]"></a>
       <a id="IIDRandomVarDistr[D,Dist&lt;:Density[D]withRand[D],R&lt;:RandomVarWithDistr[D,Dist]]:IIDRandomVarDistr[D,Dist,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -289,27 +306,27 @@ underlying probability density function.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="IIDRandomVarDistr.html"><span class="name">IIDRandomVarDistr</span></a><span class="tparams">[<span name="D">D</span>, <span name="Dist">Dist &lt;: <span class="extype" name="breeze.stats.distributions.Density">Density</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>] with <span class="extype" name="breeze.stats.distributions.Rand">Rand</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>]</span>, <span name="R">R &lt;: <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.Dist">Dist</span>]</span>]</span><span class="result"> extends <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>]] with <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>], <span class="extype" name="breeze.stats.distributions.Density">Density</span>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>]] with <span class="extype" name="breeze.stats.distributions.Rand">Rand</span>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>]]] with <a href="IIDRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVariable">IIDRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.R">R</span>]</span>
+        <a href="IIDRandomVarDistr.html"><span class="name">IIDRandomVarDistr</span></a><span class="tparams">[<span name="D">D</span>, <span name="Dist">Dist &lt;: <span class="extype" name="breeze.stats.distributions.Density">Density</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>] with <span class="extype" name="breeze.stats.distributions.Rand">Rand</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>]</span>, <span name="R">R &lt;: <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.Dist">Dist</span>]</span>]</span><span class="result"> extends <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>]] with <a href="IIDRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVariable">IIDRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.R">R</span>] with <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>], <span class="extype" name="breeze.stats.distributions.Density">Density</span>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>]] with <span class="extype" name="breeze.stats.distributions.Rand">Rand</span>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr.D">D</span>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@IIDRandomVarDistr[D,Dist&lt;:breeze.stats.distributions.Density[D]withbreeze.stats.distributions.Rand[D],R&lt;:io.github.mandar2812.dynaml.probability.RandomVarWithDistr[D,Dist]]extendsRandomVariable[Stream[D]]withRandomVarWithDistr[Stream[D],breeze.stats.distributions.Density[Stream[D]]withbreeze.stats.distributions.Rand[Stream[D]]]withIIDRandomVariable[D,R]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@IIDRandomVarDistr[D,Dist&lt;:breeze.stats.distributions.Density[D]withbreeze.stats.distributions.Rand[D],R&lt;:io.github.mandar2812.dynaml.probability.RandomVarWithDistr[D,Dist]]extendsRandomVariable[Stream[D]]withIIDRandomVariable[D,R]withRandomVarWithDistr[Stream[D],breeze.stats.distributions.Density[Stream[D]]withbreeze.stats.distributions.Rand[Stream[D]]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">An i.i.d random variable with a defined distribution.</p>
     </li><li name="io.github.mandar2812.dynaml.probability.IIDRandomVariable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="IIDRandomVariable[D,R&lt;:io.github.mandar2812.dynaml.probability.RandomVariable[D]]extendsRandomVariable[Stream[D]]"></a>
-      <a id="IIDRandomVariable[D,R&lt;:RandomVariable[D]]:IIDRandomVariable[D,R]"></a>
+      <a id="IIDRandomVariable[D,+R&lt;:io.github.mandar2812.dynaml.probability.RandomVariable[D]]extendsRandomVariable[Stream[D]]"></a>
+      <a id="IIDRandomVariable[D,+R&lt;:RandomVariable[D]]:IIDRandomVariable[D,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="IIDRandomVariable.html"><span class="name">IIDRandomVariable</span></a><span class="tparams">[<span name="D">D</span>, <span name="R">R &lt;: <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVariable.D">D</span>]</span>]</span><span class="result"> extends <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVariable.D">D</span>]]</span>
+        <a href="IIDRandomVariable.html"><span class="name">IIDRandomVariable</span></a><span class="tparams">[<span name="D">D</span>, <span name="R">+R &lt;: <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVariable.D">D</span>]</span>]</span><span class="result"> extends <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.IIDRandomVariable.D">D</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@IIDRandomVariable[D,R&lt;:io.github.mandar2812.dynaml.probability.RandomVariable[D]]extendsRandomVariable[Stream[D]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@IIDRandomVariable[D,+R&lt;:io.github.mandar2812.dynaml.probability.RandomVariable[D]]extendsRandomVariable[Stream[D]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -367,7 +384,7 @@ underlying probability density function.</p>
     </span>
       <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="MeasurableDistrRV[Domain1,Domain2,Jacobian]extendsMeasurableFunction[Domain1,Domain2]withRandomVarWithDistr[Domain2,breeze.stats.distributions.ContinuousDistr[Domain2]]"></a>
+      <a id="MeasurableDistrRV[Domain1,Domain2,Jacobian]extendsMeasurableFunction[Domain1,Domain2]withContinuousDistrRV[Domain2]"></a>
       <a id="MeasurableDistrRV[Domain1,Domain2,Jacobian]:MeasurableDistrRV[Domain1,Domain2,Jacobian]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -375,10 +392,10 @@ underlying probability density function.</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="MeasurableDistrRV.html"><span class="name">MeasurableDistrRV</span></a><span class="tparams">[<span name="Domain1">Domain1</span>, <span name="Domain2">Domain2</span>, <span name="Jacobian">Jacobian</span>]</span><span class="result"> extends <a href="MeasurableFunction.html" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableFunction">MeasurableFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>] with <a href="RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]]</span>
+        <a href="MeasurableDistrRV.html"><span class="name">MeasurableDistrRV</span></a><span class="tparams">[<span name="Domain1">Domain1</span>, <span name="Domain2">Domain2</span>, <span name="Jacobian">Jacobian</span>]</span><span class="result"> extends <a href="MeasurableFunction.html" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableFunction">MeasurableFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@MeasurableDistrRV[Domain1,Domain2,Jacobian]extendsMeasurableFunction[Domain1,Domain2]withRandomVarWithDistr[Domain2,breeze.stats.distributions.ContinuousDistr[Domain2]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@MeasurableDistrRV[Domain1,Domain2,Jacobian]extendsMeasurableFunction[Domain1,Domain2]withContinuousDistrRV[Domain2]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -406,7 +423,7 @@ with a defined probability density function.
 to samples generated by some base random variable instance.
 </p></div><dl class="paramcmts block"><dt class="tparam">Domain1</dt><dd class="cmt"><p>Type over which the base random variable is defined.</p></dd><dt class="tparam">Domain2</dt><dd class="cmt"><p>Type over which output of function <span class="extype" name="func">func</span> takes its values.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.MultGaussianPRV" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MultGaussianPRVextendsRandomVariable[io.github.mandar2812.dynaml.algebra.PartitionedVector]withContinuousDistrRV[io.github.mandar2812.dynaml.algebra.PartitionedVector]withProductwithSerializable"></a>
+      <a id="MultGaussianPRVextendsAbstractGaussianRV[io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix]withProductwithSerializable"></a>
       <a id="MultGaussianPRV:MultGaussianPRV"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -414,16 +431,16 @@ to samples generated by some base random variable instance.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="MultGaussianPRV.html"><span class="name">MultGaussianPRV</span></a><span class="params">(<span name="mu">mu: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="covariance">covariance: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>)</span><span class="result"> extends <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="MultGaussianPRV.html"><span class="name">MultGaussianPRV</span></a><span class="params">(<span name="mu">mu: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="covariance">covariance: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</span>)</span><span class="result"> extends <a href="AbstractGaussianRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.AbstractGaussianRV">AbstractGaussianRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@MultGaussianPRVextendsRandomVariable[io.github.mandar2812.dynaml.algebra.PartitionedVector]withContinuousDistrRV[io.github.mandar2812.dynaml.algebra.PartitionedVector]withProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@MultGaussianPRVextendsAbstractGaussianRV[io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix]withProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="io.github.mandar2812.dynaml.probability.MultGaussianRV" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MultGaussianRVextendsRandomVariable[breeze.linalg.DenseVector[Double]]withContinuousDistrRV[breeze.linalg.DenseVector[Double]]withProductwithSerializable"></a>
+      <a id="MultGaussianRVextendsAbstractGaussianRV[breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double]]withProductwithSerializable"></a>
       <a id="MultGaussianRV:MultGaussianRV"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -431,10 +448,10 @@ to samples generated by some base random variable instance.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="MultGaussianRV.html"><span class="name">MultGaussianRV</span></a><span class="params">(<span name="mu">mu: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="covariance">covariance: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result"> extends <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="MultGaussianRV.html"><span class="name">MultGaussianRV</span></a><span class="params">(<span name="mu">mu: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="covariance">covariance: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="spire.algebra.Field">Field</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result"> extends <a href="AbstractGaussianRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.AbstractGaussianRV">AbstractGaussianRV</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@MultGaussianRVextendsRandomVariable[breeze.linalg.DenseVector[Double]]withContinuousDistrRV[breeze.linalg.DenseVector[Double]]withProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@MultGaussianRVextendsAbstractGaussianRV[breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double]]withProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
