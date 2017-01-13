@@ -14,7 +14,7 @@ import scala.reflect.ClassTag
 /**
   * Created by mandar on 02/01/2017.
   */
-abstract class WarpedGP[T, I](p: AbstractGPRegressionModel[T, I])(
+class WarpedGP[T, I](p: AbstractGPRegressionModel[T, I])(
   warpingFunc: PushforwardMap[Double, Double, Double])(
   implicit ev: ClassTag[I],
   pf: PartitionedVectorField,

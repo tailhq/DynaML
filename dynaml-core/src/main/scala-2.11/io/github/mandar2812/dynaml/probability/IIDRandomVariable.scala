@@ -9,7 +9,7 @@ import io.github.mandar2812.dynaml.probability.distributions.GenericDistribution
   * [[RandomVariable]] represented as a [[Stream]]
   *
   * */
-trait IIDRandomVariable[D, R <: RandomVariable[D]] extends RandomVariable[Stream[D]] {
+trait IIDRandomVariable[D, +R <: RandomVariable[D]] extends RandomVariable[Stream[D]] {
 
   val baseRandomVariable: R
 
@@ -43,9 +43,9 @@ object IIDRandomVariable {
   * */
 trait IIDRandomVarDistr[
 D, Dist <: Density[D] with Rand[D],
-R <: RandomVarWithDistr[D, Dist]] extends
-  RandomVarWithDistr[Stream[D], Density[Stream[D]] with Rand[Stream[D]]] with
-  IIDRandomVariable[D, R] {
+R <: RandomVarWithDistr[D, Dist]]
+  extends IIDRandomVariable[D, R] with
+    RandomVarWithDistr[Stream[D], Density[Stream[D]] with Rand[Stream[D]]] {
 
   val baseRandomVariable: R
 

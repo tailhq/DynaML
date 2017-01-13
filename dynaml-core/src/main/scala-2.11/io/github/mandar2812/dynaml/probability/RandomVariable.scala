@@ -231,12 +231,12 @@ trait RandomVarWithDistr[Domain, Dist <: Density[Domain] with Rand[Domain]]
     val sample = BifurcationPipe(self.sample, other.sample)
   }
 
-  //TODO: Figure out implementation of following iid method
-  /*override def iid(n: Int): IIDRandomVariable[Domain, RandomVarWithDistr[Domain, Dist]] =
+  override def iid(n: Int) =
     new IIDRandomVarDistr[Domain, Dist, RandomVarWithDistr[Domain, Dist]] {
       override val baseRandomVariable: RandomVarWithDistr[Domain, Dist] = self
       override val num: Int = n
-    }*/
+
+    }
 
 }
 
