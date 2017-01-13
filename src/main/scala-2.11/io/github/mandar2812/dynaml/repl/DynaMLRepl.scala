@@ -50,7 +50,10 @@ object Defaults{
 
     Util.normalizeNewlines(
       banner+s"""\nWelcome to DynaML $version \nInteractive Scala shell for Machine Learning Research
-          |(Scala $scalaVersion Java $javaVersion)""".stripMargin
+          |
+          |Currently running on:
+          |(Scala $scalaVersion Java $javaVersion)
+          |""".stripMargin
     )
   }
 
