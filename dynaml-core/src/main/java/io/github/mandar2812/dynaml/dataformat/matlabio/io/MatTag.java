@@ -14,7 +14,6 @@ class MatTag
     /**
      * @param type
      * @param size
-     * @param compressed
      */
     public MatTag(int type, int size)
     {
