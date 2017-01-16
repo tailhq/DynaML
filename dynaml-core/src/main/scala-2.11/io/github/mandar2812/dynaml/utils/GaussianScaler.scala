@@ -21,6 +21,11 @@ case class GaussianScaler(mean: DenseVector[Double], sigma: DenseVector[Double])
   override def run(data: DenseVector[Double]): DenseVector[Double] = (data-mean) :/ sigma
 
   def apply(r: Range): GaussianScaler = GaussianScaler(mean(r), sigma(r))
+
+  def ++(other: GaussianScaler) =
+    GaussianScaler(
+      DenseVector(this.mean.toArray++other.mean.toArray),
+      DenseVector(this.sigma.toArray++other.sigma.toArray))
 }
 
 
