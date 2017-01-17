@@ -77,15 +77,16 @@ package object utils {
     (DenseVector[Double], DenseVector[Double]) = d match {
       case Nil => (m, s)
       case x :: rest =>
-        getStatsRec(rest, m + (x - m)/i.toDouble,
-          s + ((x - m) :* (x - (m + (x - m)/i.toDouble))),
-          i - 1)
+        val mnew = m + (x - m)/(i+1).toDouble
+        getStatsRec(rest, mnew,
+          s + (m:*m) - (mnew:*mnew) + ((x:*x) - s - (m:*m))/(i+1).toDouble, //((x - m) :* (x - (m + (x - m)/i.toDouble))),
+          i + 1)
 
     }
 
     getStatsRec(data.tail, data.head,
       DenseVector.zeros[Double](data.head.length),
-      data.length)
+      1)
   }
 
 
