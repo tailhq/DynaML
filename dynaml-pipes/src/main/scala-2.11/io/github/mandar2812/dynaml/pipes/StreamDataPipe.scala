@@ -63,19 +63,37 @@ trait StreamSideEffectPipe[I] extends StreamDataPipe[I, Unit, Unit] {
 
 object StreamDataPipe {
 
+  //Stream pipes which map from the original domain to a new one
   def apply[I, J](mapFunc: (I) => J): StreamMapPipe[I, J] =
     new StreamMapPipe[I, J] {
       val pipe = mapFunc
     }
 
+  def apply[I, J](map: DataPipe[I, J]): StreamMapPipe[I, J] =
+    new StreamMapPipe[I, J] {
+      val pipe = map.run _
+    }
+
+  //Stream pipes which act as filters
   def apply[I](mapFunc: (I) => Boolean): StreamFilterPipe[I] =
     new StreamFilterPipe[I] {
       val pipe = mapFunc
     }
 
+  def apply[I](mapFunc: DataPipe[I, Boolean]): StreamFilterPipe[I] =
+    new StreamFilterPipe[I] {
+      val pipe = mapFunc.run _
+    }
+
+  //stream pipes with side effects
   def apply[I](seFunc: (I) => Unit): StreamSideEffectPipe[I] =
     new StreamSideEffectPipe[I] {
       val pipe = seFunc
+    }
+
+  def apply[I](seFunc: SideEffectPipe[I]): StreamSideEffectPipe[I] =
+    new StreamSideEffectPipe[I] {
+      val pipe = seFunc.run _
     }
 }
 
@@ -83,5 +101,10 @@ object StreamPartitionPipe {
   def apply[I](mapFunc: (I) => Boolean): StreamPartitionPipe[I] =
     new StreamPartitionPipe[I] {
       val pipe = mapFunc
+    }
+
+  def apply[I](mapFunc: DataPipe[I, Boolean]): StreamPartitionPipe[I] =
+    new StreamPartitionPipe[I] {
+      val pipe = mapFunc.run _
     }
 }
