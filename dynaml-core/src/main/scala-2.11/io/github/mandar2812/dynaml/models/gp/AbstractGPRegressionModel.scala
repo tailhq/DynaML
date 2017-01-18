@@ -262,8 +262,15 @@ abstract class AbstractGPRegressionModel[T, I](
         (kernelTest - adjustedVarReducer).filterBlocks(c => c._1 <= c._2),
         kernelTest.rows, kernelTest.cols)
 
+    val priorMean = PartitionedVector(
+      test.map(mean)
+        .grouped(_blockSize)
+        .zipWithIndex.map(c => (c._2.toLong, DenseVector(c._1.toArray)))
+        .toStream,
+      test.length.toLong)
+
     MultGaussianPRV(test.length.toLong, _blockSize)(
-      crossKernel.t * alpha,
+      priorMean + crossKernel.t * alpha,
       reducedVariance)
   }
 

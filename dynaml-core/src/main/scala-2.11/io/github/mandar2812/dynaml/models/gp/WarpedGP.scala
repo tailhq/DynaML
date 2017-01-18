@@ -47,16 +47,19 @@ class WarpedGP[T, I](p: AbstractGPRegressionModel[T, I])(
     * and returns the corresponding mean of the distribution
     * corresponding to input.
     **/
-  override val mean = p.mean
+  override val mean = (DataPipe(p.mean) > warpingFunc).run _
+
   /**
     * Underlying covariance function of the
     * Gaussian Processes.
     **/
   override val covariance = p.covariance
+
   /**
     * Stores the names of the hyper-parameters
     **/
   override protected var hyper_parameters: List[String] = underlyingProcess._hyper_parameters
+
   /**
     * A Map which stores the current state of
     * the system.
