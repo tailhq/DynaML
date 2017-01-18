@@ -21,10 +21,11 @@ package io.github.mandar2812.dynaml
 import scala.collection.mutable.{MutableList => ML}
 import breeze.linalg.{DenseMatrix, DenseVector, diag}
 import breeze.math.VectorSpace
+import breeze.numerics.sqrt
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GradBasedGlobalOptimizer, GloballyOptWithGrad, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GloballyOptWithGrad, GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
 import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
@@ -267,9 +268,7 @@ object DynaMLPipe {
       val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
         DenseVector(tup._1.toArray ++ Array(tup._2))).toList)
 
-      val stdDev: DenseVector[Double] = variance.map(v =>
-        math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
-
+      val stdDev: DenseVector[Double] = sqrt(variance)
 
       val normalizationFunc = (point: (DenseVector[Double], Double)) => {
         val extendedpoint = DenseVector(point._1.toArray ++ Array(point._2))
@@ -302,8 +301,7 @@ object DynaMLPipe {
       val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
         tup._1).toList)
 
-      val stdDev: DenseVector[Double] = variance.map(v =>
-        math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
+      val stdDev: DenseVector[Double] = sqrt(variance)
 
 
       val normalizationFunc = (point: (DenseVector[Double], Double)) => {
@@ -334,8 +332,7 @@ object DynaMLPipe {
       val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
         DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
 
-      val stdDev: DenseVector[Double] = variance.map(v =>
-        math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
+      val stdDev: DenseVector[Double] = sqrt(variance)
 
 
       val normalizationFunc = (point: (DenseVector[Double], DenseVector[Double])) => {
@@ -370,8 +367,7 @@ object DynaMLPipe {
       val (mean, variance) = utils.getStats(trainTest.map(tup =>
         DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
 
-      val stdDev: DenseVector[Double] = variance.map(v =>
-        math.sqrt(v/(trainTest.length.toDouble - 1.0)))
+      val stdDev: DenseVector[Double] = sqrt(variance)
 
 
       val featuresScaler = GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
@@ -433,8 +429,7 @@ object DynaMLPipe {
       val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
         DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
 
-      val stdDev: DenseVector[Double] = variance.map(v =>
-        math.sqrt(v/(trainTest._1.length.toDouble - 1.0)))
+      val stdDev: DenseVector[Double] = sqrt(variance)
 
 
       val featuresScaler = GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
