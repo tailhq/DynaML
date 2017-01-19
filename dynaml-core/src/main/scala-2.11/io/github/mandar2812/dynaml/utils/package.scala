@@ -79,7 +79,7 @@ package object utils {
       case x :: rest =>
         val mnew = m + (x - m)/(i+1).toDouble
         getStatsRec(rest, mnew,
-          s + (m:*m) - (mnew:*mnew) + ((x:*x) - s - (m:*m))/(i+1).toDouble, //((x - m) :* (x - (m + (x - m)/i.toDouble))),
+          s + (m:*m) - (mnew:*mnew) + ((x:*x) - s - (m:*m))/i.toDouble,
           i + 1)
 
     }
@@ -89,6 +89,57 @@ package object utils {
       1)
   }
 
+  /**
+    * Get the mean and variance of a data set
+    * which is a [[List]] of [[DenseVector]].
+    *
+    * @param data The data set.
+    * @return A [[Tuple2]] containing the mean
+    *         and variance.
+    *
+    * */
+  def getStatsMult(data: List[DenseVector[Double]]):
+  (DenseVector[Double], DenseMatrix[Double]) = {
+    def getStatsRec(d: List[DenseVector[Double]],
+                    m: DenseVector[Double],
+                    s: DenseMatrix[Double],
+                    i: Int):
+    (DenseVector[Double], DenseMatrix[Double]) = d match {
+      case Nil =>
+        (m,s)
+      case x :: rest =>
+        val mnew = m + (x - m)/(i+1).toDouble
+        getStatsRec(rest, mnew,
+          s + (m*m.t) - (mnew*mnew.t) + ((x*x.t) - s - (m*m.t))/i.toDouble,
+          i + 1)
+
+    }
+
+    getStatsRec(data.tail, data.head,
+      data.head * data.head.t,
+      1)
+  }
+
+  def getStatsRDD(data: RDD[LabeledPoint]):
+  (Double, Double,
+    DenseVector[Double],
+    DenseMatrix[Double]) = {
+    val (lm, ls, m, s) = data.map((p) => {
+      val label = p.label
+      val features = DenseVector(p.features.toArray)
+      (label, label*label, features, features*features.t)
+    }).reduce((a,b) => {
+      (a._1 + b._1, a._2 + b._2, a._3 + b._3, a._4 + b._4)
+    })
+    val count = data.count().toDouble
+    val labelMean = lm/count
+    val labelVar = (ls/count) - labelMean*labelMean
+    m :/= count
+    s :/= count
+    val featuresCov = s - m*m.t
+
+    (labelMean, labelVar, m, featuresCov)
+  }
 
   def getMinMax(data: List[DenseVector[Double]]):
   (DenseVector[Double], DenseVector[Double]) = {
@@ -133,62 +184,6 @@ package object utils {
   @tailrec
   def factorial(n: Int, accumulator: Long = 1): Long = {
     if(n == 0) accumulator else factorial(n - 1, (accumulator * n))
-  }
-
-  /**
-    * Get the mean and variance of a data set
-    * which is a [[List]] of [[DenseVector]].
-    *
-    * @param data The data set.
-    * @return A [[Tuple2]] containing the mean
-    *         and variance.
-    *
-    * */
-
-  def getStatsMult(data: List[DenseVector[Double]]):
-  (DenseVector[Double], DenseMatrix[Double]) = {
-    def getStatsRec(d: List[DenseVector[Double]],
-                    m: DenseVector[Double],
-                    s: DenseMatrix[Double],
-                    i: Int):
-    (DenseVector[Double], DenseMatrix[Double]) = d match {
-      case Nil =>
-        m :/= i.toDouble
-        s :/= i.toDouble
-        //val m1: DenseVector[Double] = m/i.toDouble
-        (m, s - (m*m.t))
-
-      case x :: rest =>
-        getStatsRec(rest, m + x,
-          s + x*x.t,
-          i + 1)
-
-    }
-
-    getStatsRec(data.tail, data.head,
-      data.head * data.head.t,
-      1)
-  }
-
-  def getStatsRDD(data: RDD[LabeledPoint]):
-  (Double, Double,
-    DenseVector[Double],
-    DenseMatrix[Double]) = {
-    val (lm, ls, m, s) = data.map((p) => {
-      val label = p.label
-      val features = DenseVector(p.features.toArray)
-      (label, label*label, features, features*features.t)
-    }).reduce((a,b) => {
-      (a._1 + b._1, a._2 + b._2, a._3 + b._3, a._4 + b._4)
-    })
-    val count = data.count().toDouble
-    val labelMean = lm/count
-    val labelVar = (ls/count) - labelMean*labelMean
-    m :/= count
-    s :/= count
-    val featuresCov = s - m*m.t
-
-    (labelMean, labelVar, m, featuresCov)
   }
 
   def getTypeTag[T: ru.TypeTag](obj: T) = ru.typeTag[T]
