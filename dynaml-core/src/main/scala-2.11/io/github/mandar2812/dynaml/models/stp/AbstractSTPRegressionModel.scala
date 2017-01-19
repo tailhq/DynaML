@@ -126,6 +126,13 @@ abstract class AbstractSTPRegressionModel[T, I](
       training.length.toLong, _blockSize
     )
 
+    val priorMean = PartitionedVector(
+      test.map(mean(_))
+        .grouped(_blockSize)
+        .zipWithIndex.map(c => (c._2.toLong, DenseVector(c._1.toArray)))
+        .toStream,
+      test.length.toLong)
+
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
@@ -156,7 +163,7 @@ abstract class AbstractSTPRegressionModel[T, I](
     //Calculate the predictive mean and co-variance
     val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
 
-    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ trainingLabels)
+    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ (trainingLabels-priorMean))
 
     val v: PartitionedMatrix = Lmat \\ crossKernel
 
@@ -170,7 +177,7 @@ abstract class AbstractSTPRegressionModel[T, I](
 
     val degOfFreedom = current_state("degrees_of_freedom")
 
-    val beta = trainingLabels dot alpha
+    val beta = (trainingLabels-priorMean) dot alpha
 
     val varianceAdjustment = (degOfFreedom + beta - 2.0)/(degOfFreedom + training.length - 2.0)
 
@@ -233,6 +240,11 @@ abstract class AbstractSTPRegressionModel[T, I](
       training.length.toLong, _blockSize
     )
 
+    val trainingMean = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._1).map(mean(_)),
+      training.length.toLong, _blockSize
+    )
+
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
@@ -244,7 +256,9 @@ abstract class AbstractSTPRegressionModel[T, I](
       caching = true
     }
 
-    AbstractSTPRegressionModel.logLikelihood(current_state("degrees_of_freedom"), trainingLabels, kernelTraining)
+    AbstractSTPRegressionModel.logLikelihood(
+      current_state("degrees_of_freedom"),
+      trainingLabels-trainingMean, kernelTraining)
   }
 
   /**
