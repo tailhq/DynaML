@@ -22,7 +22,7 @@ class PolynomialKernel(
     state += ("degree" -> d.toDouble)
   }
 
-  def setoffset(o: Int): Unit = {
+  def setoffset(o: Double): Unit = {
     this.offset = o
     state += ("offset" -> o)
   }
