@@ -226,12 +226,17 @@ abstract class AbstractGPRegressionModel[T, I](
       training.length.toLong, _blockSize
     )
 
-    val priorMean = PartitionedVector(
+    val priorMeanTest = PartitionedVector(
       test.map(mean(_))
         .grouped(_blockSize)
         .zipWithIndex.map(c => (c._2.toLong, DenseVector(c._1.toArray)))
         .toStream,
       test.length.toLong)
+
+    val trainingMean = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._1).map(mean(_)),
+      training.length.toLong, _blockSize
+    )
 
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
@@ -263,7 +268,7 @@ abstract class AbstractGPRegressionModel[T, I](
     //Calculate the predictive mean and co-variance
     val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
 
-    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ (trainingLabels-priorMean))
+    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
 
     val v: PartitionedMatrix = Lmat \\ crossKernel
 
@@ -281,7 +286,7 @@ abstract class AbstractGPRegressionModel[T, I](
 
 
     MultGaussianPRV(test.length.toLong, _blockSize)(
-      priorMean + crossKernel.t * alpha,
+      priorMeanTest + crossKernel.t * alpha,
       reducedVariance)
   }
 
