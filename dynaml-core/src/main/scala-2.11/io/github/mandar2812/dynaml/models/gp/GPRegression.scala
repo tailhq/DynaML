@@ -50,10 +50,11 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 class GPRegression(
   cov: LocalScalarKernel[DenseVector[Double]],
   noise: LocalScalarKernel[DenseVector[Double]] = new DiracKernel(1.0),
-  trainingdata: Seq[(DenseVector[Double], Double)]) extends
+  trainingdata: Seq[(DenseVector[Double], Double)],
+  meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)) extends
 AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   DenseVector[Double]](cov, noise, trainingdata,
-  trainingdata.length){
+  trainingdata.length, meanFunc){
 
   /**
     * Setting a validation set is optional in case

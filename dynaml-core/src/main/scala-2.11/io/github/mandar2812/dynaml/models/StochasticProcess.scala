@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models
 
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.{ContinuousRandomVariable, RandomVariable}
 import org.apache.log4j.Logger
 
@@ -79,7 +80,7 @@ trait SecondOrderProcess[T, I, Y, K, M, W] extends StochasticProcess[T, I, Y, W]
     * and returns the corresponding mean of the distribution
     * corresponding to input.
     * */
-  val mean: (I) => Y
+  val mean: DataPipe[I, Y]
 
   /**
     * Underlying covariance function of the

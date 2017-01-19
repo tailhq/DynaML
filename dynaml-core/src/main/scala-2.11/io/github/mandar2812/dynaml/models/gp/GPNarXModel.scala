@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
+import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
   * @author mandar2812
@@ -38,8 +39,9 @@ class GPNarXModel(order: Int,
                   ex: Int,
                   cov: LocalScalarKernel[DenseVector[Double]],
                   nL: LocalScalarKernel[DenseVector[Double]],
-                  trainingdata: Seq[(DenseVector[Double], Double)]) extends
-GPRegression(cov, nL, trainingdata) {
+                  trainingdata: Seq[(DenseVector[Double], Double)],
+                  meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)) extends
+GPRegression(cov, nL, trainingdata, meanFunc) {
 
   val modelOrder = order
 

@@ -23,6 +23,7 @@ import breeze.numerics._
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.{ParameterizedLearner, SecondOrderProcess}
 import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, LaplacePosteriorMode}
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.Likelihood
 
 /**
@@ -39,7 +40,8 @@ import io.github.mandar2812.dynaml.probability.Likelihood
 abstract class AbstractGPClassification[T, I](
   data: T, kernel: LocalScalarKernel[I],
   likelihood: Likelihood[DenseVector[Double], DenseVector[Double],
-    DenseMatrix[Double], (DenseVector[Double], DenseVector[Double])])
+    DenseMatrix[Double], (DenseVector[Double], DenseVector[Double])],
+  meanFunc: DataPipe[I, Double] = DataPipe((_: I) => 0.0))
   extends SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], DenseVector[Double]]
     with ParameterizedLearner[T, DenseVector[Double], I,
     Double, (DenseMatrix[Double], DenseVector[Double])]
@@ -54,7 +56,7 @@ abstract class AbstractGPClassification[T, I](
 
   override protected var params: DenseVector[Double] = initParams()
 
-  override val mean: (I) => Double = _ => 0
+  override val mean: DataPipe[I, Double] = meanFunc
 
   override val covariance = kernel
 

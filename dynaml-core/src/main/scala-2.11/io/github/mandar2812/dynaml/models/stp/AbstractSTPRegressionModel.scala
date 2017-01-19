@@ -28,6 +28,7 @@ import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
 import io.github.mandar2812.dynaml.kernels.{LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.MultStudentsTPRV
 import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultivariateStudentsT, MultivariateStudentsT}
 import org.apache.log4j.Logger
@@ -41,7 +42,8 @@ import scala.reflect.ClassTag
 abstract class AbstractSTPRegressionModel[T, I](
   mu: Double, cov: LocalScalarKernel[I],
   n: LocalScalarKernel[I],
-  data: T, num: Int)(implicit ev: ClassTag[I])
+  data: T, num: Int,
+  meanFunc: DataPipe[I, Double] = DataPipe((x: I) => 0.0))(implicit ev: ClassTag[I])
   extends ContinuousProcess[T, I, Double, MultStudentsTPRV]
   with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultStudentsTPRV]
   with GloballyOptimizable {
@@ -55,7 +57,7 @@ abstract class AbstractSTPRegressionModel[T, I](
     * before being used for further processing.
     *
     * */
-  override val mean: (I) => Double = _ => 0.0
+  override val mean: DataPipe[I, Double] = meanFunc
 
   override val covariance = cov
 

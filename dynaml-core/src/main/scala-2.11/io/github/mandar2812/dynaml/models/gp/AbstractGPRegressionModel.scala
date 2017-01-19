@@ -49,7 +49,7 @@ import scala.reflect.ClassTag
   */
 abstract class AbstractGPRegressionModel[T, I](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
-  data: T, num: Int)(implicit ev: ClassTag[I])
+  data: T, num: Int, meanFunc: DataPipe[I, Double] = DataPipe((_:I) => 0.0))(implicit ev: ClassTag[I])
   extends ContinuousProcess[T, I, Double, MultGaussianPRV]
   with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultGaussianPRV]
   with GloballyOptWithGrad {
@@ -62,7 +62,7 @@ abstract class AbstractGPRegressionModel[T, I](
    * before being used for further processing.
    *
    * */
-  override val mean: (I) => Double = _ => 0.0
+  override val mean: DataPipe[I, Double] = meanFunc
 
   override val covariance = cov
 
@@ -127,9 +127,14 @@ abstract class AbstractGPRegressionModel[T, I](
       training.length.toLong, _blockSize
       )
 
+    val trainingMean = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._1).map(mean(_)),
+      training.length.toLong, _blockSize
+    )
+
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
 
-    effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
+    effectiveTrainingKernel.setBlockSizes((_blockSize, _blockSize))
 
     val kernelTraining: PartitionedPSDMatrix =
       effectiveTrainingKernel.buildBlockedKernelMatrix(training, npoints)
@@ -139,7 +144,7 @@ abstract class AbstractGPRegressionModel[T, I](
       caching = true
     }
 
-    AbstractGPRegressionModel.logLikelihood(trainingLabels, kernelTraining)
+    AbstractGPRegressionModel.logLikelihood(trainingLabels - trainingMean, kernelTraining)
   }
 
   /**
@@ -164,6 +169,11 @@ abstract class AbstractGPRegressionModel[T, I](
       training.length.toLong, _blockSize
     )
 
+    val trainingMean = PartitionedVector(
+      dataAsSeq(g).toStream.map(_._1).map(mean(_)),
+      training.length.toLong, _blockSize
+    )
+
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
 
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
@@ -174,7 +184,7 @@ abstract class AbstractGPRegressionModel[T, I](
     val Lmat = bcholesky(kernelTraining)
 
     val hParams = covariance.effective_hyper_parameters ++ noiseModel.effective_hyper_parameters
-    val alpha = Lmat.t \\ (Lmat \\ trainingLabels)
+    val alpha = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
 
     hParams.map(h => {
       //build kernel derivative matrix
@@ -263,7 +273,7 @@ abstract class AbstractGPRegressionModel[T, I](
         kernelTest.rows, kernelTest.cols)
 
     val priorMean = PartitionedVector(
-      test.map(mean)
+      test.map(mean(_))
         .grouped(_blockSize)
         .zipWithIndex.map(c => (c._2.toLong, DenseVector(c._1.toArray)))
         .toStream,
@@ -393,7 +403,8 @@ object AbstractGPRegressionModel {
     DenseVector[Double]]](data: Seq[(DenseVector[Double], Double)],
                           cov: LocalScalarKernel[DenseVector[Double]],
                           noise: LocalScalarKernel[DenseVector[Double]] = new DiracKernel(1.0),
-                          order: Int = 0, ex: Int = 0): M = {
+                          order: Int = 0, ex: Int = 0,
+                          meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)): M = {
     assert(ex >= 0 && order >= 0, "Non Negative values for order and ex")
     if(order == 0) new GPRegression(cov, noise, data).asInstanceOf[M]
     else if(order > 0 && ex == 0) new GPNarModel(order, cov, noise, data).asInstanceOf[M]
@@ -402,10 +413,11 @@ object AbstractGPRegressionModel {
 
   def apply[T, I](
     cov: LocalScalarKernel[I],
-    noise: LocalScalarKernel[I])(
+    noise: LocalScalarKernel[I],
+    meanFunc: DataPipe[I, Double])(
     trainingdata: T, num: Int)(
     implicit transform: DataPipe[T, Seq[(I, Double)]], ct: ClassTag[I]) =
-    new AbstractGPRegressionModel[T, I](cov, noise, trainingdata, num) {
+    new AbstractGPRegressionModel[T, I](cov, noise, trainingdata, num, meanFunc) {
       /**
         * Convert from the underlying data structure to
         * Seq[(I, Y)] where I is the index set of the GP

@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.Logger
 
 /**
@@ -16,10 +17,11 @@ class MOGPRegressionModel[I](
   cov: LocalScalarKernel[(I, Int)],
   n: LocalScalarKernel[(I, Int)],
   data: Stream[(I, DenseVector[Double])],
-  num: Int, numOutputs: Int) extends
+  num: Int, numOutputs: Int,
+  meanFunc: DataPipe[(I, Int), Double] = DataPipe((_: (I, Int)) => 0.0)) extends
   AbstractGPRegressionModel[
     Stream[(I, DenseVector[Double])],
-    (I, Int)](cov, n, data, num*numOutputs) {
+    (I, Int)](cov, n, data, num*numOutputs, meanFunc) {
 
   private val logger = Logger.getLogger(this.getClass)
 

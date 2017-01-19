@@ -38,7 +38,7 @@ class WarpedGP[T, I](p: AbstractGPRegressionModel[T, I])(
 
   val underlyingProcess =
     AbstractGPRegressionModel[T, I](
-      p.covariance, p.noiseModel)(
+      p.covariance, p.noiseModel, p.mean)(
       dataProcessPipe(p.data), p.npoints)(transform, ev)
 
 
@@ -47,7 +47,7 @@ class WarpedGP[T, I](p: AbstractGPRegressionModel[T, I])(
     * and returns the corresponding mean of the distribution
     * corresponding to input.
     **/
-  override val mean = (DataPipe(p.mean) > warpingFunc).run _
+  override val mean = p.mean > warpingFunc
 
   /**
     * Underlying covariance function of the

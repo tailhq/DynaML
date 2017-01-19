@@ -12,11 +12,12 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 class StudentTRegression(mu: Double,
   cov: LocalScalarKernel[DenseVector[Double]],
   noise: LocalScalarKernel[DenseVector[Double]] = new DiracKernel(1.0),
-  trainingdata: Seq[(DenseVector[Double], Double)]) extends
+  trainingdata: Seq[(DenseVector[Double], Double)],
+  meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe((x: DenseVector[Double]) => 0.0)) extends
   AbstractSTPRegressionModel[Seq[(DenseVector[Double], Double)],
     DenseVector[Double]](
     mu, cov, noise, trainingdata,
-    trainingdata.length){
+    trainingdata.length, meanFunc){
 
   /**
     * Setting a validation set is optional in case
