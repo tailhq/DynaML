@@ -105,6 +105,33 @@ abstract class AbstractGPRegressionModel[T, I](
     covariance.state ++ noiseModel.state
 
   /**
+    * Returns a [[DataPipe]] which calculates the energy of data: [[T]].
+    * See: [[energy]] below.
+    * */
+  def calculateEnergyPipe(h: Map[String, Double], options: Map[String, String]) = DataPipe((data: T) => {
+    setState(h)
+    val training = dataAsIndexSeq(data)
+    val trainingLabels = PartitionedVector(
+      dataAsSeq(data).toStream.map(_._2),
+      training.length.toLong, _blockSize
+    )
+
+    val trainingMean = PartitionedVector(
+      dataAsSeq(data).toStream.map(_._1).map(mean(_)),
+      training.length.toLong, _blockSize
+    )
+
+    val effectiveTrainingKernel: LocalScalarKernel[I] = this.covariance + this.noiseModel
+
+    effectiveTrainingKernel.setBlockSizes((_blockSize, _blockSize))
+
+    val kernelTraining: PartitionedPSDMatrix =
+      effectiveTrainingKernel.buildBlockedKernelMatrix(training, training.length)
+
+    AbstractGPRegressionModel.logLikelihood(trainingLabels - trainingMean, kernelTraining)
+  })
+
+  /**
     * Calculates the energy of the configuration,
     * in most global optimization algorithms
     * we aim to find an approximate value of
@@ -118,59 +145,27 @@ abstract class AbstractGPRegressionModel[T, I](
     * In this particular case E(h) = -log p(Y|X,h)
     * also known as log likelihood.
     **/
-  override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
-
-    setState(h)
-    val training = dataAsIndexSeq(g)
-    val trainingLabels = PartitionedVector(
-      dataAsSeq(g).toStream.map(_._2),
-      training.length.toLong, _blockSize
-      )
-
-    val trainingMean = PartitionedVector(
-      dataAsSeq(g).toStream.map(_._1).map(mean(_)),
-      training.length.toLong, _blockSize
-    )
-
-    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
-
-    effectiveTrainingKernel.setBlockSizes((_blockSize, _blockSize))
-
-    val kernelTraining: PartitionedPSDMatrix =
-      effectiveTrainingKernel.buildBlockedKernelMatrix(training, npoints)
-
-    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1")) {
-      partitionedKernelMatrixCache = kernelTraining
-      caching = true
-    }
-
-    AbstractGPRegressionModel.logLikelihood(trainingLabels - trainingMean, kernelTraining)
-  }
+  override def energy(h: Map[String, Double], options: Map[String, String]): Double =
+    calculateEnergyPipe(h, options)(g)
 
   /**
-    * Calculates the gradient energy of the configuration and
-    * subtracts this from the current value of h to yield a new
-    * hyper-parameter configuration.
-    *
-    * Over ride this function if you aim to implement a gradient based
-    * hyper-parameter optimization routine like ML-II
-    *
-    * @param h The value of the hyper-parameters in the configuration space
-    * @return Gradient of the objective function (marginal likelihood) as a Map
-    **/
-  override def gradEnergy(h: Map[String, Double]): Map[String, Double] = {
+    * Returns a [[DataPipe]] which calculates the gradient of the energy, E(.) of data: [[T]]
+    * with respect to the model hyper-parameters.
+    * See: [[gradEnergy]] below.
+    * */
+  def calculateGradEnergyPipe(h: Map[String, Double]) = DataPipe((data: T) => {
 
     covariance.setHyperParameters(h)
     noiseModel.setHyperParameters(h)
 
-    val training = dataAsIndexSeq(g)
+    val training = dataAsIndexSeq(data)
     val trainingLabels = PartitionedVector(
-      dataAsSeq(g).toStream.map(_._2),
+      dataAsSeq(data).toStream.map(_._2),
       training.length.toLong, _blockSize
     )
 
     val trainingMean = PartitionedVector(
-      dataAsSeq(g).toStream.map(_._1).map(mean(_)),
+      dataAsSeq(data).toStream.map(_._1).map(mean(_)),
       training.length.toLong, _blockSize
     )
 
@@ -206,7 +201,21 @@ abstract class AbstractGPRegressionModel[T, I](
 
       (h, btrace(grad))
     }).toMap
-  }
+
+  })
+
+  /**
+    * Calculates the gradient energy of the configuration and
+    * subtracts this from the current value of h to yield a new
+    * hyper-parameter configuration.
+    *
+    * Over ride this function if you aim to implement a gradient based
+    * hyper-parameter optimization routine like ML-II
+    *
+    * @param h The value of the hyper-parameters in the configuration space
+    * @return Gradient of the objective function (marginal likelihood) as a Map
+    **/
+  override def gradEnergy(h: Map[String, Double]): Map[String, Double] = calculateGradEnergyPipe(h)(g)
 
   /**
    * Calculates posterior predictive distribution for
@@ -319,8 +328,8 @@ abstract class AbstractGPRegressionModel[T, I](
     * Cache the training kernel and noise matrices
     * for fast access in future predictions.
     * */
-  def persist(): Unit = {
-
+  override def persist(state: Map[String, Double]): Unit = {
+    setState(state)
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 

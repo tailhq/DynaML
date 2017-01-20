@@ -58,10 +58,27 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
 
   /**
     * Setting a validation set is optional in case
-    * one wants to use some function of metrics like correltaion (CC) or rmse (RMSE)
-    * as hyper-parameter optimization objective functions.
+    * one wants to calculate joint marginal likelihood of the
+    * training and validation data as the objective function for
+    * hyper-parameter optimization. While retaining just the
+    * training data set for final calculating [[predictiveDistribution]]
+    * during final deployment.
     * */
-  var validationSet: Seq[(DenseVector[Double], Double)] = Seq()
+  protected var validationSet: Seq[(DenseVector[Double], Double)] = Seq()
+
+  /**
+    * Accessor method for [[validationSet]]
+    * */
+  def _validationSet = validationSet
+
+  /**
+    * Set the validation data, optionally append it to the existing validation data
+    *
+    * @param v data
+    * @param append Defaults to false
+    * */
+  def validationSet_(v: Seq[(DenseVector[Double], Double)], append: Boolean = false) =
+    if(append) validationSet ++= v else validationSet = v
 
   /**
     * Assigning a value to the [[processTargets]] data pipe
@@ -71,6 +88,7 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     * scales.
     *
     * */
+  @deprecated("scheduled to be removed by DynaML 2.x")
   var processTargets: DataPipe[
     Stream[(Double, Double)],
     Stream[(Double, Double)]] =
@@ -87,6 +105,7 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     * Currently this defaults to RMSE calculated
     * on the validation data.
     * */
+  @deprecated("sscheduled to be removed by DynaML 2.x")
   var scoresToEnergy: DataPipe[Stream[(Double, Double)], Double] =
     DataPipe((scoresAndLabels) => {
 
@@ -121,18 +140,22 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   override def energy(h: Map[String, Double],
                       options: Map[String, String]): Double = validationSet.length match {
     case 0 => super.energy(h, options)
-    case _ =>
-      // Calculate regression metrics on validation set
-      // Return some function of kpi as energy
-      setState(h)
-      val resultsToScores = DataPipe(
-        (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-          res.map(i => (i._3, i._2)).toStream)
-
-      (resultsToScores >
-        processTargets >
-        scoresToEnergy) run
-        this.test(validationSet)
+    case _ => super.calculateEnergyPipe(h, options)(dataAsSeq(g) ++ validationSet)
   }
 
+  /**
+    * Calculates the gradient energy of the configuration and
+    * subtracts this from the current value of h to yield a new
+    * hyper-parameter configuration.
+    *
+    * Over ride this function if you aim to implement a gradient based
+    * hyper-parameter optimization routine like ML-II
+    *
+    * @param h The value of the hyper-parameters in the configuration space
+    * @return Gradient of the objective function (marginal likelihood) as a Map
+    **/
+  override def gradEnergy(h: Map[String, Double]) = validationSet.length match {
+    case 0 => super.gradEnergy(h)
+    case _ => super.calculateGradEnergyPipe(h)(dataAsSeq(g) ++ validationSet)
+  }
 }

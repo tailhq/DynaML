@@ -8,12 +8,17 @@ import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
 import io.github.mandar2812.dynaml.probability.{E, MeasurableDistrRV}
 import io.github.mandar2812.dynaml.utils
+import org.apache.spark.annotation.Experimental
 
 import scala.reflect.ClassTag
 
 /**
-  * Created by mandar on 02/01/2017.
+  * ::Experimental::
+  * @author mandar date 02/01/2017.
+  *
+  * A warped Gaussian Process.
   */
+@Experimental
 class WarpedGP[T, I](p: AbstractGPRegressionModel[T, I])(
   warpingFunc: PushforwardMap[Double, Double, Double])(
   implicit ev: ClassTag[I],

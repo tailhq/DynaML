@@ -80,7 +80,10 @@ class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
     logger.info("Stopped ML-II at "+count+" iterations")
     logger.info("Final state : "+working_solution)
 
-    system.energy(working_solution, Map("persist" -> "1"))
+    //Persist the current configuration to the model memory
+    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))
+      system.persist(working_solution)
+
     (system, working_solution)
   }
 }

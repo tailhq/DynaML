@@ -160,7 +160,10 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
       "Optimum value of energy is: "+optimum+
       " at: "+GlobalOptimizer.prettyPrint(landscape(optimum)))
 
-    system.energy(landscape(optimum), options + ("persist" -> "1"))
+    //Persist the current configuration to the model memory
+    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))
+      system.persist(landscape(optimum))
+
     (system, landscape(optimum))
   }
 }

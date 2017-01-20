@@ -57,7 +57,10 @@ class GridSearch[M <: GloballyOptimizable](model: M)
     logger.info("Optimum value of energy is: "+optimum+
       "\nConfiguration: "+energyLandscape(optimum))
 
-    system.energy(energyLandscape(optimum), options + ("persist" -> "1"))
+    //Persist the current configuration to the model memory
+    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))
+      system.persist(energyLandscape(optimum))
+
     (system, energyLandscape(optimum))
   }
 }

@@ -57,6 +57,8 @@ trait GloballyOptimizable {
   def energy(h: Map[String, Double],
              options: Map[String, String] = Map()): Double
 
+  def persist(state: Map[String, Double]): Unit = {}
+
 }
 
 trait GloballyOptWithGrad extends GloballyOptimizable {

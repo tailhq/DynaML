@@ -43,7 +43,7 @@ abstract class AbstractSTPRegressionModel[T, I](
   mu: Double, cov: LocalScalarKernel[I],
   n: LocalScalarKernel[I],
   data: T, num: Int,
-  meanFunc: DataPipe[I, Double] = DataPipe((x: I) => 0.0))(implicit ev: ClassTag[I])
+  meanFunc: DataPipe[I, Double] = DataPipe((_: I) => 0.0))(implicit ev: ClassTag[I])
   extends ContinuousProcess[T, I, Double, MultStudentsTPRV]
   with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultStudentsTPRV]
   with GloballyOptimizable {
