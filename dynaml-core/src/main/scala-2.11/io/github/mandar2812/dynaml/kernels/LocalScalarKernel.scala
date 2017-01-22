@@ -1,6 +1,5 @@
 package io.github.mandar2812.dynaml.kernels
 
-import scalaxy.streams.optimize
 import scala.reflect.ClassTag
 import breeze.linalg.DenseMatrix
 import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
