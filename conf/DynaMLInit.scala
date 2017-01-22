@@ -1,7 +1,8 @@
 /*
 * External Imports
 * */
-
+//Ammonite imports
+import ammonite.ops._
 //Import breeze for linear algebra
 import breeze.linalg._
 import breeze.stats.distributions._
