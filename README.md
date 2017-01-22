@@ -1,4 +1,4 @@
-<img src="docs/images/dynaml_logo.png" alt="DynaML Logo" style="width: 128px;"/>
+<img src="docs/images/dynaml_logo_small.png" alt="DynaML Logo" style="width: 128px;"/>
 
 # DynaML
 
