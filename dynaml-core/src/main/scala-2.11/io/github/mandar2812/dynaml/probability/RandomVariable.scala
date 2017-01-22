@@ -94,24 +94,19 @@ trait HasDistribution[Domain] {
   *
   * @tparam Domain The domain over which the random variable takes values.
   * */
-trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
+trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] { self =>
 
   /**
     * Return the random variable that results from adding a provided
     * random variable to the current random variable.
     *
     * @param other The random variable to be added to this.
-    * @param ev An implicit parameter, which represents a [[Field]] defined over
-    *           the set [[Domain]].
     * */
-  def +(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
-    val sam = this.sample.run _
-
+  def +(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
     override val sample = DataPipe(() => other.sample()) >
-        DataPipe((first: Domain) => ev.plus(first, sam()))
+        DataPipe((first: Domain) => ev.plus(first, self.sample()))
     }
-  }
 
   /**
     * Return the random variable that results from subtracting a provided
@@ -121,14 +116,11 @@ trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * @param ev An implicit parameter, which represents a [[Field]] defined over
     *           the set [[Domain]].
     * */
-  def -(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
-    val sam = this.sample.run _
-
+  def -(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
       override val sample = DataPipe(() => other.sample()) >
-        DataPipe((first: Domain) => ev.minus(sam(), first))
+        DataPipe((first: Domain) => ev.minus(self.sample(), first))
     }
-  }
 
   /**
     * Return the random variable that results from multiplying a provided
@@ -138,14 +130,11 @@ trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * @param ev An implicit parameter, which represents a [[Field]] defined over
     *           the set [[Domain]].
     * */
-  def *(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
-    val sam = this.sample.run _
-
+  def *(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
       override val sample = DataPipe(() => other.sample()) >
-        DataPipe((first: Domain) => ev.times(first, sam()))
+        DataPipe((first: Domain) => ev.times(first, self.sample()))
     }
-  }
 
   /**
     * Return the random variable that results from adding a provided
@@ -155,13 +144,10 @@ trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * @param ev An implicit parameter, which represents a [[Field]] defined over
     *           the set [[Domain]].
     * */
-  def +(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
-    val sam = this.sample.run _
-
+  def +(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-      override val sample = DataPipe(() => ev.plus(other, sam()))
+      override val sample = DataPipe(() => ev.plus(other, self.sample()))
     }
-  }
 
 
   /**
@@ -172,13 +158,10 @@ trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * @param ev An implicit parameter, which represents a [[Field]] defined over
     *           the set [[Domain]].
     * */
-  def -(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
-    val sam = this.sample.run _
-
+  def -(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-      override val sample = DataPipe(() => ev.minus(sam(), other))
+      override val sample = DataPipe(() => ev.minus(self.sample(), other))
     }
-  }
 
   /**
     * Return the random variable that results from multiplying a provided
@@ -188,13 +171,10 @@ trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * @param ev An implicit parameter, which represents a [[Field]] defined over
     *           the set [[Domain]].
     * */
-  def *(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] = {
-    val sam = this.sample.run _
-
+  def *(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-      override val sample = DataPipe(() => ev.times(other, sam()))
+      override val sample = DataPipe(() => ev.times(other, self.sample()))
     }
-  }
 }
 
 /**
@@ -360,7 +340,7 @@ object RandomVariable {
 
   def apply[O](g: ThreadedBufferedRand[O]) = new ThreadedRandomVariable[O](g)
 
-  def apply[O](r: Rand[O]) = new RandomVariable[O] {
+  def apply[O](r: Rand[O]) = new RandomVariable[O]  {
     val sample = DataPipe(() => r.draw)
   }
 
