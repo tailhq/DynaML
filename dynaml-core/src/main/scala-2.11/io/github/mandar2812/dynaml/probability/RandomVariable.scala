@@ -94,7 +94,7 @@ trait HasDistribution[Domain] {
   *
   * @tparam Domain The domain over which the random variable takes values.
   * */
-trait ContinuousRandomVariable[Domain] extends RandomVariable[Domain] { self =>
+abstract class ContinuousRandomVariable[Domain] extends RandomVariable[Domain] { self =>
 
   /**
     * Return the random variable that results from adding a provided
@@ -226,8 +226,8 @@ trait RandomVarWithDistr[Domain, Dist <: Density[Domain] with Rand[Domain]]
   *
   * */
 trait ContinuousDistrRV[Domain]
-  extends RandomVarWithDistr[Domain, ContinuousDistr[Domain]]
-    with ContinuousRandomVariable[Domain] { self =>
+  extends ContinuousRandomVariable[Domain]
+    with RandomVarWithDistr[Domain, ContinuousDistr[Domain]] { self =>
 
   override val underlyingDist: ContinuousDistr[Domain]
 
@@ -260,7 +260,7 @@ trait ContinuousDistrRV[Domain]
 /**
   * A random variable which takes discrete or categorical values.
   * */
-abstract class DiscreteDistrRV[Domain]
+trait DiscreteDistrRV[Domain]
   extends RandomVarWithDistr[Domain, DiscreteDistr[Domain]] {
 
   override val underlyingDist: DiscreteDistr[Domain]
