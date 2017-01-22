@@ -1,6 +1,9 @@
 package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.{DenseMatrix, DenseVector}
+import io.github.mandar2812.dynaml.analysis.VectorField
+import io.github.mandar2812.dynaml.pipes.DataPipe
+import spire.algebra.InnerProductSpace
 
 /**
   * A covariance function implementation. Covariance functions are
@@ -55,18 +58,20 @@ object CovarianceFunction {
     *
     * @return A kernel instance defined for that particular feature transformation.
     * */
-  def apply[T](phi: T => DenseVector[Double]) = new LocalScalarKernel[T] {
-    override val hyper_parameters: List[String] = List()
+  def apply[T](phi: T => DenseVector[Double])(
+    implicit e: InnerProductSpace[DenseVector[Double], Double]) =
+    new FeatureMapCovariance[T, DenseVector[Double]](DataPipe(phi)) {
+      override val hyper_parameters: List[String] = List()
 
-    override def evaluate(x: T, y: T): Double = phi(x) dot phi(y)
+      override def evaluate(x: T, y: T): Double = phi(x) dot phi(y)
 
-    override def buildKernelMatrix[S <: Seq[T]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
-      SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
+      override def buildKernelMatrix[S <: Seq[T]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
+        SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
 
-    override def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): DenseMatrix[Double] =
-      SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
+      override def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): DenseMatrix[Double] =
+        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
-  }
+    }
 
   /**
     * Create a kernel from a symmetric function.

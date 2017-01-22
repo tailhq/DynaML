@@ -1,9 +1,10 @@
 package io.github.mandar2812.dynaml.kernels
 
 import scala.reflect.ClassTag
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
 import io.github.mandar2812.dynaml.pipes._
+import spire.algebra.InnerProductSpace
 
 /**
   * Scalar Kernel defines algebraic behavior for kernels of the form
@@ -52,11 +53,9 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
 
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new TensorCombinationKernel[Index, T1](this, otherKernel)
-    //new KernelOps.PairOps[Index, T1].tensorMultLocalScKernels(this, otherKernel)
 
   def :+[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new TensorCombinationKernel[Index, T1](this, otherKernel)(Reducer.:+:)
-    //new KernelOps.PairOps[Index, T1].tensorAddLocalScKernels(this, otherKernel)
 
   override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
     SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
@@ -77,9 +76,43 @@ abstract class CompositeCovariance[T]
   override def repr: CompositeCovariance[T] = this
 }
 
+/**
+  * @author mandar2812 date: 22/01/2017
+  *
+  * A kernel represented as a dot product of an explicit feature mapping.
+  *
+  * @param p Feature map to be applied on input.
+  * */
+class FeatureMapCovariance[T, U](p: DataPipe[T, U])(implicit e: InnerProductSpace[U, Double])
+  extends LocalScalarKernel[T] { self =>
 
+  val phi = p
 
+  override val hyper_parameters = List.empty[String]
 
+  override def evaluate(x: T, y: T) = e.dot(phi(x), phi(y))
 
+  /**
+    * Construct a multi-layer kernel
+    * */
+  def >(other: LocalScalarKernel[U]): LocalScalarKernel[T] =
+    new LocalScalarKernel[T] {
+
+      override val hyper_parameters = other.hyper_parameters
+
+      blocked_hyper_parameters = other.blocked_hyper_parameters
+
+      state = other.state
+
+      override def evaluate(x: T, y: T) =  other.evaluate(self.phi(x), self.phi(y))
+    }
+
+  /**
+    * Construct a multi-layer feature map kernel
+    * */
+  def >[V](other: FeatureMapCovariance[U, V])(implicit e1: InnerProductSpace[V, Double]): FeatureMapCovariance[T, V] =
+    new FeatureMapCovariance[T, V](self.phi > other.phi)
+
+}
 
 
