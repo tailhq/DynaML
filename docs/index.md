@@ -4,9 +4,14 @@ keywords: home page
 tags: [getting_started]
 sidebar: mydoc_sidebar
 permalink: index.html
+toc: false
 ---
 
-[![Join the chat at https://gitter.im/mandar2812/DynaML](https://badges.gitter.im/mandar2812/DynaML.svg)](https://gitter.im/mandar2812/DynaML?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)[![Build Status](https://travis-ci.org/mandar2812/DynaML.svg?branch=branch-1.0)](https://travis-ci.org/mandar2812/DynaML) [![](https://jitpack.io/v/mandar2812/DynaML.svg)](https://jitpack.io/#mandar2812/DynaML)
+<img src="images/dynaml_logo.png" alt="DynaML Logo" style="width: 256px;"/>
+
+
+[![Join the chat at https://gitter.im/mandar2812/DynaML](https://badges.gitter.im/mandar2812/DynaML.svg)](https://gitter.im/mandar2812/DynaML?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)[![Build Status](https://travis-ci.org/transcendent-ai-labs/DynaML.svg?branch=master)](https://travis-ci.org/transcendent-ai-labs/DynaML)[![](https://jitpack.io/v/mandar2812/DynaML.svg)](https://jitpack.io/#mandar2812/DynaML)
+
 
 ## What is DynaML?
 
