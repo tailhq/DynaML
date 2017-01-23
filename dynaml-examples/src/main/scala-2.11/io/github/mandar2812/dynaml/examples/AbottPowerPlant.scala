@@ -18,11 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.examples
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseVector
 import com.quantifind.charts.Highcharts._
-import io.github.mandar2812.dynaml.DynaMLPipe
+import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalScalarKernel}
+import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.gp.GPNarXModel
 import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
@@ -124,25 +124,25 @@ object AbottPowerPlant {
         )
       }
 
-    val preProcessPipe = DynaMLPipe.fileToStream >
-      DynaMLPipe.trimLines >
-      DynaMLPipe.replaceWhiteSpaces >
-      DynaMLPipe.extractTrainingFeatures(
+    val preProcessPipe = fileToStream >
+      trimLines >
+      replaceWhiteSpaces >
+      extractTrainingFeatures(
         List(0,column,1,2,3,4),
         Map()
       ) >
-      DynaMLPipe.removeMissingLines >
+      removeMissingLines >
       StreamDataPipe((line: String) => {
         val splits = line.split(",")
         val timestamp = splits.head.toDouble
         val feat = DenseVector(splits.tail.map(_.toDouble))
         (timestamp, feat)
       }) >
-      DynaMLPipe.deltaOperationVec(deltaT)
+      deltaOperationVec(deltaT)
 
-    val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
-      DynaMLPipe.splitTrainingTest(num_training, num_test) >
-      DynaMLPipe.trainTestGaussianStandardization >
+    val trainTestPipe = duplicate(preProcessPipe) >
+      splitTrainingTest(num_training, num_test) >
+      trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
     trainTestPipe.run(("data/steamgen.csv",
