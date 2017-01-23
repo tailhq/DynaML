@@ -22,6 +22,8 @@ case class GaussianScaler(mean: DenseVector[Double], sigma: DenseVector[Double])
 
   def apply(r: Range): GaussianScaler = GaussianScaler(mean(r), sigma(r))
 
+  def apply(index: Int): UnivariateGaussianScaler = UnivariateGaussianScaler(mean(index), sigma(index))
+
   def ++(other: GaussianScaler) =
     GaussianScaler(
       DenseVector(this.mean.toArray++other.mean.toArray),
@@ -48,4 +50,15 @@ case class MVGaussianScaler(mean: DenseVector[Double], sigma: DenseMatrix[Double
   override def run(data: DenseVector[Double]): DenseVector[Double] = sigmaInverse.t * (data - mean)
 
   def apply(r: Range): MVGaussianScaler = MVGaussianScaler(mean(r), sigma(r,r))
+}
+
+case class UnivariateGaussianScaler(mean: Double, sigma: Double) extends ReversibleScaler[Double] {
+  require(sigma > 0.0, "Std. Deviation for gaussian scaling must be strictly positive!")
+  /**
+    * The inverse operation of this scaling.
+    *
+    **/
+  override val i = Scaler((pattern: Double) => (pattern*sigma) + mean)
+
+  override def run(data: Double) = (data-mean)/sigma
 }
