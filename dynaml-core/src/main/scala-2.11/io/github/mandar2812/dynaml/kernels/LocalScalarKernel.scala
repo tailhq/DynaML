@@ -110,7 +110,8 @@ class FeatureMapCovariance[T, U](p: DataPipe[T, U])(implicit e: InnerProductSpac
   /**
     * Construct a multi-layer feature map kernel
     * */
-  def >[V](other: FeatureMapCovariance[U, V])(implicit e1: InnerProductSpace[V, Double]): FeatureMapCovariance[T, V] =
+  def >[V](other: FeatureMapCovariance[U, V])(
+    implicit e1: InnerProductSpace[V, Double]): FeatureMapCovariance[T, V] =
     new FeatureMapCovariance[T, V](self.phi > other.phi)
 
 }
