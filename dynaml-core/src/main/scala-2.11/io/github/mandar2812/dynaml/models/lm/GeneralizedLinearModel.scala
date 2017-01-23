@@ -40,7 +40,7 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
 
   val task: String
 
-  val h: (Double) => Double = identity _
+  val h: (Double) => Double = identity
 
   featureMap = map
 
@@ -162,7 +162,7 @@ object GeneralizedLinearModel {
   def apply[T](data: Stream[(DenseVector[Double], Double)],
                task: String = "regression",
                map: (DenseVector[Double]) => DenseVector[Double] =
-               identity[DenseVector[Double]] _,
+               identity[DenseVector[Double]],
                modeltype: String = "") = task match {
     case "regression" => new RegularizedGLM(data, data.length, map).asInstanceOf[GeneralizedLinearModel[T]]
     case "classification" => modeltype match {
