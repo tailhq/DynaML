@@ -31,6 +31,9 @@ import scala.annotation.tailrec
 import scala.util.matching.Regex
 import sys.process._
 import java.net.URL
+
+import org.apache.spark.annotation.Experimental
+
 import scalaxy.streams.optimize
 import spire.algebra.Field
 
@@ -79,14 +82,23 @@ package object utils {
       case x :: rest =>
         val mnew = m + (x - m)/(i+1).toDouble
         getStatsRec(rest, mnew,
-          s + (m:*m) - (mnew:*mnew) + ((x:*x) - s - (m:*m))/i.toDouble,
+          s + (m:*m) - (mnew:*mnew) + ((x:*x) - s - (m:*m))/(i+1).toDouble,
           i + 1)
 
     }
 
-    getStatsRec(data.tail, data.head,
+
+    val n = data.length
+
+    require(n > 1, "To calculate stats size of data must be > 1")
+
+    val adjustment = n.toDouble/(n-1)
+    val (mean, biasedSigmaSq) = getStatsRec(
+      data.tail, data.head,
       DenseVector.zeros[Double](data.head.length),
       1)
+
+    (mean, biasedSigmaSq*adjustment)
   }
 
   /**
@@ -110,16 +122,26 @@ package object utils {
       case x :: rest =>
         val mnew = m + (x - m)/(i+1).toDouble
         getStatsRec(rest, mnew,
-          s + (m*m.t) - (mnew*mnew.t) + ((x*x.t) - s - (m*m.t))/i.toDouble,
+          s + (m*m.t) - (mnew*mnew.t) + ((x*x.t) - s - (m*m.t))/(i+1).toDouble,
           i + 1)
 
     }
 
-    getStatsRec(data.tail, data.head,
+
+    val n = data.length
+
+    require(n > 1, "To calculate stats size of data must be > 1")
+
+    val adjustment = n.toDouble/(n-1)
+    val (mean, biasedSigmaSq) = getStatsRec(
+      data.tail, data.head,
       data.head * data.head.t,
       1)
+
+    (mean, biasedSigmaSq*adjustment)
   }
 
+  @Experimental
   def getStatsRDD(data: RDD[LabeledPoint]):
   (Double, Double,
     DenseVector[Double],
