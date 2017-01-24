@@ -28,4 +28,6 @@ class MLPKernel(w: Double, b: Double) extends SVMKernel[DenseMatrix[Double]]
       (state("w")*(x.t*y) + state("b"))/
       (math.sqrt(state("w")*(x.t*x) + state("b") + 1) * math.sqrt(state("w")*(y.t*y) + state("b") + 1)))
 
+  //TODO: Write implementation of kernel gradient.
+
 }

@@ -40,6 +40,8 @@ class TStudentKernel(private var d: Double = 1.0)(implicit ev: Field[DenseVector
 
   def getD: Double = state("d")
 
+  //TODO: Write implementation of kernel gradient.
+
 }
 
 class TStudentCovFunc(private var d: Double) extends LocalSVMKernel[Double] {
