@@ -48,47 +48,7 @@ class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
 
   def getBandwidth: Double = this.bandwidth
 
-  def >[K <: LocalScalarKernel[T]](otherKernel: K): CompositeCovariance[T] = {
 
-    new CompositeCovariance[T] {
-      override val hyper_parameters = self.hyper_parameters ++ otherKernel.hyper_parameters
-
-      override def evaluate(x: T, y: T) = {
-        val arg = otherKernel.evaluate(x,y) +
-          otherKernel.evaluate(y,y) -
-          2.0*otherKernel.evaluate(x,y)
-
-        math.exp(-1.0*arg/(2.0*math.pow(state("bandwidth"), 2.0)))
-      }
-
-      state = self.state ++ otherKernel.state
-
-      override def gradient(x: T, y: T): Map[String, Double] = {
-        val arg = otherKernel.evaluate(x,y) +
-          otherKernel.evaluate(y,y) -
-          2.0*otherKernel.evaluate(x,y)
-
-        val gradx = otherKernel.gradient(x,x)
-        val grady = otherKernel.gradient(y,y)
-        val gradxy = otherKernel.gradient(x,y)
-
-        Map("bandwidth" ->
-          this.evaluate(x,y)*arg/math.pow(math.abs(state("bandwidth")), 3)
-        ) ++
-          gradxy.map((s) => {
-            val ans = (-2.0*s._2 + gradx(s._1) + grady(s._1))/2.0*math.pow(state("bandwidth"), 2.0)
-            (s._1, -1.0*this.evaluate(x,y)*ans)
-          })
-      }
-
-      override def buildKernelMatrix[S <: Seq[T]](mappedData: S, length: Int) =
-        SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
-
-      override def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S) =
-        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
-
-    }
-  }
 
 }
 

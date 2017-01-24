@@ -76,6 +76,55 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     }
   }
 
+  def >[K <: GenericRBFKernel[Index]](otherKernel: K): CompositeCovariance[Index] = {
+
+    new CompositeCovariance[Index] {
+
+      override val hyper_parameters = self.hyper_parameters ++ otherKernel.hyper_parameters
+
+      override def evaluate(x: Index, y: Index) = {
+        val arg = self.evaluate(x,y) +
+          self.evaluate(y,y) -
+          2.0*self.evaluate(x,y)
+
+        math.exp(-1.0*arg/(2.0*math.pow(state("bandwidth"), 2.0)))
+      }
+
+      state = self.state ++ otherKernel.state
+
+      override def gradient(x: Index, y: Index): Map[String, Double] = {
+        val arg = self.evaluate(x,y) +
+          self.evaluate(y,y) -
+          2.0*self.evaluate(x,y)
+
+        val gradx = self.gradient(x,x)
+        val grady = self.gradient(y,y)
+        val gradxy = self.gradient(x,y)
+
+        Map("bandwidth" ->
+          otherKernel.evaluate(x,y)*arg/math.pow(math.abs(state("bandwidth")), 3)
+        ) ++
+          gradxy.map((s) => {
+            val ans = (-2.0*s._2 + gradx(s._1) + grady(s._1))/2.0*math.pow(state("bandwidth"), 2.0)
+            (s._1, -1.0*otherKernel.evaluate(x,y)*ans)
+          })
+      }
+      
+      override def setHyperParameters(h: Map[String, Double]) = {
+        self.setHyperParameters(h)
+        otherKernel.setHyperParameters(h)
+        super.setHyperParameters(h)
+      }
+
+      override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
+        SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
+
+      override def buildCrossKernelMatrix[S <: Seq[Index]](dataset1: S, dataset2: S) =
+        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
+
+    }
+  }
+
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new TensorCombinationKernel[Index, T1](this, otherKernel)
 
