@@ -16,7 +16,7 @@ import spire.algebra.InnerProductSpace
   * */
 trait LocalScalarKernel[Index] extends
 CovarianceFunction[Index, Double, DenseMatrix[Double]]
-  with KernelOps[LocalScalarKernel[Index]] {
+  with KernelOps[LocalScalarKernel[Index]] { self =>
 
   override def repr: LocalScalarKernel[Index] = this
 
@@ -50,6 +50,31 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     * */
   def *[T <: LocalScalarKernel[Index]](otherKernel: T)(implicit ev: ClassTag[Index]): CompositeCovariance[Index] =
     new MultiplicativeCovariance[Index](this, otherKernel)
+
+  /**
+    * Returns the kernel multiplied by a positive constant: k_new = k*c
+    * */
+  def *(c: Double): LocalScalarKernel[Index] = {
+    require (c > 0, "Multiplicative constant applied on a kernel must be positive!")
+    new LocalScalarKernel[Index] {
+
+      override val hyper_parameters = self.hyper_parameters
+
+      state = self.state
+
+      blocked_hyper_parameters = self.blocked_hyper_parameters
+
+      override def setHyperParameters(h: Map[String, Double]) = {
+        self.setHyperParameters(h)
+        super.setHyperParameters(h)
+      }
+
+      override def gradient(x: Index, y: Index) = super.gradient(x, y).map(co => (co._1, co._2*c))
+
+      override def evaluate(x: Index, y: Index) = self.evaluate(x, y)*c
+
+    }
+  }
 
   def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new TensorCombinationKernel[Index, T1](this, otherKernel)
@@ -95,8 +120,8 @@ class FeatureMapCovariance[T, U](p: DataPipe[T, U])(implicit e: InnerProductSpac
   /**
     * Construct a multi-layer kernel
     * */
-  def >(other: LocalScalarKernel[U]): LocalScalarKernel[T] =
-    new LocalScalarKernel[T] {
+  def >(other: LocalScalarKernel[U]): CompositeCovariance[T] =
+    new CompositeCovariance[T] {
 
       override val hyper_parameters = other.hyper_parameters
 
@@ -105,6 +130,13 @@ class FeatureMapCovariance[T, U](p: DataPipe[T, U])(implicit e: InnerProductSpac
       state = other.state
 
       override def evaluate(x: T, y: T) =  other.evaluate(self.phi(x), self.phi(y))
+
+      override def setHyperParameters(h: Map[String, Double]) = {
+        other.setHyperParameters(h)
+        super.setHyperParameters(h)
+      }
+
+      override def gradient(x: T, y: T) = other.gradient(self.phi(x), self.phi(y))
     }
 
   /**

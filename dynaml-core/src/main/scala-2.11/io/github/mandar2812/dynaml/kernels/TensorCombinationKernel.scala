@@ -45,7 +45,7 @@ class TensorCombinationKernel[R, S](
       val hyper_params = hypC._2.map(_._2).toMap
       if(kid == fID) firstK.setHyperParameters(hyper_params) else secondK.setHyperParameters(hyper_params)
     })
-    this
+    super.setHyperParameters(h)
   }
 
   override def gradient(x: (R, S), y: (R, S)): Map[String, Double] = reducer match {

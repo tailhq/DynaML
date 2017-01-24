@@ -29,7 +29,7 @@ class AdditiveCovariance[Index](
       .map(kv => (kv._1.split("/").tail.mkString("/"), kv._2)))
     otherKernel.setHyperParameters(h.filter(_._1.contains(sID))
       .map(kv => (kv._1.split("/").tail.mkString("/"), kv._2)))
-    this
+    super.setHyperParameters(h)
   }
 
   override def gradient(x: Index, y: Index): Map[String, Double] =
