@@ -30,11 +30,13 @@ import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
 import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
 import org.apache.log4j.Logger
+import org.apache.spark.rdd.RDD
 import org.renjin.script.RenjinScriptEngine
 import org.renjin.sexp._
 
 import scalaxy.streams.optimize
 import scala.reflect.ClassTag
+import scala.util.Random
 
 /**
   * @author mandar2812 datum 3/2/16.
@@ -538,6 +540,39 @@ object DynaMLPipe {
   val extractTrainingFeatures =
     (columns: List[Int], m: Map[Int, String]) => DataPipe((l: Stream[String]) =>
     utils.extractColumns(l, ",", columns, m))
+
+  /**
+    * Returns a pipeline which performs a bagging based sub-sampling
+    * of a stream of [[T]].
+    *
+    * @param proportion The sampling proportion between 0 and 1
+    * @param nBags The number of bags to generate.
+    * */
+  def baggingStream[T](proportion: Double, nBags: Int) = {
+    require(proportion > 0.0 && proportion <= 1.0 && nBags > 0,
+      "Sampling proprotion must be between 0 and 1; "+
+        "Number of bags must be positive")
+    DataPipe((data: Stream[T]) =>{
+      val sizeOfBag: Int = (data.length*proportion).toInt
+      (1 to nBags).map(_ =>
+        Stream.tabulate[T](sizeOfBag)(_ => data(Random.nextInt(data.length)))
+      ).toStream
+    })
+  }
+
+  /**
+    * Returns a pipeline which performs a bagging based sub-sampling
+    * of an Apache Spark [[RDD]] of [[T]].
+    *
+    * @param proportion The sampling proportion between 0 and 1
+    * @param nBags The number of bags to generate.
+    * */
+  def baggingRDD[T](proportion: Double, nBags: Int) = {
+    require(proportion > 0.0 && proportion <= 1.0 && nBags > 0,
+      "Sampling proprotion must be between 0 and 1; "+
+        "Number of bags must be positive")
+    DataPipe((data: RDD[T]) => (1 to nBags).map(_ => data.sample(withReplacement = true, proportion)))
+  }
 
   /**
     * Takes a base pipe and creates a parallel pipe by duplicating it.
