@@ -9,6 +9,11 @@ import org.apache.spark.rdd.RDD
   * A Generalized Linear Model applied to a
   * single output regression task. The training
   * set is an Apache Spark [[RDD]]
+  *
+  * @param data The training data as an [[RDD]]
+  * @param numPoints Number of training data points
+  * @param map A general non-linear feature mapping/basis function expansion.
+  *
   */
 class SparkGLM(
   data: RDD[(DenseVector[Double], Double)], numPoints: Long,
@@ -19,6 +24,9 @@ class SparkGLM(
 
   private lazy val sample_input = g.first()._1
 
+  /**
+    * The link function; in this case simply the identity map
+    * */
   override val h: (Double) => Double = identity[Double]
 
   featureMap = map
@@ -33,6 +41,11 @@ class SparkGLM(
 
   override def initParams() = DenseVector.zeros[Double](dimensions + 1)
 
+  /**
+    * Input an [[RDD]] containing the data set and output
+    * a design matrix and response vector which can be solved
+    * in the OLS sense.
+    * */
   override def prepareData(d: RDD[(DenseVector[Double], Double)]) = {
 
     val phi = featureMap
