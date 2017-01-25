@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
+
 package io.github.mandar2812.dynaml.models.lm
 
 import breeze.linalg.DenseVector
@@ -27,19 +28,22 @@ import scala.util.Random
 
 /**
   * @author mandar2812 date: 4/4/16.
+  *
+  * A generalised linear model for local data sets.
+  * This is extended for Regression in [[RegularizedGLM]]
+  * and for binary classification in [[LogisticGLM]] and [[ProbitGLM]]
   */
 abstract class GeneralizedLinearModel[T](
   data: Stream[(DenseVector[Double], Double)], numPoints: Int,
   map: (DenseVector[Double]) => DenseVector[Double] = identity[DenseVector[Double]])
-  extends LinearModel[Stream[(DenseVector[Double], Double)],
-    DenseVector[Double], DenseVector[Double], Double, T]
+  extends GenericGLM[Stream[(DenseVector[Double], Double)], T](data, numPoints, map)
     with GloballyOptimizable {
 
   override protected val g: Stream[(DenseVector[Double], Double)] = data
 
   val task: String
 
-  val h: (Double) => Double = identity
+  override val h: (Double) => Double = identity
 
   featureMap = map
 
@@ -53,34 +57,6 @@ abstract class GeneralizedLinearModel[T](
 
 
   override protected var params: DenseVector[Double] = initParams()
-
-  override def clearParameters(): Unit = {
-    params = initParams()
-  }
-
-  def prepareData(d: Stream[(DenseVector[Double], Double)]): T
-
-
-  /**
-    * Learn the parameters
-    * of the model which
-    * are in a node of the
-    * graph.
-    *
-    **/
-  override def learn(): Unit = {
-    params = optimizer.optimize(numPoints,
-      prepareData(g), initParams())
-  }
-
-  /**
-    * Predict the value of the
-    * target variable given a
-    * point.
-    *
-    **/
-  override def predict(point: DenseVector[Double]): Double =
-    h(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
 
   override protected var hyper_parameters: List[String] =
     List("regularization")
@@ -147,35 +123,7 @@ abstract class GeneralizedLinearModel[T](
   }
 }
 
-abstract class GenericGLM[Data, T](
-  data: Data, numPoints: Long,
-  map: (DenseVector[Double]) => DenseVector[Double] = identity[DenseVector[Double]])
-  extends LinearModel[Data, DenseVector[Double], DenseVector[Double], Double, T] {
 
-  featureMap = map
-
-  val h: (Double) => Double = identity
-
-  def prepareData(d: Data): T
-
-  override def predict(point: DenseVector[Double]): Double =
-    h(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
-
-  override def clearParameters(): Unit = {
-    params = initParams()
-  }
-
-  /**
-    * The training data
-    **/
-  override protected val g: Data = data
-
-  override def learn(): Unit = {
-    params = optimizer.optimize(numPoints,
-      prepareData(g), initParams())
-  }
-
-}
 
 
 object GeneralizedLinearModel {
