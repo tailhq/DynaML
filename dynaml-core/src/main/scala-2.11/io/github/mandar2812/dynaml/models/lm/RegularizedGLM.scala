@@ -56,6 +56,6 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
       d.map(p => DenseVector(p._2)):_*
     )
 
-    (designMatrix, responseVector)
+    (designMatrix.t*designMatrix, designMatrix.t*responseVector)
   }
 }

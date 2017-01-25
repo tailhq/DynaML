@@ -45,8 +45,8 @@ class RegularizedLSSolver extends
     val (designMatrix,labels) = ParamOutEdges
     val smoother = DenseMatrix.eye[Double](initialP.length)*regParam
     //Construct matrix A and b block by block
-    val A = designMatrix.t*designMatrix + smoother
-    val b = designMatrix.t*labels
+    val A = designMatrix + smoother
+    val b = labels
 
     A\b
   }

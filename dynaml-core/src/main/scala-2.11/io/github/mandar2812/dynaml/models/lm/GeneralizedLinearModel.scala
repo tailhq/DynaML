@@ -26,12 +26,11 @@ import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import scala.util.Random
 
 /**
-  * Created by mandar on 4/4/16.
+  * @author mandar2812 date: 4/4/16.
   */
-abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Double)],
-                             numPoints: Int,
-                             map: (DenseVector[Double]) => DenseVector[Double] =
-                             identity[DenseVector[Double]] _)
+abstract class GeneralizedLinearModel[T](
+  data: Stream[(DenseVector[Double], Double)], numPoints: Int,
+  map: (DenseVector[Double]) => DenseVector[Double] = identity[DenseVector[Double]])
   extends LinearModel[Stream[(DenseVector[Double], Double)],
     DenseVector[Double], DenseVector[Double], Double, T]
     with GloballyOptimizable {
@@ -147,6 +146,37 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
     this
   }
 }
+
+abstract class GenericGLM[Data, T](
+  data: Data, numPoints: Int,
+  map: (DenseVector[Double]) => DenseVector[Double] = identity[DenseVector[Double]])
+  extends LinearModel[Data, DenseVector[Double], DenseVector[Double], Double, T] {
+
+  featureMap = map
+
+  val h: (Double) => Double = identity
+
+  def prepareData(d: Data): T
+
+  override def predict(point: DenseVector[Double]): Double =
+    h(params dot DenseVector(featureMap(point).toArray ++ Array(1.0)))
+
+  override def clearParameters(): Unit = {
+    params = initParams()
+  }
+
+  /**
+    * The training data
+    **/
+  override protected val g: Data = data
+
+  override def learn(): Unit = {
+    params = optimizer.optimize(numPoints,
+      prepareData(g), initParams())
+  }
+
+}
+
 
 object GeneralizedLinearModel {
 
