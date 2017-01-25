@@ -21,8 +21,8 @@ package io.github.mandar2812.dynaml.models.lm
 
 import breeze.linalg.DenseVector
 import breeze.numerics._
+import breeze.stats.distributions.Gaussian
 import io.github.mandar2812.dynaml.optimization._
-import org.apache.commons.math3.distribution.NormalDistribution
 
 /**
   * @author mandar2812 date: 31/3/16.
@@ -36,7 +36,7 @@ import org.apache.commons.math3.distribution.NormalDistribution
 class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
                   numPoints: Int,
                   map: (DenseVector[Double]) => DenseVector[Double] =
-                  identity[DenseVector[Double]] _)
+                  identity[DenseVector[Double]])
   extends GeneralizedLinearModel[
     Stream[(DenseVector[Double], Double)]
     ](data, numPoints, map) {
@@ -65,13 +65,13 @@ class LogisticGLM(data: Stream[(DenseVector[Double], Double)],
 class ProbitGLM(data: Stream[(DenseVector[Double], Double)],
                 numPoints: Int,
                 map: (DenseVector[Double]) => DenseVector[Double] =
-                identity[DenseVector[Double]] _)
+                identity[DenseVector[Double]])
   extends LogisticGLM(data, numPoints, map) {
 
-  private val standardGaussian = new NormalDistribution(0, 1.0)
+  private val standardGaussian = new Gaussian(0, 1.0)
 
   override val h = (x: Double) =>
-    standardGaussian.cumulativeProbability(x)
+    standardGaussian.cdf(x)
 
   override protected val optimizer =
     new GradientDescent(

@@ -19,7 +19,7 @@ under the License.
 
 package io.github.mandar2812.dynaml.optimization
 
-import breeze.linalg.{DenseMatrix, inv, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
   * Created by mandar on 9/2/16.
@@ -28,6 +28,7 @@ class RegularizedLSSolver extends
   RegularizedOptimizer[DenseVector[Double],
     DenseVector[Double], Double,
     (DenseMatrix[Double], DenseVector[Double])] {
+
   /**
     * Solve the convex optimization problem.
     *
@@ -47,6 +48,6 @@ class RegularizedLSSolver extends
     val A = designMatrix.t*designMatrix + smoother
     val b = designMatrix.t*labels
 
-    inv(A)*b
+    A\b
   }
 }

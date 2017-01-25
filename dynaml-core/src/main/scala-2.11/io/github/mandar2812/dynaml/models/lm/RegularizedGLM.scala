@@ -36,7 +36,7 @@ RegularizedLSSolver, RegularizedOptimizer}
 class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
                      numPoints: Int,
                      map: (DenseVector[Double]) => DenseVector[Double] =
-                     identity[DenseVector[Double]] _)
+                     identity[DenseVector[Double]])
   extends GeneralizedLinearModel[(DenseMatrix[Double], DenseVector[Double])](data, numPoints, map)
     with GloballyOptimizable {
 

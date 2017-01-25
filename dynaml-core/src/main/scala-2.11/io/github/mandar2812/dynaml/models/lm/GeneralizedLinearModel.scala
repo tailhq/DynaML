@@ -36,7 +36,7 @@ abstract class GeneralizedLinearModel[T](data: Stream[(DenseVector[Double], Doub
     DenseVector[Double], DenseVector[Double], Double, T]
     with GloballyOptimizable {
 
-  override protected val g = data
+  override protected val g: Stream[(DenseVector[Double], Double)] = data
 
   val task: String
 
