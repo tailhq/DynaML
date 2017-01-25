@@ -25,7 +25,7 @@ package io.github.mandar2812.dynaml.pipes
   * abstract pipe that defines a transformation
   * between two data types, i.e. [[Source]] and [[Destination]]
   */
-trait DataPipe[-Source, +Destination] {
+trait DataPipe[-Source, +Destination] extends Serializable {
 
   def run(data: Source): Destination
 

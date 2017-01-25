@@ -1,14 +1,16 @@
-package io.github.mandar2812.dynaml.algebra
+package io.github.mandar2812.dynaml
 
 import breeze.linalg._
 import breeze.stats.distributions.{Gaussian, Uniform}
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, RBFKernel}
 import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
-import io.github.mandar2812.dynaml.algebra.BlockedMatrixOps._
+import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, RBFKernel}
 import io.github.mandar2812.dynaml.models.lm.SparkGLM
 import io.github.mandar2812.dynaml.optimization.ConjugateGradient
+import io.github.mandar2812.dynaml.pipes.RDDPipe
+import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
@@ -46,6 +48,25 @@ class ApacheSparkSpec extends FlatSpec
     if (sc != null) {
       sc.stop()
     }
+  }
+
+  "RDD Pipes " should " have a consistent composition" in {
+
+    val num = 20
+    val numbers = sc.parallelize(1 to num)
+
+    val convPipe = RDDPipe((n: Int) => n.toDouble)
+
+    val sqPipe = RDDPipe((x: Double) => x*x)
+
+    val sqrtPipe = RDDPipe((x: Double) => math.sqrt(x))
+
+    val resultPipe = RDDPipe((r: RDD[Double]) => r.reduce(_+_).toInt)
+
+    val netPipeline = convPipe > sqPipe > sqrtPipe > resultPipe
+
+    assert(netPipeline(numbers) == num*(num+1)/2)
+
   }
 
   "A distributed matrix " should "have consistent multiplication with a vector" in {

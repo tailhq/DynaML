@@ -9,6 +9,7 @@ import breeze.stats.distributions._
 //Apache Spark for big data support
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
+import org.apache.spark.rdd.RDD
 //Load Wisp-Highcharts for plotting
 import com.quantifind.charts.Highcharts._
 //Import spire implicits for definition of
