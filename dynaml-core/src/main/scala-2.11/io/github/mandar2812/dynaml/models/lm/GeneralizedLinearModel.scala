@@ -148,7 +148,7 @@ abstract class GeneralizedLinearModel[T](
 }
 
 abstract class GenericGLM[Data, T](
-  data: Data, numPoints: Int,
+  data: Data, numPoints: Long,
   map: (DenseVector[Double]) => DenseVector[Double] = identity[DenseVector[Double]])
   extends LinearModel[Data, DenseVector[Double], DenseVector[Double], Double, T] {
 

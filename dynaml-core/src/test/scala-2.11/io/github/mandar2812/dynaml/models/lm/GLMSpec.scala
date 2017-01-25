@@ -3,7 +3,8 @@ package io.github.mandar2812.dynaml.models.lm
 import breeze.linalg.DenseVector
 import breeze.stats.distributions.{Gaussian, Uniform}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
-import org.scalatest.{FlatSpec, Matchers}
+import org.apache.spark.{SparkConf, SparkContext}
+import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
 /**
   * @author mandar2812 date: 11/7/16.

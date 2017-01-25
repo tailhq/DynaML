@@ -43,7 +43,9 @@ class RegularizedLSSolver extends
                         initialP: DenseVector[Double]): DenseVector[Double] = {
 
     val (designMatrix,labels) = ParamOutEdges
-    val smoother = DenseMatrix.eye[Double](initialP.length)*regParam
+    val smoother = DenseMatrix.tabulate[Double](initialP.length, initialP.length)((i,j) => {
+      if(i != j) 0.0 else if(i < initialP.length-1) regParam else 1.0
+    })
     //Construct matrix A and b block by block
     val A = designMatrix + smoother
     val b = labels

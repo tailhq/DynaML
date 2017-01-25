@@ -11,9 +11,8 @@ import org.apache.spark.rdd.RDD
   * set is an Apache Spark [[RDD]]
   */
 class SparkGLM(
-  data: RDD[(DenseVector[Double], Double)], numPoints: Int,
-  map: (DenseVector[Double]) => DenseVector[Double] = identity[DenseVector[Double]],
-  num_features: Int = -1)
+  data: RDD[(DenseVector[Double], Double)], numPoints: Long,
+  map: (DenseVector[Double]) => DenseVector[Double] = identity[DenseVector[Double]])
   extends GenericGLM[
     RDD[(DenseVector[Double], Double)],
     (DenseMatrix[Double], DenseVector[Double])](data, numPoints, map) {
@@ -22,22 +21,24 @@ class SparkGLM(
 
   override val h: (Double) => Double = identity[Double]
 
+  featureMap = map
+
   override protected var params: DenseVector[Double] = initParams()
 
   override protected val optimizer: RegularizedOptimizer[
     DenseVector[Double], DenseVector[Double],
     Double, (DenseMatrix[Double], DenseVector[Double])] = new RegularizedLSSolver
 
-  def dimensions = if(num_features > 0) num_features else featureMap(sample_input).length
+  def dimensions = featureMap(sample_input).length
 
-  override def initParams() = DenseVector.zeros[Double](dimensions)
+  override def initParams() = DenseVector.zeros[Double](dimensions + 1)
 
   override def prepareData(d: RDD[(DenseVector[Double], Double)]) = {
 
     val phi = featureMap
     val mapFunc = (xy: (DenseVector[Double], Double)) => {
-      val phiX = phi(xy._1)
-      val phiY = phi(xy._1)*xy._2
+      val phiX = DenseVector(phi(xy._1).toArray ++ Array(1.0))
+      val phiY = phiX*xy._2
       (phiX*phiX.t, phiY)
     }
 
