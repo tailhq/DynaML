@@ -100,7 +100,7 @@ vector inputs and a singular scalar output.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],data:T,num:Int)(implicitev:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[T,I]"></a>
+      <a id="&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],data:T,num:Int,meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double])(implicitev:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[T,I]"></a>
       <a id="&lt;init&gt;:AbstractGPRegressionModel[T,I]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -108,10 +108,10 @@ vector inputs and a singular scalar output.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AbstractGPRegressionModel</span><span class="params">(<span name="cov">cov: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>, <span name="n">n: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span></span>, <span name="num">num: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>)</span>
+        <span class="name">AbstractGPRegressionModel</span><span class="params">(<span name="cov">cov: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>, <span name="n">n: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span></span>, <span name="num">num: <span class="extype" name="scala.Int">Int</span></span>, <span name="meanFunc">meanFunc: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>] = <span class="symbol"><span class="name"><a href="../../../../../package.html">DataPipe((_:I) =&gt; 0.0)</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],data:T,num:Int)(implicitev:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[T,I]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],data:T,num:Int,meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double])(implicitev:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[T,I]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -337,6 +337,46 @@ and Y is the value/label type.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#calculateEnergyPipe" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="calculateEnergyPipe(h:Map[String,Double],options:Map[String,String]):io.github.mandar2812.dynaml.pipes.DataPipe[T,Double]"></a>
+      <a id="calculateEnergyPipe(Map[String,Double],Map[String,String]):DataPipe[T,Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">calculateEnergyPipe</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@calculateEnergyPipe(h:Map[String,Double],options:Map[String,String]):io.github.mandar2812.dynaml.pipes.DataPipe[T,Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns a <span class="extype" name="DataPipe">DataPipe</span> which calculates the energy of data: <span class="extype" name="T">T</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <span class="extype" name="DataPipe">DataPipe</span> which calculates the energy of data: <span class="extype" name="T">T</span>.
+See: <a href="#energy(h:Map[String,Double],options:Map[String,String]):Double" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#energy">energy</a> below.
+</p></div></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#calculateGradEnergyPipe" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="calculateGradEnergyPipe(h:Map[String,Double]):io.github.mandar2812.dynaml.pipes.DataPipe[T,scala.collection.immutable.Map[String,Double]]"></a>
+      <a id="calculateGradEnergyPipe(Map[String,Double]):DataPipe[T,Map[String,Double]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">calculateGradEnergyPipe</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.T">T</span>, <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@calculateGradEnergyPipe(h:Map[String,Double]):io.github.mandar2812.dynaml.pipes.DataPipe[T,scala.collection.immutable.Map[String,Double]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns a <span class="extype" name="DataPipe">DataPipe</span> which calculates the gradient of the energy, E(.) of data: <span class="extype" name="T">T</span>
+with respect to the model hyper-parameters.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <span class="extype" name="DataPipe">DataPipe</span> which calculates the gradient of the energy, E(.) of data: <span class="extype" name="T">T</span>
+with respect to the model hyper-parameters.
+See: <a href="#gradEnergy(h:Map[String,Double]):Map[String,Double]" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#gradEnergy">gradEnergy</a> below.
+</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -670,18 +710,18 @@ hyper-parameter optimization routine like ML-II
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#mean" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mean:I=&gt;Double"></a>
-      <a id="mean:(I)⇒Double"></a>
+      <a id="mean:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double]"></a>
+      <a id="mean:DataPipe[I,Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">mean</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">mean</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@mean:I=&gt;Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@mean:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -790,24 +830,26 @@ before being used for further processing.</p></div><dl class="attributes block">
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#persist" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="persist():Unit"></a>
-      <a id="persist():Unit"></a>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#persist" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="persist(state:Map[String,Double]):Unit"></a>
+      <a id="persist(Map[String,Double]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">persist</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">persist</span><span class="params">(<span name="state">state: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@persist():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel@persist(state:Map[String,Double]):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Cache the training kernel and noise matrices
-for fast access in future predictions.</p>
+for fast access in future predictions.</p><div class="fullcomment"><div class="comment cmt"><p>Cache the training kernel and noise matrices
+for fast access in future predictions.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(point:I):Double"></a>
       <a id="predict(I):Double"></a>

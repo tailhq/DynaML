@@ -167,18 +167,38 @@
 </p></div><dl class="paramcmts block"><dt class="param">phi</dt><dd class="cmt"><p>A function which for every state outputs a symmetric kernel
             evaluation function for inputs.</p></dd><dt class="param">s</dt><dd class="cmt"><p>The (beginning) state of the kernel.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[T](phi:T=&gt;breeze.linalg.DenseVector[Double]):io.github.mandar2812.dynaml.kernels.CovarianceFunction[T,Double,breeze.linalg.DenseMatrix[Double]]withio.github.mandar2812.dynaml.kernels.LocalScalarKernel[T]"></a>
-      <a id="apply[T]((T)⇒DenseVector[Double]):CovarianceFunction[T,Double,DenseMatrix[Double]]withLocalScalarKernel[T]"></a>
+      <a id="apply[T](phi:io.github.mandar2812.dynaml.pipes.DataPipe[T,breeze.linalg.DenseVector[Double]])(implicite:spire.algebra.InnerProductSpace[breeze.linalg.DenseVector[Double],Double]):io.github.mandar2812.dynaml.kernels.FeatureMapCovariance[T,breeze.linalg.DenseVector[Double]]"></a>
+      <a id="apply[T](DataPipe[T,DenseVector[Double]])(InnerProductSpace[DenseVector[Double],Double]):FeatureMapCovariance[T,DenseVector[Double]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="phi">phi: (<span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.apply.T">T</span>) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.apply.T">T</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]] with <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.apply.T">T</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="phi">phi: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.apply.T">T</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="e">e: <span class="extype" name="spire.algebra.InnerProductSpace">InnerProductSpace</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="FeatureMapCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.FeatureMapCovariance">FeatureMapCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.apply.T">T</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction$@apply[T](phi:T=&gt;breeze.linalg.DenseVector[Double]):io.github.mandar2812.dynaml.kernels.CovarianceFunction[T,Double,breeze.linalg.DenseMatrix[Double]]withio.github.mandar2812.dynaml.kernels.LocalScalarKernel[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction$@apply[T](phi:io.github.mandar2812.dynaml.pipes.DataPipe[T,breeze.linalg.DenseVector[Double]])(implicite:spire.algebra.InnerProductSpace[breeze.linalg.DenseVector[Double],Double]):io.github.mandar2812.dynaml.kernels.FeatureMapCovariance[T,breeze.linalg.DenseVector[Double]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create a kernel from a feature mapping.</p><div class="fullcomment"><div class="comment cmt"><p>Create a kernel from a feature mapping.
+K(x,y) = phi<sup>T</sup>(x) . phi(y)
+</p></div><dl class="paramcmts block"><dt class="param">phi</dt><dd class="cmt"><p>A general non linear transformation as a <span class="extype" name="DataPipe">DataPipe</span>
+           from the domain to a multidimensional vector.</p></dd><dt>returns</dt><dd class="cmt"><p>A kernel instance defined for that particular feature transformation.</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[T](phi:T=&gt;breeze.linalg.DenseVector[Double])(implicite:spire.algebra.InnerProductSpace[breeze.linalg.DenseVector[Double],Double]):io.github.mandar2812.dynaml.kernels.FeatureMapCovariance[T,breeze.linalg.DenseVector[Double]]"></a>
+      <a id="apply[T]((T)⇒DenseVector[Double])(InnerProductSpace[DenseVector[Double],Double]):FeatureMapCovariance[T,DenseVector[Double]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="phi">phi: (<span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.apply.T">T</span>) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="e">e: <span class="extype" name="spire.algebra.InnerProductSpace">InnerProductSpace</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="FeatureMapCovariance.html" class="extype" name="io.github.mandar2812.dynaml.kernels.FeatureMapCovariance">FeatureMapCovariance</a>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction.apply.T">T</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction$@apply[T](phi:T=&gt;breeze.linalg.DenseVector[Double])(implicite:spire.algebra.InnerProductSpace[breeze.linalg.DenseVector[Double],Double]):io.github.mandar2812.dynaml.kernels.FeatureMapCovariance[T,breeze.linalg.DenseVector[Double]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

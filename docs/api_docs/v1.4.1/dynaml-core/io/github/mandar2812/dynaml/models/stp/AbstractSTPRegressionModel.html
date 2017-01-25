@@ -94,7 +94,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(mu:Double,cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],data:T,num:Int)(implicitev:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel[T,I]"></a>
+      <a id="&lt;init&gt;(mu:Double,cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],data:T,num:Int,meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double])(implicitev:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel[T,I]"></a>
       <a id="&lt;init&gt;:AbstractSTPRegressionModel[T,I]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -102,10 +102,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AbstractSTPRegressionModel</span><span class="params">(<span name="mu">mu: <span class="extype" name="scala.Double">Double</span></span>, <span name="cov">cov: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>]</span>, <span name="n">n: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>]</span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.T">T</span></span>, <span name="num">num: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>]</span>)</span>
+        <span class="name">AbstractSTPRegressionModel</span><span class="params">(<span name="mu">mu: <span class="extype" name="scala.Double">Double</span></span>, <span name="cov">cov: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>]</span>, <span name="n">n: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>]</span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.T">T</span></span>, <span name="num">num: <span class="extype" name="scala.Int">Int</span></span>, <span name="meanFunc">meanFunc: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>] = <span class="symbol"><span class="name"><a href="../../../../../package.html">DataPipe((_: I) =&gt; 0.0)</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel@&lt;init&gt;(mu:Double,cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],data:T,num:Int)(implicitev:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel[T,I]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel@&lt;init&gt;(mu:Double,cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],data:T,num:Int,meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double])(implicitev:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel[T,I]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -641,18 +641,18 @@ also known as log likelihood.</p></dd></dl><dl class="attributes block"> <dt>Def
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel#mean" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mean:I=&gt;Double"></a>
-      <a id="mean:(I)⇒Double"></a>
+      <a id="mean:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double]"></a>
+      <a id="mean:DataPipe[I,Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">mean</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">mean</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel.I">I</span>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel@mean:I=&gt;Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel@mean:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -779,6 +779,23 @@ before being used for further processing.</p></div><dl class="attributes block">
     </span>
       <p class="shortcomment cmt">Cache the training kernel and noise matrices
 for fast access in future predictions.</p>
+    </li><li name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable#persist" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="persist(state:Map[String,Double]):Unit"></a>
+      <a id="persist(Map[String,Double]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">persist</span><span class="params">(<span name="state">state: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel@persist(state:Map[String,Double]):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(point:I):Double"></a>
       <a id="predict(I):Double"></a>

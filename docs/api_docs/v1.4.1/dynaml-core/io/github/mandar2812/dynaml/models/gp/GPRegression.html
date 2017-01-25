@@ -92,7 +92,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],trainingdata:Seq[(breeze.linalg.DenseVector[Double],Double)]):io.github.mandar2812.dynaml.models.gp.GPRegression"></a>
+      <a id="&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],trainingdata:Seq[(breeze.linalg.DenseVector[Double],Double)],meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[breeze.linalg.DenseVector[Double],Double]):io.github.mandar2812.dynaml.models.gp.GPRegression"></a>
       <a id="&lt;init&gt;:GPRegression"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,10 +100,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">GPRegression</span><span class="params">(<span name="cov">cov: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="noise">noise: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] = <span class="symbol"><span class="name"><a href="../../../../../package.html">new DiracKernel(1.0)</a></span></span></span>, <span name="trainingdata">trainingdata: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>)</span>
+        <span class="name">GPRegression</span><span class="params">(<span name="cov">cov: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="noise">noise: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] = <span class="symbol"><span class="name"><a href="../../../../../package.html">new DiracKernel(1.0)</a></span></span></span>, <span name="trainingdata">trainingdata: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="meanFunc">meanFunc: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>] = <span class="symbol"><span class="name"><a href="../../../../../package.html">DataPipe(_ =&gt; 0.0)</a></span></span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],trainingdata:Seq[(breeze.linalg.DenseVector[Double],Double)]):io.github.mandar2812.dynaml.models.gp.GPRegression" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@&lt;init&gt;(cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],trainingdata:Seq[(breeze.linalg.DenseVector[Double],Double)],meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[breeze.linalg.DenseVector[Double],Double]):io.github.mandar2812.dynaml.models.gp.GPRegression" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -240,6 +240,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#_validationSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="_validationSet:Seq[(breeze.linalg.DenseVector[Double],Double)]"></a>
+      <a id="_validationSet:Seq[(DenseVector[Double],Double)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">_validationSet</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@_validationSet:Seq[(breeze.linalg.DenseVector[Double],Double)]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Accessor method for <a href="#validationSet:Seq[(breeze.linalg.DenseVector[Double],Double)]" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.GPRegression#validationSet">validationSet</a>
+</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -308,6 +326,46 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#calculateEnergyPipe" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="calculateEnergyPipe(h:Map[String,Double],options:Map[String,String]):io.github.mandar2812.dynaml.pipes.DataPipe[T,Double]"></a>
+      <a id="calculateEnergyPipe(Map[String,Double],Map[String,String]):DataPipe[Seq[(DenseVector[Double],Double)],Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">calculateEnergyPipe</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@calculateEnergyPipe(h:Map[String,Double],options:Map[String,String]):io.github.mandar2812.dynaml.pipes.DataPipe[T,Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns a <span class="extype" name="DataPipe">DataPipe</span> which calculates the energy of data: <span class="extype" name="T">T</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <span class="extype" name="DataPipe">DataPipe</span> which calculates the energy of data: <span class="extype" name="T">T</span>.
+See: <a href="AbstractGPRegressionModel.html#energy(h:Map[String,Double],options:Map[String,String]):Double" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#energy">energy</a> below.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#calculateGradEnergyPipe" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="calculateGradEnergyPipe(h:Map[String,Double]):io.github.mandar2812.dynaml.pipes.DataPipe[T,scala.collection.immutable.Map[String,Double]]"></a>
+      <a id="calculateGradEnergyPipe(Map[String,Double]):DataPipe[Seq[(DenseVector[Double],Double)],Map[String,Double]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">calculateGradEnergyPipe</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@calculateGradEnergyPipe(h:Map[String,Double]):io.github.mandar2812.dynaml.pipes.DataPipe[T,scala.collection.immutable.Map[String,Double]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns a <span class="extype" name="DataPipe">DataPipe</span> which calculates the gradient of the energy, E(.) of data: <span class="extype" name="T">T</span>
+with respect to the model hyper-parameters.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <span class="extype" name="DataPipe">DataPipe</span> which calculates the gradient of the energy, E(.) of data: <span class="extype" name="T">T</span>
+with respect to the model hyper-parameters.
+See: <a href="AbstractGPRegressionModel.html#gradEnergy(h:Map[String,Double]):Map[String,Double]" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#gradEnergy">gradEnergy</a> below.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -564,7 +622,7 @@ through the <a href="#validationSet:Seq[(breeze.linalg.DenseVector[Double],Doubl
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#gradEnergy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#gradEnergy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="gradEnergy(h:Map[String,Double]):Map[String,Double]"></a>
       <a id="gradEnergy(Map[String,Double]):Map[String,Double]"></a>
       <h4 class="signature">
@@ -586,7 +644,7 @@ hyper-parameter configuration.</p><div class="fullcomment"><div class="comment c
 subtracts this from the current value of h to yield a new
 hyper-parameter configuration.</p><p>Over ride this function if you aim to implement a gradient based
 hyper-parameter optimization routine like ML-II
-</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt>returns</dt><dd class="cmt"><p>Gradient of the objective function (marginal likelihood) as a Map</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt>returns</dt><dd class="cmt"><p>Gradient of the objective function (marginal likelihood) as a Map</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a> → <a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptWithGrad.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad">GloballyOptWithGrad</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -658,18 +716,18 @@ hyper-parameter optimization routine like ML-II
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#mean" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mean:I=&gt;Double"></a>
-      <a id="mean:(DenseVector[Double])⇒Double"></a>
+      <a id="mean:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double]"></a>
+      <a id="mean:DataPipe[DenseVector[Double],Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">mean</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">mean</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@mean:I=&gt;Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@mean:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -779,25 +837,25 @@ before being used for further processing.</p></div><dl class="attributes block">
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#persist" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="persist():Unit"></a>
-      <a id="persist():Unit"></a>
+      <a id="persist(state:Map[String,Double]):Unit"></a>
+      <a id="persist(Map[String,Double]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">persist</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">persist</span><span class="params">(<span name="state">state: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@persist():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@persist(state:Map[String,Double]):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Cache the training kernel and noise matrices
 for fast access in future predictions.</p><div class="fullcomment"><div class="comment cmt"><p>Cache the training kernel and noise matrices
 for fast access in future predictions.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(point:I):Double"></a>
       <a id="predict(DenseVector[Double]):Double"></a>
@@ -864,54 +922,6 @@ a particular set of test data points.</p><div class="fullcomment"><div class="co
 a particular set of test data points.
 </p></div><dl class="paramcmts block"><dt class="param">test</dt><dd class="cmt"><p>A Sequence or Sequence like data structure
             storing the values of the input patters.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> → <a href="../StochasticProcess.html" class="extype" name="io.github.mandar2812.dynaml.models.StochasticProcess">StochasticProcess</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#processTargets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="processTargets:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]"></a>
-      <a id="processTargets:DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">processTargets</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@processTargets:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Assigning a value to the <a href="#processTargets:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.GPRegression#processTargets">processTargets</a> data pipe
-can be useful in cases where we need to
-perform operations such as de-normalizing
-the predicted and actual targets to their original
-scales.</p>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#scoresToEnergy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="scoresToEnergy:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Double]"></a>
-      <a id="scoresToEnergy:DataPipe[Stream[(Double,Double)],Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">scoresToEnergy</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@scoresToEnergy:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Double]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">If one uses a non empty validation set, then
-the user can set a custom function of
-the validation predictions and targets as
-the objective function for the hyper-parameter
-optimization routine.</p><div class="fullcomment"><div class="comment cmt"><p>If one uses a non empty validation set, then
-the user can set a custom function of
-the validation predictions and targets as
-the objective function for the hyper-parameter
-optimization routine.</p><p>Currently this defaults to RMSE calculated
-on the validation data.
-</p></div></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#setState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setState(s:Map[String,Double]):AbstractGPRegressionModel.this.type"></a>
       <a id="setState(Map[String,Double]):GPRegression.this.type"></a>
@@ -1007,7 +1017,7 @@ kernels.
     </span>
       <p class="shortcomment cmt">Forget the cached kernel &amp; noise matrices.</p><div class="fullcomment"><div class="comment cmt"><p>Forget the cached kernel &amp; noise matrices.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#validationSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#validationSet" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validationSet:Seq[(breeze.linalg.DenseVector[Double],Double)]"></a>
       <a id="validationSet:Seq[(DenseVector[Double],Double)]"></a>
       <h4 class="signature">
@@ -1024,8 +1034,34 @@ kernels.
       </a>
     </span>
       <p class="shortcomment cmt">Setting a validation set is optional in case
-one wants to use some function of metrics like correltaion (CC) or rmse (RMSE)
-as hyper-parameter optimization objective functions.</p>
+one wants to calculate joint marginal likelihood of the
+training and validation data as the objective function for
+hyper-parameter optimization.</p><div class="fullcomment"><div class="comment cmt"><p>Setting a validation set is optional in case
+one wants to calculate joint marginal likelihood of the
+training and validation data as the objective function for
+hyper-parameter optimization. While retaining just the
+training data set for final calculating <a href="#predictiveDistribution[U&lt;:Seq[I]](test:U):io.github.mandar2812.dynaml.probability.MultGaussianPRV" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.GPRegression#predictiveDistribution">predictiveDistribution</a>
+during final deployment.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#validationSet_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="validationSet_(v:Seq[(breeze.linalg.DenseVector[Double],Double)],append:Boolean):Unit"></a>
+      <a id="validationSet_(Seq[(DenseVector[Double],Double)],Boolean):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validationSet_</span><span class="params">(<span name="v">v: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="append">append: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@validationSet_(v:Seq[(breeze.linalg.DenseVector[Double],Double)],append:Boolean):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Set the validation data, optionally append it to the existing validation data
+</p><div class="fullcomment"><div class="comment cmt"><p>Set the validation data, optionally append it to the existing validation data
+</p></div><dl class="paramcmts block"><dt class="param">v</dt><dd class="cmt"><p>data</p></dd><dt class="param">append</dt><dd class="cmt"><p>Defaults to false</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -1100,7 +1136,68 @@ as hyper-parameter optimization objective functions.</p>
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#processTargets" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="processTargets:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]"></a>
+      <a id="processTargets:DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: scheduled to be removed by DynaML 2.x">processTargets</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@processTargets:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Assigning a value to the <a href="#processTargets:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.GPRegression#processTargets">processTargets</a> data pipe
+can be useful in cases where we need to
+perform operations such as de-normalizing
+the predicted and actual targets to their original
+scales.</p><div class="fullcomment"><div class="comment cmt"><p>Assigning a value to the <a href="#processTargets:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Stream[(Double,Double)]]" class="extmbr" name="io.github.mandar2812.dynaml.models.gp.GPRegression#processTargets">processTargets</a> data pipe
+can be useful in cases where we need to
+perform operations such as de-normalizing
+the predicted and actual targets to their original
+scales.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p>scheduled to be removed by DynaML 2.x</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPRegression#scoresToEnergy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="scoresToEnergy:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Double]"></a>
+      <a id="scoresToEnergy:DataPipe[Stream[(Double,Double)],Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: sscheduled to be removed by DynaML 2.x">scoresToEnergy</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPRegression@scoresToEnergy:io.github.mandar2812.dynaml.pipes.DataPipe[Stream[(Double,Double)],Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">If one uses a non empty validation set, then
+the user can set a custom function of
+the validation predictions and targets as
+the objective function for the hyper-parameter
+optimization routine.</p><div class="fullcomment"><div class="comment cmt"><p>If one uses a non empty validation set, then
+the user can set a custom function of
+the validation predictions and targets as
+the objective function for the hyper-parameter
+optimization routine.</p><p>Currently this defaults to RMSE calculated
+on the validation data.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p>sscheduled to be removed by DynaML 2.x</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

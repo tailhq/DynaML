@@ -90,7 +90,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.stp.StudentTRegression#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(mu:Double,cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],trainingdata:Seq[(breeze.linalg.DenseVector[Double],Double)]):io.github.mandar2812.dynaml.models.stp.StudentTRegression"></a>
+      <a id="&lt;init&gt;(mu:Double,cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],trainingdata:Seq[(breeze.linalg.DenseVector[Double],Double)],meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[breeze.linalg.DenseVector[Double],Double]):io.github.mandar2812.dynaml.models.stp.StudentTRegression"></a>
       <a id="&lt;init&gt;:StudentTRegression"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,10 +98,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">StudentTRegression</span><span class="params">(<span name="mu">mu: <span class="extype" name="scala.Double">Double</span></span>, <span name="cov">cov: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="noise">noise: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] = <span class="symbol"><span class="name"><a href="../../../../../package.html">new DiracKernel(1.0)</a></span></span></span>, <span name="trainingdata">trainingdata: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>)</span>
+        <span class="name">StudentTRegression</span><span class="params">(<span name="mu">mu: <span class="extype" name="scala.Double">Double</span></span>, <span name="cov">cov: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="noise">noise: <a href="../../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] = <span class="symbol"><span class="name"><a href="../../../../../package.html">new DiracKernel(1.0)</a></span></span></span>, <span name="trainingdata">trainingdata: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="meanFunc">meanFunc: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>] = <span class="defval" name='<span class="name"><a href="../../../../../package.html">DataPipe((x: DenseVector[Double]) =&gt; 0.0)</a></span>'>...</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.StudentTRegression@&lt;init&gt;(mu:Double,cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],trainingdata:Seq[(breeze.linalg.DenseVector[Double],Double)]):io.github.mandar2812.dynaml.models.stp.StudentTRegression" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.StudentTRegression@&lt;init&gt;(mu:Double,cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],trainingdata:Seq[(breeze.linalg.DenseVector[Double],Double)],meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[breeze.linalg.DenseVector[Double],Double]):io.github.mandar2812.dynaml.models.stp.StudentTRegression" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -629,18 +629,18 @@ through the <a href="#validationSet:Seq[(breeze.linalg.DenseVector[Double],Doubl
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="AbstractSTPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel">AbstractSTPRegressionModel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel#mean" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mean:I=&gt;Double"></a>
-      <a id="mean:(DenseVector[Double])⇒Double"></a>
+      <a id="mean:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double]"></a>
+      <a id="mean:DataPipe[DenseVector[Double],Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">mean</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">mean</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.StudentTRegression@mean:I=&gt;Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.StudentTRegression@mean:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -769,6 +769,23 @@ before being used for further processing.</p></div><dl class="attributes block">
 for fast access in future predictions.</p><div class="fullcomment"><div class="comment cmt"><p>Cache the training kernel and noise matrices
 for fast access in future predictions.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractSTPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel">AbstractSTPRegressionModel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable#persist" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="persist(state:Map[String,Double]):Unit"></a>
+      <a id="persist(Map[String,Double]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">persist</span><span class="params">(<span name="state">state: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.stp.StudentTRegression@persist(state:Map[String,Double]):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(point:I):Double"></a>
       <a id="predict(DenseVector[Double]):Double"></a>

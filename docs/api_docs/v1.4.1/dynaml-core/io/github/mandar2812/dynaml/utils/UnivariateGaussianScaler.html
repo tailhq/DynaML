@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>MinMaxScaler - io.github.mandar2812.dynaml.utils.MinMaxScaler</title>
-          <meta name="description" content="MinMaxScaler - io.github.mandar2812.dynaml.utils.MinMaxScaler" />
-          <meta name="keywords" content="MinMaxScaler io.github.mandar2812.dynaml.utils.MinMaxScaler" />
+          <title>UnivariateGaussianScaler - io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler</title>
+          <meta name="description" content="UnivariateGaussianScaler - io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler" />
+          <meta name="keywords" content="UnivariateGaussianScaler io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'io.github.mandar2812.dynaml.utils.MinMaxScaler';
+            var hash = 'io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,10 +30,10 @@
       <div id="definition">
         <img alt="Class" src="../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.utils">utils</a></p>
-        <h1>MinMaxScaler</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>UnivariateGaussianScaler</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.utils">package utils</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,13 +45,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">MinMaxScaler</span><span class="params">(<span name="min">min: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="max">max: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result"> extends <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">UnivariateGaussianScaler</span><span class="params">(<span name="mean">mean: <span class="extype" name="scala.Double">Double</span></span>, <span name="sigma">sigma: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="scala.Double">Double</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.utils.MinMaxScaler"><span>MinMaxScaler</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler"><span>ReversibleScaler</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.Encoder"><span>Encoder</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.Scaler"><span>Scaler</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.DataPipe"><span>DataPipe</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler"><span>UnivariateGaussianScaler</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler"><span>ReversibleScaler</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.Encoder"><span>Encoder</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.Scaler"><span>Scaler</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.DataPipe"><span>DataPipe</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,19 +88,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="io.github.mandar2812.dynaml.utils.MinMaxScaler#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(min:breeze.linalg.DenseVector[Double],max:breeze.linalg.DenseVector[Double]):io.github.mandar2812.dynaml.utils.MinMaxScaler"></a>
-      <a id="&lt;init&gt;:MinMaxScaler"></a>
+              <ol><li name="io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(mean:Double,sigma:Double):io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler"></a>
+      <a id="&lt;init&gt;:UnivariateGaussianScaler"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">MinMaxScaler</span><span class="params">(<span name="min">min: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="max">max: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span>
+        <span class="name">UnivariateGaussianScaler</span><span class="params">(<span name="mean">mean: <span class="extype" name="scala.Double">Double</span></span>, <span name="sigma">sigma: <span class="extype" name="scala.Double">Double</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@&lt;init&gt;(min:breeze.linalg.DenseVector[Double],max:breeze.linalg.DenseVector[Double]):io.github.mandar2812.dynaml.utils.MinMaxScaler" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@&lt;init&gt;(mean:Double,sigma:Double):io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -126,7 +126,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -143,79 +143,62 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@##():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.ReversibleScaler#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="*[T](that:io.github.mandar2812.dynaml.pipes.ReversibleScaler[T]):io.github.mandar2812.dynaml.pipes.ReversibleScaler[(S,T)]"></a>
-      <a id="*[T](ReversibleScaler[T]):ReversibleScaler[(DenseVector[Double],T)]"></a>
+      <a id="*[T](ReversibleScaler[T]):ReversibleScaler[(Double,T)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.*.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.*.T">T</span>)]</span>
+        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.*.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.*.T">T</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@*[T](that:io.github.mandar2812.dynaml.pipes.ReversibleScaler[T]):io.github.mandar2812.dynaml.pipes.ReversibleScaler[(S,T)]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@*[T](that:io.github.mandar2812.dynaml.pipes.ReversibleScaler[T]):io.github.mandar2812.dynaml.pipes.ReversibleScaler[(S,T)]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ReversibleScaler</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.Scaler#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="*[T](that:io.github.mandar2812.dynaml.pipes.Scaler[T]):io.github.mandar2812.dynaml.pipes.Scaler[(S,T)]"></a>
-      <a id="*[T](Scaler[T]):Scaler[(DenseVector[Double],T)]"></a>
+      <a id="*[T](Scaler[T]):Scaler[(Double,T)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler.*.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler.*.T">T</span>)]</span>
+        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler.*.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler.*.T">T</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@*[T](that:io.github.mandar2812.dynaml.pipes.Scaler[T]):io.github.mandar2812.dynaml.pipes.Scaler[(S,T)]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@*[T](that:io.github.mandar2812.dynaml.pipes.Scaler[T]):io.github.mandar2812.dynaml.pipes.Scaler[(S,T)]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Scaler</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="*[OtherSource,OtherDestination](that:io.github.mandar2812.dynaml.pipes.DataPipe[OtherSource,OtherDestination]):io.github.mandar2812.dynaml.pipes.ParallelPipe[Source,Destination,OtherSource,OtherDestination]"></a>
-      <a id="*[OtherSource,OtherDestination](DataPipe[OtherSource,OtherDestination]):ParallelPipe[DenseVector[Double],DenseVector[Double],OtherSource,OtherDestination]"></a>
+      <a id="*[OtherSource,OtherDestination](DataPipe[OtherSource,OtherDestination]):ParallelPipe[Double,Double,OtherSource,OtherDestination]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="OtherSource">OtherSource</span>, <span name="OtherDestination">OtherDestination</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe">ParallelPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>
+        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="OtherSource">OtherSource</span>, <span name="OtherDestination">OtherDestination</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe">ParallelPipe</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@*[OtherSource,OtherDestination](that:io.github.mandar2812.dynaml.pipes.DataPipe[OtherSource,OtherDestination]):io.github.mandar2812.dynaml.pipes.ParallelPipe[Source,Destination,OtherSource,OtherDestination]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@*[OtherSource,OtherDestination](that:io.github.mandar2812.dynaml.pipes.DataPipe[OtherSource,OtherDestination]):io.github.mandar2812.dynaml.pipes.ParallelPipe[Source,Destination,OtherSource,OtherDestination]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DataPipe</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.utils.MinMaxScaler#++" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="++(other:io.github.mandar2812.dynaml.utils.MinMaxScaler):io.github.mandar2812.dynaml.utils.MinMaxScaler"></a>
-      <a id="++(MinMaxScaler):MinMaxScaler"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $plus$plus" class="name">++</span><span class="params">(<span name="other">other: <a href="" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@++(other:io.github.mandar2812.dynaml.utils.MinMaxScaler):io.github.mandar2812.dynaml.utils.MinMaxScaler" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
@@ -228,126 +211,109 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.ReversibleScaler#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&gt;(otherRevScaler:io.github.mandar2812.dynaml.pipes.ReversibleScaler[S]):io.github.mandar2812.dynaml.pipes.ReversibleScaler[S]"></a>
-      <a id="&gt;(ReversibleScaler[DenseVector[Double]]):ReversibleScaler[DenseVector[Double]]"></a>
+      <a id="&gt;(ReversibleScaler[Double]):ReversibleScaler[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="otherRevScaler">otherRevScaler: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="otherRevScaler">otherRevScaler: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@&gt;(otherRevScaler:io.github.mandar2812.dynaml.pipes.ReversibleScaler[S]):io.github.mandar2812.dynaml.pipes.ReversibleScaler[S]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@&gt;(otherRevScaler:io.github.mandar2812.dynaml.pipes.ReversibleScaler[S]):io.github.mandar2812.dynaml.pipes.ReversibleScaler[S]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ReversibleScaler</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.Encoder#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&gt;[Further](that:io.github.mandar2812.dynaml.pipes.Encoder[D,Further]):io.github.mandar2812.dynaml.pipes.Encoder[S,Further]"></a>
-      <a id="&gt;[Further](Encoder[DenseVector[Double],Further]):Encoder[DenseVector[Double],Further]"></a>
+      <a id="&gt;[Further](Encoder[Double,Further]):Encoder[Double,Further]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder.&gt;.Further">Further</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder.&gt;.Further">Further</span>]</span>
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder.&gt;.Further">Further</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder.&gt;.Further">Further</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@&gt;[Further](that:io.github.mandar2812.dynaml.pipes.Encoder[D,Further]):io.github.mandar2812.dynaml.pipes.Encoder[S,Further]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@&gt;[Further](that:io.github.mandar2812.dynaml.pipes.Encoder[D,Further]):io.github.mandar2812.dynaml.pipes.Encoder[S,Further]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Encoder</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.Scaler#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&gt;(otherScaler:io.github.mandar2812.dynaml.pipes.Scaler[S]):io.github.mandar2812.dynaml.pipes.Scaler[S]"></a>
-      <a id="&gt;(Scaler[DenseVector[Double]]):Scaler[DenseVector[Double]]"></a>
+      <a id="&gt;(Scaler[Double]):Scaler[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="otherScaler">otherScaler: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="otherScaler">otherScaler: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@&gt;(otherScaler:io.github.mandar2812.dynaml.pipes.Scaler[S]):io.github.mandar2812.dynaml.pipes.Scaler[S]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@&gt;(otherScaler:io.github.mandar2812.dynaml.pipes.Scaler[S]):io.github.mandar2812.dynaml.pipes.Scaler[S]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Scaler</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&gt;[Further](that:io.github.mandar2812.dynaml.pipes.DataPipe[Destination,Further]):io.github.mandar2812.dynaml.pipes.DataPipe[Source,Further]"></a>
-      <a id="&gt;[Further](DataPipe[DenseVector[Double],Further]):DataPipe[DenseVector[Double],Further]"></a>
+      <a id="&gt;[Further](DataPipe[Double,Further]):DataPipe[Double,Further]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@&gt;[Further](that:io.github.mandar2812.dynaml.pipes.DataPipe[Destination,Further]):io.github.mandar2812.dynaml.pipes.DataPipe[Source,Further]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@&gt;[Further](that:io.github.mandar2812.dynaml.pipes.DataPipe[Destination,Further]):io.github.mandar2812.dynaml.pipes.DataPipe[Source,Further]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DataPipe</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.utils.MinMaxScaler#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(r:Range):io.github.mandar2812.dynaml.utils.MinMaxScaler"></a>
-      <a id="apply(Range):MinMaxScaler"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="r">r: <span class="extype" name="scala.Range">Range</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@apply(r:Range):io.github.mandar2812.dynaml.utils.MinMaxScaler" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="io.github.mandar2812.dynaml.pipes.ReversibleScaler#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply[T[S]&lt;:Traversable[S]](data:T[S]):T[S]"></a>
-      <a id="apply[T[S]&lt;:Traversable[S]](T[DenseVector[Double]]):T[DenseVector[Double]]"></a>
+      <a id="apply[T[S]&lt;:Traversable[S]](T[Double]):T[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="S">S</span>]</span> &lt;: <span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.apply.T.S">S</span>]</span>]</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.apply.T">T</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.apply.T">T</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="S">S</span>]</span> &lt;: <span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.apply.T.S">S</span>]</span>]</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.apply.T">T</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler.apply.T">T</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@apply[T[S]&lt;:Traversable[S]](data:T[S]):T[S]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@apply[T[S]&lt;:Traversable[S]](data:T[S]):T[S]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ReversibleScaler → Encoder → Scaler</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply(data:Source):Destination"></a>
-      <a id="apply(DenseVector[Double]):DenseVector[Double]"></a>
+      <a id="apply(Double):Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="data">data: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">apply</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@apply(data:Source):Destination" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@apply(data:Source):Destination" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -364,7 +330,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -381,7 +347,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -404,7 +370,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -421,7 +387,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -444,28 +410,28 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.utils.MinMaxScaler#i" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="i:io.github.mandar2812.dynaml.pipes.Scaler[breeze.linalg.DenseVector[Double]]"></a>
-      <a id="i:Scaler[DenseVector[Double]]"></a>
+    </li><li name="io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler#i" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="i:io.github.mandar2812.dynaml.pipes.Scaler[Double]"></a>
+      <a id="i:Scaler[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">i</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">i</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@i:io.github.mandar2812.dynaml.pipes.Scaler[breeze.linalg.DenseVector[Double]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@i:io.github.mandar2812.dynaml.pipes.Scaler[Double]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a> → ReversibleScaler → Encoder</dd></dl></div>
+      <p class="shortcomment cmt">The inverse operation of this scaling.</p><div class="fullcomment"><div class="comment cmt"><p>The inverse operation of this scaling.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler">UnivariateGaussianScaler</a> → ReversibleScaler → Encoder</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -478,41 +444,24 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.utils.MinMaxScaler#max" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="max:breeze.linalg.DenseVector[Double]"></a>
-      <a id="max:DenseVector[Double]"></a>
+    </li><li name="io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler#mean" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="mean:Double"></a>
+      <a id="mean:Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">max</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">mean</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@max:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="io.github.mandar2812.dynaml.utils.MinMaxScaler#min" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="min:breeze.linalg.DenseVector[Double]"></a>
-      <a id="min:DenseVector[Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">min</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@min:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@mean:Double" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -529,7 +478,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -546,7 +495,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -563,28 +512,45 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.utils.MinMaxScaler#run" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="run(data:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
-      <a id="run(DenseVector[Double]):DenseVector[Double]"></a>
+    </li><li name="io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler#run" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="run(data:Double):Double"></a>
+      <a id="run(Double):Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">run</span><span class="params">(<span name="data">data: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">run</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@run(data:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@run(data:Double):Double" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.utils.MinMaxScaler">MinMaxScaler</a> → DataPipe</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler">UnivariateGaussianScaler</a> → DataPipe</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler#sigma" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sigma:Double"></a>
+      <a id="sigma:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sigma</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@sigma:Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -597,7 +563,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -614,7 +580,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -637,7 +603,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -660,7 +626,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.MinMaxScaler@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.utils.UnivariateGaussianScaler@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -689,13 +655,13 @@
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">
-              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
+              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.Encoder">
-              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
+              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.Scaler">
-              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
+              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</span>[<span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.DataPipe">
-              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
+              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
