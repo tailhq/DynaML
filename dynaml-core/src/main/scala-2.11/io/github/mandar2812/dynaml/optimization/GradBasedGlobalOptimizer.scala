@@ -41,7 +41,9 @@ class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
   : (M, Map[String, Double]) = {
 
     logger.info("Starting Maximum Likelihood based optimization: ML-II")
-    logger.info("-----------------------------------------------------")
+    println(
+      "-----------------------------------------------------"+
+      "-----------------------------------------------------")
     //Carry out gradient descent with step size alpha and
     //for a specified number of maximum iterations
 
@@ -55,7 +57,12 @@ class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
 
     do {
       val gradient = system.gradEnergy(working_solution)
-      logger.info("Gradient at "+count+" iteration is: "+gradient)
+      println(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"+
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+      print("\n")
+      logger.info("Gradient at "+count+" iterations is: "+gradient)
+      print("\n")
       gradNorm = norm(DenseVector(gradient.values.toArray), 2)
 
       working_solution = working_solution.zip(gradient).map((confAndGrad) => {
@@ -71,9 +78,15 @@ class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
           confAndGrad._2._2
         }
 
-        val newValue = confAndGrad._1._2 - alpha*gr
-        (hyp,newValue)
+        val newValue = math.abs(confAndGrad._1._2 - alpha*gr)
+        (hyp, newValue)
       })
+
+      logger.info("Updated state : "+working_solution)
+      print("\n")
+      println(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"+
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
       count += 1
     } while (count < maxit && gradNorm >= tolerance)
