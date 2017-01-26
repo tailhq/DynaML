@@ -61,7 +61,7 @@ class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
         "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"+
           "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
       print("\n")
-      logger.info("Gradient at "+count+" iterations is: "+gradient)
+      logger.info("Gradient at "+count+" iterations is: \n"+GlobalOptimizer.prettyPrint(gradient))
       print("\n")
       gradNorm = norm(DenseVector(gradient.values.toArray), 2)
 
@@ -82,7 +82,7 @@ class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
         (hyp, newValue)
       })
 
-      logger.info("Updated state : "+working_solution)
+      logger.info("Updated state : \n"+GlobalOptimizer.prettyPrint(working_solution))
       print("\n")
       println(
         "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"+
@@ -91,7 +91,7 @@ class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
       count += 1
     } while (count < maxit && gradNorm >= tolerance)
     logger.info("Stopped ML-II at "+count+" iterations")
-    logger.info("Final state : "+working_solution)
+    logger.info("Final state : \n"+GlobalOptimizer.prettyPrint(working_solution))
 
     //Persist the current configuration to the model memory
     if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))

@@ -175,6 +175,65 @@ object SVMKernel {
     }), rows, cols, num_R_blocks, num_C_blocks)
   }
 
+
+  def buildPartitionedKernelGradMatrix[S <: Seq[T], T](
+    data: S, length: Long,
+    numElementsPerRowBlock: Int,
+    numElementsPerColBlock: Int,
+    hyper_parameters: Seq[String],
+    eval: (T, T) => Double,
+    evalGrad: (String) => (T, T) =>  Double): Map[String, PartitionedPSDMatrix] = {
+
+    val (rows, cols) = (length, length)
+
+    logger.info("Constructing partitioned kernel matrix and its derivatives")
+    logger.info("Dimension: " + rows + " x " + cols)
+
+    val (num_R_blocks, num_C_blocks) = (
+      math.ceil(rows.toDouble/numElementsPerRowBlock).toLong,
+      math.ceil(cols.toDouble/numElementsPerColBlock).toLong)
+
+    logger.info("Blocks: " + num_R_blocks + " x " + num_C_blocks)
+    val partitionedData = data.grouped(numElementsPerRowBlock).zipWithIndex.toStream
+
+    logger.info("~~~~~~~~~~~~~~~~~~~~~~~")
+    logger.info("Constructing Partitions")
+
+
+    //Build the result using flatMap - reduce
+    utils.combine(Seq(partitionedData, partitionedData))
+      .filter(c => c.head._2 >= c.last._2)
+      .toStream.flatMap(c => {
+      val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
+
+      logger.info(":- Partition: "+partitionIndex)
+      logger.info("Constructing Kernel Matrix")
+
+      val matrix =
+        if(partitionIndex._1 == partitionIndex._2)
+          buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
+        else crossKernelMatrix(c.head._1, c.last._1, eval)
+
+
+      Seq(("kernel-matrix", (partitionIndex, matrix))) ++ hyper_parameters.map(h => {
+
+        val gradMatrix =
+          if(partitionIndex._1 == partitionIndex._2)
+            buildSVMKernelMatrix(c.head._1, c.head._1.length, evalGrad(h)).getKernelMatrix()
+          else crossKernelMatrix(c.head._1, c.last._1, evalGrad(h))
+
+        logger.info("Constructing grad wrt: "+h)
+
+        (h, (partitionIndex, gradMatrix))
+      })
+    }).groupBy(_._1).map(cluster => {
+
+      val hyp = cluster._1
+      val matData = cluster._2.map(_._2)
+      (hyp, new PartitionedPSDMatrix(matData, rows, cols, num_R_blocks, num_C_blocks))
+    })
+
+  }
 }
 
 
