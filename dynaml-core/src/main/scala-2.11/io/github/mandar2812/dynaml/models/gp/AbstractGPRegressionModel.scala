@@ -108,16 +108,16 @@ abstract class AbstractGPRegressionModel[T, I](
     * Returns a [[DataPipe]] which calculates the energy of data: [[T]].
     * See: [[energy]] below.
     * */
-  def calculateEnergyPipe(h: Map[String, Double], options: Map[String, String]) = DataPipe((data: T) => {
+  def calculateEnergyPipe(h: Map[String, Double], options: Map[String, String]) = DataPipe((dataset: T) => {
     setState(h)
-    val training = dataAsIndexSeq(data)
+    val training = dataAsIndexSeq(dataset)
     val trainingLabels = PartitionedVector(
-      dataAsSeq(data).toStream.map(_._2),
+      dataAsSeq(dataset).toStream.map(_._2),
       training.length.toLong, _blockSize
     )
 
     val trainingMean = PartitionedVector(
-      dataAsSeq(data).toStream.map(_._1).map(mean(_)),
+      dataAsSeq(dataset).toStream.map(_._1).map(mean(_)),
       training.length.toLong, _blockSize
     )
 
@@ -153,19 +153,19 @@ abstract class AbstractGPRegressionModel[T, I](
     * with respect to the model hyper-parameters.
     * See: [[gradEnergy]] below.
     * */
-  def calculateGradEnergyPipe(h: Map[String, Double]) = DataPipe((data: T) => {
+  def calculateGradEnergyPipe(h: Map[String, Double]) = DataPipe((dataset: T) => {
 
     covariance.setHyperParameters(h)
     noiseModel.setHyperParameters(h)
 
-    val training = dataAsIndexSeq(data)
+    val training = dataAsIndexSeq(dataset)
     val trainingLabels = PartitionedVector(
-      dataAsSeq(data).toStream.map(_._2),
+      dataAsSeq(dataset).toStream.map(_._2),
       training.length.toLong, _blockSize
     )
 
     val trainingMean = PartitionedVector(
-      dataAsSeq(data).toStream.map(_._1).map(mean(_)),
+      dataAsSeq(dataset).toStream.map(_._1).map(mean(_)),
       training.length.toLong, _blockSize
     )
 
@@ -174,7 +174,7 @@ abstract class AbstractGPRegressionModel[T, I](
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
     val kernelTraining: PartitionedPSDMatrix =
-      effectiveTrainingKernel.buildBlockedKernelMatrix(training, npoints)
+      effectiveTrainingKernel.buildBlockedKernelMatrix(training, training.length)
 
     val Lmat = bcholesky(kernelTraining)
 
@@ -186,12 +186,12 @@ abstract class AbstractGPRegressionModel[T, I](
       val kernelDerivative: PartitionedMatrix =
         if(noiseModel.hyper_parameters.contains(h))
           SVMKernel.buildPartitionedKernelMatrix(
-            training, npoints.toLong,
+            training, training.length,
             _blockSize, _blockSize,
             (x: I, y: I) => noiseModel.gradient(x, y)(h))
         else
           SVMKernel.buildPartitionedKernelMatrix(
-            training, npoints.toLong,
+            training, training.length,
             _blockSize, _blockSize,
             (x: I, y: I) => covariance.gradient(x, y)(h))
 
