@@ -154,46 +154,52 @@ abstract class AbstractGPRegressionModel[T, I](
     * See: [[gradEnergy]] below.
     * */
   def calculateGradEnergyPipe(h: Map[String, Double]) = DataPipe((dataset: T) => {
+    try {
+      covariance.setHyperParameters(h)
+      noiseModel.setHyperParameters(h)
 
-    covariance.setHyperParameters(h)
-    noiseModel.setHyperParameters(h)
+      val training = dataAsIndexSeq(dataset)
+      val trainingLabels = PartitionedVector(
+        dataAsSeq(dataset).toStream.map(_._2),
+        training.length.toLong, _blockSize
+      )
 
-    val training = dataAsIndexSeq(dataset)
-    val trainingLabels = PartitionedVector(
-      dataAsSeq(dataset).toStream.map(_._2),
-      training.length.toLong, _blockSize
-    )
+      val trainingMean = PartitionedVector(
+        dataAsSeq(dataset).toStream.map(_._1).map(mean(_)),
+        training.length.toLong, _blockSize
+      )
 
-    val trainingMean = PartitionedVector(
-      dataAsSeq(dataset).toStream.map(_._1).map(mean(_)),
-      training.length.toLong, _blockSize
-    )
+      val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
 
-    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
+      effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
+      val hParams = effectiveTrainingKernel.effective_hyper_parameters
 
-    effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
-    val hParams = effectiveTrainingKernel.effective_hyper_parameters
+      val gradMatrices = SVMKernel.buildPartitionedKernelGradMatrix(
+        training, training.length, _blockSize, _blockSize,
+        hParams, (x: I, y: I) => effectiveTrainingKernel.evaluate(x,y),
+        (hy: String) => (x: I, y: I) => effectiveTrainingKernel.gradient(x,y)(hy))
 
-    val gradMatrices = SVMKernel.buildPartitionedKernelGradMatrix(
-      training, training.length, _blockSize, _blockSize,
-      hParams, (x: I, y: I) => effectiveTrainingKernel.evaluate(x,y),
-      (hy: String) => (x: I, y: I) => effectiveTrainingKernel.gradient(x,y)(hy))
+      val kernelTraining: PartitionedPSDMatrix = gradMatrices("kernel-matrix")
 
-    val kernelTraining: PartitionedPSDMatrix = gradMatrices("kernel-matrix")
+      val Lmat = bcholesky(kernelTraining)
 
-    val Lmat = bcholesky(kernelTraining)
+      val alpha = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
 
-    val alpha = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
+      hParams.map(h => {
+        //build kernel derivative matrix
+        val kernelDerivative: PartitionedMatrix = gradMatrices(h)
+        //Calculate gradient for the hyper parameter h
+        val grad: PartitionedMatrix =
+          alpha*alpha.t*kernelDerivative - (Lmat.t \\ (Lmat \\ kernelDerivative))
 
-    hParams.map(h => {
-      //build kernel derivative matrix
-      val kernelDerivative: PartitionedMatrix = gradMatrices(h)
-      //Calculate gradient for the hyper parameter h
-      val grad: PartitionedMatrix =
-        alpha*alpha.t*kernelDerivative - (Lmat.t \\ (Lmat \\ kernelDerivative))
+        (h.split("/").tail.mkString("/"), btrace(grad))
+      }).toMap
 
-      (h.split("/").tail.mkString("/"), btrace(grad))
-    }).toMap
+    } catch {
+      case _: breeze.linalg.NotConvergedException =>
+        covariance.effective_hyper_parameters.map(h => (h, Double.NaN)).toMap ++
+          noiseModel.effective_hyper_parameters.map(h => (h, Double.NaN)).toMap
+    }
 
   })
 

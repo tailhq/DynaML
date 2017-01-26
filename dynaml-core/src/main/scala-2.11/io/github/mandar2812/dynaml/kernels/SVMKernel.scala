@@ -106,6 +106,47 @@ object SVMKernel {
     }
   }
 
+  /**
+    * Returns the kernel matrix along with
+    * its derivatives for each hyper-parameter.
+    * */
+  def buildKernelGradMatrix[S <: Seq[T], T](
+    data1: S, data2: S,
+    hyper_parameters: Seq[String],
+    eval: (T, T) => Double,
+    evalGrad: (String) => (T, T) =>  Double):
+  Map[String, DenseMatrix[Double]] = {
+
+    val (rows, cols) = (data1.length, data2.length)
+    logger.info("Constructing Kernel/Grad Matrices")
+    logger.info("   Dimensions: " + rows + " x " + cols)
+
+    val keys = Seq("kernel-matrix") ++ hyper_parameters
+
+    optimize {
+      utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
+        .filter(s => s.head._2 >= s.last._2)
+        .flatMap(s => {
+          keys.map(k =>
+            if(k == "kernel-matrix") (k, ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+            else (k, ((s.head._2, s.last._2), evalGrad(k)(s.head._1, s.last._1))))
+        }).groupBy(_._1).map(cl => {
+
+        if (cl._1 == "kernel-matrix") logger.info("Constructing Kernel Matrix")
+        else logger.info("Constructing Grad Matrix for: "+cl._1)
+
+        val kernelIndex = cl._2.map(_._2).toMap
+
+        (
+          cl._1,
+          DenseMatrix.tabulate[Double](rows, cols){
+            (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
+          }
+        )
+      })
+    }
+  }
+
   def buildPartitionedKernelMatrix[S <: Seq[T], T](
     data: S,
     length: Long,
@@ -205,27 +246,16 @@ object SVMKernel {
       .filter(c => c.head._2 >= c.last._2)
       .toStream.flatMap(c => {
       val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
-
+      print("\n")
       logger.info(":- Partition: "+partitionIndex)
-      logger.info("Constructing Kernel Matrix")
 
-      val matrix =
-        if(partitionIndex._1 == partitionIndex._2)
-          buildSVMKernelMatrix(c.head._1, c.head._1.length, eval).getKernelMatrix()
-        else crossKernelMatrix(c.head._1, c.last._1, eval)
+      SVMKernel.buildKernelGradMatrix(
+        c.head._1, c.last._1,
+        hyper_parameters,
+        eval, evalGrad).map(cluster => {
+          (cluster._1, (partitionIndex, cluster._2))
+        }).toSeq
 
-
-      Seq(("kernel-matrix", (partitionIndex, matrix))) ++ hyper_parameters.map(h => {
-
-        val gradMatrix =
-          if(partitionIndex._1 == partitionIndex._2)
-            buildSVMKernelMatrix(c.head._1, c.head._1.length, evalGrad(h)).getKernelMatrix()
-          else crossKernelMatrix(c.head._1, c.last._1, evalGrad(h))
-
-        logger.info("Constructing grad wrt: "+h)
-
-        (h, (partitionIndex, gradMatrix))
-      })
     }).groupBy(_._1).map(cluster => {
 
       val hyp = cluster._1

@@ -55,6 +55,8 @@ class GradBasedGlobalOptimizer[M <: GloballyOptWithGrad](model: M)
     var gradNorm = 1.0
     var working_solution = initialConfig
 
+    logger.info("Starting state: \n"+GlobalOptimizer.prettyPrint(working_solution))
+
     do {
       val gradient = system.gradEnergy(working_solution)
       println(

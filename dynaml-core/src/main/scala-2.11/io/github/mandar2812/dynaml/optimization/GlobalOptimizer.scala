@@ -77,7 +77,7 @@ trait GlobalOptimizer[T <: GloballyOptimizable] {
 
     grid.map((config) => {
       val configMap = List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
-      logger.info("""Evaluating Configuration: """+GlobalOptimizer.prettyPrint(configMap))
+      logger.info("""Evaluating Configuration: \n"""+GlobalOptimizer.prettyPrint(configMap))
 
       val configEnergy = system.energy(configMap, options)
 
