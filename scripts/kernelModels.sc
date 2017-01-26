@@ -16,7 +16,7 @@ val other_kernel1 = new CauchyKernel(1.0)
 val otherSumK = kernel + other_kernel
 val sumK2 = new DecomposableCovariance(otherSumK, other_kernel1)(sp1)
 
-AbottPowerPlant(kernel, new DiracKernel(0.09),
-  opt = Map("globalOpt" -> "ML", "grid" -> "2", "step" -> "0.0002", "tolerance" -> "0.0001", "maxIterations" -> "5"),
-  num_training = 2000, num_test = 1000, deltaT = 2, column = 8)
+AbottPowerPlant(other_kernel, new DiracKernel(1.09),
+  opt = Map("globalOpt" -> "ML", "grid" -> "2", "step" -> "0.002", "tolerance" -> "0.0001", "maxIterations" -> "5"),
+  num_training = 1000, num_test = 1000, deltaT = 2, column = 8)
 
