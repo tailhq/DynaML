@@ -33,7 +33,8 @@ class AdditiveCovariance[Index](
   }
 
   override def gradient(x: Index, y: Index): Map[String, Double] =
-    firstKernel.gradient(x, y) ++ otherKernel.gradient(x,y)
+    firstKernel.gradient(x, y).map(h => (fID+"/"+h._1, h._2)) ++
+      otherKernel.gradient(x,y).map(h => (sID+"/"+h._1, h._2))
 
   override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
     SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)

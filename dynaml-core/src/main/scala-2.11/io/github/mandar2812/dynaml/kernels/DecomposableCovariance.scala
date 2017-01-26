@@ -70,13 +70,17 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
       val (xs, ys) = (encoding*encoding)((x,y))
       xs.zip(ys).zip(kernels).map(coupleAndKern => {
         val (u,v) = coupleAndKern._1
-        coupleAndKern._2.gradient(u,v)
+        val id = coupleAndKern._1.toString.split("\\.").last
+        coupleAndKern._2.gradient(u,v).map(c => (id+"/"+c._1, c._2))
       }).reduceLeft(_++_)
     case ProductReducer =>
       val (xs, ys) = (encoding*encoding)((x,y))
       xs.zip(ys).zip(kernels).map(coupleAndKern => {
         val (u,v) = coupleAndKern._1
-        coupleAndKern._2.gradient(u,v).mapValues(_ * this.evaluate(x,y)/coupleAndKern._2.evaluate(x,y))
+        val id = coupleAndKern._1.toString.split("\\.").last
+        coupleAndKern._2.gradient(u,v)
+          .map(c => (id+"/"+c._1, c._2))
+          .mapValues(_ * this.evaluate(x,y)/coupleAndKern._2.evaluate(x,y))
       }).reduceLeft(_++_)
   }
 }

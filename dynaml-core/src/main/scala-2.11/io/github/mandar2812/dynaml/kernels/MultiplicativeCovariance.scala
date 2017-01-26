@@ -34,8 +34,8 @@ class MultiplicativeCovariance[Index](
   }
 
   override def gradient(x: Index, y: Index): Map[String, Double] =
-    firstKernel.gradient(x, y).map((couple) => (couple._1, couple._2*otherKernel.evaluate(x,y))) ++
-      otherKernel.gradient(x,y).map((couple) => (couple._1, couple._2*firstKernel.evaluate(x,y)))
+    firstKernel.gradient(x, y).map((couple) => (fID+"/"+couple._1, couple._2*otherKernel.evaluate(x,y))) ++
+      otherKernel.gradient(x,y).map((couple) => (sID+"/"+couple._1, couple._2*firstKernel.evaluate(x,y)))
 
   override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
     SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)

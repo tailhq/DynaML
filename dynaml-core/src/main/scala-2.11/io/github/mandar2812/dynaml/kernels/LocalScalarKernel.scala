@@ -69,7 +69,7 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
         super.setHyperParameters(h)
       }
 
-      override def gradient(x: Index, y: Index) = super.gradient(x, y).map(co => (co._1, co._2*c))
+      override def gradient(x: Index, y: Index) = self.gradient(x, y).map(co => (co._1, co._2*c))
 
       override def evaluate(x: Index, y: Index) = self.evaluate(x, y)*c
 

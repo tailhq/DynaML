@@ -50,9 +50,10 @@ class TensorCombinationKernel[R, S](
 
   override def gradient(x: (R, S), y: (R, S)): Map[String, Double] = reducer match {
     case SumReducer =>
-      firstK.gradient(x._1, y._1) ++ secondK.gradient(x._2, y._2)
+      firstK.gradient(x._1, y._1).map(h => (fID+"/"+h._1, h._2)) ++
+        secondK.gradient(x._2, y._2).map(h => (sID+"/"+h._1, h._2))
     case ProductReducer =>
-      firstK.gradient(x._1, y._1).map(k => (k._1, k._2*secondK.evaluate(x._2, y._2))) ++
-        secondK.gradient(x._2, y._2).map(k => (k._1, k._2*firstK.evaluate(x._1, y._1)))
+      firstK.gradient(x._1, y._1).map(k => (fID+"/"+k._1, k._2*secondK.evaluate(x._2, y._2))) ++
+        secondK.gradient(x._2, y._2).map(k => (sID+"/"+k._1, k._2*firstK.evaluate(x._1, y._1)))
   }
 }
