@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, norm}
 import spire.algebra.{Field, InnerProductSpace}
 
 /**
@@ -43,8 +43,12 @@ class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
     math.exp(-1*ev.dot(x, x)/(2*math.pow(this.state("bandwidth"), 2)))
 
   override def gradient(x: T,
-                        y: T): Map[String, Double] =
-    Map("bandwidth" -> 1.0*evaluate(x,y)*math.pow(ev.dot(x, x),2)/math.pow(math.abs(state("bandwidth")), 3))
+                        y: T): Map[String, Double] = {
+    val diff = ev.minus(x, y)
+
+    Map("bandwidth" -> 1.0*evaluate(x,y)*ev.dot(diff, diff)/math.pow(math.abs(state("bandwidth")), 3))
+  }
+
 
   def getBandwidth: Double = this.bandwidth
 
@@ -58,7 +62,6 @@ class RBFKernel(private var bandwidth: Double = 1.0)(
   with SVMKernel[DenseMatrix[Double]]
   with Serializable { self =>
 
-  //val normedVectorSpace = ev.normed
 
 
 }
@@ -127,7 +130,7 @@ class MahalanobisKernel(private var band: DenseVector[Double], private var h: Do
     val bandMap = state.filter((k) => k._1.contains("MahalanobisBandwidth"))
     assert(x.length == bandMap.size, "Mahalanobis Bandwidth vector's must be equal to that of data")
     Map("MahalanobisAmplitude" -> 2.0*evaluate(x,y)/state("MahalanobisAmplitude")) ++
-      bandMap.map((k) => (k._1, evaluate(x,y)*2.0/math.pow(k._2, 3.0)))
+      bandMap.map((k) => (k._1, evaluate(x,y)*math.pow(norm(x-y), 2.0)/math.pow(k._2, 3.0)))
   }
 
 }
