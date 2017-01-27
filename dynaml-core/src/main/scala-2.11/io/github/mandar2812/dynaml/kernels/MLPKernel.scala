@@ -61,9 +61,9 @@ class MLPKernel(w: Double, b: Double) extends SVMKernel[DenseMatrix[Double]]
 
     Map(
       "w" ->
-        alpha*((denominator*(x.t*y) - numerator*0.5*(wyy*(x.t*x)/wxx + wxx*(y.t*y)/wyy))/denominator*denominator),
+        alpha*((denominator*(x.t*y) - numerator*0.5*(wyy*(x.t*x)/wxx + wxx*(y.t*y)/wyy))/(denominator*denominator)),
       "b" ->
-        alpha*((denominator - numerator*0.5*(wyy/wxx + wxx/wyy))/denominator*denominator)
+        alpha*((denominator - numerator*0.5*(wyy/wxx + wxx/wyy))/(denominator*denominator))
     )
   }
 }
