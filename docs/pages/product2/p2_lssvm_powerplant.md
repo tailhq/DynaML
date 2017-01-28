@@ -12,7 +12,7 @@ _System identification_ refers to the process of learning a predictive model for
 
 ## DaISy: System Identification Database
 
-[_DaISy_](http://homes.esat.kuleuven.be/~smc/daisy/daisydata.html) is a database of (artificial and real world) dynamic systems maintained by the [STADIUS](https://www.esat.kuleuven.be/stadius/) research group at KU Leuven. We will work with the power plant data set listed on the _DaISy_ home page in this post. Using [DynaML](https://mandar2812.github.io/DynaML), which comes preloaded with the power plant data, we will train [LSSVM](https://github.com/mandar2812/DynaML/wiki/Dual-LSSVM) models to predict the various output indicators of the power plant in question.
+[_DaISy_](http://homes.esat.kuleuven.be/~smc/daisy/daisydata.html) is a database of (artificial and real world) dynamic systems maintained by the [STADIUS](https://www.esat.kuleuven.be/stadius/) research group at KU Leuven. We will work with the power plant data set listed on the _DaISy_ home page in this post. Using [DynaML](https://transcendent-ai-labs.github.io/DynaML), which comes preloaded with the power plant data, we will train [LSSVM](https://github.com/transcendent-ai-labs/DynaML/wiki/Dual-LSSVM) models to predict the various output indicators of the power plant in question.
 
 ## System Identification Models
 
@@ -111,11 +111,11 @@ $$
 
 ## Syntax
 
-The [```DaisyPowerPlant```]({{site.baseurl}}/api_docs/dynaml-examples/index.html#io.github.mandar2812.dynaml.examples.DaisyPowerPlant$) program can be used to train and test LS-SVM models on the Pont Sur-Sambre power plant data.
+The [```DaisyPowerPlant```]({{site.baseurl}}/api_docs/v.4.1/dynaml-examples/index.html#io.github.mandar2812.dynaml.examples.DaisyPowerPlant$) program can be used to train and test LS-SVM models on the Pont Sur-Sambre power plant data.
 
 Parameter | Type | Default value |Notes
 --------|-----------|-----------|------------|
-kernel | [```CovarianceFunction```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) | - | The kernel function driving the LS-SVM model.
+kernel | [```CovarianceFunction```]({{site.baseurl}}/api_docs/v1.4.1/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) | - | The kernel function driving the LS-SVM model.
 deltaT | ```Int``` | 2 | Order of auto-regressive model i.e. number of steps in the past to look for input features.
 timelag | ```Int``` | 0 | The number of steps in the past to start using inputs.
 num_training | ```Int``` | 150 | Number of training data instances.
@@ -178,6 +178,6 @@ deltaT = 1, column = 8)
 
 ## Source Code
 
-Below is the example program as a github gist, to view the original program in DynaML, click [here](https://github.com/mandar2812/DynaML/blob/master/src/main/scala/io/github/mandar2812/dynaml/examples/DaisyPowerPlant.scala).
+Below is the example program as a github gist, to view the original program in DynaML, click [here](https://github.com/transcendent-ai-labs/DynaML/blob/master/src/main/scala/io/github/mandar2812/dynaml/examples/DaisyPowerPlant.scala).
 
 {% gist mandar2812/eb23b47adad66deb2f65 %}

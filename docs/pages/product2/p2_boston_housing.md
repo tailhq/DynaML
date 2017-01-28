@@ -40,12 +40,12 @@ $$
 
 ## Syntax
 
-The [```TestGPHousing()```]({{site.baseurl}}/api_docs/dynaml-examples/index.html#io.github.mandar2812.dynaml.examples.TestGPHousing$) program can be run in the REPL, below is a description of each of its arguments.
+The [```TestGPHousing()```]({{site.baseurl}}/api_docs/v1.4.1/dynaml-examples/index.html#io.github.mandar2812.dynaml.examples.TestGPHousing$) program can be run in the REPL, below is a description of each of its arguments.
 
 Parameter | Type | Default value |Notes
 --------|-----------|-----------|------------|
-kernel | [```CovarianceFunction```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) | - | The kernel function driving the GP model.
-noise | [```CovarianceFunction```]({{site.baseurl}}/api_docs/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) | - | The additive noise that corrupts the values of the latent function.
+kernel | [```CovarianceFunction```]({{site.baseurl}}/api_docs/v1.4.1/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) | - | The kernel function driving the GP model.
+noise | [```CovarianceFunction```]({{site.baseurl}}/api_docs/v1.4.1/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) | - | The additive noise that corrupts the values of the latent function.
 trainFraction | ```Double``` | 0.75 | Fraction of the data to be used for model training and hyper-parameter selection.
 columns | ```List[Int]``` | 13, 0,.., 12 | The columns to be selected for analysis (indexed from 0), first one is the target column.
 grid| ```Int``` | 5 | The number of grid points for each hyper-parameter  
@@ -82,6 +82,6 @@ Configuration: Map(hurst -> 0.4, beta -> 2.35, bandwidth -> 1.35)
 
 ## Source Code
 
-Below is the example program as a github gist, to view the original program in DynaML, click [here](https://github.com/mandar2812/DynaML/blob/master/src/main/scala/io/github/mandar2812/dynaml/examples/TestGPHousing.scala).
+Below is the example program as a github gist, to view the original program in DynaML, click [here](https://github.com/transcendent-ai-labs/DynaML/blob/master/src/main/scala/io/github/mandar2812/dynaml/examples/TestGPHousing.scala).
 
 {% gist bc5ff898ca921f22b5ee %}
