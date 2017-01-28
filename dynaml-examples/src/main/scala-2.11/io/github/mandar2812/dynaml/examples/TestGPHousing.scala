@@ -18,14 +18,13 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.examples
 
-import breeze.linalg.{DenseMatrix, DenseVector}
-import io.github.mandar2812.dynaml.DynaMLPipe
+import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.GPRegressionPipe
 import io.github.mandar2812.dynaml.models.gp.GPRegression
-import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
 
 /**
@@ -105,7 +104,7 @@ object TestGPHousing {
         Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => tt._1._1,
       kernel, noise) >
-      DynaMLPipe.modelTuning(startConf, globalOpt, grid, step) >
+      modelTuning(startConf, globalOpt, grid, step) >
       DataPipe((modelCouple: (GPRegression, Map[String, Double])) => {
         modelCouple._1.setState(modelCouple._2)
         modelCouple._1
@@ -136,15 +135,15 @@ object TestGPHousing {
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
 
-    val preProcessPipe = DynaMLPipe.fileToStream >
-      DynaMLPipe.trimLines >
-      DynaMLPipe.replaceWhiteSpaces >
-      DynaMLPipe.extractTrainingFeatures(columns, Map()) >
-      DynaMLPipe.splitFeaturesAndTargets
+    val preProcessPipe = fileToStream >
+      trimLines >
+      replaceWhiteSpaces >
+      extractTrainingFeatures(columns, Map()) >
+      splitFeaturesAndTargets
 
-    val trainTestPipe = DynaMLPipe.duplicate(preProcessPipe) >
-      DynaMLPipe.splitTrainingTest(num_training, 506-num_training) >
-      DynaMLPipe.trainTestGaussianStandardization >
+    val trainTestPipe = duplicate(preProcessPipe) >
+      splitTrainingTest(num_training, 506-num_training) >
+      trainTestGaussianStandardization >
       BifurcationPipe(
         modelpipe,
         DataPipe((tt: (
