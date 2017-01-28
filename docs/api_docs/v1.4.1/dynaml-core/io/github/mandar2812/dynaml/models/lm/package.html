@@ -67,7 +67,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="GeneralizedLinearModel[T]extendsLinearModel[Stream[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,T]withGloballyOptimizable"></a>
+      <a id="GeneralizedLinearModel[T]extendsGenericGLM[Stream[(breeze.linalg.DenseVector[Double],Double)],T]withGloballyOptimizable"></a>
       <a id="GeneralizedLinearModel[T]:GeneralizedLinearModel[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -75,14 +75,31 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="GeneralizedLinearModel.html"><span class="name">GeneralizedLinearModel</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
+        <a href="GeneralizedLinearModel.html"><span class="name">GeneralizedLinearModel</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.package@GeneralizedLinearModel[T]extendsLinearModel[Stream[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,T]withGloballyOptimizable" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.package@GeneralizedLinearModel[T]extendsGenericGLM[Stream[(breeze.linalg.DenseVector[Double],Double)],T]withGloballyOptimizable" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Created by mandar on 4/4/16.</p>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.models.lm.GenericGLM" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GenericGLM[Data,T]extendsLinearModel[Data,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,T]"></a>
+      <a id="GenericGLM[Data,T]:GenericGLM[Data,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GenericGLM.html"><span class="name">GenericGLM</span></a><span class="tparams">[<span name="Data">Data</span>, <span name="T">T</span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM.Data">Data</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.package@GenericGLM[Data,T]extendsLinearModel[Data,breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.models.lm.LogisticGLM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LogisticGLMextendsGeneralizedLinearModel[Stream[(breeze.linalg.DenseVector[Double],Double)]]"></a>
       <a id="LogisticGLM:LogisticGLM"></a>
@@ -130,6 +147,57 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.package@RegularizedGLMextendsGeneralizedLinearModel[(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]withGloballyOptimizable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkGLM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SparkGLMextendsGenericGLM[org.apache.spark.rdd.RDD[(breeze.linalg.DenseVector[Double],Double)],(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]"></a>
+      <a id="SparkGLM:SparkGLM"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SparkGLM.html"><span class="name">SparkGLM</span></a><span class="result"> extends <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.package@SparkGLMextendsGenericGLM[org.apache.spark.rdd.RDD[(breeze.linalg.DenseVector[Double],Double)],(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkLogisticGLM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SparkLogisticGLMextendsGenericGLM[org.apache.spark.rdd.RDD[(breeze.linalg.DenseVector[Double],Double)],org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint]]"></a>
+      <a id="SparkLogisticGLM:SparkLogisticGLM"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SparkLogisticGLM.html"><span class="name">SparkLogisticGLM</span></a><span class="result"> extends <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.package@SparkLogisticGLMextendsGenericGLM[org.apache.spark.rdd.RDD[(breeze.linalg.DenseVector[Double],Double)],org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkProbitGLM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SparkProbitGLMextendsSparkLogisticGLM"></a>
+      <a id="SparkProbitGLM:SparkProbitGLM"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SparkProbitGLM.html"><span class="name">SparkProbitGLM</span></a><span class="result"> extends <a href="SparkLogisticGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkLogisticGLM">SparkLogisticGLM</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.package@SparkProbitGLMextendsSparkLogisticGLM" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

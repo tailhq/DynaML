@@ -47,14 +47,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">GeneralizedLinearModel</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
+        <span class="name">GeneralizedLinearModel</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by mandar on 4/4/16.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a>, <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a>, <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>], <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="LogisticGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.LogisticGLM">LogisticGLM</a>, <a href="ProbitGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.ProbitGLM">ProbitGLM</a>, <a href="RegularizedGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a></div>
@@ -75,7 +74,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel"><span>GeneralizedLinearModel</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable"><span>GloballyOptimizable</span></li><li class="in" name="io.github.mandar2812.dynaml.models.LinearModel"><span>LinearModel</span></li><li class="in" name="io.github.mandar2812.dynaml.models.ParameterizedLearner"><span>ParameterizedLearner</span></li><li class="in" name="io.github.mandar2812.dynaml.models.Model"><span>Model</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel"><span>GeneralizedLinearModel</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable"><span>GloballyOptimizable</span></li><li class="in" name="io.github.mandar2812.dynaml.models.lm.GenericGLM"><span>GenericGLM</span></li><li class="in" name="io.github.mandar2812.dynaml.models.LinearModel"><span>LinearModel</span></li><li class="in" name="io.github.mandar2812.dynaml.models.ParameterizedLearner"><span>ParameterizedLearner</span></li><li class="in" name="io.github.mandar2812.dynaml.models.Model"><span>Model</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -135,8 +134,8 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#prepareData" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="prepareData(d:Stream[(breeze.linalg.DenseVector[Double],Double)]):T"></a>
+    </li><li name="io.github.mandar2812.dynaml.models.lm.GenericGLM#prepareData" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="prepareData(d:Data):T"></a>
       <a id="prepareData(Stream[(DenseVector[Double],Double)]):T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -147,11 +146,11 @@
         <span class="name">prepareData</span><span class="params">(<span name="d">d: <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel@prepareData(d:Stream[(breeze.linalg.DenseVector[Double],Double)]):T" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel@prepareData(d:Data):T" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#task" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="task:String"></a>
       <a id="task:String"></a>
@@ -276,7 +275,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#clearParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.GenericGLM#clearParameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clearParameters():Unit"></a>
       <a id="clearParameters():Unit"></a>
       <h4 class="signature">
@@ -292,7 +291,7 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a> → <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -493,7 +492,7 @@ to an identity map.
     </span>
       <p class="shortcomment cmt">The training data
 </p><div class="fullcomment"><div class="comment cmt"><p>The training data
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -511,7 +510,7 @@ to an identity map.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#h" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#h" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="h:Double=&gt;Double"></a>
       <a id="h:(Double)⇒Double"></a>
       <h4 class="signature">
@@ -527,7 +526,7 @@ to an identity map.
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -599,7 +598,7 @@ to an identity map.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#learn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.GenericGLM#learn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="learn():Unit"></a>
       <a id="learn():Unit"></a>
       <h4 class="signature">
@@ -621,7 +620,7 @@ are in a node of the
 graph.</p><div class="fullcomment"><div class="comment cmt"><p>Learn the parameters
 of the model which
 are in a node of the
-graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -727,7 +726,7 @@ of the model.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.GenericGLM#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(point:breeze.linalg.DenseVector[Double]):Double"></a>
       <a id="predict(DenseVector[Double]):Double"></a>
       <h4 class="signature">
@@ -747,7 +746,7 @@ of the model.
 target variable given a
 point.</p><div class="fullcomment"><div class="comment cmt"><p>Predict the value of the
 target variable given a
-point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
+point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setBatchFraction(f:Double):ParameterizedLearner.this.type"></a>
       <a id="setBatchFraction(Double):GeneralizedLinearModel.this.type"></a>
@@ -967,6 +966,8 @@ kernels.</p>
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">
               <h3>Inherited from <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">
+              <h3>Inherited from <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.LinearModel">
               <h3>Inherited from <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel.T">T</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">

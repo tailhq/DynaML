@@ -47,16 +47,16 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">DataPipe</span><span class="tparams">[<span name="Source">-Source</span>, <span name="Destination">+Destination</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">DataPipe</span><span class="tparams">[<span name="Source">-Source</span>, <span name="Destination">+Destination</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="BifurcationPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</a>, <a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a>, <a href="ParallelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe">ParallelPipe</a>, <a href="ProductReducer$.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ProductReducer">ProductReducer</a>, <a href="Reducer.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Reducer">Reducer</a>, <a href="ReducerPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ReducerPipe">ReducerPipe</a>, <a href="ReversibleScaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</a>, <a href="Scaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</a>, <a href="SideEffectPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.SideEffectPipe">SideEffectPipe</a>, <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>, <a href="StreamFilterPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFilterPipe">StreamFilterPipe</a>, <a href="StreamMapPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamMapPipe">StreamMapPipe</a>, <a href="StreamPartitionPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamPartitionPipe">StreamPartitionPipe</a>, <a href="StreamSideEffectPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamSideEffectPipe">StreamSideEffectPipe</a>, <a href="SumReducer$.html" class="extype" name="io.github.mandar2812.dynaml.pipes.SumReducer">SumReducer</a>, <a href="TupleIntegerEncoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.TupleIntegerEncoder">TupleIntegerEncoder</a></div>
+            <div class="subClasses hiddenContent"><a href="BifurcationPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.BifurcationPipe">BifurcationPipe</a>, <a href="Encoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Encoder">Encoder</a>, <a href="ParallelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe">ParallelPipe</a>, <a href="ProductReducer$.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ProductReducer">ProductReducer</a>, <a href="RDDFilterPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.RDDFilterPipe">RDDFilterPipe</a>, <a href="RDDMapPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.RDDMapPipe">RDDMapPipe</a>, <a href="RDDPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.RDDPipe">RDDPipe</a>, <a href="Reducer.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Reducer">Reducer</a>, <a href="ReducerPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ReducerPipe">ReducerPipe</a>, <a href="ReversibleScaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</a>, <a href="Scaler.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Scaler">Scaler</a>, <a href="SideEffectPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.SideEffectPipe">SideEffectPipe</a>, <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>, <a href="StreamFilterPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFilterPipe">StreamFilterPipe</a>, <a href="StreamMapPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamMapPipe">StreamMapPipe</a>, <a href="StreamPartitionPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamPartitionPipe">StreamPartitionPipe</a>, <a href="StreamSideEffectPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamSideEffectPipe">StreamSideEffectPipe</a>, <a href="SumReducer$.html" class="extype" name="io.github.mandar2812.dynaml.pipes.SumReducer">SumReducer</a>, <a href="TupleIntegerEncoder.html" class="extype" name="io.github.mandar2812.dynaml.pipes.TupleIntegerEncoder">TupleIntegerEncoder</a></div>
           </div></div>
         
 
@@ -74,7 +74,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.pipes.DataPipe"><span>DataPipe</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.pipes.DataPipe"><span>DataPipe</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -537,7 +537,11 @@ Schematically represented as:</p><p><span class="extype" name="Source">Source</s
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

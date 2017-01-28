@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>RegularizedGLM - io.github.mandar2812.dynaml.models.lm.RegularizedGLM</title>
-          <meta name="description" content="RegularizedGLM - io.github.mandar2812.dynaml.models.lm.RegularizedGLM" />
-          <meta name="keywords" content="RegularizedGLM io.github.mandar2812.dynaml.models.lm.RegularizedGLM" />
+          <title>SparkGLM - io.github.mandar2812.dynaml.models.lm.SparkGLM</title>
+          <meta name="description" content="SparkGLM - io.github.mandar2812.dynaml.models.lm.SparkGLM" />
+          <meta name="keywords" content="SparkGLM io.github.mandar2812.dynaml.models.lm.SparkGLM" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'io.github.mandar2812.dynaml.models.lm.RegularizedGLM';
+            var hash = 'io.github.mandar2812.dynaml.models.lm.SparkGLM';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,10 +30,10 @@
       <div id="definition">
         <img alt="Class" src="../../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="io">io</a>.<a href="../../../../package.html" class="extype" name="io.github">github</a>.<a href="../../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.lm">lm</a></p>
-        <h1>RegularizedGLM</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>SparkGLM</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.lm">package lm</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,13 +45,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">RegularizedGLM</span><span class="result"> extends <a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a>[(<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])] with <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>
+        <span class="name">SparkGLM</span><span class="result"> extends <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a>[(<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a>, <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM"><span>RegularizedGLM</span></li><li class="in" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel"><span>GeneralizedLinearModel</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable"><span>GloballyOptimizable</span></li><li class="in" name="io.github.mandar2812.dynaml.models.lm.GenericGLM"><span>GenericGLM</span></li><li class="in" name="io.github.mandar2812.dynaml.models.LinearModel"><span>LinearModel</span></li><li class="in" name="io.github.mandar2812.dynaml.models.ParameterizedLearner"><span>ParameterizedLearner</span></li><li class="in" name="io.github.mandar2812.dynaml.models.Model"><span>Model</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.models.lm.SparkGLM"><span>SparkGLM</span></li><li class="in" name="io.github.mandar2812.dynaml.models.lm.GenericGLM"><span>GenericGLM</span></li><li class="in" name="io.github.mandar2812.dynaml.models.LinearModel"><span>LinearModel</span></li><li class="in" name="io.github.mandar2812.dynaml.models.ParameterizedLearner"><span>ParameterizedLearner</span></li><li class="in" name="io.github.mandar2812.dynaml.models.Model"><span>Model</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,24 +88,23 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(data:Stream[(breeze.linalg.DenseVector[Double],Double)],numPoints:Int,map:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]):io.github.mandar2812.dynaml.models.lm.RegularizedGLM"></a>
-      <a id="&lt;init&gt;:RegularizedGLM"></a>
+              <ol><li name="io.github.mandar2812.dynaml.models.lm.SparkGLM#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(data:org.apache.spark.rdd.RDD[(breeze.linalg.DenseVector[Double],Double)],numPoints:Long,map:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]):io.github.mandar2812.dynaml.models.lm.SparkGLM"></a>
+      <a id="&lt;init&gt;:SparkGLM"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">RegularizedGLM</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="numPoints">numPoints: <span class="extype" name="scala.Int">Int</span></span>, <span name="map">map: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>] = <span class="symbol">identity[DenseVector[Double]]</span></span>)</span>
+        <span class="name">SparkGLM</span><span class="params">(<span name="data">data: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="numPoints">numPoints: <span class="extype" name="scala.Long">Long</span></span>, <span name="map">map: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>] = <span class="symbol">identity[DenseVector[Double]]</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@&lt;init&gt;(data:Stream[(breeze.linalg.DenseVector[Double],Double)],numPoints:Int,map:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]):io.github.mandar2812.dynaml.models.lm.RegularizedGLM" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@&lt;init&gt;(data:org.apache.spark.rdd.RDD[(breeze.linalg.DenseVector[Double],Double)],numPoints:Long,map:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]):io.github.mandar2812.dynaml.models.lm.SparkGLM" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The training data as a stream of tuples</p></dd><dt class="param">numPoints</dt><dd class="cmt"><p>The number of training data points</p></dd><dt class="param">map</dt><dd class="cmt"><p>The basis functions used to map the input
-           features to a possible higher dimensional space</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>The training data as an <span class="extype" name="RDD">RDD</span></p></dd><dt class="param">numPoints</dt><dd class="cmt"><p>Number of training data points</p></dd><dt class="param">map</dt><dd class="cmt"><p>A general non-linear feature mapping/basis function expansion.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -127,7 +126,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -144,7 +143,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@##():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -161,45 +160,11 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable#_current_state" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="_current_state:Map[String,Double]"></a>
-      <a id="_current_state:Map[String,Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">_current_state</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@_current_state:Map[String,Double]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable#_hyper_parameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="_hyper_parameters:List[String]"></a>
-      <a id="_hyper_parameters:List[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">_hyper_parameters</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@_hyper_parameters:List[String]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -212,7 +177,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -229,7 +194,7 @@
         <span class="name">clearParameters</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@clearParameters():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@clearParameters():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -246,7 +211,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -257,44 +222,24 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#current_state" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="current_state:Map[String,Double]"></a>
-      <a id="current_state:Map[String,Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">current_state</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@current_state:Map[String,Double]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A Map which stores the current state of
-the system.</p><div class="fullcomment"><div class="comment cmt"><p>A Map which stores the current state of
-the system.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.Model#data" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data:T"></a>
-      <a id="data:Stream[(DenseVector[Double],Double)]"></a>
+      <a id="data:RDD[(DenseVector[Double],Double)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">data</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+        <span class="name">data</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@data:T" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@data:T" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#dimensions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkGLM#dimensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="dimensions:Int"></a>
       <a id="dimensions:Int"></a>
       <h4 class="signature">
@@ -306,37 +251,11 @@ the system.
         <span class="name">dimensions</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@dimensions:Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@dimensions:Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#energy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="energy(h:Map[String,Double],options:Map[String,String]):Double"></a>
-      <a id="energy(Map[String,Double],Map[String,String]):Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">energy</span><span class="params">(<span name="h">h: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@energy(h:Map[String,Double],options:Map[String,String]):Double" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Calculates the energy of the configuration,
-in most global optimization algorithms
-we aim to find an approximate value of
-the hyper-parameters such that this function
-is minimized.</p><div class="fullcomment"><div class="comment cmt"><p>Calculates the energy of the configuration,
-in most global optimization algorithms
-we aim to find an approximate value of
-the hyper-parameters such that this function
-is minimized.
-</p></div><dl class="paramcmts block"><dt class="param">h</dt><dd class="cmt"><p>The value of the hyper-parameters in the configuration space</p></dd><dt class="param">options</dt><dd class="cmt"><p>Optional parameters about configuration</p></dd><dt>returns</dt><dd class="cmt"><p>Configuration Energy E(h)</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -349,7 +268,7 @@ is minimized.
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -366,7 +285,7 @@ is minimized.
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -383,7 +302,7 @@ is minimized.
         <span class="name">featureMap</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@featureMap:Q=&gt;Q" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@featureMap:Q=&gt;Q" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -405,7 +324,7 @@ to an identity map.
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -416,25 +335,25 @@ to an identity map.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#g" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="g:Stream[(breeze.linalg.DenseVector[Double],Double)]"></a>
-      <a id="g:Stream[(DenseVector[Double],Double)]"></a>
+    </li><li name="io.github.mandar2812.dynaml.models.lm.GenericGLM#g" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="g:Data"></a>
+      <a id="g:RDD[(DenseVector[Double],Double)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">g</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+        <span class="name">g</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@g:Stream[(breeze.linalg.DenseVector[Double],Double)]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@g:Data" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The training data
 </p><div class="fullcomment"><div class="comment cmt"><p>The training data
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -447,12 +366,12 @@ to an identity map.
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#h" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkGLM#h" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="h:Double=&gt;Double"></a>
       <a id="h:(Double)⇒Double"></a>
       <h4 class="signature">
@@ -464,11 +383,13 @@ to an identity map.
         <span class="name">h</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@h:Double=&gt;Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@h:Double=&gt;Double" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a></dd></dl></div>
+      <p class="shortcomment cmt">The link function; in this case simply the identity map
+</p><div class="fullcomment"><div class="comment cmt"><p>The link function; in this case simply the identity map
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a> → <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -481,31 +402,12 @@ to an identity map.
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#hyper_parameters" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hyper_parameters:List[String]"></a>
-      <a id="hyper_parameters:List[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hyper_parameters</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@hyper_parameters:List[String]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Stores the names of the hyper-parameters
-</p><div class="fullcomment"><div class="comment cmt"><p>Stores the names of the hyper-parameters
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#initParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkGLM#initParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="initParams():breeze.linalg.DenseVector[Double]"></a>
       <a id="initParams():DenseVector[Double]"></a>
       <h4 class="signature">
@@ -517,12 +419,11 @@ to an identity map.
         <span class="name">initParams</span><span class="params">()</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@initParams():breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@initParams():breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Initialize parameters to a vector of ones.</p><div class="fullcomment"><div class="comment cmt"><p>Initialize parameters to a vector of ones.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -535,7 +436,7 @@ to an identity map.
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -552,7 +453,7 @@ to an identity map.
         <span class="name">learn</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@learn():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@learn():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -575,7 +476,7 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -592,7 +493,7 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -609,12 +510,12 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM#optimizer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkGLM#optimizer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]"></a>
       <a id="optimizer:RegularizedOptimizer[DenseVector[Double],DenseVector[Double],Double,(DenseMatrix[Double],DenseVector[Double])]"></a>
       <h4 class="signature">
@@ -626,11 +527,11 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
         <span class="name">optimizer</span><span class="result">: <a href="../../optimization/RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[breeze.linalg.DenseVector[Double],breeze.linalg.DenseVector[Double],Double,(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#parameters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="parameters():T"></a>
       <a id="parameters():DenseVector[Double]"></a>
@@ -643,7 +544,7 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
         <span class="name">parameters</span><span class="params">()</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@parameters():T" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@parameters():T" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -651,7 +552,7 @@ graph.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
 of the model.</p><div class="fullcomment"><div class="comment cmt"><p>Get the value of the parameters
 of the model.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#params" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkGLM#params" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="params:breeze.linalg.DenseVector[Double]"></a>
       <a id="params:DenseVector[Double]"></a>
       <h4 class="signature">
@@ -663,28 +564,11 @@ of the model.
         <span class="name">params</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@params:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@params:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable#persist" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="persist(state:Map[String,Double]):Unit"></a>
-      <a id="persist(Map[String,Double]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">persist</span><span class="params">(<span name="state">state: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@persist(state:Map[String,Double]):Unit" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.lm.GenericGLM#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(point:breeze.linalg.DenseVector[Double]):Double"></a>
       <a id="predict(DenseVector[Double]):Double"></a>
@@ -697,7 +581,7 @@ of the model.
         <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@predict(point:breeze.linalg.DenseVector[Double]):Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@predict(point:breeze.linalg.DenseVector[Double]):Double" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -706,115 +590,96 @@ target variable given a
 point.</p><div class="fullcomment"><div class="comment cmt"><p>Predict the value of the
 target variable given a
 point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a> → <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM#prepareData" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="prepareData(d:Stream[(breeze.linalg.DenseVector[Double],Double)]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])"></a>
-      <a id="prepareData(Stream[(DenseVector[Double],Double)]):(DenseMatrix[Double],DenseVector[Double])"></a>
+    </li><li name="io.github.mandar2812.dynaml.models.lm.SparkGLM#prepareData" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="prepareData(d:org.apache.spark.rdd.RDD[(breeze.linalg.DenseVector[Double],Double)]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])"></a>
+      <a id="prepareData(RDD[(DenseVector[Double],Double)]):(DenseMatrix[Double],DenseVector[Double])"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">prepareData</span><span class="params">(<span name="d">d: <span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])</span>
+        <span class="name">prepareData</span><span class="params">(<span name="d">d: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@prepareData(d:Stream[(breeze.linalg.DenseVector[Double],Double)]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@prepareData(d:org.apache.spark.rdd.RDD[(breeze.linalg.DenseVector[Double],Double)]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double])" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a> → <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a></dd></dl></div>
+      <p class="shortcomment cmt">Input an <span class="extype" name="RDD">RDD</span> containing the data set and output
+a design matrix and response vector which can be solved
+in the OLS sense.</p><div class="fullcomment"><div class="comment cmt"><p>Input an <span class="extype" name="RDD">RDD</span> containing the data set and output
+a design matrix and response vector which can be solved
+in the OLS sense.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a> → <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setBatchFraction(f:Double):ParameterizedLearner.this.type"></a>
-      <a id="setBatchFraction(Double):RegularizedGLM.this.type"></a>
+      <a id="setBatchFraction(Double):SparkGLM.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setBatchFraction</span><span class="params">(<span name="f">f: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a>.this.type</span>
+        <span class="name">setBatchFraction</span><span class="params">(<span name="f">f: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a>.this.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@setBatchFraction(f:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@setBatchFraction(f:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setLearningRate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setLearningRate(alpha:Double):ParameterizedLearner.this.type"></a>
-      <a id="setLearningRate(Double):RegularizedGLM.this.type"></a>
+      <a id="setLearningRate(Double):SparkGLM.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setLearningRate</span><span class="params">(<span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a>.this.type</span>
+        <span class="name">setLearningRate</span><span class="params">(<span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a>.this.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@setLearningRate(alpha:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@setLearningRate(alpha:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setMaxIterations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setMaxIterations(i:Int):ParameterizedLearner.this.type"></a>
-      <a id="setMaxIterations(Int):RegularizedGLM.this.type"></a>
+      <a id="setMaxIterations(Int):SparkGLM.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setMaxIterations</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a>.this.type</span>
+        <span class="name">setMaxIterations</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a>.this.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@setMaxIterations(i:Int):ParameterizedLearner.this.type" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@setMaxIterations(i:Int):ParameterizedLearner.this.type" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#setRegParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setRegParam(r:Double):ParameterizedLearner.this.type"></a>
-      <a id="setRegParam(Double):RegularizedGLM.this.type"></a>
+      <a id="setRegParam(Double):SparkGLM.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setRegParam</span><span class="params">(<span name="r">r: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a>.this.type</span>
+        <span class="name">setRegParam</span><span class="params">(<span name="r">r: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.SparkGLM">SparkGLM</a>.this.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@setRegParam(r:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@setRegParam(r:Double):ParameterizedLearner.this.type" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel#setState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setState(s:Map[String,Double]):GeneralizedLinearModel.this.type"></a>
-      <a id="setState(Map[String,Double]):RegularizedGLM.this.type"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setState</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a>.this.type</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@setState(s:Map[String,Double]):GeneralizedLinearModel.this.type" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Set the model &quot;state&quot; which
-contains values of its hyper-parameters
-with respect to the covariance and noise
-kernels.</p><div class="fullcomment"><div class="comment cmt"><p>Set the model &quot;state&quot; which
-contains values of its hyper-parameters
-with respect to the covariance and noise
-kernels.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -827,28 +692,11 @@ kernels.
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM#task" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="task:String"></a>
-      <a id="task:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">task</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@task:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.lm.RegularizedGLM">RegularizedGLM</a> → <a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -861,7 +709,7 @@ kernels.
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@toString():String" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -878,7 +726,7 @@ kernels.
         <span class="name">updateParameters</span><span class="params">(<span name="param">param: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@updateParameters(param:T):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@updateParameters(param:T):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -895,7 +743,7 @@ kernels.
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -918,7 +766,7 @@ kernels.
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -941,7 +789,7 @@ kernels.
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.RegularizedGLM@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.lm.SparkGLM@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -961,18 +809,14 @@ kernels.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">
-              <h3>Inherited from <a href="GeneralizedLinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel">GeneralizedLinearModel</a>[(<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
-            </div><div class="parent" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">
-              <h3>Inherited from <a href="../../optimization/GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></h3>
-            </div><div class="parent" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">
-              <h3>Inherited from <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
+        <div class="parent" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">
+              <h3>Inherited from <a href="GenericGLM.html" class="extype" name="io.github.mandar2812.dynaml.models.lm.GenericGLM">GenericGLM</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.LinearModel">
-              <h3>Inherited from <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
+              <h3>Inherited from <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">
-              <h3>Inherited from <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
+              <h3>Inherited from <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.Model">
-              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="scala.Stream">Stream</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</h3>
+              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

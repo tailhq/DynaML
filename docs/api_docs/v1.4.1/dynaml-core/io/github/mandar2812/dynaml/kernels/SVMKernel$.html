@@ -166,6 +166,41 @@ having functions which can construct kernel matrices.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#buildKernelGradMatrix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="buildKernelGradMatrix[S&lt;:Seq[T],T](data1:S,data2:S,hyper_parameters:Seq[String],eval:(T,T)=&gt;Double,evalGrad:String=&gt;((T,T)=&gt;Double)):Map[String,breeze.linalg.DenseMatrix[Double]]"></a>
+      <a id="buildKernelGradMatrix[S&lt;:Seq[T],T](S,S,Seq[String],(T,T)⇒Double,(String)⇒(T,T)⇒Double):Map[String,DenseMatrix[Double]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">buildKernelGradMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildKernelGradMatrix.T">T</span>]</span>, <span name="T">T</span>]</span><span class="params">(<span name="data1">data1: <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildKernelGradMatrix.S">S</span></span>, <span name="data2">data2: <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildKernelGradMatrix.S">S</span></span>, <span name="hyper_parameters">hyper_parameters: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="eval">eval: (<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildKernelGradMatrix.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildKernelGradMatrix.T">T</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>, <span name="evalGrad">evalGrad: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ (<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildKernelGradMatrix.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildKernelGradMatrix.T">T</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.SVMKernel$@buildKernelGradMatrix[S&lt;:Seq[T],T](data1:S,data2:S,hyper_parameters:Seq[String],eval:(T,T)=&gt;Double,evalGrad:String=&gt;((T,T)=&gt;Double)):Map[String,breeze.linalg.DenseMatrix[Double]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the kernel matrix along with
+its derivatives for each hyper-parameter.</p>
+    </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#buildPartitionedKernelGradMatrix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="buildPartitionedKernelGradMatrix[S&lt;:Seq[T],T](data:S,length:Long,numElementsPerRowBlock:Int,numElementsPerColBlock:Int,hyper_parameters:Seq[String],eval:(T,T)=&gt;Double,evalGrad:String=&gt;((T,T)=&gt;Double)):Map[String,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix]"></a>
+      <a id="buildPartitionedKernelGradMatrix[S&lt;:Seq[T],T](S,Long,Int,Int,Seq[String],(T,T)⇒Double,(String)⇒(T,T)⇒Double):Map[String,PartitionedPSDMatrix]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">buildPartitionedKernelGradMatrix</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildPartitionedKernelGradMatrix.T">T</span>]</span>, <span name="T">T</span>]</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildPartitionedKernelGradMatrix.S">S</span></span>, <span name="length">length: <span class="extype" name="scala.Long">Long</span></span>, <span name="numElementsPerRowBlock">numElementsPerRowBlock: <span class="extype" name="scala.Int">Int</span></span>, <span name="numElementsPerColBlock">numElementsPerColBlock: <span class="extype" name="scala.Int">Int</span></span>, <span name="hyper_parameters">hyper_parameters: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="eval">eval: (<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildPartitionedKernelGradMatrix.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildPartitionedKernelGradMatrix.T">T</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>, <span name="evalGrad">evalGrad: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ (<span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildPartitionedKernelGradMatrix.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.SVMKernel.buildPartitionedKernelGradMatrix.T">T</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.SVMKernel$@buildPartitionedKernelGradMatrix[S&lt;:Seq[T],T](data:S,length:Long,numElementsPerRowBlock:Int,numElementsPerColBlock:Int,hyper_parameters:Seq[String],eval:(T,T)=&gt;Double,evalGrad:String=&gt;((T,T)=&gt;Double)):Map[String,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#buildPartitionedKernelMatrix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="buildPartitionedKernelMatrix[S&lt;:Seq[T],T](data:S,length:Long,numElementsPerRowBlock:Int,numElementsPerColBlock:Int,eval:(T,T)=&gt;Double):io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix"></a>
       <a id="buildPartitionedKernelMatrix[S&lt;:Seq[T],T](S,Long,Int,Int,(T,T)⇒Double):PartitionedPSDMatrix"></a>

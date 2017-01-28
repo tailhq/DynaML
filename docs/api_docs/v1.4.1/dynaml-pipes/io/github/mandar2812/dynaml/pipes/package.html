@@ -84,7 +84,7 @@
     </span>
       
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="DataPipe[-Source,+Destination]extendsAnyRef"></a>
+      <a id="DataPipe[-Source,+Destination]extendsSerializable"></a>
       <a id="DataPipe[-Source,+Destination]:DataPipe[Source,Destination]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -92,10 +92,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="DataPipe.html"><span class="name">DataPipe</span></a><span class="tparams">[<span name="Source">-Source</span>, <span name="Destination">+Destination</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="DataPipe.html"><span class="name">DataPipe</span></a><span class="tparams">[<span name="Source">-Source</span>, <span name="Destination">+Destination</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@DataPipe[-Source,+Destination]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@DataPipe[-Source,+Destination]extendsSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -134,6 +134,58 @@
       </a>
     </span>
       
+    </li><li name="io.github.mandar2812.dynaml.pipes.RDDFilterPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RDDFilterPipe[Element]extendsRDDPipe[Element,org.apache.spark.rdd.RDD[Element]]"></a>
+      <a id="RDDFilterPipe[Element]:RDDFilterPipe[Element]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RDDFilterPipe.html"><span class="name">RDDFilterPipe</span></a><span class="tparams">[<span name="Element">Element</span>]</span><span class="result"> extends <a href="RDDPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.RDDPipe">RDDPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.RDDFilterPipe.Element">Element</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.RDDFilterPipe.Element">Element</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@RDDFilterPipe[Element]extendsRDDPipe[Element,org.apache.spark.rdd.RDD[Element]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.pipes.RDDMapPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RDDMapPipe[Element,OtherElement]extendsRDDPipe[Element,org.apache.spark.rdd.RDD[OtherElement]]"></a>
+      <a id="RDDMapPipe[Element,OtherElement]:RDDMapPipe[Element,OtherElement]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RDDMapPipe.html"><span class="name">RDDMapPipe</span></a><span class="tparams">[<span name="Element">Element</span>, <span name="OtherElement">OtherElement</span>]</span><span class="result"> extends <a href="RDDPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.RDDPipe">RDDPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.RDDMapPipe.Element">Element</span>, <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.RDDMapPipe.OtherElement">OtherElement</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@RDDMapPipe[Element,OtherElement]extendsRDDPipe[Element,org.apache.spark.rdd.RDD[OtherElement]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A pipeline which takes an <span class="extype" name="RDD">RDD</span> of <span class="extype" name="Element">Element</span> and maps it to
+an <span class="extype" name="RDD">RDD</span> of <span class="extype" name="OtherElement">OtherElement</span>.</p>
+    </li><li name="io.github.mandar2812.dynaml.pipes.RDDPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RDDPipe[Element,Result]extendsDataPipe[org.apache.spark.rdd.RDD[Element],Result]"></a>
+      <a id="RDDPipe[Element,Result]:RDDPipe[Element,Result]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RDDPipe.html"><span class="name">RDDPipe</span></a><span class="tparams">[<span name="Element">Element</span>, <span name="Result">Result</span>]</span><span class="result"> extends <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.RDDPipe.Element">Element</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.RDDPipe.Result">Result</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@RDDPipe[Element,Result]extendsDataPipe[org.apache.spark.rdd.RDD[Element],Result]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.pipes.Reducer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ReducerextendsReducerPipe[Double]"></a>
       <a id="Reducer:Reducer"></a>
@@ -337,7 +389,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="BifurcationPipe$.html"><span class="name">BifurcationPipe</span></a>
+        <a href="BifurcationPipe$.html"><span class="name">BifurcationPipe</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@BifurcationPipe" title="Permalink" target="_top">
@@ -354,7 +406,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="DataPipe$.html"><span class="name">DataPipe</span></a>
+        <a href="DataPipe$.html"><span class="name">DataPipe</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@DataPipe" title="Permalink" target="_top">
@@ -371,7 +423,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Encoder$.html"><span class="name">Encoder</span></a>
+        <a href="Encoder$.html"><span class="name">Encoder</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@Encoder" title="Permalink" target="_top">
@@ -388,7 +440,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="ParallelPipe$.html"><span class="name">ParallelPipe</span></a>
+        <a href="ParallelPipe$.html"><span class="name">ParallelPipe</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@ParallelPipe" title="Permalink" target="_top">
@@ -413,6 +465,23 @@
       </a>
     </span>
       
+    </li><li name="io.github.mandar2812.dynaml.pipes.RDDPipe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RDDPipe"></a>
+      <a id="RDDPipe:RDDPipe"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RDDPipe$.html"><span class="name">RDDPipe</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@RDDPipe" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="io.github.mandar2812.dynaml.pipes.Reducer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Reducer"></a>
       <a id="Reducer:Reducer"></a>
@@ -422,7 +491,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Reducer$.html"><span class="name">Reducer</span></a>
+        <a href="Reducer$.html"><span class="name">Reducer</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@Reducer" title="Permalink" target="_top">
@@ -441,7 +510,7 @@ default definitions
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Scaler$.html"><span class="name">Scaler</span></a>
+        <a href="Scaler$.html"><span class="name">Scaler</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@Scaler" title="Permalink" target="_top">
@@ -458,7 +527,7 @@ default definitions
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="StreamDataPipe$.html"><span class="name">StreamDataPipe</span></a>
+        <a href="StreamDataPipe$.html"><span class="name">StreamDataPipe</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamDataPipe" title="Permalink" target="_top">
@@ -475,7 +544,7 @@ default definitions
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="StreamPartitionPipe$.html"><span class="name">StreamPartitionPipe</span></a>
+        <a href="StreamPartitionPipe$.html"><span class="name">StreamPartitionPipe</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamPartitionPipe" title="Permalink" target="_top">
