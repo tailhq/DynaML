@@ -9,11 +9,10 @@ import io.github.mandar2812.dynaml.probability.distributions.SkewGaussian
   * @author mandar date 22/12/2016.
   */
 
-val g = GaussianRV(0.0, 0.25)
-
-val sg = RandomVariable(SkewGaussian(1.0, 0.0, 0.25))
-
 implicit val detImpl = identityPipe[Double]
+
+val g = GaussianRV(0.0, 0.25)
+val sg = RandomVariable(SkewGaussian(1.0, 0.0, 0.25))
 
 val h: PushforwardMap[Double, Double, Double] = PushforwardMap(
   DataPipe((x: Double) => math.exp(x)),
@@ -23,7 +22,6 @@ val h: PushforwardMap[Double, Double, Double] = PushforwardMap(
 )
 
 val p = h->g
-
 val q = h->sg
 
 val y = Array.tabulate[(Double, Double)](100)(n => (n*0.03, q.underlyingDist.pdf(n*0.03)))
