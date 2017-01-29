@@ -59,11 +59,11 @@ To include DynaML in your maven JVM project edit your ```pom.xml``` file as foll
 </dependency>
 ```
 
-for sbt projects edit your `build.sbt` (see [JitPack](https://jitpack.io/#mandar2812/DynaML) for more details)
+for sbt projects edit your `build.sbt` (see [JitPack](https://jitpack.io/#transcendent-ai-labs/DynaML) for more details)
 
 ```scala
     resolvers += "jitpack" at "https://jitpack.io"
-    libraryDependencies += "com.github.User" % "Repo" % "Tag"
+    libraryDependencies += "com.github.transcendent-ai-labs" % "DynaML" % version	
 ```
 
 
