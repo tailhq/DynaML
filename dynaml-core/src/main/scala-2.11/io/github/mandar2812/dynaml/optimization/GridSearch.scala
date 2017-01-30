@@ -55,7 +55,7 @@ class GridSearch[M <: GloballyOptimizable](model: M)
     val optimum = energyLandscape.keys.min
 
     logger.info("Optimum value of energy is: "+optimum+
-      "\nConfiguration: "+energyLandscape(optimum))
+      "\nConfiguration: \n"+GlobalOptimizer.prettyPrint(energyLandscape(optimum)))
 
     //Persist the current configuration to the model memory
     if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))
