@@ -29,7 +29,7 @@ import org.apache.log4j.Logger
 class GridSearch[M <: GloballyOptimizable](model: M)
   extends GlobalOptimizer[M]{
 
-  override protected val logger = Logger.getLogger(this.getClass)
+  override protected val logger: Logger = Logger.getLogger(this.getClass)
 
   override val system = model
 
