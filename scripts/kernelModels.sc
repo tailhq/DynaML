@@ -18,8 +18,8 @@ val matern = new GenericMaternKernel[DenseVector[Double]](1.0, 2)
 val otherSumK = kernel + other_kernel
 val sumK2 = new DecomposableCovariance(otherSumK, other_kernel1)(sp1)
 
-AbottPowerPlant(matern + kernel, new DiracKernel(1.09),
+AbottPowerPlant(kernel+matern, new DiracKernel(1.09),
   opt = Map("globalOpt" -> "ML", "grid" -> "2",
-    "step" -> "0.002", "tolerance" -> "0.0001",
-     "maxIterations" -> "25"), num_training = 1000,
-     num_test = 1000, deltaT = 2, column = 8)
+    "step" -> "0.2", "tolerance" -> "0.0001",
+     "maxIterations" -> "25"), num_training = 1025,
+     num_test = 1025, deltaT = 2, column = 8)
