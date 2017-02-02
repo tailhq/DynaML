@@ -48,14 +48,14 @@ class CauchyCovFunc(private var sigma: Double)
 
 class CoRegCauchyKernel(bandwidth: Double) extends LocalSVMKernel[Int] {
 
-  override val hyper_parameters: List[String] = List("coRegSigma")
+  override val hyper_parameters: List[String] = List("CoRegSigma")
 
-  state = Map("coRegSigma" -> bandwidth)
+  state = Map("CoRegSigma" -> bandwidth)
 
   override def gradient(x: Int, y: Int): Map[String, Double] =
     Map("CoRegSigma" -> 2.0*math.pow(evaluate(x,y), 2)*math.pow(x-y, 2)/math.pow(state("CoRegSigma"), 3))
 
   override def evaluate(x: Int, y: Int): Double = {
-    1/(1 + math.pow(x-y, 2)/math.pow(state("coRegSigma"), 2))
+    1/(1 + math.pow(x-y, 2)/math.pow(state("CoRegSigma"), 2))
   }
 }
