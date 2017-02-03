@@ -54,7 +54,9 @@ object Dependencies {
     "com.github.scopt" % "scopt_2.11" % "3.5.0",
     "com.nativelibs4java" % "scalaxy-streams_2.11" % "0.3.4" % "provided",
     "com.diffplug.matsim" % "matfilerw" % "3.0.0",
-    "org.scalameta" % "scalameta_2.11" % "1.4.0"
+    "org.scalameta" % "scalameta_2.11" % "1.4.0",
+    "com.signalcollect" % "signal-collect_2.11" % "8.0.6",
+    "com.signalcollect" % "triplerush_2.11" % "9.0.0"
   )
 
   val apacheSparkDependency = Seq(
