@@ -17,6 +17,7 @@ specific language governing permissions and limitations
 under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
+import scala.collection.GenTraversable
 import scalaxy.streams.optimize
 
 
@@ -74,6 +75,11 @@ trait StreamSideEffectPipe[I] extends StreamDataPipe[I, Unit, Unit] {
 }
 
 object StreamDataPipe {
+
+  def toStreamPipe[I, S <: GenTraversable[I]] =
+    new DataPipe[S, Stream[I]] {
+      override def run(data: S) = data.toStream
+    }
 
   //Stream pipes which map from the original domain to a new one
   def apply[I, J](mapFunc: (I) => J): StreamMapPipe[I, J] =
