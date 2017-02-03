@@ -117,7 +117,7 @@ object StreamFlatMapPipe {
 
   def apply[I, J](mapFunc: DataPipe[I, Stream[J]]) =
     new StreamFlatMapPipe[I, J] {
-      override val pipe = mapFunc
+      override val pipe = mapFunc.run _
     }
 
 }
