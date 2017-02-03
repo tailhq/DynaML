@@ -124,7 +124,7 @@ After the project builds, you should get the following prompt.
  \ \___\/ /           \ \_\/ / /    / / // / /_       __\ \_\\/_/    / / //_______/\__\/
   \/_____/             \/_/\/_/     \/_/ \_\___\     /____/_/        \/_/ \_______\/
 
-Welcome to DynaML v1.4.1-beta.3
+Welcome to DynaML v1.4.1-beta.11
 Interactive Scala shell for Machine Learning Research
 (Scala 2.11.8 Java 1.8.0_101)
 DynaML>
