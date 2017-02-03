@@ -8,7 +8,7 @@ topnav_title: "DynaML: Scala toolkit for Machine Learning"
 site_title: DynaML
 # this appears in the html browser tab for the site title (seen mostly by search engines, not users)
 
-company_name: Mandar Chandorkar
+company_name: Transcendent AI Labs
 # this appears in the footer
 
 github_editme_path:
@@ -102,7 +102,7 @@ description: "Documentation for the DynaML machine learning toolkit"
 # the description is used in the feed.xml file
 
 # needed for sitemap.xml file only
-url: mandar2812.github.io
+url: transcendent-ai-labs.github.io
 baseurl: /DynaML
 apiurl: /DynaML/api_docs/v1.4.1
 
