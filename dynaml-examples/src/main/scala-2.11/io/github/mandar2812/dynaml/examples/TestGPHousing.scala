@@ -97,11 +97,12 @@ object TestGPHousing {
     val startConf = kernel.state ++ noise.state
 
     val modelpipe = new GPRegressionPipe[
-      GPRegression, ((Stream[(DenseVector[Double], Double)],
-      Stream[(DenseVector[Double], Double)]),
-      (DenseVector[Double], DenseVector[Double]))](
-      (tt: ((Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)]),
+      GPRegression, (
+      (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
+      (DenseVector[Double], DenseVector[Double])),
+      DenseVector[Double]](
+      (tt: (
+        (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => tt._1._1,
       kernel, noise) >
       modelTuning(startConf, globalOpt, grid, step) >

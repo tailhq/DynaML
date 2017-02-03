@@ -19,10 +19,9 @@ import scala.reflect.ClassTag
   * A warped Gaussian Process.
   */
 @Experimental
-class WarpedGP[T, I](p: AbstractGPRegressionModel[T, I])(
+class WarpedGP[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
   warpingFunc: PushforwardMap[Double, Double, Double])(
-  implicit ev: ClassTag[I],
-  pf: PartitionedVectorField,
+  implicit pf: PartitionedVectorField,
   transform: Encoder[T, Seq[(I, Double)]])
   extends ContinuousProcess[
     T, I, Double,
@@ -44,7 +43,7 @@ class WarpedGP[T, I](p: AbstractGPRegressionModel[T, I])(
   val underlyingProcess =
     AbstractGPRegressionModel[T, I](
       p.covariance, p.noiseModel, p.mean)(
-      dataProcessPipe(p.data), p.npoints)(transform, ev)
+      dataProcessPipe(p.data), p.npoints)
 
 
   /**

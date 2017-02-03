@@ -21,16 +21,19 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.models.{GPRegressionPipe, LinearModel}
 
+import scala.reflect.ClassTag
+
 /**
   * Created by mandar on 9/2/16.
   */
-abstract class GPCommitteeRegression[T,D[T]](num: Int, data: D[T],
-                                             networks: GPRegressionPipe[GPRegression, D[T]]*)
-  extends LinearModel[D[T], DenseVector[Double], DenseVector[Double], Double, D[T]] {
+abstract class GPCommitteeRegression[D, I: ClassTag](
+  num: Int, data: D,
+  networks: GPRegressionPipe[AbstractGPRegressionModel[Seq[(I, Double)], I], D, I]*) extends
+  LinearModel[D, DenseVector[Double], I, Double, D] {
 
-  override protected val g: D[T] = data
+  override protected val g: D = data
 
-  val baseNetworks: List[GPRegression] =
+  val baseNetworks: List[AbstractGPRegressionModel[Seq[(I, Double)], I]] =
     networks.toList.map(net => net.run(g))
 
   val num_points = num
@@ -41,8 +44,8 @@ abstract class GPCommitteeRegression[T,D[T]](num: Int, data: D[T],
     * point.
     *
     **/
-  override def predict(point: DenseVector[Double]): Double =
-    params dot featureMap(point)
+  override def predict(point: I): Double =
+    params dot phi(point)
 
   override def clearParameters(): Unit =
     DenseVector.fill[Double](baseNetworks.length)(1.0)
@@ -67,7 +70,7 @@ abstract class GPCommitteeRegression[T,D[T]](num: Int, data: D[T],
   override protected var params: DenseVector[Double] =
     DenseVector.fill[Double](baseNetworks.length)(1.0)
 
-  featureMap = (pattern) =>
+  val phi = (pattern: I) =>
     DenseVector(baseNetworks.map(net =>
       net.predictionWithErrorBars(Seq(pattern), 1).head._2
     ).toArray)

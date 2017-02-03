@@ -21,22 +21,27 @@ package io.github.mandar2812.dynaml.models
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
+import io.github.mandar2812.dynaml.pipes.DataPipe
+
+import scala.reflect.ClassTag
 
 /**
   * Created by mandar on 15/6/16.
   */
-class GPRegressionPipe[M <:
-AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
-  DenseVector[Double]], Source](pre: (Source) => Seq[(DenseVector[Double], Double)],
-                                cov: LocalScalarKernel[DenseVector[Double]],
-                                n: LocalScalarKernel[DenseVector[Double]],
-                                order: Int = 0, ex: Int = 0)
-  extends ModelPipe[Source, Seq[(DenseVector[Double], Double)],
-    DenseVector[Double], Double, M] {
+class GPRegressionPipe[
+M <: AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet],
+Source, IndexSet: ClassTag](
+  pre: (Source) => Seq[(IndexSet, Double)],
+  cov: LocalScalarKernel[IndexSet],
+  n: LocalScalarKernel[IndexSet],
+  order: Int = 0, ex: Int = 0,
+  meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0))
+  extends ModelPipe[Source, Seq[(IndexSet, Double)], IndexSet, Double, M] {
 
-  override val preProcess: (Source) => Seq[(DenseVector[Double], Double)] = pre
+  override val preProcess: (Source) => Seq[(IndexSet, Double)] = pre
 
-  override def run(data: Source): M =
-    AbstractGPRegressionModel[M](preProcess(data), cov, n, order, ex)
+  implicit val transform = DataPipe(preProcess)
+
+  override def run(data: Source): M = AbstractGPRegressionModel(cov, n, meanFunc)(data, 0).asInstanceOf[M]
 
 }

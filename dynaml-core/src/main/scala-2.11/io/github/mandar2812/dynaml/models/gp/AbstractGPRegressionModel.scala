@@ -47,9 +47,9 @@ import scala.reflect.ClassTag
   *                2) I = DenseVector when implementing GP regression
   *
   */
-abstract class AbstractGPRegressionModel[T, I](
+abstract class AbstractGPRegressionModel[T, I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
-  data: T, num: Int, meanFunc: DataPipe[I, Double] = DataPipe((_:I) => 0.0))(implicit ev: ClassTag[I])
+  data: T, num: Int, meanFunc: DataPipe[I, Double] = DataPipe((_:I) => 0.0))
   extends ContinuousProcess[T, I, Double, MultGaussianPRV]
   with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultGaussianPRV]
   with GloballyOptWithGrad {
@@ -425,13 +425,16 @@ object AbstractGPRegressionModel {
     else new GPNarXModel(order, ex, cov, noise, data).asInstanceOf[M]
   }
 
-  def apply[T, I](
+  def apply[T, I: ClassTag](
     cov: LocalScalarKernel[I],
     noise: LocalScalarKernel[I],
     meanFunc: DataPipe[I, Double])(
     trainingdata: T, num: Int)(
-    implicit transform: DataPipe[T, Seq[(I, Double)]], ct: ClassTag[I]) =
-    new AbstractGPRegressionModel[T, I](cov, noise, trainingdata, num, meanFunc) {
+    implicit transform: DataPipe[T, Seq[(I, Double)]]) = {
+
+    val num_points = if(num > 0) num else transform(trainingdata).length
+
+    new AbstractGPRegressionModel[T, I](cov, noise, trainingdata, num_points, meanFunc) {
       /**
         * Convert from the underlying data structure to
         * Seq[(I, Y)] where I is the index set of the GP
@@ -439,4 +442,7 @@ object AbstractGPRegressionModel {
         **/
       override def dataAsSeq(data: T) = transform(data)
     }
+
+  }
+
 }
