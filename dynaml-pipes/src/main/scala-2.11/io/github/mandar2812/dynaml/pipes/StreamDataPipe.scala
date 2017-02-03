@@ -45,8 +45,20 @@ trait StreamDataPipe[I, J, K] extends DataPipe[Stream[I], K]{
   override def run(data: Stream[I]): K
 }
 
+/**
+  * A pipeline which takes a [[Stream]] of data and
+  * performs the scala `map`operation.
+  * */
 trait StreamMapPipe[I, J] extends StreamDataPipe[I, J, Stream[J]] {
   override def run(data: Stream[I]): Stream[J] = optimize { data.map(pipe) }
+}
+
+/**
+  * A pipeline which takes a [[Stream]] of data and
+  * performs the scala `flatMap` operation.
+  * */
+trait StreamFlatMapPipe[I, J] extends StreamDataPipe[I, Stream[J], Stream[J]] {
+  override def run(data: Stream[I]) = optimize { data.flatMap(pipe) }
 }
 
 trait StreamFilterPipe[I] extends StreamDataPipe[I, Boolean, Stream[I]] {
@@ -95,6 +107,19 @@ object StreamDataPipe {
     new StreamSideEffectPipe[I] {
       val pipe = seFunc.run _
     }
+}
+
+object StreamFlatMapPipe {
+  def apply[I, J](mapFunc: (I) => Stream[J]) =
+    new StreamFlatMapPipe[I, J] {
+      override val pipe = mapFunc
+    }
+
+  def apply[I, J](mapFunc: DataPipe[I, Stream[J]]) =
+    new StreamFlatMapPipe[I, J] {
+      override val pipe = mapFunc
+    }
+
 }
 
 object StreamPartitionPipe {
