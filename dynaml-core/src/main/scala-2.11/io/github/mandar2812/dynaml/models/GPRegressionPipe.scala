@@ -18,7 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models
 
-import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.pipes.DataPipe
