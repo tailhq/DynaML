@@ -24,6 +24,8 @@ import breeze.numerics.{lgamma, log}
 /**
   * @author mandar date: 06/02/2017.
   *
+  * Multivariate Gamma function.
+  *
   */
 object mvlgamma extends UFunc {
 

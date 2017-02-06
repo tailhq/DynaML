@@ -23,6 +23,7 @@ import breeze.numerics._
 import math.Pi
 import breeze.linalg._
 import breeze.stats.distributions._
+import org.apache.spark.annotation.Experimental
 
 import scala.runtime.ScalaRunTime
 
@@ -70,6 +71,8 @@ case class MultivariateStudentsT(
 
   def mode = mean
 
+  //TODO: Check and correct calculation of entropy for Mult Students T
+  @Experimental
   lazy val entropy = {
     sum(log(diag(root))) + (mean.length/2.0)*log(mu*Pi) + lbeta(mean.length/2.0, mu/2.0) - lgamma(mean.length/2.0) +
       (digamma((mu+mean.length)/2.0) - digamma(mu/2.0))*(mu+mean.length)/2.0

@@ -57,6 +57,7 @@ case class BlockedMultivariateStudentsT(
 
   def mode = mean
 
+  //TODO: Check and correct calculation of entropy for Mult Students T
   lazy val entropy = {
     bsum(blog(bdiag(root))) + (mean.rows/2.0)*log(mu*Pi) + lbeta(mean.rows/2.0, mu/2.0) - lgamma(mean.rows/2.0) +
       (digamma((mu+mean.rows)/2.0) - digamma(mu/2.0))*(mu+mean.rows)/2.0
