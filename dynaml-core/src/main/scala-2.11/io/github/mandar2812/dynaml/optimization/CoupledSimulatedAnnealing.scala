@@ -96,8 +96,8 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
     val initialEnergyLandscape = getEnergyLandscape(initialConfig, options)
 
-
     val gamma_init = CoupledSimulatedAnnealing.couplingFactor(variant)(initialEnergyLandscape.map(_._1), accTemp)
+
     var acceptanceProbs: List[Double] = initialEnergyLandscape.map(c => {
       CoupledSimulatedAnnealing.acceptanceProbability(variant)(c._1, c._1, gamma_init, accTemp)
     })
@@ -137,18 +137,25 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
             val new_energy = system.energy(new_config, options)
 
             //Calculate the acceptance probability
-            val acceptanceProbability = CoupledSimulatedAnnealing.acceptanceProbability(variant)(
-              new_energy - maxEnergy, config._1,
-              couplingFactor, accTemp)
+            val acceptanceProbability =
+              CoupledSimulatedAnnealing.acceptanceProbability(variant)(
+                new_energy - maxEnergy, config._1,
+                couplingFactor, accTemp)
 
             val ans = if(new_energy < config._1) {
+
               ((new_energy, new_config), acceptanceProbability)
+
             } else {
-              if(Random.nextDouble <= acceptanceProbability) ((new_energy, new_config), acceptanceProbability)
-              else (config, acceptanceProbability)
+
+              if(Random.nextDouble <= acceptanceProbability)
+                ((new_energy, new_config), acceptanceProbability)
+              else
+                (config, acceptanceProbability)
             }
             ans
           }).unzip
+
           acceptanceProbs = probabilities
           CSATRec(newEnergyLandscape, it-1)
       }
@@ -184,15 +191,22 @@ object CoupledSimulatedAnnealing {
     case MwVC => "Modified with Variance Control"
   }
 
-  def couplingFactor(variant: String)(landscape: Seq[Double], Tacc: Double): Double = {
+  def couplingFactor(variant: String)(
+    landscape: Seq[Double],
+    Tacc: Double): Double = {
+
     if(variant == MuSA || variant == BA)
       landscape.map(energy => math.exp(-1.0*energy/Tacc)).sum
     else if (variant == M || variant == MwVC)
       landscape.map(energy => math.exp(energy/Tacc)).sum
     else 1.0
+
   }
 
-  def acceptanceProbability(variant: String)(energy: Double, oldEnergy: Double, gamma: Double, temperature: Double) = {
+  def acceptanceProbability(variant: String)(
+    energy: Double, oldEnergy: Double,
+    gamma: Double, temperature: Double) = {
+
     if(variant == MuSA )
       math.exp(-1.0*energy/temperature)/(math.exp(-1.0*energy/temperature)+gamma)
     else if (variant == BA)
@@ -200,6 +214,7 @@ object CoupledSimulatedAnnealing {
     else if (variant == M || variant == MwVC)
       math.exp(oldEnergy/temperature)/gamma
     else gamma/(1.0 + math.exp((energy - oldEnergy)/temperature))
+
   }
 
   def varianceDesired(variant: String)(m: Int):Double = {
