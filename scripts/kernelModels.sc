@@ -22,7 +22,7 @@ val noise = new DiracKernel(0.05)
 noise.block_all_hyper_parameters
 
 AbottPowerPlant(other_kernel, noise,
-  opt = Map("globalOpt" -> "GPC", "grid" -> "2",
+  opt = Map("globalOpt" -> "GPCSA", "grid" -> "3",
     "step" -> "0.02", "tolerance" -> "0.0001",
      "maxIterations" -> "5"), num_training = 1025,
      num_test = 1025, deltaT = 2, column = 8)

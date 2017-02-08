@@ -121,7 +121,7 @@ class GridGPCommittee[T, I: ClassTag](model: AbstractGPRegressionModel[T, I]) ex
     val (kernels, noiseModels, meanFuncs) = weights.map(weightCouple => {
       val (w, conf) = weightCouple
       val (k, n) = (covariancePipe(conf), noisePipe(conf))
-      (k*w*w, n*w*w, meanF > DataPipe((x: Double) => x*w))
+      (k*(w*w), n*(w*w), meanF > DataPipe((x: Double) => x*w))
     }).unzip3
 
     //Calculate the resultant kernels, noise and mean function of GP committee

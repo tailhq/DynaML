@@ -20,8 +20,12 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
 import breeze.stats.distributions.CauchyDistribution
-import io.github.mandar2812.dynaml.utils
+import io.github.mandar2812.dynaml.kernels.DecomposableCovariance
+import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
+import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.{DynaMLPipe, utils}
 
+import scala.reflect.ClassTag
 import scala.util.Random
 
 /**
@@ -81,8 +85,9 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
   def mutationTemperature(initialTemp: Double)(k: Int): Double =
     initialTemp/k.toDouble
 
-  override def optimize(initialConfig: Map[String, Double],
-                        options: Map[String, String] = Map()) = {
+  protected def performCSA(
+    initialConfig: Map[String, Double],
+    options: Map[String, String] = Map()) = {
 
     logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     logger.info("Coupled Simulated Annealing: "+CoupledSimulatedAnnealing.algorithm(variant))
@@ -160,7 +165,14 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
           CSATRec(newEnergyLandscape, it-1)
       }
 
-    val landscape = CSATRec(initialEnergyLandscape, MAX_ITERATIONS).toMap
+    CSATRec(initialEnergyLandscape, MAX_ITERATIONS)
+  }
+
+  override def optimize(initialConfig: Map[String, Double],
+                        options: Map[String, String] = Map()) = {
+
+
+    val landscape = performCSA(initialConfig, options).toMap
     val optimum = landscape.keys.min
 
     logger.info(
@@ -224,6 +236,82 @@ object CoupledSimulatedAnnealing {
       0.99*(m-1)/math.pow(m, 2.0)
 
   }
+}
 
 
+/**
+  * @author mandar2812 date 08/02/2017
+  *
+  * Build GP committee model after performing the CSA routine
+  * */
+class CSAGPCommittee[T, I: ClassTag](
+  model: AbstractGPRegressionModel[T, I]) extends
+  CoupledSimulatedAnnealing(model) {
+
+  override def optimize(
+    initialConfig: Map[String, Double],
+    options: Map[String, String]) = {
+
+
+    //Find out the blocked hyper parameters and their values
+    val blockedHypParams = system.covariance.blocked_hyper_parameters ++ system.noiseModel.blocked_hyper_parameters
+
+    val blockedState = system._current_state.filterKeys(blockedHypParams.contains)
+
+    val energyLandscape = performCSA(initialConfig, options)
+
+    //Calculate the weights of each configuration
+    val weights = GridGPCommittee.calculateModelWeights(energyLandscape).map(c => (c._1, c._2 ++ blockedState))
+
+    logger.info("--------------------------------------")
+    logger.info(
+      "Calculated model probabilities/weights are \n"+
+        weights.map(wc =>
+          "\nConfiguration: \n"+
+            GlobalOptimizer.prettyPrint(wc._2)+
+            "\nProbability = "+wc._1+"\n"
+        ).reduceLeft((a, b) => a++b)
+    )
+    logger.info("--------------------------------------")
+
+    //Declare implicit value for weighted kernel
+    implicit val encoder = DynaMLPipe.genericReplicationEncoder(weights.length)
+    //Declare implicit value for transformation required for creation of a GP model
+    implicit val transform: DataPipe[T, Seq[(I, Double)]] = DataPipe(system.dataAsSeq)
+
+    //Now construct a weighted Gaussian Process model
+    val (covariancePipe, noisePipe) = (system.covariance.asPipe, system.noiseModel.asPipe)
+
+    //The mean function of the original GP
+    val meanF = system.mean
+
+    //Get the kernels, noise models and mean functions of each GP in committee
+    val (kernels, noiseModels, meanFuncs) = weights.map(weightCouple => {
+      val (w, conf) = weightCouple
+      val (k, n) = (covariancePipe(conf), noisePipe(conf))
+      (k*(w*w), n*(w*w), meanF > DataPipe((x: Double) => x*w))
+    }).unzip3
+
+    //Calculate the resultant kernels, noise and mean function of GP committee
+    val (netKernel, netNoiseModel, netMeanFunc) = (
+      new DecomposableCovariance[I](kernels:_*),
+      new DecomposableCovariance[I](noiseModels:_*),
+      DataPipe((x: I) => meanFuncs.map(_(x)).sum))
+
+
+    logger.info("Constructing probabilistic Committee GP model")
+    //Create the GP committee with the calculated specifications
+    val committeeGP: AbstractGPRegressionModel[T, I] =
+      AbstractGPRegressionModel(
+        netKernel, netNoiseModel, netMeanFunc)(
+        system.data, system.npoints)
+
+    logger.info("State of new model: "+GlobalOptimizer.prettyPrint(committeeGP._current_state))
+
+    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))
+      committeeGP.persist(committeeGP._current_state)
+
+    //Return the resultant model
+    (committeeGP, committeeGP._current_state)
+  }
 }

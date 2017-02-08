@@ -46,8 +46,6 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
 
   def kernelPipe(config: Map[String, Double]) = encodingTuple > kernelBind(config) > reducer
 
-  //protected def updateKernelPipe(): Unit = kernelPipe = encodingTuple > kernelBind > reducer
-
   override def repr: DecomposableCovariance[S] = this
 
   override def setHyperParameters(h: Map[String, Double]): DecomposableCovariance.this.type = {
