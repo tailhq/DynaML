@@ -41,7 +41,8 @@ class WaveletKernel(func: (Double) => Double)(private var scale: Double)(implici
     state += ("scale" -> d)
   }
 
-  override def eval(x: DenseVector[Double]): Double = x.map(i => mother(math.abs(i)/scale)).toArray.product
+  override def evalAt(config: Map[String, Double])(x: DenseVector[Double]): Double =
+    x.map(i => mother(math.abs(i)/config("scale"))).toArray.product
 
   def getscale: Double = state("scale")
 
@@ -56,5 +57,6 @@ class WaveletCovFunc(func: (Double) => Double)(private var scale: Double)
 
   state = Map("scale" -> scale)
 
-  override def evaluate(x: Double, y: Double): Double = mother(math.abs(x-y)/state("scale"))
+  override def evaluateAt(config: Map[String, Double])(x: Double, y: Double): Double =
+    mother(math.abs(x-y)/config("scale"))
 }

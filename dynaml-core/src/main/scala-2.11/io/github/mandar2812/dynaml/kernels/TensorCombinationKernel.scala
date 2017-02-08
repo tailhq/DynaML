@@ -27,8 +27,23 @@ class TensorCombinationKernel[R, S](
   state =
     firstK.state.map(h => (fID+"/"+h._1, h._2)) ++ secondK.state.map(h => (sID+"/"+h._1, h._2))
 
-  override def evaluate(x: (R, S), y: (R, S)): Double =
-    reducer(Array(firstK.evaluate(x._1, y._1), secondK.evaluate(x._2, y._2)))
+  private def getKernelConfigs(config: Map[String, Double]) = (
+    config.filter(_._1.contains(fID)).map(CompositeCovariance.truncateHyperParams),
+    config.filter(_._1.contains(sID)).map(CompositeCovariance.truncateHyperParams)
+  )
+
+  override def evaluateAt(config: Map[String, Double])(x: (R, S), y: (R, S)): Double = {
+
+    val (firstKernelConfig, secondKernelConfig) = getKernelConfigs(config)
+
+    reducer(
+      Array(
+        firstK.evaluateAt(firstKernelConfig)(x._1, y._1),
+        secondK.evaluateAt(secondKernelConfig)(x._2, y._2)
+      )
+    )
+  }
+
 
   override def repr: TensorCombinationKernel[R, S] = this
 
@@ -48,12 +63,22 @@ class TensorCombinationKernel[R, S](
     super.setHyperParameters(h)
   }
 
-  override def gradient(x: (R, S), y: (R, S)): Map[String, Double] = reducer match {
-    case SumReducer =>
-      firstK.gradient(x._1, y._1).map(h => (fID+"/"+h._1, h._2)) ++
-        secondK.gradient(x._2, y._2).map(h => (sID+"/"+h._1, h._2))
-    case ProductReducer =>
-      firstK.gradient(x._1, y._1).map(k => (fID+"/"+k._1, k._2*secondK.evaluate(x._2, y._2))) ++
-        secondK.gradient(x._2, y._2).map(k => (sID+"/"+k._1, k._2*firstK.evaluate(x._1, y._1)))
+  override def gradientAt(config: Map[String, Double])(x: (R, S), y: (R, S)): Map[String, Double] = {
+    val (firstKernelConfig, secondKernelConfig) = getKernelConfigs(config)
+
+    reducer match {
+      case SumReducer =>
+        firstK.gradientAt(firstKernelConfig)(x._1, y._1).map(h => (fID+"/"+h._1, h._2)) ++
+          secondK.gradientAt(secondKernelConfig)(x._2, y._2).map(h => (sID+"/"+h._1, h._2))
+
+      case ProductReducer =>
+        firstK.gradientAt(firstKernelConfig)(x._1, y._1).map(k =>
+          (fID+"/"+k._1, k._2*secondK.evaluateAt(secondKernelConfig)(x._2, y._2))) ++
+          secondK.gradientAt(secondKernelConfig)(x._2, y._2).map(k =>
+            (sID+"/"+k._1, k._2*firstK.evaluateAt(firstKernelConfig)(x._1, y._1)))
+
+      case _ =>
+        super.gradientAt(config)(x, y)
+    }
   }
 }

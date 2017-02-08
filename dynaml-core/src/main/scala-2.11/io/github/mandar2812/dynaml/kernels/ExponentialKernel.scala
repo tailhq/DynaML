@@ -9,7 +9,7 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
  */
 class ExponentialKernel(be: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
-  with LocalSVMKernel[DenseVector[Double]]
+  with LocalScalarKernel[DenseVector[Double]]
   with Serializable {
   override val hyper_parameters = List("beta")
 
@@ -22,8 +22,18 @@ class ExponentialKernel(be: Double = 1.0)
     this.beta = b
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    math.exp(state("beta")*(x.t * y)/(norm(x,2)*norm(y,2)))
+  override def evaluateAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Double =
+    math.exp(config("beta")*(x.t * y)/(norm(x,2)*norm(y,2)))
 
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]) = {
 
+    Map("beta" -> evaluateAt(config)(x, y)*(x.t * y)/(norm(x,2)*norm(y,2)))
+
+  }
 }

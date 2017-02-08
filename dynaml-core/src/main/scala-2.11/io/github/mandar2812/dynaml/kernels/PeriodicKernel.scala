@@ -11,8 +11,9 @@ import breeze.linalg.{norm, DenseMatrix, DenseVector}
 class PeriodicKernel(private var lengthscale: Double = 1.0,
                      private var freq: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
-  with LocalSVMKernel[DenseVector[Double]]
+  with LocalScalarKernel[DenseVector[Double]]
   with Serializable {
+
   override val hyper_parameters = List("lengthscale", "frequency")
 
   state = Map("lengthscale" -> lengthscale, "frequency" -> freq)
@@ -27,20 +28,28 @@ class PeriodicKernel(private var lengthscale: Double = 1.0,
     this.freq = f
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
+  override def evaluateAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Double = {
+
     val diff = x - y
-    Math.exp(-2*math.pow(math.sin(norm(diff, 1)*math.Pi*state("frequency")), 2)/
-      (2*math.pow(this.state("lengthscale"), 2)))
+
+    Math.exp(-2*math.pow(math.sin(norm(diff, 1)*math.Pi*config("frequency")), 2)/
+      (2*math.pow(config("lengthscale"), 2)))
   }
 
-  override def gradient(x: DenseVector[Double],
-                        y: DenseVector[Double]): Map[String, Double] = {
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Map[String, Double] = {
+
     val diff = norm(x-y, 1)
-    val k = math.Pi*state("frequency")*diff/math.pow(state("lengthscale"),2)
+    val k = math.Pi*config("frequency")*diff/math.pow(config("lengthscale"), 2)
 
     Map(
-      "frequency" -> -2.0*evaluate(x,y)*math.sin(2.0*k)*k/state("frequency"),
-      "lengthscale" -> 4.0*evaluate(x,y)*math.sin(2*k)*k/state("lengthscale")
+      "frequency" -> -2.0*evaluateAt(config)(x,y)*math.sin(2.0*k)*k/config("frequency"),
+      "lengthscale" -> 4.0*evaluateAt(config)(x,y)*math.sin(2*k)*k/config("lengthscale")
     )
   }
 
@@ -49,25 +58,33 @@ class PeriodicKernel(private var lengthscale: Double = 1.0,
 
 class PeriodicCovFunc(private var lengthscale: Double = 1.0,
                       private var freq: Double = 1.0)
-  extends LocalSVMKernel[Double] {
+  extends LocalScalarKernel[Double] {
+
   override val hyper_parameters = List("lengthscale", "frequency")
 
   state = Map("lengthscale" -> lengthscale, "frequency" -> freq)
 
-  override def evaluate(x: Double, y: Double): Double = {
+  override def evaluateAt(
+    config: Map[String, Double])(
+    x: Double, y: Double): Double = {
+
     val diff = x - y
-    Math.exp(-2*math.pow(math.sin(diff*math.Pi*state("frequency")), 2)/
-      (2*math.pow(this.state("lengthscale"), 2)))
+
+    Math.exp(-2*math.pow(math.sin(diff*math.Pi*config("frequency")), 2)/
+      (2*math.pow(config("lengthscale"), 2)))
   }
 
-  override def gradient(x: Double,
-                        y: Double): Map[String, Double] = {
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: Double,
+    y: Double): Map[String, Double] = {
+
     val diff = math.abs(x-y)
-    val k = math.Pi*state("frequency")*diff/math.pow(state("lengthscale"),2)
+    val k = math.Pi*config("frequency")*diff/math.pow(config("lengthscale"), 2)
 
     Map(
-      "frequency" -> -2.0*evaluate(x,y)*math.sin(2.0*k)*k/state("frequency"),
-      "lengthscale" -> 4.0*evaluate(x,y)*math.sin(2*k)*k/state("lengthscale")
+      "frequency" -> -2.0*evaluateAt(config)(x,y)*math.sin(2.0*k)*k/config("frequency"),
+      "lengthscale" -> 4.0*evaluateAt(config)(x,y)*math.sin(2*k)*k/config("lengthscale")
     )
   }
 }

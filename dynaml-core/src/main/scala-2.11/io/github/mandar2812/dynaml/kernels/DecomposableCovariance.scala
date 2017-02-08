@@ -32,17 +32,17 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     k.blocked_hyper_parameters.map(h => id+"/"+h)
   }).reduceLeft(_++_)
 
-  def kernelBind = DataPipe((xy: (Array[S], Array[S])) => {
+  def kernelBind(config: Map[String, Double]) = DataPipe((xy: (Array[S], Array[S])) => {
     optimize {
-      (xy._1, xy._2, kernels.map(k => k.evaluate _ ))
+      (xy._1, xy._2, kernels.map(k => k.evaluateAt(config) _ ))
         .zipped
         .map((x, y, k) => k(x, y))
     }
   })
 
-  var kernelPipe = encodingTuple > kernelBind > reducer
+  def kernelPipe(config: Map[String, Double]) = encodingTuple > kernelBind(config) > reducer
 
-  protected def updateKernelPipe(): Unit = kernelPipe = encodingTuple > kernelBind > reducer
+  //protected def updateKernelPipe(): Unit = kernelPipe = encodingTuple > kernelBind > reducer
 
   override def repr: DecomposableCovariance[S] = this
 
@@ -59,28 +59,35 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
       val hyper_params = hypC._2.map(_._2).toMap
       kernelMap(kid).setHyperParameters(hyper_params)
     })
-    updateKernelPipe()
     this
   }
 
-  override def evaluate(x: S, y: S): Double = kernelPipe run (x,y)
+  override def evaluateAt(config: Map[String, Double])(x: S, y: S): Double = kernelPipe(config) run (x,y)
 
-  override def gradient(x: S, y: S): Map[String, Double] = reducer match {
+  override def gradientAt(config: Map[String, Double])(x: S, y: S): Map[String, Double] = reducer match {
     case SumReducer =>
       val (xs, ys) = (encoding*encoding)((x,y))
+
       xs.zip(ys).zip(kernels).map(coupleAndKern => {
         val (u,v) = coupleAndKern._1
         val id = coupleAndKern._1.toString.split("\\.").last
-        coupleAndKern._2.gradient(u,v).map(c => (id+"/"+c._1, c._2))
+        coupleAndKern._2.gradientAt(config)(u,v).map(c => (id+"/"+c._1, c._2))
       }).reduceLeft(_++_)
+
     case ProductReducer =>
       val (xs, ys) = (encoding*encoding)((x,y))
+
       xs.zip(ys).zip(kernels).map(coupleAndKern => {
+
         val (u,v) = coupleAndKern._1
         val id = coupleAndKern._1.toString.split("\\.").last
-        coupleAndKern._2.gradient(u,v)
+
+        coupleAndKern._2.gradientAt(config)(u,v)
           .map(c => (id+"/"+c._1, c._2))
-          .mapValues(_ * this.evaluate(x,y)/coupleAndKern._2.evaluate(x,y))
+          .mapValues(_ * evaluateAt(config)(x,y)/coupleAndKern._2.evaluateAt(config)(x,y))
       }).reduceLeft(_++_)
+
+    case _ =>
+      super.gradientAt(config)(x, y)
   }
 }

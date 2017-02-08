@@ -32,12 +32,15 @@ class AnovaKernel(si: Double = 1.0,
     state += ("k" -> kl)
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
+  override def evaluateAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Double = {
     x.toArray
       .zip(y.toArray)
       .map{couple =>
-        math.exp(-1.0*state("degree")*state("sigma")*math.pow(math.pow(couple._1, state("k")) -
-          math.pow(couple._2, state("k")),2))
+        math.exp(-1.0*config("degree")*config("sigma")*math.pow(math.pow(couple._1, config("k")) -
+          math.pow(couple._2, config("k")),2))
       }.sum
   }
 
@@ -68,7 +71,7 @@ class AnovaCovFunc(si: Double = 1.0,
     state += ("k" -> kl)
   }
 
-  override def evaluate(x: Double, y: Double): Double =
-    math.exp(-1.0*state("d")*state("sigma")*math.pow(math.pow(x, state("k")) -
-      math.pow(y, state("k")),2))
+  override def evaluateAt(config: Map[String, Double])(x: Double, y: Double): Double =
+    math.exp(-1.0*config("d")*config("sigma")*math.pow(math.pow(x, config("k")) -
+      math.pow(y, config("k")),2))
 }

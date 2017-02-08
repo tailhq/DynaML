@@ -30,6 +30,7 @@ class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
   implicit ev: Field[T] with InnerProductSpace[T, Double])
   extends StationaryKernel[T, Double, DenseMatrix[Double]]
     with LocalScalarKernel[T] with Serializable { self =>
+
   override val hyper_parameters = List("bandwidth")
 
   state = Map("bandwidth" -> bandwidth)
@@ -39,20 +40,20 @@ class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
     this.bandwidth = d
   }
 
-  override def eval(x: T): Double =
-    math.exp(-1*ev.dot(x, x)/(2*math.pow(this.state("bandwidth"), 2)))
+  override def evalAt(config: Map[String, Double])(x: T): Double =
+    math.exp(-1*ev.dot(x, x)/(2*math.pow(config("bandwidth"), 2)))
 
-  override def gradient(x: T,
-                        y: T): Map[String, Double] = {
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: T, y: T): Map[String, Double] = {
+
     val diff = ev.minus(x, y)
 
-    Map("bandwidth" -> 1.0*evaluate(x,y)*ev.dot(diff, diff)/math.pow(math.abs(state("bandwidth")), 3))
+    Map("bandwidth" -> 1.0*evaluateAt(config)(x,y)*ev.dot(diff, diff)/math.pow(math.abs(config("bandwidth")), 3))
   }
 
 
   def getBandwidth: Double = this.bandwidth
-
-
 
 }
 
@@ -62,8 +63,7 @@ class RBFKernel(private var bandwidth: Double = 1.0)(
   with SVMKernel[DenseMatrix[Double]]
   with Serializable { self =>
 
-
-
+  //override def evalAt(config: Map[String, Double])(x: DenseVector[Double]) = super.evalAt(config)(x)
 }
 
 /**
@@ -78,12 +78,14 @@ class SEKernel(private var band: Double = 1.0, private var h: Double = 2.0)(
 
   override val hyper_parameters = List("bandwidth","amplitude")
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]) =
-    math.pow(state("amplitude"), 2.0)*super.evaluate(x,y)
+  override def evaluateAt(config: Map[String, Double])(x: DenseVector[Double], y: DenseVector[Double]) =
+    math.pow(config("amplitude"), 2.0)*super.evaluateAt(config)(x,y)
 
-  override def gradient(x: DenseVector[Double],
-                        y: DenseVector[Double]): Map[String, Double] =
-    Map("amplitude" -> 2.0*state("amplitude")*super.evaluate(x,y)) ++ super.gradient(x,y)
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Map[String, Double] =
+    Map("amplitude" -> 2.0*config("amplitude")*super.evaluateAt(config)(x,y)) ++ super.gradientAt(config)(x,y)
 
 }
 
@@ -109,11 +111,16 @@ class MahalanobisKernel(private var band: DenseVector[Double], private var h: Do
   override val hyper_parameters = List("MahalanobisAmplitude") ++
     band.mapPairs((i, b) => "MahalanobisBandwidth_"+i).toArray.toList
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]) = {
-    val bandMap = state.filter((k) => k._1.contains("MahalanobisBandwidth"))
+  override def evaluateAt(config: Map[String, Double])(
+    x: DenseVector[Double], y: DenseVector[Double]) = {
+
+    val bandMap = config.filter((k) => k._1.contains("MahalanobisBandwidth"))
+
     assert(x.length == bandMap.size,
       "Mahalanobis Bandwidth vector's must be equal to that of data: "+x.length)
+
     val diff = x - y
+
     val bandwidth = DenseMatrix.tabulate[Double](bandMap.size, bandMap.size)((i, j) => {
       if (i == j)
         math.pow(bandMap("MahalanobisBandwidth_"+i), -2.0)
@@ -121,34 +128,40 @@ class MahalanobisKernel(private var band: DenseVector[Double], private var h: Do
         0.0
     })
 
-    math.pow(state("MahalanobisAmplitude"), 2.0)*
+    math.pow(config("MahalanobisAmplitude"), 2.0)*
       math.exp((diff.t*(bandwidth*diff))*(-1.0/2.0))
   }
 
-  override def gradient(x: DenseVector[Double],
-                        y: DenseVector[Double]): Map[String, Double] = {
-    val bandMap = state.filter((k) => k._1.contains("MahalanobisBandwidth"))
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Map[String, Double] = {
+
+    val bandMap = config.filter((k) => k._1.contains("MahalanobisBandwidth"))
+
     assert(x.length == bandMap.size, "Mahalanobis Bandwidth vector's must be equal to that of data")
-    Map("MahalanobisAmplitude" -> 2.0*evaluate(x,y)/state("MahalanobisAmplitude")) ++
-      bandMap.map((k) => (k._1, evaluate(x,y)*math.pow(norm(x-y), 2.0)/math.pow(k._2, 3.0)))
+
+    Map("MahalanobisAmplitude" -> 2.0*evaluateAt(config)(x,y)/config("MahalanobisAmplitude")) ++
+      bandMap.map((k) => (k._1, evaluateAt(config)(x,y)*math.pow(norm(x-y), 2.0)/math.pow(k._2, 3.0)))
   }
 
 }
 
 
 class RBFCovFunc(private var bandwidth: Double)
-  extends LocalSVMKernel[Double] {
+  extends LocalScalarKernel[Double] {
+
   override val hyper_parameters: List[String] = List("bandwidth")
 
   state = Map("bandwidth" -> bandwidth)
 
-  override def evaluate(x: Double, y: Double): Double = {
+  override def evaluateAt(config: Map[String, Double])(x: Double, y: Double): Double = {
     val diff = x - y
-    Math.exp(-1*math.pow(diff, 2)/(2*math.pow(this.state("bandwidth"), 2)))
+    Math.exp(-1*math.pow(diff, 2)/(2*math.pow(config("bandwidth"), 2)))
   }
 
-  override def gradient(x: Double, y: Double): Map[String, Double] =
-    Map("bandwidth" -> evaluate(x,y)*math.pow(x-y,2)/math.pow(math.abs(state("bandwidth")), 3))
+  override def gradientAt(config: Map[String, Double])(x: Double, y: Double): Map[String, Double] =
+    Map("bandwidth" -> evaluateAt(config)(x,y)*math.pow(x-y,2)/math.pow(math.abs(config("bandwidth")), 3))
 }
 
 class SECovFunc(private var band: Double = 1.0, private var h: Double = 2.0)
@@ -158,25 +171,26 @@ class SECovFunc(private var band: Double = 1.0, private var h: Double = 2.0)
 
   override val hyper_parameters = List("bandwidth","amplitude")
 
-  override def evaluate(x: Double, y: Double) =
-    math.pow(state("amplitude"), 2.0)*super.evaluate(x,y)
+  override def evaluateAt(config: Map[String, Double])(x: Double, y: Double) =
+    math.pow(config("amplitude"), 2.0)*super.evaluateAt(config)(x,y)
 
-  override def gradient(x: Double,
-                        y: Double): Map[String, Double] =
-    Map("amplitude" -> 2.0*state("amplitude")*super.evaluate(x,y)) ++ super.gradient(x,y)
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: Double, y: Double): Map[String, Double] =
+    Map("amplitude" -> 2.0*config("amplitude")*super.evaluateAt(config)(x,y)) ++ super.gradientAt(config)(x,y)
 
 }
 
-class CoRegRBFKernel(bandwidth: Double) extends LocalSVMKernel[Int] {
+class CoRegRBFKernel(bandwidth: Double) extends LocalScalarKernel[Int] {
 
   override val hyper_parameters: List[String] = List("coRegB")
 
   state = Map("coRegB" -> bandwidth)
 
-  override def gradient(x: Int, y: Int): Map[String, Double] =
-    Map("coRegB" -> 1.0*evaluate(x,y)*math.pow(x-y,2)/math.pow(math.abs(state("coRegB")), 3))
+  override def gradientAt(config: Map[String, Double])(x: Int, y: Int): Map[String, Double] =
+    Map("coRegB" -> 1.0*evaluateAt(config)(x,y)*math.pow(x-y,2)/math.pow(math.abs(config("coRegB")), 3))
 
-  override def evaluate(x: Int, y: Int): Double = {
-    math.exp(-1.0*math.pow(x-y, 2.0)/state("coRegB"))
+  override def evaluateAt(config: Map[String, Double])(x: Int, y: Int): Double = {
+    math.exp(-1.0*math.pow(x-y, 2.0)/config("coRegB"))
   }
 }

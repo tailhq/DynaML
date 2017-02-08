@@ -9,7 +9,9 @@ import spire.algebra.Field
   * */
 abstract class StationaryKernel[T, V, M](implicit ev: Field[T]) extends CovarianceFunction[T, V, M] {
 
-  override def evaluate(x: T, y: T): V = eval(ev.minus(x,y))
+  def evalAt(config: Map[String, Double])(x: T): V
 
-  def eval(x: T): V
+  def eval(x: T): V = evalAt(state)(x)
+
+  override def evaluateAt(config: Map[String, Double])(x: T, y: T) = evalAt(config)(ev.minus(x,y))
 }

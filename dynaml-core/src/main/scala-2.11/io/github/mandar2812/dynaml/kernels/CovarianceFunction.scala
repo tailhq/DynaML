@@ -5,10 +5,15 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 import spire.algebra.InnerProductSpace
 
 /**
+  * @author mandar2812
   * A covariance function implementation. Covariance functions are
-  * central to Stochastic Process Models as well as SVMs.
+  * central to Gaussian/Student T Process Models as well as SVMs.
+  *
+  * @tparam T The index set over which K(.,.) is defined K: T &times; T -> V
+  * @tparam V The value outputted by the kernel
+  * @tparam M The type of the kernel matrix object.
   * */
-abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
+abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] with Serializable {
 
   val hyper_parameters: List[String]
 
@@ -37,7 +42,13 @@ abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] {
     this
   }
 
-  def gradient(x: T, y: T): Map[String, V]
+  def evaluateAt(config: Map[String, Double])(x: T, y: T): V
+
+  def gradientAt(config: Map[String, Double])(x: T, y: T): Map[String, V]
+
+  override def evaluate(x: T, y: T) = evaluateAt(state)(x, y)
+
+  def gradient(x: T, y: T): Map[String, V] = gradientAt(state)(x, y)
 
   def buildKernelMatrix[S <: Seq[T]](mappedData: S,
                                      length: Int): KernelMatrix[M]
@@ -108,12 +119,12 @@ object CovarianceFunction {
     *
     * */
   def apply[T](phi: Map[String, Double] => (T, T) => Double)(s: Map[String, Double]) =
-    new LocalScalarKernel[T] {
+    new LocalSVMKernel[T] {
       override val hyper_parameters: List[String] = s.keys.toList
 
       state = s
 
-      override def evaluate(x: T, y: T): Double = phi(state)(x, y)
+      override def evaluateAt(config: Map[String, Double])(x: T, y: T): Double = phi(config)(x, y)
 
       override def buildKernelMatrix[S <: Seq[T]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
         SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)

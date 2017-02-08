@@ -18,8 +18,9 @@ class LinearKernel(private var offset: Double = 0.0)
     this.offset = o
   }
 
-  override def evaluate(x: DenseVector[Double],
-                        y: DenseVector[Double]): Double =
-    (x.t * y) + this.offset
+  override def evaluateAt(config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Double =
+    (x.t * y) + config("offset")
 
 }

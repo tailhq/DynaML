@@ -22,13 +22,19 @@ class WaveKernel(th: Double = 1.0)
     this.theta = b
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
-    if (norm(x-y,2) != 0) math.sin(norm(x-y,2)/state("theta"))*(state("theta")/norm(x-y,2)) else 1.0
+  override def evaluateAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Double =
+    if (norm(x-y,2) != 0) math.sin(norm(x-y,2)/config("theta"))*(config("theta")/norm(x-y,2)) else 1.0
 
-  override def gradient(x: DenseVector[Double],
-                        y: DenseVector[Double]): Map[String, Double] = {
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Map[String, Double] = {
+
     val diff = norm(x-y, 2)
-    Map("theta" -> (-1.0*math.cos(diff/state("theta")) + math.sin(diff/state("theta"))/diff))
+    Map("theta" -> (-1.0*math.cos(diff/config("theta")) + math.sin(diff/config("theta"))/diff))
   }
 
 }
@@ -39,11 +45,11 @@ class WaveCovFunc(private var theta: Double)
 
   state = Map("theta" -> theta)
 
-  override def evaluate(x: Double, y: Double): Double =
-    if (x-y != 0) math.sin(math.pow(x-y,2)/state("theta"))*(state("theta")/math.pow(x-y,2)) else 1.0
+  override def evaluateAt(config: Map[String, Double])(x: Double, y: Double): Double =
+    if (x-y != 0) math.sin(math.pow(x-y,2)/config("theta"))*(config("theta")/math.pow(x-y,2)) else 1.0
 
-  override def gradient(x: Double, y: Double): Map[String, Double] = {
+  override def gradientAt(config: Map[String, Double])(x: Double, y: Double): Map[String, Double] = {
     val diff = math.pow(x-y, 2)
-    Map("theta" -> (-1.0*math.cos(diff/state("theta")) + math.sin(diff/state("theta"))/diff))
+    Map("theta" -> (-1.0*math.cos(diff/config("theta")) + math.sin(diff/config("theta"))/diff))
   }
 }

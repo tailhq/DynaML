@@ -30,24 +30,24 @@ class CoRegGraphKernel(m: DenseMatrix[Double]) extends LocalSVMKernel[Int] {
 
   override val hyper_parameters: List[String] = state.keys.toList
 
-  def adjecancyMatrix = DenseMatrix.tabulate[Double](dimensions, dimensions){(i, j) =>
-    if(i <= j) state("M_"+i+"_"+j)
-    else state("M_"+j+"_"+i)
+  def adjecancyMatrix(config: Map[String, Double]) = DenseMatrix.tabulate[Double](dimensions, dimensions){(i, j) =>
+    if(i <= j) config("M_"+i+"_"+j)
+    else config("M_"+j+"_"+i)
   }
 
-  def degreeMatrix =
+  def degreeMatrix(config: Map[String, Double]) =
     DenseMatrix.eye[Double](dimensions) :*
-      ((adjecancyMatrix * DenseMatrix.ones[Double](dimensions, dimensions)) + adjecancyMatrix)
+      ((adjecancyMatrix(config) * DenseMatrix.ones[Double](dimensions, dimensions)) + adjecancyMatrix(config))
 
-  var l: DenseMatrix[Double] = pinv(degreeMatrix - adjecancyMatrix)
+  def l(config: Map[String, Double]): DenseMatrix[Double] = pinv(degreeMatrix(config) - adjecancyMatrix(config))
 
-  override def gradient(x: Int, y: Int): Map[String, Double] = hyper_parameters.map(_ -> 1.0).toMap
+  override def gradientAt(config: Map[String, Double])(x: Int, y: Int): Map[String, Double] =
+    hyper_parameters.map(_ -> 1.0).toMap
 
-  override def evaluate(x: Int, y: Int): Double = l(x,y)
+  override def evaluateAt(config: Map[String, Double])(x: Int, y: Int): Double = l(config)(x,y)
 
   override def setHyperParameters(h: Map[String, Double]): CoRegGraphKernel.this.type = {
     super.setHyperParameters(h)
-    l = pinv(degreeMatrix - adjecancyMatrix)
     this
   }
 }

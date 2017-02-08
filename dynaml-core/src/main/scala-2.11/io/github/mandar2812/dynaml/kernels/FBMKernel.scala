@@ -11,22 +11,25 @@ class FBMCovFunction(private var hurst: Double)
 
   state = Map("hurst" -> hurst)
 
-  override def evaluate(x: Double, y: Double): Double = {
-    0.5*(math.pow(math.abs(x), 2*state("hurst")) +
-      math.pow(math.abs(y), 2*state("hurst")) -
-      math.pow(math.abs(x-y), 2*state("hurst")))
+  override def evaluateAt(config: Map[String, Double])(x: Double, y: Double): Double = {
+    0.5*(math.pow(math.abs(x), 2*config("hurst")) +
+      math.pow(math.abs(y), 2*config("hurst")) -
+      math.pow(math.abs(x-y), 2*config("hurst")))
   }
 
-  override def gradient(x: Double, y: Double): Map[String, Double] = {
+  override def gradientAt(config: Map[String, Double])(x: Double, y: Double): Map[String, Double] = {
     val a = math.pow(x, 2)
     val b = math.pow(y, 2)
     val c = math.pow(x-y, 2)
+
     val grad = if(math.log(c) != Double.NaN
       && math.log(a) != Double.NaN
       && math.log(b) != Double.NaN) {
-      math.pow(a, state("hurst"))*math.log(a) +
-        math.pow(b, state("hurst"))*math.log(b) -
-        math.pow(c, state("hurst"))*math.log(c)
+
+      math.pow(a, config("hurst"))*math.log(a) +
+        math.pow(b, config("hurst"))*math.log(b) -
+        math.pow(c, config("hurst"))*math.log(c)
+
     } else if(math.log(c) == Double.NaN){
       Double.NegativeInfinity
     } else {
@@ -61,25 +64,34 @@ class FBMKernel(private var hurst: Double = 0.75)
     state += ("hurst" -> d)
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double = {
+  override def evaluateAt(config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Double = {
+
     val diff = x - y
-    0.5*(math.pow(norm(x, 2), 2*state("hurst")) + math.pow(norm(y, 2), 2*state("hurst")) -
-      math.pow(norm(diff, 2), 2*state("hurst")))
+
+    0.5*(math.pow(norm(x, 2), 2*config("hurst")) + math.pow(norm(y, 2), 2*config("hurst")) -
+      math.pow(norm(diff, 2), 2*config("hurst")))
   }
 
   def getHurst: Double = this.hurst
 
-  override def gradient(x: DenseVector[Double],
-                        y: DenseVector[Double]): Map[String, Double] = {
+  override def gradientAt(config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Map[String, Double] = {
+
     val a = math.pow(norm(x, 2), 2)
     val b = math.pow(norm(y, 2), 2)
     val c = math.pow(norm(x-y, 2), 2)
+
     val grad = if(math.log(c) != Double.NaN
       && math.log(a) != Double.NaN
       && math.log(b) != Double.NaN) {
-      math.pow(a, state("hurst"))*math.log(a) +
-        math.pow(b, state("hurst"))*math.log(b) -
-        math.pow(c, state("hurst"))*math.log(c)
+
+      math.pow(a, config("hurst"))*math.log(a) +
+        math.pow(b, config("hurst"))*math.log(b) -
+        math.pow(c, config("hurst"))*math.log(c)
+
     } else if(math.log(c) == Double.NaN){
       Double.NegativeInfinity
     } else {

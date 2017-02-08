@@ -30,11 +30,11 @@ class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
     this
   }
 
-  override def eval(x: T) = {
+  override def evalAt(config: Map[String, Double])(x: T) = {
     val r = math.sqrt(ev.dot(x, x))
-    val nu = state("p") + 0.5
-    val lengthscale = state("l")
-    val order = state("p").toInt
+    val nu = config("p") + 0.5
+    val lengthscale = config("l")
+    val order = config("p").toInt
 
     val leadingTerm = exp(-sqrt(2*nu)*r/lengthscale)*exp(lgamma(order + 1) - lgamma(2*order + 1))
 
@@ -45,14 +45,14 @@ class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
     leadingTerm*sumTerm
   }
 
-  override def gradient(x: T, y: T) = {
+  override def gradientAt(config: Map[String, Double])(x: T, y: T) = {
 
     val diff = ev.minus(x, y)
     val r = math.sqrt(ev.dot(diff, diff))
 
-    val nu = state("p") + 0.5
-    val lengthscale = state("l")
-    val order = state("p").toInt
+    val nu = config("p") + 0.5
+    val lengthscale = config("l")
+    val order = config("p").toInt
 
     val leadingTerm = exp(-sqrt(2*nu)*r/lengthscale)*exp(lgamma(order + 1) - lgamma(2*order + 1))
 
@@ -71,7 +71,9 @@ class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
 
       diffLead*sumTerm + diffSum*leadingTerm
     })
+
   }
+
 }
 
 /**

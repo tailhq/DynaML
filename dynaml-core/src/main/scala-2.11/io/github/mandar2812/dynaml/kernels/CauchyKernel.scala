@@ -10,7 +10,7 @@ import spire.algebra.Field
 class CauchyKernel(si: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
   extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
     with SVMKernel[DenseMatrix[Double]]
-    with LocalSVMKernel[DenseVector[Double]]
+    with LocalScalarKernel[DenseVector[Double]]
   with Serializable {
   override val hyper_parameters = List("sigma")
 
@@ -23,39 +23,43 @@ class CauchyKernel(si: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
     state += ("sigma" -> b)
   }
 
-  override def eval(x: DenseVector[Double]): Double =
-    1/(1 + math.pow(norm(x, 2)/state("sigma"), 2))
-
-  override def gradient(x: DenseVector[Double], y: DenseVector[Double]): Map[String, Double] = {
-    Map("sigma" -> 2.0*math.pow(evaluate(x,y),2)*math.pow(norm(x-y, 2), 2)/math.pow(state("sigma"), 3))
+  override def evalAt(config: Map[String, Double])(x: DenseVector[Double]) = {
+    1/(1 + math.pow(norm(x, 2)/config("sigma"), 2))
   }
+
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]) =
+    Map("sigma" -> 2.0*math.pow(evaluateAt(config)(x,y),2)*math.pow(norm(x-y, 2), 2)/math.pow(config("sigma"), 3))
+
 }
 
 class CauchyCovFunc(private var sigma: Double)
-  extends LocalSVMKernel[Double] {
+  extends LocalScalarKernel[Double] {
   override val hyper_parameters: List[String] = List("sigma")
 
   state = Map("sigma" -> sigma)
 
-  override def evaluate(x: Double, y: Double): Double = {
-    1/(1 + math.pow((x-y)/state("sigma"), 2))
+  override def evaluateAt(config: Map[String, Double])(x: Double, y: Double): Double = {
+    1/(1 + math.pow((x-y)/config("sigma"), 2))
   }
 
-  override def gradient(x: Double, y: Double): Map[String, Double] = {
-    Map("sigma" -> 2.0*math.pow(evaluate(x,y),2)*math.pow(x-y, 2)/math.pow(state("sigma"), 3))
+  override def gradientAt(config: Map[String, Double])(x: Double, y: Double): Map[String, Double] = {
+    Map("sigma" -> 2.0*math.pow(evaluateAt(config)(x,y),2)*math.pow(x-y, 2)/math.pow(config("sigma"), 3))
   }
 }
 
-class CoRegCauchyKernel(bandwidth: Double) extends LocalSVMKernel[Int] {
+class CoRegCauchyKernel(bandwidth: Double) extends LocalScalarKernel[Int] {
 
   override val hyper_parameters: List[String] = List("CoRegSigma")
 
   state = Map("CoRegSigma" -> bandwidth)
 
-  override def gradient(x: Int, y: Int): Map[String, Double] =
-    Map("CoRegSigma" -> 2.0*math.pow(evaluate(x,y), 2)*math.pow(x-y, 2)/math.pow(state("CoRegSigma"), 3))
+  override def gradientAt(config: Map[String, Double])(x: Int, y: Int): Map[String, Double] =
+    Map("CoRegSigma" -> 2.0*math.pow(evaluateAt(config)(x,y), 2)*math.pow(x-y, 2)/math.pow(config("CoRegSigma"), 3))
 
-  override def evaluate(x: Int, y: Int): Double = {
-    1/(1 + math.pow(x-y, 2)/math.pow(state("CoRegSigma"), 2))
+  override def evaluateAt(config: Map[String, Double])(x: Int, y: Int): Double = {
+    1/(1 + math.pow(x-y, 2)/math.pow(config("CoRegSigma"), 2))
   }
 }

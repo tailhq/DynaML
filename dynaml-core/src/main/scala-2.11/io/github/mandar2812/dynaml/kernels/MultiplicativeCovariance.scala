@@ -17,7 +17,19 @@ class MultiplicativeCovariance[Index](
     firstKernel.hyper_parameters.map(h => fID+"/"+h) ++
       otherKernel.hyper_parameters.map(h => sID+"/"+h)
 
-  override def evaluate(x: Index, y: Index) = firstKernel.evaluate(x,y) * otherKernel.evaluate(x,y)
+  private def getKernelConfigs(config: Map[String, Double]) = (
+    config.filter(_._1.contains(fID)).map(CompositeCovariance.truncateHyperParams),
+    config.filter(_._1.contains(sID)).map(CompositeCovariance.truncateHyperParams)
+  )
+
+  override def evaluateAt(config: Map[String, Double])(x: Index, y: Index) = {
+
+    val (firstKernelConfig, secondKernelConfig) = getKernelConfigs(config)
+
+    firstKernel.evaluateAt(firstKernelConfig)(x,y) * otherKernel.evaluateAt(secondKernelConfig)(x,y)
+
+  }
+
 
   state = firstKernel.state.map(h => (fID+"/"+h._1, h._2)) ++ otherKernel.state.map(h => (sID+"/"+h._1, h._2))
 
@@ -26,16 +38,24 @@ class MultiplicativeCovariance[Index](
       otherKernel.blocked_hyper_parameters.map(h => sID+"/"+h)
 
   override def setHyperParameters(h: Map[String, Double]): this.type = {
-    firstKernel.setHyperParameters(h.filter(_._1.contains(fID))
-      .map(kv => (kv._1.split("/").tail.mkString("/"), kv._2)))
-    otherKernel.setHyperParameters(h.filter(_._1.contains(sID))
-      .map(kv => (kv._1.split("/").tail.mkString("/"), kv._2)))
+
+    val (firstKernelConfig, secondKernelConfig) = getKernelConfigs(h)
+
+    firstKernel.setHyperParameters(firstKernelConfig)
+    otherKernel.setHyperParameters(secondKernelConfig)
     super.setHyperParameters(h)
   }
 
-  override def gradient(x: Index, y: Index): Map[String, Double] =
-    firstKernel.gradient(x, y).map((couple) => (fID+"/"+couple._1, couple._2*otherKernel.evaluate(x,y))) ++
-      otherKernel.gradient(x,y).map((couple) => (sID+"/"+couple._1, couple._2*firstKernel.evaluate(x,y)))
+  override def gradientAt(config: Map[String, Double])(x: Index, y: Index): Map[String, Double] = {
+
+    val (firstKernelConfig, secondKernelConfig) = getKernelConfigs(config)
+
+    firstKernel.gradientAt(firstKernelConfig)(x, y).map((couple) =>
+      (fID+"/"+couple._1, couple._2*otherKernel.evaluateAt(secondKernelConfig)(x,y))
+    ) ++ otherKernel.gradientAt(secondKernelConfig)(x,y).map((couple) =>
+      (sID+"/"+couple._1, couple._2*firstKernel.evaluateAt(firstKernelConfig)(x,y))
+    )
+  }
 
   override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
     SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)

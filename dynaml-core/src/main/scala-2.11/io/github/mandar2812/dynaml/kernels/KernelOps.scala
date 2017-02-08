@@ -37,7 +37,7 @@ object KernelOps extends UFunc {
             firstKern.hyper_parameters.map(h => fID+"/"+h) ++
               otherKernel.hyper_parameters.map(h => sID+"/"+h)
 
-          override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) + otherKernel.evaluate(x,y)
+          override def evaluateAt(config: Map[String, Double])(x: Index, y: Index) = firstKern.evaluateAt(config)(x,y) + otherKernel.evaluateAt(config)(x,y)
 
           state = firstKern.state.map(h => (fID+"/"+h._1, h._2)) ++ otherKernel.state.map(h => (sID+"/"+h._1, h._2))
 
@@ -53,8 +53,8 @@ object KernelOps extends UFunc {
             this
           }
 
-          override def gradient(x: Index, y: Index): Map[String, Double] =
-            firstKern.gradient(x, y) ++ otherKernel.gradient(x,y)
+          override def gradientAt(config: Map[String, Double])(x: Index, y: Index): Map[String, Double] =
+            firstKern.gradientAt(config)(x, y) ++ otherKernel.gradientAt(config)(x,y)
 
           override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
             SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
@@ -79,7 +79,7 @@ object KernelOps extends UFunc {
             firstKern.hyper_parameters.map(h => fID+"/"+h) ++
               otherKernel.hyper_parameters.map(h => sID+"/"+h)
 
-          override def evaluate(x: Index, y: Index) = firstKern.evaluate(x,y) * otherKernel.evaluate(x,y)
+          override def evaluateAt(config: Map[String, Double])(x: Index, y: Index) = firstKern.evaluateAt(config)(x,y) * otherKernel.evaluateAt(config)(x,y)
 
           state = firstKern.state.map(h => (fID+"/"+h._1, h._2)) ++ otherKernel.state.map(h => (sID+"/"+h._1, h._2))
 
@@ -95,9 +95,9 @@ object KernelOps extends UFunc {
             this
           }
 
-          override def gradient(x: Index, y: Index): Map[String, Double] =
-            firstKern.gradient(x, y).map((couple) => (couple._1, couple._2*otherKernel.evaluate(x,y))) ++
-              otherKernel.gradient(x,y).map((couple) => (couple._1, couple._2*firstKern.evaluate(x,y)))
+          override def gradientAt(config: Map[String, Double])(x: Index, y: Index): Map[String, Double] =
+            firstKern.gradientAt(config)(x, y).map((couple) => (couple._1, couple._2*otherKernel.evaluateAt(config)(x,y))) ++
+              otherKernel.gradientAt(config)(x,y).map((couple) => (couple._1, couple._2*firstKern.evaluateAt(config)(x,y)))
 
           override def buildKernelMatrix[S <: Seq[Index]](mappedData: S, length: Int) =
             SVMKernel.buildSVMKernelMatrix[S, Index](mappedData, length, this.evaluate)
@@ -132,9 +132,9 @@ object KernelOps extends UFunc {
             super.setHyperParameters(h)
           }
 
-          override def gradient(x: (Index, Index1), y: (Index, Index1)): Map[String, Double] =
-            firstkernel.gradient(x._1, y._1).mapValues(v => v*otherKernel.evaluate(x._2, y._2)) ++
-              otherKernel.gradient(x._2, y._2).mapValues(v => v*firstkernel.evaluate(x._1, y._1))
+          override def gradientAt(config: Map[String, Double])(x: (Index, Index1), y: (Index, Index1)): Map[String, Double] =
+            firstkernel.gradientAt(config)(x._1, y._1).mapValues(v => v*otherKernel.evaluateAt(config)(x._2, y._2)) ++
+              otherKernel.gradientAt(config)(x._2, y._2).mapValues(v => v*firstkernel.evaluateAt(config)(x._1, y._1))
 
           override def buildKernelMatrix[S <: Seq[(Index, Index1)]](mappedData: S, length: Int) =
             SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
@@ -142,8 +142,8 @@ object KernelOps extends UFunc {
           override def buildCrossKernelMatrix[S <: Seq[(Index, Index1)]](dataset1: S, dataset2: S) =
             SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
-          override def evaluate(x: (Index, Index1), y: (Index, Index1)): Double =
-            firstkernel.evaluate(x._1, y._1)*otherKernel.evaluate(x._2, y._2)
+          override def evaluateAt(config: Map[String, Double])(x: (Index, Index1), y: (Index, Index1)): Double =
+            firstkernel.evaluateAt(config)(x._1, y._1)*otherKernel.evaluateAt(config)(x._2, y._2)
         }
     }
 
@@ -169,8 +169,8 @@ object KernelOps extends UFunc {
             super.setHyperParameters(h)
           }
 
-          override def gradient(x: (Index, Index1), y: (Index, Index1)): Map[String, Double] =
-            firstkernel.gradient(x._1, y._1) ++ otherKernel.gradient(x._2,y._2)
+          override def gradientAt(config: Map[String, Double])(x: (Index, Index1), y: (Index, Index1)): Map[String, Double] =
+            firstkernel.gradientAt(config)(x._1, y._1) ++ otherKernel.gradientAt(config)(x._2,y._2)
 
           override def buildKernelMatrix[S <: Seq[(Index, Index1)]](mappedData: S, length: Int) =
             SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
@@ -178,8 +178,8 @@ object KernelOps extends UFunc {
           override def buildCrossKernelMatrix[S <: Seq[(Index, Index1)]](dataset1: S, dataset2: S) =
             SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
-          override def evaluate(x: (Index, Index1), y: (Index, Index1)): Double =
-            firstkernel.evaluate(x._1, y._1)+otherKernel.evaluate(x._2, y._2)
+          override def evaluateAt(config: Map[String, Double])(x: (Index, Index1), y: (Index, Index1)): Double =
+            firstkernel.evaluateAt(config)(x._1, y._1)+otherKernel.evaluateAt(config)(x._2, y._2)
         }
     }
 
@@ -205,8 +205,8 @@ object KernelOps extends UFunc {
             super.setHyperParameters(h)
           }
 
-          override def gradient(x: (Index, Index), y: (Index, Index)): Map[String, Double] =
-            firstkernel.gradient(x._1, y._1) ++ otherKernel.gradient(x._2,y._2)
+          override def gradientAt(config: Map[String, Double])(x: (Index, Index), y: (Index, Index)): Map[String, Double] =
+            firstkernel.gradientAt(config)(x._1, y._1) ++ otherKernel.gradientAt(config)(x._2,y._2)
 
           override def buildKernelMatrix[S <: Seq[(Index, Index)]](mappedData: S, length: Int) =
             SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
@@ -214,8 +214,8 @@ object KernelOps extends UFunc {
           override def buildCrossKernelMatrix[S <: Seq[(Index, Index)]](dataset1: S, dataset2: S) =
             SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
-          override def evaluate(x: (Index, Index), y: (Index, Index)): Double =
-            firstkernel.evaluate(x._1, y._1)+otherKernel.evaluate(x._2, y._2)
+          override def evaluateAt(config: Map[String, Double])(x: (Index, Index), y: (Index, Index)): Double =
+            firstkernel.evaluateAt(config)(x._1, y._1)+otherKernel.evaluateAt(config)(x._2, y._2)
         }
     }
 

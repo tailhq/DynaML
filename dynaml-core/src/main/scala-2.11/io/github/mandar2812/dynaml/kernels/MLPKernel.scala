@@ -42,16 +42,19 @@ class MLPKernel(w: Double, b: Double) extends SVMKernel[DenseMatrix[Double]]
     state += ("b" -> o)
   }
 
-  override def evaluate(x: DenseVector[Double], y: DenseVector[Double]): Double =
+  override def evaluateAt(config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Double =
     math.asin(
-      (state("w")*(x.t*y) + state("b"))/
-      (math.sqrt(state("w")*(x.t*x) + state("b") + 1) * math.sqrt(state("w")*(y.t*y) + state("b") + 1)))
+      (config("w")*(x.t*y) + config("b"))/
+      (math.sqrt(config("w")*(x.t*x) + config("b") + 1) * math.sqrt(config("w")*(y.t*y) + config("b") + 1))
+    )
 
-  override def gradient(x: DenseVector[Double], y: DenseVector[Double]) = {
+  override def gradientAt(config: Map[String, Double])(x: DenseVector[Double], y: DenseVector[Double]) = {
     val (wxy, wxx, wyy) = (
-      state("w")*(x.t*y) + state("b"),
-      math.sqrt(state("w")*(x.t*x) + state("b") + 1),
-      math.sqrt(state("w")*(y.t*y) + state("b") + 1))
+      config("w")*(x.t*y) + config("b"),
+      math.sqrt(config("w")*(x.t*x) + config("b") + 1),
+      math.sqrt(config("w")*(y.t*y) + config("b") + 1))
 
     val (numerator, denominator) = (wxy, wxx*wyy)
 

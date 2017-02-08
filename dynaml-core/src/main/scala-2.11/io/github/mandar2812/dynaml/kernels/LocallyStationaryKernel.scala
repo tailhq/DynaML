@@ -16,12 +16,15 @@ import breeze.linalg.DenseMatrix
   * */
 class LocallyStationaryKernel[I](baseKernel: StationaryKernel[I, Double, DenseMatrix[Double]],
                                  scalingFunc: (I) => Double)(implicit ev: Field[I])
-  extends LocalSVMKernel[I] {
+  extends LocalScalarKernel[I] {
 
   state = baseKernel.state
 
   override val hyper_parameters: List[String] = baseKernel.hyper_parameters
 
-  override def evaluate(x: I, y: I): Double =
-    scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5)))*baseKernel.evaluate(x,y)
+  override def evaluateAt(config: Map[String, Double])(x: I, y: I): Double =
+    scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5)))*baseKernel.evaluateAt(config)(x,y)
+
+  override def gradientAt(config: Map[String, Double])(x: I, y: I) =
+    baseKernel.gradientAt(config)(x, y).mapValues(_*scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5))))
 }
