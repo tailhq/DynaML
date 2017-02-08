@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.gp.GPNarXModel
-import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridGPCommittee, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
@@ -73,13 +73,18 @@ object AbottPowerPlant {
             .setLogScale(false)
 
           case "ML" => new GradBasedGlobalOptimizer[model.type](model)
+
+          case "GPC" => new GridGPCommittee(model)
+            .setGridSize(opt("grid").toInt)
+            .setStepSize(opt("step").toDouble)
+            .setLogScale(false)
         }
 
         val startConf = kernel.effective_state ++ noise.effective_state
 
-        val (_, conf) = gs.optimize(startConf, opt)
+        val (optModel, conf) = gs.optimize(startConf, opt)
 
-        val res = model.test(trainTest._1._2)
+        val res = optModel.test(trainTest._1._2)
 
         val deNormalize = DataPipe((list: List[(Double, Double, Double, Double)]) =>
           list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
