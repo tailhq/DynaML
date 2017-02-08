@@ -127,10 +127,10 @@ object CovarianceFunction {
       override def evaluateAt(config: Map[String, Double])(x: T, y: T): Double = phi(config)(x, y)
 
       override def buildKernelMatrix[S <: Seq[T]](mappedData: S, length: Int): KernelMatrix[DenseMatrix[Double]] =
-        SVMKernel.buildSVMKernelMatrix(mappedData, length, this.evaluate)
+        SVMKernel.buildSVMKernelMatrix(mappedData, length, evaluate)
 
       override def buildCrossKernelMatrix[S <: Seq[T]](dataset1: S, dataset2: S): DenseMatrix[Double] =
-        SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
+        SVMKernel.crossKernelMatrix(dataset1, dataset2, evaluate)
 
     }
 }

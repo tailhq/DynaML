@@ -34,9 +34,13 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
 
   def kernelBind(config: Map[String, Double]) = DataPipe((xy: (Array[S], Array[S])) => {
     optimize {
-      (xy._1, xy._2, kernels.map(k => k.evaluateAt(config) _ ))
-        .zipped
-        .map((x, y, k) => k(x, y))
+      (xy._1,
+        xy._2,
+        kernelMap.map(k =>
+          k._2.evaluateAt(
+            config.filterKeys(_.contains(k._1))
+              .map(CompositeCovariance.truncateHyperParams)) _
+        )).zipped.map((x, y, k) => k(x, y))
     }
   })
 

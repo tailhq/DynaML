@@ -150,15 +150,10 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     * configuration of hyper-parameters returns this kernel function
     * set with that configuration.
     * */
-  def asPipe: DataPipe[Map[String, Double], LocalScalarKernel[Index]] = {
-    val phi = (c: Map[String, Double]) => {
-      evaluateAt(c) _
-    }
-
+  def asPipe: DataPipe[Map[String, Double], LocalScalarKernel[Index]] =
     DataPipe((config: Map[String, Double]) => {
-      CovarianceFunction(phi)(config)
+      CovarianceFunction(evaluateAt _)(config)
     })
-  }
 
 }
 
