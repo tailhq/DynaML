@@ -24,107 +24,75 @@ import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.GPRegressionPipe
-import io.github.mandar2812.dynaml.models.gp.GPRegression
+import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GPRegression}
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
 
 /**
   * Created by mandar on 15/12/15.
   */
 object TestGPHousing {
+  
+  
+  type Features = DenseVector[Double]
+  type Output = Double
+  type Pattern = (Features, Output)
+  type Data = Stream[Pattern]
+  type DataAlt = Seq[Pattern]
+  type TTData = (Data, Data)
+  type Kernel = LocalScalarKernel[Features]
+  type Scales = (Features, Features)
+  type GP = AbstractGPRegressionModel[Data, Features]
+  type GPAlt = AbstractGPRegressionModel[DataAlt, Features]
+  type PredictionsAndErrBars = Seq[(Features, Output, Output, Output, Output)]
+  type PredictionsAndOutputs = List[(Output, Output)]
+  
 
-  def apply(kernel: LocalScalarKernel[DenseVector[Double]],
+  def apply(kernel: Kernel,
             bandwidth: Double = 0.5,
-            noise: LocalScalarKernel[DenseVector[Double]],
+            noise: Kernel,
             trainFraction: Double = 0.75,
             columns: List[Int] = List(13,0,1,2,3,4,5,6,7,8,9,10,11,12),
             grid: Int = 5, step: Double = 0.2, globalOpt: String = "ML",
-            stepSize: Double = 0.01, maxIt: Int = 300): Unit =
+            stepSize: Double = 0.01, maxIt: Int = 300, policy: String = "GS"): Unit =
     runExperiment(kernel, bandwidth,
       noise, (506*trainFraction).toInt, columns,
-      grid, step, globalOpt,
+      grid, step, globalOpt, policy,
       Map("tolerance" -> "0.0001",
         "step" -> stepSize.toString,
         "maxIterations" -> maxIt.toString
       )
     )
 
-  def apply(kern: String,
-            bandwidth: Double,
-            noise: LocalScalarKernel[DenseVector[Double]],
-            trainFraction: Double,
-            columns: List[Int],
-            grid: Int, step: Double, globalOpt: String,
-            stepSize: Double, maxIt: Int): Unit = {
-
-    implicit val field = VectorField(columns.length - 1)
-
-    val kernel: LocalScalarKernel[DenseVector[Double]] =
-      kern match {
-        case "RBF" =>
-          new RBFKernel(bandwidth)
-        case "Cauchy" =>
-          new CauchyKernel(bandwidth)
-        case "Laplacian" =>
-          new LaplacianKernel(bandwidth)
-        case "RationalQuadratic" =>
-          new RationalQuadraticKernel(bandwidth)
-        case "FBM" => new FBMKernel(bandwidth)
-        case "Student" => new TStudentKernel(bandwidth)
-        case "Periodic" => new PeriodicKernel(bandwidth, bandwidth)
-      }
-
-    val num_training = 506*trainFraction
-
-    runExperiment(kernel, bandwidth,
-      noise, num_training.toInt, columns,
-      grid, step, globalOpt,
-      Map("tolerance" -> "0.0001",
-        "step" -> stepSize.toString,
-        "maxIterations" -> maxIt.toString
-      )
-    )
-
-  }
-
-  def runExperiment(kernel: LocalScalarKernel[DenseVector[Double]],
+  def runExperiment(kernel: Kernel,
                     bandwidth: Double = 0.5,
-                    noise: LocalScalarKernel[DenseVector[Double]],
+                    noise: Kernel,
                     num_training: Int = 200, columns: List[Int] = List(40,16,21,23,24,22,25),
                     grid: Int = 5, step: Double = 0.2,
-                    globalOpt: String = "ML", opt: Map[String, String]): Unit = {
+                    globalOpt: String = "ML", pol: String = "GS",
+                    opt: Map[String, String]): Unit = {
 
 
-    val startConf = kernel.state ++ noise.state
+    val startConf = kernel.effective_state ++ noise.effective_state
 
-    val modelpipe = new GPRegressionPipe[
-      GPRegression, (
-      (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-      (DenseVector[Double], DenseVector[Double])),
-      DenseVector[Double]](
-      (tt: (
-        (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-        (DenseVector[Double], DenseVector[Double]))) => tt._1._1,
-      kernel, noise) >
-      modelTuning(startConf, globalOpt, grid, step) >
-      DataPipe((modelCouple: (GPRegression, Map[String, Double])) => {
-        modelCouple._1.setState(modelCouple._2)
+    val modelpipe =
+      GPRegressionPipe[(TTData, Scales), Features]((tt: (TTData, Scales)) => tt._1._1, kernel, noise) >
+      gpTuning[DataAlt, Features](startConf, globalOpt, grid, step, opt("maxIterations").toInt, pol) >
+      DataPipe((modelCouple: (GPAlt, Map[String, Double])) => {
         modelCouple._1
       })
 
-    val testPipe = DataPipe((testSample: (GPRegression,
-          (Stream[(DenseVector[Double], Double)],
-          (DenseVector[Double], DenseVector[Double]))
-          )) => (testSample._1.test(testSample._2._1), testSample._2._2)) >
-        DataPipe((res: (Seq[(DenseVector[Double], Double, Double, Double, Double)],
-          (DenseVector[Double], DenseVector[Double]))) =>
-          res._1.map(i => (i._3, i._2)).toList.map{l => (l._1*res._2._2(-1) + res._2._1(-1),
-            l._2*res._2._2(-1) + res._2._1(-1))}
-        ) > DataPipe((scoresAndLabels: List[(Double, Double)]) => {
-        val metrics = new RegressionMetrics(scoresAndLabels,
-          scoresAndLabels.length)
+    val testPipe = DataPipe((testSample: (GPAlt, (Data, Scales))) => {
+      val (model, (data, scales)) = testSample
+      (model.test(data), scales) }) >
+      DataPipe((res: (PredictionsAndErrBars, Scales)) =>
+        res._1
+          .map(i => (i._3, i._2)).toList
+          .map(l => (l._1*res._2._2(-1) + res._2._1(-1), l._2*res._2._2(-1) + res._2._1(-1)))) >
+      DataPipe((scoresAndLabels: PredictionsAndOutputs) => {
 
+        val metrics = new RegressionMetrics(scoresAndLabels, scoresAndLabels.length)
         metrics.setName("MEDV")
-
+        //Print the evaluation results
         metrics.print()
         metrics.generatePlots()
       })
@@ -147,11 +115,9 @@ object TestGPHousing {
       trainTestGaussianStandardization >
       BifurcationPipe(
         modelpipe,
-        DataPipe((tt: (
-          (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-            (DenseVector[Double], DenseVector[Double]))) => (tt._1._2, tt._2)
-        )
-      ) > testPipe
+        DataPipe((tt: (TTData, Scales)) => (tt._1._2, tt._2))
+      ) >
+      testPipe
 
     trainTestPipe.run(("data/housing.data", "data/housing.data"))
 

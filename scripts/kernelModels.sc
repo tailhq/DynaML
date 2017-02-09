@@ -12,11 +12,11 @@ val other_kernel1 = new CauchyKernel(1.0)
 val matern = new GenericMaternKernel[DenseVector[Double]](1.0, 2)
 
 val otherSumK = kernel + other_kernel
-val noise = new DiracKernel(1.5)
+val noiseKernel = new DiracKernel(1.5)
 
-//noise.block_all_hyper_parameters
+noiseKernel.block_all_hyper_parameters
 
-AbottPowerPlant(other_kernel, noise,
+AbottPowerPlant(other_kernel, noiseKernel,
   opt = Map("globalOpt" -> "GPC", "grid" -> "2",
     "step" -> "0.5", "tolerance" -> "0.0001",
     "maxIterations" -> "10", "policy" -> "CSA"), num_training = 1025,
