@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models
 
+import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.pipes.DataPipe
@@ -27,20 +28,31 @@ import scala.reflect.ClassTag
 /**
   * Created by mandar on 15/6/16.
   */
-class GPRegressionPipe[
-M <: AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet],
-Source, IndexSet: ClassTag](
+class GPRegressionPipe[Source, IndexSet: ClassTag](
   pre: (Source) => Seq[(IndexSet, Double)],
   cov: LocalScalarKernel[IndexSet],
   n: LocalScalarKernel[IndexSet],
   order: Int = 0, ex: Int = 0,
   meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0))
-  extends ModelPipe[Source, Seq[(IndexSet, Double)], IndexSet, Double, M] {
+  extends ModelPipe[
+    Source, Seq[(IndexSet, Double)], IndexSet, Double,
+    AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet]] {
 
   override val preProcess: (Source) => Seq[(IndexSet, Double)] = pre
 
-  implicit val transform = DataPipe(preProcess)
+  implicit val transform = DynaMLPipe.identityPipe[Seq[(IndexSet, Double)]]
 
-  override def run(data: Source): M = AbstractGPRegressionModel(cov, n, meanFunc)(data, 0).asInstanceOf[M]
+  override def run(data: Source): AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet] =
+    AbstractGPRegressionModel(cov, n, meanFunc)(preProcess(data), 0)
 
+}
+
+
+object GPRegressionPipe {
+  def apply[Source, IndexSet: ClassTag](
+    pre: (Source) => Seq[(IndexSet, Double)],
+    cov: LocalScalarKernel[IndexSet], n: LocalScalarKernel[IndexSet],
+    order: Int = 0, ex: Int = 0,
+    meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0)) =
+    new GPRegressionPipe[Source, IndexSet](pre, cov, n, order, ex, meanFunc)
 }

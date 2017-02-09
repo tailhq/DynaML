@@ -25,7 +25,7 @@ import breeze.numerics.sqrt
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GloballyOptWithGrad, GradBasedGlobalOptimizer, GridSearch}
+import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
 import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
@@ -665,6 +665,43 @@ object DynaMLPipe {
       gs.optimize(startingState, Map("tolerance" -> "0.0001",
         "step" -> step.toString,
         "maxIterations" -> grid.toString))
+    })
+
+  def gpTuning[T, I:ClassTag](
+    startingState: Map[String, Double],
+    globalOpt: String = "GS",
+    grid: Int = 3, step: Double = 0.02,
+    maxIt: Int = 20, policy: String = "GS") =
+    DataPipe((model: AbstractGPRegressionModel[T, I]) => {
+      val gs = globalOpt match {
+        case "GS" => new GridSearch(model)
+          .setGridSize(grid)
+          .setStepSize(step)
+          .setLogScale(false)
+
+        case "ML" => new GradBasedGlobalOptimizer(model)
+
+        case "CSA" => new CoupledSimulatedAnnealing(model)
+          .setGridSize(grid)
+          .setStepSize(step)
+          .setLogScale(false)
+          .setMaxIterations(maxIt)
+          .setVariant(CoupledSimulatedAnnealing.MwVC)
+
+        case "GPC" => new ProbGPCommMachine(model)
+          .setPolicy(policy)
+          .setGridSize(grid)
+          .setStepSize(step)
+          .setMaxIterations(maxIt)
+      }
+
+      gs.optimize(
+        startingState,
+        Map(
+          "tolerance" -> "0.0001",
+          "step" -> step.toString,
+          "maxIterations" -> grid.toString,
+          "persist" -> "true"))
     })
 
 

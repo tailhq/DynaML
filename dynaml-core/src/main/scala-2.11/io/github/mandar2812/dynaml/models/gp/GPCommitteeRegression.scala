@@ -28,7 +28,7 @@ import scala.reflect.ClassTag
   */
 abstract class GPCommitteeRegression[D, I: ClassTag](
   num: Int, data: D,
-  networks: GPRegressionPipe[AbstractGPRegressionModel[Seq[(I, Double)], I], D, I]*) extends
+  networks: GPRegressionPipe[D, I]*) extends
   LinearModel[D, DenseVector[Double], I, Double, D] {
 
   override protected val g: D = data

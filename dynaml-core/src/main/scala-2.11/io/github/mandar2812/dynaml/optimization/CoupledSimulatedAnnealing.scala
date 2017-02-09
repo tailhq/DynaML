@@ -344,8 +344,11 @@ class ProbGPCommMachine[T, I: ClassTag](
 
     logger.info("===============================================")
 
-    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))
+    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1")) {
+      logger.info("Persisting model state")
       committeeGP.persist(committeeGP._current_state)
+    }
+
 
     //Return the resultant model
     (committeeGP, committeeGP._current_state)

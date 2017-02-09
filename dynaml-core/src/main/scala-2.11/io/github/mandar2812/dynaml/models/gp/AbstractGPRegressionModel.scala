@@ -92,8 +92,14 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     * kernels.
     * */
   def setState(s: Map[String, Double]): this.type = {
-    covariance.setHyperParameters(s)
-    noiseModel.setHyperParameters(s)
+
+    val (covHyp, noiseHyp) = (
+      s.filterKeys(covariance.hyper_parameters.contains),
+      s.filterKeys(noiseModel.hyper_parameters.contains)
+    )
+
+    covariance.setHyperParameters(covHyp)
+    noiseModel.setHyperParameters(noiseHyp)
     current_state = covariance.state ++ noiseModel.state
     this
   }
