@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.gp.GPNarXModel
-import io.github.mandar2812.dynaml.optimization.{CSAGPCommittee, GradBasedGlobalOptimizer, GridGPCommittee, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{ProbGPCommMachine$, GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
@@ -74,12 +74,8 @@ object AbottPowerPlant {
 
           case "ML" => new GradBasedGlobalOptimizer[model.type](model)
 
-          case "GPC" => new GridGPCommittee(model)
-            .setGridSize(opt("grid").toInt)
-            .setStepSize(opt("step").toDouble)
-            .setLogScale(false)
-
-          case "GPCSA" => new CSAGPCommittee(model)
+          case "GPC" => new ProbGPCommMachine(model)
+            .setPolicy(opt("policy"))
             .setGridSize(opt("grid").toInt)
             .setStepSize(opt("step").toDouble)
             .setLogScale(false)

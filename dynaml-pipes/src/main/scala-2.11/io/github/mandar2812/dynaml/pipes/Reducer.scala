@@ -17,6 +17,10 @@ object ProductReducer extends Reducer {
   override def run(data: Array[Double]): Double = data.product
 }
 
+case class WeightedSumReducer(weights: Array[Double]) extends Reducer {
+  override def run(data: Array[Double]) = data.zip(weights).map(k => k._1*k._2).sum
+}
+
 /**
   * Reducer companion object with
   * default definitions

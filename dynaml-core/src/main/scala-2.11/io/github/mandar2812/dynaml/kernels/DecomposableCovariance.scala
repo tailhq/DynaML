@@ -32,19 +32,28 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     k.blocked_hyper_parameters.map(h => id+"/"+h)
   }).reduceLeft(_++_)
 
-  def kernelBind(config: Map[String, Double]) = DataPipe((xy: (Array[S], Array[S])) => {
+
+  protected def kernelBind(config: Map[String, Double]) = DataPipe((xy: (Array[S], Array[S])) => {
+
+    val (x, y) = xy
+
+    //Create a collection of kernel functions.
+    val kxy: Iterable[(S, S) => Double] = kernelMap.map(k => {
+      val kEvalFunc = k._2.evaluateAt(
+        config
+          .filterKeys(_.contains(k._1))
+          .map(CompositeCovariance.truncateHyperParams)) _
+
+      kEvalFunc
+    })
+
+    //Bind kernel functions to inputs by zip.
     optimize {
-      (xy._1,
-        xy._2,
-        kernelMap.map(k =>
-          k._2.evaluateAt(
-            config.filterKeys(_.contains(k._1))
-              .map(CompositeCovariance.truncateHyperParams)) _
-        )).zipped.map((x, y, k) => k(x, y))
+      (x, y, kxy).zipped.map((x, y, k) => k(x, y))
     }
   })
 
-  def kernelPipe(config: Map[String, Double]) = encodingTuple > kernelBind(config) > reducer
+  protected def evaluationDataPipe(config: Map[String, Double]) = encodingTuple > kernelBind(config) > reducer
 
   override def repr: DecomposableCovariance[S] = this
 
@@ -64,7 +73,7 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     this
   }
 
-  override def evaluateAt(config: Map[String, Double])(x: S, y: S): Double = kernelPipe(config) run (x,y)
+  override def evaluateAt(config: Map[String, Double])(x: S, y: S): Double = evaluationDataPipe(config) run (x,y)
 
   override def gradientAt(config: Map[String, Double])(x: S, y: S): Map[String, Double] = reducer match {
     case SumReducer =>
