@@ -152,36 +152,36 @@ are carried out for the input domain <span class="extype" name="T">T</span>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.StationaryKernel#eval" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="eval(x:T):V"></a>
-      <a id="eval(T):V"></a>
+    </li><li name="io.github.mandar2812.dynaml.kernels.StationaryKernel#evalAt" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="evalAt(config:Map[String,Double])(x:T):V"></a>
+      <a id="evalAt(Map[String,Double])(T):V"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eval</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.V">V</span></span>
+        <span class="name">evalAt</span><span class="params">(<span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.V">V</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.StationaryKernel@eval(x:T):V" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.StationaryKernel@evalAt(config:Map[String,Double])(x:T):V" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
-    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#gradient" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="gradient(x:T,y:T):Map[String,V]"></a>
-      <a id="gradient(T,T):Map[String,V]"></a>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#gradientAt" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="gradientAt(config:Map[String,Double])(x:T,y:T):Map[String,V]"></a>
+      <a id="gradientAt(Map[String,Double])(T,T):Map[String,V]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">gradient</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>, <span name="y">y: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.V">V</span>]</span>
+        <span class="name">gradientAt</span><span class="params">(<span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>, <span name="y">y: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.V">V</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.StationaryKernel@gradient(x:T,y:T):Map[String,V]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.StationaryKernel@gradientAt(config:Map[String,Double])(x:T,y:T):Map[String,V]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -418,7 +418,24 @@ are carried out for the input domain <span class="extype" name="T">T</span>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.StationaryKernel#evaluate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.kernels.StationaryKernel#eval" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="eval(x:T):V"></a>
+      <a id="eval(T):V"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eval</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.V">V</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.StationaryKernel@eval(x:T):V" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#evaluate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="evaluate(x:T,y:T):V"></a>
       <a id="evaluate(T,T):V"></a>
       <h4 class="signature">
@@ -434,7 +451,24 @@ are carried out for the input domain <span class="extype" name="T">T</span>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel">StationaryKernel</a> → <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a> → <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.StationaryKernel#evaluateAt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evaluateAt(config:Map[String,Double])(x:T,y:T):V"></a>
+      <a id="evaluateAt(Map[String,Double])(T,T):V"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">evaluateAt</span><span class="params">(<span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>, <span name="y">y: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.V">V</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.StationaryKernel@evaluateAt(config:Map[String,Double])(x:T,y:T):V" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel">StationaryKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -475,6 +509,23 @@ are carried out for the input domain <span class="extype" name="T">T</span>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#gradient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="gradient(x:T,y:T):Map[String,V]"></a>
+      <a id="gradient(T,T):Map[String,V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gradient</span><span class="params">(<span name="x">x: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>, <span name="y">y: <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="io.github.mandar2812.dynaml.kernels.StationaryKernel.V">V</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.StationaryKernel@gradient(x:T,y:T):Map[String,V]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>

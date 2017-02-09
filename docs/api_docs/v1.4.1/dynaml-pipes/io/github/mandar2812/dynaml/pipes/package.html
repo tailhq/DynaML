@@ -305,6 +305,24 @@ an <span class="extype" name="RDD">RDD</span> of <span class="extype" name="Othe
       </a>
     </span>
       
+    </li><li name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StreamFlatMapPipe[I,J]extendsStreamDataPipe[I,Stream[J],Stream[J]]"></a>
+      <a id="StreamFlatMapPipe[I,J]:StreamFlatMapPipe[I,J]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamFlatMapPipe.html"><span class="name">StreamFlatMapPipe</span></a><span class="tparams">[<span name="I">I</span>, <span name="J">J</span>]</span><span class="result"> extends <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>, <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>], <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamFlatMapPipe[I,J]extendsStreamDataPipe[I,Stream[J],Stream[J]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A pipeline which takes a <span class="extype" name="Stream">Stream</span> of data and
+performs the scala <code>flatMap</code> operation.</p>
     </li><li name="io.github.mandar2812.dynaml.pipes.StreamMapPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="StreamMapPipe[I,J]extendsStreamDataPipe[I,J,Stream[J]]"></a>
       <a id="StreamMapPipe[I,J]:StreamMapPipe[I,J]"></a>
@@ -321,7 +339,8 @@ an <span class="extype" name="RDD">RDD</span> of <span class="extype" name="Othe
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A pipeline which takes a <span class="extype" name="Stream">Stream</span> of data and
+performs the scala <code>map</code>operation.</p>
     </li><li name="io.github.mandar2812.dynaml.pipes.StreamPartitionPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="StreamPartitionPipe[I]extendsStreamDataPipe[I,Boolean,(Stream[I],Stream[I])]"></a>
       <a id="StreamPartitionPipe[I]:StreamPartitionPipe[I]"></a>
@@ -373,6 +392,23 @@ an <span class="extype" name="RDD">RDD</span> of <span class="extype" name="Othe
       </a>
     </span>
       <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.pipes.WeightedSumReducer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WeightedSumReducerextendsReducerwithProductwithSerializable"></a>
+      <a id="WeightedSumReducer:WeightedSumReducer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="WeightedSumReducer.html"><span class="name">WeightedSumReducer</span></a><span class="params">(<span name="weights">weights: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result"> extends <a href="Reducer.html" class="extype" name="io.github.mandar2812.dynaml.pipes.Reducer">Reducer</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@WeightedSumReducerextendsReducerwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
@@ -531,6 +567,23 @@ default definitions
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamDataPipe" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StreamFlatMapPipe"></a>
+      <a id="StreamFlatMapPipe:StreamFlatMapPipe"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StreamFlatMapPipe$.html"><span class="name">StreamFlatMapPipe</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.package@StreamFlatMapPipe" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

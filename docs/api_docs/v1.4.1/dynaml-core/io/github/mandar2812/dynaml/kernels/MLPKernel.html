@@ -357,6 +357,28 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel#asPipe" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asPipe:io.github.mandar2812.dynaml.pipes.DataPipe[Map[String,Double],io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]]"></a>
+      <a id="asPipe:DataPipe[Map[String,Double],LocalScalarKernel[DenseVector[Double]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asPipe</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>], <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.MLPKernel@asPipe:io.github.mandar2812.dynaml.pipes.DataPipe[Map[String,Double],io.github.mandar2812.dynaml.kernels.LocalScalarKernel[Index]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get a pipeline which when given a particular
+configuration of hyper-parameters returns this kernel function
+set with that configuration.</p><div class="fullcomment"><div class="comment cmt"><p>Get a pipeline which when given a particular
+configuration of hyper-parameters returns this kernel function
+set with that configuration.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#block" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="block(h:String*):Unit"></a>
       <a id="block(String*):Unit"></a>
@@ -584,8 +606,8 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.MLPKernel#evaluate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="evaluate(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):Double"></a>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#evaluate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evaluate(x:T,y:T):V"></a>
       <a id="evaluate(DenseVector[Double],DenseVector[Double]):Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -596,11 +618,28 @@
         <span class="name">evaluate</span><span class="params">(<span name="x">x: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.MLPKernel@evaluate(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):Double" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.MLPKernel@evaluate(x:T,y:T):V" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.MLPKernel">MLPKernel</a> → <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a> → <a href="Kernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.Kernel">Kernel</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.MLPKernel#evaluateAt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evaluateAt(config:Map[String,Double])(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):Double"></a>
+      <a id="evaluateAt(Map[String,Double])(DenseVector[Double],DenseVector[Double]):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">evaluateAt</span><span class="params">(<span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="x">x: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.MLPKernel@evaluateAt(config:Map[String,Double])(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.MLPKernel">MLPKernel</a> → <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.kernels.SVMKernel#featureMapping" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="featureMapping(decomposition:(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double]))(prototypes:List[breeze.linalg.DenseVector[Double]])(data:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
       <a id="featureMapping((DenseVector[Double],DenseMatrix[Double]))(List[DenseVector[Double]])(DenseVector[Double]):DenseVector[Double]"></a>
@@ -671,8 +710,8 @@ the Eigen Decomposition.</p><p>phi_i(x) = (1/sqrt(eigenvalue(i)))*Sum(k, 1, m, K
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.kernels.MLPKernel#gradient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="gradient(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):scala.collection.immutable.Map[String,Double]"></a>
+    </li><li name="io.github.mandar2812.dynaml.kernels.CovarianceFunction#gradient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="gradient(x:T,y:T):Map[String,V]"></a>
       <a id="gradient(DenseVector[Double],DenseVector[Double]):Map[String,Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -680,14 +719,31 @@ the Eigen Decomposition.</p><p>phi_i(x) = (1/sqrt(eigenvalue(i)))*Sum(k, 1, m, K
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">gradient</span><span class="params">(<span name="x">x: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">gradient</span><span class="params">(<span name="x">x: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.MLPKernel@gradient(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):scala.collection.immutable.Map[String,Double]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.MLPKernel@gradient(x:T,y:T):Map[String,V]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.MLPKernel">MLPKernel</a> → <a href="LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.kernels.MLPKernel#gradientAt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="gradientAt(config:Map[String,Double])(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):scala.collection.immutable.Map[String,Double]"></a>
+      <a id="gradientAt(Map[String,Double])(DenseVector[Double],DenseVector[Double]):Map[String,Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gradientAt</span><span class="params">(<span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="x">x: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="y">y: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.kernels.MLPKernel@gradientAt(config:Map[String,Double])(x:breeze.linalg.DenseVector[Double],y:breeze.linalg.DenseVector[Double]):scala.collection.immutable.Map[String,Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.kernels.MLPKernel">MLPKernel</a> → <a href="LocalSVMKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalSVMKernel">LocalSVMKernel</a> → <a href="CovarianceFunction.html" class="extype" name="io.github.mandar2812.dynaml.kernels.CovarianceFunction">CovarianceFunction</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>

@@ -45,14 +45,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">GPCommitteeRegression</span><span class="tparams">[<span name="T">T</span>, <span name="D">D<span class="tparams">[<span name="T">T</span>]</span></span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]]</span>
+        <span class="name">GPCommitteeRegression</span><span class="tparams">[<span name="D">D</span>, <span name="I">I</span>]</span><span class="result"> extends <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by mandar on 9/2/16.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>], <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>], <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -90,18 +90,18 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(num:Int,data:D[T],networks:io.github.mandar2812.dynaml.models.GPRegressionPipe[io.github.mandar2812.dynaml.models.gp.GPRegression,D[T]]*):io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression[T,D]"></a>
-      <a id="&lt;init&gt;:GPCommitteeRegression[T,D]"></a>
+      <a id="&lt;init&gt;(num:Int,data:D,networks:io.github.mandar2812.dynaml.models.GPRegressionPipe[D,I]*)(implicitevidence$1:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression[D,I]"></a>
+      <a id="&lt;init&gt;:GPCommitteeRegression[D,I]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">GPCommitteeRegression</span><span class="params">(<span name="num">num: <span class="extype" name="scala.Int">Int</span></span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]</span>, <span name="networks">networks: <a href="../GPRegressionPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe">GPRegressionPipe</a>[<a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]]*</span>)</span>
+        <span class="name">GPCommitteeRegression</span><span class="params">(<span name="num">num: <span class="extype" name="scala.Int">Int</span></span>, <span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span></span>, <span name="networks">networks: <a href="../GPRegressionPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe">GPRegressionPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>]*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@&lt;init&gt;(num:Int,data:D[T],networks:io.github.mandar2812.dynaml.models.GPRegressionPipe[io.github.mandar2812.dynaml.models.gp.GPRegression,D[T]]*):io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression[T,D]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@&lt;init&gt;(num:Int,data:D,networks:io.github.mandar2812.dynaml.models.GPRegressionPipe[D,I]*)(implicitevidence$1:scala.reflect.ClassTag[I]):io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression[D,I]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -115,14 +115,14 @@
               <h3>Abstract Value Members</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.ParameterizedLearner#optimizer" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[T,Q,R,S]"></a>
-      <a id="optimizer:RegularizedOptimizer[DenseVector[Double],DenseVector[Double],Double,D[T]]"></a>
+      <a id="optimizer:RegularizedOptimizer[DenseVector[Double],I,Double,D]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">optimizer</span><span class="result">: <a href="../../optimization/RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]]</span>
+        <span class="name">optimizer</span><span class="result">: <a href="../../optimization/RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@optimizer:io.github.mandar2812.dynaml.optimization.RegularizedOptimizer[T,Q,R,S]" title="Permalink" target="_top">
@@ -204,18 +204,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression#baseNetworks" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="baseNetworks:List[io.github.mandar2812.dynaml.models.gp.GPRegression]"></a>
-      <a id="baseNetworks:List[GPRegression]"></a>
+      <a id="baseNetworks:List[io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(I,Double)],I]]"></a>
+      <a id="baseNetworks:List[AbstractGPRegressionModel[Seq[(I,Double)],I]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">baseNetworks</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="GPRegression.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPRegression">GPRegression</a>]</span>
+        <span class="name">baseNetworks</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@baseNetworks:List[io.github.mandar2812.dynaml.models.gp.GPRegression]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@baseNetworks:List[io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(I,Double)],I]]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -262,14 +262,14 @@
         </dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.Model#data" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="data:T"></a>
-      <a id="data:D[T]"></a>
+      <a id="data:D"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">data</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]</span>
+        <span class="name">data</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@data:T" title="Permalink" target="_top">
@@ -313,14 +313,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.LinearModel#featureMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="featureMap:Q=&gt;Q"></a>
-      <a id="featureMap:(DenseVector[Double])⇒DenseVector[Double]"></a>
+      <a id="featureMap:(I)⇒I"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">featureMap</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">featureMap</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@featureMap:Q=&gt;Q" title="Permalink" target="_top">
@@ -357,18 +357,18 @@ to an identity map.
               
         </dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression#g" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="g:D[T]"></a>
-      <a id="g:D[T]"></a>
+      <a id="g:D"></a>
+      <a id="g:D"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">g</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]</span>
+        <span class="name">g</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@g:D[T]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@g:D" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -571,19 +571,36 @@ of the model.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression">GPCommitteeRegression</a> → <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression#phi" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="phi:I=&gt;breeze.linalg.DenseVector[Double]"></a>
+      <a id="phi:(I)⇒DenseVector[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">phi</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@phi:I=&gt;breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="predict(point:breeze.linalg.DenseVector[Double]):Double"></a>
-      <a id="predict(DenseVector[Double]):Double"></a>
+      <a id="predict(point:I):Double"></a>
+      <a id="predict(I):Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">predict</span><span class="params">(<span name="point">point: <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@predict(point:breeze.linalg.DenseVector[Double]):Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression@predict(point:I):Double" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -790,11 +807,11 @@ point.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a 
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.models.LinearModel">
-              <h3>Inherited from <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]]</h3>
+              <h3>Inherited from <a href="../LinearModel.html" class="extype" name="io.github.mandar2812.dynaml.models.LinearModel">LinearModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">
-              <h3>Inherited from <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>]]</h3>
+              <h3>Inherited from <a href="../ParameterizedLearner.html" class="extype" name="io.github.mandar2812.dynaml.models.ParameterizedLearner">ParameterizedLearner</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>, <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.models.Model">
-              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.T">T</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>]</h3>
+              <h3>Inherited from <a href="../Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.gp.GPCommitteeRegression.I">I</span>, <span class="extype" name="scala.Double">Double</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

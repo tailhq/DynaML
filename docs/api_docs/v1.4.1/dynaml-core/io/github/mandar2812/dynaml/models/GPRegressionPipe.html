@@ -28,10 +28,12 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img alt="Class" src="../../../../../lib/class_big.png" />
+        <a href="GPRegressionPipe$.html" title="See companion object"><img alt="Class/Object" src="../../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a></p>
-        <h1>GPRegressionPipe</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models">package models</a>
+        <h1><a href="GPRegressionPipe$.html" title="See companion object">GPRegressionPipe</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="GPRegressionPipe$.html" title="See companion object">object GPRegressionPipe</a>
+            | <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models">package models</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
@@ -45,14 +47,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">GPRegressionPipe</span><span class="tparams">[<span name="M">M &lt;: <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="Source">Source</span>]</span><span class="result"> extends <a href="ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span>]</span>
+        <span class="name">GPRegressionPipe</span><span class="tparams">[<span name="Source">Source</span>, <span name="IndexSet">IndexSet</span>]</span><span class="result"> extends <a href="ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>, <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by mandar on 15/6/16.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>, <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -90,18 +92,18 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="io.github.mandar2812.dynaml.models.GPRegressionPipe#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(pre:Source=&gt;Seq[(breeze.linalg.DenseVector[Double],Double)],cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],order:Int,ex:Int):io.github.mandar2812.dynaml.models.GPRegressionPipe[M,Source]"></a>
-      <a id="&lt;init&gt;:GPRegressionPipe[M,Source]"></a>
+      <a id="&lt;init&gt;(pre:Source=&gt;Seq[(IndexSet,Double)],cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[IndexSet],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[IndexSet],order:Int,ex:Int,meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[IndexSet,Double])(implicitevidence$1:scala.reflect.ClassTag[IndexSet]):io.github.mandar2812.dynaml.models.GPRegressionPipe[Source,IndexSet]"></a>
+      <a id="&lt;init&gt;:GPRegressionPipe[Source,IndexSet]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">GPRegressionPipe</span><span class="params">(<span name="pre">pre: (<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="cov">cov: <a href="../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="n">n: <a href="../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>, <span name="order">order: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="ex">ex: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span>
+        <span class="name">GPRegressionPipe</span><span class="params">(<span name="pre">pre: (<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="cov">cov: <a href="../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]</span>, <span name="n">n: <a href="../kernels/LocalScalarKernel.html" class="extype" name="io.github.mandar2812.dynaml.kernels.LocalScalarKernel">LocalScalarKernel</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]</span>, <span name="order">order: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="ex">ex: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="meanFunc">meanFunc: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>] = <span class="symbol"><span class="name"><a href="../../../../package.html">DataPipe((_: IndexSet) =&gt; 0.0)</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@&lt;init&gt;(pre:Source=&gt;Seq[(breeze.linalg.DenseVector[Double],Double)],cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],order:Int,ex:Int):io.github.mandar2812.dynaml.models.GPRegressionPipe[M,Source]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@&lt;init&gt;(pre:Source=&gt;Seq[(IndexSet,Double)],cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[IndexSet],n:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[IndexSet],order:Int,ex:Int,meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[IndexSet,Double])(implicitevidence$1:scala.reflect.ClassTag[IndexSet]):io.github.mandar2812.dynaml.models.GPRegressionPipe[Source,IndexSet]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -151,14 +153,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="*[OtherSource,OtherDestination](that:io.github.mandar2812.dynaml.pipes.DataPipe[OtherSource,OtherDestination]):io.github.mandar2812.dynaml.pipes.ParallelPipe[Source,Destination,OtherSource,OtherDestination]"></a>
-      <a id="*[OtherSource,OtherDestination](DataPipe[OtherSource,OtherDestination]):ParallelPipe[Source,M,OtherSource,OtherDestination]"></a>
+      <a id="*[OtherSource,OtherDestination](DataPipe[OtherSource,OtherDestination]):ParallelPipe[Source,AbstractGPRegressionModel[Seq[(IndexSet,Double)],IndexSet],OtherSource,OtherDestination]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="OtherSource">OtherSource</span>, <span name="OtherDestination">OtherDestination</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe">ParallelPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>
+        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="OtherSource">OtherSource</span>, <span name="OtherDestination">OtherDestination</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe">ParallelPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@*[OtherSource,OtherDestination](that:io.github.mandar2812.dynaml.pipes.DataPipe[OtherSource,OtherDestination]):io.github.mandar2812.dynaml.pipes.ParallelPipe[Source,Destination,OtherSource,OtherDestination]" title="Permalink" target="_top">
@@ -185,14 +187,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&gt;[Further](that:io.github.mandar2812.dynaml.pipes.DataPipe[Destination,Further]):io.github.mandar2812.dynaml.pipes.DataPipe[Source,Further]"></a>
-      <a id="&gt;[Further](DataPipe[M,Further]):DataPipe[Source,Further]"></a>
+      <a id="&gt;[Further](DataPipe[AbstractGPRegressionModel[Seq[(IndexSet,Double)],IndexSet],Further]):DataPipe[Source,Further]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@&gt;[Further](that:io.github.mandar2812.dynaml.pipes.DataPipe[Destination,Further]):io.github.mandar2812.dynaml.pipes.DataPipe[Source,Further]" title="Permalink" target="_top">
@@ -202,14 +204,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DataPipe</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply(data:Source):Destination"></a>
-      <a id="apply(Source):M"></a>
+      <a id="apply(Source):AbstractGPRegressionModel[Seq[(IndexSet,Double)],IndexSet]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span></span>
+        <span class="name">apply</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span></span>)</span><span class="result">: <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@apply(data:Source):Destination" title="Permalink" target="_top">
@@ -417,35 +419,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.GPRegressionPipe#preProcess" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="preProcess:Source=&gt;Seq[(breeze.linalg.DenseVector[Double],Double)]"></a>
-      <a id="preProcess:(Source)⇒Seq[(DenseVector[Double],Double)]"></a>
+      <a id="preProcess:Source=&gt;Seq[(IndexSet,Double)]"></a>
+      <a id="preProcess:(Source)⇒Seq[(IndexSet,Double)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">preProcess</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+        <span class="name">preProcess</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@preProcess:Source=&gt;Seq[(breeze.linalg.DenseVector[Double],Double)]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@preProcess:Source=&gt;Seq[(IndexSet,Double)]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe">GPRegressionPipe</a> → <a href="ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.ModelPipe">ModelPipe</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.GPRegressionPipe#run" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="run(data:Source):M"></a>
-      <a id="run(Source):M"></a>
+      <a id="run(data:Source):io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(IndexSet,Double)],IndexSet]"></a>
+      <a id="run(Source):AbstractGPRegressionModel[Seq[(IndexSet,Double)],IndexSet]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">run</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span></span>
+        <span class="name">run</span><span class="params">(<span name="data">data: <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span></span>)</span><span class="result">: <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@run(data:Source):M" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@run(data:Source):io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(IndexSet,Double)],IndexSet]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -484,6 +486,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.GPRegressionPipe#transform" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="transform:io.github.mandar2812.dynaml.pipes.DataPipe[Seq[(IndexSet,Double)],Seq[(IndexSet,Double)]]"></a>
+      <a id="transform:DataPipe[Seq[(IndexSet,Double)],Seq[(IndexSet,Double)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transform</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.models.GPRegressionPipe@transform:io.github.mandar2812.dynaml.pipes.DataPipe[Seq[(IndexSet,Double)],Seq[(IndexSet,Double)]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -563,9 +582,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.models.ModelPipe">
-              <h3>Inherited from <a href="ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span>]</h3>
+              <h3>Inherited from <a href="ModelPipe.html" class="extype" name="io.github.mandar2812.dynaml.models.ModelPipe">ModelPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>, <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]]</h3>
             </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.DataPipe">
-              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.M">M</span>]</h3>
+              <h3>Inherited from <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.Source">Source</span>, <a href="gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.GPRegressionPipe.IndexSet">IndexSet</span>]]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">

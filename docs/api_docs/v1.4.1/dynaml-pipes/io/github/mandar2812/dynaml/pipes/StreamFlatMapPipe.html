@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>GridSearch - io.github.mandar2812.dynaml.optimization.GridSearch</title>
-          <meta name="description" content="GridSearch - io.github.mandar2812.dynaml.optimization.GridSearch" />
-          <meta name="keywords" content="GridSearch io.github.mandar2812.dynaml.optimization.GridSearch" />
+          <title>StreamFlatMapPipe - io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe</title>
+          <meta name="description" content="StreamFlatMapPipe - io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe" />
+          <meta name="keywords" content="StreamFlatMapPipe io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'io.github.mandar2812.dynaml.optimization.GridSearch';
+            var hash = 'io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,12 +28,14 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img alt="Class" src="../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.optimization">optimization</a></p>
-        <h1>GridSearch</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.optimization">package optimization</a>
+        <a href="StreamFlatMapPipe$.html" title="See companion object"><img alt="Trait/Object" src="../../../../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.pipes">pipes</a></p>
+        <h1><a href="StreamFlatMapPipe$.html" title="See companion object">StreamFlatMapPipe</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="StreamFlatMapPipe$.html" title="See companion object">object StreamFlatMapPipe</a>
+            | <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.pipes">package pipes</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -42,20 +44,19 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">GridSearch</span><span class="tparams">[<span name="M">M &lt;: <a href="GloballyOptimizable.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GloballyOptimizable">GloballyOptimizable</a></span>]</span><span class="result"> extends <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span>]</span>
+        <span class="name">StreamFlatMapPipe</span><span class="tparams">[<span name="I">I</span>, <span name="J">J</span>]</span><span class="result"> extends <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>, <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>], <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A pipeline which takes a <span class="extype" name="Stream">Stream</span> of data and
+performs the scala <code>flatMap</code> operation.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="CoupledSimulatedAnnealing.html" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a>, <a href="ProbGPCommMachine.html" class="extype" name="io.github.mandar2812.dynaml.optimization.ProbGPCommMachine">ProbGPCommMachine</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>, <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>], <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]], <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>], <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -72,7 +73,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.optimization.GridSearch"><span>GridSearch</span></li><li class="in" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer"><span>GlobalOptimizer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe"><span>StreamFlatMapPipe</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe"><span>StreamDataPipe</span></li><li class="in" name="io.github.mandar2812.dynaml.pipes.DataPipe"><span>DataPipe</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,34 +90,36 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="io.github.mandar2812.dynaml.optimization.GridSearch#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(model:M):io.github.mandar2812.dynaml.optimization.GridSearch[M]"></a>
-      <a id="&lt;init&gt;:GridSearch[M]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">GridSearch</span><span class="params">(<span name="model">model: <span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span></span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@&lt;init&gt;(model:M):io.github.mandar2812.dynaml.optimization.GridSearch[M]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
-
         
 
         
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.pipes.StreamDataPipe#pipe" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="pipe:I=&gt;J"></a>
+      <a id="pipe:(I)⇒Stream[J]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pipe</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>) ⇒ <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@pipe:I=&gt;J" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The functions that compose the
+pipe operations.</p><div class="fullcomment"><div class="comment cmt"><p>The functions that compose the
+pipe operations.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -129,7 +132,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -146,11 +149,28 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@##():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*[OtherSource,OtherDestination](that:io.github.mandar2812.dynaml.pipes.DataPipe[OtherSource,OtherDestination]):io.github.mandar2812.dynaml.pipes.ParallelPipe[Source,Destination,OtherSource,OtherDestination]"></a>
+      <a id="*[OtherSource,OtherDestination](DataPipe[OtherSource,OtherDestination]):ParallelPipe[Stream[I],Stream[J],OtherSource,OtherDestination]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times" class="name">*</span><span class="tparams">[<span name="OtherSource">OtherSource</span>, <span name="OtherDestination">OtherDestination</span>]</span><span class="params">(<span name="that">that: <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>)</span><span class="result">: <a href="ParallelPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.ParallelPipe">ParallelPipe</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>], <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherSource">OtherSource</span>, <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.*.OtherDestination">OtherDestination</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@*[OtherSource,OtherDestination](that:io.github.mandar2812.dynaml.pipes.DataPipe[OtherSource,OtherDestination]):io.github.mandar2812.dynaml.pipes.ParallelPipe[Source,Destination,OtherSource,OtherDestination]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a></dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
@@ -163,11 +183,50 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;[Further](that:io.github.mandar2812.dynaml.pipes.DataPipe[Destination,Further]):io.github.mandar2812.dynaml.pipes.DataPipe[Source,Further]"></a>
+      <a id="&gt;[Further](DataPipe[Stream[J],Further]):DataPipe[Stream[I],Further]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="Further">Further</span>]</span><span class="params">(<span name="that">that: <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>)</span><span class="result">: <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>], <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe.&gt;.Further">Further</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@&gt;[Further](that:io.github.mandar2812.dynaml.pipes.DataPipe[Destination,Further]):io.github.mandar2812.dynaml.pipes.DataPipe[Source,Further]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents the composition of two
+pipes, resulting in a third pipe
+Schematically represented as:</p><div class="fullcomment"><div class="comment cmt"><p>Represents the composition of two
+pipes, resulting in a third pipe
+Schematically represented as:</p><p><span class="extype" name="Source">Source</span> -&gt; <span class="extype" name="Destination">Destination</span> :: <span class="extype" name="Destination">Destination</span> -&gt; <span class="extype" name="Further">Further</span> ==
+<span class="extype" name="Source">Source</span> -&gt; <span class="extype" name="Further">Further</span></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.pipes.DataPipe#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(data:Source):Destination"></a>
+      <a id="apply(Stream[I]):Stream[J]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@apply(data:Source):Destination" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -180,7 +239,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -197,7 +256,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -220,7 +279,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -237,7 +296,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -254,7 +313,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -277,45 +336,11 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#getEnergyLandscape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getEnergyLandscape(initialConfig:Map[String,Double],options:Map[String,String]):List[(Double,Map[String,Double])]"></a>
-      <a id="getEnergyLandscape(Map[String,Double],Map[String,String]):List[(Double,Map[String,Double])]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getEnergyLandscape</span><span class="params">(<span name="initialConfig">initialConfig: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map()</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>])]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@getEnergyLandscape(initialConfig:Map[String,Double],options:Map[String,String]):List[(Double,Map[String,Double])]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#gridsize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="gridsize:Int"></a>
-      <a id="gridsize:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">gridsize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@gridsize:Int" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -328,7 +353,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -345,45 +370,11 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#logarithmicScale" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="logarithmicScale:Boolean"></a>
-      <a id="logarithmicScale:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">logarithmicScale</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@logarithmicScale:Boolean" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GridSearch#logger" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="logger:org.apache.log4j.Logger"></a>
-      <a id="logger:Logger"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">logger</span><span class="result">: <span class="extype" name="org.apache.log4j.Logger">Logger</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@logger:org.apache.log4j.Logger" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -396,7 +387,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -413,7 +404,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -430,96 +421,32 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GridSearch#optimize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="optimize(initialConfig:Map[String,Double],options:Map[String,String]):(M,Map[String,Double])"></a>
-      <a id="optimize(Map[String,Double],Map[String,String]):(M,Map[String,Double])"></a>
+    </li><li name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe#run" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="run(data:Stream[I]):Stream[J]"></a>
+      <a id="run(Stream[I]):Stream[J]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optimize</span><span class="params">(<span name="initialConfig">initialConfig: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map()</span></span>)</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>])</span>
+        <span class="name">run</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@optimize(initialConfig:Map[String,Double],options:Map[String,String]):(M,Map[String,Double])" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@run(data:Stream[I]):Stream[J]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GridSearch#setGridSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setGridSize(s:Int):io.github.mandar2812.dynaml.optimization.GridSearch[M]"></a>
-      <a id="setGridSize(Int):GridSearch[M]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setGridSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@setGridSize(s:Int):io.github.mandar2812.dynaml.optimization.GridSearch[M]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GridSearch#setLogScale" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setLogScale(t:Boolean):io.github.mandar2812.dynaml.optimization.GridSearch[M]"></a>
-      <a id="setLogScale(Boolean):GridSearch[M]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setLogScale</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@setLogScale(t:Boolean):io.github.mandar2812.dynaml.optimization.GridSearch[M]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GridSearch#setStepSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setStepSize(s:Double):io.github.mandar2812.dynaml.optimization.GridSearch[M]"></a>
-      <a id="setStepSize(Double):GridSearch[M]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setStepSize</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@setStepSize(s:Double):io.github.mandar2812.dynaml.optimization.GridSearch[M]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#step" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="step:Double"></a>
-      <a id="step:Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">step</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@step:Double" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
+      <p class="shortcomment cmt">The function which writes
+to the destination
+</p><div class="fullcomment"><div class="comment cmt"><p>The function which writes
+to the destination
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe">StreamFlatMapPipe</a> → <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a> → <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -532,28 +459,11 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.optimization.GridSearch#system" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="system:M"></a>
-      <a id="system:M"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">system</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@system:M" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -566,7 +476,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@toString():String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -583,7 +493,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -606,7 +516,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -629,7 +539,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.GridSearch@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -649,8 +559,14 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">
-              <h3>Inherited from <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch.M">M</span>]</h3>
+        <div class="parent" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">
+              <h3>Inherited from <a href="StreamDataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.StreamDataPipe">StreamDataPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>, <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>], <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]]</h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.pipes.DataPipe">
+              <h3>Inherited from <a href="DataPipe.html" class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</a>[<span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.I">I</span>], <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="io.github.mandar2812.dynaml.pipes.StreamFlatMapPipe.J">J</span>]]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
