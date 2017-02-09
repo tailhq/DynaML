@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.gp.GPNarXModel
-import io.github.mandar2812.dynaml.optimization.{ProbGPCommMachine$, GradBasedGlobalOptimizer, GridSearch}
+import io.github.mandar2812.dynaml.optimization.{ProbGPCommMachine, GradBasedGlobalOptimizer, GridSearch}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import org.apache.log4j.Logger
 
