@@ -18,7 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
-import breeze.linalg.{DenseVector, sum}
+import breeze.linalg.{DenseMatrix, DenseVector, max, min, sum}
+import breeze.numerics.exp
 import breeze.stats.distributions.CauchyDistribution
 import io.github.mandar2812.dynaml.kernels.DecomposableCovariance
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
@@ -70,6 +71,12 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
   var alpha = 0.05
 
+  private def computeDesiredVariance = CoupledSimulatedAnnealing.varianceDesired(variant) _
+
+  private def computeCouplingFactor = CoupledSimulatedAnnealing.couplingFactor(variant) _
+
+  private def computeAcceptanceProb = CoupledSimulatedAnnealing.acceptanceProbability(variant) _
+
   protected val mutate = (config: Map[String, Double], temperature: Double) => {
     logger.info("Mutating configuration: \n"+GlobalOptimizer.prettyPrint(config)+"\n")
 
@@ -98,14 +105,14 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
     var mutTemp = iTemp
 
     //Calculate desired variance
-    val sigmaD = CoupledSimulatedAnnealing.varianceDesired(variant)(math.pow(gridsize, initialConfig.size).toInt)
+    val sigmaD = computeDesiredVariance(math.pow(gridsize, initialConfig.size).toInt)
 
     val initialEnergyLandscape = getEnergyLandscape(initialConfig, options)
 
-    val gamma_init = CoupledSimulatedAnnealing.couplingFactor(variant)(initialEnergyLandscape.map(_._1), accTemp)
+    val gamma_init = computeCouplingFactor(initialEnergyLandscape.map(_._1), accTemp)
 
     var acceptanceProbs: List[Double] = initialEnergyLandscape.map(c => {
-      CoupledSimulatedAnnealing.acceptanceProbability(variant)(c._1, c._1, gamma_init, accTemp)
+      computeAcceptanceProb(c._1, c._1, gamma_init, accTemp)
     })
 
     def CSATRec(eLandscape: List[(Double, Map[String, Double])], it: Int): List[(Double, Map[String, Double])] =
@@ -131,9 +138,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
           val maxEnergy = eLandscape.map(_._1).max
 
-          val couplingFactor = CoupledSimulatedAnnealing.couplingFactor(variant)(
-            eLandscape.map(t => t._1 - maxEnergy),
-            accTemp)
+          val couplingFactor = computeCouplingFactor(eLandscape.map(t => t._1 - maxEnergy), accTemp)
 
           //Now mutate each solution and accept/reject
           //according to the acceptance probability
@@ -147,7 +152,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
             //Calculate the acceptance probability
             val acceptanceProbability =
-              CoupledSimulatedAnnealing.acceptanceProbability(variant)(
+              computeAcceptanceProb(
                 new_energy - maxEnergy, config._1,
                 couplingFactor, accTemp)
 
@@ -258,6 +263,8 @@ class ProbGPCommMachine[T, I: ClassTag](
 
   private var policy: String = "CSA"
 
+  private var baselinePolicy: String = "max"
+
   def _policy = policy
 
   def setPolicy(p: String): this.type = {
@@ -269,6 +276,26 @@ class ProbGPCommMachine[T, I: ClassTag](
     this
   }
 
+  def setBaseLinePolicy(p: String): this.type = {
+
+    if(p == "avg" || p == "mean" || p == "average")
+      baselinePolicy = "mean"
+    else if(p == "min")
+      baselinePolicy = "min"
+    else if(p == "max")
+      baselinePolicy = "max"
+    else
+      baselinePolicy = "mean"
+
+    this
+  }
+
+  private def calculateEnergyLandscape(initialConfig: Map[String, Double], options: Map[String, String]) =
+    if(policy == "CSA") performCSA(initialConfig, options)
+    else getEnergyLandscape(initialConfig, options)
+
+  private def modelProbabilities = DataPipe(ProbGPCommMachine.calculateModelWeightsSigmoid(baselinePolicy) _)
+
   override def optimize(
     initialConfig: Map[String, Double],
     options: Map[String, String]) = {
@@ -276,22 +303,23 @@ class ProbGPCommMachine[T, I: ClassTag](
 
     //Find out the blocked hyper parameters and their values
     val blockedHypParams = system.covariance.blocked_hyper_parameters ++ system.noiseModel.blocked_hyper_parameters
-    val (kernelParams, noiseParams) = (system.covariance.hyper_parameters, system.noiseModel.hyper_parameters)
+
+    val (kernelParams, noiseParams) = (
+      system.covariance.hyper_parameters,
+      system.noiseModel.hyper_parameters)
 
     val blockedState = system._current_state.filterKeys(blockedHypParams.contains)
 
-    val energyLandscape =
-      if(policy == "CSA") performCSA(initialConfig, options)
-      else getEnergyLandscape(initialConfig, options)
+    val energyLandscape = calculateEnergyLandscape(initialConfig, options)
 
     //Calculate the weights of each configuration
-    val weights = ProbGPCommMachine.calculateModelWeights(energyLandscape).map(c => (c._1, c._2 ++ blockedState))
+    val weights = modelProbabilities(energyLandscape).map(c => (c._1, c._2 ++ blockedState))
 
     //Declare implicit value for weighted kernel
     implicit val encoder = DynaMLPipe.genericReplicationEncoder(weights.length)
     //Declare implicit value for transformation required for creation of the compound kernel
     implicit val transform: DataPipe[T, Seq[(I, Double)]] = DataPipe(system.dataAsSeq)
-    //Declare implicit reducer required for compund kernel
+    //Declare implicit reducer required for the weighted kernel
     implicit val reducer = WeightedSumReducer(weights.map(c => c._1*c._1).toArray)
 
     //Now construct a weighted Gaussian Process model
@@ -300,7 +328,7 @@ class ProbGPCommMachine[T, I: ClassTag](
     //The mean function of the original GP
     val meanF = system.mean
 
-    //Get the kernels, noise models and mean functions of each GP in committee
+    //Get the kernels, noise models and mean functions of each GP in the committee
     val (kernels, noiseModels, meanFuncs) = weights.map(weightCouple => {
 
       val (w, conf) = weightCouple
@@ -339,8 +367,12 @@ class ProbGPCommMachine[T, I: ClassTag](
     logger.info("--------------------------------------")
 
 
-    logger.info("State of new model:- Covariance: \n"+GlobalOptimizer.prettyPrint(committeeGP.covariance.state))
-    logger.info("State of new model:- Noise \n"+GlobalOptimizer.prettyPrint(committeeGP.noiseModel.state))
+    logger.info(
+      "State of new model:- Covariance: \n" +
+        GlobalOptimizer.prettyPrint(committeeGP.covariance.state))
+    logger.info(
+      "State of new model:- Noise \n" +
+        GlobalOptimizer.prettyPrint(committeeGP.noiseModel.state))
 
     logger.info("===============================================")
 
@@ -348,7 +380,6 @@ class ProbGPCommMachine[T, I: ClassTag](
       logger.info("Persisting model state")
       committeeGP.persist(committeeGP._current_state)
     }
-
 
     //Return the resultant model
     (committeeGP, committeeGP._current_state)
@@ -364,24 +395,53 @@ object ProbGPCommMachine {
 
     val hTotal = sum(h)
 
-    val alpha = if(h.length == 1) 1.0 else 1.0/(h.length-1)
+    val alpha = if (h.length == 1) 1.0 else 1.0 / (h.length - 1)
 
-    val weights: DenseVector[Double] = h.map(p => 1.0-(p/hTotal)):*alpha
+    val weights: DenseVector[Double] = h.map(p => 1.0 - (p / hTotal)) :* alpha
     val configurations = energyLandscape.map(_._2)
 
-    /*val maskMatrices: Seq[DenseMatrix[Double]] =
+    weights.toArray.toSeq zip configurations
+  }
+
+  def calculateModelWeightsSigmoid(
+    baselineMethod: String = "mean")(
+    energyLandscape: List[(Double, Map[String, Double])])
+  : Seq[(Double, Map[String, Double])] = {
+
+    val h = DenseVector(energyLandscape.map(_._1).toArray)
+
+    val baseline = baselineMethod match {
+      case "mean" =>
+        sum(h)/h.length.toDouble
+      case "avg" =>
+        sum(h)/h.length.toDouble
+      case "min" =>
+        min(h)
+      case "max" =>
+        max(h)
+      case _ =>
+        sum(h)/h.length.toDouble
+    }
+
+    val maskMatrices: Seq[DenseMatrix[Double]] =
       (0 until h.length).map(i =>
-        DenseMatrix.tabulate[Double](h.length, h.length)((r,s) => {
-          if(r == i) 0.0 else if(s == i) -1.0 else 0.0
+        DenseMatrix.tabulate[Double](h.length, h.length)((r, s) => {
+          if (r == i) 0.0
+          else if (s == i) -1.0
+          else if (r == s) 1.0
+          else 0.0
         })
       )
 
-    val weights = maskMatrices.map(mask => {
-      1.0/sum(exp((mask*h) :* -1.0))
-    })*/
+    val weights = maskMatrices.zipWithIndex.map(mask => {
+      1.0/sum(exp((mask._1*h) :* (-1.0/baseline)))
+    })
+
+    val configurations = energyLandscape.map(_._2)
 
     weights.toArray.toSeq zip configurations
 
-
   }
+
+
 }
