@@ -643,9 +643,10 @@ object DynaMLPipe {
     })
 
 
-  def modelTuning[M <: GloballyOptWithGrad](startingState: Map[String, Double],
-                                            globalOpt: String = "GS",
-                                            grid: Int = 3, step: Double = 0.02) =
+  def modelTuning[M <: GloballyOptWithGrad](
+    startingState: Map[String, Double],
+    globalOpt: String = "GS",
+    grid: Int = 3, step: Double = 0.02) =
     DataPipe((model: M) => {
       val gs = globalOpt match {
         case "GS" => new GridSearch[M](model)

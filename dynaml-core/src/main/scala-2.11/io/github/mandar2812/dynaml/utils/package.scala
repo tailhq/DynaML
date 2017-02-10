@@ -61,6 +61,11 @@ package object utils {
     CSVReader.open(new File(file))
   }
 
+  def diagonal(m: DenseMatrix[Double]): DenseMatrix[Double] = {
+    require(m.rows == m.cols, "matrix must be square to extract diagonal")
+    m.mapPairs((index, value) => if(index._1 == index._2) value else 0.0)
+  }
+
   /**
     * Get the mean and variance of a data set
     * which is a [[List]] of [[DenseVector]].

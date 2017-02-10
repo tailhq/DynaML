@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.probability.distributions
 
-import breeze.numerics.{log, sqrt}
+import breeze.numerics.log
 import breeze.stats.distributions.{ContinuousDistr, HasCdf}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import spire.algebra.Field
@@ -15,7 +15,7 @@ import spire.algebra.Field
   * w: An odd function from the domain type [[T]] to [[Double]].
   */
 abstract class SkewSymmDistribution[T](
-  protected val basisDistr: ContinuousDistr[T] with HasCdf,
+  protected val basisDistr: ContinuousDistr[T],
   protected val warpingDistr: ContinuousDistr[Double] with HasCdf,
   protected val w: DataPipe[T, Double],
   cutoff: Double = 0.0)(implicit f: Field[T])
