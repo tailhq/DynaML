@@ -7,7 +7,6 @@ import breeze.stats.distributions._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.utils._
-import spire.algebra.Field
 import spire.implicits._
 
 /**
@@ -38,12 +37,45 @@ case class ExtendedSkewGaussian(
 
 }
 
+/**
+  * Multivariate Skew-Normal distribution as
+  * specified in Azzalani et. al.
+  *
+  * @param alpha A breeze [[DenseVector]] which represents the skewness parameters
+  *
+  * @param mu The center of the distribution
+  *
+  * @param sigma The covariance matrix of the base multivariate gaussian.
+  *
+  * */
 case class MultivariateSkewNormal(
   alpha: DenseVector[Double],
   mu: DenseVector[Double],
   sigma: DenseMatrix[Double]) extends
   SkewSymmDistribution[DenseVector[Double]](
-    MultivariateGaussian(mu, sigma), Gaussian(0.0, 1.0),
-    DataPipe((x: DenseVector[Double]) => alpha.t*(diagonal(sigma)\(x-mu))))(
-    VectorField(alpha.length)
-  )
+    basisDistr = MultivariateGaussian(mu, sigma),
+    warpingDistr = Gaussian(0.0, 1.0),
+    w = DataPipe((x: DenseVector[Double]) => alpha.t*(sqrt(diagonal(sigma))\(x-mu))))(
+    VectorField(alpha.length))
+
+/**
+  * Extended Multivariate Skew-Gaussian distribution
+  * as specified in Azzalani et.al.
+  *
+  * @param tau Determines the cutoff of the warping function
+  *
+  * @param alpha A breeze [[DenseVector]] which represents the skewness parameters
+  *
+  * @param mu The center of the distribution
+  *
+  * @param sigma The covariance matrix of the base multivariate gaussian.
+  * */
+case class ExtendedMultivariateSkewNormal(
+  tau: Double, alpha: DenseVector[Double],
+  mu: DenseVector[Double], sigma: DenseMatrix[Double]) extends
+  SkewSymmDistribution[DenseVector[Double]](
+    basisDistr = MultivariateGaussian(mu, sigma),
+    warpingDistr = Gaussian(0.0, 1.0),
+    w = DataPipe((x: DenseVector[Double]) => alpha.t*(sqrt(diagonal(sigma))\(x-mu))),
+    cutoff = tau*sqrt(1.0 + alpha.t*(diagonal(sigma)\sigma)*alpha))(
+    VectorField(alpha.length))

@@ -32,6 +32,7 @@ import scala.util.matching.Regex
 import sys.process._
 import java.net.URL
 
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrix
 import org.apache.spark.annotation.Experimental
 
 import scalaxy.streams.optimize
@@ -61,9 +62,23 @@ package object utils {
     CSVReader.open(new File(file))
   }
 
+  /**
+    * Extract the diagonal elements of a breeze [[DenseMatrix]]
+    * */
   def diagonal(m: DenseMatrix[Double]): DenseMatrix[Double] = {
-    require(m.rows == m.cols, "matrix must be square to extract diagonal")
+    require(m.rows == m.cols, "Matrix must be square to extract diagonal")
     m.mapPairs((index, value) => if(index._1 == index._2) value else 0.0)
+  }
+
+  /**
+    * Extract the diagonal elements of a [[PartitionedMatrix]]
+    * */
+  def diagonal[M <: PartitionedMatrix](pm: M): PartitionedMatrix = {
+    require(pm.rows == pm.cols, "Blocked matrix must be square to extract diagonal")
+    pm.map(pairs => {
+      if(pairs._1._1 == pairs._1._2) (pairs._1, diagonal(pairs._2))
+      else (pairs._1, DenseMatrix.zeros[Double](pairs._2.rows, pairs._2.cols))
+    })
   }
 
   /**
