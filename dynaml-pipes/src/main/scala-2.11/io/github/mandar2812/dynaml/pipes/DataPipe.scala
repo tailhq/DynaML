@@ -27,6 +27,8 @@ package io.github.mandar2812.dynaml.pipes
   */
 trait DataPipe[-Source, +Destination] extends Serializable {
 
+  self =>
+
   def run(data: Source): Destination
 
   def apply(data: Source): Destination = run(data)
@@ -42,12 +44,16 @@ trait DataPipe[-Source, +Destination] extends Serializable {
     * */
   def >[Further](that: DataPipe[Destination, Further]):
   DataPipe[Source, Further] = {
-    val runFunc = (d: Source) => that.run(this.run(d))
+    val runFunc = (d: Source) => that.run(self.run(d))
     DataPipe(runFunc)
   }
 
   def *[OtherSource, OtherDestination](that: DataPipe[OtherSource, OtherDestination])
-  :ParallelPipe[Source, Destination, OtherSource, OtherDestination] = ParallelPipe(this.run, that.run)
+  :ParallelPipe[Source, Destination, OtherSource, OtherDestination] = ParallelPipe(self.run, that.run)
+
+  def >-<[OtherSource, OtherDestination](that: DataPipe[OtherSource, OtherDestination])
+  :DataPipe2[Source, OtherSource, (Destination, OtherDestination)] =
+    DataPipe2((d1: Source, d2: OtherSource) => (self(d1), that(d2)))
 }
 
 object DataPipe {
