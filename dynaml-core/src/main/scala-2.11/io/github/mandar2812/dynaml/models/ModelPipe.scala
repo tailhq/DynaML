@@ -5,7 +5,7 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 /**
   * Top level trait for Pipes involving ML models.
   */
-trait ModelPipe[Source, T, Q, R, M <: Model[T, Q, R]]
+trait ModelPipe[-Source, T, Q, R, +M <: Model[T, Q, R]]
   extends DataPipe[Source, M] {
 
   val preProcess: (Source) => T
