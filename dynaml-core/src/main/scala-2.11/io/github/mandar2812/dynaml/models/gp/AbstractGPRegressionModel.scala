@@ -280,28 +280,14 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
       covariance.evaluate)
 
     //Calculate the predictive mean and co-variance
-    val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
-
-    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
-
-    val v: PartitionedMatrix = Lmat \\ crossKernel
-
-    val varianceReducer: PartitionedMatrix = v.t * v
-
-    //Ensure that the variance reduction is symmetric
-    val adjustedVarReducer: PartitionedMatrix = (varianceReducer.L + varianceReducer.L.t).map(bm =>
-      if(bm._1._1 == bm._1._2) (bm._1, bm._2*(DenseMatrix.eye[Double](bm._2.rows)*0.5))
-      else bm)
-
-    val reducedVariance: PartitionedPSDMatrix =
-      new PartitionedPSDMatrix(
-        (kernelTest - adjustedVarReducer).filterBlocks(c => c._1 <= c._2),
-        kernelTest.rows, kernelTest.cols)
-
+    val (postPredictiveMean, postPredictiveCovariance) =
+      AbstractGPRegressionModel.solveGP(
+        trainingLabels, trainingMean, priorMeanTest,
+        smoothingMat, kernelTest, crossKernel)
 
     MultGaussianPRV(test.length.toLong, _blockSize)(
-      priorMeanTest + crossKernel.t * alpha,
-      reducedVariance)
+      postPredictiveMean,
+      postPredictiveCovariance)
   }
 
   /**
@@ -358,6 +344,36 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 }
 
 object AbstractGPRegressionModel {
+
+  def solveGP(
+    trainingLabels: PartitionedVector,
+    trainingMean: PartitionedVector,
+    priorMeanTest: PartitionedVector,
+    smoothingMat: PartitionedPSDMatrix,
+    kernelTest: PartitionedPSDMatrix,
+    crossKernel: PartitionedMatrix):
+  (PartitionedVector, PartitionedPSDMatrix) = {
+
+    val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
+
+    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
+
+    val v: PartitionedMatrix = Lmat \\ crossKernel
+
+    val varianceReducer: PartitionedMatrix = v.t * v
+
+    //Ensure that the variance reduction is symmetric
+    val adjustedVarReducer: PartitionedMatrix = (varianceReducer.L + varianceReducer.L.t).map(bm =>
+      if(bm._1._1 == bm._1._2) (bm._1, bm._2*(DenseMatrix.eye[Double](bm._2.rows)*0.5))
+      else bm)
+
+    val reducedVariance: PartitionedPSDMatrix =
+      new PartitionedPSDMatrix(
+        (kernelTest - adjustedVarReducer).filterBlocks(c => c._1 <= c._2),
+        kernelTest.rows, kernelTest.cols)
+
+    (priorMeanTest + crossKernel.t * alpha, reducedVariance)
+  }
 
   /**
     * Calculate the marginal log likelihood
