@@ -16,16 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.models
+package io.github.mandar2812.dynaml.modelpipe
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import org.apache.spark.rdd.RDD
-
-import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, DataPipe3}
 import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
-import io.github.mandar2812.dynaml.models.lm.{
-GeneralizedLeastSquaresModel, GeneralizedLinearModel, GenericGLM, SparkGLM}
+import io.github.mandar2812.dynaml.models.lm.{GeneralizedLeastSquaresModel, GeneralizedLinearModel, GenericGLM, SparkGLM}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, DataPipe3}
+import org.apache.spark.rdd.RDD
 
 /**
   * Created by mandar2812 on 15/6/16.

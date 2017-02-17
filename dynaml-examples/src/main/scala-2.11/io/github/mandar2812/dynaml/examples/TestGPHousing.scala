@@ -23,7 +23,7 @@ import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.GPRegressionPipe
+import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe
 import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GPRegression}
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
 

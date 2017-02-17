@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.models
+package io.github.mandar2812.dynaml.modelpipe
 
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel

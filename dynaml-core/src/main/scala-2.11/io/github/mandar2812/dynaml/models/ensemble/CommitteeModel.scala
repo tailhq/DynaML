@@ -19,9 +19,10 @@ under the License.
 package io.github.mandar2812.dynaml.models.ensemble
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.modelpipe.ModelPipe
 import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork
-import io.github.mandar2812.dynaml.models.{LinearModel, Model, ModelPipe}
+import io.github.mandar2812.dynaml.models.{LinearModel, Model}
 
 /**
   * Defines an abstract implementation of a "committee-model".

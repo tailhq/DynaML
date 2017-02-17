@@ -28,7 +28,8 @@ import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 import io.github.mandar2812.dynaml.kernels.{RBFKernel, SVMKernel}
-import io.github.mandar2812.dynaml.models.{GLMPipe, KernelizedModel}
+import io.github.mandar2812.dynaml.modelpipe.GLMPipe
+import io.github.mandar2812.dynaml.models.KernelizedModel
 import io.github.mandar2812.dynaml.models.lm.GeneralizedLinearModel
 import io.github.mandar2812.dynaml.models.svm.{KernelSparkModel, LSSVMSparkModel}
 import io.github.mandar2812.dynaml.pipes._

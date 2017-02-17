@@ -19,7 +19,8 @@ under the License.
 package io.github.mandar2812.dynaml.models.ensemble
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.models.{Model, ModelPipe}
+import io.github.mandar2812.dynaml.modelpipe.ModelPipe
+import io.github.mandar2812.dynaml.models.Model
 import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork
 

@@ -1,5 +1,6 @@
-package io.github.mandar2812.dynaml.models
+package io.github.mandar2812.dynaml.modelpipe
 
+import io.github.mandar2812.dynaml.models.Model
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
