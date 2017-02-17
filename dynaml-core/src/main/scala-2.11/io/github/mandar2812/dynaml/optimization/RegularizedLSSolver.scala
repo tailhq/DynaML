@@ -22,7 +22,10 @@ package io.github.mandar2812.dynaml.optimization
 import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
-  * Created by mandar on 9/2/16.
+  * @author mandar2812 date 9/2/16.
+  *
+  * Solves the Ordinary Least Squares system exactly
+  * given X.t * X and X.t*y
   */
 class RegularizedLSSolver extends
   RegularizedOptimizer[DenseVector[Double],
