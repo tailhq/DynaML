@@ -1,7 +1,6 @@
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.examples.AbottPowerPlant
 
 implicit val ev = VectorField(6)
@@ -16,8 +15,11 @@ val noiseKernel = new DiracKernel(1.5)
 
 noiseKernel.block_all_hyper_parameters
 
-AbottPowerPlant(other_kernel, noiseKernel,
-  opt = Map("globalOpt" -> "GPC", "grid" -> "2",
+AbottPowerPlant(
+  other_kernel, noiseKernel,
+  opt = Map(
+    "globalOpt" -> "GPC", "grid" -> "2",
     "step" -> "0.5", "tolerance" -> "0.0001",
-    "maxIterations" -> "10", "policy" -> "CSA"), num_training = 1025,
-     num_test = 1025, deltaT = 3, column = 8)
+    "maxIterations" -> "10", "policy" -> "CSA"),
+  num_training = 1025, num_test = 1025,
+  deltaT = 3, column = 8)
