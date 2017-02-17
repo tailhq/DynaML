@@ -18,14 +18,17 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models
 
-import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
-import io.github.mandar2812.dynaml.kernels.{CovarianceFunction, LocalScalarKernel}
-import io.github.mandar2812.dynaml.models.lm.{GeneralizedLeastSquaresModel, GeneralizedLinearModel}
+import breeze.linalg.{DenseMatrix, DenseVector}
+import org.apache.spark.rdd.RDD
+
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, DataPipe3}
+import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
+import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
+import io.github.mandar2812.dynaml.models.lm.{
+GeneralizedLeastSquaresModel, GeneralizedLinearModel, GenericGLM, SparkGLM}
 
 /**
-  * Created by mandar on 15/6/16.
+  * Created by mandar2812 on 15/6/16.
   */
 class GLMPipe[T, Source](pre: (Source) => Stream[(DenseVector[Double], Double)],
                          map: (DenseVector[Double]) => (DenseVector[Double]) = identity _,
@@ -71,8 +74,7 @@ object GeneralizedLeastSquaresPipe3 extends DataPipe3[
     new GeneralizedLeastSquaresModel(data1, data2, data3.run)
 }
 
-class GeneralizedLeastSquaresPipe2(
-  covarianceFunction: LocalScalarKernel[DenseVector[Double]]) extends DataPipe2[
+class GeneralizedLeastSquaresPipe2(covarianceFunction: LocalScalarKernel[DenseVector[Double]]) extends DataPipe2[
     Stream[(DenseVector[Double], Double)],
     DataPipe[DenseVector[Double], DenseVector[Double]],
     GeneralizedLeastSquaresModel] {
@@ -85,5 +87,31 @@ class GeneralizedLeastSquaresPipe2(
     //Construct the covariance matrix from the data
     val Omega = covarianceFunction.buildBlockedKernelMatrix(data1.map(_._1), data1.length.toLong)
     GeneralizedLeastSquaresPipe3(data1, Omega, data2)
+  }
+}
+
+
+/**
+  * Represents a [[DataPipe2]] object which takes two arguments:
+  * <ol>
+  *   <li>the data as an [[RDD]]</li>
+  *   <li>a feature mapping from [[DenseVector]] to [[DenseVector]] </li>
+  * </ol>
+  * and returns a [[SparkGLM]] regression model.
+  * */
+object SparkGLMPipe2 extends DataPipe2[
+  RDD[(DenseVector[Double], Double)],
+  DataPipe[DenseVector[Double], DenseVector[Double]],
+  GenericGLM[
+    RDD[(DenseVector[Double], Double)],
+    (DenseMatrix[Double], DenseVector[Double])]] {
+
+
+  override def run(
+    data1: RDD[(DenseVector[Double], Double)],
+    data2: DataPipe[DenseVector[Double], DenseVector[Double]]) = {
+
+    val length = data1.count()
+    new SparkGLM(data1, length, data2.run)
   }
 }
