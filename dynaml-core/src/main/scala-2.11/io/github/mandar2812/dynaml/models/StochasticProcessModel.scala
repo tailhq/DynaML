@@ -20,12 +20,12 @@ package io.github.mandar2812.dynaml.models
 
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.{ContinuousRandomVariable, RandomVariable}
+import io.github.mandar2812.dynaml.probability.ContinuousRandomVariable
 import org.apache.log4j.Logger
 
 /**
   * date 26/08/16.
-  * High Level description of a stochastic process.
+  * High Level description of a stochastic process based predictive model.
   *
   * @author mandar2812
   * @tparam T The underlying data structure storing the training & test data.
@@ -33,7 +33,7 @@ import org.apache.log4j.Logger
   * @tparam Y The type of the output label
   * @tparam W Implementing class of the posterior distribution
   */
-trait StochasticProcess[T, I, Y, W] extends Model[T, I, Y] {
+trait StochasticProcessModel[T, I, Y, W] extends Model[T, I, Y] {
 
   /** Calculates posterior predictive distribution for
     * a particular set of test data points.
@@ -73,7 +73,7 @@ trait StochasticProcess[T, I, Y, W] extends Model[T, I, Y] {
   * @tparam W Implementing class of the posterior distribution
   *
   * */
-trait SecondOrderProcess[T, I, Y, K, M, W] extends StochasticProcess[T, I, Y, W] {
+trait SecondOrderProcessModel[T, I, Y, K, M, W] extends StochasticProcessModel[T, I, Y, W] {
 
   /**
     * Mean Function: Takes a member of the index set (input)
@@ -99,7 +99,8 @@ trait SecondOrderProcess[T, I, Y, K, M, W] extends StochasticProcess[T, I, Y, W]
   * [[io.github.mandar2812.dynaml.models.stp.StudentTRegression]] and others.
   *
   */
-abstract class ContinuousProcess[T, I, Y, W <: ContinuousRandomVariable[_]] extends StochasticProcess[T, I, Y, W] {
+abstract class ContinuousProcessModel[T, I, Y, W <: ContinuousRandomVariable[_]]
+  extends StochasticProcessModel[T, I, Y, W] {
 
   private val logger = Logger.getLogger(this.getClass)
 

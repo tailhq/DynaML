@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.analysis
 
-import io.github.mandar2812.dynaml.models.ContinuousProcess
+import io.github.mandar2812.dynaml.models.ContinuousProcessModel
 import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
 import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, MeasurableDistrRV}
 import spire.algebra.Field

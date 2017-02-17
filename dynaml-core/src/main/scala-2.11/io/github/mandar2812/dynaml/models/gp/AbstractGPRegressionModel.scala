@@ -26,7 +26,7 @@ import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel, SVMKernel}
-import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
+import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
@@ -50,8 +50,8 @@ import scala.reflect.ClassTag
 abstract class AbstractGPRegressionModel[T, I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
   data: T, num: Int, meanFunc: DataPipe[I, Double] = DataPipe((_:I) => 0.0))
-  extends ContinuousProcess[T, I, Double, MultGaussianPRV]
-  with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultGaussianPRV]
+  extends ContinuousProcessModel[T, I, Double, MultGaussianPRV]
+  with SecondOrderProcessModel[T, I, Double, Double, DenseMatrix[Double], MultGaussianPRV]
   with GloballyOptWithGrad {
 
   private val logger = Logger.getLogger(this.getClass)

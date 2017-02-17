@@ -26,7 +26,7 @@ import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
 import io.github.mandar2812.dynaml.kernels.{LocalScalarKernel, SVMKernel}
-import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
+import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.MultStudentsTPRV
@@ -44,8 +44,8 @@ abstract class AbstractSTPRegressionModel[T, I](
   n: LocalScalarKernel[I],
   data: T, num: Int,
   meanFunc: DataPipe[I, Double] = DataPipe((_: I) => 0.0))(implicit ev: ClassTag[I])
-  extends ContinuousProcess[T, I, Double, MultStudentsTPRV]
-  with SecondOrderProcess[T, I, Double, Double, DenseMatrix[Double], MultStudentsTPRV]
+  extends ContinuousProcessModel[T, I, Double, MultStudentsTPRV]
+  with SecondOrderProcessModel[T, I, Double, Double, DenseMatrix[Double], MultStudentsTPRV]
   with GloballyOptimizable {
 
 

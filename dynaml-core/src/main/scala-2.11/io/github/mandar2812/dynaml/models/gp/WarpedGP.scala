@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg.{DenseMatrix, det, diag}
 import io.github.mandar2812.dynaml.algebra.{PartitionedMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.analysis.{DifferentiableMap, PartitionedVectorField, PushforwardMap}
-import io.github.mandar2812.dynaml.models.{ContinuousProcess, SecondOrderProcess}
+import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
 import io.github.mandar2812.dynaml.probability.{E, MeasurableDistrRV}
@@ -23,10 +23,10 @@ class WarpedGP[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
   warpingFunc: PushforwardMap[Double, Double, Double])(
   implicit pf: PartitionedVectorField,
   transform: Encoder[T, Seq[(I, Double)]])
-  extends ContinuousProcess[
+  extends ContinuousProcessModel[
     T, I, Double,
     MeasurableDistrRV[PartitionedVector, PartitionedVector, PartitionedMatrix]]
-  with SecondOrderProcess[
+  with SecondOrderProcessModel[
     T, I, Double, Double, DenseMatrix[Double],
     MeasurableDistrRV[PartitionedVector, PartitionedVector, PartitionedMatrix]]
   with GloballyOptWithGrad {
