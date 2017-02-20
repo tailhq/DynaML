@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel, CovarianceFunction => CovFunc}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
@@ -80,6 +81,13 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   def validationSet_(v: Seq[(DenseVector[Double], Double)], append: Boolean = false) =
     if(append) validationSet ++= v else validationSet = v
 
+
+  protected lazy val validationDataFeatures = validationSet.map(_._1)
+
+  protected lazy val validationDataLabels = PartitionedVector(
+    validationSet.toStream.map(_._2),
+    trainingData.length.toLong, _blockSize
+  )
   /**
     * Assigning a value to the [[processTargets]] data pipe
     * can be useful in cases where we need to
@@ -140,7 +148,10 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
   override def energy(h: Map[String, Double],
                       options: Map[String, String]): Double = validationSet.length match {
     case 0 => super.energy(h, options)
-    case _ => super.calculateEnergyPipe(h, options)(dataAsSeq(g) ++ validationSet)
+    case _ => super.calculateEnergyPipe(h, options)(
+      trainingData ++ validationDataFeatures,
+      PartitionedVector.vertcat(trainingDataLabels, validationDataLabels)
+    )
   }
 
   /**
@@ -156,6 +167,9 @@ AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
     **/
   override def gradEnergy(h: Map[String, Double]) = validationSet.length match {
     case 0 => super.gradEnergy(h)
-    case _ => super.calculateGradEnergyPipe(h)(dataAsSeq(g) ++ validationSet)
+    case _ => super.calculateGradEnergyPipe(h)(
+      trainingData ++ validationDataFeatures,
+      PartitionedVector.vertcat(trainingDataLabels, validationDataLabels)
+    )
   }
 }

@@ -28,7 +28,7 @@ import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import org.apache.log4j.Logger
 
@@ -110,32 +110,36 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
   override protected var current_state: Map[String, Double] =
     covariance.state ++ noiseModel.state
 
+  protected lazy val trainingData = dataAsIndexSeq(g)
+
+  protected lazy val trainingDataLabels = PartitionedVector(
+    dataAsSeq(g).toStream.map(_._2),
+    trainingData.length.toLong, _blockSize
+  )
+
   /**
-    * Returns a [[DataPipe]] which calculates the energy of data: [[T]].
+    * Returns a [[DataPipe2]] which calculates the energy of data: [[T]].
     * See: [[energy]] below.
     * */
-  def calculateEnergyPipe(h: Map[String, Double], options: Map[String, String]) = DataPipe((dataset: T) => {
-    setState(h)
-    val training = dataAsIndexSeq(dataset)
-    val trainingLabels = PartitionedVector(
-      dataAsSeq(dataset).toStream.map(_._2),
-      training.length.toLong, _blockSize
-    )
+  def calculateEnergyPipe(h: Map[String, Double], options: Map[String, String]) =
+    DataPipe2((training: Seq[I], trainingLabels: PartitionedVector) => {
+      setState(h)
 
-    val trainingMean = PartitionedVector(
-      dataAsSeq(dataset).toStream.map(_._1).map(mean(_)),
-      training.length.toLong, _blockSize
-    )
 
-    val effectiveTrainingKernel: LocalScalarKernel[I] = this.covariance + this.noiseModel
+      val trainingMean = PartitionedVector(
+        training.toStream.map(mean(_)),
+        training.length.toLong, _blockSize
+      )
 
-    effectiveTrainingKernel.setBlockSizes((_blockSize, _blockSize))
+      val effectiveTrainingKernel: LocalScalarKernel[I] = this.covariance + this.noiseModel
 
-    val kernelTraining: PartitionedPSDMatrix =
-      effectiveTrainingKernel.buildBlockedKernelMatrix(training, training.length)
+      effectiveTrainingKernel.setBlockSizes((_blockSize, _blockSize))
 
-    AbstractGPRegressionModel.logLikelihood(trainingLabels - trainingMean, kernelTraining)
-  })
+      val kernelTraining: PartitionedPSDMatrix =
+        effectiveTrainingKernel.buildBlockedKernelMatrix(training, training.length)
+
+      AbstractGPRegressionModel.logLikelihood(trainingLabels - trainingMean, kernelTraining)
+    })
 
   /**
     * Calculates the energy of the configuration,
@@ -152,62 +156,57 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     * also known as log likelihood.
     **/
   override def energy(h: Map[String, Double], options: Map[String, String]): Double =
-    calculateEnergyPipe(h, options)(g)
+    calculateEnergyPipe(h, options)(trainingData, trainingDataLabels)
 
   /**
     * Returns a [[DataPipe]] which calculates the gradient of the energy, E(.) of data: [[T]]
     * with respect to the model hyper-parameters.
     * See: [[gradEnergy]] below.
     * */
-  def calculateGradEnergyPipe(h: Map[String, Double]) = DataPipe((dataset: T) => {
-    try {
-      covariance.setHyperParameters(h)
-      noiseModel.setHyperParameters(h)
+  def calculateGradEnergyPipe(h: Map[String, Double]) =
+    DataPipe2((training: Seq[I], trainingLabels: PartitionedVector) => {
+      try {
+        covariance.setHyperParameters(h)
+        noiseModel.setHyperParameters(h)
 
-      val training = dataAsIndexSeq(dataset)
-      val trainingLabels = PartitionedVector(
-        dataAsSeq(dataset).toStream.map(_._2),
-        training.length.toLong, _blockSize
-      )
+        val trainingMean = PartitionedVector(
+          training.toStream.map(mean(_)),
+          training.length.toLong, _blockSize
+        )
 
-      val trainingMean = PartitionedVector(
-        dataAsSeq(dataset).toStream.map(_._1).map(mean(_)),
-        training.length.toLong, _blockSize
-      )
+        val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
 
-      val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
+        effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
+        val hParams = effectiveTrainingKernel.effective_hyper_parameters
 
-      effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
-      val hParams = effectiveTrainingKernel.effective_hyper_parameters
+        val gradMatrices = SVMKernel.buildPartitionedKernelGradMatrix(
+          training, training.length, _blockSize, _blockSize,
+          hParams, (x: I, y: I) => effectiveTrainingKernel.evaluate(x,y),
+          (hy: String) => (x: I, y: I) => effectiveTrainingKernel.gradient(x,y)(hy))
 
-      val gradMatrices = SVMKernel.buildPartitionedKernelGradMatrix(
-        training, training.length, _blockSize, _blockSize,
-        hParams, (x: I, y: I) => effectiveTrainingKernel.evaluate(x,y),
-        (hy: String) => (x: I, y: I) => effectiveTrainingKernel.gradient(x,y)(hy))
+        val kernelTraining: PartitionedPSDMatrix = gradMatrices("kernel-matrix")
 
-      val kernelTraining: PartitionedPSDMatrix = gradMatrices("kernel-matrix")
+        val Lmat = bcholesky(kernelTraining)
 
-      val Lmat = bcholesky(kernelTraining)
+        val alpha = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
 
-      val alpha = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
+        hParams.map(h => {
+          //build kernel derivative matrix
+          val kernelDerivative: PartitionedMatrix = gradMatrices(h)
+          //Calculate gradient for the hyper parameter h
+          val grad: PartitionedMatrix =
+            alpha*alpha.t*kernelDerivative - (Lmat.t \\ (Lmat \\ kernelDerivative))
 
-      hParams.map(h => {
-        //build kernel derivative matrix
-        val kernelDerivative: PartitionedMatrix = gradMatrices(h)
-        //Calculate gradient for the hyper parameter h
-        val grad: PartitionedMatrix =
-          alpha*alpha.t*kernelDerivative - (Lmat.t \\ (Lmat \\ kernelDerivative))
+          (h.split("/").tail.mkString("/"), btrace(grad))
+        }).toMap
 
-        (h.split("/").tail.mkString("/"), btrace(grad))
-      }).toMap
+      } catch {
+        case _: breeze.linalg.NotConvergedException =>
+          covariance.effective_hyper_parameters.map(h => (h, Double.NaN)).toMap ++
+            noiseModel.effective_hyper_parameters.map(h => (h, Double.NaN)).toMap
+      }
 
-    } catch {
-      case _: breeze.linalg.NotConvergedException =>
-        covariance.effective_hyper_parameters.map(h => (h, Double.NaN)).toMap ++
-          noiseModel.effective_hyper_parameters.map(h => (h, Double.NaN)).toMap
-    }
-
-  })
+    })
 
   /**
     * Calculates the gradient energy of the configuration and
@@ -220,7 +219,8 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     * @param h The value of the hyper-parameters in the configuration space
     * @return Gradient of the objective function (marginal likelihood) as a Map
     **/
-  override def gradEnergy(h: Map[String, Double]): Map[String, Double] = calculateGradEnergyPipe(h)(g)
+  override def gradEnergy(h: Map[String, Double]): Map[String, Double] =
+    calculateGradEnergyPipe(h)(trainingData, trainingDataLabels)
 
   /**
    * Calculates posterior predictive distribution for
