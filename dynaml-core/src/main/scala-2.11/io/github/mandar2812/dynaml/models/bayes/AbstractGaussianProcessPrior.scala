@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.bayes
 
-import spire.algebra.Field
+import spire.algebra.{Field, InnerProductSpace}
 import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.analysis.PartitionedVectorField
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
@@ -42,7 +42,9 @@ abstract class AbstractGaussianProcessPrior[I: ClassTag, MeanFuncParams](
     MultGaussianPRV, MultGaussianPRV,
     AbstractGPRegressionModel[Seq[(I, Double)], I]] {
 
-  protected var meanFuncParams: MeanFuncParams
+  def _meanFuncParams: MeanFuncParams
+
+  def meanFuncParams_(p: MeanFuncParams): Unit
 
   val meanFunctionPipe: MetaPipe[MeanFuncParams, I, Double]
 
@@ -50,7 +52,7 @@ abstract class AbstractGaussianProcessPrior[I: ClassTag, MeanFuncParams](
 
 
   override def posteriorModel(data: Seq[(I, Double)]) =
-    posteriorModelPipe(data, meanFunctionPipe(meanFuncParams))
+    posteriorModelPipe(data, meanFunctionPipe(_meanFuncParams))
 
   override def priorDistribution[U <: Seq[I]](d: U) = {
 
@@ -61,7 +63,7 @@ abstract class AbstractGaussianProcessPrior[I: ClassTag, MeanFuncParams](
       PartitionedVectorField(numPoints, covariance.rowBlocking)
 
     //Construct mean Vector
-    val meanFunc = meanFunctionPipe(meanFuncParams)
+    val meanFunc = meanFunctionPipe(_meanFuncParams)
     val meanVector = PartitionedVector(
       d.toStream.map(meanFunc(_)),
       numPoints,
@@ -72,4 +74,21 @@ abstract class AbstractGaussianProcessPrior[I: ClassTag, MeanFuncParams](
 
     MultGaussianPRV(meanVector, covMat)
   }
+}
+
+
+class LinearTrendGaussianPrior[I: ClassTag](
+  covariance: LocalScalarKernel[I],
+  noiseCovariance: LocalScalarKernel[I],
+  trendParams: I)(
+  implicit inner: InnerProductSpace[I, Double]) extends
+  AbstractGaussianProcessPrior[I, I](covariance, noiseCovariance) {
+
+  private var params = trendParams
+
+  override def _meanFuncParams = params
+
+  override def meanFuncParams_(p: I) = params = p
+
+  override val meanFunctionPipe = MetaPipe((params: I) => (x: I) => inner.dot(params, x))
 }
