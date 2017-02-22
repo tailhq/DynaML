@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml
 
 import scalaxy.streams.optimize
 import spire.algebra.InnerProductSpace
+import scala.collection.Bag
 
 /**
   * Created by mandar on 11/01/2017.
@@ -25,5 +26,10 @@ package object probability {
     rv.iid(candidates).sample().sum/candidates.toDouble
   }
 
+ 
+  type Pattern = Map[Taxon, Int]
+  val Pattern = Map
+  type Patterns = Bag[Pattern]
+  val Patterns = Bag
 
 }
