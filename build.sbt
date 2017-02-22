@@ -18,7 +18,7 @@ val dataDirectory = settingKey[File]("The directory holding the data files for r
 
 name := "DynaML"
 enablePlugins(GitVersioning)
-scalaVersion := "2.12.1"
+scalaVersion := "2.11.7"
 scalacOptions += "-opt:l:classpath"
 libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2"
 libraryDependencies += "com.github.julien-truffaut" %% "monocle-core" % "1.4.0-M2"
