@@ -16,6 +16,7 @@ val mainVersion = "v1.4.1-beta.12"
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
+name := "DynaML"
 enablePlugins(GitVersioning)
 scalaVersion := "2.12.1"
 scalacOptions += "-opt:l:classpath"
