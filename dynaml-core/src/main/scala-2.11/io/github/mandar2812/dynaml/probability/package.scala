@@ -10,6 +10,11 @@ import scala.collection.Bag
 package object probability {
 
   var candidates: Int = 10000
+ 
+  type Pattern = Map[Taxon, Int]
+  val Pattern = Map
+  type Patterns = Bag[Pattern]
+  val Patterns = Bag
 
   def E[@specialized(Double) I](rv: RandomVariable[I])(implicit f: InnerProductSpace[I, Double]): I = optimize {
     f.divr(
@@ -26,10 +31,5 @@ package object probability {
     rv.iid(candidates).sample().sum/candidates.toDouble
   }
 
- 
-  type Pattern = Map[Taxon, Int]
-  val Pattern = Map
-  type Patterns = Bag[Pattern]
-  val Patterns = Bag
 
 }
