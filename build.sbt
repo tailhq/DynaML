@@ -16,7 +16,7 @@ val mainVersion = "v1.4.1-beta.12"
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
-enablePlugins(GitVersioning)
+
 scalaVersion := "2.12.1"
 scalacOptions += "-opt:l:classpath"
 libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2"
