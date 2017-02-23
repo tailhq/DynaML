@@ -56,15 +56,16 @@ object Dependencies {
     "com.diffplug.matsim" % "matfilerw" % "3.0.0",
     "org.scalameta" % "scalameta_2.11" % "1.4.0",
     "com.signalcollect" % "signal-collect_2.11" % "8.0.6",
-    "com.signalcollect" % "triplerush_2.11" % "9.0.0"
-    "com.chuusai" %% "shapeless" % "2.3.2"
-    "com.github.julien-truffaut" %% "monocle-core" % "1.4.0-M2"
-    "com.lihaoyi" % "ammonite" % "0.8.1" cross CrossVersion.full
-    "io.github.nicolasstucki" %% "multisets" % "0.4"
-    "net.java.dev.jna" % "jna" % "4.2.2"
-    "org.apache.commons" % "commons-math3" % "3.6.1"
-    "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.5"
-    "org.scala-lang" % "scala-compiler" % scala.value
+    "com.signalcollect" % "triplerush_2.11" % "9.0.0",
+    "com.chuusai" %% "shapeless" % "2.3.2",
+    compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+    "com.github.julien-truffaut" %% "monocle-core" % "1.4.0-M2",
+    "com.lihaoyi" % "ammonite" % "0.8.1" cross CrossVersion.full,
+    "io.github.nicolasstucki" %% "multisets" % "0.4",
+    "net.java.dev.jna" % "jna" % "4.2.2",
+    "org.apache.commons" % "commons-math3" % "3.6.1",
+    "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.5",
+    "org.scala-lang" % "scala-compiler" % scala.value,
     "org.spire-math" %% "spire" % "0.13.0"
   )
 
