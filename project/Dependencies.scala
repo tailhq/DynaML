@@ -4,7 +4,7 @@ object Dependencies {
 
   val scala = "2.11.8"
 
-  crossScalaVersions := Seq(
+  val crossScalaVersions := Seq(
   "2.10.4", "2.10.5", "2.10.6", "2.11.3",
   "2.11.4", "2.11.5", "2.11.6", "2.11.7", "2.11.8"
   )
@@ -96,7 +96,7 @@ object Dependencies {
 
   val replDependency = Seq(
     "com.lihaoyi" % "ammonite-repl_2.11.8" % "0.8.1",
-    "com.lihaoyi" % "ammonite" % "0.8.1" cross CrossVersion.full,
+    "com.lihaoyi" % "ammonite" % "0.8.1" cross CrossVersion.full
   )
 
   val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")
