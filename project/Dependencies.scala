@@ -4,6 +4,11 @@ object Dependencies {
 
   val scala = "2.11.8"
 
+  crossScalaVersions := Seq(
+  "2.10.4", "2.10.5", "2.10.6", "2.11.3",
+  "2.11.4", "2.11.5", "2.11.6", "2.11.7", "2.11.8"
+  )
+  
   val platform = {
     // Determine platform name using code similar to javacpp
     // com.googlecode.javacpp.Loader.java line 60-84
@@ -59,8 +64,7 @@ object Dependencies {
     "com.signalcollect" % "triplerush_2.11" % "9.0.0",
     "com.chuusai" %% "shapeless" % "2.3.2",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
-    "com.github.julien-truffaut" %% "monocle-core" % "1.4.0-M2",
-    "com.lihaoyi" % "ammonite" % "0.8.1" cross CrossVersion.full,
+    "com.github.julien-truffaut" %% "monocle-core" % "1.4.0-M2",    
     "io.github.nicolasstucki" %% "multisets" % "0.4",
     "net.java.dev.jna" % "jna" % "4.2.2",
     "org.apache.commons" % "commons-math3" % "3.6.1",
@@ -91,7 +95,8 @@ object Dependencies {
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" % "ammonite-repl_2.11.8" % "0.8.1"
+    "com.lihaoyi" % "ammonite-repl_2.11.8" % "0.8.1",
+    "com.lihaoyi" % "ammonite" % "0.8.1" cross CrossVersion.full,
   )
 
   val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")
