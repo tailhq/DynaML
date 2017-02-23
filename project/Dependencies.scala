@@ -65,7 +65,7 @@ object Dependencies {
     "net.java.dev.jna" % "jna" % "4.2.2",
     "org.apache.commons" % "commons-math3" % "3.6.1",
     "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.5",
-    "org.scala-lang" % "scala-compiler" % scala.value,
+    "org.scala-lang" % "scala-compiler" % scala,
     "org.spire-math" %% "spire" % "0.13.0"
   )
 
