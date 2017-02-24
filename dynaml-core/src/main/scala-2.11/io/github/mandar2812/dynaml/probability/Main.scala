@@ -16,6 +16,7 @@ object Main extends App {
     case Exception(t, msg) => throw t
     case _ =>
   }
+ }
 
   def escape(raw: String): String = {
     import scala.reflect.runtime.universe._
