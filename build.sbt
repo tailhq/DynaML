@@ -47,7 +47,7 @@ lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
 
 lazy val core = (project in file("dynaml-core")).settings(baseSettings)
   .settings(commonSettings:_*)
-  .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
+  .enablePlugins(JavaAppPackaging, BuildInfoPlugin, GitVersioning)
   .dependsOn(pipes)
   .settings(
     name := "dynaml-core",
@@ -62,7 +62,7 @@ lazy val examples = (project in file("dynaml-examples"))
     version := mainVersion
   ).dependsOn(pipes, core)
 
-lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin, GitVersioning)
+lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .settings(baseSettings:_*)
   .dependsOn(core, examples, pipes)
   .settings(
