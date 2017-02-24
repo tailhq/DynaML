@@ -16,20 +16,6 @@ val mainVersion = "v1.4.1-beta.12"
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
-name := "DynaML"
-scalaVersion := "2.11.7"
-scalacOptions += "-opt:l:classpath"
-libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2"
-libraryDependencies += "com.github.julien-truffaut" %% "monocle-core" % "1.4.0-M2"
-libraryDependencies += "com.lihaoyi" % "ammonite" % "0.8.1" cross CrossVersion.full
-libraryDependencies += "io.github.nicolasstucki" %% "multisets" % "0.4"
-libraryDependencies += "net.java.dev.jna" % "jna" % "4.2.2"
-libraryDependencies += "org.apache.commons" % "commons-math3" % "3.6.1"
-libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.5"
-libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
-libraryDependencies += "org.spire-math" %% "spire" % "0.13.0"
-
-
 val baseSettings = Seq(
   organization := "io.github.mandar2812",
   scalaVersion in ThisBuild := scala,
@@ -49,7 +35,7 @@ lazy val commonSettings = Seq(
       openMLDependency ++ rejinDependency ++
       rPackages ++ cppCompatDependencies),
 
-  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
+  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline", "-opt:l:classpath")
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
@@ -76,7 +62,7 @@ lazy val examples = (project in file("dynaml-examples"))
     version := mainVersion
   ).dependsOn(pipes, core)
 
-lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
+lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin, GitVersioning)
   .settings(baseSettings:_*)
   .dependsOn(core, examples, pipes)
   .settings(
