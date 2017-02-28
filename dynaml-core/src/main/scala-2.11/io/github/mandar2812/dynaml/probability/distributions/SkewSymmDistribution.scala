@@ -18,7 +18,7 @@ abstract class SkewSymmDistribution[T](
   protected val basisDistr: ContinuousDistr[T],
   protected val warpingDistr: ContinuousDistr[Double] with HasCdf,
   cutoff: Double = 0.0)(implicit f: Field[T])
-  extends AbstractContinuousDistr[T] {
+  extends ContinuousDistr[T] {
 
   protected val w: DataPipe[T, Double]
 
