@@ -17,14 +17,22 @@ import spire.algebra.Field
 abstract class SkewSymmDistribution[T](
   protected val basisDistr: ContinuousDistr[T],
   protected val warpingDistr: ContinuousDistr[Double] with HasCdf,
-  protected val w: DataPipe[T, Double],
   cutoff: Double = 0.0)(implicit f: Field[T])
-  extends ContinuousDistr[T] {
+  extends AbstractContinuousDistr[T] {
+
+  protected val w: DataPipe[T, Double]
 
   lazy private val p_cutoff: Double = warpingDistr.cdf(cutoff)
 
+  /**
+    * The warped cutoff is an adjusted value of the
+    * cutoff based on the cutoff value and skewness parameters.
+    * To be implemented by extending class.
+    * */
+  protected val warped_cutoff: Double
+
   override def unnormalizedLogPdf(x: T) =
-    basisDistr.unnormalizedLogPdf(x) + log(warpingDistr.cdf(w(x) + cutoff))
+    basisDistr.unnormalizedLogPdf(x) + log(warpingDistr.cdf(w(x) + warped_cutoff))
 
   override def logNormalizer =
     log(p_cutoff) + basisDistr.logNormalizer

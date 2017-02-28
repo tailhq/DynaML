@@ -1,12 +1,13 @@
 package io.github.mandar2812.dynaml.probability.distributions
 
 
-import breeze.linalg.{DenseMatrix, DenseVector}
-import breeze.numerics.{log, sqrt}
+import breeze.linalg.{DenseMatrix, DenseVector, cholesky}
+import breeze.numerics.sqrt
 import breeze.stats.distributions._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.utils._
+import io.github.mandar2812.dynaml.algebra._
 import spire.implicits._
 
 /**
@@ -18,8 +19,12 @@ case class SkewGaussian(
   alpha: Double, mu: Double = 0.0,
   sigma: Double = 1.0) extends
   SkewSymmDistribution[Double](
-    Gaussian(mu, sigma), Gaussian(mu, sigma),
-    DataPipe((x: Double) => alpha*x))
+    Gaussian(mu, sigma), Gaussian(0.0, 1.0)) {
+
+  override protected val w = DataPipe((x: Double) => alpha*(x-mu)/sqrt(sigma))
+
+  override protected val warped_cutoff: Double = 0.0
+}
 
 /**
   * The univariate extended skew gaussian distribution
@@ -29,11 +34,12 @@ case class ExtendedSkewGaussian(
   mu: Double = 0.0, sigma: Double = 1.0)(
   implicit rand: RandBasis = Rand)
   extends SkewSymmDistribution[Double](
-    Gaussian(mu, sigma), Gaussian(mu, sigma),
-    DataPipe((x: Double) => alpha*x), alpha0) {
+    Gaussian(mu, sigma), Gaussian(0.0, 1.0),
+    alpha0) {
 
-  override def logNormalizer =
-    log(warpingDistr.cdf(alpha0/sqrt(1 + alpha*alpha))) + basisDistr.logNormalizer
+  override protected val w = DataPipe((x: Double) => alpha*(x-mu)/sqrt(sigma))
+
+  override protected val warped_cutoff: Double = alpha0*sqrt(1 + alpha*alpha)
 
 }
 
@@ -54,9 +60,17 @@ case class MultivariateSkewNormal(
   sigma: DenseMatrix[Double]) extends
   SkewSymmDistribution[DenseVector[Double]](
     basisDistr = MultivariateGaussian(mu, sigma),
-    warpingDistr = Gaussian(0.0, 1.0),
-    w = DataPipe((x: DenseVector[Double]) => alpha.t*(sqrt(diagonal(sigma))\(x-mu))))(
-    VectorField(alpha.length))
+    warpingDistr = Gaussian(0.0, 1.0))(
+    VectorField(alpha.length)) {
+
+  private lazy val omega = diagonal(sigma)
+
+  private lazy val sqrtSigma = sqrt(omega)
+
+  override protected val w = DataPipe((x: DenseVector[Double]) => crossQuadraticForm(alpha, cholesky(sqrtSigma), x-mu))
+
+  override protected val warped_cutoff: Double = 0.0
+}
 
 /**
   * Extended Multivariate Skew-Gaussian distribution
@@ -76,6 +90,48 @@ case class ExtendedMultivariateSkewNormal(
   SkewSymmDistribution[DenseVector[Double]](
     basisDistr = MultivariateGaussian(mu, sigma),
     warpingDistr = Gaussian(0.0, 1.0),
-    w = DataPipe((x: DenseVector[Double]) => alpha.t*(sqrt(diagonal(sigma))\(x-mu))),
-    cutoff = tau*sqrt(1.0 + alpha.t*(diagonal(sigma)\sigma)*alpha))(
-    VectorField(alpha.length))
+    cutoff = tau)(
+    VectorField(alpha.length)) {
+
+  private lazy val omega = diagonal(sigma)
+
+  private lazy val sqrtSigma = sqrt(omega)
+
+  private lazy val correlationMatrix: DenseMatrix[Double] = omega\sigma
+
+  override protected val w = DataPipe((x: DenseVector[Double]) => crossQuadraticForm(alpha, cholesky(sqrtSigma), x-mu))
+
+  override protected val warped_cutoff: Double = tau*sqrt(1.0 + quadraticForm(cholesky(correlationMatrix), alpha))
+}
+
+
+/**
+  * Extended Multivariate Skew-Gaussian distribution
+  * as specified in Adcock and Schutes.
+  *
+  * @param tau Determines the cutoff of the warping function
+  *
+  * @param alpha A breeze [[DenseVector]] which represents the skewness parameters
+  *
+  * @param mu The center of the distribution
+  *
+  * @param sigma The covariance matrix of the base multivariate gaussian.
+  * */
+case class MESN(
+  tau: Double, alpha: DenseVector[Double],
+  mu: DenseVector[Double], sigma: DenseMatrix[Double]) extends
+  SkewSymmDistribution[DenseVector[Double]](
+      basisDistr = MultivariateGaussian(mu + alpha*tau, sigma + alpha*alpha.t),
+      warpingDistr = Gaussian(0.0, 1.0),
+      cutoff = tau)(
+      VectorField(alpha.length)) {
+
+  private lazy val adjustedCenter = mu + alpha*tau
+
+  private lazy val delta = sqrt(1.0 + quadraticForm(cholesky(sigma), alpha))
+
+  override protected val w = DataPipe(
+    (x: DenseVector[Double]) => crossQuadraticForm(alpha, cholesky(sigma), x - adjustedCenter)/delta)
+
+  override protected val warped_cutoff: Double = tau*sqrt(1 + quadraticForm(cholesky(sigma), alpha))
+}
