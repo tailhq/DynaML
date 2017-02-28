@@ -18,6 +18,7 @@ import scala.runtime.ScalaRunTime
 case class BlockedMultiVariateGaussian(mean: PartitionedVector,
                                        covariance: PartitionedPSDMatrix)(implicit rand: RandBasis = Rand)
   extends ContinuousDistr[PartitionedVector] with Moments[PartitionedVector, PartitionedPSDMatrix] {
+
   def draw() = {
     val nE: Int = if(mean.rowBlocks > 1L) mean(0L to 0L)._data.head._2.length else mean.rows.toInt
     val z: PartitionedVector = PartitionedVector.rand(mean.rows, nE, GaussianRV(0.0, 1.0))

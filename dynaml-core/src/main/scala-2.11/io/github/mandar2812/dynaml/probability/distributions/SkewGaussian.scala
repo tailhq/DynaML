@@ -4,11 +4,12 @@ package io.github.mandar2812.dynaml.probability.distributions
 import breeze.linalg.{DenseMatrix, DenseVector, cholesky}
 import breeze.numerics.sqrt
 import breeze.stats.distributions._
-import io.github.mandar2812.dynaml.analysis.VectorField
+import io.github.mandar2812.dynaml.analysis.{PartitionedVectorField, VectorField}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.utils._
 import io.github.mandar2812.dynaml.algebra._
 import spire.implicits._
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 
 /**
   * @author mandar2812 date: 02/01/2017.
@@ -127,13 +128,53 @@ case class MESN(
       VectorField(alpha.length)) {
 
   private lazy val adjustedCenter = mu + alpha*tau
+  private lazy val rootSigma = cholesky(sigma)
 
-  private lazy val delta = sqrt(1.0 + quadraticForm(cholesky(sigma), alpha))
+
+  private lazy val delta = sqrt(1.0 + quadraticForm(rootSigma, alpha))
 
   override protected val w = DataPipe(
-    (x: DenseVector[Double]) => crossQuadraticForm(alpha, cholesky(sigma), x - adjustedCenter)/delta)
+    (x: DenseVector[Double]) => crossQuadraticForm(alpha, rootSigma, x - adjustedCenter)/delta)
 
-  override protected val warped_cutoff: Double = tau*sqrt(1 + quadraticForm(cholesky(sigma), alpha))
+  override protected val warped_cutoff: Double = tau*sqrt(1 + quadraticForm(rootSigma, alpha))
+
+  override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
+
+}
+
+/**
+  * Extended Multivariate Skew-Gaussian distribution
+  * as specified in Adcock and Schutes, defined on [[PartitionedVector]]
+  *
+  * @param tau Determines the cutoff of the warping function
+  *
+  * @param alpha A breeze [[DenseVector]] which represents the skewness parameters
+  *
+  * @param mu The center of the distribution
+  *
+  * @param sigma The covariance matrix of the base multivariate gaussian.
+  * */
+case class BlockedMESN(
+  tau: Double, alpha: PartitionedVector,
+  mu: PartitionedVector, sigma: PartitionedPSDMatrix) extends
+  SkewSymmDistribution[PartitionedVector](
+    basisDistr = BlockedMultiVariateGaussian(
+      mu + alpha*tau,
+      sigma + PartitionedPSDMatrix.fromOuterProduct(alpha)),
+    warpingDistr = Gaussian(0.0, 1.0),
+    cutoff = tau)(
+    PartitionedVectorField(alpha.rows, (alpha.rows/alpha.rowBlocks).toInt)) {
+
+  private lazy val adjustedCenter: PartitionedVector = mu + alpha*tau
+
+  private lazy val rootSigma: LowerTriPartitionedMatrix = bcholesky(sigma)
+
+  private lazy val delta = sqrt(1.0 + blockedQuadraticForm(rootSigma, alpha))
+
+  override protected val w = DataPipe(
+    (x: PartitionedVector) => blockedCrossQuadraticForm(alpha, rootSigma, x - adjustedCenter)/delta)
+
+  override protected val warped_cutoff: Double = tau*sqrt(1 + blockedQuadraticForm(rootSigma, alpha))
 
   override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
 

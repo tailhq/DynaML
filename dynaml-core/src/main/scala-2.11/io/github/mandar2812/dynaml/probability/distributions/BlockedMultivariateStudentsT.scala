@@ -37,8 +37,9 @@ case class BlockedMultivariateStudentsT(
   override def toString() =  ScalaRunTime._toString(this)
 
   override def unnormalizedLogPdf(t: PartitionedVector) = {
-    val centered = t - mean
-    val slv = covariance \ centered
+    val centered: PartitionedVector = t - mean
+    val z: PartitionedVector = root \ centered
+    val slv: PartitionedVector = root.t \ z
 
     -0.5*(mu+mean.rows)*log(1.0 + ((slv dot centered) / (mu - 2.0)))
 

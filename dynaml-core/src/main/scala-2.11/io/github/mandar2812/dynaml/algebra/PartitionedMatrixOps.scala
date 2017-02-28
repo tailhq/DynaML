@@ -37,6 +37,40 @@ object PartitionedMatrixOps extends UFunc {
 
   /**
     * Reference implementation for adding
+    * two [[PartitionedPSDMatrix]] objects.
+    *
+    */
+  implicit object addPartitionedPSDMatAandB extends
+    OpAdd.Impl2[PartitionedPSDMatrix, PartitionedPSDMatrix, PartitionedPSDMatrix] {
+    def apply(a: PartitionedPSDMatrix, b: PartitionedPSDMatrix) = {
+      require(
+        a.rows == b.rows && a.cols == b.cols,
+        "For matrix addition A + B, their dimensions must match")
+
+      require(
+        a.rowBlocks == b.rowBlocks && a.colBlocks == b.colBlocks,
+        "For blocked matrix addition A + B, they must have equal number of blocks")
+
+      val mat1 = a._data
+      val mat2 = b._data
+
+      new PartitionedPSDMatrix(
+        mat1.zip(mat2).map(c => (c._1._1, c._1._2 + c._2._2)),
+        a.rows, a.cols, a.rowBlocks, a.colBlocks)
+
+    }
+  }
+
+
+  implicit object addPartitionedPSDMatAandMatB extends
+    OpAdd.Impl2[PartitionedPSDMatrix, PartitionedMatrix, PartitionedMatrix] {
+    def apply(a: PartitionedPSDMatrix, b: PartitionedMatrix) =
+      addPartitionedMatAandB(a.asInstanceOf[PartitionedMatrix], b)
+  }
+
+
+  /**
+    * Reference implementation for adding
     * two [[PartitionedMatrix]] objects.
     *
     */
@@ -104,7 +138,6 @@ object PartitionedMatrixOps extends UFunc {
   }
 
 
-
   /**
     * Reference implementation for adding
     * two [[PartitionedVector]] objects.
@@ -151,6 +184,12 @@ object PartitionedMatrixOps extends UFunc {
         a.rows, a.cols, a.rowBlocks, a.colBlocks)
 
     }
+  }
+
+  implicit object subPartitionedPSDMatAandMatB extends
+    OpSub.Impl2[PartitionedPSDMatrix, PartitionedMatrix, PartitionedMatrix] {
+    def apply(a: PartitionedPSDMatrix, b: PartitionedMatrix) =
+      subPartitionedMatAandB(a.asInstanceOf[PartitionedMatrix], b)
   }
 
   implicit object subPartitionedLMatAandUB extends

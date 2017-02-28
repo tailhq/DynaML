@@ -23,6 +23,8 @@ import breeze.linalg.{DenseMatrix, DenseVector, cholesky, diag, product, scaleAd
 import breeze.numerics._
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, DataPipe3}
 import org.apache.spark.annotation.Experimental
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
 
 /**
   * @author mandar2812 on 13/10/2016.
@@ -193,7 +195,7 @@ package object algebra {
   object quadraticForm extends DataPipe2[DenseMatrix[Double], DenseVector[Double], Double] {
 
     /**
-      * Calculate xT. A x
+      * Calculate x<sup>T</sup>. A<sup>-1</sup> . x
       *
       * @param data1 The lower triangular cholesky deocomposition of a square symmetric PSD matrix
       * @param data2 A breeze [[DenseVector]]
@@ -208,7 +210,7 @@ package object algebra {
   object crossQuadraticForm extends DataPipe3[DenseVector[Double], DenseMatrix[Double], DenseVector[Double], Double] {
 
     /**
-      * Calculate yT. A x
+      * Calculate y<sup>T</sup>. A<sup>-1</sup> . x
       *
       * @param data1 The vector y as a breeze [[DenseVector]]
       * @param data2 The lower triangular cholesky deocomposition of a square symmetric PSD matrix
@@ -217,5 +219,39 @@ package object algebra {
     override def run(data1: DenseVector[Double], data2: DenseMatrix[Double], data3: DenseVector[Double]) =
       data1.t*(data2.t\(data2\data3))
   }
+
+  /**
+    * Calculates quadratic form x.T A x
+    * */
+  object blockedQuadraticForm extends DataPipe2[LowerTriPartitionedMatrix, PartitionedVector, Double] {
+
+    /**
+      * Calculate x<sup>T</sup>. A<sup>-1</sup> . x
+      *
+      * @param data1 The lower triangular Cholesky decomposition of a square symmetric PSD matrix
+      * @param data2 A breeze [[DenseVector]]
+      * */
+    override def run(data1: LowerTriPartitionedMatrix, data2: PartitionedVector) =
+      blockedCrossQuadraticForm(data2, data1, data2)
+
+  }
+
+  /**
+    * Calculates cross quadratic form y.T A x
+    * */
+  object blockedCrossQuadraticForm extends
+    DataPipe3[PartitionedVector, LowerTriPartitionedMatrix, PartitionedVector, Double] {
+
+    /**
+      * Calculate y<sup>T</sup>. A<sup>-1</sup> . x
+      *
+      * @param data1 The vector y as a breeze [[DenseVector]]
+      * @param data2 The lower triangular cholesky deocomposition of a square symmetric PSD matrix
+      * @param data3 The vector x as a breeze [[DenseVector]]
+      * */
+    override def run(data1: PartitionedVector, data2: LowerTriPartitionedMatrix, data3: PartitionedVector) =
+      data1 dot (data2.t\(data2\data3))
+  }
+
 
 }

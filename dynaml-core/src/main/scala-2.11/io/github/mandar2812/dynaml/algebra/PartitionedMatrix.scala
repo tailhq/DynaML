@@ -7,6 +7,8 @@ import org.apache.spark.rdd.RDD
 
 import scala.collection.immutable.NumericRange
 
+import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
+
 /**
   * @author mandar2812 date 13/10/2016.
   * A distributed matrix that is stored in blocks.
@@ -238,11 +240,27 @@ private[dynaml] class PartitionedPSDMatrix(
         else Seq(c, (c._1.swap, c._2.t)))
       .reduce((a,b) => a ++ b).toStream,
     num_rows, num_cols,
-    num_row_blocks, num_col_blocks) {
+    num_row_blocks, num_col_blocks) with
+    NumericOps[PartitionedPSDMatrix] {
 
   override def t = this
 
   def _underlyingdata = underlyingdata
 
   override def repr: PartitionedPSDMatrix = this
+}
+
+object PartitionedPSDMatrix {
+
+  /**
+    * Create a [[PartitionedPSDMatrix]] instance from the outer product
+    * of a [[PartitionedVector]] with itself.
+    * */
+  def fromOuterProduct(v: PartitionedVector): PartitionedPSDMatrix = {
+    val mat: PartitionedMatrix = v*v.t
+    new PartitionedPSDMatrix(
+      mat._data.filter(p => p._1._1 >= p._1._2),
+      mat.rows, mat.cols, mat.rowBlocks, mat.colBlocks)
+  }
+
 }
