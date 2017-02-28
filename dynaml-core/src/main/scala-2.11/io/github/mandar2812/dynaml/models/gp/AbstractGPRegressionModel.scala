@@ -110,7 +110,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
   override protected var current_state: Map[String, Double] =
     covariance.state ++ noiseModel.state
 
-  protected lazy val trainingData = dataAsIndexSeq(g)
+  protected lazy val trainingData: Seq[I] = dataAsIndexSeq(g)
 
   protected lazy val trainingDataLabels = PartitionedVector(
     dataAsSeq(g).toStream.map(_._2),
@@ -234,11 +234,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
     logger.info("Calculating posterior predictive distribution")
     //Calculate the kernel matrix on the training data
-    val training = dataAsIndexSeq(g)
-    val trainingLabels = PartitionedVector(
-      dataAsSeq(g).toStream.map(_._2),
-      training.length.toLong, _blockSize
-    )
+
 
     val priorMeanTest = PartitionedVector(
       test.map(mean(_))
@@ -249,7 +245,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
     val trainingMean = PartitionedVector(
       dataAsSeq(g).toStream.map(_._1).map(mean(_)),
-      training.length.toLong, _blockSize
+      trainingData.length.toLong, _blockSize
     )
 
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
@@ -258,8 +254,8 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     val smoothingMat = if(!caching) {
       logger.info("---------------------------------------------------------------")
       logger.info("Calculating covariance matrix for training points")
-      SVMKernel.buildPartitionedKernelMatrix(training,
-        training.length, _blockSize, _blockSize,
+      SVMKernel.buildPartitionedKernelMatrix(trainingData,
+        trainingData.length, _blockSize, _blockSize,
         effectiveTrainingKernel.evaluate)
     } else {
       logger.info("** Using cached training matrix **")
@@ -275,14 +271,14 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     logger.info("---------------------------------------------------------------")
     logger.info("Calculating covariance matrix between training and test points")
     val crossKernel = SVMKernel.crossPartitonedKernelMatrix(
-      training, test,
+      trainingData, test,
       _blockSize, _blockSize,
       covariance.evaluate)
 
     //Calculate the predictive mean and co-variance
     val (postPredictiveMean, postPredictiveCovariance) =
       AbstractGPRegressionModel.solveGP(
-        trainingLabels, trainingMean, priorMeanTest,
+        trainingDataLabels, trainingMean, priorMeanTest,
         smoothingMat, kernelTest, crossKernel)
 
     MultGaussianPRV(test.length.toLong, _blockSize)(
@@ -324,9 +320,8 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
-    val training = dataAsIndexSeq(g)
-    partitionedKernelMatrixCache = SVMKernel.buildPartitionedKernelMatrix(training,
-      training.length, _blockSize, _blockSize,
+    partitionedKernelMatrixCache = SVMKernel.buildPartitionedKernelMatrix(trainingData,
+      trainingData.length, _blockSize, _blockSize,
       effectiveTrainingKernel.evaluate)
     caching = true
 
@@ -369,7 +364,7 @@ object AbstractGPRegressionModel {
 
     val reducedVariance: PartitionedPSDMatrix =
       new PartitionedPSDMatrix(
-        (kernelTest - adjustedVarReducer).filterBlocks(c => c._1 <= c._2),
+        (kernelTest - adjustedVarReducer).filterBlocks(c => c._1 >= c._2),
         kernelTest.rows, kernelTest.cols)
 
     (priorMeanTest + crossKernel.t * alpha, reducedVariance)
