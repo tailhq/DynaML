@@ -134,4 +134,7 @@ case class MESN(
     (x: DenseVector[Double]) => crossQuadraticForm(alpha, cholesky(sigma), x - adjustedCenter)/delta)
 
   override protected val warped_cutoff: Double = tau*sqrt(1 + quadraticForm(cholesky(sigma), alpha))
+
+  override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
+
 }
