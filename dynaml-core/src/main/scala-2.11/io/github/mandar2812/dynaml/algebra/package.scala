@@ -19,9 +19,9 @@ under the License.
 package io.github.mandar2812.dynaml
 
 import breeze.generic.UFunc
-import breeze.linalg.{DenseVector, diag, product, scaleAdd, sum}
+import breeze.linalg.{DenseMatrix, DenseVector, cholesky, diag, product, scaleAdd, sum}
 import breeze.numerics._
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, DataPipe3}
 import org.apache.spark.annotation.Experimental
 
 /**
@@ -187,5 +187,35 @@ package object algebra {
     }
   }
 
+  /**
+    * Calculates quadratic form x.T A x
+    * */
+  object quadraticForm extends DataPipe2[DenseMatrix[Double], DenseVector[Double], Double] {
+
+    /**
+      * Calculate xT. A x
+      *
+      * @param data1 The lower triangular cholesky deocomposition of a square symmetric PSD matrix
+      * @param data2 A breeze [[DenseVector]]
+      * */
+    override def run(data1: DenseMatrix[Double], data2: DenseVector[Double]) = crossQuadraticForm(data2, data1, data2)
+
+  }
+
+  /**
+    * Calculates cross quadratic form y.T A x
+    * */
+  object crossQuadraticForm extends DataPipe3[DenseVector[Double], DenseMatrix[Double], DenseVector[Double], Double] {
+
+    /**
+      * Calculate yT. A x
+      *
+      * @param data1 The vector y as a breeze [[DenseVector]]
+      * @param data2 The lower triangular cholesky deocomposition of a square symmetric PSD matrix
+      * @param data3 The vector x as a breeze [[DenseVector]]
+      * */
+    override def run(data1: DenseVector[Double], data2: DenseMatrix[Double], data3: DenseVector[Double]) =
+      data1.t*(data2.t\(data2\data3))
+  }
 
 }
