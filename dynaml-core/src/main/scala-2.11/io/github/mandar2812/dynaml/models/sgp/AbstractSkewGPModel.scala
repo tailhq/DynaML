@@ -197,7 +197,6 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
 
       val (l,t) = (current_state("skewness"), current_state("cutoff"))
 
-
       val trainingMean = PartitionedVector(
         training.toStream.map(mean(_)),
         training.length.toLong, _blockSize
@@ -212,13 +211,9 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
       val kernelTraining: PartitionedPSDMatrix =
         effectiveTrainingKernel.buildBlockedKernelMatrix(training, training.length)
 
-      try {
-        val distribution = BlockedMESNRV(t, skewnessTraining, trainingMean, kernelTraining)
-        -1.0*distribution.underlyingDist.logPdf(trainingLabels)
-      } catch {
-        case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
-        case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
-      }
+     AbstractSkewGPModel.logLikelihood(
+       trainingLabels, t, skewnessTraining,
+       trainingMean, kernelTraining)
     })
 
   /**
@@ -273,6 +268,20 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
 
 
 object AbstractSkewGPModel {
+
+  def logLikelihood(
+    y: PartitionedVector, tau: Double,
+    skewness: PartitionedVector, center: PartitionedVector,
+    covarince:PartitionedPSDMatrix): Double = {
+
+    try {
+      val distribution = BlockedMESNRV(tau, skewness, center, covarince)
+      -1.0*distribution.underlyingDist.logPdf(y)
+    } catch {
+      case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
+      case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
+    }
+  }
 
   def solveSkewGP(
     trainingLabels: PartitionedVector,
