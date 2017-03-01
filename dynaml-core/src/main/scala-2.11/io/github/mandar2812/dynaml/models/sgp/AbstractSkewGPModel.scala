@@ -263,14 +263,19 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
     * for fast access in future predictions.
     * */
   override def persist(state: Map[String, Double]): Unit = {
+    //Set the hyperparameters to state
     setState(state)
+
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
+    //Calculate the kernel matrix over the training data.
+    partitionedKernelMatrixCache =
+      SVMKernel.buildPartitionedKernelMatrix(
+        trainingData, trainingData.length,
+        _blockSize, _blockSize, effectiveTrainingKernel.evaluate)
 
-    partitionedKernelMatrixCache = SVMKernel.buildPartitionedKernelMatrix(trainingData,
-      trainingData.length, _blockSize, _blockSize,
-      effectiveTrainingKernel.evaluate)
+    //Set the caching flag to true
     caching = true
 
   }
