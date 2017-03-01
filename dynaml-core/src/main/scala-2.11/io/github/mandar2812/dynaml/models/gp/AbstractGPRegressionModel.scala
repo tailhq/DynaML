@@ -277,7 +277,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
     //Calculate the predictive mean and co-variance
     val (postPredictiveMean, postPredictiveCovariance) =
-      AbstractGPRegressionModel.solveGP(
+      AbstractGPRegressionModel.solve(
         trainingDataLabels, trainingMean, priorMeanTest,
         smoothingMat, kernelTest, crossKernel)
 
@@ -340,7 +340,11 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
 object AbstractGPRegressionModel {
 
-  def solveGP(
+  /**
+    * Calculate the parameters of the posterior predictive distribution
+    * for a multivariate gaussian model.
+    * */
+  def solve(
     trainingLabels: PartitionedVector,
     trainingMean: PartitionedVector,
     priorMeanTest: PartitionedVector,
@@ -442,6 +446,19 @@ object AbstractGPRegressionModel {
     else new GPNarXModel(order, ex, cov, noise, data).asInstanceOf[M]
   }
 
+  /**
+    * Create an instance of [[AbstractGPRegressionModel]] for a
+    * particular data type [[T]]
+    *
+    * @tparam T The type of the training data
+    * @tparam I The type of the input patterns in the data set of type [[T]]
+    *
+    * @param cov The covariance function
+    * @param noise The noise covariance function
+    * @param meanFunc The trend or mean function
+    * @param trainingdata The actual data set of type [[T]]
+    * @param transform An implicit conversion from [[T]] to [[Seq]] represented as a [[DataPipe]]
+    * */
   def apply[T, I: ClassTag](
     cov: LocalScalarKernel[I],
     noise: LocalScalarKernel[I],
