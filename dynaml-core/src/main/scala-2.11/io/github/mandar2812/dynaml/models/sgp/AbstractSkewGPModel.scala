@@ -156,7 +156,7 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
       _blockSize, _blockSize,
       covariance.evaluate)
 
-    val (predMean, predCov, predSkewness, predCutoff) = AbstractSkewGPModel.solveSkewGP(
+    val (predMean, predCov, predSkewness, predCutoff) = AbstractSkewGPModel.solve(
       trainingDataLabels, trainingMean, priorMeanTest,
       smoothingMat, kernelTest, crossKernel,
       skewnessTraining, priorSkewnessTest,
@@ -269,6 +269,10 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
 
 object AbstractSkewGPModel {
 
+  /**
+    * Calculate the negative log likelihood of data for a
+    * multivariate extended skew normal model.
+    * */
   def logLikelihood(
     y: PartitionedVector, tau: Double,
     skewness: PartitionedVector, center: PartitionedVector,
@@ -283,7 +287,11 @@ object AbstractSkewGPModel {
     }
   }
 
-  def solveSkewGP(
+  /**
+    * Calculate the parameters of the posterior predictive distribution
+    * for a multivariate extended skew normal model.
+    * */
+  def solve(
     trainingLabels: PartitionedVector,
     trainingMean: PartitionedVector,
     priorMeanTest: PartitionedVector,
@@ -323,4 +331,39 @@ object AbstractSkewGPModel {
       (priorCutoff + (skewnessTraining dot alpha))*delta)
 
   }
+
+  /**
+    * Create an instance of [[AbstractSkewGPModel]] for a
+    * particular data type [[T]]
+    *
+    * @tparam T The type of the training data
+    * @tparam I The type of the input patterns in the data set of type [[T]]
+    *
+    * @param cov The covariance function
+    * @param noise The noise covariance function
+    * @param meanFunc The trend or mean function
+    * @param trainingdata The actual data set of type [[T]]
+    * @param lambda Skewness parameter
+    * @param tau Cut off parameter
+    * @param transform An implicit conversion from [[T]] to [[Seq]] represented as a [[DataPipe]]
+    * */
+  def apply[T, I: ClassTag](
+    cov: LocalScalarKernel[I], noise: LocalScalarKernel[I],
+    meanFunc: DataPipe[I, Double], lambda: Double, tau: Double)(
+    trainingdata: T, num: Int)(
+    implicit transform: DataPipe[T, Seq[(I, Double)]]) = {
+
+    val num_points = if(num > 0) num else transform(trainingdata).length
+
+    new AbstractSkewGPModel[T, I](cov, noise, trainingdata, num_points, lambda, tau, meanFunc) {
+      /**
+        * Convert from the underlying data structure to
+        * Seq[(I, Y)] where I is the index set of the GP
+        * and Y is the value/label type.
+        **/
+      override def dataAsSeq(data: T) = transform(data)
+    }
+
+  }
+
 }
