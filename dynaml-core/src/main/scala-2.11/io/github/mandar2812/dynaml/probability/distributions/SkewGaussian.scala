@@ -10,6 +10,8 @@ import io.github.mandar2812.dynaml.utils._
 import io.github.mandar2812.dynaml.algebra._
 import spire.implicits._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
+import io.github.mandar2812.dynaml.probability.{E, MeasurableFunction, RandomVariable}
+import io.github.mandar2812.dynaml.utils
 
 /**
   * @author mandar2812 date: 02/01/2017.
@@ -163,9 +165,17 @@ case class BlockedMESN(
       sigma + PartitionedPSDMatrix.fromOuterProduct(alpha)),
     warpingDistr = Gaussian(0.0, 1.0),
     cutoff = tau)(
-    PartitionedVectorField(alpha.rows, (alpha.rows/alpha.rowBlocks).toInt)) {
+    PartitionedVectorField(alpha.rows, (alpha.rows/alpha.rowBlocks).toInt))
+  with Moments[PartitionedVector, PartitionedPSDMatrix] {
+
+
+  implicit val f = PartitionedVectorField(alpha.rows, (alpha.rows/alpha.rowBlocks).toInt)
 
   private lazy val adjustedCenter: PartitionedVector = mu + alpha*tau
+
+  private val varAdjustment = PartitionedPSDMatrix.fromOuterProduct(alpha)
+
+  private lazy val adjustedVariance: PartitionedPSDMatrix = sigma + varAdjustment
 
   private lazy val rootSigma: LowerTriPartitionedMatrix = bcholesky(sigma)
 
@@ -178,4 +188,13 @@ case class BlockedMESN(
 
   override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
 
+  override def mean = adjustedCenter + alpha*warpingDistr.pdf(tau)
+
+  override def variance = adjustedVariance + varAdjustment*(warpingDistr.pdf(tau)*utils.hermite(1, tau))
+
+  //TODO: Improve calculation of entropy
+  override def entropy = Double.NaN//E(MeasurableFunction(RandomVariable(this))(x => math.log(1.0/pdf(x))))
+
+  //TODO: Fix calculation of mode
+  override def mode = adjustedCenter
 }

@@ -8,15 +8,16 @@ import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
 import io.github.mandar2812.dynaml.kernels.{LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.probability.BlockedMESNRV
-import io.github.mandar2812.dynaml.probability.distributions.BlockedMESN
 import org.apache.log4j.Logger
 
 import scala.reflect.ClassTag
 
 /**
-  * Created by mandar on 28/02/2017.
+  * @author mandar2812 date: 28/02/2017.
+  *
+  * Implementation of Extended Skew-Gaussian Process regression model.
   */
 abstract class AbstractSkewGPModel[T, I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
@@ -77,7 +78,6 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
     this
   }
 
-
   val npoints = num
 
   protected var blockSize = 1000
@@ -129,8 +129,6 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
 
     val skewnessTraining = trainingMean.map(b => (b._1, DenseVector.fill[Double](b._2.length)(l)))
 
-    val priorCutoff = current_state("cutoff")
-
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
@@ -162,11 +160,88 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
       trainingDataLabels, trainingMean, priorMeanTest,
       smoothingMat, kernelTest, crossKernel,
       skewnessTraining, priorSkewnessTest,
-      priorCutoff)
+      t)
 
     BlockedMESNRV(predCutoff, predSkewness, predMean, predCov)
   }
 
+
+  /**
+    * Draw three predictions from the posterior predictive distribution
+    * 1) Mean or MAP estimate Y
+    * 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
+    * 3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
+    **/
+  //TODO: Improve implementation to generate assymetric error bars
+  override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int) = {
+
+    val posterior = predictiveDistribution(testData)
+    val postcov = posterior.underlyingDist.variance
+    val postmean = posterior.underlyingDist.mean
+    val varD: PartitionedVector = bdiag(postcov)
+    val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val mean = postmean._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+
+    logger.info("Generating error bars")
+    val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
+    (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
+  }
+
+  /**
+    * Returns a [[DataPipe2]] which calculates the energy of data: [[T]].
+    * See: [[energy]] below.
+    * */
+  def calculateEnergyPipe(h: Map[String, Double], options: Map[String, String]) =
+    DataPipe2((training: Seq[I], trainingLabels: PartitionedVector) => {
+      setState(h)
+
+      val (l,t) = (current_state("skewness"), current_state("cutoff"))
+
+
+      val trainingMean = PartitionedVector(
+        training.toStream.map(mean(_)),
+        training.length.toLong, _blockSize
+      )
+
+      val skewnessTraining = trainingMean.map(b => (b._1, DenseVector.fill[Double](b._2.length)(l)))
+
+      val effectiveTrainingKernel: LocalScalarKernel[I] = this.covariance + this.noiseModel
+
+      effectiveTrainingKernel.setBlockSizes((_blockSize, _blockSize))
+
+      val kernelTraining: PartitionedPSDMatrix =
+        effectiveTrainingKernel.buildBlockedKernelMatrix(training, training.length)
+
+      try {
+        val distribution = BlockedMESNRV(t, skewnessTraining, trainingMean, kernelTraining)
+        -1.0*distribution.underlyingDist.logPdf(trainingLabels)
+      } catch {
+        case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
+        case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
+      }
+    })
+
+  /**
+    * Calculates the energy of the configuration,
+    * in most global optimization algorithms
+    * we aim to find an approximate value of
+    * the hyper-parameters such that this function
+    * is minimized.
+    *
+    * @param h       The value of the hyper-parameters in the configuration space
+    * @param options Optional parameters about configuration
+    * @return Configuration Energy E(h)
+    **/
+  override def energy(h: Map[String, Double], options: Map[String, String]) =
+    calculateEnergyPipe(h, options)(trainingData, trainingDataLabels)
+
+  /**
+    * Predict the value of the
+    * target variable given a
+    * point.
+    *
+    **/
+  override def predict(point: I) = predictiveDistribution(Seq(point)).underlyingDist.mean._data.head._2(0)
 
   /**
     * Cache the training kernel and noise matrices
