@@ -269,6 +269,14 @@ object PartitionedMatrixOps extends UFunc {
     def apply(a: PartitionedMatrix, b: Double) = a.map(c => (c._1, c._2*b))
   }
 
+  implicit object multSPartitionedPSDMatAScalar extends
+    OpMulMatrix.Impl2[PartitionedPSDMatrix, Double, PartitionedPSDMatrix] {
+    def apply(a: PartitionedPSDMatrix, b: Double) = {
+      require(b > 0.0, "PSD matrix can only be multiplied by positive number")
+      new PartitionedPSDMatrix(a._underlyingdata.map(c => (c._1, c._2*b)), a.rows, a.cols, a.rowBlocks, a.colBlocks)
+    }
+  }
+
   implicit object multPartitionedMatAandB extends
     OpMulMatrix.Impl2[PartitionedMatrix, PartitionedMatrix, PartitionedMatrix] {
     def apply(a: PartitionedMatrix, b: PartitionedMatrix) = {
