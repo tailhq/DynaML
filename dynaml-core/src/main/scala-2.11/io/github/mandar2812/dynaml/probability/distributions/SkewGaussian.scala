@@ -24,7 +24,7 @@ case class SkewGaussian(
   SkewSymmDistribution[Double](
     Gaussian(mu, sigma), Gaussian(0.0, 1.0)) {
 
-  override protected val w = DataPipe((x: Double) => alpha*(x-mu)/sqrt(sigma))
+  override protected val w = DataPipe((x: Double) => alpha*(x-mu)/sigma)
 
   override protected val warped_cutoff: Double = 0.0
 }
@@ -40,7 +40,7 @@ case class ExtendedSkewGaussian(
     Gaussian(mu, sigma), Gaussian(0.0, 1.0),
     alpha0) {
 
-  override protected val w = DataPipe((x: Double) => alpha*(x-mu)/sqrt(sigma))
+  override protected val w = DataPipe((x: Double) => alpha*(x-mu)/sigma)
 
   override protected val warped_cutoff: Double = alpha0*sqrt(1 + alpha*alpha)
 
