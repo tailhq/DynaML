@@ -214,31 +214,41 @@ package object utils {
     * Implementation of the quick-select algorithm.
     * */
   def quickselect(list: Stream[Double], k: Int): Double = {
-    require(k <= list.length && k > 0, "In quick-select, the search index must be between 1 and length of list")
 
-    def quickSelectRec(l: Array[Double], k: Int, p: Double): Double = l match {
-      case Array() => l(k)
-      case Array(e) => e
-      case _ =>
-        val parts = l.partition(_<p)
-        val len = l.length
-        if(k < parts._1.length) quickSelectRec(parts._1, k, l(Random.nextInt(l.length)))
-        else if(k >= len-1) quickSelectRec(parts._2, k - len + 1, l(Random.nextInt(l.length)))
-        else p
+    require(k <= list.length && k > 0, "In quick-select, the search index must be between 1 and length of list")
+    val random: (Int) => Int = Random.nextInt
+
+    def quickSelectRec(list_sample: Seq[Double], k: Int, pivot: Double): Double = {
+      val split_list = list_sample.partition(_ < pivot)
+      val s = split_list._1.length
+
+      if(s == k) {
+        pivot
+      } else if (s == 0 && list_sample.sum == pivot * list_sample.length) {
+        pivot
+      } else if(s < k) {
+        quickSelectRec(split_list._2, k - s,
+          split_list._2(random(split_list._2.length)))
+      } else {
+        quickSelectRec(split_list._1, k,
+          split_list._1(random(split_list._1.length)))
+      }
     }
 
     val arrayStream = list.toArray
-    quickSelectRec(arrayStream, k, arrayStream(Random.nextInt(arrayStream.length)))
+    quickSelectRec(arrayStream, k-1, arrayStream(Random.nextInt(arrayStream.length)))
   }
 
   def median(list: Stream[Double]): Double = {
     val random: (Int) => Int = Random.nextInt
+
     def medianK(list_sample: Seq[Double], k: Int, pivot: Double): Double = {
       val split_list = list_sample.partition(_ < pivot)
       val s = split_list._1.length
+
       if(s == k) {
         pivot
-      } else if (list_sample.sum == pivot * list_sample.length) {
+      } else if (s == 0 && list_sample.sum == pivot * list_sample.length) {
         pivot
       } else if(s < k) {
         medianK(split_list._2, k - s,
@@ -248,7 +258,14 @@ package object utils {
           split_list._1(random(split_list._1.length)))
       }
     }
-    medianK(list, list.length/2, list(random(list.length)))
+
+    if(list.length % 2 == 0) {
+      val medA = medianK(list, list.length/2, list(random(list.length)))
+      val medB = medianK(list, list.length/2 - 1, list(random(list.length)))
+      (medA + medB)/2.0
+    } else {
+      medianK(list, list.length/2, list(random(list.length)))
+    }
   }
 
 
