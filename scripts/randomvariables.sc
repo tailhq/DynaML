@@ -24,6 +24,17 @@ val h: PushforwardMap[Double, Double, Double] = PushforwardMap(
 val p = h->g
 val q = h->sg
 
+val u = Array.tabulate[(Double, Double)](100)(n => (n*0.03 - 1.5, sg.underlyingDist.pdf(n*0.03 - 1.5)))
+spline(u.toIterable)
+hold()
+val v = Array.tabulate[(Double, Double)](100)(n => (n*0.03 - 1.5, g.underlyingDist.pdf(n*0.03 - 1.5)))
+spline(v.toIterable)
+unhold()
+legend(List("Skew Gaussian", "Gaussian"))
+title("Probability Density Functions")
+
+
+
 val y = Array.tabulate[(Double, Double)](100)(n => (n*0.03, q.underlyingDist.pdf(n*0.03)))
 spline(y.toIterable)
 hold()
