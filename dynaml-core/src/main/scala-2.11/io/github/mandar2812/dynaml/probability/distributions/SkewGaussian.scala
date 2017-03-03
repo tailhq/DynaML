@@ -109,6 +109,31 @@ case class ExtendedMultivariateSkewNormal(
 
 
 /**
+  * The univariate version of MESN of Adcock and Schutes.
+  *
+  * See also: [[MESN]]
+  * */
+case class UESN(
+  tau: Double, alpha: Double,
+  mu: Double = 0.0, sigma: Double = 1.0)(
+  implicit rand: RandBasis = Rand)
+  extends SkewSymmDistribution[Double](
+    Gaussian(mu + alpha*tau, sigma + math.abs(alpha)),
+    Gaussian(0.0, 1.0), cutoff = tau) {
+
+  private lazy val adjustedCenter = mu + alpha*tau
+
+  private lazy val delta = sqrt(1.0 + alpha*alpha/sigma)
+
+  override protected val w = DataPipe((x: Double) => alpha*(x-adjustedCenter)/(sigma*delta))
+
+  override protected val warped_cutoff: Double = tau*delta
+
+  override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
+
+}
+
+/**
   * Extended Multivariate Skew-Gaussian distribution
   * as specified in Adcock and Schutes.
   *
@@ -138,7 +163,7 @@ case class MESN(
   override protected val w = DataPipe(
     (x: DenseVector[Double]) => crossQuadraticForm(alpha, rootSigma, x - adjustedCenter)/delta)
 
-  override protected val warped_cutoff: Double = tau*sqrt(1 + quadraticForm(rootSigma, alpha))
+  override protected val warped_cutoff: Double = tau*delta
 
   override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
 
