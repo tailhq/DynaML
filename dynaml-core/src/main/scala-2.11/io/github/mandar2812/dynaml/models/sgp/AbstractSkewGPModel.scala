@@ -22,6 +22,8 @@ package io.github.mandar2812.dynaml.models.sgp
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.sqrt
+import breeze.stats.distributions.Gaussian
+import spire.implicits._
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
@@ -29,7 +31,9 @@ import io.github.mandar2812.dynaml.kernels.{LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
-import io.github.mandar2812.dynaml.probability.BlockedMESNRV
+import io.github.mandar2812.dynaml.probability
+import io.github.mandar2812.dynaml.probability.{BlockedMESNRV, RandomVariable}
+import io.github.mandar2812.dynaml.probability.distributions.{ExtendedSkewGaussian, UESN}
 import org.apache.log4j.Logger
 
 import scala.reflect.ClassTag
@@ -128,8 +132,6 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
     **/
   override def predictiveDistribution[U <: Seq[I]](test: U) = {
     logger.info("Calculating posterior predictive distribution")
-    //Calculate the kernel matrix on the training data
-
 
     val (l,t) = (current_state("skewness"), current_state("cutoff"))
 
@@ -152,6 +154,7 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
+    //Calculate the kernel matrix on the training data
     val smoothingMat = if(!caching) {
       logger.info("---------------------------------------------------------------")
       logger.info("Calculating covariance matrix for training points")
@@ -192,19 +195,38 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
     * 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
     * 3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
     **/
-  //TODO: Improve implementation to generate assymetric error bars
   override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int) = {
+    val stdG = new Gaussian(0.0, 1.0)
 
-    val posterior = predictiveDistribution(testData)
-    val postcov = posterior.underlyingDist.variance
-    val postmean = posterior.underlyingDist.mean
+    //Calculate the confidence interval alpha, corresponding to the value of sigma
+    val alpha = 1.0 - (stdG.cdf(sigma.toDouble) - stdG.cdf(-1.0*sigma.toDouble))
+
+    logger.info("Calculated confidence bound: alpha = "+alpha)
+    val BlockedMESNRV(pTau, pLambda, postmean, postcov) = predictiveDistribution(testData)
+
     val varD: PartitionedVector = bdiag(postcov)
-    val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
-    val mean = postmean._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
 
-    logger.info("Generating error bars")
-    val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
-    (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
+    val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray)
+    val mean = postmean._data.map(_._2.toArray)
+    val lambda = pLambda._data.map(_._2.toArray)
+
+    logger.info("Generating (marginal) error bars using a buffered approach")
+
+    val zippedBufferedParams = mean.zip(stdDev).zip(lambda).map(c => (c._1._1, c._1._2, c._2))
+
+    val predictions = zippedBufferedParams.flatMap(buffer => {
+      val (muBuff, sBuff, lBuff) = buffer
+
+      muBuff.zip(sBuff).zip(lBuff).map(c => {
+        val (mu, s, l) = (c._1._1, c._1._2, c._2)
+        val (_, _, appMode, lower, higher) =
+          probability.OrderStats(RandomVariable(UESN(pTau, l, mu, s)), alpha)
+
+        (appMode, lower, higher)
+      })
+    })
+
+    predictions.zip(testData).map(c => (c._2, c._1._1, c._1._2, c._1._3))
   }
 
   /**
@@ -375,7 +397,7 @@ object AbstractSkewGPModel {
   def apply[T, I: ClassTag](
     cov: LocalScalarKernel[I], noise: LocalScalarKernel[I],
     meanFunc: DataPipe[I, Double], lambda: Double, tau: Double)(
-    trainingdata: T, num: Int)(
+    trainingdata: T, num: Int = 0)(
     implicit transform: DataPipe[T, Seq[(I, Double)]]) = {
 
     val num_points = if(num > 0) num else transform(trainingdata).length
