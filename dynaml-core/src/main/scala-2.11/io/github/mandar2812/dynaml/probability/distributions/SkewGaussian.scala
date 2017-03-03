@@ -121,6 +121,8 @@ case class UESN(
     Gaussian(mu + alpha*tau, sigma + math.abs(alpha)),
     Gaussian(0.0, 1.0), cutoff = tau) {
 
+  private val truncatedGaussian = TruncatedGaussian(tau, 1.0, 0.0, Double.PositiveInfinity)
+
   private lazy val adjustedCenter = mu + alpha*tau
 
   private lazy val delta = sqrt(1.0 + alpha*alpha/sigma)
@@ -129,7 +131,7 @@ case class UESN(
 
   override protected val warped_cutoff: Double = tau*delta
 
-  override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
+  override def draw() = basisDistr.draw() + alpha*truncatedGaussian.draw()
 
 }
 
@@ -154,6 +156,7 @@ case class MESN(
       cutoff = tau)(
       VectorField(alpha.length)) {
 
+  private val truncatedGaussian = TruncatedGaussian(tau, 1.0, 0.0, Double.PositiveInfinity)
   private lazy val adjustedCenter = mu + alpha*tau
   private lazy val rootSigma = cholesky(sigma)
 
@@ -165,7 +168,7 @@ case class MESN(
 
   override protected val warped_cutoff: Double = tau*delta
 
-  override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
+  override def draw() = basisDistr.draw() + alpha*truncatedGaussian.draw()
 
 }
 
@@ -193,6 +196,7 @@ case class BlockedMESN(
     PartitionedVectorField(alpha.rows, (alpha.rows/alpha.rowBlocks).toInt))
   with Moments[PartitionedVector, PartitionedPSDMatrix] {
 
+  private val truncatedGaussian = TruncatedGaussian(tau, 1.0, 0.0, Double.PositiveInfinity)
 
   implicit val f = PartitionedVectorField(alpha.rows, (alpha.rows/alpha.rowBlocks).toInt)
 
@@ -211,7 +215,7 @@ case class BlockedMESN(
 
   override protected val warped_cutoff: Double = tau*sqrt(1 + blockedQuadraticForm(rootSigma, alpha))
 
-  override def draw() = basisDistr.draw() + alpha*(tau + warpingDistr.draw())
+  override def draw() = basisDistr.draw() + alpha*truncatedGaussian.draw()
 
   override def mean = adjustedCenter + alpha*warpingDistr.pdf(tau)
 
