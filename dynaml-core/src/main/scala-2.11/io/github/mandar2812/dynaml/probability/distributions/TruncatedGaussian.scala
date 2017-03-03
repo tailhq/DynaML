@@ -10,7 +10,7 @@ import breeze.stats.distributions._
 case class TruncatedGaussian(mu: Double, sigma: Double, a: Double, b: Double)(
   implicit rand: RandBasis = Rand) extends
   AbstractContinuousDistr[Double] with
-  HasCdf with HasInverseCdf {
+  HasCdf with HasInverseCdf with Moments[Double, Double] {
 
   require(sigma > 0.0, "Std Dev must be positive.")
   require(a < b, "A must be lower limit, B must be upper limit")
@@ -18,6 +18,9 @@ case class TruncatedGaussian(mu: Double, sigma: Double, a: Double, b: Double)(
   private val baseGaussian = Gaussian(mu, sigma)
 
   private val z = baseGaussian.cdf(b) - baseGaussian.cdf(a)
+  private val y = baseGaussian.pdf(b) - baseGaussian.pdf(a)
+
+  private val (alpha, beta) = ((a-mu)/sigma, (b-mu)/sigma)
 
   override def probability(x: Double, y: Double) = ???
 
@@ -37,4 +40,14 @@ case class TruncatedGaussian(mu: Double, sigma: Double, a: Double, b: Double)(
   override def draw() = {
     inverseCdf(rand.uniform.draw())
   }
+
+  override def mean = mu - sigma*(baseGaussian.pdf(b) - baseGaussian.pdf(a))/z
+
+  override def variance =
+    sigma*sigma*(1.0 - ((beta*baseGaussian.pdf(b) - alpha*baseGaussian.pdf(a))/z) - math.pow(y/z, 2.0))
+
+  override def entropy =
+    (alpha*baseGaussian.pdf(a) - beta*baseGaussian.pdf(b))/(2*z) + math.sqrt(2*math.Pi*math.exp(1.0))*sigma*z
+
+  override def mode = if (mu < a) a else if (mu > b) b else mu
 }
