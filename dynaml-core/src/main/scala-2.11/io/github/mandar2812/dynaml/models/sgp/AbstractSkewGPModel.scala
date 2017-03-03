@@ -33,7 +33,7 @@ import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.probability
 import io.github.mandar2812.dynaml.probability.{BlockedMESNRV, RandomVariable}
-import io.github.mandar2812.dynaml.probability.distributions.{ExtendedSkewGaussian, UESN}
+import io.github.mandar2812.dynaml.probability.distributions.UESN
 import org.apache.log4j.Logger
 
 import scala.reflect.ClassTag
@@ -133,28 +133,34 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
   override def predictiveDistribution[U <: Seq[I]](test: U) = {
     logger.info("Calculating posterior predictive distribution")
 
+    //Calculate the prior distribution parameters
+    //Skewness and cutoff
     val (l,t) = (current_state("skewness"), current_state("cutoff"))
 
+    //Mean
+    //Test:
     val priorMeanTest = PartitionedVector(
       test.map(mean(_))
         .grouped(_blockSize)
         .zipWithIndex.map(c => (c._2.toLong, DenseVector(c._1.toArray)))
         .toStream,
       test.length.toLong)
-
+    //Training
     val trainingMean = PartitionedVector(
       dataAsSeq(g).toStream.map(_._1).map(mean(_)),
       trainingData.length.toLong, _blockSize
     )
 
+    //Calculate the skewness as a partitioned vector
+    //Test
     val priorSkewnessTest = priorMeanTest.map(b => (b._1, DenseVector.fill[Double](b._2.length)(l)))
-
+    //Training
     val skewnessTraining = trainingMean.map(b => (b._1, DenseVector.fill[Double](b._2.length)(l)))
 
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
-    //Calculate the kernel matrix on the training data
+    //Calculate the kernel + noise matrix on the training data
     val smoothingMat = if(!caching) {
       logger.info("---------------------------------------------------------------")
       logger.info("Calculating covariance matrix for training points")
@@ -179,6 +185,7 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
       _blockSize, _blockSize,
       covariance.evaluate)
 
+    //Solve for parameters of the posterior predictive distribution
     val (predMean, predCov, predSkewness, predCutoff) = AbstractSkewGPModel.solve(
       trainingDataLabels, trainingMean, priorMeanTest,
       smoothingMat, kernelTest, crossKernel,
