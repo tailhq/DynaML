@@ -15,8 +15,9 @@ import scala.runtime.ScalaRunTime
   *
   * @author mandar2812
   */
-case class BlockedMultiVariateGaussian(mean: PartitionedVector,
-                                       covariance: PartitionedPSDMatrix)(implicit rand: RandBasis = Rand)
+case class BlockedMultiVariateGaussian(
+  mean: PartitionedVector,
+  covariance: PartitionedPSDMatrix)(implicit rand: RandBasis = Rand)
   extends ContinuousDistr[PartitionedVector] with Moments[PartitionedVector, PartitionedPSDMatrix] {
 
   def draw() = {

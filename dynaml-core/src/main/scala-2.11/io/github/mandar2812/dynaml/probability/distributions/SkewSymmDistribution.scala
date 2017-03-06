@@ -14,11 +14,14 @@ import spire.algebra.Field
   * warpingDistr: A symmetric distribution acting as the warping function
   * w: An odd function from the domain type [[T]] to [[Double]].
   */
-abstract class SkewSymmDistribution[T](
-  protected val basisDistr: ContinuousDistr[T],
-  protected val warpingDistr: ContinuousDistr[Double] with HasCdf,
-  cutoff: Double = 0.0)(implicit f: Field[T])
+abstract class SkewSymmDistribution[T](implicit f: Field[T])
   extends ContinuousDistr[T] {
+
+  protected val basisDistr: ContinuousDistr[T]
+
+  protected val warpingDistr: ContinuousDistr[Double] with HasCdf
+
+  protected val cutoff: Double = 0.0
 
   protected val w: DataPipe[T, Double]
 

@@ -21,8 +21,11 @@ import io.github.mandar2812.dynaml.utils
 case class SkewGaussian(
   alpha: Double, mu: Double = 0.0,
   sigma: Double = 1.0) extends
-  SkewSymmDistribution[Double](
-    Gaussian(mu, sigma), Gaussian(0.0, 1.0)) {
+  SkewSymmDistribution[Double] {
+
+  override protected val basisDistr: ContinuousDistr[Double] = Gaussian(mu, sigma)
+
+  override protected val warpingDistr: ContinuousDistr[Double] with HasCdf = Gaussian(0.0, 1.0)
 
   override protected val w = DataPipe((x: Double) => alpha*(x-mu)/sigma)
 
@@ -36,9 +39,15 @@ case class ExtendedSkewGaussian(
   alpha0: Double, alpha: Double,
   mu: Double = 0.0, sigma: Double = 1.0)(
   implicit rand: RandBasis = Rand)
-  extends SkewSymmDistribution[Double](
-    Gaussian(mu, sigma), Gaussian(0.0, 1.0),
-    alpha0) {
+  extends SkewSymmDistribution[Double] {
+
+
+
+  override protected val basisDistr: ContinuousDistr[Double] = Gaussian(mu, sigma)
+
+  override protected val warpingDistr: ContinuousDistr[Double] with HasCdf = Gaussian(0.0, 1.0)
+
+  override protected val cutoff: Double = alpha0
 
   override protected val w = DataPipe((x: Double) => alpha*(x-mu)/sigma)
 
@@ -61,10 +70,11 @@ case class MultivariateSkewNormal(
   alpha: DenseVector[Double],
   mu: DenseVector[Double],
   sigma: DenseMatrix[Double]) extends
-  SkewSymmDistribution[DenseVector[Double]](
-    basisDistr = MultivariateGaussian(mu, sigma),
-    warpingDistr = Gaussian(0.0, 1.0))(
-    VectorField(alpha.length)) {
+  SkewSymmDistribution[DenseVector[Double]]()(VectorField(alpha.length)) {
+
+  override protected val basisDistr: ContinuousDistr[DenseVector[Double]] = MultivariateGaussian(mu, sigma)
+
+  override protected val warpingDistr: ContinuousDistr[Double] with HasCdf = Gaussian(0.0, 1.0)
 
   private lazy val omega = diagonal(sigma)
 
@@ -90,11 +100,13 @@ case class MultivariateSkewNormal(
 case class ExtendedMultivariateSkewNormal(
   tau: Double, alpha: DenseVector[Double],
   mu: DenseVector[Double], sigma: DenseMatrix[Double]) extends
-  SkewSymmDistribution[DenseVector[Double]](
-    basisDistr = MultivariateGaussian(mu, sigma),
-    warpingDistr = Gaussian(0.0, 1.0),
-    cutoff = tau)(
-    VectorField(alpha.length)) {
+  SkewSymmDistribution[DenseVector[Double]]()(VectorField(alpha.length)) {
+
+  override protected val basisDistr: ContinuousDistr[DenseVector[Double]] = MultivariateGaussian(mu, sigma)
+
+  override protected val warpingDistr: ContinuousDistr[Double] with HasCdf = Gaussian(0.0, 1.0)
+
+  override protected val cutoff: Double = tau
 
   private lazy val omega = diagonal(sigma)
 
@@ -117,9 +129,13 @@ case class UESN(
   tau: Double, alpha: Double,
   mu: Double = 0.0, sigma: Double = 1.0)(
   implicit rand: RandBasis = Rand)
-  extends SkewSymmDistribution[Double](
-    Gaussian(mu + alpha*tau, sigma + math.abs(alpha)),
-    Gaussian(0.0, 1.0), cutoff = tau) {
+  extends SkewSymmDistribution[Double] {
+
+  override protected val basisDistr: ContinuousDistr[Double] = Gaussian(mu + alpha*tau, sigma + math.abs(alpha))
+
+  override protected val warpingDistr: ContinuousDistr[Double] with HasCdf = Gaussian(0.0, 1.0)
+
+  override protected val cutoff: Double = tau
 
   private val truncatedGaussian = TruncatedGaussian(tau, 1.0, 0.0, Double.PositiveInfinity)
 
@@ -150,16 +166,20 @@ case class UESN(
 case class MESN(
   tau: Double, alpha: DenseVector[Double],
   mu: DenseVector[Double], sigma: DenseMatrix[Double]) extends
-  SkewSymmDistribution[DenseVector[Double]](
-      basisDistr = MultivariateGaussian(mu + alpha*tau, sigma + alpha*alpha.t),
-      warpingDistr = Gaussian(0.0, 1.0),
-      cutoff = tau)(
-      VectorField(alpha.length)) {
+  SkewSymmDistribution[DenseVector[Double]]()(VectorField(alpha.length)) {
 
   private val truncatedGaussian = TruncatedGaussian(tau, 1.0, 0.0, Double.PositiveInfinity)
+
   private lazy val adjustedCenter = mu + alpha*tau
+
   private lazy val rootSigma = cholesky(sigma)
 
+  override protected val cutoff: Double = tau
+
+  override protected val basisDistr: ContinuousDistr[DenseVector[Double]] =
+    MultivariateGaussian(mu + alpha*tau, sigma + alpha*alpha.t)
+
+  override protected val warpingDistr: ContinuousDistr[Double] with HasCdf = Gaussian(0.0, 1.0)
 
   private lazy val delta = sqrt(1.0 + quadraticForm(rootSigma, alpha))
 
@@ -187,12 +207,7 @@ case class MESN(
 case class BlockedMESN(
   tau: Double, alpha: PartitionedVector,
   mu: PartitionedVector, sigma: PartitionedPSDMatrix) extends
-  SkewSymmDistribution[PartitionedVector](
-    basisDistr = BlockedMultiVariateGaussian(
-      mu + alpha*tau,
-      sigma + PartitionedPSDMatrix.fromOuterProduct(alpha)),
-    warpingDistr = Gaussian(0.0, 1.0),
-    cutoff = tau)(
+  SkewSymmDistribution[PartitionedVector]()(
     PartitionedVectorField(alpha.rows, (alpha.rows/alpha.rowBlocks).toInt))
   with Moments[PartitionedVector, PartitionedPSDMatrix] {
 
@@ -209,6 +224,15 @@ case class BlockedMESN(
   private lazy val rootSigma: LowerTriPartitionedMatrix = bcholesky(sigma)
 
   private lazy val delta = sqrt(1.0 + blockedQuadraticForm(rootSigma, alpha))
+
+  override protected val basisDistr: ContinuousDistr[PartitionedVector] =
+    BlockedMultiVariateGaussian(
+      mu + alpha*tau,
+      sigma + PartitionedPSDMatrix.fromOuterProduct(alpha))
+
+  override protected val warpingDistr: ContinuousDistr[Double] with HasCdf = Gaussian(0.0, 1.0)
+
+  override protected val cutoff: Double = tau
 
   override protected val w = DataPipe(
     (x: PartitionedVector) => blockedCrossQuadraticForm(alpha, rootSigma, x - adjustedCenter)/delta)
