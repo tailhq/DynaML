@@ -227,8 +227,8 @@ case class BlockedMESN(
 
   override protected val basisDistr: ContinuousDistr[PartitionedVector] =
     BlockedMultiVariateGaussian(
-      mu + alpha*tau,
-      sigma + PartitionedPSDMatrix.fromOuterProduct(alpha))
+      adjustedCenter,
+      adjustedVariance)
 
   override protected val warpingDistr: ContinuousDistr[Double] with HasCdf = Gaussian(0.0, 1.0)
 

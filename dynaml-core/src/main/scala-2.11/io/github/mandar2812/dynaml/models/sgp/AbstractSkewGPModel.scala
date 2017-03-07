@@ -145,6 +145,7 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
         .zipWithIndex.map(c => (c._2.toLong, DenseVector(c._1.toArray)))
         .toStream,
       test.length.toLong)
+
     //Training
     val trainingMean = PartitionedVector(
       dataAsSeq(g).toStream.map(_._1).map(mean(_)),
