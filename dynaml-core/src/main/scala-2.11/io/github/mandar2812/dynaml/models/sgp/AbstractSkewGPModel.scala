@@ -286,7 +286,7 @@ abstract class AbstractSkewGPModel[T, I: ClassTag](
     * point.
     *
     **/
-  override def predict(point: I) = predictiveDistribution(Seq(point)).underlyingDist.mean._data.head._2(0)
+  override def predict(point: I) = predictionWithErrorBars(Seq(point), 2).head._2
 
   /**
     * Cache the training kernel and noise matrices
