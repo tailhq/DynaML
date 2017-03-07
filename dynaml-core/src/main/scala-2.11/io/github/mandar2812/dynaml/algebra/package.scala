@@ -250,7 +250,7 @@ package object algebra {
       * @param data3 The vector x as a breeze [[DenseVector]]
       * */
     override def run(data1: PartitionedVector, data2: LowerTriPartitionedMatrix, data3: PartitionedVector) =
-      data1 dot (data2.t\(data2\data3))
+      data1 dot (data2.t\\(data2\\data3))
   }
 
 

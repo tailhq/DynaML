@@ -244,7 +244,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
       test.length.toLong)
 
     val trainingMean = PartitionedVector(
-      dataAsSeq(g).toStream.map(_._1).map(mean(_)),
+      trainingData.map(mean(_)).toStream,
       trainingData.length.toLong, _blockSize
     )
 

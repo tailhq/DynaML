@@ -258,9 +258,14 @@ object PartitionedPSDMatrix {
     * */
   def fromOuterProduct(v: PartitionedVector): PartitionedPSDMatrix = {
     val mat: PartitionedMatrix = v*v.t
+
+    val adjMat = (mat.L + mat.L.t).map(bm =>
+      if(bm._1._1 == bm._1._2) (bm._1, bm._2*(DenseMatrix.eye[Double](bm._2.rows)*0.5))
+      else bm)
+
     new PartitionedPSDMatrix(
-      mat._data.filter(p => p._1._1 >= p._1._2),
-      mat.rows, mat.cols, mat.rowBlocks, mat.colBlocks)
+      adjMat._data.filter(p => p._1._1 >= p._1._2),
+      adjMat.rows, adjMat.cols, adjMat.rowBlocks, adjMat.colBlocks)
   }
 
 }

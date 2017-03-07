@@ -136,12 +136,7 @@ object bcholesky extends UFunc {
       * replace them with zero matrices thus mAcc starts
       * with these zero matrix blocks.
       * */
-      val dat = choleskyPAcc(
-        X, 0L, Stream()
-        /*X._data
-          .filter(c => c._1._2 > c._1._1)
-          .map(c => (c._1, DenseMatrix.zeros[Double](c._2.rows, c._2.cols)))*/
-      ).sortBy(_._1)
+      val dat = choleskyPAcc(X, 0L, Stream()).sortBy(_._1)
 
       /*
       * Create new blocked matrix from accumulated Stream

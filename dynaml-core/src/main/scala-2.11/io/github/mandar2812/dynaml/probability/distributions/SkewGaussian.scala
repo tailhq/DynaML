@@ -237,7 +237,7 @@ case class BlockedMESN(
   override protected val w = DataPipe(
     (x: PartitionedVector) => blockedCrossQuadraticForm(alpha, rootSigma, x - adjustedCenter)/delta)
 
-  override protected val warped_cutoff: Double = tau*sqrt(1 + blockedQuadraticForm(rootSigma, alpha))
+  override protected lazy val warped_cutoff: Double = tau*delta
 
   override def draw() = basisDistr.draw() + alpha*truncatedGaussian.draw()
 
