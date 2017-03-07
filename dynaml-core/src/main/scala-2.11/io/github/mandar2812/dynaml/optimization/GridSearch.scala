@@ -18,15 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
-import breeze.linalg.{DenseMatrix, DenseVector, sum}
-import breeze.numerics.exp
-import io.github.mandar2812.dynaml.DynaMLPipe
-import io.github.mandar2812.dynaml.kernels.DecomposableCovariance
-import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.Logger
-
-import scala.reflect.ClassTag
 
 /**
  * @author mandar2812 datum 24/6/15.
