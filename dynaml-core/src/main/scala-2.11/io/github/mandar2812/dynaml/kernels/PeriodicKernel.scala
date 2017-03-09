@@ -7,7 +7,7 @@ import breeze.linalg.{norm, DenseMatrix, DenseVector}
   *
   * Implementation of the periodic kernel
   * K(x,y) = exp(-2*sin^2(pi*omega*x-y/l^2))
-  */
+  * */
 class PeriodicKernel(private var lengthscale: Double = 1.0,
                      private var freq: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]

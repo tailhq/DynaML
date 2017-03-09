@@ -5,7 +5,7 @@ package io.github.mandar2812.dynaml.kernels
   *
   * A kernel formed by multiplication
   * of two kernels k(.,.) = k1(.,.) * k2(.,.)
-  */
+  * */
 class MultiplicativeCovariance[Index](
   firstKernel: LocalScalarKernel[Index],
   otherKernel: LocalScalarKernel[Index])

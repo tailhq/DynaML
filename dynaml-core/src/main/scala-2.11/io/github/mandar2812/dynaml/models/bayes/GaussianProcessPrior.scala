@@ -35,7 +35,7 @@ import org.apache.spark.annotation.Experimental
   * @author mandar2812 date: 21/02/2017.
   *
   * Represents a Gaussian Process Prior over functions.
-  */
+  * */
 @Experimental
 abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
   val covariance: LocalScalarKernel[I],

@@ -18,7 +18,8 @@ import io.github.mandar2812.dynaml.pipes.Encoder
   * @param center The center of the spectral power distribution.
   *
   * @param scale The std deviation of the spectral power distribution.
-  */
+  *
+  * */
 abstract class GaussianSMKernel[T](center: T, scale: T)(
   implicit field: Field[T] with InnerProductSpace[T, Double]) extends
   StationaryKernel[T, Double, DenseMatrix[Double]] with

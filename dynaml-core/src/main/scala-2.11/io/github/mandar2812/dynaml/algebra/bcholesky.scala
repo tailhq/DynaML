@@ -21,7 +21,7 @@ under the License.
 package io.github.mandar2812.dynaml.algebra
 
 import breeze.generic.UFunc
-import breeze.linalg.{DenseMatrix, LU, cholesky, inv, upperTriangular, lowerTriangular}
+import breeze.linalg.{DenseMatrix, NotConvergedException, cholesky, inv}
 import org.apache.spark.rdd.RDD
 import BlockedMatrixOps._
 import PartitionedMatrixOps._
@@ -32,7 +32,9 @@ import PartitionedMatrixOps._
   * Implementation of blocked version of
   * the Cholesky decomposition algorithm
   * Reference [[http://www.cs.utexas.edu/users/flame/Notes/NotesOnCholReal.pdf]]
-  */
+  *
+  * @throws NotConvergedException When cholesky decomposition is not possible due to numerical instabilities
+  * */
 object bcholesky extends UFunc {
 
   def choleskyAcc(mat: SparkBlockedMatrix,
