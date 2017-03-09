@@ -19,7 +19,7 @@ import scala.reflect.ClassTag
   * A warped Gaussian Process.
   */
 @Experimental
-class WarpedGP[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
+class WarpedGPModel[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
   warpingFunc: PushforwardMap[Double, Double, Double])(
   implicit pf: PartitionedVectorField,
   transform: Encoder[T, Seq[(I, Double)]])
