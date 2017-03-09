@@ -5,8 +5,6 @@ import breeze.linalg.DenseMatrix
 import io.github.mandar2812.dynaml.pipes.Encoder
 
 /**
-  * @author mandar2812 date: 09/03/2017.
-  *
   * Implements the gaussian spectral mixture kernel as outlined
   * in Wilson et. al.
   *
@@ -14,9 +12,7 @@ import io.github.mandar2812.dynaml.pipes.Encoder
   * of a gaussian spectral density as is shown by Bochner's theorem.
   *
   * @tparam T The domain over which the kernel is defined
-  *
   * @param center The center of the spectral power distribution.
-  *
   * @param scale The std deviation of the spectral power distribution.
   *
   * */
