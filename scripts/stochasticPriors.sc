@@ -25,7 +25,7 @@ unhold()
 title("Gaussian Process prior samples")
 
 val gammaRV = RandomVariable(new Gamma(2.0, 2.0))
-val noiseAdd = GaussianRV(0.0, 0.5)+gammaRV
+val noiseAdd = GaussianRV(0.0, 1.0)
 
 val dataset = Seq.tabulate[(Double, Double)](10){i => (gammaRV.sample(), noiseAdd.sample())}
 
