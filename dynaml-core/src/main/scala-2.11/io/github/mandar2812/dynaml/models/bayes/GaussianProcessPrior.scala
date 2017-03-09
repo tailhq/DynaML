@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.bayes
 
 import spire.algebra.{Field, InnerProductSpace}
+import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.analysis.PartitionedVectorField
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
@@ -26,34 +27,69 @@ import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe2
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 
 import scala.reflect.ClassTag
-import io.github.mandar2812.dynaml.pipes.MetaPipe
+import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import org.apache.spark.annotation.Experimental
 
 /**
   * @author mandar2812 date: 21/02/2017.
+  *
+  * Represents a Gaussian Process Prior over functions.
   */
 @Experimental
-abstract class AbstractGaussianProcessPrior[I: ClassTag, MeanFuncParams](
-  covariance: LocalScalarKernel[I],
-  noiseCovariance: LocalScalarKernel[I]) extends
+abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
+  val covariance: LocalScalarKernel[I],
+  val noiseCovariance: LocalScalarKernel[I]) extends
   StochasticProcessPrior[
     I, Double, PartitionedVector,
     MultGaussianPRV, MultGaussianPRV,
     AbstractGPRegressionModel[Seq[(I, Double)], I]] {
 
+  type GPModel = AbstractGPRegressionModel[Seq[(I, Double)], I]
+
   def _meanFuncParams: MeanFuncParams
 
   def meanFuncParams_(p: MeanFuncParams): Unit
 
+  private val initial_covariance_state = covariance.state ++ noiseCovariance.state
+
   val meanFunctionPipe: MetaPipe[MeanFuncParams, I, Double]
 
-  val posteriorModelPipe = new GPRegressionPipe2[I](covariance, noiseCovariance)
+  private var globalOptConfig = Map(
+    "globalOpt" -> "GS",
+    "gridSize" -> "3",
+    "gridStep" -> "0.2")
 
+  /**
+    * Append the global optimization configuration
+    * */
+  def globalOptConfig_(conf: Map[String, String]) = globalOptConfig ++= conf
 
+  /**
+    * Data pipe which takes as input training data and a trend model,
+    * outputs a tuned gaussian process regression model.
+    * */
+  def posteriorModelPipe =
+    GPRegressionPipe2[I](covariance, noiseCovariance) >
+    gpTuning(
+      initial_covariance_state,
+      globalOptConfig("globalOpt"),
+      globalOptConfig("gridSize").toInt,
+      globalOptConfig("gridStep").toDouble) >
+    DataPipe((modelAndConf: (GPModel, Map[String, Double])) => modelAndConf._1)
+
+  /**
+    * Given some data, return a gaussian process regression model
+    *
+    * @param data A Sequence of input patterns and responses
+    * */
   override def posteriorModel(data: Seq[(I, Double)]) =
     posteriorModelPipe(data, meanFunctionPipe(_meanFuncParams))
 
+  /**
+    * Returns the distribution of response values,
+    * evaluated over a set of domain points of type [[I]].
+    * */
   override def priorDistribution[U <: Seq[I]](d: U) = {
 
     val numPoints: Long = d.length.toLong
@@ -69,26 +105,33 @@ abstract class AbstractGaussianProcessPrior[I: ClassTag, MeanFuncParams](
       numPoints,
       covariance.rowBlocking)
 
+    val effectiveCov = covariance + noiseCovariance
     //Construct covariance matrix
-    val covMat = covariance.buildBlockedKernelMatrix(d, numPoints)
+    val covMat = effectiveCov.buildBlockedKernelMatrix(d, numPoints)
 
     MultGaussianPRV(meanVector, covMat)
   }
 }
 
-
+/**
+  * @author mandar2812 date 21/02/2017.
+  *
+  * A gaussian process prior with a linear trend mean function.
+  * */
 class LinearTrendGaussianPrior[I: ClassTag](
-  covariance: LocalScalarKernel[I],
-  noiseCovariance: LocalScalarKernel[I],
-  trendParams: I)(
+  cov: LocalScalarKernel[I],
+  n: LocalScalarKernel[I],
+  trendParams: I, intercept: Double)(
   implicit inner: InnerProductSpace[I, Double]) extends
-  AbstractGaussianProcessPrior[I, I](covariance, noiseCovariance) {
+  GaussianProcessPrior[I, (I, Double)](cov, n) {
 
-  private var params = trendParams
+  private var params = (trendParams, intercept)
 
   override def _meanFuncParams = params
 
-  override def meanFuncParams_(p: I) = params = p
+  override def meanFuncParams_(p: (I, Double)) = params = p
 
-  override val meanFunctionPipe = MetaPipe((params: I) => (x: I) => inner.dot(params, x))
+  override val meanFunctionPipe = MetaPipe(
+    (parameters: (I, Double)) => (x: I) => inner.dot(parameters._1, x) + parameters._2
+  )
 }

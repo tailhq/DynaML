@@ -68,3 +68,11 @@ class GPRegressionPipe2[IndexSet: ClassTag](
   override def run(data1: Seq[(IndexSet, Double)], data2: DataPipe[IndexSet, Double]) =
     AbstractGPRegressionModel(cov, n, data2)(data1, data1.length)
 }
+
+object GPRegressionPipe2 {
+
+  def apply[IndexSet: ClassTag](
+    cov: LocalScalarKernel[IndexSet],
+    n: LocalScalarKernel[IndexSet]): GPRegressionPipe2[IndexSet] =
+    new GPRegressionPipe2(cov, n)
+}
