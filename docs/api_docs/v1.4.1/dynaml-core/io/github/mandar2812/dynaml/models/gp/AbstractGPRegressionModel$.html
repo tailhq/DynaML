@@ -147,7 +147,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply[T,I](cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[I],meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[I,Double])(trainingdata:T,num:Int)(implicitevidence$2:scala.reflect.ClassTag[I],implicittransform:io.github.mandar2812.dynaml.pipes.DataPipe[T,Seq[(I,Double)]]):io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[T,I]"></a>
       <a id="apply[T,I](LocalScalarKernel[I],LocalScalarKernel[I],DataPipe[I,Double])(T,Int)(ClassTag[I],DataPipe[T,Seq[(I,Double)]]):AbstractGPRegressionModel[T,I]"></a>
       <h4 class="signature">
@@ -163,7 +163,11 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Create an instance of <a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> for a
+particular data type <span class="extype" name="T">T</span>
+</p><div class="fullcomment"><div class="comment cmt"><p>Create an instance of <a href="AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a> for a
+particular data type <span class="extype" name="T">T</span>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the training data</p></dd><dt class="tparam">I</dt><dd class="cmt"><p>The type of the input patterns in the data set of type <span class="extype" name="T">T</span></p></dd><dt class="param">cov</dt><dd class="cmt"><p>The covariance function</p></dd><dt class="param">noise</dt><dd class="cmt"><p>The noise covariance function</p></dd><dt class="param">meanFunc</dt><dd class="cmt"><p>The trend or mean function</p></dd><dt class="param">trainingdata</dt><dd class="cmt"><p>The actual data set of type <span class="extype" name="T">T</span></p></dd><dt class="param">transform</dt><dd class="cmt"><p>An implicit conversion from <span class="extype" name="T">T</span> to <span class="extype" name="Seq">Seq</span> represented as a <span class="extype" name="DataPipe">DataPipe</span></p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="apply[M&lt;:io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(breeze.linalg.DenseVector[Double],Double)],breeze.linalg.DenseVector[Double]]](data:Seq[(breeze.linalg.DenseVector[Double],Double)],cov:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],noise:io.github.mandar2812.dynaml.kernels.LocalScalarKernel[breeze.linalg.DenseVector[Double]],order:Int,ex:Int,meanFunc:io.github.mandar2812.dynaml.pipes.DataPipe[breeze.linalg.DenseVector[Double],Double]):M"></a>
       <a id="apply[M&lt;:AbstractGPRegressionModel[Seq[(DenseVector[Double],Double)],DenseVector[Double]]](Seq[(DenseVector[Double],Double)],LocalScalarKernel[DenseVector[Double]],LocalScalarKernel[DenseVector[Double]],Int,Int,DataPipe[DenseVector[Double],Double]):M"></a>
@@ -424,6 +428,24 @@ kernel and noise matrices.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel#solve" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="solve(trainingLabels:io.github.mandar2812.dynaml.algebra.PartitionedVector,trainingMean:io.github.mandar2812.dynaml.algebra.PartitionedVector,priorMeanTest:io.github.mandar2812.dynaml.algebra.PartitionedVector,smoothingMat:io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix,kernelTest:io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix,crossKernel:io.github.mandar2812.dynaml.algebra.PartitionedMatrix):(io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix)"></a>
+      <a id="solve(PartitionedVector,PartitionedVector,PartitionedVector,PartitionedPSDMatrix,PartitionedPSDMatrix,PartitionedMatrix):(PartitionedVector,PartitionedPSDMatrix)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">solve</span><span class="params">(<span name="trainingLabels">trainingLabels: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="trainingMean">trainingMean: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="priorMeanTest">priorMeanTest: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="smoothingMat">smoothingMat: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>, <span name="kernelTest">kernelTest: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>, <span name="crossKernel">crossKernel: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedMatrix">PartitionedMatrix</span></span>)</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel$@solve(trainingLabels:io.github.mandar2812.dynaml.algebra.PartitionedVector,trainingMean:io.github.mandar2812.dynaml.algebra.PartitionedVector,priorMeanTest:io.github.mandar2812.dynaml.algebra.PartitionedVector,smoothingMat:io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix,kernelTest:io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix,crossKernel:io.github.mandar2812.dynaml.algebra.PartitionedMatrix):(io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix)" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Calculate the parameters of the posterior predictive distribution
+for a multivariate gaussian model.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

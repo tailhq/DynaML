@@ -100,6 +100,27 @@
       </a>
     </span>
       
+    </li><li name="io.github.mandar2812.dynaml.probability.distributions.BlockedMESN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BlockedMESNextendsSkewSymmDistribution[io.github.mandar2812.dynaml.algebra.PartitionedVector]withMoments[io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix]withProductwithSerializable"></a>
+      <a id="BlockedMESN:BlockedMESN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BlockedMESN.html"><span class="name">BlockedMESN</span></a><span class="params">(<span name="tau">tau: <span class="extype" name="scala.Double">Double</span></span>, <span name="alpha">alpha: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="mu">mu: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="sigma">sigma: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>)</span><span class="result"> extends <a href="SkewSymmDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.SkewSymmDistribution">SkewSymmDistribution</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>] with <span class="extype" name="breeze.stats.distributions.Moments">Moments</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.probability.distributions.package@BlockedMESNextendsSkewSymmDistribution[io.github.mandar2812.dynaml.algebra.PartitionedVector]withMoments[io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Extended Multivariate Skew-Gaussian distribution
+as specified in Adcock and Schutes, defined on <span class="extype" name="PartitionedVector">PartitionedVector</span>
+</p><div class="fullcomment"><div class="comment cmt"><p>Extended Multivariate Skew-Gaussian distribution
+as specified in Adcock and Schutes, defined on <span class="extype" name="PartitionedVector">PartitionedVector</span>
+</p></div><dl class="paramcmts block"><dt class="param">tau</dt><dd class="cmt"><p>Determines the cutoff of the warping function</p></dd><dt class="param">alpha</dt><dd class="cmt"><p>A breeze <span class="extype" name="DenseVector">DenseVector</span> which represents the skewness parameters</p></dd><dt class="param">mu</dt><dd class="cmt"><p>The center of the distribution</p></dd><dt class="param">sigma</dt><dd class="cmt"><p>The covariance matrix of the base multivariate gaussian.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="BlockedMultiVariateGaussianextendsContinuousDistr[io.github.mandar2812.dynaml.algebra.PartitionedVector]withMoments[io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix]withProductwithSerializable"></a>
       <a id="BlockedMultiVariateGaussian:BlockedMultiVariateGaussian"></a>
@@ -135,6 +156,26 @@
       </a>
     </span>
       <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.probability.distributions.ExtendedMultivariateSkewNormal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ExtendedMultivariateSkewNormalextendsSkewSymmDistribution[breeze.linalg.DenseVector[Double]]withProductwithSerializable"></a>
+      <a id="ExtendedMultivariateSkewNormal:ExtendedMultivariateSkewNormal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ExtendedMultivariateSkewNormal.html"><span class="name">ExtendedMultivariateSkewNormal</span></a><span class="params">(<span name="tau">tau: <span class="extype" name="scala.Double">Double</span></span>, <span name="alpha">alpha: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="mu">mu: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="sigma">sigma: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result"> extends <a href="SkewSymmDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.SkewSymmDistribution">SkewSymmDistribution</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.probability.distributions.package@ExtendedMultivariateSkewNormalextendsSkewSymmDistribution[breeze.linalg.DenseVector[Double]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Extended Multivariate Skew-Gaussian distribution
+as specified in Azzalani et.al.</p><div class="fullcomment"><div class="comment cmt"><p>Extended Multivariate Skew-Gaussian distribution
+as specified in Azzalani et.al.
+</p></div><dl class="paramcmts block"><dt class="param">tau</dt><dd class="cmt"><p>Determines the cutoff of the warping function</p></dd><dt class="param">alpha</dt><dd class="cmt"><p>A breeze <span class="extype" name="DenseVector">DenseVector</span> which represents the skewness parameters</p></dd><dt class="param">mu</dt><dd class="cmt"><p>The center of the distribution</p></dd><dt class="param">sigma</dt><dd class="cmt"><p>The covariance matrix of the base multivariate gaussian.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.distributions.ExtendedSkewGaussian" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ExtendedSkewGaussianextendsSkewSymmDistribution[Double]withProductwithSerializable"></a>
       <a id="ExtendedSkewGaussian:ExtendedSkewGaussian"></a>
@@ -170,6 +211,26 @@
       </a>
     </span>
       <p class="shortcomment cmt">Created by mandar on 06/01/2017.</p>
+    </li><li name="io.github.mandar2812.dynaml.probability.distributions.MESN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MESNextendsSkewSymmDistribution[breeze.linalg.DenseVector[Double]]withProductwithSerializable"></a>
+      <a id="MESN:MESN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MESN.html"><span class="name">MESN</span></a><span class="params">(<span name="tau">tau: <span class="extype" name="scala.Double">Double</span></span>, <span name="alpha">alpha: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="mu">mu: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="sigma">sigma: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result"> extends <a href="SkewSymmDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.SkewSymmDistribution">SkewSymmDistribution</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.probability.distributions.package@MESNextendsSkewSymmDistribution[breeze.linalg.DenseVector[Double]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Extended Multivariate Skew-Gaussian distribution
+as specified in Adcock and Schutes.</p><div class="fullcomment"><div class="comment cmt"><p>Extended Multivariate Skew-Gaussian distribution
+as specified in Adcock and Schutes.
+</p></div><dl class="paramcmts block"><dt class="param">tau</dt><dd class="cmt"><p>Determines the cutoff of the warping function</p></dd><dt class="param">alpha</dt><dd class="cmt"><p>A breeze <span class="extype" name="DenseVector">DenseVector</span> which represents the skewness parameters</p></dd><dt class="param">mu</dt><dd class="cmt"><p>The center of the distribution</p></dd><dt class="param">sigma</dt><dd class="cmt"><p>The covariance matrix of the base multivariate gaussian.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.distributions.MatrixNormal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MatrixNormalextendsContinuousDistr[breeze.linalg.DenseMatrix[Double]]withMoments[breeze.linalg.DenseMatrix[Double],(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double])]withProductwithSerializable"></a>
       <a id="MatrixNormal:MatrixNormal"></a>
@@ -207,6 +268,26 @@
                 <span class="name">@Experimental</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.distributions.MultivariateSkewNormal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MultivariateSkewNormalextendsSkewSymmDistribution[breeze.linalg.DenseVector[Double]]withProductwithSerializable"></a>
+      <a id="MultivariateSkewNormal:MultivariateSkewNormal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MultivariateSkewNormal.html"><span class="name">MultivariateSkewNormal</span></a><span class="params">(<span name="alpha">alpha: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="mu">mu: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="sigma">sigma: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result"> extends <a href="SkewSymmDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.SkewSymmDistribution">SkewSymmDistribution</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.probability.distributions.package@MultivariateSkewNormalextendsSkewSymmDistribution[breeze.linalg.DenseVector[Double]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Multivariate Skew-Normal distribution as
+specified in Azzalani et.</p><div class="fullcomment"><div class="comment cmt"><p>Multivariate Skew-Normal distribution as
+specified in Azzalani et. al.
+</p></div><dl class="paramcmts block"><dt class="param">alpha</dt><dd class="cmt"><p>A breeze <span class="extype" name="DenseVector">DenseVector</span> which represents the skewness parameters</p></dd><dt class="param">mu</dt><dd class="cmt"><p>The center of the distribution</p></dd><dt class="param">sigma</dt><dd class="cmt"><p>The covariance matrix of the base multivariate gaussian.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.distributions.MultivariateStudentsT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MultivariateStudentsTextendsContinuousDistr[breeze.linalg.DenseVector[Double]]withMoments[breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double]]withProductwithSerializable"></a>
       <a id="MultivariateStudentsT:MultivariateStudentsT"></a>
@@ -275,6 +356,41 @@
       </a>
     </span>
       <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.probability.distributions.TruncatedGaussian" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TruncatedGaussianextendsAbstractContinuousDistr[Double]withHasCdfwithHasInverseCdfwithMoments[Double,Double]withProductwithSerializable"></a>
+      <a id="TruncatedGaussian:TruncatedGaussian"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TruncatedGaussian.html"><span class="name">TruncatedGaussian</span></a><span class="params">(<span name="mu">mu: <span class="extype" name="scala.Double">Double</span></span>, <span name="sigma">sigma: <span class="extype" name="scala.Double">Double</span></span>, <span name="a">a: <span class="extype" name="scala.Double">Double</span></span>, <span name="b">b: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rand">rand: <span class="extype" name="breeze.stats.distributions.RandBasis">RandBasis</span> = <span class="symbol"><span class="name"><a href="../../../../../../breeze/package.html">Rand</a></span></span></span>)</span><span class="result"> extends <a href="AbstractContinuousDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr">AbstractContinuousDistr</a>[<span class="extype" name="scala.Double">Double</span>] with <span class="extype" name="breeze.stats.distributions.HasCdf">HasCdf</span> with <span class="extype" name="breeze.stats.distributions.HasInverseCdf">HasInverseCdf</span> with <span class="extype" name="breeze.stats.distributions.Moments">Moments</span>[<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.probability.distributions.package@TruncatedGaussianextendsAbstractContinuousDistr[Double]withHasCdfwithHasInverseCdfwithMoments[Double,Double]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.probability.distributions.UESN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UESNextendsSkewSymmDistribution[Double]withProductwithSerializable"></a>
+      <a id="UESN:UESN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UESN.html"><span class="name">UESN</span></a><span class="params">(<span name="tau">tau: <span class="extype" name="scala.Double">Double</span></span>, <span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span></span>, <span name="mu">mu: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.0</span></span>, <span name="sigma">sigma: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1.0</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rand">rand: <span class="extype" name="breeze.stats.distributions.RandBasis">RandBasis</span> = <span class="symbol"><span class="name"><a href="../../../../../../breeze/package.html">Rand</a></span></span></span>)</span><span class="result"> extends <a href="SkewSymmDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.SkewSymmDistribution">SkewSymmDistribution</a>[<span class="extype" name="scala.Double">Double</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.probability.distributions.package@UESNextendsSkewSymmDistribution[Double]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The univariate version of MESN of Adcock and Schutes.</p><div class="fullcomment"><div class="comment cmt"><p>The univariate version of MESN of Adcock and Schutes.</p><p>See also: <a href="MESN.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.MESN">MESN</a>
+</p></div></div>
     </li></ol>
             </div>
 
