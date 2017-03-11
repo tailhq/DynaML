@@ -16,7 +16,7 @@ import io.github.mandar2812.dynaml.pipes.Encoder
   * @param scale The std deviation of the spectral power distribution.
   *
   * */
-abstract class GaussianSMKernel[T](center: T, scale: T)(
+class GaussianSMKernel[T](center: T, scale: T, enc: Encoder[Map[String, Double], (T, T)])(
   implicit field: Field[T] with InnerProductSpace[T, Double]) extends
   StationaryKernel[T, Double, DenseMatrix[Double]] with
   LocalScalarKernel[T] {
@@ -29,12 +29,16 @@ abstract class GaussianSMKernel[T](center: T, scale: T)(
     * All classes extending [[GaussianSMKernel]] need to implement
     * this encoding.
     * */
-  val parameterEncoding: Encoder[Map[String, Double], (T, T)]
+  val parameterEncoding: Encoder[Map[String, Double], (T, T)] = enc
 
   /**
     * Helper function to output the center and scale
     * */
   def getCenterAndScale(c: Map[String, Double]): (T, T) = parameterEncoding(c)
+
+  state = parameterEncoding.i((center, scale))
+
+  override val hyper_parameters = state.keys.toList
 
   override def evalAt(config: Map[String, Double])(x: T) = {
     val (m, v) = getCenterAndScale(config)
@@ -61,19 +65,6 @@ object GaussianSMKernel {
 
   def apply[T](center: T, scale: T, pEncoding: Encoder[Map[String, Double], (T, T)])(
     implicit field: Field[T] with InnerProductSpace[T, Double]): GaussianSMKernel[T] =
-    new GaussianSMKernel[T](center, scale) {
-
-      /**
-        * A reversible data pipe which can convert a configuration
-        * into a tuple of [[T]] containing the center and scale
-        * of the underlying gaussian spectral density.
-        *
-        * All classes extending [[GaussianSMKernel]] need to implement
-        * this encoding.
-        **/
-      override val parameterEncoding = pEncoding
-
-      override val hyper_parameters = parameterEncoding.i((field.one, field.one)).keys.toList
-    }
+    new GaussianSMKernel[T](center, scale, enc = pEncoding)
 
 }
