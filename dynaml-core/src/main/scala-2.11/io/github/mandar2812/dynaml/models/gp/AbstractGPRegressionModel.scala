@@ -362,9 +362,9 @@ object AbstractGPRegressionModel {
     val varianceReducer: PartitionedMatrix = v.t * v
 
     //Ensure that the variance reduction is symmetric
-    val adjustedVarReducer: PartitionedMatrix = (varianceReducer.L + varianceReducer.L.t).map(bm =>
+    val adjustedVarReducer: PartitionedMatrix = varianceReducer /*(varianceReducer.L + varianceReducer.L.t).map(bm =>
       if(bm._1._1 == bm._1._2) (bm._1, bm._2*(DenseMatrix.eye[Double](bm._2.rows)*0.5))
-      else bm)
+      else bm)*/
 
     val reducedVariance: PartitionedPSDMatrix =
       new PartitionedPSDMatrix(
