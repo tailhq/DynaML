@@ -29,6 +29,8 @@ val noiseAdd = GaussianRV(0.0, 1.0)
 
 val dataset = Seq.tabulate[(Double, Double)](10){i => (gammaRV.sample(), noiseAdd.sample())}
 
+//Seq((11.1, gammaRV.sample()), (-0.5, 2.5))
+
 //Set hyper-parameter selection configuration
 gp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "5"))
 
