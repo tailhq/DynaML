@@ -70,3 +70,47 @@ class MLPKernel(w: Double, b: Double) extends SVMKernel[DenseMatrix[Double]]
     )
   }
 }
+
+class MLP1dKernel(w: Double, b: Double) extends LocalSVMKernel[Double]
+  with Serializable {
+
+  override val hyper_parameters = List("w", "b")
+
+  state = Map("w" -> w, "b" -> b)
+
+  def setw(d: Double): Unit = {
+    state += ("w" -> d.toDouble)
+  }
+
+  def setoffset(o: Double): Unit = {
+    state += ("b" -> o)
+  }
+
+  override def evaluateAt(config: Map[String, Double])(
+    x: Double,
+    y: Double): Double =
+    math.asin(
+      (config("w")*(x*y) + config("b"))/
+        (math.sqrt(config("w")*(x*x) + config("b") + 1) * math.sqrt(config("w")*(y*y) + config("b") + 1))
+    )
+
+  override def gradientAt(config: Map[String, Double])(x: Double, y: Double) = {
+    val (wxy, wxx, wyy) = (
+      config("w")*(x*y) + config("b"),
+      math.sqrt(config("w")*(x*x) + config("b") + 1),
+      math.sqrt(config("w")*(y*y) + config("b") + 1))
+
+    val (numerator, denominator) = (wxy, wxx*wyy)
+
+    val z = numerator/denominator
+
+    val alpha = 1.0/(1.0 - z*z)
+
+    Map(
+      "w" ->
+        alpha*((denominator*(x*y) - numerator*0.5*(wyy*(x*x)/wxx + wxx*(y*y)/wyy))/(denominator*denominator)),
+      "b" ->
+        alpha*((denominator - numerator*0.5*(wyy/wxx + wxx/wyy))/(denominator*denominator))
+    )
+  }
+}
