@@ -17,7 +17,7 @@ import io.github.mandar2812.dynaml.pipes.Encoder
   *
   * */
 class GaussianSMKernel[T](center: T, scale: T, enc: Encoder[Map[String, Double], (T, T)])(
-  implicit field: Field[T] with InnerProductSpace[T, Double]) extends
+  implicit field: Field[T], innerProd: InnerProductSpace[T, Double]) extends
   StationaryKernel[T, Double, DenseMatrix[Double]] with
   LocalScalarKernel[T] {
 
@@ -44,7 +44,7 @@ class GaussianSMKernel[T](center: T, scale: T, enc: Encoder[Map[String, Double],
     val (m, v) = getCenterAndScale(config)
     val xscaled = field.times(x, v)
 
-    math.cos(2*math.Pi*field.dot(m, x))*math.exp(-2.0*math.Pi*math.Pi*field.dot(xscaled, xscaled))
+    math.cos(2*math.Pi*innerProd.dot(m, x))*math.exp(-2.0*math.Pi*math.Pi*innerProd.dot(xscaled, xscaled))
   }
 
   override def gradientAt(config: Map[String, Double])(x: T, y: T) = {
@@ -54,8 +54,8 @@ class GaussianSMKernel[T](center: T, scale: T, enc: Encoder[Map[String, Double],
 
     val tau_sq = field.times(tau, tau)
 
-    val grad_wrt_m = field.timesl(-2.0*math.Pi*math.sin(2.0*math.Pi*field.dot(m, tau)), tau)
-    val grad_wrt_v = field.timesl(-4.0*math.Pi*math.Pi*evalAt(config)(tau), field.times(tau_sq, v))
+    val grad_wrt_m = innerProd.timesl(-2.0*math.Pi*math.sin(2.0*math.Pi*innerProd.dot(m, tau)), tau)
+    val grad_wrt_v = innerProd.timesl(-4.0*math.Pi*math.Pi*evalAt(config)(tau), field.times(tau_sq, v))
 
     parameterEncoding.i((grad_wrt_m,grad_wrt_v))
   }
@@ -64,7 +64,7 @@ class GaussianSMKernel[T](center: T, scale: T, enc: Encoder[Map[String, Double],
 object GaussianSMKernel {
 
   def apply[T](center: T, scale: T, pEncoding: Encoder[Map[String, Double], (T, T)])(
-    implicit field: Field[T] with InnerProductSpace[T, Double]): GaussianSMKernel[T] =
+    implicit field: Field[T], innerProd: InnerProductSpace[T, Double]): GaussianSMKernel[T] =
     new GaussianSMKernel[T](center, scale, enc = pEncoding)
 
 }
