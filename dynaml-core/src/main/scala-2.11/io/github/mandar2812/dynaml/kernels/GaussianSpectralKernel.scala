@@ -14,6 +14,8 @@ import io.github.mandar2812.dynaml.pipes.Encoder
   * @tparam T The domain over which the kernel is defined
   * @param center The center of the spectral power distribution.
   * @param scale The std deviation of the spectral power distribution.
+  * @param enc A reversible transformation to convert the kernel's state from
+  *            a [[Map]] to tuple of [[T]], implemented as an [[Encoder]]
   *
   * */
 class GaussianSpectralKernel[T](center: T, scale: T, enc: Encoder[Map[String, Double], (T, T)])(

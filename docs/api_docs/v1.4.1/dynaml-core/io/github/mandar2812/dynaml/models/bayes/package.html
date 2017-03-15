@@ -66,7 +66,25 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.bayes.GaussianProcessPrior" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="io.github.mandar2812.dynaml.models.bayes.ESGPPrior" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ESGPPrior[I,MeanFuncParams]extendsStochasticProcessPrior[I,Double,io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.models.sgp.ESGPModel[Seq[(I,Double)],I]]"></a>
+      <a id="ESGPPrior[I,MeanFuncParams]:ESGPPrior[I,MeanFuncParams]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ESGPPrior.html"><span class="name">ESGPPrior</span></a><span class="tparams">[<span name="I">I</span>, <span name="MeanFuncParams">MeanFuncParams</span>]</span><span class="result"> extends <a href="StochasticProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">StochasticProcessPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.ESGPPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <a href="../../probability/BlockedMESNRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.BlockedMESNRV">BlockedMESNRV</a>, <a href="../../probability/BlockedMESNRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.BlockedMESNRV">BlockedMESNRV</a>, <a href="../sgp/ESGPModel.html" class="extype" name="io.github.mandar2812.dynaml.models.sgp.ESGPModel">ESGPModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.ESGPPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.ESGPPrior.I">I</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.package@ESGPPrior[I,MeanFuncParams]extendsStochasticProcessPrior[I,Double,io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.models.sgp.ESGPModel[Seq[(I,Double)],I]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An Extended Skew Gaussian Process Prior over functions.</p><div class="fullcomment"><div class="comment cmt"><p>An Extended Skew Gaussian Process Prior over functions.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The index set over which the process is defined</p></dd><dt class="tparam">MeanFuncParams</dt><dd class="cmt"><p>The parameters specifying the trend function</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.GaussianProcessPrior" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="GaussianProcessPrior[I,MeanFuncParams]extendsStochasticProcessPrior[I,Double,io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.probability.MultGaussianPRV,io.github.mandar2812.dynaml.probability.MultGaussianPRV,io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(I,Double)],I]]"></a>
       <a id="GaussianProcessPrior[I,MeanFuncParams]:GaussianProcessPrior[I,MeanFuncParams]"></a>
       <h4 class="signature">
@@ -86,8 +104,25 @@
                 <span class="name">@Experimental</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.LinearTrendESGPrior" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LinearTrendESGPrior[I]extendsESGPPrior[I,(I,Double)]withLinearTrendStochasticPrior[I,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.models.sgp.ESGPModel[Seq[(I,Double)],I]]"></a>
+      <a id="LinearTrendESGPrior[I]:LinearTrendESGPrior[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearTrendESGPrior.html"><span class="name">LinearTrendESGPrior</span></a><span class="tparams">[<span name="I">I</span>]</span><span class="result"> extends <a href="ESGPPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.ESGPPrior">ESGPPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendESGPrior.I">I</span>, (<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendESGPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)] with <a href="LinearTrendStochasticPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior">LinearTrendStochasticPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendESGPrior.I">I</span>, <a href="../../probability/BlockedMESNRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.BlockedMESNRV">BlockedMESNRV</a>, <a href="../../probability/BlockedMESNRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.BlockedMESNRV">BlockedMESNRV</a>, <a href="../sgp/ESGPModel.html" class="extype" name="io.github.mandar2812.dynaml.models.sgp.ESGPModel">ESGPModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendESGPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendESGPrior.I">I</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.package@LinearTrendESGPrior[I]extendsESGPPrior[I,(I,Double)]withLinearTrendStochasticPrior[I,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.models.sgp.ESGPModel[Seq[(I,Double)],I]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LinearTrendGaussianPrior[I]extendsGaussianProcessPrior[I,(I,Double)]"></a>
+      <a id="LinearTrendGaussianPrior[I]extendsGaussianProcessPrior[I,(I,Double)]withLinearTrendStochasticPrior[I,io.github.mandar2812.dynaml.probability.MultGaussianPRV,io.github.mandar2812.dynaml.probability.MultGaussianPRV,io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(I,Double)],I]]"></a>
       <a id="LinearTrendGaussianPrior[I]:LinearTrendGaussianPrior[I]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -95,15 +130,33 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="LinearTrendGaussianPrior.html"><span class="name">LinearTrendGaussianPrior</span></a><span class="tparams">[<span name="I">I</span>]</span><span class="result"> extends <a href="GaussianProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.GaussianProcessPrior">GaussianProcessPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior.I">I</span>, (<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+        <a href="LinearTrendGaussianPrior.html"><span class="name">LinearTrendGaussianPrior</span></a><span class="tparams">[<span name="I">I</span>]</span><span class="result"> extends <a href="GaussianProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.GaussianProcessPrior">GaussianProcessPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior.I">I</span>, (<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)] with <a href="LinearTrendStochasticPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior">LinearTrendStochasticPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior.I">I</span>, <a href="../../probability/MultGaussianPRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.MultGaussianPRV">MultGaussianPRV</a>, <a href="../../probability/MultGaussianPRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.MultGaussianPRV">MultGaussianPRV</a>, <a href="../gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior.I">I</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.package@LinearTrendGaussianPrior[I]extendsGaussianProcessPrior[I,(I,Double)]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.package@LinearTrendGaussianPrior[I]extendsGaussianProcessPrior[I,(I,Double)]withLinearTrendStochasticPrior[I,io.github.mandar2812.dynaml.probability.MultGaussianPRV,io.github.mandar2812.dynaml.probability.MultGaussianPRV,io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[Seq[(I,Double)],I]]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt"></p>
-    </li><li name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LinearTrendStochasticPrior[I,D&lt;:io.github.mandar2812.dynaml.probability.RandomVarWithDistr[io.github.mandar2812.dynaml.algebra.PartitionedVector,_],W,StochasticModel&lt;:io.github.mandar2812.dynaml.models.StochasticProcessModel[Seq[(I,Double)],I,Double,W]]extendsStochasticProcessPrior[I,Double,io.github.mandar2812.dynaml.algebra.PartitionedVector,D,W,StochasticModel]"></a>
+      <a id="LinearTrendStochasticPrior[I,D&lt;:RandomVarWithDistr[PartitionedVector,_],W,StochasticModel&lt;:StochasticProcessModel[Seq[(I,Double)],I,Double,W]]:LinearTrendStochasticPrior[I,D,W,StochasticModel]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearTrendStochasticPrior.html"><span class="name">LinearTrendStochasticPrior</span></a><span class="tparams">[<span name="I">I</span>, <span name="D">D &lt;: <a href="../../probability/RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, _]</span>, <span name="W">W</span>, <span name="StochasticModel">StochasticModel &lt;: <a href="../StochasticProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.StochasticProcessModel">StochasticProcessModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.W">W</span>]</span>]</span><span class="result"> extends <a href="StochasticProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">StochasticProcessPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.W">W</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.StochasticModel">StochasticModel</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.package@LinearTrendStochasticPrior[I,D&lt;:io.github.mandar2812.dynaml.probability.RandomVarWithDistr[io.github.mandar2812.dynaml.algebra.PartitionedVector,_],W,StochasticModel&lt;:io.github.mandar2812.dynaml.models.StochasticProcessModel[Seq[(I,Double)],I,Double,W]]extendsStochasticProcessPrior[I,Double,io.github.mandar2812.dynaml.algebra.PartitionedVector,D,W,StochasticModel]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A template for general stochastic priors
+having a linear trend function (or mean function)</p>
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="StochasticProcessPrior[I,Y,Y1,D&lt;:io.github.mandar2812.dynaml.probability.RandomVarWithDistr[Y1,_],W,StochasticModel&lt;:io.github.mandar2812.dynaml.models.StochasticProcessModel[Seq[(I,Y)],I,Y,W]]extendsAnyRef"></a>
       <a id="StochasticProcessPrior[I,Y,Y1,D&lt;:RandomVarWithDistr[Y1,_],W,StochasticModel&lt;:StochasticProcessModel[Seq[(I,Y)],I,Y,W]]:StochasticProcessPrior[I,Y,Y1,D,W,StochasticModel]"></a>
       <h4 class="signature">
@@ -119,10 +172,7 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@Experimental</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <p class="shortcomment cmt"></p>
     </li></ol>
             </div>
 

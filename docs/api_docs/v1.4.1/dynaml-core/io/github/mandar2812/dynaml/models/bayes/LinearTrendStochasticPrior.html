@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>StochasticProcessPrior - io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior</title>
-          <meta name="description" content="StochasticProcessPrior - io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior" />
-          <meta name="keywords" content="StochasticProcessPrior io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior" />
+          <title>LinearTrendStochasticPrior - io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior</title>
+          <meta name="description" content="LinearTrendStochasticPrior - io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior" />
+          <meta name="keywords" content="LinearTrendStochasticPrior io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior';
+            var hash = 'io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,10 +30,10 @@
       <div id="definition">
         <img alt="Trait" src="../../../../../../lib/trait_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="io">io</a>.<a href="../../../../package.html" class="extype" name="io.github">github</a>.<a href="../../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml.models">models</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes">bayes</a></p>
-        <h1>StochasticProcessPrior</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>LinearTrendStochasticPrior</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes">package bayes</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,16 +45,17 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">StochasticProcessPrior</span><span class="tparams">[<span name="I">I</span>, <span name="Y">Y</span>, <span name="Y1">Y1</span>, <span name="D">D &lt;: <a href="../../probability/RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.Y1">Y1</span>, _]</span>, <span name="W">W</span>, <span name="StochasticModel">StochasticModel &lt;: <a href="../StochasticProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.StochasticProcessModel">StochasticProcessModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.Y">Y</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.Y">Y</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.W">W</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">LinearTrendStochasticPrior</span><span class="tparams">[<span name="I">I</span>, <span name="D">D &lt;: <a href="../../probability/RandomVarWithDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVarWithDistr">RandomVarWithDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, _]</span>, <span name="W">W</span>, <span name="StochasticModel">StochasticModel &lt;: <a href="../StochasticProcessModel.html" class="extype" name="io.github.mandar2812.dynaml.models.StochasticProcessModel">StochasticProcessModel</a>[<span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.W">W</span>]</span>]</span><span class="result"> extends <a href="StochasticProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">StochasticProcessPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.W">W</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.StochasticModel">StochasticModel</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A template for general stochastic priors
+having a linear trend function (or mean function)</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="StochasticProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">StochasticProcessPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.W">W</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.StochasticModel">StochasticModel</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="ESGPPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.ESGPPrior">ESGPPrior</a>, <a href="GaussianProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.GaussianProcessPrior">GaussianProcessPrior</a>, <a href="LinearTrendESGPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendESGPrior">LinearTrendESGPrior</a>, <a href="LinearTrendGaussianPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior">LinearTrendGaussianPrior</a>, <a href="LinearTrendStochasticPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior">LinearTrendStochasticPrior</a></div>
+            <div class="subClasses hiddenContent"><a href="LinearTrendESGPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendESGPrior">LinearTrendESGPrior</a>, <a href="LinearTrendGaussianPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendGaussianPrior">LinearTrendGaussianPrior</a></div>
           </div></div>
         
 
@@ -72,7 +73,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior"><span>StochasticProcessPrior</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior"><span>LinearTrendStochasticPrior</span></li><li class="in" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior"><span>StochasticProcessPrior</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -95,24 +96,58 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior#posteriorModel" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior#innerProduct" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="innerProduct:spire.algebra.InnerProductSpace[I,Double]"></a>
+      <a id="innerProduct:InnerProductSpace[I,Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">innerProduct</span><span class="result">: <span class="extype" name="spire.algebra.InnerProductSpace">InnerProductSpace</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@innerProduct:spire.algebra.InnerProductSpace[I,Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior#params" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="params:(I,Double)"></a>
+      <a id="params:(I,Double)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">params</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@params:(I,Double)" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior#posteriorModel" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="posteriorModel(data:Seq[(I,Y)]):StochasticModel"></a>
-      <a id="posteriorModel(Seq[(I,Y)]):StochasticModel"></a>
+      <a id="posteriorModel(Seq[(I,Double)]):StochasticModel"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">posteriorModel</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.Y">Y</span>)]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.StochasticModel">StochasticModel</span></span>
+        <span class="name">posteriorModel</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)]</span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.StochasticModel">StochasticModel</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@posteriorModel(data:Seq[(I,Y)]):StochasticModel" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@posteriorModel(data:Seq[(I,Y)]):StochasticModel" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior#priorDistribution" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StochasticProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">StochasticProcessPrior</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior#priorDistribution" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="priorDistribution[U&lt;:Seq[I]](d:U):D"></a>
       <a id="priorDistribution[U&lt;:Seq[I]](U):D"></a>
       <h4 class="signature">
@@ -121,14 +156,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">priorDistribution</span><span class="tparams">[<span name="U">U &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.I">I</span>]</span>]</span><span class="params">(<span name="d">d: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.priorDistribution.U">U</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.D">D</span></span>
+        <span class="name">priorDistribution</span><span class="tparams">[<span name="U">U &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>]</span>]</span><span class="params">(<span name="d">d: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.priorDistribution.U">U</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.D">D</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@priorDistribution[U&lt;:Seq[I]](d:U):D" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@priorDistribution[U&lt;:Seq[I]](d:U):D" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StochasticProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">StochasticProcessPrior</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -146,7 +181,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -163,7 +198,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@##():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -180,7 +215,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -197,7 +232,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -214,7 +249,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -237,7 +272,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -254,7 +289,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -271,7 +306,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -294,7 +329,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -311,7 +346,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -328,11 +363,28 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior#meanFunctionPipe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="meanFunctionPipe:io.github.mandar2812.dynaml.pipes.MetaPipe[(I,Double),I,Double]"></a>
+      <a id="meanFunctionPipe:MetaPipe[(I,Double),I,Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">meanFunctionPipe</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.pipes.MetaPipe">MetaPipe</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>), <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@meanFunctionPipe:io.github.mandar2812.dynaml.pipes.MetaPipe[(I,Double),I,Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -345,7 +397,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -362,7 +414,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -379,28 +431,28 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior#posteriorRV" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior#posteriorRV" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="posteriorRV[U&lt;:Seq[I]](data:Seq[(I,Y)])(test:U):W"></a>
-      <a id="posteriorRV[U&lt;:Seq[I]](Seq[(I,Y)])(U):W"></a>
+      <a id="posteriorRV[U&lt;:Seq[I]](Seq[(I,Double)])(U):W"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">posteriorRV</span><span class="tparams">[<span name="U">U &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.I">I</span>]</span>]</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.Y">Y</span>)]</span>)</span><span class="params">(<span name="test">test: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.posteriorRV.U">U</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.W">W</span></span>
+        <span class="name">posteriorRV</span><span class="tparams">[<span name="U">U &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>]</span>]</span><span class="params">(<span name="data">data: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>)]</span>)</span><span class="params">(<span name="test">test: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior.posteriorRV.U">U</span></span>)</span><span class="result">: <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.W">W</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@posteriorRV[U&lt;:Seq[I]](data:Seq[(I,Y)])(test:U):W" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@posteriorRV[U&lt;:Seq[I]](data:Seq[(I,Y)])(test:U):W" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StochasticProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">StochasticProcessPrior</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -413,7 +465,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -430,7 +482,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@toString():String" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -447,7 +499,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -470,7 +522,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -493,7 +545,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -513,7 +565,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">
+              <h3>Inherited from <a href="StochasticProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.StochasticProcessPrior">StochasticProcessPrior</a>[<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.I">I</span>, <span class="extype" name="scala.Double">Double</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.D">D</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.W">W</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.LinearTrendStochasticPrior.StochasticModel">StochasticModel</span>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
