@@ -18,9 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.bayes
 
+import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.models.StochasticProcessModel
+import io.github.mandar2812.dynaml.pipes.MetaPipe
 import io.github.mandar2812.dynaml.probability.RandomVarWithDistr
-import org.apache.spark.annotation.Experimental
+import spire.algebra.InnerProductSpace
 
 
 
@@ -30,7 +32,6 @@ import org.apache.spark.annotation.Experimental
   * Represents a stochastic process with a
   * defined prior distribution.
   */
-@Experimental
 trait StochasticProcessPrior[I, Y, Y1,
 D <: RandomVarWithDistr[Y1, _], W,
 StochasticModel <: StochasticProcessModel[Seq[(I, Y)], I, Y, W]] {
@@ -44,3 +45,24 @@ StochasticModel <: StochasticProcessModel[Seq[(I, Y)], I, Y, W]] {
 
 }
 
+/**
+  * A template for general stochastic priors
+  * having a linear trend function (or mean function)
+  *
+  * */
+trait LinearTrendStochasticPrior[
+I, D <: RandomVarWithDistr[PartitionedVector, _], W,
+StochasticModel <: StochasticProcessModel[Seq[(I, Double)], I, Double, W]]
+  extends StochasticProcessPrior[
+    I, Double, PartitionedVector,
+    D, W, StochasticModel] {
+
+  val innerProduct: InnerProductSpace[I, Double]
+
+  protected var params: (I, Double)
+
+  val meanFunctionPipe = MetaPipe(
+    (parameters: (I, Double)) => (x: I) => innerProduct.dot(parameters._1, x) + parameters._2
+  )
+
+}

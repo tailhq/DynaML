@@ -24,11 +24,12 @@ import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.analysis.PartitionedVectorField
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe2
+import io.github.mandar2812.dynaml.models.StochasticProcessModel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 
 import scala.reflect.ClassTag
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
-import io.github.mandar2812.dynaml.probability.MultGaussianPRV
+import io.github.mandar2812.dynaml.probability.{MultGaussianPRV, RandomVarWithDistr}
 import org.apache.spark.annotation.Experimental
 
 /**
@@ -123,9 +124,12 @@ class LinearTrendGaussianPrior[I: ClassTag](
   n: LocalScalarKernel[I],
   trendParams: I, intercept: Double)(
   implicit inner: InnerProductSpace[I, Double]) extends
-  GaussianProcessPrior[I, (I, Double)](cov, n) {
+  GaussianProcessPrior[I, (I, Double)](cov, n) with
+  LinearTrendStochasticPrior[I, MultGaussianPRV, MultGaussianPRV, AbstractGPRegressionModel[Seq[(I, Double)], I]]{
 
-  private var params = (trendParams, intercept)
+  override val innerProduct = inner
+
+  override protected var params: (I, Double) = (trendParams, intercept)
 
   override def _meanFuncParams = params
 
