@@ -13,7 +13,7 @@ val encoder = Encoder(
   (conf: Map[String, Double]) => (conf("c"), conf("s")),
   (cs: (Double, Double)) => Map("c" -> cs._1, "s" -> cs._2))
 
-val gsmKernel = GaussianSMKernel[Double](3.5, 2.0, encoder)
+val gsmKernel = GaussianSpectralKernel[Double](3.5, 2.0, encoder)
 val n = new MAKernel(0.8)
 
 val gp_prior = new LinearTrendGaussianPrior[Double](rbfc + gsmKernel, n, 0.0, 0.0)
@@ -32,8 +32,6 @@ val gammaRV = RandomVariable(new Gamma(2.0, 2.0))
 val noiseAdd = GaussianRV(0.0, 0.2)
 
 val dataset = xs.map{i => (i + GaussianRV(0.0, 0.02).sample(), noiseAdd.sample()+math.cos(i)*math.exp(-0.25*i))}
-
-//Seq((11.1, gammaRV.sample()), (-0.5, 2.5))
 
 //Set hyper-parameter selection configuration
 gp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "5"))
