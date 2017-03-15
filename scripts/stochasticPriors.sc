@@ -3,15 +3,21 @@ import breeze.stats.distributions.{Gamma, Gaussian}
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.bayes.{LinearTrendESGPrior, LinearTrendGaussianPrior}
 import io.github.mandar2812.dynaml.probability.{BlockedMESNRV, GaussianRV, MultGaussianPRV, RandomVariable}
-import io.github.mandar2812.dynaml.analysis.implicits._
 import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.analysis.implicits._
+import io.github.mandar2812.dynaml.pipes.Encoder
 
+val rbfc = new RBFCovFunc(1.5)
 
-val rbfc = new TStudentCovFunc(1.5)
+val encoder = Encoder(
+  (conf: Map[String, Double]) => (conf("c"), conf("s")),
+  (cs: (Double, Double)) => Map("c" -> cs._1, "s" -> cs._2))
+
+val gsmKernel = GaussianSMKernel[Double](3.5, 2.0, encoder)
 val n = new MAKernel(0.8)
 
-val gp_prior = new LinearTrendGaussianPrior[Double](rbfc, n, 0.0, 0.0)
-val sgp_prior = new LinearTrendESGPrior[Double](rbfc, n, 0.75, 0.1, 0.0, 0.0)
+val gp_prior = new LinearTrendGaussianPrior[Double](rbfc + gsmKernel, n, 0.0, 0.0)
+val sgp_prior = new LinearTrendESGPrior[Double](rbfc + gsmKernel, n, 0.75, 0.1, 0.0, 0.0)
 
 val xs = Seq.tabulate[Double](20)(0.5*_)
 
@@ -22,23 +28,10 @@ val samples = (1 to 8).map(_ => ys.sample()).map(s => s.toBreezeVector.toArray.t
 
 val samples_sgp = (1 to 8).map(_ => sgp_ys.sample()).map(s => s.toBreezeVector.toArray.toSeq)
 
-spline(xs, samples.head)
-hold()
-samples.tail.foreach((s: Seq[Double]) => spline(xs, s))
-unhold()
-title("Gaussian Process prior samples")
-
-spline(xs, samples_sgp.head)
-hold()
-samples_sgp.tail.foreach((s: Seq[Double]) => spline(xs, s))
-unhold()
-title("Ext. Skew Gaussian Process prior samples")
-
-
 val gammaRV = RandomVariable(new Gamma(2.0, 2.0))
-val noiseAdd = GaussianRV(0.0, 1.0)
+val noiseAdd = GaussianRV(0.0, 0.2)
 
-val dataset = Seq.tabulate[(Double, Double)](10){i => (gammaRV.sample(), noiseAdd.sample())}
+val dataset = xs.map{i => (i + GaussianRV(0.0, 0.02).sample(), noiseAdd.sample()+math.cos(i)*math.exp(-0.25*i))}
 
 //Seq((11.1, gammaRV.sample()), (-0.5, 2.5))
 
@@ -76,3 +69,20 @@ hold()
 samplesSGPPost.tail.foreach((s: Seq[Double]) => spline(xs, s))
 unhold()
 title("Ext. Skew Gaussian Process posterior samples")
+
+val (dx, dy) = dataset.sorted.unzip
+
+spline(dx, dy)
+title("Data")
+
+spline(xs, samples.head)
+hold()
+samples.tail.foreach((s: Seq[Double]) => spline(xs, s))
+unhold()
+title("Gaussian Process prior samples")
+
+spline(xs, samples_sgp.head)
+hold()
+samples_sgp.tail.foreach((s: Seq[Double]) => spline(xs, s))
+unhold()
+title("Ext. Skew Gaussian Process prior samples")
