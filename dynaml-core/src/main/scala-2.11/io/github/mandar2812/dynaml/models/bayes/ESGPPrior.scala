@@ -8,13 +8,22 @@ import io.github.mandar2812.dynaml.modelpipe.ESGPPipe4
 import io.github.mandar2812.dynaml.models.sgp.ESGPModel
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
 import io.github.mandar2812.dynaml.probability.BlockedMESNRV
-import spire.algebra.Field
+import spire.algebra.{Field, InnerProductSpace}
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
+
 import scala.reflect.ClassTag
 
 /**
-  * Created by mandar on 13/03/2017.
-  */
+  * An Extended Skew Gaussian Process Prior over functions.
+  *
+  * @author mandar2812 date 13/03/2017.
+  *
+  * @tparam I The index set over which the process is defined
+  * @tparam MeanFuncParams The parameters specifying the trend function
+  *
+  * @param covariance The covariance function of the underlying prior
+  * @param noiseCovariance The covariance function of the noise.
+  * */
 abstract class ESGPPrior[I: ClassTag, MeanFuncParams](
   val covariance: LocalScalarKernel[I],
   val noiseCovariance: LocalScalarKernel[I],
@@ -94,4 +103,34 @@ abstract class ESGPPrior[I: ClassTag, MeanFuncParams](
     BlockedMESNRV(tau, lVec, meanVector, covMat)
   }
 
+}
+
+/**
+  * @author mandar2812 date 21/02/2017.
+  *
+  * An extended skew gaussian process prior with a
+  * linear trend function.
+  * */
+class LinearTrendESGPrior[I: ClassTag](
+  cov: LocalScalarKernel[I],
+  n: LocalScalarKernel[I],
+  lambda: Double, tau: Double,
+  trendParams: I, intercept: Double)(
+  implicit inner: InnerProductSpace[I, Double]) extends
+  ESGPPrior[I, (I, Double)](cov, n, lambda, tau) with
+  LinearTrendStochasticPrior[
+    I, BlockedMESNRV, BlockedMESNRV,
+    ESGPModel[Seq[(I, Double)], I]]{
+
+  override val innerProduct = inner
+
+  override protected var params: (I, Double) = (trendParams, intercept)
+
+  override def _meanFuncParams = params
+
+  override def meanFuncParams_(p: (I, Double)) = params = p
+
+  override val meanFunctionPipe = MetaPipe(
+    (parameters: (I, Double)) => (x: I) => inner.dot(parameters._1, x) + parameters._2
+  )
 }
