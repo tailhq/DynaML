@@ -94,7 +94,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
     options: Map[String, String] = Map()) = {
 
     logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
-    logger.info("Coupled Simulated Annealing: "+CoupledSimulatedAnnealing.algorithm(variant))
+    logger.info("Coupled Simulated Annealing (CSA): "+CoupledSimulatedAnnealing.algorithm(variant))
     logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
 
     var accTemp = iTemp
@@ -209,8 +209,8 @@ object CoupledSimulatedAnnealing {
   def algorithm(variant: String): String = variant match {
     case MuSA => "Multi-state Simulated Annealing"
     case BA => "Blind Acceptance"
-    case M => "Modified"
-    case MwVC => "Modified with Variance Control"
+    case M => "Modified CSA"
+    case MwVC => "Modified CSA with Variance Control"
   }
 
   def couplingFactor(variant: String)(
