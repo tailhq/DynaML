@@ -2,7 +2,7 @@ import breeze.linalg.eig
 import breeze.stats.distributions.{Gamma, Gaussian}
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.bayes.{LinearTrendESGPrior, LinearTrendGaussianPrior}
-import io.github.mandar2812.dynaml.probability.{BlockedMESNRV, GaussianRV, MultGaussianPRV, RandomVariable}
+import io.github.mandar2812.dynaml.probability._
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.analysis.implicits._
 import io.github.mandar2812.dynaml.pipes.Encoder
@@ -13,11 +13,21 @@ val encoder = Encoder(
   (conf: Map[String, Double]) => (conf("c"), conf("s")),
   (cs: (Double, Double)) => Map("c" -> cs._1, "s" -> cs._2))
 
+val hyp_prior: Map[String, ContinuousDistrRV[Double]] = Map(
+  "c" -> GaussianRV(2.5, 1.5),
+  "s" -> RandomVariable(Gamma(2.0, 2.0)),
+  "noiseLevel" -> RandomVariable(Gamma(2.0, 2.0)))
+
+val sgp_hyp_prior = hyp_prior ++ Map("cutoff" -> GaussianRV(0.0, 1.0), "skewness" -> GaussianRV(0.0, 1.0))
+
 val gsmKernel = GaussianSpectralKernel[Double](3.5, 2.0, encoder)
 val n = new MAKernel(0.8)
 
 val gp_prior = new LinearTrendGaussianPrior[Double](gsmKernel, n, 0.0, 0.0)
+gp_prior.hyperPrior_(hyp_prior)
+
 val sgp_prior = new LinearTrendESGPrior[Double](gsmKernel, n, 0.75, 0.1, 0.0, 0.0)
+sgp_prior.hyperPrior_(hyp_prior)
 
 val xs = Seq.tabulate[Double](20)(0.5*_)
 
@@ -34,8 +44,8 @@ val noiseAdd = GaussianRV(0.0, 0.2)
 val dataset = xs.map{i => (i + GaussianRV(0.0, 0.02).sample(), noiseAdd.sample()+math.cos(i)*math.exp(-0.25*i))}
 
 //Set hyper-parameter selection configuration
-gp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "5", "globalOpt" -> "GPC"))
-sgp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "2"))
+gp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "40", "globalOpt" -> "GPC", "policy" -> "GS"))
+sgp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "5"))
 
 val gpModel = gp_prior.posteriorModel(dataset)
 val sgpModel = sgp_prior.posteriorModel(dataset)

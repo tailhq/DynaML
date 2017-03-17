@@ -29,7 +29,7 @@ import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 
 import scala.reflect.ClassTag
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
-import io.github.mandar2812.dynaml.probability.{MultGaussianPRV, RandomVarWithDistr}
+import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, MultGaussianPRV, RandomVarWithDistr}
 import org.apache.spark.annotation.Experimental
 
 /**
@@ -59,7 +59,8 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
   private var globalOptConfig = Map(
     "globalOpt" -> "GS",
     "gridSize" -> "3",
-    "gridStep" -> "0.2")
+    "gridStep" -> "0.2",
+    "policy" -> "GS")
 
   /**
     * Append the global optimization configuration
@@ -76,7 +77,9 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
       initial_covariance_state,
       globalOptConfig("globalOpt"),
       globalOptConfig("gridSize").toInt,
-      globalOptConfig("gridStep").toDouble) >
+      globalOptConfig("gridStep").toDouble,
+      policy = globalOptConfig("policy"),
+      prior = hyperPrior) >
     DataPipe((modelAndConf: (GPModel, Map[String, Double])) => modelAndConf._1)
 
   /**

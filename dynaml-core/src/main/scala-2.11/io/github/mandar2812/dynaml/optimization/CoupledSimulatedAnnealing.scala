@@ -72,14 +72,15 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
   private def computeAcceptanceProb = CoupledSimulatedAnnealing.acceptanceProbability(variant) _
 
-  protected val mutate = (config: Map[String, Double], temperature: Double) => {
-    logger.info("Mutating configuration: \n"+GlobalOptimizer.prettyPrint(config)+"\n")
+  protected val mutate: (Map[String, Double], Double) => Map[String, Double] =
+    (config: Map[String, Double], temperature: Double) => {
+      logger.info("Mutating configuration: \n"+GlobalOptimizer.prettyPrint(config)+"\n")
 
-    config.map((param) => {
-      val dist = new CauchyDistribution(0.0, temperature)
-      val mutated = param._2 + dist.sample()
-      (param._1, math.abs(mutated))
-    })
+      config.map((param) => {
+        val dist = new CauchyDistribution(0.0, temperature)
+        val mutated = param._2 + dist.sample()
+        (param._1, math.abs(mutated))
+      })
   }
 
   def acceptanceTemperature(initialTemp: Double)(k: Int): Double =
@@ -102,7 +103,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
     //Calculate desired variance
     val sigmaD = computeDesiredVariance(math.pow(gridsize, initialConfig.size).toInt)
 
-    val initialEnergyLandscape = getEnergyLandscape(initialConfig, options)
+    val initialEnergyLandscape = getEnergyLandscape(initialConfig, options, meanFieldPrior)
 
     val gamma_init = computeCouplingFactor(initialEnergyLandscape.map(_._1), accTemp)
 

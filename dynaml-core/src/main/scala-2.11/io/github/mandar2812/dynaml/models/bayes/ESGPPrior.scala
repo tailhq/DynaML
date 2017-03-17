@@ -65,7 +65,8 @@ abstract class ESGPPrior[I: ClassTag, MeanFuncParams](
         initial_state,
         globalOptConfig("globalOpt"),
         globalOptConfig("gridSize").toInt,
-        globalOptConfig("gridStep").toDouble) >
+        globalOptConfig("gridStep").toDouble,
+        prior = hyperPrior) >
       DataPipe((modelAndConf: (ExtendedSGPModel, Map[String, Double])) => modelAndConf._1)
 
   /**

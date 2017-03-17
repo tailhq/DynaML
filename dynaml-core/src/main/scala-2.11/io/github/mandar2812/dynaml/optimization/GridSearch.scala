@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
+import io.github.mandar2812.dynaml.probability.ContinuousDistrRV
 import org.apache.log4j.Logger
 
 /**
@@ -51,7 +52,7 @@ class GridSearch[M <: GloballyOptimizable](model: M)
   override def optimize(initialConfig: Map[String, Double],
                         options: Map[String, String] = Map()) = {
 
-    val energyLandscape = getEnergyLandscape(initialConfig, options).toMap
+    val energyLandscape = getEnergyLandscape(initialConfig, options, meanFieldPrior).toMap
     val optimum = energyLandscape.keys.min
 
     logger.info("Optimum value of energy is: "+optimum+

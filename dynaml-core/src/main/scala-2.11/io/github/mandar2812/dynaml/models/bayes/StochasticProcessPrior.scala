@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.models.bayes
 import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.models.StochasticProcessModel
 import io.github.mandar2812.dynaml.pipes.MetaPipe
-import io.github.mandar2812.dynaml.probability.RandomVarWithDistr
+import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, RandomVarWithDistr}
 import spire.algebra.InnerProductSpace
 
 
@@ -35,6 +35,12 @@ import spire.algebra.InnerProductSpace
 trait StochasticProcessPrior[I, Y, Y1,
 D <: RandomVarWithDistr[Y1, _], W,
 StochasticModel <: StochasticProcessModel[Seq[(I, Y)], I, Y, W]] {
+
+  protected var hyperPrior: Map[String, ContinuousDistrRV[Double]] = Map()
+
+  def hyperPrior_(h: Map[String, ContinuousDistrRV[Double]]) = {
+    hyperPrior = h
+  }
 
   def posteriorModel(data: Seq[(I, Y)]): StochasticModel
 
