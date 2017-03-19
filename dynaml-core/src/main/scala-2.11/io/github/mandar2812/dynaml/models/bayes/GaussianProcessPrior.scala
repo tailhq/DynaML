@@ -24,20 +24,17 @@ import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.analysis.PartitionedVectorField
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe2
-import io.github.mandar2812.dynaml.models.StochasticProcessModel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 
 import scala.reflect.ClassTag
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
-import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, MultGaussianPRV, RandomVarWithDistr}
-import org.apache.spark.annotation.Experimental
+import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 
 /**
   * @author mandar2812 date: 21/02/2017.
   *
   * Represents a Gaussian Process Prior over functions.
   * */
-@Experimental
 abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
   val covariance: LocalScalarKernel[I],
   val noiseCovariance: LocalScalarKernel[I]) extends
