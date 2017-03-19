@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import spire.algebra.{Field, InnerProductSpace}
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.pipes.Encoder
 
 /**
@@ -68,5 +68,23 @@ object GaussianSpectralKernel {
   def apply[T](center: T, scale: T, pEncoding: Encoder[Map[String, Double], (T, T)])(
     implicit field: Field[T], innerProd: InnerProductSpace[T, Double]): GaussianSpectralKernel[T] =
     new GaussianSpectralKernel[T](center, scale, enc = pEncoding)
+
+  def getEncoderforBreezeDV(dim: Int) = {
+    val (centerPrefixes, scalePrefixes) = (
+      (0 until dim).map(n => "c_"+n),
+      (0 until dim).map(n => "s_"+n))
+
+    val forwardMap: (Map[String, Double]) => (DenseVector[Double], DenseVector[Double]) =
+      (conf: Map[String, Double]) => (
+      DenseVector((0 until dim).map(i => conf("c_"+i)).toArray),
+      DenseVector((0 until dim).map(i => conf("s_"+i)).toArray))
+
+    val reverseMap = (params: (DenseVector[Double], DenseVector[Double])) => {
+      params._1.mapPairs((i, v) => ("c_"+i, v)).toArray.toMap ++
+        params._2.mapPairs((i, v) => ("s_"+i, v)).toArray.toMap
+    }
+
+    Encoder(forwardMap, reverseMap)
+  }
 
 }
