@@ -109,7 +109,7 @@ object Dependencies {
 
   val notebookInterfaceDependency = Seq()
 
-  val imageDependency = Seq(
+  val imageDependencies = Seq(
     "com.sksamuel.scrimage" % "scrimage-core_2.11" % "2.1.7",
     "com.sksamuel.scrimage" % "scrimage-io-extra_2.11" % "2.1.7",
     "com.sksamuel.scrimage" % "scrimage-filters_2.11" % "2.1.7"

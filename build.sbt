@@ -33,7 +33,8 @@ lazy val commonSettings = Seq(
       linearAlgebraDependencies ++ chartsDependencies ++
       tinkerpopDependency ++ notebookInterfaceDependency ++
       openMLDependency ++ rejinDependency ++
-      rPackages ++ cppCompatDependencies),
+      rPackages ++ cppCompatDependencies ++
+      imageDependencies),
 
   scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
 )
