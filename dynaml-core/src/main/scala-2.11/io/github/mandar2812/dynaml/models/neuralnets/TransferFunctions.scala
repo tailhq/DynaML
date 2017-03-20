@@ -18,7 +18,9 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.neuralnets
 
+import breeze.linalg.DenseVector
 import breeze.numerics.{cosh, sigmoid, sinh, tanh}
+import io.github.mandar2812.dynaml.pipes.Scaler
 
 /**
  * @author mandar2812
@@ -105,3 +107,54 @@ object TransferFunctions {
       case "reclinear" => DrecLin
     }
 }
+
+trait Activation[I] extends Scaler[I] {
+  val grad: Scaler[I]
+}
+
+object Activation {
+
+  def apply[I](f: (I) => I, gr: (I) => I): Activation[I] = new Activation[I] {
+    override val grad = Scaler(gr)
+
+    override def run(data: I) = f(data)
+  }
+
+  def apply[I](f: Scaler[I], gr: Scaler[I]): Activation[I] = apply(f.run _, gr.run _)
+}
+
+object Sigmoid extends Activation[Double] {
+
+  override val grad = Scaler(TransferFunctions.Dlogsig)
+
+  override def run(data: Double) = TransferFunctions.logsig(data)
+}
+
+object VectorSigmoid extends Activation[DenseVector[Double]] {
+
+  override val grad = Scaler((x: DenseVector[Double]) => x.map(TransferFunctions.Dlogsig))
+
+  override def run(data: DenseVector[Double]) = data.map(TransferFunctions.logsig)
+}
+
+object VectorTansig extends Activation[DenseVector[Double]] {
+
+  override val grad = Scaler((x: DenseVector[Double]) => x.map(TransferFunctions.Dtansig))
+
+  override def run(data: DenseVector[Double]) = data.map(TransferFunctions.tansig)
+}
+
+object VectorLinear extends Activation[DenseVector[Double]] {
+
+  override val grad = Scaler((x: DenseVector[Double]) => x.map(TransferFunctions.Dlin))
+
+  override def run(data: DenseVector[Double]) = data.map(TransferFunctions.lin)
+}
+
+object VectorRecLin extends Activation[DenseVector[Double]] {
+
+  override val grad = Scaler((x: DenseVector[Double]) => x.map(TransferFunctions.DrecLin))
+
+  override def run(data: DenseVector[Double]) = data.map(TransferFunctions.recLin)
+}
+

@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.models.neuralnets
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.graph.NeuralGraph
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
+import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe, Scaler}
 
 /**
   *
@@ -38,6 +39,7 @@ import io.github.mandar2812.dynaml.models.ParameterizedLearner
   *
   * @tparam Pattern The type of an individual data pattern
   * */
+@deprecated("Neural Network base trait has been deprecated since DynaML v1.4.1")
 trait NeuralNetwork[G, P, T <: NeuralGraph[P], Pattern] extends
 ParameterizedLearner[G, T,
   DenseVector[Double], DenseVector[Double],
@@ -59,4 +61,80 @@ ParameterizedLearner[G, T,
     *
     * */
   def dataAsStream(d: G): Stream[Pattern]
+}
+
+/**
+  * The basic building block of a neural computation stack.
+  * */
+trait NeuralLayer[P, I] extends Scaler[I] {
+
+  /**
+    * The layer synapses or connection weights
+    * */
+  val parameters: P
+
+  /**
+    * Activation function
+    * */
+  val activationFunc: Activation[I]
+
+  /**
+    * Compute the forward pass through the layer.
+    * */
+  val forward: Scaler[I] = this > activationFunc
+
+}
+
+object NeuralLayer {
+
+  def apply[P, I](compute: MetaPipe[P, I, I], activation: Activation[I])(params: P) =
+    new NeuralLayer[P, I] {
+      override val parameters = params
+      override val activationFunc = activation
+      override def run(data: I) = activation(compute(parameters)(data))
+  }
+
+}
+
+/**
+  * A network, represented as a stack of [[NeuralLayer]] objects.
+  * */
+class NeuralStack[P, I](elements: NeuralLayer[P, I]*) {
+
+  val layers: Seq[NeuralLayer[P, I]] = elements
+
+  val layerWeights = layers.map(_.parameters)
+
+  /**
+    * Do a forward pass through the network outputting all the intermediate.
+    * layer activations.
+    * */
+  def forwardPropagate(x: I): Seq[I] = layers.scanLeft(x)((h, layer) => layer.forward(h))
+
+  /**
+    * Do a forward pass through the network outputting only the output layer activations.
+    * */
+  def forwardPass(x: I): I = layers.foldLeft(x)((h, layer) => layer.forward(h))
+
+  /**
+    * Slice the stack according to a range.
+    * */
+  def apply(r: Range): NeuralStack[P, I] = NeuralStack(layers.slice(r.min, r.max + 1):_*)
+
+}
+
+object NeuralStack {
+
+  def apply[P, I](elements: NeuralLayer[P, I]*): NeuralStack[P, I] = new NeuralStack(elements:_*)
+}
+
+/**
+  * A mechanism to generate neural computation layers on the fly.
+  * */
+class NeuralLayerFactory[P, I](
+  metaLayer: MetaPipe[P, I, I],
+  activation: Activation[I]) extends
+  DataPipe[P, NeuralLayer[P, I]] {
+
+  override def run(params: P) = NeuralLayer(metaLayer, activation)(params)
 }
