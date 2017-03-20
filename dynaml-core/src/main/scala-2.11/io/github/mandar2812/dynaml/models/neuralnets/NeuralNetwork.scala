@@ -65,6 +65,9 @@ ParameterizedLearner[G, T,
 
 /**
   * The basic building block of a neural computation stack.
+  *
+  * @tparam P The type of the parameters/connections of the layer.
+  * @tparam I The type of the input supplied to the layer
   * */
 trait NeuralLayer[P, I] extends Scaler[I] {
 
@@ -133,8 +136,8 @@ object NeuralStack {
   * */
 class NeuralLayerFactory[P, I](
   metaLayer: MetaPipe[P, I, I],
-  activation: Activation[I]) extends
+  activationFunc: Activation[I]) extends
   DataPipe[P, NeuralLayer[P, I]] {
 
-  override def run(params: P) = NeuralLayer(metaLayer, activation)(params)
+  override def run(params: P) = NeuralLayer(metaLayer, activationFunc)(params)
 }
