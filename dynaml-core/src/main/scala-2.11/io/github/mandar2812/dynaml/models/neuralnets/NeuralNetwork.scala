@@ -142,6 +142,11 @@ class NeuralStack[P, I](elements: NeuralLayer[P, I]*) {
     * */
   def ++(otherStack: NeuralStack[P, I]): NeuralStack[P, I] = NeuralStack(this.layers ++ otherStack.layers :_*)
 
+  /**
+    * Append a single computation layer to the stack.
+    * */
+  def :+(computationLayer: NeuralLayer[P, I]): NeuralStack[P, I] = NeuralStack(this.layers :+ computationLayer :_*)
+
 }
 
 object NeuralStack {
@@ -153,9 +158,9 @@ object NeuralStack {
   * A mechanism to generate neural computation layers on the fly.
   * */
 class NeuralLayerFactory[P, I](
-  metaLayer: MetaPipe[P, I, I],
+  metaLocalField: MetaPipe[P, I, I],
   activationFunc: Activation[I]) extends
   DataPipe[P, NeuralLayer[P, I]] {
 
-  override def run(params: P) = NeuralLayer(metaLayer, activationFunc)(params)
+  override def run(params: P) = NeuralLayer(metaLocalField, activationFunc)(params)
 }
