@@ -107,7 +107,7 @@ object NeuralLayer {
     new NeuralLayer[P, I, J] {
       override val parameters = params
       override val activationFunc = activation
-      override val localField = Scaler(compute(parameters).run)
+      override val localField = compute(parameters)
     }
 
 }
@@ -174,4 +174,14 @@ class NeuralLayerFactory[P, I, J](
   DataPipe[P, NeuralLayer[P, I, J]] {
 
   override def run(params: P) = NeuralLayer(metaLocalField, activationFunc)(params)
+}
+
+class NeuralStackFactory[P, I](layerFacs: NeuralLayerFactory[P, I, I]*)
+  extends DataPipe[Seq[P], NeuralStack[P, I]] {
+
+  val layerFactories: Seq[NeuralLayerFactory[P, I, I]] = layerFacs
+
+  override def run(params: Seq[P]): NeuralStack[P, I] = NeuralStack(layerFactories.zip(params).map(couple => {
+    couple._1.run(couple._2)
+  }):_*)
 }
