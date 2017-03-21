@@ -69,12 +69,14 @@ ParameterizedLearner[G, T,
   * @tparam P The type of the parameters/connections of the layer.
   * @tparam I The type of the input supplied to the layer
   * */
-trait NeuralLayer[P, I] extends Scaler[I] {
+trait NeuralLayer[P, I] {
 
   /**
     * The layer synapses or connection weights
     * */
   val parameters: P
+
+  val localField: Scaler[I]
 
   /**
     * Activation function
@@ -84,18 +86,28 @@ trait NeuralLayer[P, I] extends Scaler[I] {
   /**
     * Compute the forward pass through the layer.
     * */
-  val forward: Scaler[I] = this > activationFunc
+  val forward: Scaler[I] = localField > activationFunc
 
 }
 
 object NeuralLayer {
 
+  /**
+    * Create a neural computation layer i.e. [[NeuralLayer]] instance
+    *
+    * @tparam P The type of the layer parameters/weights/connections
+    * @tparam I The type of input accepted by the computation layer
+    * @param compute Represents the actual computation as a [[MetaPipe]]
+    *                i.e. a data pipeline which takes as input a parameter value
+    *                and outputs a pipe which represents the layer computation
+    * @param activation The activation function
+    * */
   def apply[P, I](compute: MetaPipe[P, I, I], activation: Activation[I])(params: P) =
     new NeuralLayer[P, I] {
       override val parameters = params
       override val activationFunc = activation
-      override def run(data: I) = activation(compute(parameters)(data))
-  }
+      override val localField = Scaler(compute(parameters).run)
+    }
 
 }
 
@@ -123,6 +135,12 @@ class NeuralStack[P, I](elements: NeuralLayer[P, I]*) {
     * Slice the stack according to a range.
     * */
   def apply(r: Range): NeuralStack[P, I] = NeuralStack(layers.slice(r.min, r.max + 1):_*)
+
+  /**
+    * Append another computation stack to the end of the
+    * current one.
+    * */
+  def ++(otherStack: NeuralStack[P, I]): NeuralStack[P, I] = NeuralStack(this.layers ++ otherStack.layers :_*)
 
 }
 
