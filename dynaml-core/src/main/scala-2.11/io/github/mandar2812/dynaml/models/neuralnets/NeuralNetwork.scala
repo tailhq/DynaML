@@ -68,25 +68,26 @@ ParameterizedLearner[G, T,
   *
   * @tparam P The type of the parameters/connections of the layer.
   * @tparam I The type of the input supplied to the layer
+  * @tparam J The type of the output.
   * */
-trait NeuralLayer[P, I] {
+trait NeuralLayer[P, I, J] {
 
   /**
     * The layer synapses or connection weights
     * */
   val parameters: P
 
-  val localField: Scaler[I]
+  val localField: DataPipe[I, J]
 
   /**
     * Activation function
     * */
-  val activationFunc: Activation[I]
+  val activationFunc: Activation[J]
 
   /**
     * Compute the forward pass through the layer.
     * */
-  val forward: Scaler[I] = localField > activationFunc
+  val forward: DataPipe[I, J] = localField > activationFunc
 
 }
 
@@ -102,8 +103,8 @@ object NeuralLayer {
     *                and outputs a pipe which represents the layer computation
     * @param activation The activation function
     * */
-  def apply[P, I](compute: MetaPipe[P, I, I], activation: Activation[I])(params: P) =
-    new NeuralLayer[P, I] {
+  def apply[P, I, J](compute: MetaPipe[P, I, J], activation: Activation[J])(params: P) =
+    new NeuralLayer[P, I, J] {
       override val parameters = params
       override val activationFunc = activation
       override val localField = Scaler(compute(parameters).run)
@@ -114,9 +115,9 @@ object NeuralLayer {
 /**
   * A network, represented as a stack of [[NeuralLayer]] objects.
   * */
-class NeuralStack[P, I](elements: NeuralLayer[P, I]*) {
+class NeuralStack[P, I](elements: NeuralLayer[P, I, I]*) {
 
-  val layers: Seq[NeuralLayer[P, I]] = elements
+  val layers: Seq[NeuralLayer[P, I, I]] = elements
 
   val layerWeights = layers.map(_.parameters)
 
@@ -132,6 +133,16 @@ class NeuralStack[P, I](elements: NeuralLayer[P, I]*) {
   def forwardPass(x: I): I = layers.foldLeft(x)((h, layer) => layer.forward(h))
 
   /**
+    * Batch version of [[forwardPropagate()]]
+    * */
+  def forwardPropagateBatch[T <: Traversable[I]](d: T): Seq[T] = layers.scanLeft(d)((h, layer) => layer.forward(h))
+
+  /**
+    * Batch version of [[forwardPass()]]
+    * */
+  def forwardPassBatch[T <: Traversable[I]](d: T): T = layers.foldLeft(d)((h, layer) => layer.forward(h))
+
+  /**
     * Slice the stack according to a range.
     * */
   def apply(r: Range): NeuralStack[P, I] = NeuralStack(layers.slice(r.min, r.max + 1):_*)
@@ -145,22 +156,22 @@ class NeuralStack[P, I](elements: NeuralLayer[P, I]*) {
   /**
     * Append a single computation layer to the stack.
     * */
-  def :+(computationLayer: NeuralLayer[P, I]): NeuralStack[P, I] = NeuralStack(this.layers :+ computationLayer :_*)
+  def :+(computationLayer: NeuralLayer[P, I, I]): NeuralStack[P, I] = NeuralStack(this.layers :+ computationLayer :_*)
 
 }
 
 object NeuralStack {
 
-  def apply[P, I](elements: NeuralLayer[P, I]*): NeuralStack[P, I] = new NeuralStack(elements:_*)
+  def apply[P, I](elements: NeuralLayer[P, I, I]*): NeuralStack[P, I] = new NeuralStack(elements:_*)
 }
 
 /**
   * A mechanism to generate neural computation layers on the fly.
   * */
-class NeuralLayerFactory[P, I](
-  metaLocalField: MetaPipe[P, I, I],
-  activationFunc: Activation[I]) extends
-  DataPipe[P, NeuralLayer[P, I]] {
+class NeuralLayerFactory[P, I, J](
+  metaLocalField: MetaPipe[P, I, J],
+  activationFunc: Activation[J]) extends
+  DataPipe[P, NeuralLayer[P, I, J]] {
 
   override def run(params: P) = NeuralLayer(metaLocalField, activationFunc)(params)
 }

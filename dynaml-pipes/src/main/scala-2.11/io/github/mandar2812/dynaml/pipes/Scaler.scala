@@ -1,3 +1,21 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+* */
 package io.github.mandar2812.dynaml.pipes
 
 import scalaxy.streams._
@@ -9,8 +27,8 @@ import scalaxy.streams._
   * heavily in data processing tasks.
   */
 trait Scaler[S] extends DataPipe[S, S]{
-  def apply[T[S] <: Traversable[S]](data: T[S]) =
-    optimize { data.map(run).asInstanceOf[T[S]] }
+  override def apply[T <: Traversable[S]](data: T) =
+    optimize { data.map(run).asInstanceOf[T] }
 
   def *[T](that: Scaler[T]) = {
     val firstRun = this.run _
@@ -50,8 +68,8 @@ trait ReversibleScaler[S] extends Scaler[S] with Encoder[S, S]{
     * */
   override val i: Scaler[S]
 
-  override def apply[T[S] <: Traversable[S]](data: T[S]):T[S] =
-    optimize { data.map(run).asInstanceOf[T[S]] }
+  override def apply[T<: Traversable[S]](data: T):T =
+    optimize { data.map(run).asInstanceOf[T] }
 
   def *[T](that: ReversibleScaler[T]) = {
 

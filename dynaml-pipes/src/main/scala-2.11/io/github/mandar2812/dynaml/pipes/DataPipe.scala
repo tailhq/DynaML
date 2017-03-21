@@ -18,6 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
 
+import scalaxy.streams.optimize
+
 /**
   * @author mandar2812 on 18/11/15.
   *
@@ -32,6 +34,9 @@ trait DataPipe[-Source, +Destination] extends Serializable {
   def run(data: Source): Destination
 
   def apply(data: Source): Destination = run(data)
+
+  def apply[T <: Traversable[Source]](data: T) =
+    optimize { data.map(run).asInstanceOf[T] }
 
   /**
     * Represents the composition of two
