@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.graph
 /**
   * A Neural Graph is an encapsulation
   * of a base graph of type [[B]] with
-  * a set of predifined behaviors.
+  * a set of predefined behaviors.
   *
   * @tparam B The type of the encapsulated
   *           base graph object
