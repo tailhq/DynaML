@@ -58,4 +58,6 @@ abstract class GenericFFNeuralNet[Data, I, LayerP]
   val num_hidden_layers: Int = params.layerParameters.length - 1
 
   val activations: Seq[Activation[I]] = params._layers.map(_.activationFunc)
+
+  val neurons_by_layer: Seq[Int]
 }
