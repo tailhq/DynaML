@@ -1,7 +1,5 @@
 package io.github.mandar2812.dynaml.graph
 
-import breeze.linalg.DenseVector
-
 /**
   * A Neural Graph is an encapsulation
   * of a base graph of type [[B]] with
@@ -9,14 +7,11 @@ import breeze.linalg.DenseVector
   *
   * @tparam B The type of the encapsulated
   *           base graph object
-  */
-trait NeuralGraph[B] {
+  *
+  * @tparam I Type of input
+  * @tparam J Type of output
+  * */
+trait NeuralGraph[B, I, J] {
   protected val g: B
-  val num_inputs: Int
-  val num_outputs: Int
-  val forwardPass: (DenseVector[Double]) => DenseVector[Double]
-}
-
-object NeuralGraph {
-
+  val forwardPass: (I) => J
 }

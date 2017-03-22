@@ -47,7 +47,7 @@ import scala.collection.JavaConversions._
   *            4) "recLinear"
   * */
 class FFNeuralGraph(baseGraph: FramedGraph[Graph], act: List[String], hidden: Int = 1)
-  extends NeuralGraph[FramedGraph[Graph]]{
+  extends NeuralGraph[FramedGraph[Graph], DenseVector[Double], DenseVector[Double]]{
 
   override protected val g = baseGraph
 
@@ -81,9 +81,9 @@ class FFNeuralGraph(baseGraph: FramedGraph[Graph], act: List[String], hidden: In
     g.getEdges[Synapse]("layer", layer, classOf[Synapse])
   )
 
-  override val num_inputs: Int = getLayer(0).size - 1
+  val num_inputs: Int = getLayer(0).size - 1
 
-  override val num_outputs: Int = getLayer(hidden_layers+1).size
+  val num_outputs: Int = getLayer(hidden_layers+1).size
 
   /**
     * Perform a forward pass through the network to
