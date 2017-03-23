@@ -66,7 +66,7 @@ abstract class Vec2VecLayer extends NeuralLayer[
   * */
 class NeuralLayerFactory[P, I, J](
   metaLocalField: MetaPipe[P, I, J],
-  activationFunc: Activation[J]) extends
+  val activationFunc: Activation[J]) extends
   DataPipe[P, NeuralLayer[P, I, J]] {
 
   override def run(params: P) = NeuralLayer(metaLocalField, activationFunc)(params)

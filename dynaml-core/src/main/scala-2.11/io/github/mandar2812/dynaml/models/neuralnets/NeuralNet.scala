@@ -3,9 +3,10 @@ package io.github.mandar2812.dynaml.models.neuralnets
 import io.github.mandar2812.dynaml.graph.NeuralGraph
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.probability.RandomVariable
 
 /**
-  * @author mandar date 22/03/2017.
+  * @author mandar2812 date 22/03/2017.
   *
   * Base member of the Neural Network API.
   * */
@@ -45,19 +46,23 @@ Graph <: NeuralGraph[BaseGraph, Input, Output]] extends
   * models.
   *
   * @tparam Data The type of the training data.
-  * @tparam I The type of the input features, output features and layer activations
   * @tparam LayerP The type of the layer parameters i.e. weights/connections etc.
+  * @tparam I The type of the input features, output features and layer activations
   * */
-abstract class GenericFFNeuralNet[Data, I, LayerP]
+abstract class GenericFFNeuralNet[Data, LayerP, I]
   extends NeuralNet[
     Data, Seq[NeuralLayer[LayerP, I, I]],
     I, I, NeuralStack[LayerP, I]] {
 
-  val num_layers: Int = params.layerParameters.length + 1
+  val stackFactory: NeuralStackFactory[LayerP, I]
 
-  val num_hidden_layers: Int = params.layerParameters.length - 1
+  protected val generator: RandomVariable[LayerP]
 
-  val activations: Seq[Activation[I]] = params._layers.map(_.activationFunc)
+  val num_layers: Int = stackFactory.layerFactories.length + 1
 
-  val neurons_by_layer: Seq[Int]
+  val num_hidden_layers: Int = stackFactory.layerFactories.length - 1
+
+  val activations: Seq[Activation[I]] = stackFactory.layerFactories.map(_.activationFunc)
+
+  override def initParams() = stackFactory(generator.iid(activations.length).sample())
 }

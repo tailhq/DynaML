@@ -80,6 +80,10 @@ object NeuralStackFactory {
     activations: Seq[Activation[DenseVector[Double]]])
   : NeuralStackFactory[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]] = {
 
+    require(
+      num_units_by_layer.length == activations.length + 1,
+      "Number of layers (input, output & hidden) must be = num(activation layers) + 1")
+
     val layerFactories = num_units_by_layer.sliding(2).toSeq
       .map(l => (l.head, l.last)).zip(activations)
       .map((couple: ((Int, Int), Activation[DenseVector[Double]])) => {
