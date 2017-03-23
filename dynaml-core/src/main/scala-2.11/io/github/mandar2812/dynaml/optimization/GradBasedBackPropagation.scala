@@ -105,7 +105,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 2
       * */
-      logger.info("             Back propagation ------------")
+      logger.info("             Back propagation")
       //Calculate the gradients of the output layer activations with respect to their local fields.
       val outputActGrads = outputFields.map(outputLayerActFunc.grad(_))
       //Calculate the delta variable for the output layer
@@ -119,7 +119,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       * for the input layer.
       * */
       //[d0 | d1, d2, ..., dL]
-      val deltasByLayer = layers.zip(fields.tail)
+      val deltasByLayer = layers.zip(fields.init)
         .scanRight(outputLayerDelta)(
           (layer_and_fields, deltas) => {
 
@@ -128,7 +128,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
           }
         ).tail
 
-      logger.info("             Calculating gradients ------------")
+      logger.info("             Calculating gradients")
       /*
       * Calculate the gradients for each layer
       * grad_i needs delta_i, a_[i-1]
@@ -144,7 +144,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
         stepSize, count, regParam)._1
 
       //Spawn the updated network.
-      logger.info("             Updating Network Parameters ------------")
+      logger.info("             Updating Network Parameters")
       workingStack = stackFactory(new_layer_params)
     })
     //Return the working solution
@@ -152,7 +152,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
   }
 }
 
-abstract class FFBackProp(
+class FFBackProp(
   stackF: NeuralStackFactory[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]]) extends
   GradBasedBackPropagation[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]] {
 
@@ -164,8 +164,11 @@ abstract class FFBackProp(
     * the delta value and outputs the gradient of the layer parameters.
     **/
   override val gradCompute = StreamDataPipe(
-    (c: (PatternType, PatternType)) => (c._1*c._2.t, c._2)) >
-    DataPipe((g: Stream[(DenseMatrix[Double], PatternType)]) => g.reduce((x, y) => (x._1+y._1, x._2+y._2)))
+    (c: (PatternType, PatternType)) => (c._2*c._1.t, c._2)) >
+    DataPipe((g: Stream[(DenseMatrix[Double], PatternType)]) => {
+      val N = g.length.toDouble
+      g.map(c => (c._1/N, c._2/N)).reduce((x, y) => (x._1+y._1, x._2+y._2))
+    })
 
   /**
     * A meta pipeline which for a particular value of the layer parameters,

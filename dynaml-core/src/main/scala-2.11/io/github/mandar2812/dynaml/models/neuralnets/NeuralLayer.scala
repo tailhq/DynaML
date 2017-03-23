@@ -27,7 +27,7 @@ trait NeuralLayer[P, I, J] {
   /**
     * Compute the forward pass through the layer.
     * */
-  val forward: DataPipe[I, J] = localField > activationFunc
+  val forward: DataPipe[I, J]
 
 }
 
@@ -48,6 +48,10 @@ object NeuralLayer {
       override val parameters = params
       override val activationFunc = activation
       override val localField = compute(parameters)
+      /**
+        * Compute the forward pass through the layer.
+        **/
+      override val forward = localField > activationFunc
     }
 
 }
