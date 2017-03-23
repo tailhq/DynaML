@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.models.neuralnets
 
 import io.github.mandar2812.dynaml.graph.NeuralGraph
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
+import io.github.mandar2812.dynaml.optimization.GradBasedBackPropagation
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.RandomVariable
 
@@ -65,4 +66,36 @@ abstract class GenericFFNeuralNet[Data, LayerP, I]
   val activations: Seq[Activation[I]] = stackFactory.layerFactories.map(_.activationFunc)
 
   override def initParams() = stackFactory(generator.iid(activations.length).sample())
+
+  override protected var params: NeuralStack[LayerP, I] = initParams()
+
+  override protected val optimizer: GradBasedBackPropagation[LayerP, I]
+
+}
+
+object GenericFFNeuralNet {
+  /**
+    * Create a feed forward neural net
+    * @param networkFactory A [[NeuralStackFactory]] object.
+    * @param trainingAlgorithm The optimization/training routine
+    *                          as a [[GradBasedBackPropagation]] instance
+    * @param data The training data
+    * @param trans A data pipeline transforming the training data from
+    *              type [[Data]] to [[Stream]] of input patterns and targets
+    * @param layerInitializer A [[RandomVariable]] which generates samples for
+    *                         the layer parameters.
+    * */
+  def apply[Data, LayerP, I](
+    networkFactory: NeuralStackFactory[LayerP, I],
+    trainingAlgorithm: GradBasedBackPropagation[LayerP, I],
+    data: Data, trans: DataPipe[Data, Stream[(I, I)]],
+    layerInitializer: RandomVariable[LayerP]) =
+    new GenericFFNeuralNet[Data, LayerP, I] {
+
+      override val stackFactory = networkFactory
+      override protected val generator: RandomVariable[LayerP] = layerInitializer
+      override protected val optimizer: GradBasedBackPropagation[LayerP, I] = trainingAlgorithm
+      override val transform = trans
+      override protected val g: Data = data
+  }
 }

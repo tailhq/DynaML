@@ -37,11 +37,9 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
 
   /**
     * A data pipeline which takes [[Tuple3]] consisting of
-    * output layer activations, targets and
-    * gradients of output activations
-    * with respect to their local fields,
-    * respectively and outputs the output layer
-    * delta values.
+    * output layer activations, targets and gradients of output activations
+    * with respect to their local fields, respectively and returns
+    * the output layer delta values.
     * */
   val computeOutputDelta: StreamMapPipe[(I, I, I), I]
 
@@ -65,7 +63,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
 
     val (patterns, targets): (Stream[I], Stream[I]) = data.unzip
 
-    logger.info("------------ Starting Back-propagation procedure ------------")
+    logger.info("------------ Starting back-propagation procedure ------------")
 
     cfor(1)(count => count < numIterations, count => count + 1)( count => {
 
