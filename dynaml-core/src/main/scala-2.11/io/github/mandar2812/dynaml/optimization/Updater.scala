@@ -32,6 +32,20 @@ trait BasicUpdater[P] extends Serializable {
       regParam: Double): (P, Double)
 }
 
+class FFLayerUpdater extends BasicUpdater[Seq[(DenseMatrix[Double], DenseVector[Double])]] {
+  override def compute(
+    weightsOld: Seq[(DenseMatrix[Double], DenseVector[Double])],
+    gradient: Seq[(DenseMatrix[Double], DenseVector[Double])],
+    stepSize: Double, iter: Int, regParam: Double) = {
+    (
+      weightsOld.zip(gradient).map(couple =>
+        (
+          couple._1._1 - couple._2._1*stepSize - couple._1._1*regParam,
+          couple._1._2 - couple._2._2*stepSize - couple._1._2*regParam)),
+      0.0)
+  }
+}
+
 /**
  * 
  */

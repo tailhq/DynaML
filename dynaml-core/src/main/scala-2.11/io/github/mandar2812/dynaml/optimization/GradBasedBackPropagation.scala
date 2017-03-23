@@ -1,7 +1,8 @@
 package io.github.mandar2812.dynaml.optimization
 
-import io.github.mandar2812.dynaml.models.neuralnets.{NeuralStack, NeuralStackFactory, Activation}
-import io.github.mandar2812.dynaml.pipes.{MetaPipe, StreamDataPipe, StreamMapPipe}
+import breeze.linalg.{DenseMatrix, DenseVector}
+import io.github.mandar2812.dynaml.models.neuralnets.{Activation, NeuralStack, NeuralStackFactory}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe, StreamDataPipe, StreamMapPipe}
 import org.apache.log4j.Logger
 import spire.implicits.cfor
 
@@ -25,7 +26,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
     * [[Tuple2]] whose first element is the activation and second element
     * the delta value and outputs the gradient of the layer parameters.
     * */
-  val gradCompute: StreamDataPipe[(I, I), LayerP, LayerP]
+  val gradCompute: DataPipe[Stream[(I, I)], LayerP]
 
   /**
     * A meta pipeline which for a particular value of the layer parameters,
@@ -79,7 +80,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 1
       * */
-
+      logger.info("             Forward propagation ------------")
       val layers = workingStack._layers
 
       /*
@@ -104,7 +105,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 2
       * */
-
+      logger.info("             Back propagation ------------")
       //Calculate the gradients of the output layer activations with respect to their local fields.
       val outputActGrads = outputFields.map(outputLayerActFunc.grad(_))
       //Calculate the delta variable for the output layer
@@ -127,6 +128,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
           }
         ).tail
 
+      logger.info("             Calculating gradients ------------")
       /*
       * Calculate the gradients for each layer
       * grad_i needs delta_i, a_[i-1]
@@ -142,10 +144,54 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
         stepSize, count, regParam)._1
 
       //Spawn the updated network.
-      logger.info("------------ Updating Network Parameters ------------")
+      logger.info("             Updating Network Parameters ------------")
       workingStack = stackFactory(new_layer_params)
     })
     //Return the working solution
     workingStack
   }
+}
+
+abstract class FFBackProp(
+  stackF: NeuralStackFactory[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]]) extends
+  GradBasedBackPropagation[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]] {
+
+  type PatternType = DenseVector[Double]
+
+  /**
+    * A data pipeline which takes as input a [[Stream]] of
+    * [[Tuple2]] whose first element is the activation and second element
+    * the delta value and outputs the gradient of the layer parameters.
+    **/
+  override val gradCompute = StreamDataPipe(
+    (c: (PatternType, PatternType)) => (c._1*c._2.t, c._2)) >
+    DataPipe((g: Stream[(DenseMatrix[Double], PatternType)]) => g.reduce((x, y) => (x._1+y._1, x._2+y._2)))
+
+  /**
+    * A meta pipeline which for a particular value of the layer parameters,
+    * returns a data pipe which takes as input [[Stream]] of [[Tuple2]]
+    * consisting of delta's and gradients of activation function with respect to
+    * their local fields (calculated via [[Activation.grad]]).
+    **/
+  override val backPropagate = MetaPipe(
+    (p: (DenseMatrix[Double], DenseVector[Double])) => (s: Stream[(PatternType, PatternType)]) => {
+      s.map(c => (p._1.t*c._1):*c._2)
+    })
+  /**
+    * A data pipeline which takes [[Tuple3]] consisting of
+    * output layer activations, targets and gradients of output activations
+    * with respect to their local fields, respectively and returns
+    * the output layer delta values.
+    **/
+  override val computeOutputDelta = StreamDataPipe((s: (PatternType, PatternType, PatternType)) => {
+    s._3:*(s._1 - s._2)
+  })
+
+  /**
+    * Performs the actual update to the layer parameters
+    * after all the gradients have been calculated.
+    **/
+  override val updater = new FFLayerUpdater
+
+  override val stackFactory = stackF
 }
