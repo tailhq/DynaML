@@ -32,8 +32,19 @@ trait BasicUpdater[P] extends Serializable {
       regParam: Double): (P, Double)
 }
 
+/**
+  * An updater which uses both the local gradient and
+  * the inertia of the system to perform update to its
+  * parameters.
+  * */
 trait MomentumUpdater[P] extends BasicUpdater[P] {
 
+  /**
+    *
+    * @return a [[Tuple2]] of [[P]], the first element
+    *         represents the updated parameters and the second element
+    *         represents the update performaned.
+    * */
   def computeWithMomentum(
     weightsOld: P, gradient: P,
     previousWeightUpdate: P,
@@ -63,15 +74,13 @@ class FFLayerUpdater extends MomentumUpdater[Seq[(DenseMatrix[Double], DenseVect
       val (wold, grad) = triple._1
       val update = (grad._1*stepSize + wold._1*regParam, grad._2*stepSize + wold._2*regParam)
       val prevUpdate = triple._2
+
       ((
         wold._1 - update._1*(1.0 - alpha) - prevUpdate._1*alpha,
         wold._2 - update._2*(1.0 - alpha) - prevUpdate._2*alpha), update)
     }).unzip
 }
 
-/**
- * 
- */
 abstract class Updater
   extends BasicUpdater[DenseVector[Double]]{
   def compute(
@@ -157,7 +166,6 @@ class L1Updater extends Updater {
 }
 
 /**
- * :: DeveloperApi ::
  * Updater for L2 regularized problems.
  *          R(w) = 1/2 ||w||**2
  * Uses a step-size decreasing with the square root of the number of iterations.

@@ -18,10 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
-import breeze.linalg.{Tensor}
-import com.tinkerpop.blueprints.Edge
-import com.tinkerpop.frames.EdgeFrame
-
 /**
  * Trait for optimization problem solvers.
  *
