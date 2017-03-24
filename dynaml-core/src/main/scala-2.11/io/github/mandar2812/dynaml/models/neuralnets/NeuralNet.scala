@@ -1,5 +1,7 @@
 package io.github.mandar2812.dynaml.models.neuralnets
 
+import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.stats.distributions.Uniform
 import io.github.mandar2812.dynaml.graph.NeuralGraph
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.optimization.GradBasedBackPropagation
@@ -20,7 +22,56 @@ Graph <: NeuralGraph[BaseGraph, Input, Output]] extends
 
   val transform: DataPipe[Data, Stream[(Input, Output)]]
 
-  val numPoints = transform(g).length
+  val numPoints: Int
+
+
+  /**
+    * Predict the value of the
+    * target variable given a
+    * point.
+    *
+    **/
+  override def predict(point: Input) = params.forwardPass(point)
+
+  def _neuralStack: Graph = params
+}
+
+/**
+  * Base class for implementations of feed-forward neural network
+  * models.
+  *
+  * @tparam Data The type of the training data.
+  * @tparam LayerP The type of the layer parameters i.e. weights/connections etc.
+  * @tparam I The type of the input features, output features and layer activations
+  * */
+class GenericFFNeuralNet[Data, LayerP, I](
+  trainingAlgorithm: GradBasedBackPropagation[LayerP, I],
+  data: Data, trans: DataPipe[Data, Stream[(I, I)]],
+  layerInitializer: RandomVariable[Seq[LayerP]]) extends NeuralNet[
+    Data, Seq[NeuralLayer[LayerP, I, I]],
+    I, I, NeuralStack[LayerP, I]] {
+
+  val stackFactory: NeuralStackFactory[LayerP, I] = trainingAlgorithm.stackFactory
+
+  protected val generator: RandomVariable[Seq[LayerP]] = layerInitializer
+
+  override protected val g: Data = data
+
+  val num_layers: Int = stackFactory.layerFactories.length + 1
+
+  val num_hidden_layers: Int = stackFactory.layerFactories.length - 1
+
+  val activations: Seq[Activation[I]] = stackFactory.layerFactories.map(_.activationFunc)
+
+  override val transform = trans
+
+  override val numPoints = transform(g).length
+
+  override protected var params: NeuralStack[LayerP, I] = initParams()
+
+  override protected val optimizer: GradBasedBackPropagation[LayerP, I] = trainingAlgorithm
+
+  override def initParams() = (generator.sample > stackFactory).run()
 
   /**
     * Learn the parameters
@@ -33,50 +84,12 @@ Graph <: NeuralGraph[BaseGraph, Input, Output]] extends
     params = optimizer.optimize(numPoints, transform(g), initParams())
   }
 
-  /**
-    * Predict the value of the
-    * target variable given a
-    * point.
-    *
-    **/
-  override def predict(point: Input) = params.forwardPass(point)
-}
-
-/**
-  * Base class for implementations of feed-forward neural network
-  * models.
-  *
-  * @tparam Data The type of the training data.
-  * @tparam LayerP The type of the layer parameters i.e. weights/connections etc.
-  * @tparam I The type of the input features, output features and layer activations
-  * */
-abstract class GenericFFNeuralNet[Data, LayerP, I]
-  extends NeuralNet[
-    Data, Seq[NeuralLayer[LayerP, I, I]],
-    I, I, NeuralStack[LayerP, I]] {
-
-  val stackFactory: NeuralStackFactory[LayerP, I]
-
-  protected val generator: RandomVariable[LayerP]
-
-  val num_layers: Int = stackFactory.layerFactories.length + 1
-
-  val num_hidden_layers: Int = stackFactory.layerFactories.length - 1
-
-  val activations: Seq[Activation[I]] = stackFactory.layerFactories.map(_.activationFunc)
-
-  override def initParams() = stackFactory(generator.iid(activations.length).sample())
-
-  override protected var params: NeuralStack[LayerP, I] = initParams()
-
-  override protected val optimizer: GradBasedBackPropagation[LayerP, I]
 
 }
 
 object GenericFFNeuralNet {
   /**
     * Create a feed forward neural net
-    * @param networkFactory A [[NeuralStackFactory]] object.
     * @param trainingAlgorithm The optimization/training routine
     *                          as a [[GradBasedBackPropagation]] instance
     * @param data The training data
@@ -86,16 +99,24 @@ object GenericFFNeuralNet {
     *                         the layer parameters.
     * */
   def apply[Data, LayerP, I](
-    networkFactory: NeuralStackFactory[LayerP, I],
     trainingAlgorithm: GradBasedBackPropagation[LayerP, I],
     data: Data, trans: DataPipe[Data, Stream[(I, I)]],
-    layerInitializer: RandomVariable[LayerP]) =
-    new GenericFFNeuralNet[Data, LayerP, I] {
+    layerInitializer: RandomVariable[Seq[LayerP]]) =
+    new GenericFFNeuralNet[Data, LayerP, I](trainingAlgorithm, data, trans, layerInitializer)
 
-      override val stackFactory = networkFactory
-      override protected val generator: RandomVariable[LayerP] = layerInitializer
-      override protected val optimizer: GradBasedBackPropagation[LayerP, I] = trainingAlgorithm
-      override val transform = trans
-      override protected val g: Data = data
+  def getWeightInitializer(num_units_by_layer: Seq[Int])
+  : RandomVariable[Seq[(DenseMatrix[Double], DenseVector[Double])]] = {
+
+    val uni = new Uniform(-1.0, 1.0)
+
+    RandomVariable(
+      num_units_by_layer.sliding(2)
+        .toSeq
+        .map(l => (l.head, l.last))
+        .map((c) => RandomVariable(() => (
+          DenseMatrix.tabulate(c._2, c._1)((_, _) => uni.draw()),
+          DenseVector.tabulate(c._2)(_ => uni.draw())))
+        ):_*
+    )
   }
 }

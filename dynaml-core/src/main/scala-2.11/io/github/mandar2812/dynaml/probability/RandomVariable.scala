@@ -104,8 +104,9 @@ abstract class ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * */
   def +(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-    override val sample = DataPipe(() => other.sample()) >
-        DataPipe((first: Domain) => ev.plus(first, self.sample()))
+    override val sample =
+      BifurcationPipe(self.sample, other.sample) >
+      DataPipe((couple: (Domain, Domain)) => ev.plus(couple._1, couple._2))
     }
 
   /**
@@ -118,8 +119,9 @@ abstract class ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * */
   def -(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-      override val sample = DataPipe(() => other.sample()) >
-        DataPipe((first: Domain) => ev.minus(self.sample(), first))
+      override val sample =
+        BifurcationPipe(self.sample, other.sample) >
+        DataPipe((couple: (Domain, Domain)) => ev.minus(couple._1, couple._2))
     }
 
   /**
@@ -132,8 +134,9 @@ abstract class ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * */
   def *(other: ContinuousRandomVariable[Domain])(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-      override val sample = DataPipe(() => other.sample()) >
-        DataPipe((first: Domain) => ev.times(first, self.sample()))
+      override val sample =
+        BifurcationPipe(self.sample, other.sample) >
+        DataPipe((couple: (Domain, Domain)) => ev.times(couple._1, couple._2))
     }
 
   /**
@@ -146,7 +149,7 @@ abstract class ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * */
   def +(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-      override val sample = DataPipe(() => ev.plus(other, self.sample()))
+      override val sample = self.sample > DataPipe((s: Domain) => ev.plus(other, s))
     }
 
 
@@ -160,7 +163,7 @@ abstract class ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * */
   def -(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-      override val sample = DataPipe(() => ev.minus(self.sample(), other))
+      override val sample = self.sample > DataPipe((s: Domain) => ev.minus(s, other))
     }
 
   /**
@@ -173,7 +176,7 @@ abstract class ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
     * */
   def *(other: Domain)(implicit ev: Field[Domain]): ContinuousRandomVariable[Domain] =
     new ContinuousRandomVariable[Domain] {
-      override val sample = DataPipe(() => ev.times(other, self.sample()))
+      override val sample =  self.sample > DataPipe((s: Domain) => ev.times(other, s))
     }
 }
 
@@ -343,5 +346,9 @@ object RandomVariable {
   def apply[O](r: Rand[O]) = new RandomVariable[O]  {
     val sample = DataPipe(() => r.draw)
   }
+
+  def apply[I](rvs: RandomVariable[I]*): RandomVariable[Seq[I]] = RandomVariable(() => {
+    rvs.map(_.sample.run())
+  })
 
 }

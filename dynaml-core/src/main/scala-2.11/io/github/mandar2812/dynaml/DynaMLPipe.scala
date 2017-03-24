@@ -525,11 +525,8 @@ object DynaMLPipe {
     *
     * Usage: DynaMLPipe.splitTrainingTest(num_training, num_test)
     * */
-  val splitTrainingTest: (Int, Int) => DataPipe[
-    (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-    (Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)])] =
-    (num_training: Int, num_test: Int) => DataPipe((data: (Stream[(DenseVector[Double], Double)],
-    Stream[(DenseVector[Double], Double)])) => {
+  def splitTrainingTest[P](num_training: Int, num_test: Int) =
+    DataPipe((data: (Stream[P], Stream[P])) => {
       (data._1.take(num_training), data._2.takeRight(num_test))
     })
 

@@ -68,7 +68,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
 
     cfor(1)(count => count < numIterations, count => count + 1)( count => {
 
-      logger.info("------------ Epoch "+count+" ------------")
+      logger.info("\n------------ Epoch "+count+" ------------")
 
       /*
       * In each epoch conduct three stages:
@@ -80,7 +80,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 1
       * */
-      logger.info("             Forward propagation ------------")
+      logger.info("\tForward propagation")
       val layers = workingStack._layers
 
       /*
@@ -105,7 +105,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 2
       * */
-      logger.info("             Back propagation")
+      logger.info("\tBack propagation")
       //Calculate the gradients of the output layer activations with respect to their local fields.
       val outputActGrads = outputFields.map(outputLayerActFunc.grad(_))
       //Calculate the delta variable for the output layer
@@ -128,7 +128,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
           }
         ).tail
 
-      logger.info("             Calculating gradients")
+      logger.info("\tCalculating gradients")
       /*
       * Calculate the gradients for each layer
       * grad_i needs delta_i, a_[i-1]
@@ -144,7 +144,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
         stepSize, count, regParam)._1
 
       //Spawn the updated network.
-      logger.info("             Updating Network Parameters")
+      logger.info("\tUpdating Network Parameters")
       workingStack = stackFactory(new_layer_params)
     })
     //Return the working solution
