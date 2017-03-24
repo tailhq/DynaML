@@ -1,10 +1,13 @@
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.stats.distributions.Uniform
 import io.github.mandar2812.dynaml.models.neuralnets.{Activation, NeuralStack, NeuralStackFactory}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe, StreamDataPipe, StreamMapPipe}
 import org.apache.log4j.Logger
 import spire.implicits.cfor
+
+import scala.util.Random
 
 /**
   * @author mandar2812 date 23/03/2017.
@@ -42,7 +45,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
     * with respect to their local fields, respectively and returns
     * the output layer delta values.
     * */
-  val computeOutputDelta: StreamMapPipe[(I, I, I), I]
+  val computeOutputDelta: StreamMapPipe[(I, I, I), (I, Double)]
 
   /**
     * Performs the actual update to the layer parameters
@@ -71,11 +74,19 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
     //Initialize a working solution to the loss function optimization problem
     var (workingStack, previousUpdate) = (initialStack, initialStack.layerParameters)
 
-    val (patterns, targets): (Stream[I], Stream[I]) = data.unzip
-
     logger.info("------------ Starting back-propagation procedure ------------")
+    logger.info(" Configuration ")
+    logger.info("---------------")
+    logger.info(" Mini Batch Fraction : "+miniBatchFraction)
+    logger.info(" Max Iterations : "+numIterations)
+    logger.info(" Learning Rate : "+stepSize)
+    logger.info(" Regularization : "+regParam)
+    logger.info(" Momentum: "+momentum)
 
     cfor(1)(count => count < numIterations, count => count + 1)( count => {
+
+      val (patterns, targets): (Stream[I], Stream[I]) =
+        data.filter(_ => Random.nextDouble() <= miniBatchFraction).unzip
 
       logger.info("\n------------ Epoch "+count+" ------------")
 
@@ -114,14 +125,20 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 2
       * */
-      logger.info("\tBack propagation")
       //Calculate the gradients of the output layer activations with respect to their local fields.
       val outputActGrads = outputFields.map(outputLayerActFunc.grad(_))
-      //Calculate the delta variable for the output layer
-      val outputLayerDelta: Stream[I] = computeOutputDelta(
-        outputActivations.zip(targets).zip(outputActGrads).map(t => (t._1._1, t._1._2, t._2))
-      )
 
+      //Calculate the delta variable for the output layer
+      val (outputLayerDelta, outputLosses): (Stream[I], Stream[Double]) = computeOutputDelta(
+        outputActivations.zip(targets).zip(outputActGrads).map(t => {
+          (t._1._1, t._1._2, t._2)
+        })
+      ).unzip
+
+      val avg_loss: Double = outputLosses.sum/outputLosses.length
+
+      logger.info("\tAverage Loss = "+avg_loss)
+      logger.info("\tBack propagation")
       /*
       * Calculate the deltas for each layer
       * and discard the delta value produced
@@ -190,6 +207,7 @@ class FFBackProp(
     (p: (DenseMatrix[Double], DenseVector[Double])) => (s: Stream[(PatternType, PatternType)]) => {
       s.map(c => (p._1.t*c._1):*c._2)
     })
+
   /**
     * A data pipeline which takes [[Tuple3]] consisting of
     * output layer activations, targets and gradients of output activations
@@ -197,7 +215,8 @@ class FFBackProp(
     * the output layer delta values.
     **/
   override val computeOutputDelta = StreamDataPipe((s: (PatternType, PatternType, PatternType)) => {
-    s._3:*(s._1 - s._2)
+    val diff = s._1 - s._2
+    (s._3:*diff, diff.t*diff)
   })
 
   /**
