@@ -182,6 +182,7 @@ object TestNeuralStackDelve {
           .setRegParam(regularization)
           .setStepSize(stepSize)
           .setMiniBatchFraction(mini)
+          .momentum_(alpha)
 
       val ff_neural_net = GenericFFNeuralNet(
         backPropOptimizer,

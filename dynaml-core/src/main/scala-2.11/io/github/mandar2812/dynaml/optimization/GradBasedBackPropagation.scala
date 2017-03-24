@@ -48,9 +48,18 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
     * Performs the actual update to the layer parameters
     * after all the gradients have been calculated.
     * */
-  val updater: BasicUpdater[Seq[LayerP]]
+  val updater: MomentumUpdater[Seq[LayerP]]
 
   val stackFactory: NeuralStackFactory[LayerP, I]
+
+  protected var momentum = 0.5
+
+  def _momentum = momentum
+
+  def momentum_(m: Double) = {
+    momentum = m
+    this
+  }
 
   /**
     * Solve the convex optimization problem.
@@ -60,7 +69,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
     initialStack: NeuralStack[LayerP, I]) = {
 
     //Initialize a working solution to the loss function optimization problem
-    var workingStack = initialStack
+    var (workingStack, previousUpdate) = (initialStack, initialStack.layerParameters)
 
     val (patterns, targets): (Stream[I], Stream[I]) = data.unzip
 
@@ -139,13 +148,14 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 3
       * */
-      val new_layer_params = updater.compute(
-        workingStack.layerParameters, gradientsByLayer,
-        stepSize, count, regParam)._1
+      val (new_layer_params, currentUpdate) = updater.computeWithMomentum(
+        workingStack.layerParameters, gradientsByLayer, previousUpdate,
+        stepSize, momentum, count, regParam)
 
       //Spawn the updated network.
       logger.info("\tUpdating Network Parameters")
       workingStack = stackFactory(new_layer_params)
+      previousUpdate = currentUpdate
     })
     //Return the working solution
     workingStack

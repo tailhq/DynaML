@@ -32,18 +32,41 @@ trait BasicUpdater[P] extends Serializable {
       regParam: Double): (P, Double)
 }
 
-class FFLayerUpdater extends BasicUpdater[Seq[(DenseMatrix[Double], DenseVector[Double])]] {
+trait MomentumUpdater[P] extends BasicUpdater[P] {
+
+  def computeWithMomentum(
+    weightsOld: P, gradient: P,
+    previousWeightUpdate: P,
+    step: Double, alpha: Double,
+    iter: Int, regParam: Double): (P, P)
+}
+
+class FFLayerUpdater extends MomentumUpdater[Seq[(DenseMatrix[Double], DenseVector[Double])]] {
   override def compute(
     weightsOld: Seq[(DenseMatrix[Double], DenseVector[Double])],
     gradient: Seq[(DenseMatrix[Double], DenseVector[Double])],
-    stepSize: Double, iter: Int, regParam: Double) = {
+    step: Double, iter: Int, regParam: Double) = {
     (
       weightsOld.zip(gradient).map(couple =>
         (
-          couple._1._1 - couple._2._1*stepSize - couple._1._1*regParam,
-          couple._1._2 - couple._2._2*stepSize - couple._1._2*regParam)),
+          couple._1._1 - couple._2._1*step - couple._1._1*regParam,
+          couple._1._2 - couple._2._2*step - couple._1._2*regParam)),
       0.0)
   }
+
+  override def computeWithMomentum(
+    weightsOld: Seq[(DenseMatrix[Double], DenseVector[Double])],
+    gradient: Seq[(DenseMatrix[Double], DenseVector[Double])],
+    previousWeightUpdate: Seq[(DenseMatrix[Double], DenseVector[Double])],
+    stepSize: Double, alpha: Double, iter: Int, regParam: Double) =
+    weightsOld.zip(gradient).zip(previousWeightUpdate).map(triple => {
+      val (wold, grad) = triple._1
+      val update = (grad._1*stepSize + wold._1*regParam, grad._2*stepSize + wold._2*regParam)
+      val prevUpdate = triple._2
+      ((
+        wold._1 - update._1*(1.0 - alpha) - prevUpdate._1*alpha,
+        wold._2 - update._2*(1.0 - alpha) - prevUpdate._2*alpha), update)
+    }).unzip
 }
 
 /**
