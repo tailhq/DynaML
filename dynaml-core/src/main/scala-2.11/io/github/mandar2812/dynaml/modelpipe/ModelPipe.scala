@@ -4,7 +4,7 @@ import io.github.mandar2812.dynaml.models.Model
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
-  * Top level trait for Pipes involving ML models.
+  * Top level trait for Pipes returning ML models.
   */
 trait ModelPipe[-Source, T, Q, R, +M <: Model[T, Q, R]]
   extends DataPipe[Source, M] {
@@ -15,9 +15,20 @@ trait ModelPipe[-Source, T, Q, R, +M <: Model[T, Q, R]]
 }
 
 /**
-  * A pipeline which encapsulates a DynaML [[Model]]
+  * A pipeline which encapsulates a DynaML [[Model.predict()]] functionality.
+  *
+  * @tparam T The training data type accepted by the encapsulated model
+  * @tparam P The type of unprocessed input to the pipe
+  * @tparam Q The type of input features the model accepts
+  * @tparam R The type of output returned by [[Model.predict()]]
+  * @tparam S The type of the processed output.
+  *
+  * @param m The underlying model
+  * @param pre Pre-processing [[DataPipe]]
+  * @param po Post-processing [[DataPipe]]
+  *
   * */
-class ModelPredictionPipe[T, P, Q, R, S, M <: Model[T, Q, R]](
+class ModelPredictionPipe[T, -P, Q, R, +S, M <: Model[T, Q, R]](
   pre: DataPipe[P, Q], m: M, po: DataPipe[R, S])
   extends DataPipe[P, S] {
 
@@ -27,12 +38,14 @@ class ModelPredictionPipe[T, P, Q, R, S, M <: Model[T, Q, R]](
 
   val postprocess: DataPipe[R, S] = po
 
-  protected val netFlow: DataPipe[P, S] = preprocess > DataPipe((x: Q) => baseModel.predict(x)) > postprocess
+  protected val netFlow: DataPipe[P, S] =
+    preprocess > DataPipe((x: Q) => baseModel.predict(x)) > postprocess
 
   override def run(data: P) = netFlow(data)
 }
 
 object ModelPredictionPipe {
-  def apply[T, P, Q, R, S, M <: Model[T, Q, R]](pre: DataPipe[P, Q], m: M, po: DataPipe[R, S]) =
+  def apply[T, P, Q, R, S, M <: Model[T, Q, R]](
+    pre: DataPipe[P, Q], m: M, po: DataPipe[R, S]) =
     new ModelPredictionPipe[T, P, Q, R, S, M](pre, m, po)
 }
