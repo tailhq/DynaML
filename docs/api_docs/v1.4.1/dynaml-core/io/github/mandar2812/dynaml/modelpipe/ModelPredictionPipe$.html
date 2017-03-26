@@ -28,11 +28,11 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="ModelPredictionPipe.html" title="See companion trait"><img alt="Object/Trait" src="../../../../../lib/object_to_trait_big.png" /></a>
+        <a href="ModelPredictionPipe.html" title="See companion class"><img alt="Object/Class" src="../../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe">modelpipe</a></p>
-        <h1><a href="ModelPredictionPipe.html" title="See companion trait">ModelPredictionPipe</a></h1><h3><span class="morelinks"><div>
+        <h1><a href="ModelPredictionPipe.html" title="See companion class">ModelPredictionPipe</a></h1><h3><span class="morelinks"><div>
             Related Docs:
-            <a href="ModelPredictionPipe.html" title="See companion trait">trait ModelPredictionPipe</a>
+            <a href="ModelPredictionPipe.html" title="See companion class">class ModelPredictionPipe</a>
             | <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe">package modelpipe</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe$" title="Permalink" target="_top">
@@ -148,22 +148,62 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]](model:M):io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe[T,Q,R,M]"></a>
-      <a id="apply[T,Q,R,M&lt;:Model[T,Q,R]](M):ModelPredictionPipe[T,Q,R,M]"></a>
+      <a id="apply[T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]](featuresSc:io.github.mandar2812.dynaml.pipes.ReversibleScaler[Q],outputSc:io.github.mandar2812.dynaml.pipes.ReversibleScaler[R],m:M):io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe[T,Q,Q,R,R,M]"></a>
+      <a id="apply[T,Q,R,M&lt;:Model[T,Q,R]](ReversibleScaler[Q],ReversibleScaler[R],M):ModelPredictionPipe[T,Q,Q,R,R,M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="M">M &lt;: <a href="../models/Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>]</span>]</span><span class="params">(<span name="model">model: <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.M">M</span></span>)</span><span class="result">: <a href="ModelPredictionPipe.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe">ModelPredictionPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.M">M</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="M">M &lt;: <a href="../models/Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>]</span>]</span><span class="params">(<span name="featuresSc">featuresSc: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>]</span>, <span name="outputSc">outputSc: <span class="extype" name="io.github.mandar2812.dynaml.pipes.ReversibleScaler">ReversibleScaler</span>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>]</span>, <span name="m">m: <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.M">M</span></span>)</span><span class="result">: <a href="ModelPredictionPipe.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe">ModelPredictionPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.M">M</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe$@apply[T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]](model:M):io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe[T,Q,R,M]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe$@apply[T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]](featuresSc:io.github.mandar2812.dynaml.pipes.ReversibleScaler[Q],outputSc:io.github.mandar2812.dynaml.pipes.ReversibleScaler[R],m:M):io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe[T,Q,Q,R,R,M]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Create a <a href="ModelPredictionPipe.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe">ModelPredictionPipe</a> instance
+given scaling relationships for features and outputs,
+along with a DynaML <span class="extype" name="Model">Model</span></p>
+    </li><li name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply[T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]](m:M):io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe[T,Q,Q,R,R,M]"></a>
+      <a id="apply[T,Q,R,M&lt;:Model[T,Q,R]](M):ModelPredictionPipe[T,Q,Q,R,R,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="M">M &lt;: <a href="../models/Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>]</span>]</span><span class="params">(<span name="m">m: <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.M">M</span></span>)</span><span class="result">: <a href="ModelPredictionPipe.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe">ModelPredictionPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.M">M</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe$@apply[T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]](m:M):io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe[T,Q,Q,R,R,M]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create a <a href="ModelPredictionPipe.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe">ModelPredictionPipe</a> instance
+(having no pre or post processing steps)
+given a DynaML <span class="extype" name="Model">Model</span></p>
+    </li><li name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply[T,P,Q,R,S,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]](pre:io.github.mandar2812.dynaml.pipes.DataPipe[P,Q],m:M,po:io.github.mandar2812.dynaml.pipes.DataPipe[R,S]):io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe[T,P,Q,R,S,M]"></a>
+      <a id="apply[T,P,Q,R,S,M&lt;:Model[T,Q,R]](DataPipe[P,Q],M,DataPipe[R,S]):ModelPredictionPipe[T,P,Q,R,S,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>, <span name="P">P</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="S">S</span>, <span name="M">M &lt;: <a href="../models/Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>]</span>]</span><span class="params">(<span name="pre">pre: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.P">P</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>]</span>, <span name="m">m: <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.M">M</span></span>, <span name="po">po: <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.S">S</span>]</span>)</span><span class="result">: <a href="ModelPredictionPipe.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe">ModelPredictionPipe</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.P">P</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.R">R</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.S">S</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.apply.M">M</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe$@apply[T,P,Q,R,S,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]](pre:io.github.mandar2812.dynaml.pipes.DataPipe[P,Q],m:M,po:io.github.mandar2812.dynaml.pipes.DataPipe[R,S]):io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe[T,P,Q,R,S,M]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create a <a href="ModelPredictionPipe.html" class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe">ModelPredictionPipe</a> instance given
+a pre-processing flow, a DynaML <span class="extype" name="Model">Model</span> and a post-processing flow
+respectively.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

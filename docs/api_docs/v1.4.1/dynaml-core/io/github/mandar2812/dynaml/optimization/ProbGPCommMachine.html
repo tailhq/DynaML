@@ -350,18 +350,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#getEnergyLandscape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getEnergyLandscape(initialConfig:Map[String,Double],options:Map[String,String]):List[(Double,Map[String,Double])]"></a>
-      <a id="getEnergyLandscape(Map[String,Double],Map[String,String]):List[(Double,Map[String,Double])]"></a>
+      <a id="getEnergyLandscape(initialConfig:Map[String,Double],options:Map[String,String],prior:Map[String,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Double]]):List[(Double,Map[String,Double])]"></a>
+      <a id="getEnergyLandscape(Map[String,Double],Map[String,String],Map[String,ContinuousDistrRV[Double]]):List[(Double,Map[String,Double])]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getEnergyLandscape</span><span class="params">(<span name="initialConfig">initialConfig: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map()</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>])]</span>
+        <span class="name">getEnergyLandscape</span><span class="params">(<span name="initialConfig">initialConfig: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="options">options: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map()</span></span>, <span name="prior">prior: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../probability/ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="scala.Double">Double</span>]] = <span class="symbol">Map()</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@getEnergyLandscape(initialConfig:Map[String,Double],options:Map[String,String]):List[(Double,Map[String,Double])]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@getEnergyLandscape(initialConfig:Map[String,Double],options:Map[String,String],prior:Map[String,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Double]]):List[(Double,Map[String,Double])]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#getGrid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getGrid(initialConfig:Map[String,Double]):Seq[Map[String,Double]]"></a>
+      <a id="getGrid(Map[String,Double]):Seq[Map[String,Double]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getGrid</span><span class="params">(<span name="initialConfig">initialConfig: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@getGrid(initialConfig:Map[String,Double]):Seq[Map[String,Double]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -468,8 +485,25 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GridSearch.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GridSearch">GridSearch</a> → <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#meanFieldPrior" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="meanFieldPrior:Map[String,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Double]]"></a>
+      <a id="meanFieldPrior:Map[String,ContinuousDistrRV[Double]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">meanFieldPrior</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../probability/ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@meanFieldPrior:Map[String,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Double]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing#mutate" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mutate:(Map[String,Double],Double)=&gt;scala.collection.immutable.Map[String,Double]"></a>
+      <a id="mutate:(Map[String,Double],Double)=&gt;Map[String,Double]"></a>
       <a id="mutate:(Map[String,Double],Double)⇒Map[String,Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -477,10 +511,10 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">mutate</span><span class="result">: (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">mutate</span><span class="result">: (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@mutate:(Map[String,Double],Double)=&gt;scala.collection.immutable.Map[String,Double]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@mutate:(Map[String,Double],Double)=&gt;Map[String,Double]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -553,6 +587,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#num_samples" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="num_samples:Int"></a>
+      <a id="num_samples:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">num_samples</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@num_samples:Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.ProbGPCommMachine#optimize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="optimize(initialConfig:Map[String,Double],options:Map[String,String]):(io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel[T,I],Map[String,Double])"></a>
       <a id="optimize(Map[String,Double],Map[String,String]):(AbstractGPRegressionModel[T,I],Map[String,Double])"></a>
@@ -655,6 +706,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CoupledSimulatedAnnealing.html" class="extype" name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing">CoupledSimulatedAnnealing</a></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#setNumSamples" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setNumSamples(n:Int):io.github.mandar2812.dynaml.optimization.GlobalOptimizer[T]"></a>
+      <a id="setNumSamples(Int):GlobalOptimizer[AbstractGPRegressionModel[T,I]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setNumSamples</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<a href="../models/gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.ProbGPCommMachine.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.ProbGPCommMachine.I">I</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@setNumSamples(n:Int):io.github.mandar2812.dynaml.optimization.GlobalOptimizer[T]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.ProbGPCommMachine#setPolicy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="setPolicy(p:String):ProbGPCommMachine.this.type"></a>
       <a id="setPolicy(String):ProbGPCommMachine.this.type"></a>
@@ -672,6 +740,23 @@
       </a>
     </span>
       
+    </li><li name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer#setPrior" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setPrior(p:Map[String,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Double]]):io.github.mandar2812.dynaml.optimization.GlobalOptimizer[T]"></a>
+      <a id="setPrior(Map[String,ContinuousDistrRV[Double]]):GlobalOptimizer[AbstractGPRegressionModel[T,I]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setPrior</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../probability/ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: <a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a>[<a href="../models/gp/AbstractGPRegressionModel.html" class="extype" name="io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel">AbstractGPRegressionModel</a>[<span class="extype" name="io.github.mandar2812.dynaml.optimization.ProbGPCommMachine.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.optimization.ProbGPCommMachine.I">I</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.ProbGPCommMachine@setPrior(p:Map[String,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Double]]):io.github.mandar2812.dynaml.optimization.GlobalOptimizer[T]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GlobalOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.GlobalOptimizer">GlobalOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing#setStepSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setStepSize(s:Double):io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing[M]"></a>
       <a id="setStepSize(Double):CoupledSimulatedAnnealing[AbstractGPRegressionModel[T,I]]"></a>

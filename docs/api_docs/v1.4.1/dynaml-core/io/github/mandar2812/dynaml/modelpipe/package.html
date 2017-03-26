@@ -201,25 +201,25 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Top level trait for Pipes involving ML models.</p>
-    </li><li name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ModelPredictionPipe[T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]]extendsDataPipe[Q,R]"></a>
-      <a id="ModelPredictionPipe[T,Q,R,M&lt;:Model[T,Q,R]]:ModelPredictionPipe[T,Q,R,M]"></a>
+      <p class="shortcomment cmt">Top level trait for Pipes returning ML models.</p>
+    </li><li name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ModelPredictionPipe[T,-P,Q,R,+S,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]]extendsDataPipe[P,S]"></a>
+      <a id="ModelPredictionPipe[T,-P,Q,R,+S,M&lt;:Model[T,Q,R]]:ModelPredictionPipe[T,P,Q,R,S,M]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ModelPredictionPipe.html"><span class="name">ModelPredictionPipe</span></a><span class="tparams">[<span name="T">T</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="M">M &lt;: <a href="../models/Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.R">R</span>]</span>]</span><span class="result"> extends <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.R">R</span>]</span>
+        <a href="ModelPredictionPipe.html"><span class="name">ModelPredictionPipe</span></a><span class="tparams">[<span name="T">T</span>, <span name="P">-P</span>, <span name="Q">Q</span>, <span name="R">R</span>, <span name="S">+S</span>, <span name="M">M &lt;: <a href="../models/Model.html" class="extype" name="io.github.mandar2812.dynaml.models.Model">Model</a>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.T">T</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.Q">Q</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.R">R</span>]</span>]</span><span class="result"> extends <span class="extype" name="io.github.mandar2812.dynaml.pipes.DataPipe">DataPipe</span>[<span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.P">P</span>, <span class="extype" name="io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.modelpipe.package@ModelPredictionPipe[T,Q,R,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]]extendsDataPipe[Q,R]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.modelpipe.package@ModelPredictionPipe[T,-P,Q,R,+S,M&lt;:io.github.mandar2812.dynaml.models.Model[T,Q,R]]extendsDataPipe[P,S]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A pipeline which encapsulates a DynaML <span class="extype" name="Model">Model</span>
-</p>
+      <p class="shortcomment cmt">A pipeline which encapsulates a DynaML <span class="extype" name="Model.predict()">Model.predict()</span> functionality.</p><div class="fullcomment"><div class="comment cmt"><p>A pipeline which encapsulates a DynaML <span class="extype" name="Model.predict()">Model.predict()</span> functionality.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The training data type accepted by the encapsulated model</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of unprocessed input to the pipe</p></dd><dt class="tparam">Q</dt><dd class="cmt"><p>The type of input features the model accepts</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of output returned by <span class="extype" name="Model.predict()">Model.predict()</span></p></dd><dt class="tparam">S</dt><dd class="cmt"><p>The type of the processed output.</p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.modelpipe.ModelTestPipe" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ModelTestPipe[Source,Destination,Data,Features,Label,M&lt;:io.github.mandar2812.dynaml.models.Model[Data,Features,Label]]extendsDataPipe[(M,Source),Destination]"></a>
       <a id="ModelTestPipe[Source,Destination,Data,Features,Label,M&lt;:Model[Data,Features,Label]]:ModelTestPipe[Source,Destination,Data,Features,Label,M]"></a>

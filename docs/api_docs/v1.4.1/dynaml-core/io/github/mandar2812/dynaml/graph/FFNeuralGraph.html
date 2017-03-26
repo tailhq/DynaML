@@ -47,7 +47,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">FFNeuralGraph</span><span class="result"> extends <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]]</span>
+        <span class="name">FFNeuralGraph</span><span class="result"> extends <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
       </h4>
       
@@ -55,7 +55,7 @@
 feed-forward neural network.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -504,7 +504,7 @@ calculate the predicted output.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.graph.FFNeuralGraph#num_inputs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.graph.FFNeuralGraph#num_inputs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="num_inputs:Int"></a>
       <a id="num_inputs:Int"></a>
       <h4 class="signature">
@@ -520,8 +520,8 @@ calculate the predicted output.
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.graph.FFNeuralGraph">FFNeuralGraph</a> → <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph">NeuralGraph</a></dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.graph.FFNeuralGraph#num_outputs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      
+    </li><li name="io.github.mandar2812.dynaml.graph.FFNeuralGraph#num_outputs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="num_outputs:Int"></a>
       <a id="num_outputs:Int"></a>
       <h4 class="signature">
@@ -537,7 +537,7 @@ calculate the predicted output.
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.graph.FFNeuralGraph">FFNeuralGraph</a> → <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph">NeuralGraph</a></dd></dl></div>
+      
     </li><li name="io.github.mandar2812.dynaml.graph.FFNeuralGraph#predictBatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predictBatch(procInputs:List[List[Double]]):scala.collection.immutable.Map[Int,scala.collection.immutable.Map[Int,Double]]"></a>
       <a id="predictBatch(List[List[Double]]):Map[Int,Map[Int,Double]]"></a>
@@ -678,7 +678,7 @@ input points.
 
         <div id="inheritedMembers">
         <div class="parent" name="io.github.mandar2812.dynaml.graph.NeuralGraph">
-              <h3>Inherited from <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>]]</h3>
+              <h3>Inherited from <a href="NeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph">NeuralGraph</a>[<span class="extype" name="com.tinkerpop.frames.FramedGraph">FramedGraph</span>[<span class="extype" name="com.tinkerpop.blueprints.Graph">Graph</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

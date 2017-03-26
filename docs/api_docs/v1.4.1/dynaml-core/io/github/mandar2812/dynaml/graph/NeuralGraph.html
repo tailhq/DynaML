@@ -28,12 +28,10 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="NeuralGraph$.html" title="See companion object"><img alt="Trait/Object" src="../../../../../lib/trait_to_object_big.png" /></a>
+        <img alt="Trait" src="../../../../../lib/trait_big.png" />
         <p id="owner"><a href="../../../../package.html" class="extype" name="io">io</a>.<a href="../../../package.html" class="extype" name="io.github">github</a>.<a href="../../package.html" class="extype" name="io.github.mandar2812">mandar2812</a>.<a href="../package.html" class="extype" name="io.github.mandar2812.dynaml">dynaml</a>.<a href="package.html" class="extype" name="io.github.mandar2812.dynaml.graph">graph</a></p>
-        <h1><a href="NeuralGraph$.html" title="See companion object">NeuralGraph</a></h1><h3><span class="morelinks"><div>
-            Related Docs:
-            <a href="NeuralGraph$.html" title="See companion object">object NeuralGraph</a>
-            | <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.graph">package graph</a>
+        <h1>NeuralGraph</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="io.github.mandar2812.dynaml.graph">package graph</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../../index.html#io.github.mandar2812.dynaml.graph.NeuralGraph" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
@@ -47,20 +45,20 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">NeuralGraph</span><span class="tparams">[<span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">NeuralGraph</span><span class="tparams">[<span name="B">B</span>, <span name="I">I</span>, <span name="J">J</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Neural Graph is an encapsulation
 of a base graph of type <span class="extype" name="B">B</span> with
-a set of predifined behaviors.
+a set of predefined behaviors.
 </p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the encapsulated
-          base graph object</p></dd></dl><div class="toggleContainer block">
+          base graph object</p></dd><dt class="tparam">I</dt><dd class="cmt"><p>Type of input</p></dd><dt class="tparam">J</dt><dd class="cmt"><p>Type of output</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.FFNeuralGraph">FFNeuralGraph</a></div>
+            <div class="subClasses hiddenContent"><a href="FFNeuralGraph.html" class="extype" name="io.github.mandar2812.dynaml.graph.FFNeuralGraph">FFNeuralGraph</a>, <a href="../models/neuralnets/NeuralStack.html" class="extype" name="io.github.mandar2812.dynaml.models.neuralnets.NeuralStack">NeuralStack</a></div>
           </div></div>
         
 
@@ -102,18 +100,18 @@ a set of predifined behaviors.
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="io.github.mandar2812.dynaml.graph.NeuralGraph#forwardPass" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="forwardPass:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]"></a>
-      <a id="forwardPass:(DenseVector[Double])⇒DenseVector[Double]"></a>
+      <a id="forwardPass:I=&gt;J"></a>
+      <a id="forwardPass:(I)⇒J"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">forwardPass</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]) ⇒ <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">forwardPass</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph.I">I</span>) ⇒ <span class="extype" name="io.github.mandar2812.dynaml.graph.NeuralGraph.J">J</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.graph.NeuralGraph@forwardPass:breeze.linalg.DenseVector[Double]=&gt;breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.graph.NeuralGraph@forwardPass:I=&gt;J" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -135,40 +133,6 @@ a set of predifined behaviors.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="io.github.mandar2812.dynaml.graph.NeuralGraph#num_inputs" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="num_inputs:Int"></a>
-      <a id="num_inputs:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">num_inputs</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.graph.NeuralGraph@num_inputs:Int" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="io.github.mandar2812.dynaml.graph.NeuralGraph#num_outputs" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="num_outputs:Int"></a>
-      <a id="num_outputs:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">num_outputs</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.graph.NeuralGraph@num_outputs:Int" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li></ol>
             </div>
 
