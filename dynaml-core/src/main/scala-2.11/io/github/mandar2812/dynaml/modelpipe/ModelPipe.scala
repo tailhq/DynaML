@@ -1,7 +1,8 @@
 package io.github.mandar2812.dynaml.modelpipe
 
 import io.github.mandar2812.dynaml.models.Model
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler}
 
 /**
   * Top level trait for Pipes returning ML models.
@@ -45,7 +46,32 @@ class ModelPredictionPipe[T, -P, Q, R, +S, M <: Model[T, Q, R]](
 }
 
 object ModelPredictionPipe {
+  /**
+    * Create a [[ModelPredictionPipe]] instance given
+    * a pre-processing flow, a DynaML [[Model]] and a post-processing flow
+    * respectively.
+    * */
   def apply[T, P, Q, R, S, M <: Model[T, Q, R]](
     pre: DataPipe[P, Q], m: M, po: DataPipe[R, S]) =
     new ModelPredictionPipe[T, P, Q, R, S, M](pre, m, po)
+
+  /**
+    * Create a [[ModelPredictionPipe]] instance
+    * (having no pre or post processing steps)
+    * given a DynaML [[Model]]
+    *
+    * */
+  def apply[T, Q, R, M <: Model[T, Q, R]](m: M) =
+    new ModelPredictionPipe[T, Q, Q, R, R, M](identityPipe[Q], m, identityPipe[R])
+
+  /**
+    * Create a [[ModelPredictionPipe]] instance
+    * given scaling relationships for features and outputs,
+    * along with a DynaML [[Model]]
+    *
+    * */
+  def apply[T, Q, R, M <: Model[T, Q, R]](
+    featuresSc: ReversibleScaler[Q], outputSc: ReversibleScaler[R], m: M) =
+    new ModelPredictionPipe[T, Q, Q, R, R, M](featuresSc, m, outputSc.i)
+
 }
