@@ -91,7 +91,7 @@ object BackPropagation {
              transform: DataPipe[T, Stream[(DenseVector[Double], DenseVector[Double])]],
              sparsityWeight: Double = 0.0) = {
 
-    //log important backpropagation parameters to the screen
+    //log important back-propagation parameters to the screen
     logger.info(" Configuration ")
     logger.info("---------------")
     logger.info(" Mini Batch Fraction : "+miniBatchFraction)
@@ -101,7 +101,7 @@ object BackPropagation {
     logger.info(" Momentum: "+momentum)
 
     //Calculate the effective data size based on the
-    //minibatch fraction and the total number of
+    //mini batch fraction and the total number of
     //training data points
     val effectiveDataSize = nPoints*miniBatchFraction
 
@@ -135,7 +135,7 @@ object BackPropagation {
       node.setValueBuffer(procOutputs(node.getNID() - 1).toArray)
     })
 
-    //Begin backpropagation iterations
+    //Begin back-propagation iterations
 
     cfor(1)(iteration => iteration < numIterations, iteration => iteration + 1)( iteration => {
 

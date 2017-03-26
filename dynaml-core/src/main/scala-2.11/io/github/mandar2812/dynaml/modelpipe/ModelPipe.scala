@@ -17,16 +17,22 @@ trait ModelPipe[-Source, T, Q, R, +M <: Model[T, Q, R]]
 /**
   * A pipeline which encapsulates a DynaML [[Model]]
   * */
-trait ModelPredictionPipe[T, Q, R, M <: Model[T, Q, R]]
-  extends DataPipe[Q, R] {
+class ModelPredictionPipe[T, P, Q, R, S, M <: Model[T, Q, R]](
+  pre: DataPipe[P, Q], m: M, po: DataPipe[R, S])
+  extends DataPipe[P, S] {
 
-  val baseModel: M
+  val preprocess: DataPipe[P, Q] = pre
 
-  override def run(data: Q) = baseModel.predict(data)
+  val baseModel: M = m
+
+  val postprocess: DataPipe[R, S] = po
+
+  protected val netFlow: DataPipe[P, S] = preprocess > DataPipe((x: Q) => baseModel.predict(x)) > postprocess
+
+  override def run(data: P) = netFlow(data)
 }
 
 object ModelPredictionPipe {
-  def apply[T, Q, R, M <: Model[T, Q, R]](model: M) = new ModelPredictionPipe[T, Q, R, M] {
-    override val baseModel = model
-  }
+  def apply[T, P, Q, R, S, M <: Model[T, Q, R]](pre: DataPipe[P, Q], m: M, po: DataPipe[R, S]) =
+    new ModelPredictionPipe[T, P, Q, R, S, M](pre, m, po)
 }

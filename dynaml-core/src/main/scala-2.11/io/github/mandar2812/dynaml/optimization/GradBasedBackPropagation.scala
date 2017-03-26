@@ -60,7 +60,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
     * A data pipeline which takes [[Tuple3]] consisting of
     * output layer activations, targets and gradients of output activations
     * with respect to their local fields, respectively and returns
-    * the output layer delta values.
+    * the output layer delta values and the loss.
     * */
   val computeOutputDelta: StreamMapPipe[(I, I, I), (I, Double)]
 
