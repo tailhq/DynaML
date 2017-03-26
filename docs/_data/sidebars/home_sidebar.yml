@@ -3,7 +3,7 @@
 entries:
 - title: DynaML
   product: DynaML
-  version: 1.4
+  version: 1.4.x
   folders:
 
   - title:

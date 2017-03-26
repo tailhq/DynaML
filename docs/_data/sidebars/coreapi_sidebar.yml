@@ -4,7 +4,7 @@ entries:
 
 - title: Sidebar
   product: Core API
-  version: 1.4
+  version: 1.4.x
 
   folders:
 
