@@ -71,6 +71,11 @@ abstract class RandomVariable[Domain] {
     override val baseRandomVariable: RandomVariable[Domain] = self
     override val num: Int = n
   }
+
+  /**
+    * Alias for [[sample.run()]]
+    * */
+  def draw: Domain = sample.run()
 }
 
 /**

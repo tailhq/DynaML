@@ -20,8 +20,8 @@ P <: RandomVariable[Domain1], D <: RandomVariable[Domain2]]
     *
     **/
   override val sample = DataPipe(() => {
-    val ps = prior.sample()
-    (ps, likelihood(ps).sample())
+    val ps = prior.sample.run()
+    (ps, likelihood(ps).sample.run())
   })
 }
 

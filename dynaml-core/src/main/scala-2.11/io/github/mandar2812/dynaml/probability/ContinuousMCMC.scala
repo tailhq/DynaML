@@ -32,7 +32,7 @@ class ContinuousMCMC[ConditioningSet, Domain](
 
   override val underlyingDist = new AbstractContinuousDistr[(ConditioningSet, Domain)] {
 
-    private val priorSample = prior.sample()
+    private val priorSample = prior.sample.run()
 
     override def unnormalizedLogPdf(x: (ConditioningSet, Domain)) =
       prior.underlyingDist.unnormalizedLogPdf(x._1) +
@@ -56,7 +56,7 @@ class ContinuousMCMC[ConditioningSet, Domain](
     //Initialize an MCMC sampler
     val sampler = GeneralMetropolisHastings(
       LikelihoodModel(logLikelihoodFunc), proposalDist.underlyingDist,
-      prior.sample(), burnIn)
+      prior.sample.run(), burnIn)
 
     RandomVariable(() => sampler.draw())
   })
