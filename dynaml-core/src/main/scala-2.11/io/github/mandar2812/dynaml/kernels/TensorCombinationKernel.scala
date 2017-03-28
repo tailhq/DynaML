@@ -82,3 +82,6 @@ class TensorCombinationKernel[R, S](
     }
   }
 }
+
+class KroneckerProductKernel[R, S](firstK: LocalScalarKernel[R], secondK: LocalScalarKernel[S])
+  extends TensorCombinationKernel(firstK, secondK)(Reducer.:*:)

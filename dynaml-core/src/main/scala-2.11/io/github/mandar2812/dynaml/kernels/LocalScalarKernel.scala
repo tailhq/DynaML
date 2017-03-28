@@ -127,8 +127,8 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     }
   }
 
-  def :*[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
-    new TensorCombinationKernel[Index, T1](this, otherKernel)
+  def :*[T1](otherKernel: LocalScalarKernel[T1]): KroneckerProductKernel[Index, T1] =
+    new KroneckerProductKernel[Index, T1](this, otherKernel)
 
   def :+[T1](otherKernel: LocalScalarKernel[T1]): CompositeCovariance[(Index, T1)] =
     new TensorCombinationKernel[Index, T1](this, otherKernel)(Reducer.:+:)
