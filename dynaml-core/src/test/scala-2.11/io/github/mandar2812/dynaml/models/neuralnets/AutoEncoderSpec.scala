@@ -4,8 +4,6 @@ import breeze.linalg.{DenseVector, sum}
 import breeze.stats.distributions.{Gaussian, Uniform}
 import io.github.mandar2812.dynaml.evaluation.MultiRegressionMetrics
 import org.scalatest.{FlatSpec, Matchers}
-import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._
-import io.github.mandar2812.dynaml.optimization.BackPropagation
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.RandomVariable
 import spire.implicits._
@@ -33,14 +31,14 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
       val sample = rvOnCircle.draw
       val features = DenseVector(sample._1, sample._2)
       val augFeatures = DenseVector(
-        math.pow(0.85*features(1), 2.5) + noise.draw,
-        math.pow(0.45*features(0), 3.2) + noise.draw,
+        math.pow(0.85*features(1), 2) + noise.draw,
+        math.pow(0.45*features(0), 3) + noise.draw,
         math.pow(features(0)+0.85*features(1), 3) + noise.draw,
         math.pow(features(0)-0.5*features(1), 2) + noise.draw,
         math.pow(features(0)+features(1), 3) + noise.draw,
         math.pow(features(0)-features(1), 2) + noise.draw,
-        math.pow(features(0)+0.4*features(1), 1.5) + noise.draw,
-        math.pow(features(0)+0.5*features(1), 1.5) + noise.draw)
+        math.pow(features(0)+0.4*features(1), 2) + noise.draw,
+        math.pow(features(0)+0.5*features(1), 3) + noise.draw)
 
       augFeatures
     })
@@ -51,7 +49,7 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
 
     //BackPropagation.rho = 0.5
 
-    enc.optimizer.setRegParam(0.001).setStepSize(0.001).setNumIterations(300).momentum_(0.35)
+    enc.optimizer.setRegParam(0.0).setStepSize(0.2).setNumIterations(500).momentum_(0.5)
 
     enc.learn(trainingData.toStream)
 

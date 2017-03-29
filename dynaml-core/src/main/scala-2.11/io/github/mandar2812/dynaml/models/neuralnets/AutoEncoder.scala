@@ -145,11 +145,19 @@ object GenericAutoEncoder {
     initializer: RandomVariable[Seq[LayerP]]): GenericAutoEncoder[LayerP, I] =
     new GenericAutoEncoder(learningAlgorithm, initializer)
 
-  def apply(inDim: Int, outDim: Int, acts: List[Activation[DenseVector[Double]]])
+  def apply(neurons_by_layer: List[Int], acts: List[Activation[DenseVector[Double]]])
   : GenericAutoEncoder[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]] = {
-    val num_units_layer = List(inDim, outDim, inDim)
-    val trainingAlg = new FFBackProp(NeuralStackFactory(num_units_layer)(acts))
-    apply(trainingAlg, GenericFFNeuralNet.getWeightInitializer(num_units_layer))
+
+    require(
+      neurons_by_layer.head == neurons_by_layer.last,
+      "First and last layer of an auto-encoder must have the same dimensions!")
+
+    val trainingAlg = new FFBackProp(NeuralStackFactory(neurons_by_layer)(acts))
+    apply(trainingAlg, GenericFFNeuralNet.getWeightInitializer(neurons_by_layer))
   }
 
+  def apply(inDim: Int, outDim: Int, acts: List[Activation[DenseVector[Double]]])
+  : GenericAutoEncoder[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]] =
+    apply(List(inDim, outDim, inDim), acts)
+  
 }
