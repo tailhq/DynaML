@@ -51,7 +51,6 @@ class KroneckerMOGPModel[I](
 
   override def energy(h: Map[String, Double], options: Map[String, String]): Double = {
     setState(h)
-    val processed_hyp = h.map(kv => (kv._1.split("/").tail.mkString("/"), kv._2))
 
     val (features, targets) = data.unzip
 
