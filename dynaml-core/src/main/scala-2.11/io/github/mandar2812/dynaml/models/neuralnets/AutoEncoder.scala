@@ -18,11 +18,12 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.neuralnets
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.graph.FFNeuralGraph
 import io.github.mandar2812.dynaml.graph.utils.Neuron
-import io.github.mandar2812.dynaml.optimization.BackPropagation
+import io.github.mandar2812.dynaml.optimization.{BackPropagation, FFBackProp, GradBasedBackPropagation}
 import io.github.mandar2812.dynaml.pipes.{ReversibleScaler, Scaler}
+import io.github.mandar2812.dynaml.probability.RandomVariable
 
 /**
   * @author mandar2812 22/6/16.
@@ -71,5 +72,66 @@ class AutoEncoder(inDim: Int, outDim: Int,
     DenseVector.tabulate[Double](outDim)(i => outputs(i+1))
 
   }
+
+}
+
+/**
+  * @author mandar2812 date: 29/03/17
+  *
+  * Represents an auto-encoder acting on generic types.
+  *
+  * @tparam LayerP The type of parameters specifying layer weights
+  * @tparam I The type of input features
+  * */
+class GenericAutoEncoder[LayerP, I](
+  learningAlgorithm: GradBasedBackPropagation[LayerP, I],
+  initializer: RandomVariable[Seq[LayerP]]) {
+
+  val stackFactory = learningAlgorithm.stackFactory
+
+  private val nLayers: Int = stackFactory.layerFactories.length
+
+  /**
+    * The depth of the encoder is the number of
+    * layers in the forward transform, this is
+    * calculated in a straight forward manner by
+    * dividing the total number of layers by 2.
+    * */
+  val depth: Int = nLayers/2
+
+  val generator: RandomVariable[Seq[LayerP]] = initializer
+
+  def initialize: NeuralStack[LayerP, I] = (generator.sample > stackFactory).run()
+
+  var stack: NeuralStack[LayerP, I] = initialize
+
+  /**
+    * Learn a representation from data.
+    * */
+  def learn(data: Stream[I]): Unit = stack = learningAlgorithm.optimize(data.length, data.map(x => (x,x)), initialize)
+
+  /**
+    * @return A slice of the total [[NeuralStack]] which represents the encoding transformation.
+    * */
+  def forwardStack: NeuralStack[LayerP, I] = stack(0 until depth)
+
+  /**
+    * @return A slice of the total [[NeuralStack]] which represents the decoding transformation.
+    * */
+  def reverseStack: NeuralStack[LayerP, I] = stack(depth until nLayers)
+
+  /**
+    * Encode a point
+    * @param x The point to be encoded
+    *
+    * */
+  def f(x: I): I = forwardStack.forwardPass(x)
+
+  /**
+    * Decode a point
+    * @param xhat The encoded features
+    *
+    * */
+  def i(xhat: I): I = reverseStack.forwardPass(xhat)
 
 }

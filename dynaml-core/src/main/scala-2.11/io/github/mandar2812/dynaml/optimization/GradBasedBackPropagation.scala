@@ -196,8 +196,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
   }
 }
 
-class FFBackProp(
-  stackF: NeuralStackFactory[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]]) extends
+class FFBackProp(stackF: NeuralStackFactory[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]]) extends
   GradBasedBackPropagation[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]] {
 
   type PatternType = DenseVector[Double]
