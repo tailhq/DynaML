@@ -33,6 +33,7 @@ import io.github.mandar2812.dynaml.probability.RandomVariable
   * It is represented as a [[ReversibleScaler]] transforming
   * a breeze [[DenseVector]] into another breeze Dense Vector.
   */
+@deprecated("AutoEncoder is deprecated as of DynaML v1.4.2 in favour of GenericAutoEncoder")
 class AutoEncoder(inDim: Int, outDim: Int,
                   acts: List[String] = List("logsig", "logsig"))
   extends ReversibleScaler[DenseVector[Double]]{
