@@ -41,23 +41,30 @@ Domain1, Domain2, +R <: RandomVariable[Domain1]]
 
   val func: DataPipe[Domain1, Domain2]
 
-  override val sample: DataPipe[Unit, Domain2] = baseRV.sample > func
-
   def _baseRandomVar = baseRV
 
 }
 
 object MeasurableFunction {
 
-  def apply[Domain1, @specialized Domain2, R <: RandomVariable[Domain1]](base: R)(f: Domain1 => Domain2)
+  def apply[Domain1, Domain2, R <: RandomVariable[Domain1]](base: R)(f: Domain1 => Domain2)
   : MeasurableFunction[Domain1, Domain2, R] = new MeasurableFunction[Domain1, Domain2, R] {
     override val baseRV = base
     override val func = DataPipe(f)
+    override val sample: DataPipe[Unit, Domain2] = baseRV.sample > func
+  }
+
+  def apply[Domain1, Domain2, R <: RandomVariable[Domain1]](base: R, f: DataPipe[Domain1, Domain2])
+  : MeasurableFunction[Domain1, Domain2, R] = new MeasurableFunction[Domain1, Domain2, R] {
+    override val baseRV = base
+    override val func = f
+    override val sample: DataPipe[Unit, Domain2] = baseRV.sample > func
   }
 
 }
 
-
+abstract class ContinuousMeasurableFunc[Domain1, Domain2, +R <: ContinuousRandomVariable[Domain1]]
+  extends ContinuousRandomVariable[Domain2] with MeasurableFunction[Domain1, Domain2, R]
 
 /**
   * A measurable function of a continuous random variable
@@ -73,8 +80,9 @@ object MeasurableFunction {
   * */
 class MeasurableDistrRV[Domain1, Domain2, Jacobian](
   override val baseRV: ContinuousDistrRV[Domain1])(
-  override val func: PushforwardMap[Domain1, Domain2, Jacobian]) extends ContinuousDistrRV[Domain2]
-  with MeasurableFunction[Domain1, Domain2, ContinuousDistrRV[Domain1]] {
+  override val func: PushforwardMap[Domain1, Domain2, Jacobian]) extends
+  ContinuousMeasurableFunc[Domain1, Domain2, ContinuousDistrRV[Domain1]] with
+  ContinuousDistrRV[Domain2] {
 
   override val underlyingDist = new ContinuousDistr[Domain2] {
     override def unnormalizedLogPdf(x: Domain2) =

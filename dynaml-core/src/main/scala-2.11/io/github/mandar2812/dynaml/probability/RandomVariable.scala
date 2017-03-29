@@ -76,6 +76,13 @@ abstract class RandomVariable[Domain] {
     * Alias for [[sample.run()]]
     * */
   def draw: Domain = sample.run()
+
+  /**
+    * Transform the current random variable on [[Domain]] to a
+    * morphed random variable on [[OtherDomain]]
+    * */
+  def >[OtherDomain](transformation: DataPipe[Domain, OtherDomain])
+  : MeasurableFunction[Domain, OtherDomain, RandomVariable[Domain]] = MeasurableFunction(self, transformation)
 }
 
 /**
@@ -332,7 +339,7 @@ object RandomVariable {
     * @param ev A spire [[Field]] implementation for the domain [[O]]
     * @return A continuous random variable instance.
     * */
-  def apply[O](d: ContinuousDistr[O])(implicit ev: Field[O]) = new ContinuousDistrRV[O] {
+  def apply[O](d: ContinuousDistr[O])(implicit ev: Field[O]): ContinuousDistrRV[O] = new ContinuousDistrRV[O] {
     override val underlyingDist = d
   }
 
@@ -342,7 +349,7 @@ object RandomVariable {
     * @param d A breeze discrete distribution
     * @return A discrete random variable instance.
     * */
-  def apply[O](d: DiscreteDistr[O]) = new DiscreteDistrRV[O] {
+  def apply[O](d: DiscreteDistr[O]): DiscreteDistrRV[O] = new DiscreteDistrRV[O] {
     override val underlyingDist = d
   }
 

@@ -13,7 +13,7 @@ import org.apache.log4j.Logger
   * as outlined in Lawrence et. al 2012 on arxiv
   *
   * @tparam I The index set of the GP.
-  */
+  * */
 class MOGPRegressionModel[I](
   cov: LocalScalarKernel[(I, Int)],
   n: LocalScalarKernel[(I, Int)],
