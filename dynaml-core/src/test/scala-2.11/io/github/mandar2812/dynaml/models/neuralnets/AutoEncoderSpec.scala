@@ -3,10 +3,11 @@ package io.github.mandar2812.dynaml.models.neuralnets
 import breeze.linalg.{DenseVector, sum}
 import breeze.stats.distributions.{Gaussian, Uniform}
 import io.github.mandar2812.dynaml.evaluation.MultiRegressionMetrics
-import org.scalatest.{FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.RandomVariable
 import spire.implicits._
+
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Created by mandar on 11/7/16.
@@ -45,11 +46,11 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
 
     val (trainingData, testData) = (data.take(3000), data.takeRight(1000))
 
-    val enc = GenericAutoEncoder(8, 2, List(VectorTansig, VectorTansig))
+    val enc = GenericAutoEncoder(List(8, 4, 4, 8), List(VectorTansig, VectorTansig, VectorTansig))
 
     //BackPropagation.rho = 0.5
 
-    enc.optimizer.setRegParam(0.0).setStepSize(0.2).setNumIterations(500).momentum_(0.5)
+    enc.optimizer.setRegParam(0.0001).setStepSize(0.1).setNumIterations(1000).momentum_(0.5)
 
     enc.learn(trainingData.toStream)
 
