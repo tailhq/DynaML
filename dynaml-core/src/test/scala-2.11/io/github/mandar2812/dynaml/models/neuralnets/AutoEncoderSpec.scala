@@ -6,6 +6,9 @@ import io.github.mandar2812.dynaml.evaluation.MultiRegressionMetrics
 import org.scalatest.{FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._
 import io.github.mandar2812.dynaml.optimization.BackPropagation
+import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.probability.RandomVariable
+import spire.implicits._
 
 /**
   * Created by mandar on 11/7/16.
@@ -15,7 +18,10 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
   /*"An auto-encoder"*/ ignore should "be able to learn a continuous, "+
     "invertible identity map x = g(h(x))" in {
 
-    val uni = new Uniform(0.0, 1.0)
+    val uni = new Uniform(-math.Pi, math.Pi)
+    val theta = RandomVariable(new Uniform(-math.Pi, math.Pi))
+    val circleTransform = DataPipe((t: Double) => (math.cos(t), math.sin(t)))
+    val rvOnCircle = theta > circleTransform
     //Create synthetic data set of x,y values
 
     val noise = new Gaussian(0.0, 0.02)
@@ -24,7 +30,8 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
     val epsilon = 0.05
 
     val data = (1 to numPoints).map(_ => {
-      val features = DenseVector.tabulate[Double](2)(_ => uni.draw)
+      val sample = rvOnCircle.draw
+      val features = DenseVector(sample._1, sample._2)
       val augFeatures = DenseVector(
         math.pow(0.85*features(1), 2.5) + noise.draw,
         math.pow(0.45*features(0), 3.2) + noise.draw,
@@ -35,26 +42,21 @@ class AutoEncoderSpec extends FlatSpec with Matchers {
         math.pow(features(0)+0.4*features(1), 1.5) + noise.draw,
         math.pow(features(0)+0.5*features(1), 1.5) + noise.draw)
 
-      (augFeatures, augFeatures)
+      augFeatures
     })
 
     val (trainingData, testData) = (data.take(3000), data.takeRight(1000))
 
-    val enc = new AutoEncoder(8, 4, List(SIGMOID, LIN))
+    val enc = GenericAutoEncoder(8, 2, List(VectorTansig, VectorTansig))
 
-    BackPropagation.rho = 0.5
-    enc.optimizer
-      .setRegParam(0.0)
-      .setStepSize(1.5)
-      .setNumIterations(200)
-      .setMomentum(0.4)
-      .setSparsityWeight(0.9)
+    //BackPropagation.rho = 0.5
+
+    enc.optimizer.setRegParam(0.001).setStepSize(0.001).setNumIterations(300).momentum_(0.35)
 
     enc.learn(trainingData.toStream)
 
-
     val metrics = new MultiRegressionMetrics(
-      testData.map(c => (enc.i(enc(c._1)), c._2)).toList,
+      testData.map(c => (enc.i(enc.f(c)), c)).toList,
       testData.length)
 
     println("Corr: "+metrics.corr)

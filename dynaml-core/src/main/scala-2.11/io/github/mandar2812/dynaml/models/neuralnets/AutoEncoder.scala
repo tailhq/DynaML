@@ -87,7 +87,9 @@ class GenericAutoEncoder[LayerP, I](
   learningAlgorithm: GradBasedBackPropagation[LayerP, I],
   initializer: RandomVariable[Seq[LayerP]]) {
 
-  val stackFactory = learningAlgorithm.stackFactory
+  val optimizer = learningAlgorithm
+
+  val stackFactory = optimizer.stackFactory
 
   private val nLayers: Int = stackFactory.layerFactories.length
 
@@ -108,7 +110,7 @@ class GenericAutoEncoder[LayerP, I](
   /**
     * Learn a representation from data.
     * */
-  def learn(data: Stream[I]): Unit = stack = learningAlgorithm.optimize(data.length, data.map(x => (x,x)), initialize)
+  def learn(data: Stream[I]): Unit = stack = optimizer.optimize(data.length, data.map(x => (x,x)), initialize)
 
   /**
     * @return A slice of the total [[NeuralStack]] which represents the encoding transformation.
@@ -133,5 +135,21 @@ class GenericAutoEncoder[LayerP, I](
     *
     * */
   def i(xhat: I): I = reverseStack.forwardPass(xhat)
+
+}
+
+object GenericAutoEncoder {
+
+  def apply[LayerP, I](
+    learningAlgorithm: GradBasedBackPropagation[LayerP, I],
+    initializer: RandomVariable[Seq[LayerP]]): GenericAutoEncoder[LayerP, I] =
+    new GenericAutoEncoder(learningAlgorithm, initializer)
+
+  def apply(inDim: Int, outDim: Int, acts: List[Activation[DenseVector[Double]]])
+  : GenericAutoEncoder[(DenseMatrix[Double], DenseVector[Double]), DenseVector[Double]] = {
+    val num_units_layer = List(inDim, outDim, inDim)
+    val trainingAlg = new FFBackProp(NeuralStackFactory(num_units_layer)(acts))
+    apply(trainingAlg, GenericFFNeuralNet.getWeightInitializer(num_units_layer))
+  }
 
 }
