@@ -136,12 +136,12 @@ object GaussianProcessPrior {
   /**
     * Create GP prior models on the fly
     * */
-  def apply[I, MeanFuncParams](
+  def apply[I: ClassTag, MeanFuncParams](
     covariance: LocalScalarKernel[I],
     noiseCovariance: LocalScalarKernel[I],
     meanFPipe: MetaPipe[MeanFuncParams, I, Double],
     initialParams: MeanFuncParams): GaussianProcessPrior[I, MeanFuncParams] =
-    new GaussianProcessPrior(covariance, noiseCovariance) {
+    new GaussianProcessPrior[I, MeanFuncParams](covariance, noiseCovariance) {
 
       private var params = initialParams
 
