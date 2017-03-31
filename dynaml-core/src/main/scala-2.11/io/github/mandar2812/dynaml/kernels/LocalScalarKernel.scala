@@ -1,7 +1,7 @@
 package io.github.mandar2812.dynaml.kernels
 
 import scala.reflect.ClassTag
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
 import io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix
 import io.github.mandar2812.dynaml.pipes._
 import spire.algebra.InnerProductSpace
@@ -25,8 +25,6 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     colBlocking = s._2
   }
 
-
-
   /**
     *  Create composite kernel k = k<sub>1</sub> + k<sub>2</sub>
     *
@@ -40,7 +38,7 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
   /**
     *  Create composite kernel k = k<sub>1</sub> * k<sub>2</sub>
     *
-    *  @param otherKernel The kernel to add to the current one.
+    *  @param otherKernel The kernel to multiply to the current one.
     *  @return The kernel k defined above.
     *
     * */
@@ -74,6 +72,9 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     }
   }
 
+  /**
+    * Construct a 2 layer kernel K = k1 > rbf
+    * */
   def >[K <: GenericRBFKernel[Index]](otherKernel: K): CompositeCovariance[Index] = {
 
     new CompositeCovariance[Index] {
@@ -123,6 +124,9 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
     }
   }
 
+  /**
+    * Construct the kronecker product kernel
+    * */
   def :*[T1](otherKernel: LocalScalarKernel[T1]): KroneckerProductKernel[Index, T1] =
     new KroneckerProductKernel[Index, T1](this, otherKernel)
 
@@ -153,10 +157,7 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
 
 }
 
-abstract class CompositeCovariance[T]
-  extends LocalSVMKernel[T] {
-  //override def repr: CompositeCovariance[T] = this
-}
+abstract class CompositeCovariance[T] extends LocalSVMKernel[T]
 
 object CompositeCovariance {
 

@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.kernels
 
 import spire.algebra.Field
 import breeze.linalg.DenseMatrix
+import io.github.mandar2812.dynaml.pipes.DataPipe
 
 /**
   * Implementation of locally stationary kernels as defined in
@@ -14,8 +15,9 @@ import breeze.linalg.DenseMatrix
   * @param scalingFunc The non-negative scaling function K1(.)
   *
   * */
-class LocallyStationaryKernel[I](baseKernel: StationaryKernel[I, Double, DenseMatrix[Double]],
-                                 scalingFunc: (I) => Double)(implicit ev: Field[I])
+class LocallyStationaryKernel[I](
+  baseKernel: StationaryKernel[I, Double, DenseMatrix[Double]],
+  scalingFunc: DataPipe[I, Double])(implicit ev: Field[I])
   extends LocalScalarKernel[I] {
 
   state = baseKernel.state
@@ -27,4 +29,31 @@ class LocallyStationaryKernel[I](baseKernel: StationaryKernel[I, Double, DenseMa
 
   override def gradientAt(config: Map[String, Double])(x: I, y: I) =
     baseKernel.gradientAt(config)(x, y).mapValues(_*scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5))))
+}
+
+/**
+  * @author mandar2812 date: 31/03/2017
+  *
+  * Represents covariance function of a GP which is
+  * scaled version of a base GP.
+  * z ~ GP(m(.), K(.,.))
+  * y = g(x)*z
+  *
+  * y ~ GP(g(x)*m(x), g(x)K(x,x')g(x')) 
+  * */
+class ScaledKernel[I](
+  baseKernel: LocalScalarKernel[I],
+  scalingFunc: DataPipe[I, Double])
+  extends LocalScalarKernel[I] {
+
+  state = baseKernel.state
+
+  override val hyper_parameters: List[String] = baseKernel.hyper_parameters
+
+  override def evaluateAt(config: Map[String, Double])(x: I, y: I): Double =
+    scalingFunc(x)*baseKernel.evaluateAt(config)(x,y)*scalingFunc(y)
+
+  override def gradientAt(config: Map[String, Double])(x: I, y: I) =
+    baseKernel.gradientAt(config)(x, y).mapValues(_*scalingFunc(x)*scalingFunc(y))
+
 }
