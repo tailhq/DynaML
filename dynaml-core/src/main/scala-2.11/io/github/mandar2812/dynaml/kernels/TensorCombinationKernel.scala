@@ -44,9 +44,6 @@ class TensorCombinationKernel[R, S](
     )
   }
 
-
-  override def repr: TensorCombinationKernel[R, S] = this
-
   override def setHyperParameters(h: Map[String, Double]): TensorCombinationKernel.this.type = {
     //Sanity Check
     assert(effective_hyper_parameters.forall(h.contains),

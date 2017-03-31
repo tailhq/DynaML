@@ -16,11 +16,7 @@ import spire.algebra.InnerProductSpace
   * */
 trait LocalScalarKernel[Index] extends
 CovarianceFunction[Index, Double, DenseMatrix[Double]]
-  with KernelOps[LocalScalarKernel[Index]] with Serializable { self =>
-
-  override def repr: LocalScalarKernel[Index] = this
-
-  implicit protected val kernelOps = new KernelOps.Ops[Index]
+  with Serializable { self =>
 
   var (rowBlocking, colBlocking): (Int, Int) = (1000, 1000)
 
@@ -159,7 +155,7 @@ CovarianceFunction[Index, Double, DenseMatrix[Double]]
 
 abstract class CompositeCovariance[T]
   extends LocalSVMKernel[T] {
-  override def repr: CompositeCovariance[T] = this
+  //override def repr: CompositeCovariance[T] = this
 }
 
 object CompositeCovariance {

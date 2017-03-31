@@ -55,8 +55,6 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
 
   protected def evaluationDataPipe(config: Map[String, Double]) = encodingTuple > kernelBind(config) > reducer
 
-  override def repr: DecomposableCovariance[S] = this
-
   override def setHyperParameters(h: Map[String, Double]): DecomposableCovariance.this.type = {
     //Sanity Check
     assert(effective_hyper_parameters.forall(h.contains),

@@ -25,7 +25,7 @@ import breeze.numerics.{log, sqrt}
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, LocalScalarKernel, SVMKernel}
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, KroneckerProductKernel, LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
@@ -480,3 +480,8 @@ object AbstractGPRegressionModel {
   }
 
 }
+
+abstract class KroneckerGPRegressionModel[T, I: ClassTag, J: ClassTag](
+  cov: KroneckerProductKernel[I, J], n: KroneckerProductKernel[I, J],
+  data: T, num: Int, meanFunc: DataPipe[(I, J), Double] = DataPipe((_:(I, J)) => 0.0))
+  extends AbstractGPRegressionModel[T, (I,J)](cov, n, data, num, meanFunc)

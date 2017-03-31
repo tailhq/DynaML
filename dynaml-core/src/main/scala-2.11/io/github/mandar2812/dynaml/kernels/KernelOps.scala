@@ -5,6 +5,7 @@ import breeze.generic.UFunc
 /**
   * @author mandar2812 date: 26/10/2016.
   */
+@deprecated
 trait KernelOps[+This] extends Any {
   def repr: This
 
