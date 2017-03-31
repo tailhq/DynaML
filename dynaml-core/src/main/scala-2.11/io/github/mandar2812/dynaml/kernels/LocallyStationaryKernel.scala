@@ -75,3 +75,15 @@ class ScaledKernel[I](
     baseKernel.gradientAt(config)(x, y).mapValues(_*scalingFunc(x)*scalingFunc(y))
 
 }
+
+object ScaledKernel {
+
+  /**
+    * Create Scaled Kernels on the fly
+    * */
+  def apply[I](
+    baseKernel: LocalScalarKernel[I],
+    scalingFunc: DataPipe[I, Double]): ScaledKernel[I] =
+    new ScaledKernel(baseKernel, scalingFunc)
+}
+

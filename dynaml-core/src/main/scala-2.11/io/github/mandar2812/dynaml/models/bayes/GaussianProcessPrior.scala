@@ -22,7 +22,7 @@ import spire.algebra.{Field, InnerProductSpace}
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.analysis.PartitionedVectorField
-import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
+import io.github.mandar2812.dynaml.kernels.{LocalScalarKernel, ScaledKernel}
 import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe2
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 
@@ -42,6 +42,8 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
     I, Double, PartitionedVector,
     MultGaussianPRV, MultGaussianPRV,
     AbstractGPRegressionModel[Seq[(I, Double)], I]] {
+
+  self =>
 
   type GPModel = AbstractGPRegressionModel[Seq[(I, Double)], I]
 
@@ -112,7 +114,46 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
 
     MultGaussianPRV(meanVector, covMat)
   }
+
+  /**
+    * Define a prior over the process which is a scaled version of the base GP.
+    * z ~ GP(m(.), K(.,.))
+    * y = g(x)*z
+    *
+    * y ~ GP(g(x)*m(x), g(x)K(x,x')g(x'))
+    * */
+  def *(scalingFunc: DataPipe[I, Double]): GaussianProcessPrior[I, MeanFuncParams] =
+  GaussianProcessPrior[I, MeanFuncParams](
+    ScaledKernel[I](self.covariance, scalingFunc),
+    ScaledKernel[I](self.noiseCovariance, scalingFunc),
+    MetaPipe((p: MeanFuncParams) => (x: I) => self.meanFunctionPipe(p)(x)*scalingFunc(x)),
+    self._meanFuncParams)
+
 }
+
+object GaussianProcessPrior {
+
+  /**
+    * Create GP prior models on the fly
+    * */
+  def apply[I, MeanFuncParams](
+    covariance: LocalScalarKernel[I],
+    noiseCovariance: LocalScalarKernel[I],
+    meanFPipe: MetaPipe[MeanFuncParams, I, Double],
+    initialParams: MeanFuncParams): GaussianProcessPrior[I, MeanFuncParams] =
+    new GaussianProcessPrior(covariance, noiseCovariance) {
+
+      private var params = initialParams
+
+      override def _meanFuncParams = params
+
+      override def meanFuncParams_(p: MeanFuncParams) = params = p
+
+      override val meanFunctionPipe = meanFPipe
+    }
+
+}
+
 
 /**
   * @author mandar2812 date 21/02/2017.
