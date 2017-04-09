@@ -98,13 +98,13 @@ In the _Maximum Likelihood_ (ML-II) algorithm (refer to [Ramussen & Williams](ht
 
 $$
 \begin{equation}
-log p(\mathbf{y}| X, \mathbf{\theta}) = - \frac{1}{2} \mathbf{y}^T K^{-1} \mathbf{y} - \frac{1}{2} log |K| - \frac{n}{2} log 2\pi
+log \ p(\mathbf{y}| X, \mathbf{\theta}) = - \frac{1}{2} \mathbf{y}^T K^{-1} \mathbf{y} - \frac{1}{2} log |K| - \frac{n}{2} log 2\pi
 \end{equation}
 $$
 
 $$
 \begin{align}
-& \frac{\partial }{\partial \theta_j} log p(\mathbf{y}| X, \mathbf{\theta}) = \frac{1}{2} tr ((\mathbf{\alpha} \mathbf{\alpha}^T - K^{-1}) \frac{\partial K}{\partial \theta_j}) \\
+& \frac{\partial }{\partial \theta_j} log \ p(\mathbf{y}| X, \mathbf{\theta}) = \frac{1}{2} tr ((\mathbf{\alpha} \mathbf{\alpha}^T - K^{-1}) \frac{\partial K}{\partial \theta_j}) \\
 & \mathbf{\alpha} = K^{-1} \mathbf{y}
 \end{align}
 
