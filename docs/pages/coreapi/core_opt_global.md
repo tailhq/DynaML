@@ -104,7 +104,7 @@ $$
 
 $$
 \begin{align}
-& \frac{\partial }{\partial \theta_j} log p(\mathbf{y}| X, \mathbf{\theta}) = \frac{1}{2} tr ((\mathbf{\alpha} \mathbf{\alpha}^T - K^{-1}) \frac{\partial }{\partial K\theta_j}) \\
+& \frac{\partial }{\partial \theta_j} log p(\mathbf{y}| X, \mathbf{\theta}) = \frac{1}{2} tr ((\mathbf{\alpha} \mathbf{\alpha}^T - K^{-1}) \frac{\partial K}{\partial \theta_j}) \\
 & \mathbf{\alpha} = K^{-1} \mathbf{y}
 \end{align}
 
