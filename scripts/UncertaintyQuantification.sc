@@ -144,11 +144,11 @@ legend(List("Histogram of actual test data",
 
 
 // Multidimensional Example
-
+/*
 val (training, test, noiseLevel) = (500, 1000, 0.05)
 
 
-val num_features = 4
+val num_features: Int = 4
 implicit val ev = VectorField(num_features)
 
 
@@ -212,3 +212,4 @@ unhold()
 legend(List("Histogram of actual test data",
   "Histogram of noiseless function",
   "Histogram of generated data from GP probability model"))
+*/
