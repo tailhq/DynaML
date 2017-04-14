@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.kernels
 import io.github.mandar2812.dynaml.pipes.{ProductReducer, Reducer, SumReducer}
 
 /**
-  * Represents a kernel on a product space [[R]] &times [[S]]
+  * Represents a kernel on a product space [[R]] &times; [[S]]
   *
   * @param firstK The first covariance
   * @param secondK The second covariance
