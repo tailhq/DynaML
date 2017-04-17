@@ -82,8 +82,16 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
   }
 
   /**
-    * Solve the convex optimization problem.
-    */
+    * Solve the optimization problem of
+    * determining [[NeuralStack]] weights,
+    * from training data.
+    *
+    * @param nPoints The number of training data points
+    * @param data Training data
+    * @param initialStack The initial [[NeuralStack]] before training
+    *
+    * @return A [[NeuralStack]] with the learned layer weights and biases.
+    * */
   override def optimize(
     nPoints: Long, data: Stream[(I, I)],
     initialStack: NeuralStack[LayerP, I]) = {

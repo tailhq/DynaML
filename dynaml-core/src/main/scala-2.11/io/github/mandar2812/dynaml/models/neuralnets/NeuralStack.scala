@@ -60,21 +60,60 @@ object NeuralStack {
   def apply[P, I](elements: NeuralLayer[P, I, I]*): NeuralStack[P, I] = new NeuralStack(elements:_*)
 }
 
+/**
+  * Creates a [[NeuralStack]] on the fly. Represented as a [[DataPipe]]
+  *
+  * @tparam P The type of layer parameters
+  * @tparam I The type of input accepted by the computational stack generated
+  *           by the [[run()]] method.
+  *
+  * @param layerFacs A collection of [[NeuralLayerFactory]] instances.
+  * */
 class NeuralStackFactory[P, I](layerFacs: NeuralLayerFactory[P, I, I]*)
   extends DataPipe[Seq[P], NeuralStack[P, I]] {
 
   val layerFactories: Seq[NeuralLayerFactory[P, I, I]] = layerFacs
 
-  override def run(params: Seq[P]): NeuralStack[P, I] = NeuralStack(layerFactories.zip(params).map(couple => {
-    couple._1.run(couple._2)
-  }):_*)
+  /**
+    * Generate a [[NeuralStack]]
+    * @param params The layer parameters/weights
+    * @return A [[NeuralStack]] with the provided layer weights.
+    * */
+  override def run(params: Seq[P]): NeuralStack[P, I] = NeuralStack(
+    layerFactories.zip(params).map(couple => couple._1.run(couple._2)):_*
+  )
 }
 
+/**
+  * Contains convenience methods for instantiating [[NeuralStack]] objects.
+  * */
 object NeuralStackFactory {
 
+  /**
+    * Create a [[NeuralStackFactory]] from a list of [[NeuralLayerFactory]] instances.
+    * This is an alias for instance creation using the `new` keyword.
+    * */
   def apply[P, I](layerFacs: NeuralLayerFactory[P, I, I]*): NeuralStackFactory[P, I] =
     new NeuralStackFactory(layerFacs:_*)
 
+  /**
+    * Create a [[NeuralStackFactory]] which
+    * performs operations on breeze [[DenseVector]] instances.
+    *
+    * The parameters of each layer are represented
+    * as a [[DenseMatrix]] (W) and a [[DenseVector]] (b)
+    * yielding the following relation for the forward pass.
+    *
+    * a(n+1) = &sigma;(W.a(n) + b)
+    *
+    * @param num_units_by_layer A Sequence containing number of neurons for each layer
+    * @param activations The activation functions for each layer, each activation is
+    *                    an instance or sub-class instance of [[Activation]].
+    *
+    * @return A [[NeuralStackFactory]] instance which operates on breeze [[DenseVector]],
+    *         which generates [[NeuralStack]] instances having the specified activations
+    *         and provided layer parameters.
+    * */
   def apply(
     num_units_by_layer: Seq[Int])(
     activations: Seq[Activation[DenseVector[Double]]])

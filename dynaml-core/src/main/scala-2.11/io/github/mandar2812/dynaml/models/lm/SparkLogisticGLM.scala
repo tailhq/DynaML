@@ -36,7 +36,7 @@ import org.apache.spark.rdd.RDD
   * @author mandar2812 date: 25/01/2017.
   *
   * Implementation of logistic regression model trained on Apache Spark [[RDD]]
-  */
+  * */
 class SparkLogisticGLM(
   data: RDD[(DenseVector[Double], Double)], numPoints: Long,
   map: (DenseVector[Double]) => DenseVector[Double] =
