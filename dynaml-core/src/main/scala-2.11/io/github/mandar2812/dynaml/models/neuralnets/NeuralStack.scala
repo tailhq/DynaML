@@ -7,35 +7,37 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 /**
   * A network, represented as a stack of [[NeuralLayer]] objects.
   * */
-class NeuralStack[P, I](elements: NeuralLayer[P, I, I]*)
-  extends NeuralGraph[Seq[NeuralLayer[P, I, I]], I, I] {
+class NeuralStack[P, I](elements: Seq[NeuralLayer[P, I, I]])
+  extends GenericNeuralStack[P, I, Seq[NeuralLayer[P, I, I]]](elements) {
+
+  self =>
 
   override protected val g: Seq[NeuralLayer[P, I, I]] = elements
 
   val layerParameters: Seq[P] = g.map(_.parameters)
 
-  def _layers = g
+  override def _layers = g
 
   /**
     * Do a forward pass through the network outputting all the intermediate.
     * layer activations.
     * */
-  def forwardPropagate(x: I): Seq[I] = g.scanLeft(x)((h, layer) => layer.forward(h))
+  override def forwardPropagate(x: I): Seq[I] = g.scanLeft(x)((h, layer) => layer.forward(h))
 
   /**
     * Do a forward pass through the network outputting only the output layer activations.
     * */
-  val forwardPass: (I) => I = (x: I) => g.foldLeft(x)((h, layer) => layer.forward(h))
+  override val forwardPass: (I) => I = (x: I) => g.foldLeft(x)((h, layer) => layer.forward(h))
 
   /**
     * Batch version of [[forwardPropagate()]]
     * */
-  def forwardPropagateBatch[T <: Traversable[I]](d: T): Seq[T] = g.scanLeft(d)((h, layer) => layer.forward(h))
+  override def forwardPropagateBatch[T <: Traversable[I]](d: T): Seq[T] = g.scanLeft(d)((h, layer) => layer.forward(h))
 
   /**
     * Batch version of [[forwardPass()]]
     * */
-  def forwardPassBatch[T <: Traversable[I]](d: T): T = g.foldLeft(d)((h, layer) => layer.forward(h))
+  override def forwardPassBatch[T <: Traversable[I]](d: T): T = g.foldLeft(d)((h, layer) => layer.forward(h))
 
   /**
     * Slice the stack according to a range.
@@ -46,18 +48,20 @@ class NeuralStack[P, I](elements: NeuralLayer[P, I, I]*)
     * Append another computation stack to the end of the
     * current one.
     * */
-  def ++(otherStack: NeuralStack[P, I]): NeuralStack[P, I] = NeuralStack(this.g ++ otherStack.g :_*)
+  override def ++[T <: Traversable[NeuralLayer[P, I, I]]](otherStack: GenericNeuralStack[P, I, T]) =
+    new NeuralStack(self.g ++ otherStack._layers)
 
   /**
     * Append a single computation layer to the stack.
     * */
-  def :+(computationLayer: NeuralLayer[P, I, I]): NeuralStack[P, I] = NeuralStack(this.g :+ computationLayer :_*)
+  override def :+(computationLayer: NeuralLayer[P, I, I]): NeuralStack[P, I] =
+    NeuralStack(self.g :+ computationLayer :_*)
 
 }
 
 object NeuralStack {
 
-  def apply[P, I](elements: NeuralLayer[P, I, I]*): NeuralStack[P, I] = new NeuralStack(elements:_*)
+  def apply[P, I](elements: NeuralLayer[P, I, I]*): NeuralStack[P, I] = new NeuralStack(elements)
 }
 
 /**
