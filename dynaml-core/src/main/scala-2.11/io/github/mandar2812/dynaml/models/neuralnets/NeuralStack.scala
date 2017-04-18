@@ -1,14 +1,15 @@
 package io.github.mandar2812.dynaml.models.neuralnets
 
+import scala.collection.GenTraversableLike
 import breeze.linalg.{DenseMatrix, DenseVector}
-import io.github.mandar2812.dynaml.graph.NeuralGraph
 import io.github.mandar2812.dynaml.pipes.DataPipe
+
 
 /**
   * A network, represented as a stack of [[NeuralLayer]] objects.
   * */
 class NeuralStack[P, I](elements: Seq[NeuralLayer[P, I, I]])
-  extends GenericNeuralStack[P, I, Seq[NeuralLayer[P, I, I]]](elements) {
+  extends GenericNeuralStack[P, I, NeuralLayer[P, I, I], Seq](elements) {
 
   self =>
 
@@ -42,14 +43,18 @@ class NeuralStack[P, I](elements: Seq[NeuralLayer[P, I, I]])
   /**
     * Slice the stack according to a range.
     * */
-  def apply(r: Range): NeuralStack[P, I] = NeuralStack(g.slice(r.min, r.max + 1):_*)
+  override def apply(r: Range): NeuralStack[P, I] = NeuralStack(g.slice(r.min, r.max + 1):_*)
+
 
   /**
     * Append another computation stack to the end of the
     * current one.
-    * */
-  override def ++[T <: Traversable[NeuralLayer[P, I, I]]](otherStack: GenericNeuralStack[P, I, T]) =
-    new NeuralStack(self.g ++ otherStack._layers)
+    **/
+  override def ++[
+  L <: NeuralLayer[P, I, I],
+  G[L] <: Traversable[L] with GenTraversableLike[L, G[L]]](
+    otherStack: GenericNeuralStack[P, I, L, G]) =
+    new NeuralStack(self.g ++ otherStack._layers.asInstanceOf[Seq[NeuralLayer[P, I, I]]])
 
   /**
     * Append a single computation layer to the stack.
