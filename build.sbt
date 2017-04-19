@@ -14,6 +14,12 @@ packageDescription := "DynaML is a scala library/repl for implementing and worki
 
 val mainVersion = "v1.4.2-beta.2"
 
+name := "DynamicLinearModels"
+
+version := "1.0"
+
+scalaVersion := "2.11.5"
+
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
 val baseSettings = Seq(
@@ -93,3 +99,8 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
   ).aggregate(core, pipes, examples).settings(
     aggregate in publishM2 := true)
 
+libraryDependencies ++= Seq(
+  "org.scalanlp" %% "breeze" % "0.10",
+  "org.scalaz" %% "scalaz-core" % "7.2.0",
+  "org.spire-math" %% "spire" % "0.11.0"
+)
