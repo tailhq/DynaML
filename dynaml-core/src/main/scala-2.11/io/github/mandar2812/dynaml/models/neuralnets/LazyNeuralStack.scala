@@ -25,7 +25,7 @@ class LazyNeuralStack[P, I](elements: Stream[NeuralLayer[P, I, I]]) extends
     **/
   override def ++[
   L <: NeuralLayer[P, I, I],
-  G[L] <: Traversable[L] with GenTraversableLike[L, G[L]]](
+  G[L1] <: Traversable[L1] with GenTraversableLike[L1, G[L1]]](
     otherStack: GenericNeuralStack[P, I, L, G]) =
     new LazyNeuralStack[P, I](self.g ++ otherStack._layers.asInstanceOf[Stream[NeuralLayer[P, I, I]]])
 

@@ -12,7 +12,7 @@ import scala.collection.GenTraversableLike
   * */
 class GenericNeuralStack[
 P, I, Layer <: NeuralLayer[P, I, I],
-T[Layer] <: Traversable[Layer] with GenTraversableLike[Layer, T[Layer]]
+T[L] <: Traversable[L] with GenTraversableLike[L, T[L]]
 ](elements: T[Layer]) extends NeuralGraph[T[Layer], I, I] {
 
   self =>
@@ -55,7 +55,7 @@ T[Layer] <: Traversable[Layer] with GenTraversableLike[Layer, T[Layer]]
     * */
   def ++[
   L <: NeuralLayer[P, I, I],
-  G[L] <: Traversable[L] with GenTraversableLike[L, G[L]]](
+  G[L1] <: Traversable[L1] with GenTraversableLike[L1, G[L1]]](
     otherStack: GenericNeuralStack[P, I, L, G])
   : GenericNeuralStack[P, I, NeuralLayer[P, I, I], T] = new GenericNeuralStack[P, I, NeuralLayer[P, I, I], T](
     (self.g.map((l: Layer) => l.asInstanceOf[NeuralLayer[P, I, I]]) ++

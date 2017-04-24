@@ -17,29 +17,6 @@ class NeuralStack[P, I](elements: Seq[NeuralLayer[P, I, I]])
 
   val layerParameters: Seq[P] = g.map(_.parameters)
 
-  override def _layers = g
-
-  /**
-    * Do a forward pass through the network outputting all the intermediate.
-    * layer activations.
-    * */
-  override def forwardPropagate(x: I): Seq[I] = g.scanLeft(x)((h, layer) => layer.forward(h))
-
-  /**
-    * Do a forward pass through the network outputting only the output layer activations.
-    * */
-  override val forwardPass: (I) => I = (x: I) => g.foldLeft(x)((h, layer) => layer.forward(h))
-
-  /**
-    * Batch version of [[forwardPropagate()]]
-    * */
-  override def forwardPropagateBatch[T <: Traversable[I]](d: T): Seq[T] = g.scanLeft(d)((h, layer) => layer.forward(h))
-
-  /**
-    * Batch version of [[forwardPass()]]
-    * */
-  override def forwardPassBatch[T <: Traversable[I]](d: T): T = g.foldLeft(d)((h, layer) => layer.forward(h))
-
   /**
     * Slice the stack according to a range.
     * */
@@ -52,7 +29,7 @@ class NeuralStack[P, I](elements: Seq[NeuralLayer[P, I, I]])
     **/
   override def ++[
   L <: NeuralLayer[P, I, I],
-  G[L] <: Traversable[L] with GenTraversableLike[L, G[L]]](
+  G[L1] <: Traversable[L1] with GenTraversableLike[L1, G[L1]]](
     otherStack: GenericNeuralStack[P, I, L, G]) =
     new NeuralStack(self.g ++ otherStack._layers.asInstanceOf[Seq[NeuralLayer[P, I, I]]])
 
