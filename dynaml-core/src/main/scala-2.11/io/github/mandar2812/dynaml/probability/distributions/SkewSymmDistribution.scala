@@ -7,12 +7,14 @@ import spire.algebra.Field
 
 /**
   *
-  * A generalised skew symmetric distribution has three components
+  * A generalised skew symmetric distribution has the following components
   *
-  * &phi;: A symmetric distribution acting as the base
-  * G: A symmetric distribution acting as the warping function
-  * w: An odd function from the domain type [[T]] to [[Double]].
-  * &tau;: Cutoff
+  * <ul>
+  *   <li>&phi;: A symmetric distribution acting as the base</li>
+  *   <li>G: A symmetric distribution acting as the warping function</li>
+  *   <li>w: An odd function from the domain type [[T]] to [[Double]].</li>
+  *   <li>&tau;: Cutoff</li>
+  * </ul>
   *
   * The probability density of a
   * generalised skew symmetric distribution is
