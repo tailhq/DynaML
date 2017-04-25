@@ -25,7 +25,8 @@ data/Adult.csv
 data/ForestCover.csv
 data/*Res.csv
 Gemfile.lock
-index*.html
+index-*.html
+!docs/api_docs/**/**/index.html
 *.DS_Store
 javascripts
 stylesheets
