@@ -1,0 +1,208 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>dynaml - io.github.mandar2812.dynaml</title>
+          <meta name="description" content="dynaml - io.github.mandar2812.dynaml" />
+          <meta name="keywords" content="dynaml io.github.mandar2812.dynaml" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'io.github.mandar2812.dynaml.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="io">io</a>.<a href="../../package.html" class="extype" name="io.github">github</a>.<a href="../package.html" class="extype" name="io.github.mandar2812">mandar2812</a></p>
+        <h1>dynaml</h1><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.package" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dynaml</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.DynaML" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DynaMLextendsProductwithSerializable"></a>
+      <a id="DynaML:DynaML"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DynaML.html"><span class="name">DynaML</span></a><span class="params">(<span name="predef">predef: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="defaultPredef">defaultPredef: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="storageBackend">storageBackend: <span class="extype" name="ammonite.runtime.Storage">Storage</span> = <span class="defval" name='<span class="name"><a href="../../../package.html">new Storage.Folder(Defaults.ammoniteHome)</a></span>'>...</span></span>, <span name="wd">wd: <span class="extype" name="ammonite.ops.Path">Path</span> = <span class="symbol"><span class="name"><a href="../../../../ammonite/package.html">ammonite.ops.pwd</a></span></span></span>, <span name="welcomeBanner">welcomeBanner: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol"><span class="name"><a href="../../../package.html">Some(Defaults.welcomeBanner)</a></span></span></span>, <span name="inputStream">inputStream: <span class="extype" name="java.io.InputStream">InputStream</span> = <span class="symbol">System.in</span></span>, <span name="outputStream">outputStream: <span class="extype" name="java.io.OutputStream">OutputStream</span> = <span class="symbol">System.out</span></span>, <span name="errorStream">errorStream: <span class="extype" name="java.io.OutputStream">OutputStream</span> = <span class="symbol">System.err</span></span>, <span name="verboseOutput">verboseOutput: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.package@DynaMLextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Contains the various entry points to the DynaML REPL.</p><div class="fullcomment"><div class="comment cmt"><p>Contains the various entry points to the DynaML REPL.</p><p>Configuration of the basic REPL is done by passing in arguments when
+constructing the <a href="DynaML.html" class="extype" name="io.github.mandar2812.dynaml.DynaML">DynaML</a> instance, and the various entrypoints such
+as <a href="DynaML.html#run(replArgs:ammonite.util.Bind[_]*):Any" class="extmbr" name="io.github.mandar2812.dynaml.DynaML#run">run</a> <a href="DynaML.html#runScript(path:ammonite.ops.Path,args:Seq[String],kwargs:Seq[(String,String)],replApi:Boolean):ammonite.util.Res[ammonite.util.Imports]" class="extmbr" name="io.github.mandar2812.dynaml.DynaML#runScript">runScript</a> and so on are methods on that instance.</p><p>It is more or less equivalent to the <a href="repl/DynaMLRepl.html" class="extype" name="io.github.mandar2812.dynaml.repl.DynaMLRepl">io.github.mandar2812.dynaml.repl.DynaMLRepl</a>
+] object itself, and has
+a similar set of parameters, but does not have any of the <a href="repl/DynaMLRepl.html" class="extype" name="io.github.mandar2812.dynaml.repl.DynaMLRepl">io.github.mandar2812.dynaml.repl.DynaMLRepl</a>'s
+implementation-related code and provides a more convenient set of
+entry-points that a user can call.</p><p>Note that the <a href="DynaML.html#instantiateRepl(replArgs:Seq[ammonite.util.Bind[_]]):io.github.mandar2812.dynaml.repl.DynaMLRepl" class="extmbr" name="io.github.mandar2812.dynaml.DynaML#instantiateRepl">instantiateRepl</a> function generates a new <span class="extype" name="Repl">Repl</span>
+every time it is called!
+</p></div><dl class="paramcmts block"><dt class="param">predef</dt><dd class="cmt"><p>Any additional code you want to run before the REPL session
+              starts. Can contain multiple blocks separated by <code>@</code>s</p></dd><dt class="param">defaultPredef</dt><dd class="cmt"><p>Do you want to include the &quot;standard&quot; predef imports
+                     provided by Ammonite? These include tools like <code>time</code>,
+                     <code>grep</code>, the <code>|</code> or <code>|?</code> pipes from ammonite-ops, and
+                     other helpers. Can be disabled to give a clean
+                     namespace for you to fill using your own predef.</p></dd><dt class="param">storageBackend</dt><dd class="cmt"><p>Where will all of Ammonite's persistent data get
+                      stored? Things like any <code>predef.sc</code> file,
+                      compilation/ivy caches, etc.. Defaults include
+                      <span class="extype" name="Storage.Folder">Storage.Folder</span> and <span class="extype" name="Storage.InMemory">Storage.InMemory</span>, though
+                      you can create your own.</p></dd><dt class="param">wd</dt><dd class="cmt"><p>The working directory of the REPL; when it load scripts, where
+          the scripts will be considered relative to when assigning them
+          packages</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="io.github.mandar2812.dynaml.DynaML" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DynaML"></a>
+      <a id="DynaML:DynaML"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DynaML$.html"><span class="name">DynaML</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.package@DynaML" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.DynaMLSpark" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DynaMLSpark"></a>
+      <a id="DynaMLSpark:DynaMLSpark"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DynaMLSpark$.html"><span class="name">DynaMLSpark</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.package@DynaMLSpark" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
+    </li><li name="io.github.mandar2812.dynaml.openml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="openml"></a>
+      <a id="openml:openml"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="openml/package.html"><span class="name">openml</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.package@openml" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.repl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="repl"></a>
+      <a id="repl:repl"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="repl/package.html"><span class="name">repl</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#io.github.mandar2812.dynaml.package@repl" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
