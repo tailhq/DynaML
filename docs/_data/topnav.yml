@@ -28,9 +28,13 @@ topnav_dropdowns:
       folderitems:
         - title: DynaML Core;v1.4
           external_url: /DynaML/api_docs/v1.4/dynaml-core/index.html
-        - title: DynaML Pipes;v1.4
-          external_url: /DynaML/api_docs/v1.4/dynaml-pipes/index.html
         - title: DynaML Core;v1.4.1
           external_url: /DynaML/api_docs/v1.4.1/dynaml-core/index.html
+        - title: DynaML Core;v1.4.2
+          external_url: /DynaML/api_docs/v1.4.2/dynaml-core/index.html
+        - title: DynaML Pipes;v1.4
+          external_url: /DynaML/api_docs/v1.4/dynaml-pipes/index.html
         - title: DynaML Pipes;v1.4.1
           external_url: /DynaML/api_docs/v1.4.1/dynaml-pipes/index.html
+        - title: DynaML Pipes;v1.4.2
+          external_url: /DynaML/api_docs/v1.4.2/dynaml-pipes/index.html
