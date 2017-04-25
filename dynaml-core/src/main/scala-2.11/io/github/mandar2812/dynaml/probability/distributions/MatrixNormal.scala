@@ -25,13 +25,14 @@ import breeze.stats.distributions.{ContinuousDistr, Moments, Rand, RandBasis}
 import scala.math.log1p
 
 /**
-  * @author mandar date: 05/02/2017.
   * Matrix normal distribution over n &times p matrices
   *
   * @param m The mode, mean and center of the distribution
   * @param u The n &times; n covariance matrix of the rows
   * @param v The p &times; p covariance matrix of the columns
-  */
+  *
+  * @author mandar date: 05/02/2017.
+  * */
 case class MatrixNormal(
   m: DenseMatrix[Double],
   u: DenseMatrix[Double],

@@ -14,10 +14,9 @@ import io.github.mandar2812.dynaml.probability.{E, MeasurableFunction, RandomVar
 import io.github.mandar2812.dynaml.utils
 
 /**
-  * @author mandar2812 date: 02/01/2017.
-  *
   * Univariate skew gaussian distribution
-  */
+  * @author mandar2812 date: 02/01/2017.
+  * */
 case class SkewGaussian(
   alpha: Double, mu: Double = 0.0,
   sigma: Double = 1.0) extends

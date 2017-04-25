@@ -22,7 +22,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.{ContinuousDistr, Gaussian, MultivariateGaussian}
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.analysis.{PartitionedVectorField, VectorField}
-import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian
+import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultiVariateGaussian, MatrixNormal}
 import spire.implicits._
 import spire.algebra.Field
 
@@ -30,7 +30,7 @@ abstract class AbstractGaussianRV[T, V] extends ContinuousDistrRV[T]
 
 /**
   * @author mandar2812 on 26/7/16.
-  */
+  * */
 case class GaussianRV(mu: Double, sigma: Double) extends AbstractGaussianRV[Double, Double] {
   override val underlyingDist = new Gaussian(mu, sigma)
 }
@@ -77,4 +77,12 @@ object MultGaussianPRV {
     new MultGaussianPRV(mu, covariance)
   }
 
+}
+
+case class MatrixNormalRV(
+  m: DenseMatrix[Double], u: DenseMatrix[Double],
+  v: DenseMatrix[Double]) extends AbstractGaussianRV[
+  DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double])] {
+
+  override val underlyingDist = MatrixNormal(m, u, v)
 }

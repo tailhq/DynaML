@@ -6,14 +6,22 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 import spire.algebra.Field
 
 /**
-  * @author mandar2812 date: 04/01/2017.
   *
   * A generalised skew symmetric distribution has three components
   *
-  * basisDistr: A symmetric distribution acting as the base
-  * warpingDistr: A symmetric distribution acting as the warping function
+  * &phi;: A symmetric distribution acting as the base
+  * G: A symmetric distribution acting as the warping function
   * w: An odd function from the domain type [[T]] to [[Double]].
-  */
+  * &tau;: Cutoff
+  *
+  * The probability density of a
+  * generalised skew symmetric distribution is
+  *
+  * &rho;(x) = &phi;(x)*G(w(x) + &tau;)
+  *
+  * @author mandar2812 date: 04/01/2017.
+  *
+  * */
 abstract class SkewSymmDistribution[T](implicit f: Field[T])
   extends ContinuousDistr[T] {
 

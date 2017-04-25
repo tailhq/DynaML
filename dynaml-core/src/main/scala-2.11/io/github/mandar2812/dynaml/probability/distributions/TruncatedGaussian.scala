@@ -3,10 +3,15 @@ package io.github.mandar2812.dynaml.probability.distributions
 import breeze.stats.distributions._
 
 /**
+  * Univariate Truncated Gaussian Distribution
+  *
+  * @param mu The mean of the base gaussian.
+  * @param sigma Std Deviation of the base gaussian.
+  * @param a Lower limit of truncation.
+  * @param b Upper limit of truncation.
   * @author mandar2812 date 03/03/2017.
   *
-  * Univariate Truncated Gaussian Distribution
-  */
+  * */
 case class TruncatedGaussian(mu: Double, sigma: Double, a: Double, b: Double)(
   implicit rand: RandBasis = Rand) extends
   AbstractContinuousDistr[Double] with
@@ -22,7 +27,12 @@ case class TruncatedGaussian(mu: Double, sigma: Double, a: Double, b: Double)(
 
   private val (alpha, beta) = ((a-mu)/sigma, (b-mu)/sigma)
 
-  override def probability(x: Double, y: Double) = ???
+  override def probability(x: Double, y: Double) = {
+    require(
+      x <= y,
+      "Lower limit x must be actually lesser than upper limit y in P(x <= a <= y)")
+    cdf(y) - cdf(x)
+  }
 
   override def cdf(x: Double) =
     if(x <= a) 0.0

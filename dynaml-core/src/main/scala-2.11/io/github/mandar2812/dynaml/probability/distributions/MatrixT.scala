@@ -25,12 +25,13 @@ import io.github.mandar2812.dynaml.utils.mvlgamma
 import org.apache.spark.annotation.Experimental
 
 /**
-  * @author mandar2812 date: 05/02/2017.
   * Matrix Students T distribution over n &times p matrices
   *
   * @param m The mode, mean and center of the distribution
   * @param omega The p &times; p covariance matrix of the columns
   * @param sigma The n &times; n covariance matrix of the rows
+  * @author mandar2812 date: 05/02/2017.
+  *
   * */
 @Experimental
 case class MatrixT(
