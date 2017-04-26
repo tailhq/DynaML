@@ -4,14 +4,17 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.{ContinuousDistr, StudentsT}
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.analysis.{PartitionedVectorField, VectorField}
-import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultivariateStudentsT, MultivariateStudentsT}
+import io.github.mandar2812.dynaml.probability.distributions.{
+BlockedMultivariateStudentsT, MatrixT, MultivariateStudentsT}
 import spire.implicits._
 import spire.algebra.Field
 
+abstract class AbstractStudentsTRandVar[I](mu: Double) extends ContinuousDistrRV[I]
+
 /**
-  * Created by mandar on 26/08/16.
-  */
-case class StudentsTRV(mu: Double) extends ContinuousDistrRV[Double] {
+  * @author mandar2812 date 26/08/16.
+  * */
+case class StudentsTRV(mu: Double) extends AbstractStudentsTRandVar[Double](mu) {
   override val underlyingDist = new StudentsT(mu)
 
 }
@@ -20,7 +23,7 @@ case class MultStudentsTRV(mu: Double,
                            mean: DenseVector[Double],
                            covariance : DenseMatrix[Double])(
   implicit ev: Field[DenseVector[Double]])
-  extends ContinuousDistrRV[DenseVector[Double]] {
+  extends AbstractStudentsTRandVar[DenseVector[Double]](mu) {
 
   override val underlyingDist = MultivariateStudentsT(mu, mean, covariance)
 }
@@ -42,7 +45,7 @@ case class MultStudentsTPRV(mu: Double,
                             mean: PartitionedVector,
                             covariance: PartitionedPSDMatrix)(
   implicit ev: Field[PartitionedVector])
-  extends ContinuousDistrRV[PartitionedVector] {
+  extends AbstractStudentsTRandVar[PartitionedVector](mu) {
 
   override val underlyingDist: ContinuousDistr[PartitionedVector] = BlockedMultivariateStudentsT(mu, mean, covariance)
 }
@@ -59,4 +62,13 @@ object MultStudentsTPRV {
     new MultStudentsTPRV(mu, mean, covariance)
   }
 
+}
+
+case class MatrixTRV(
+  mu: Double, m: DenseMatrix[Double],
+  u: DenseMatrix[Double],
+  v: DenseMatrix[Double]) extends
+  AbstractStudentsTRandVar[DenseMatrix[Double]](mu) {
+
+  override val underlyingDist = MatrixT(mu, m, u, v)
 }
