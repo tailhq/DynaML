@@ -47,8 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by mandar on 11/01/2017.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Contains helper functions pertaining to random variables.</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -231,8 +230,8 @@ probability density function.</p>
       <a id="ContinuousMeasurableFunc[Domain1,Domain2,+R&lt;:ContinuousRandomVariable[Domain1]]:ContinuousMeasurableFunc[Domain1,Domain2,R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="ContinuousMeasurableFunc.html"><span class="name">ContinuousMeasurableFunc</span></a><span class="tparams">[<span name="Domain1">Domain1</span>, <span name="Domain2">Domain2</span>, <span name="R">+R &lt;: <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousMeasurableFunc.Domain1">Domain1</span>]</span>]</span><span class="result"> extends <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousMeasurableFunc.Domain2">Domain2</span>] with <a href="MeasurableFunction.html" class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableFunction">MeasurableFunction</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousMeasurableFunc.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousMeasurableFunc.Domain2">Domain2</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousMeasurableFunc.R">R</span>]</span>
@@ -469,7 +468,7 @@ underlying probability density function.</p>
     </span>
       
     </li><li name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="MeasurableDistrRV[Domain1,Domain2,Jacobian]extendsContinuousMeasurableFunc[Domain1,Domain2,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Domain1]]withContinuousDistrRV[Domain2]"></a>
+      <a id="MeasurableDistrRV[Domain1,Domain2,Jacobian]extendsContinuousRandomVariable[Domain2]withContinuousMeasurableFunc[Domain1,Domain2,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Domain1]]withContinuousDistrRV[Domain2]"></a>
       <a id="MeasurableDistrRV[Domain1,Domain2,Jacobian]:MeasurableDistrRV[Domain1,Domain2,Jacobian]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -477,10 +476,10 @@ underlying probability density function.</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="MeasurableDistrRV.html"><span class="name">MeasurableDistrRV</span></a><span class="tparams">[<span name="Domain1">Domain1</span>, <span name="Domain2">Domain2</span>, <span name="Jacobian">Jacobian</span>]</span><span class="result"> extends <a href="ContinuousMeasurableFunc.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousMeasurableFunc">ContinuousMeasurableFunc</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>]] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
+        <a href="MeasurableDistrRV.html"><span class="name">MeasurableDistrRV</span></a><span class="tparams">[<span name="Domain1">Domain1</span>, <span name="Domain2">Domain2</span>, <span name="Jacobian">Jacobian</span>]</span><span class="result"> extends <a href="ContinuousRandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousRandomVariable">ContinuousRandomVariable</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>] with <a href="ContinuousMeasurableFunc.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousMeasurableFunc">ContinuousMeasurableFunc</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>, <span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>, <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain1">Domain1</span>]] with <a href="ContinuousDistrRV.html" class="extype" name="io.github.mandar2812.dynaml.probability.ContinuousDistrRV">ContinuousDistrRV</a>[<span class="extype" name="io.github.mandar2812.dynaml.probability.MeasurableDistrRV.Domain2">Domain2</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@MeasurableDistrRV[Domain1,Domain2,Jacobian]extendsContinuousMeasurableFunc[Domain1,Domain2,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Domain1]]withContinuousDistrRV[Domain2]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@MeasurableDistrRV[Domain1,Domain2,Jacobian]extendsContinuousRandomVariable[Domain2]withContinuousMeasurableFunc[Domain1,Domain2,io.github.mandar2812.dynaml.probability.ContinuousDistrRV[Domain1]]withContinuousDistrRV[Domain2]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -504,9 +503,10 @@ with a defined probability density function.
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Created by mandar2812 on 24/09/2016.</p><div class="fullcomment"><div class="comment cmt"><p>Created by mandar2812 on 24/09/2016.</p><p>A measurable function is any mapping/function applied
+      <p class="shortcomment cmt">A measurable function is any mapping/function applied
+to samples generated by some base random variable instance.</p><div class="fullcomment"><div class="comment cmt"><p>A measurable function is any mapping/function applied
 to samples generated by some base random variable instance.
-</p></div><dl class="paramcmts block"><dt class="tparam">Domain1</dt><dd class="cmt"><p>Type over which the base random variable is defined.</p></dd><dt class="tparam">Domain2</dt><dd class="cmt"><p>Type over which output of function takes its values.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">Domain1</dt><dd class="cmt"><p>Type over which the base random variable is defined.</p></dd><dt class="tparam">Domain2</dt><dd class="cmt"><p>Type over which output of function takes its values.</p></dd><dt class="tparam">R</dt><dd class="cmt"><p>The type of the base Random Variable, must inherit from <a href="RandomVariable.html" class="extype" name="io.github.mandar2812.dynaml.probability.RandomVariable">RandomVariable</a></p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.MultGaussianPRV" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="MultGaussianPRVextendsAbstractGaussianRV[io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix]withProductwithSerializable"></a>
       <a id="MultGaussianPRV:MultGaussianPRV"></a>
@@ -745,6 +745,23 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = 1/(1 + exp(
       </a>
     </span>
       
+    </li><li name="io.github.mandar2812.dynaml.probability.ContinuousMeasurableFunc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContinuousMeasurableFunc"></a>
+      <a id="ContinuousMeasurableFunc:ContinuousMeasurableFunc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ContinuousMeasurableFunc$.html"><span class="name">ContinuousMeasurableFunc</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.probability.package@ContinuousMeasurableFunc" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="io.github.mandar2812.dynaml.probability#E" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="E(rv:io.github.mandar2812.dynaml.probability.RandomVariable[Double]):Double"></a>
       <a id="E(RandomVariable[Double]):Double"></a>
@@ -762,7 +779,7 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = 1/(1 + exp(
       </a>
     </span>
       
-    </li><li name="io.github.mandar2812.dynaml.probability#E" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="io.github.mandar2812.dynaml.probability#E" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="E[I](rv:io.github.mandar2812.dynaml.probability.RandomVariable[I])(implicitf:spire.algebra.InnerProductSpace[I,Double]):I"></a>
       <a id="E[I](RandomVariable[I])(InnerProductSpace[I,Double]):I"></a>
       <h4 class="signature">
@@ -778,7 +795,10 @@ in Gaussian Process binary classification models</p><p>p(y = 1| f) = 1/(1 + exp(
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Calculate the monte carlo estimate of the
+first moment/expectation of a random variable.</p><div class="fullcomment"><div class="comment cmt"><p>Calculate the monte carlo estimate of the
+first moment/expectation of a random variable.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The domain of the random variable.</p></dd><dt class="param">rv</dt><dd class="cmt"><p>The random variable from which to sample</p></dd><dt class="param">f</dt><dd class="cmt"><p>An implicit object representing an inner product on <span class="extype" name="I">I</span></p></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.IIDRandomVarDistr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="IIDRandomVarDistr"></a>
       <a id="IIDRandomVarDistr:IIDRandomVarDistr"></a>
@@ -985,7 +1005,7 @@ Contains apply methods which can create random variables.
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Number of monte carlo samples to generate.</p>
     </li><li name="io.github.mandar2812.dynaml.probability.distributions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="distributions"></a>
       <a id="distributions:distributions"></a>
