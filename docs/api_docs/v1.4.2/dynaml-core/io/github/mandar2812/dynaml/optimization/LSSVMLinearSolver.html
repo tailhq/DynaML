@@ -401,7 +401,7 @@ conditions on the Dual Least Squares SVM optimization problem.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver#optimize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="optimize(nPoints:Long,ParamOutEdges:(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double]),initialP:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
+      <a id="optimize(nPoints:Long,linearSystem:(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double]),initialP:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]"></a>
       <a id="optimize(Long,(DenseMatrix[Double],DenseVector[Double]),DenseVector[Double]):DenseVector[Double]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -409,17 +409,31 @@ conditions on the Dual Least Squares SVM optimization problem.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Long">Long</span></span>, <span name="ParamOutEdges">ParamOutEdges: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])</span>, <span name="initialP">initialP: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">optimize</span><span class="params">(<span name="nPoints">nPoints: <span class="extype" name="scala.Long">Long</span></span>, <span name="linearSystem">linearSystem: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])</span>, <span name="initialP">initialP: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver@optimize(nPoints:Long,ParamOutEdges:(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double]),initialP:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver@optimize(nPoints:Long,linearSystem:(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double]),initialP:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Solve the convex optimization problem.</p><div class="fullcomment"><div class="comment cmt"><p>Solve the convex optimization problem.</p><p>A = [K + I&times;&gamma;]|[1]
-     [1<sup>T</sup>]     |[0]</p><p>b = [y]
-    [0]</p><p>return A<sup>-1</sup>&times;b
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver">LSSVMLinearSolver</a> → <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a></dd></dl></div>
+      <p class="shortcomment cmt">Solve the convex optimization problem.</p><div class="fullcomment"><div class="comment cmt"><p>Solve the convex optimization problem.</p><p><table border="0">
+  <tr>
+    <th>A</th> <th>&nbsp;=&nbsp;</th> <th>K + &gamma;I</th> <th>1</th>
+  </tr>
+  <tr>
+    <th>&nbsp;</th> <th>&nbsp;</th> <th>1<sup>T</sup></th> <th>0</th>
+  </tr>
+  <tr height = 20px></tr>
+  <tr>
+    <th>b</th> <th>&nbsp;=&nbsp;</th> <th>y</th> <th>&nbsp;</th>
+  </tr>
+  <tr>
+    <th>&nbsp;</th> <th>&nbsp;</th> <th>0</th> <th>&nbsp;</th>
+  </tr>
+</table>
+</p></div><dl class="paramcmts block"><dt class="param">nPoints</dt><dd class="cmt"><p>The number of data points, i.e. also the size of matrix A</p></dd><dt class="param">linearSystem</dt><dd class="cmt"><p>The components of the linear system (A, b) as a tuple.</p></dd><dt class="param">initialP</dt><dd class="cmt"><p>An initial estimate of the linear system solution, this parameter
+                is redundant for <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver">LSSVMLinearSolver</a> as the exact solution is
+                computed.</p></dd><dt>returns</dt><dd class="cmt"><p>A<sup>-1</sup>&times;b</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver">LSSVMLinearSolver</a> → <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#regParam" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="regParam:Double"></a>
       <a id="regParam:Double"></a>
