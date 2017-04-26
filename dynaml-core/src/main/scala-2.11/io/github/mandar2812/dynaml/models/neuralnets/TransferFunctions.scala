@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.models.neuralnets
 import breeze.linalg.DenseVector
 import breeze.numerics.{cosh, sigmoid, sinh, tanh}
 import io.github.mandar2812.dynaml.pipes.Scaler
+import org.apache.spark.annotation.Experimental
 
 /**
  * @author mandar2812
@@ -156,5 +157,14 @@ object VectorRecLin extends Activation[DenseVector[Double]] {
   override val grad = Scaler((x: DenseVector[Double]) => x.map(TransferFunctions.DrecLin))
 
   override def run(data: DenseVector[Double]) = data.map(TransferFunctions.recLin)
+}
+
+@Experimental
+class VectorWavelet(motherWavelet: (Double) => Double, motherWaveletGr: (Double) => Double)
+  extends Activation[DenseVector[Double]] {
+
+  override val grad = Scaler((x: DenseVector[Double]) => x.map(motherWaveletGr))
+
+  override def run(data: DenseVector[Double]) = data.map(motherWavelet)
 }
 
