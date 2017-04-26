@@ -3,15 +3,27 @@ package io.github.mandar2812.dynaml
 import scalaxy.streams.optimize
 import spire.algebra.InnerProductSpace
 
-import scala.util.Random
 
 /**
-  * Created by mandar on 11/01/2017.
-  */
+  * Contains helper functions pertaining to random variables.
+  * @author mandar2812 date 11/01/2017.
+  * */
 package object probability {
 
+
+  /**
+    * Number of monte carlo samples to generate.
+    * */
   var candidates: Int = 10000
 
+  /**
+    * Calculate the monte carlo estimate of the
+    * first moment/expectation of a random variable.
+    *
+    * @tparam I The domain of the random variable.
+    * @param rv The random variable from which to sample
+    * @param f An implicit object representing an inner product on [[I]]
+    * */
   def E[@specialized(Double) I](rv: RandomVariable[I])(implicit f: InnerProductSpace[I, Double]): I = optimize {
     f.divr(
       rv.iid(candidates)
