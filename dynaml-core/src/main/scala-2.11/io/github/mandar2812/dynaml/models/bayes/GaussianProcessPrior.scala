@@ -31,9 +31,17 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 
 /**
-  * @author mandar2812 date: 21/02/2017.
-  *
   * Represents a Gaussian Process Prior over functions.
+  *
+  * @tparam I The index set or domain
+  * @tparam MeanFuncParams The type of the parameters
+  *                        expressing the trend/mean function
+  * @param covariance A [[LocalScalarKernel]] over the index set [[I]],
+  *                   represents the covariance or kernel function of the
+  *                   gaussian process prior measure.
+  * @param noiseCovariance A [[LocalScalarKernel]] instance representing
+  *                        the measurement noise over realisations of the prior.
+  * @author mandar2812 date: 21/02/2017.
   * */
 abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
   val covariance: LocalScalarKernel[I],
@@ -117,10 +125,12 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
 
   /**
     * Define a prior over the process which is a scaled version of the base GP.
-    * z ~ GP(m(.), K(.,.))
-    * y = g(x)*z
     *
-    * y ~ GP(g(x)*m(x), g(x)K(x,x')g(x'))
+    * z ~ GP(m(.), K(.,.))
+    *
+    * y = g(x)&times;z
+    *
+    * y ~ GP(g(x)&times;m(x), g(x)K(x,x')g(x'))
     * */
   def *(scalingFunc: DataPipe[I, Double]): GaussianProcessPrior[I, MeanFuncParams] =
   GaussianProcessPrior[I, MeanFuncParams](
@@ -156,13 +166,12 @@ object GaussianProcessPrior {
 
 
 /**
-  * @author mandar2812 date 21/02/2017.
-  *
   * A gaussian process prior with a linear trend mean function.
+  *
+  * @author mandar2812 date 21/02/2017.
   * */
 class LinearTrendGaussianPrior[I: ClassTag](
-  cov: LocalScalarKernel[I],
-  n: LocalScalarKernel[I],
+  cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
   trendParams: I, intercept: Double)(
   implicit inner: InnerProductSpace[I, Double]) extends
   GaussianProcessPrior[I, (I, Double)](cov, n) with
