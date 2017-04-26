@@ -28,9 +28,10 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, WeightedSumReducer}
 import scala.reflect.ClassTag
 
 /**
+  * Build GP committee model after performing the CSA routine
+  *
   * @author mandar2812 date 08/02/2017
   *
-  * Build GP committee model after performing the CSA routine
   * */
 class ProbGPCommMachine[T, I: ClassTag](
   model: AbstractGPRegressionModel[T, I]) extends

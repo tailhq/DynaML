@@ -25,11 +25,12 @@ import io.github.mandar2812.dynaml.utils
 import scala.util.Random
 
 /**
- * @author mandar datum 25/6/15.
- *
- * Implementation of the Coupled Simulated Annealing algorithm
- * for global optimization.
- */
+  * Implementation of the Coupled Simulated Annealing algorithm
+  * for global optimization.
+  *
+  * @author mandar datum 25/6/15.
+  *
+  * */
 class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
   extends GridSearch[M](model: M){
 
@@ -91,7 +92,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
 
   protected def performCSA(
     initialConfig: Map[String, Double],
-    options: Map[String, String] = Map()) = {
+    options: Map[String, String] = Map()): List[(Double, Map[String, Double])] = {
 
     logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     logger.info("Coupled Simulated Annealing (CSA): "+CoupledSimulatedAnnealing.algorithm(variant))

@@ -49,7 +49,8 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by mandar on 9/2/16.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Solves the linear problem resulting from applying the Karush-Kuhn-Tucker
+conditions on the Dual Least Squares SVM optimization problem.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="RegularizedOptimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">RegularizedOptimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a>[<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>, (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>])], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -89,7 +90,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(modelTask:String):io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver"></a>
       <a id="&lt;init&gt;:LSSVMLinearSolver"></a>
       <h4 class="signature">
@@ -105,7 +106,7 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">modelTask</dt><dd class="cmt"><p>Set to &quot;regression&quot; or &quot;classification&quot;</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -415,9 +416,9 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Solve the convex optimization problem.</p><div class="fullcomment"><div class="comment cmt"><p>Solve the convex optimization problem.</p><p>A = [K + I*reg]|[1]
-     [1.t]     |[0]</p><p>b = [y]
-    [0]</p><p>return inverse(A)*b
+      <p class="shortcomment cmt">Solve the convex optimization problem.</p><div class="fullcomment"><div class="comment cmt"><p>Solve the convex optimization problem.</p><p>A = [K + I&times;&gamma;]|[1]
+     [1<sup>T</sup>]     |[0]</p><p>b = [y]
+    [0]</p><p>return A<sup>-1</sup>&times;b
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver">LSSVMLinearSolver</a> → <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#regParam" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="regParam:Double"></a>

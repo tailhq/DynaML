@@ -18,11 +18,16 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
-import breeze.linalg.{DenseMatrix, inv, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
-  * Created by mandar on 9/2/16.
-  */
+  * Solves the linear problem resulting from applying the Karush-Kuhn-Tucker
+  * conditions on the Dual Least Squares SVM optimization problem.
+  *
+  * @param modelTask Set to "regression" or "classification"
+  * @author mandar date 9/2/16.
+  *
+  * */
 class LSSVMLinearSolver(modelTask: String) extends
 RegularizedOptimizer[DenseVector[Double],
   DenseVector[Double], Double,
@@ -34,14 +39,14 @@ RegularizedOptimizer[DenseVector[Double],
   /**
     * Solve the convex optimization problem.
     *
-    * A = [K + I*reg]|[1]
-    *      [1.t]     |[0]
+    * A = [K + I&times;&gamma;]|[1]
+    *      [1<sup>T</sup>]     |[0]
     *
     * b = [y]
     *     [0]
     *
-    * return inverse(A)*b
-    **/
+    * return A<sup>-1</sup>&times;b
+    * */
   override def optimize(nPoints: Long,
                         ParamOutEdges: (DenseMatrix[Double], DenseVector[Double]),
                         initialP: DenseVector[Double]): DenseVector[Double] = {
@@ -73,6 +78,6 @@ RegularizedOptimizer[DenseVector[Double],
           DenseVector.vertcat[Double](ones.toDenseVector, DenseVector(0.0)))
     }
 
-    inv(a)*b
+    a\b
   }
 }
