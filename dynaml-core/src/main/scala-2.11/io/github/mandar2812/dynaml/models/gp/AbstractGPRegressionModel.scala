@@ -43,10 +43,14 @@ import scala.reflect.ClassTag
   *
   * @tparam I The index set over which the Gaussian Process
   *           is defined.
-  *           e.g  1) I = Double when implementing GP time series
-  *                2) I = DenseVector when implementing GP regression
+  *           e.g:
   *
-  */
+  *           <ul>
+  *             <li>I = Double when implementing GP time series</li>
+  *             <li>I = DenseVector when implementing GP regression</li>
+  *           <ul>
+  *
+  * */
 abstract class AbstractGPRegressionModel[T, I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
   data: T, num: Int, meanFunc: DataPipe[I, Double] = DataPipe((_:I) => 0.0))
@@ -154,7 +158,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     *
     * In this particular case E(h) = -log p(Y|X,h)
     * also known as log likelihood.
-    **/
+    * */
   override def energy(h: Map[String, Double], options: Map[String, String]): Double =
     calculateEnergyPipe(h, options)(trainingData, trainingDataLabels)
 
@@ -218,7 +222,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     *
     * @param h The value of the hyper-parameters in the configuration space
     * @return Gradient of the objective function (marginal likelihood) as a Map
-    **/
+    * */
   override def gradEnergy(h: Map[String, Double]): Map[String, Double] =
     calculateGradEnergyPipe(h)(trainingData, trainingDataLabels)
 
@@ -228,7 +232,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
    *
    * @param test A Sequence or Sequence like data structure
    *             storing the values of the input patters.
-   **/
+   * */
   override def predictiveDistribution[U <: Seq[I]](test: U):
   MultGaussianPRV = {
 
@@ -288,9 +292,13 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
   /**
     * Draw three predictions from the posterior predictive distribution
-    * 1) Mean or MAP estimate Y
-    * 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
-    * 3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
+    *
+    * <ol>
+    *   <li>Mean or MAP estimate Y</li>
+    *   <li>Y- : The lower error bar estimate (mean - sigma*stdDeviation)</li>
+    *   <li>Y+ : The upper error bar. (mean + sigma*stdDeviation)</li>
+    * </ol>
+    *
     **/
   def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int):
   Seq[(I, Double, Double, Double)] = {

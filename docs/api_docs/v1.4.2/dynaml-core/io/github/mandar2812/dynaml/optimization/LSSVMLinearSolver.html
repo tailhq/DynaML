@@ -418,7 +418,7 @@ conditions on the Dual Least Squares SVM optimization problem.
     </span>
       <p class="shortcomment cmt">Solve the convex optimization problem.</p><div class="fullcomment"><div class="comment cmt"><p>Solve the convex optimization problem.</p><p><table border="0">
   <tr>
-    <th>A</th> <th>&nbsp;=&nbsp;</th> <th>K + &gamma;I</th> <th>1</th>
+    <th>A</th> <th>&nbsp;=&nbsp;</th> <th>K + &gamma;&times;I</th> <th>1</th>
   </tr>
   <tr>
     <th>&nbsp;</th> <th>&nbsp;</th> <th>1<sup>T</sup></th> <th>0</th>
@@ -433,7 +433,7 @@ conditions on the Dual Least Squares SVM optimization problem.
 </table>
 </p></div><dl class="paramcmts block"><dt class="param">nPoints</dt><dd class="cmt"><p>The number of data points, i.e. also the size of matrix A</p></dd><dt class="param">linearSystem</dt><dd class="cmt"><p>The components of the linear system (A, b) as a tuple.</p></dd><dt class="param">initialP</dt><dd class="cmt"><p>An initial estimate of the linear system solution, this parameter
                 is redundant for <a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver">LSSVMLinearSolver</a> as the exact solution is
-                computed.</p></dd><dt>returns</dt><dd class="cmt"><p>A<sup>-1</sup>&times;b</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver">LSSVMLinearSolver</a> → <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a></dd></dl></div>
+                computed.</p></dd><dt>returns</dt><dd class="cmt"><p>A<sup>-1</sup>b</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.optimization.LSSVMLinearSolver">LSSVMLinearSolver</a> → <a href="Optimizer.html" class="extype" name="io.github.mandar2812.dynaml.optimization.Optimizer">Optimizer</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.optimization.RegularizedOptimizer#regParam" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="regParam:Double"></a>
       <a id="regParam:Double"></a>
