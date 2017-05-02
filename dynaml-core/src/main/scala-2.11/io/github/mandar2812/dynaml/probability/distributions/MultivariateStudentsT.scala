@@ -38,13 +38,18 @@ import scala.runtime.ScalaRunTime
 case class MultivariateStudentsT(
   mu: Double,
   mean: DenseVector[Double],
-  covariance : DenseMatrix[Double])(implicit rand: RandBasis = Rand)
-  extends ContinuousDistr[DenseVector[Double]] with Moments[DenseVector[Double], DenseMatrix[Double]] {
+  covariance : DenseMatrix[Double])(implicit rand: RandBasis = Rand) extends
+  AbstractContinuousDistr[DenseVector[Double]] with
+  Moments[DenseVector[Double], DenseMatrix[Double]] with
+  HasErrorBars[DenseVector[Double]] {
 
   assert(mu > 2.0, "Parameter mu in Multivariate Students T must be greater than 2.0")
 
+  private val chisq = new ChiSquared(mu)
+
   def draw() = {
-    val z: DenseVector[Double] = DenseVector.rand(mean.length, new StudentsT(mu))
+    val w = math.sqrt(mu/chisq.draw())
+    val z: DenseVector[Double] = DenseVector.rand(mean.length, rand.gaussian(0.0, 1.0))*w
     (root * z) += mean
   }
 
@@ -76,6 +81,17 @@ case class MultivariateStudentsT(
   lazy val entropy = {
     sum(log(diag(root))) + (mean.length/2.0)*log(mu*Pi) + lbeta(mean.length/2.0, mu/2.0) - lgamma(mean.length/2.0) +
       (digamma((mu+mean.length)/2.0) - digamma(mu/2.0))*(mu+mean.length)/2.0
+  }
+
+  override def confidenceInterval(s: Double) = {
+    val signFlag = if(s < 0) -1.0 else 1.0
+
+    val ones = DenseVector.ones[Double](mean.length)
+    val multiplier = signFlag*s
+
+    val bar: DenseVector[Double] = root*(ones*(multiplier*math.sqrt(mu/(mu-2.0))))
+
+    (mean - bar, mean + bar)
   }
 }
 

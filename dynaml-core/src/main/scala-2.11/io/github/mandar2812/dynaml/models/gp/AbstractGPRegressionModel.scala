@@ -304,12 +304,12 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
   Seq[(I, Double, Double, Double)] = {
 
     val posterior = predictiveDistribution(testData)
-    val postcov = posterior.covariance
+    /*val postcov = posterior.covariance
     val postmean = posterior.mu
     val varD: PartitionedVector = bdiag(postcov)
-    val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)*/
 
-    val mean = postmean._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val mean = posterior.mu._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
 
     val (lower, upper) = posterior.underlyingDist.confidenceInterval(sigma.toDouble)
 

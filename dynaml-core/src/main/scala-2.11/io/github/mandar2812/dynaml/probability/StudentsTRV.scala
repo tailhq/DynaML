@@ -25,7 +25,7 @@ case class MultStudentsTRV(mu: Double,
   implicit ev: Field[DenseVector[Double]])
   extends AbstractStudentsTRandVar[DenseVector[Double]](mu) {
 
-  override val underlyingDist = MultivariateStudentsT(mu, mean, covariance)
+  override val underlyingDist: MultivariateStudentsT = MultivariateStudentsT(mu, mean, covariance)
 }
 
 object MultStudentsTRV {
@@ -47,7 +47,7 @@ case class MultStudentsTPRV(mu: Double,
   implicit ev: Field[PartitionedVector])
   extends AbstractStudentsTRandVar[PartitionedVector](mu) {
 
-  override val underlyingDist: ContinuousDistr[PartitionedVector] = BlockedMultivariateStudentsT(mu, mean, covariance)
+  override val underlyingDist: BlockedMultivariateStudentsT = BlockedMultivariateStudentsT(mu, mean, covariance)
 }
 
 object MultStudentsTPRV {
