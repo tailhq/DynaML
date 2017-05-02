@@ -68,8 +68,8 @@ object Dependencies {
   val loggingDependency = Seq("log4j" % "log4j" % "1.2.17" % "compile")
 
   val linearAlgebraDependencies = Seq(
-    "org.scalanlp" % "breeze_2.11" % "0.12" % "compile",
-    "org.scalanlp" % "breeze-natives_2.11" % "0.12" % "compile",
+    "org.scalanlp" % "breeze_2.11" % "0.13.1" % "compile",
+    "org.scalanlp" % "breeze-natives_2.11" % "0.13.1" % "compile",
     "org.la4j" % "la4j" % "0.6.0" % "compile")
 
   val chartsDependencies = Seq(

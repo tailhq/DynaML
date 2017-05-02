@@ -39,7 +39,7 @@ case class TruncatedGaussian(mu: Double, sigma: Double, a: Double, b: Double)(
     else if(x >= b) 1.0
     else (baseGaussian.cdf(x) - baseGaussian.cdf(b))/z
 
-  override def inverseCdf(p: Double) = baseGaussian.icdf(baseGaussian.cdf(a) + p*z)
+  override def inverseCdf(p: Double) = baseGaussian.inverseCdf(baseGaussian.cdf(a) + p*z)
 
   override def unnormalizedLogPdf(x: Double) =
     if(x <= b && x >= a) baseGaussian.logPdf(x)
