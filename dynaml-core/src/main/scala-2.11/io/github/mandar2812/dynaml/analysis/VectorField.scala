@@ -20,19 +20,19 @@ class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
     DenseVector((a.toArray zip b.toArray).map(couple => couple._1 % couple._2))
 
   override def mod(a: DenseVector[Double],
-                   b: DenseVector[Double]): DenseVector[Double] = a :% b
+                   b: DenseVector[Double]): DenseVector[Double] = a %:% b
 
   override def one: DenseVector[Double] = DenseVector.ones[Double](num_dim)
 
   override def times(x: DenseVector[Double],
-                     y: DenseVector[Double]): DenseVector[Double] = x :* y
+                     y: DenseVector[Double]): DenseVector[Double] = x *:* y
 
   override def negate(x: DenseVector[Double]): DenseVector[Double] = x.map(_ * -1.0)
 
   override def zero: DenseVector[Double] = DenseVector.zeros[Double](num_dim)
 
   override def div(x: DenseVector[Double],
-                   y: DenseVector[Double]): DenseVector[Double] = x :/ y
+                   y: DenseVector[Double]): DenseVector[Double] = x /:/ y
 
   override def plus(x: DenseVector[Double],
                     y: DenseVector[Double]): DenseVector[Double] = x + y
