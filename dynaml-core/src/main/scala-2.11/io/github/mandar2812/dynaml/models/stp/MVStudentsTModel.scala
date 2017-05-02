@@ -20,9 +20,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.stp
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, det}
+import breeze.numerics.log
 import io.github.mandar2812.dynaml.kernels.{LocalScalarKernel, SVMKernel}
 import io.github.mandar2812.dynaml.models.ContinuousProcessModel
+import io.github.mandar2812.dynaml.models.stp.MVStudentsTModel.InferencePrimitives
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.MatrixTRV
@@ -57,6 +59,11 @@ abstract class MVStudentsTModel[T, I: ClassTag](
 
   private val logger = Logger.getLogger(this.getClass)
 
+  /**
+    * The training data
+    * */
+  override protected val g: T = data
+
   val npoints = num
 
   val num_outputs = numOutputs
@@ -69,15 +76,16 @@ abstract class MVStudentsTModel[T, I: ClassTag](
 
   require(
     npoints >= num_latent_features + num_outputs,
-    "In a Baysian Multi-output Students T model, n >= m+q")
+    "In a Bayesian Multi-output Students T model, n >= m+q")
 
   protected lazy val H: DenseMatrix[Double] = DenseMatrix.vertcat(trainingData.map(featureMap(_).asDenseMatrix):_*)
 
   protected lazy val D: DenseMatrix[Double] = DenseMatrix.vertcat(trainingDataLabels.map(_.asDenseMatrix):_*)
 
-  protected var (caching, kernelMatrixCache, bGLSCache, sigmaGLSCache, residualGLSCache, hAhCache)
-  : (Boolean, DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double]) =
-    (false, null, null, null, null, null)
+  protected var caching: Boolean = false
+
+  protected var (kernelMatrixCache, bGLSCache, sigmaGLSCache, residualGLSCache, hAhCache): InferencePrimitives =
+    (null, null, null, null, null)
 
 
   /**
@@ -128,36 +136,20 @@ abstract class MVStudentsTModel[T, I: ClassTag](
     val (kMat, bGLS, sigmaGLS, resGLS, hAh) = if(caching) {
       logger.info("** Using cached training matrix **")
       (kernelMatrixCache, bGLSCache, sigmaGLSCache, residualGLSCache, hAhCache)
-    } else {
-      val effectiveTrainingKernel: LocalScalarKernel[I] = this.covariance + this.noiseModel
-
-      logger.info("---------------------------------------------------------------")
-      logger.info("Calculating covariance matrix for training points")
-      val A = SVMKernel.buildSVMKernelMatrix(
-        trainingData, trainingData.length,
-        effectiveTrainingKernel.evaluate)
-        .getKernelMatrix()
-
-      val (abyH, abyD) = (A\H, A\D)
-
-      val h_A_h = H.t*abyH
-      val b_hat = h_A_h\(H.t*abyD)
-
-      val residual_gls = D - H*b_hat
-
-      val s_hat = residual_gls.t*(A\residual_gls)
-      (A, b_hat, s_hat.mapValues(v => v/(npoints-num_latent_features).toDouble), residual_gls, h_A_h)
-    }
+    } else MVStudentsTModel.inferencePrimitives(covariance, noiseModel, trainingData, H, D)
 
     logger.info("---------------------------------------------------------------")
     logger.info("Calculating covariance matrix for test points")
     val kernelTest = SVMKernel.buildSVMKernelMatrix(
-      test, test.length, covariance.evaluate).getKernelMatrix()
+      test, test.length,
+      covariance.evaluate)
+      .getKernelMatrix()
 
     logger.info("---------------------------------------------------------------")
     logger.info("Calculating covariance matrix between training and test points")
     val crossKernel = SVMKernel.crossKernelMatrix(
-      trainingData, test, covariance.evaluate)
+      trainingData, test,
+      covariance.evaluate)
 
     val aByT = kMat\crossKernel
 
@@ -167,19 +159,134 @@ abstract class MVStudentsTModel[T, I: ClassTag](
     val predictiveMean = bGLS.t*H + resGLS.t*aByT
 
     val predictiveCovariance = kernelTest - crossKernel.t*aByT + hTestRes.t*(hAh\hTestRes)
-    MatrixTRV(npoints - num_latent_features, predictiveMean, predictiveCovariance, sigmaGLS)
+
+    MatrixTRV(
+      npoints - num_latent_features,
+      predictiveMean, predictiveCovariance,
+      sigmaGLS)
   }
 
+
   /**
-    * The training data
+    * Draw three predictions from the posterior predictive distribution
+    * 1) Mean or MAP estimate Y
+    * 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
+    * 3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
     **/
-  override protected val g: T = data
+  /*override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int) = {
+
+  }*/
 
   /**
     * Predict the value of the
     * target variable given a
     * point.
     *
-    **/
-  override def predict(point: I) = ???
+    * */
+  override def predict(point: I) = predictiveDistribution(Seq(point)).m.toDenseVector
+
+  override def persist(state: Map[String, Double]) = {
+    setState(state)
+
+    val primitives = MVStudentsTModel.inferencePrimitives(covariance, noiseModel, trainingData, H, D)
+
+    kernelMatrixCache = primitives._1
+    bGLSCache = primitives._2
+    sigmaGLSCache = primitives._3
+    residualGLSCache = primitives._4
+    hAhCache = primitives._5
+
+    caching = true
+  }
+
+  def unpersist(): Unit = {
+
+    kernelMatrixCache = null
+    bGLSCache = null
+    sigmaGLSCache = null
+    residualGLSCache = null
+    hAhCache = null
+
+    caching = false
+  }
+
+  /**
+    * Calculates the energy of the configuration,
+    * in most global optimization algorithms
+    * we aim to find an approximate value of
+    * the hyper-parameters such that this function
+    * is minimized.
+    *
+    * @param h       The value of the hyper-parameters in the configuration space
+    * @param options Optional parameters about configuration
+    * @return Configuration Energy E(h)
+    * */
+  override def energy(h: Map[String, Double], options: Map[String, String]) = {
+    setState(h)
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
+    val A = SVMKernel.buildSVMKernelMatrix(
+      trainingData, trainingData.length,
+      effectiveTrainingKernel.evaluate)
+      .getKernelMatrix()
+
+    val log_likelihood_term1 = 0.5*num_outputs*log(det(A))
+
+    lazy val h_A_h = H.t*(A\H)
+
+    val log_likelihood_term2 = 0.5*num_outputs*log(det(h_A_h))
+
+    lazy val d_G_d = D.t*(A\(D - (H*h_A_h*H.t)*(A\D)))
+
+    val log_likelihood_term3 = 0.5*(npoints - num_latent_features)*log(det(d_G_d))
+
+    log_likelihood_term1 + log_likelihood_term2 + log_likelihood_term3
+  }
+}
+
+object MVStudentsTModel {
+
+  private val logger = Logger.getLogger(this.getClass)
+
+  type InferencePrimitives =
+    (DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double])
+
+  def inferencePrimitives[I: ClassTag](
+    covariance: LocalScalarKernel[I], noiseModel: LocalScalarKernel[I],
+    trainingData: Seq[I], H: DenseMatrix[Double], D: DenseMatrix[Double]): InferencePrimitives = {
+
+    val (npoints, num_latent_features) = (trainingData.length, H.cols)
+    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
+
+    logger.info("---------------------------------------------------------------")
+    logger.info("Calculating covariance matrix for training points")
+    val A = SVMKernel.buildSVMKernelMatrix(
+      trainingData, trainingData.length,
+      effectiveTrainingKernel.evaluate)
+      .getKernelMatrix()
+
+    lazy val (abyH, abyD) = (A\H, A\D)
+
+    val h_A_h = H.t*abyH
+    val b_hat = h_A_h\(H.t*abyD)
+
+    val residual_gls = D - H*b_hat
+
+    val s_hat = residual_gls.t*(A\residual_gls)
+    (A, b_hat, s_hat.mapValues(v => v/(npoints-num_latent_features).toDouble), residual_gls, h_A_h)
+
+  }
+
+  /*def apply[T, I: ClassTag](
+    cov: LocalScalarKernel[I],
+    noise: LocalScalarKernel[I],
+    featureMap: DataPipe[I, DenseVector[Double]])(
+    trainingdata: T, num: Int, num_outputs: Int)(
+    implicit transform: DataPipe[T, Seq[(I, Double)]]) = {
+
+    new MVStudentsTModel[T, I](cov, noise, trainingdata, num, num_outputs, featureMap) {
+
+    }
+
+  }*/
+
 }
