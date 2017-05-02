@@ -61,7 +61,7 @@ case class MultGaussianPRV(mu: PartitionedVector, covariance: PartitionedPSDMatr
   implicit ev: Field[PartitionedVector])
   extends AbstractGaussianRV[PartitionedVector, PartitionedPSDMatrix] {
 
-  override val underlyingDist: ContinuousDistr[PartitionedVector] = BlockedMultiVariateGaussian(mu, covariance)
+  override val underlyingDist: BlockedMultiVariateGaussian = BlockedMultiVariateGaussian(mu, covariance)
 
 }
 

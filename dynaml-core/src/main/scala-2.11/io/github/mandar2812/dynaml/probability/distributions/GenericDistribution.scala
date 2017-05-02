@@ -10,3 +10,8 @@ abstract class GenericDistribution[T] extends Density[T] with Rand[T]
 abstract class AbstractDiscreteDistr[T] extends GenericDistribution[T] with DiscreteDistr[T]
 
 abstract class AbstractContinuousDistr[T] extends GenericDistribution[T] with ContinuousDistr[T]
+
+trait HasErrorBars[T] {
+
+  def confidenceInterval(s: Double): (T, T)
+}

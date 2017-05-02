@@ -3,7 +3,7 @@ package io.github.mandar2812.dynaml.probability.distributions
 import breeze.numerics._
 
 import math.{Pi, log1p}
-import breeze.stats.distributions.{ContinuousDistr, Moments, Rand, RandBasis}
+import breeze.stats.distributions.{Moments, Rand, RandBasis}
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
@@ -17,8 +17,10 @@ import scala.runtime.ScalaRunTime
   */
 case class BlockedMultiVariateGaussian(
   mean: PartitionedVector,
-  covariance: PartitionedPSDMatrix)(implicit rand: RandBasis = Rand)
-  extends ContinuousDistr[PartitionedVector] with Moments[PartitionedVector, PartitionedPSDMatrix] {
+  covariance: PartitionedPSDMatrix)(implicit rand: RandBasis = Rand) extends
+  AbstractContinuousDistr[PartitionedVector] with
+  Moments[PartitionedVector, PartitionedPSDMatrix] with
+  HasErrorBars[PartitionedVector] {
 
   def draw() = {
     val nE: Int = if(mean.rowBlocks > 1L) mean(0L to 0L)._data.head._2.length else mean.rows.toInt
@@ -51,6 +53,18 @@ case class BlockedMultiVariateGaussian(
   def mode = mean
   lazy val entropy = {
     mean.rows.toDouble * log1p(2 * Pi) + bsum(blog(bdiag(root)))
+  }
+
+  override def confidenceInterval(s: Double) = {
+    val signFlag = if(s < 0) -1.0 else 1.0
+    val nE: Int = if(mean.rowBlocks > 1L) mean(0L to 0L)._data.head._2.length else mean.rows.toInt
+
+    val ones = PartitionedVector.ones(mean.rows, nE)
+    val multiplier = signFlag*s
+
+    val bar: PartitionedVector = root*(ones*multiplier)
+
+    (mean - bar, mean + bar)
   }
 }
 
