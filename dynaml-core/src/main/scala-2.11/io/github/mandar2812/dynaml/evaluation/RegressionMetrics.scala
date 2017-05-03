@@ -157,14 +157,14 @@ class MultiRegressionMetrics(override protected val scoresAndLabels: List[(Dense
   val length: DenseVector[Double] = DenseVector.fill(num_outputs)(len)
 
   val rmse: DenseVector[Double] = sqrt(scoresAndLabels.map((p) =>
-    square(p._1-p._2)).reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/length)
+    square(p._1-p._2)).reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b)/length)
 
   val mae: DenseVector[Double] = scoresAndLabels.map((p) =>
-    abs(p._1 - p._2)).reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/length
+    abs(p._1 - p._2)).reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b)/length
 
   val rmsle: DenseVector[Double] = sqrt(scoresAndLabels.map((p) =>
     square(log(onesVec + abs(p._1)) - log(abs(p._2) + onesVec)))
-    .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/length)
+    .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b)/length)
 
   val Rsq: DenseVector[Double] = MultiRegressionMetrics.computeRsq(scoresAndLabels, length)
 
