@@ -31,15 +31,16 @@ import scala.math.log1p
   * @param u The n &times; n covariance matrix of the rows
   * @param v The p &times; p covariance matrix of the columns
   *
-  * @author mandar date: 05/02/2017.
+  * @author mandar2812 date: 05/02/2017.
   * */
 case class MatrixNormal(
   m: DenseMatrix[Double],
   u: DenseMatrix[Double],
   v: DenseMatrix[Double])(
   implicit rand: RandBasis = Rand) extends
-  ContinuousDistr[DenseMatrix[Double]] with
-  Moments[DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double])]{
+  AbstractContinuousDistr[DenseMatrix[Double]] with
+  Moments[DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double])] with
+  HasErrorBars[DenseMatrix[Double]] {
 
   private lazy val (rootu, rootv) = (cholesky(u), cholesky(v))
 
@@ -74,4 +75,16 @@ case class MatrixNormal(
     m.rows * m.cols * (log1p(2 * math.Pi) + sum(log(diag(rootu))) + sum(log(diag(rootv))))
   }
 
+  override def confidenceInterval(s: Double) = {
+    val signFlag = if(s < 0) -1.0 else 1.0
+
+    val ones = DenseMatrix.ones[Double](mean.rows, mean.cols)
+    val multiplier = signFlag*s
+
+    val z = ones*multiplier
+
+    val bar: DenseMatrix[Double] = rootu*z*rootv.t
+
+    (mean - bar, mean + bar)
+  }
 }

@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.probability.distributions
 
-import breeze.linalg.{DenseMatrix, cholesky, det, diag, sum, trace}
+import breeze.linalg.{DenseMatrix, cholesky, det, diag, sum}
 import breeze.numerics._
 import breeze.stats.distributions._
 import io.github.mandar2812.dynaml.utils.mvlgamma
