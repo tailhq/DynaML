@@ -77,7 +77,7 @@ case class MatrixT(
   override def draw() = {
     val w = math.sqrt(mu/chisq.draw())
     val z: DenseMatrix[Double] = DenseMatrix.rand(m.rows, m.cols, rand.gaussian(0.0, 1.0))
-    mean + (rootOmega*z*rootSigma.t)*w
+    mean + (rootSigma*z*rootOmega.t)*w
   }
 
   //TODO: Check and correct calculation of entropy for Matrix Students T
@@ -97,7 +97,7 @@ case class MatrixT(
 
     val z = ones*multiplier
 
-    val bar: DenseMatrix[Double] = rootOmega*z*rootSigma.t
+    val bar: DenseMatrix[Double] = rootSigma*z*rootOmega.t
 
     (mean - bar, mean + bar)
 
