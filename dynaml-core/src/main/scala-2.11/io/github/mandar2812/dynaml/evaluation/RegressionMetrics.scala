@@ -145,8 +145,7 @@ object RegressionMetrics {
 
 }
 
-class MultiRegressionMetrics(override protected val scoresAndLabels
-                             : List[(DenseVector[Double], DenseVector[Double])],
+class MultiRegressionMetrics(override protected val scoresAndLabels: List[(DenseVector[Double], DenseVector[Double])],
                              val len: Int)
   extends Metrics[DenseVector[Double]] {
   private val logger = Logger.getLogger(this.getClass)
@@ -201,12 +200,10 @@ class MultiRegressionMetrics(override protected val scoresAndLabels
     logger.info("Generating Plot of Fit for each target")
     (0 until num_outputs).foreach(output => {
       regression(scoresAndLabels.map(couple => (couple._1(output), couple._2(output))))
-      hold()
     })
     title("Goodness of fit: "+name)
     xAxis("Predicted "+name)
     yAxis("Actual "+name)
-    unhold()
   }
 
   def ++(otherMetrics: MultiRegressionMetrics): MultiRegressionMetrics = {
