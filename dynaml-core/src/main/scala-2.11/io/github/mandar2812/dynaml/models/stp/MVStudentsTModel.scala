@@ -154,11 +154,11 @@ abstract class MVStudentsTModel[T, I: ClassTag](
     val aByT = kMat\crossKernel
 
     val hTest = DenseMatrix.vertcat(test.map(featureMap(_).asDenseMatrix):_*)
-    val hTestRes = hTest - H.t*aByT
+    val hTestRes = hTest - (H.t*aByT).t
 
-    val predictiveMean = bGLS.t*H + resGLS.t*aByT
+    val predictiveMean = hTest*bGLS + (resGLS.t*aByT).t
 
-    val predictiveCovariance = kernelTest - crossKernel.t*aByT + hTestRes.t*(hAh\hTestRes)
+    val predictiveCovariance = kernelTest - crossKernel.t*aByT + hTestRes*(hAh\hTestRes.t)
 
     MatrixTRV(
       npoints - num_latent_features,

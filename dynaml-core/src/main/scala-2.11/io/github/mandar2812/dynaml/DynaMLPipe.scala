@@ -19,8 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml
 
 import scala.collection.mutable.{MutableList => ML}
-import breeze.linalg.{DenseMatrix, DenseVector, diag}
-import breeze.math.VectorSpace
+import breeze.linalg.DenseVector
 import breeze.numerics.sqrt
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
