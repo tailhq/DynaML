@@ -318,11 +318,12 @@ object AbstractSTPRegressionModel {
     *
     * @param trainingData The function values assimilated as a [[DenseVector]]
     *
-    * @param kernelMatrix The kernel matrix of the training features
+    * @param kernelMatrix The kernel matrix formed from the data features
     *
     * */
-  def logLikelihood(mu: Double, trainingData: DenseVector[Double],
-                    kernelMatrix: DenseMatrix[Double]): Double = {
+  def logLikelihood(
+    mu: Double, trainingData: DenseVector[Double],
+    kernelMatrix: DenseMatrix[Double]): Double = {
 
 
     try {
@@ -334,16 +335,17 @@ object AbstractSTPRegressionModel {
     }
   }
 
-  def logLikelihood(mu: Double, trainingData: PartitionedVector,
-                    kernelMatrix: PartitionedPSDMatrix): Double = {
+  def logLikelihood(
+    mu: Double, trainingData: PartitionedVector,
+    kernelMatrix: PartitionedPSDMatrix): Double = {
 
     try {
       val nE =
         if(trainingData.rowBlocks > 1L) trainingData(0L to 0L)._data.head._2.length
         else trainingData.rows.toInt
 
-      val dist = BlockedMultivariateStudentsT(mu,
-        PartitionedVector.zeros(trainingData.rows, nE),
+      val dist = BlockedMultivariateStudentsT(
+        mu, PartitionedVector.zeros(trainingData.rows, nE),
         kernelMatrix)
 
       -1.0*dist.logPdf(trainingData)
