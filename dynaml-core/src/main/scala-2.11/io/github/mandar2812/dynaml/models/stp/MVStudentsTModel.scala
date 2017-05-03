@@ -130,7 +130,7 @@ abstract class MVStudentsTModel[T, I: ClassTag](
     *
     * @param test A Sequence or Sequence like data structure
     *             storing the values of the input patters.
-    **/
+    * */
   override def predictiveDistribution[U <: Seq[I]](test: U) = {
 
     val (kMat, bGLS, sigmaGLS, resGLS, hAh) = if(caching) {
@@ -173,9 +173,23 @@ abstract class MVStudentsTModel[T, I: ClassTag](
     * 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
     * 3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
     **/
-  /*override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int) = {
+  override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int) = {
+    val posterior = predictiveDistribution(testData)
 
-  }*/
+    val posterierMean = posterior.m
+    val mean = testData.indices.toStream.map(index => posterierMean(index,::).t)
+
+    val (lower, upper) = posterior.underlyingDist.confidenceInterval(sigma.toDouble)
+
+    val lowerErrorBars = testData.indices.toStream.map(index => lower(index,::).t)
+    val upperErrorBars = testData.indices.toStream.map(index => upper(index,::).t)
+
+
+    logger.info("Generating error bars")
+
+    val preds = mean.zip(lowerErrorBars.zip(upperErrorBars)).map(t => (t._1, t._2._1, t._2._2))
+    (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
+  }
 
   /**
     * Predict the value of the
@@ -211,15 +225,13 @@ abstract class MVStudentsTModel[T, I: ClassTag](
   }
 
   /**
-    * Calculates the energy of the configuration,
-    * in most global optimization algorithms
-    * we aim to find an approximate value of
-    * the hyper-parameters such that this function
-    * is minimized.
+    * Calculates the marginalized negative log likelihood of the data
+    * in the Multivariate Students' T model.
     *
     * @param h       The value of the hyper-parameters in the configuration space
     * @param options Optional parameters about configuration
-    * @return Configuration Energy E(h)
+    * @return Configuration Energy E(h) = - log p(D| H, K) where
+    *         H = &phi;(X) (design matrix) and K = C(X, X) (kernel matrix).
     * */
   override def energy(h: Map[String, Double], options: Map[String, String]) = {
     setState(h)
@@ -250,6 +262,19 @@ object MVStudentsTModel {
   type InferencePrimitives =
     (DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double])
 
+  /**
+    * Returns a set of matrices which are the starting points for
+    * computing the predictive distribution of unseen data. Values
+    * returned by this method can be cached for speeding up high throughput
+    * inference tasks.
+    *
+    * @tparam I The type of the input features
+    * @param covariance The covariance kernel as a [[LocalScalarKernel]]
+    * @param noiseModel The covariance kernel of the measurement noise also as a [[LocalScalarKernel]]
+    * @param trainingData The training data features as a sequence of [[I]]
+    * @param H The design matrix resulting from applying the basis feature map &phi;(.) to the data matrix X
+    * @param D The training data outputs as a [[DenseMatrix]]
+    * */
   def inferencePrimitives[I: ClassTag](
     covariance: LocalScalarKernel[I], noiseModel: LocalScalarKernel[I],
     trainingData: Seq[I], H: DenseMatrix[Double], D: DenseMatrix[Double]): InferencePrimitives = {
@@ -276,17 +301,22 @@ object MVStudentsTModel {
 
   }
 
-  /*def apply[T, I: ClassTag](
+  def apply[T, I: ClassTag](
     cov: LocalScalarKernel[I],
     noise: LocalScalarKernel[I],
     featureMap: DataPipe[I, DenseVector[Double]])(
     trainingdata: T, num: Int, num_outputs: Int)(
-    implicit transform: DataPipe[T, Seq[(I, Double)]]) = {
+    implicit transform: DataPipe[T, Seq[(I, DenseVector[Double])]]) = {
 
     new MVStudentsTModel[T, I](cov, noise, trainingdata, num, num_outputs, featureMap) {
-
+      /**
+        * Convert from the underlying data structure to
+        * Seq[(I, Y)] where I is the index set of the GP
+        * and Y is the value/label type.
+        **/
+      override def dataAsSeq(data: T) = transform(data)
     }
 
-  }*/
+  }
 
 }

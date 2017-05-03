@@ -20,7 +20,7 @@ package io.github.mandar2812.dynaml.probability.distributions
 
 import breeze.linalg.{DenseMatrix, cholesky, det, diag, sum, trace}
 import breeze.numerics._
-import breeze.stats.distributions.{ContinuousDistr, Moments, Rand, RandBasis}
+import breeze.stats.distributions._
 import io.github.mandar2812.dynaml.utils.mvlgamma
 import org.apache.spark.annotation.Experimental
 
@@ -40,10 +40,13 @@ case class MatrixT(
   omega: DenseMatrix[Double],
   sigma: DenseMatrix[Double])(
   implicit rand: RandBasis = Rand) extends
-  ContinuousDistr[DenseMatrix[Double]] with
-  Moments[DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double])]{
+  AbstractContinuousDistr[DenseMatrix[Double]] with
+  Moments[DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double])] with
+  HasErrorBars[DenseMatrix[Double]] {
 
   assert(mu > 2.0, "Parameter mu in Matrix Students T must be greater than 2.0")
+
+  private val chisq = new ChiSquared(mu)
 
   private lazy val (rootOmega, rootSigma) = (cholesky(omega), cholesky(sigma))
 
@@ -72,8 +75,9 @@ case class MatrixT(
   override def mode = m
 
   override def draw() = {
+    val w = math.sqrt(mu/chisq.draw())
     val z: DenseMatrix[Double] = DenseMatrix.rand(m.rows, m.cols, rand.gaussian(0.0, 1.0))
-    mean + (rootOmega*z*rootSigma.t)
+    mean + (rootOmega*z*rootSigma.t)*w
   }
 
   //TODO: Check and correct calculation of entropy for Matrix Students T
@@ -84,4 +88,18 @@ case class MatrixT(
       (digamma((mu+n*p)/2.0) - digamma(mu/2.0))*(mu+n*p)/2.0
   }
 
+  override def confidenceInterval(s: Double) = {
+
+    val signFlag = if(s < 0) -1.0 else 1.0
+
+    val ones = DenseMatrix.ones[Double](mean.rows, mean.cols)
+    val multiplier = signFlag*s*math.sqrt(mu/(mu-2.0))
+
+    val z = ones*multiplier
+
+    val bar: DenseMatrix[Double] = rootOmega*z*rootSigma.t
+
+    (mean - bar, mean + bar)
+
+  }
 }
