@@ -70,5 +70,5 @@ case class MatrixTRV(
   v: DenseMatrix[Double]) extends
   AbstractStudentsTRandVar[DenseMatrix[Double]](mu) {
 
-  override val underlyingDist = MatrixT(mu, m, u, v)
+  override val underlyingDist = MatrixT(mu, m, v, u)
 }

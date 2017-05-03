@@ -5,7 +5,7 @@ import io.github.mandar2812.dynaml.examples.AbottPowerPlant
 
 implicit val ev = VectorField(24)
 
-val kernel = new LaplacianKernel(1.5)
+val kernel = new LaplacianKernel(5.5)
 val other_kernel = new RBFKernel(4.5)
 val other_kernel1 = new CauchyKernel(1.0)
 val matern = new GenericMaternKernel[DenseVector[Double]](1.0, 2)
@@ -20,7 +20,7 @@ AbottPowerPlant(
   other_kernel, noiseKernel)(
   deltaT = 3,
   opt = Map(
-    "globalOpt" -> "GS", "grid" -> "2",
+    "globalOpt" -> "GS", "grid" -> "4",
     "step" -> "0.5", "tolerance" -> "0.0001",
     "maxIterations" -> "10"),
   num_training = 1025, num_test = 1000)
