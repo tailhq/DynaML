@@ -192,6 +192,19 @@ class LinearTrendGaussianPrior[I: ClassTag](
 }
 
 /**
+  *
+  * Gaussian Process prior where the covariance can be
+  * decomposed as a product of covariance functions over
+  * two index sets [[I]] and [[J]].
+  *
+  * @tparam I Index set of the first component covariance
+  * @tparam J Index set of the second component covariance
+  * @tparam MeanFuncParams Type of the parameterization of the trend/mean function
+  *
+  * @param covarianceI First component covariance function
+  * @param covarianceJ Second component covariance function
+  * @param noiseCovarianceI First component of measurement noise
+  * @param noiseCovarianceJ Second component of measurement noise
   * @author mandar2812 date: 2017/05/04
   *
   * */
@@ -201,7 +214,7 @@ abstract class CoRegGPPrior[I: ClassTag, J: ClassTag, MeanFuncParams](
   GaussianProcessPrior[(I,J), MeanFuncParams](covarianceI:*covarianceJ, noiseCovarianceI:*noiseCovarianceJ) {
 
 
-  def priorDistribution[U <: Seq[I], V <: Seq[J]](d1: U, d2:V): MatrixNormalRV = {
+  def priorDistribution[U <: Seq[I], V <: Seq[J]](d1: U, d2: V): MatrixNormalRV = {
 
     val (rows, cols) = (d1.length, d2.length)
     val u = covarianceI.buildKernelMatrix(d1, rows).getKernelMatrix()
@@ -215,6 +228,21 @@ abstract class CoRegGPPrior[I: ClassTag, J: ClassTag, MeanFuncParams](
 
 object CoRegGPPrior {
 
+  /**
+    * @tparam I Index set of the first component covariance
+    * @tparam J Index set of the second component covariance
+    * @tparam MeanFuncParams Type of the parameterization of the trend/mean function
+    *
+    * @param covarianceI First component covariance function
+    * @param covarianceJ Second component covariance function
+    * @param noiseCovarianceI First component of measurement noise
+    * @param noiseCovarianceJ Second component of measurement noise
+    * @param meanFPipe A [[MetaPipe]] which takes a the mean function parameters and
+    *                  returns a [[DataPipe]] which is the mean function.
+    * @param initialParams Initial assignment to the mean function parameters.
+    *
+    * @return A [[CoRegGPPrior]] with the specified trend function.
+    * */
   def apply[I: ClassTag, J: ClassTag, MeanFuncParams](
     covarianceI: LocalScalarKernel[I], covarianceJ: LocalScalarKernel[J],
     noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J],
