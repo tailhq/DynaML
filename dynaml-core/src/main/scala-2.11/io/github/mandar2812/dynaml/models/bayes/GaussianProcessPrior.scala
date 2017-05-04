@@ -245,7 +245,7 @@ object CoRegGPPrior {
     * */
   def apply[I: ClassTag, J: ClassTag, MeanFuncParams](
     covarianceI: LocalScalarKernel[I], covarianceJ: LocalScalarKernel[J],
-    noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J],
+    noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J])(
     meanFPipe: MetaPipe[MeanFuncParams, (I, J), Double],
     initialParams: MeanFuncParams) =
     new CoRegGPPrior[I, J, MeanFuncParams](covarianceI, covarianceJ, noiseCovarianceI, noiseCovarianceJ) {
