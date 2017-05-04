@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.bayes
 
+import breeze.linalg.DenseMatrix
 import spire.algebra.{Field, InnerProductSpace}
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.algebra.PartitionedVector
@@ -28,7 +29,7 @@ import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 
 import scala.reflect.ClassTag
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
-import io.github.mandar2812.dynaml.probability.MultGaussianPRV
+import io.github.mandar2812.dynaml.probability.{MatrixNormalRV, MultGaussianPRV}
 
 /**
   * Represents a Gaussian Process Prior over functions.
@@ -59,7 +60,7 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
 
   def meanFuncParams_(p: MeanFuncParams): Unit
 
-  private val initial_covariance_state = covariance.state ++ noiseCovariance.state
+  protected val initial_covariance_state: Map[String, Double] = covariance.state ++ noiseCovariance.state
 
   val meanFunctionPipe: MetaPipe[MeanFuncParams, I, Double]
 
@@ -188,4 +189,45 @@ class LinearTrendGaussianPrior[I: ClassTag](
   override val meanFunctionPipe = MetaPipe(
     (parameters: (I, Double)) => (x: I) => inner.dot(parameters._1, x) + parameters._2
   )
+}
+
+/**
+  * @author mandar2812 date: 2017/05/04
+  *
+  * */
+abstract class CoRegGPPrior[I: ClassTag, J: ClassTag, MeanFuncParams](
+  covarianceI: LocalScalarKernel[I], covarianceJ: LocalScalarKernel[J],
+  noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J]) extends
+  GaussianProcessPrior[(I,J), MeanFuncParams](covarianceI:*covarianceJ, noiseCovarianceI:*noiseCovarianceJ) {
+
+
+  def priorDistribution[U <: Seq[I], V <: Seq[J]](d1: U, d2:V): MatrixNormalRV = {
+
+    val (rows, cols) = (d1.length, d2.length)
+    val u = covarianceI.buildKernelMatrix(d1, rows).getKernelMatrix()
+    val v = covarianceJ.buildKernelMatrix(d2, cols).getKernelMatrix()
+
+    val m = DenseMatrix.tabulate[Double](rows, cols)((i,j) => meanFunctionPipe(_meanFuncParams)(d1(i), d2(j)))
+    MatrixNormalRV(m, u, v)
+  }
+
+}
+
+object CoRegGPPrior {
+
+  def apply[I: ClassTag, J: ClassTag, MeanFuncParams](
+    covarianceI: LocalScalarKernel[I], covarianceJ: LocalScalarKernel[J],
+    noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J],
+    meanFPipe: MetaPipe[MeanFuncParams, (I, J), Double],
+    initialParams: MeanFuncParams) =
+    new CoRegGPPrior[I, J, MeanFuncParams](covarianceI, covarianceJ, noiseCovarianceI, noiseCovarianceJ) {
+
+      private var params = initialParams
+
+      override def _meanFuncParams = params
+
+      override def meanFuncParams_(p: MeanFuncParams) = params = p
+
+      override val meanFunctionPipe = meanFPipe
+    }
 }

@@ -64,7 +64,7 @@ class AbstractGridSearch[M <: GloballyOptimizable](model: M)
       (keyValue._1, List.tabulate(gridsize)(scaleFunc))
     })
 
-    val grid = utils.combine(gridvecs.map(_._2)).map(x => DenseVector(x.toArray))
+    val grid = utils.combine(gridvecs.values).map(x => DenseVector(x.toArray))
 
     val energyLandscape = grid.map((config) => {
       val configMap = List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
