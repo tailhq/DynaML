@@ -66,7 +66,29 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.bayes.ESGPPrior" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="io.github.mandar2812.dynaml.models.bayes.CoRegGPPrior" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CoRegGPPrior[I,J,MeanFuncParams]extendsGaussianProcessPrior[(I,J),MeanFuncParams]"></a>
+      <a id="CoRegGPPrior[I,J,MeanFuncParams]:CoRegGPPrior[I,J,MeanFuncParams]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CoRegGPPrior.html"><span class="name">CoRegGPPrior</span></a><span class="tparams">[<span name="I">I</span>, <span name="J">J</span>, <span name="MeanFuncParams">MeanFuncParams</span>]</span><span class="result"> extends <a href="GaussianProcessPrior.html" class="extype" name="io.github.mandar2812.dynaml.models.bayes.GaussianProcessPrior">GaussianProcessPrior</a>[(<span class="extype" name="io.github.mandar2812.dynaml.models.bayes.CoRegGPPrior.I">I</span>, <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.CoRegGPPrior.J">J</span>), <span class="extype" name="io.github.mandar2812.dynaml.models.bayes.CoRegGPPrior.MeanFuncParams">MeanFuncParams</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.package@CoRegGPPrior[I,J,MeanFuncParams]extendsGaussianProcessPrior[(I,J),MeanFuncParams]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Gaussian Process prior where the covariance can be
+decomposed as a product of covariance functions over
+two index sets <span class="extype" name="I">I</span> and <span class="extype" name="J">J</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Gaussian Process prior where the covariance can be
+decomposed as a product of covariance functions over
+two index sets <span class="extype" name="I">I</span> and <span class="extype" name="J">J</span>.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>Index set of the first component covariance</p></dd><dt class="tparam">J</dt><dd class="cmt"><p>Index set of the second component covariance</p></dd><dt class="tparam">MeanFuncParams</dt><dd class="cmt"><p>Type of the parameterization of the trend/mean function</p></dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.ESGPPrior" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ESGPPrior[I,MeanFuncParams]extendsStochasticProcessPrior[I,Double,io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.probability.BlockedMESNRV,io.github.mandar2812.dynaml.models.sgp.ESGPModel[Seq[(I,Double)],I]]"></a>
       <a id="ESGPPrior[I,MeanFuncParams]:ESGPPrior[I,MeanFuncParams]"></a>
       <h4 class="signature">
@@ -179,7 +201,24 @@ having a linear trend function (or mean function)</p>
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="io.github.mandar2812.dynaml.models.bayes.GaussianProcessPrior" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="io.github.mandar2812.dynaml.models.bayes.CoRegGPPrior" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CoRegGPPrior"></a>
+      <a id="CoRegGPPrior:CoRegGPPrior"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CoRegGPPrior$.html"><span class="name">CoRegGPPrior</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.models.bayes.package@CoRegGPPrior" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="io.github.mandar2812.dynaml.models.bayes.GaussianProcessPrior" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GaussianProcessPrior"></a>
       <a id="GaussianProcessPrior:GaussianProcessPrior"></a>
       <h4 class="signature">

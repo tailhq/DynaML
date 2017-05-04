@@ -45,14 +45,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">BlockedMultiVariateGaussian</span><span class="params">(<span name="mean">mean: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="covariance">covariance: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rand">rand: <span class="extype" name="breeze.stats.distributions.RandBasis">RandBasis</span> = <span class="symbol"><span class="name"><a href="../../../../../../breeze/package.html">Rand</a></span></span></span>)</span><span class="result"> extends <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>] with <span class="extype" name="breeze.stats.distributions.Moments">Moments</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">BlockedMultiVariateGaussian</span><span class="params">(<span name="mean">mean: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span></span>, <span name="covariance">covariance: <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="rand">rand: <span class="extype" name="breeze.stats.distributions.RandBasis">RandBasis</span> = <span class="symbol"><span class="name"><a href="../../../../../../breeze/package.html">Rand</a></span></span></span>)</span><span class="result"> extends <a href="AbstractContinuousDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr">AbstractContinuousDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>] with <span class="extype" name="breeze.stats.distributions.Moments">Moments</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>] with <a href="HasErrorBars.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.HasErrorBars">HasErrorBars</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a Gaussian distribution over a <span class="extype" name="PartitionedVector">PartitionedVector</span>
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="breeze.stats.distributions.Moments">Moments</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>], <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <span class="extype" name="breeze.stats.distributions.Rand">Rand</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <span class="extype" name="breeze.stats.distributions.Density">Density</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="HasErrorBars.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.HasErrorBars">HasErrorBars</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <span class="extype" name="breeze.stats.distributions.Moments">Moments</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>], <a href="AbstractContinuousDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr">AbstractContinuousDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <a href="GenericDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.GenericDistribution">GenericDistribution</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <span class="extype" name="breeze.stats.distributions.Rand">Rand</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="breeze.stats.distributions.Density">Density</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -70,7 +70,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian"><span>BlockedMultiVariateGaussian</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="breeze.stats.distributions.Moments"><span>Moments</span></li><li class="in" name="breeze.stats.distributions.ContinuousDistr"><span>ContinuousDistr</span></li><li class="in" name="breeze.stats.distributions.Rand"><span>Rand</span></li><li class="in" name="breeze.stats.distributions.Density"><span>Density</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian"><span>BlockedMultiVariateGaussian</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.distributions.HasErrorBars"><span>HasErrorBars</span></li><li class="in" name="breeze.stats.distributions.Moments"><span>Moments</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr"><span>AbstractContinuousDistr</span></li><li class="in" name="breeze.stats.distributions.ContinuousDistr"><span>ContinuousDistr</span></li><li class="in" name="io.github.mandar2812.dynaml.probability.distributions.GenericDistribution"><span>GenericDistribution</span></li><li class="in" name="breeze.stats.distributions.Rand"><span>Rand</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="breeze.stats.distributions.Density"><span>Density</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -240,6 +240,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Rand</dd></dl></div>
+    </li><li name="io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian#confidenceInterval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="confidenceInterval(s:Double):(io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedVector)"></a>
+      <a id="confidenceInterval(Double):(PartitionedVector,PartitionedVector)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">confidenceInterval</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: (<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian@confidenceInterval(s:Double):(io.github.mandar2812.dynaml.algebra.PartitionedVector,io.github.mandar2812.dynaml.algebra.PartitionedVector)" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian">BlockedMultiVariateGaussian</a> → <a href="HasErrorBars.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.HasErrorBars">HasErrorBars</a></dd></dl></div>
     </li><li name="io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian#covariance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="covariance:io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix"></a>
       <a id="covariance:PartitionedPSDMatrix"></a>
@@ -885,20 +902,26 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Product">
+        <div class="parent" name="scala.Product">
               <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.probability.distributions.HasErrorBars">
+              <h3>Inherited from <a href="HasErrorBars.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.HasErrorBars">HasErrorBars</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
             </div><div class="parent" name="breeze.stats.distributions.Moments">
               <h3>Inherited from <span class="extype" name="breeze.stats.distributions.Moments">Moments</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>, <span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedPSDMatrix">PartitionedPSDMatrix</span>]</h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr">
+              <h3>Inherited from <a href="AbstractContinuousDistr.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr">AbstractContinuousDistr</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
             </div><div class="parent" name="breeze.stats.distributions.ContinuousDistr">
               <h3>Inherited from <span class="extype" name="breeze.stats.distributions.ContinuousDistr">ContinuousDistr</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
+            </div><div class="parent" name="io.github.mandar2812.dynaml.probability.distributions.GenericDistribution">
+              <h3>Inherited from <a href="GenericDistribution.html" class="extype" name="io.github.mandar2812.dynaml.probability.distributions.GenericDistribution">GenericDistribution</a>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
             </div><div class="parent" name="breeze.stats.distributions.Rand">
               <h3>Inherited from <span class="extype" name="breeze.stats.distributions.Rand">Rand</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="breeze.stats.distributions.Density">
               <h3>Inherited from <span class="extype" name="breeze.stats.distributions.Density">Density</span>[<span class="extype" name="io.github.mandar2812.dynaml.algebra.PartitionedVector">PartitionedVector</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
