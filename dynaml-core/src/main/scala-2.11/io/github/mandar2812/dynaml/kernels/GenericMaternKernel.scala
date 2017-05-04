@@ -7,13 +7,15 @@ import spire.algebra.{Field, InnerProductSpace}
 import io.github.mandar2812.dynaml.utils._
 
 /**
-  * @author mandar2812 date: 27/01/2017.
-  *
   * Implementation of the half integer Matern
   * covariance function
-  */
+  *
+  * @author mandar2812 date: 27/01/2017.
+  *
+  *
+  * */
 class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
-  implicit ev: Field[T] with InnerProductSpace[T, Double])
+  implicit evInner: InnerProductSpace[T, Double], evField: Field[T])
   extends StationaryKernel[T, Double, DenseMatrix[Double]]
     with LocalScalarKernel[T] with Serializable { self =>
 
@@ -31,7 +33,7 @@ class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
   }
 
   override def evalAt(config: Map[String, Double])(x: T) = {
-    val r = math.sqrt(ev.dot(x, x))
+    val r = math.sqrt(evInner.dot(x, x))
     val nu = config("p") + 0.5
     val lengthscale = config("l")
     val order = config("p").toInt
@@ -47,8 +49,8 @@ class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
 
   override def gradientAt(config: Map[String, Double])(x: T, y: T) = {
 
-    val diff = ev.minus(x, y)
-    val r = math.sqrt(ev.dot(diff, diff))
+    val diff = evField.minus(x, y)
+    val r = math.sqrt(evInner.dot(diff, diff))
 
     val nu = config("p") + 0.5
     val lengthscale = config("l")
@@ -77,13 +79,15 @@ class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
 }
 
 /**
-  * @author mandar2812 date: 27/01/2017.
-  *
   * Implementation of the half integer Matern-ARD
   * covariance function
-  */
+  *
+  * @author mandar2812 date: 27/01/2017.
+  *
+  *
+  * */
 abstract class GenericMaternARDKernel[T](private var l: T, private var p: Int = 3)(
-  implicit ev: Field[T] with InnerProductSpace[T, Double])
+  implicit evInner: InnerProductSpace[T, Double], evField: Field[T])
   extends StationaryKernel[T, Double, DenseMatrix[Double]]
     with LocalScalarKernel[T] with Serializable { self =>
 
