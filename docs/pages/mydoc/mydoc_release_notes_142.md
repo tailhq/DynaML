@@ -5,7 +5,7 @@ keywords: release notes, announcements, what's new, new features
 last_updated: May 7, 2017
 summary: "Version 1.4.2 of DynaML, released May 7, 2017. Updates, improvements and new features."
 sidebar: mydoc_sidebar
-permalink: mydoc_release_notes_141.html
+permalink: mydoc_release_notes_142.html
 folder: mydoc
 ---
 
