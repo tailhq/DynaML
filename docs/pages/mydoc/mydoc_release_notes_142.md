@@ -1,5 +1,5 @@
 ---
-title: Release notes 1.4.1
+title: Release notes 1.4.2
 tags: [getting_started,release_notes]
 keywords: release notes, announcements, what's new, new features
 last_updated: May 7, 2017
