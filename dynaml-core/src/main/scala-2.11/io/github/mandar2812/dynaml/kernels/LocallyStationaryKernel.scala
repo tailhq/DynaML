@@ -53,7 +53,9 @@ class LocallyStationaryKernel[I](
   *
   * Represents covariance function of a GP which is
   * scaled version of a base GP.
+  *
   * z ~ GP(m(.), K(.,.))
+  *
   * y = g(x)*z
   *
   * y ~ GP(g(x)*m(x), g(x)K(x,x')g(x'))
