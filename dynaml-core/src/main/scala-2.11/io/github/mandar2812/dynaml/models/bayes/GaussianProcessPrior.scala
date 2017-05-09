@@ -28,7 +28,7 @@ import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe2
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 
 import scala.reflect.ClassTag
-import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe, ParallelPipe}
 import io.github.mandar2812.dynaml.probability.{MatrixNormalRV, MultGaussianPRV}
 
 /**
@@ -213,6 +213,7 @@ abstract class CoRegGPPrior[I: ClassTag, J: ClassTag, MeanFuncParams](
   noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J]) extends
   GaussianProcessPrior[(I,J), MeanFuncParams](covarianceI:*covarianceJ, noiseCovarianceI:*noiseCovarianceJ) {
 
+  self =>
 
   def priorDistribution[U <: Seq[I], V <: Seq[J]](d1: U, d2: V): MatrixNormalRV = {
 
@@ -224,6 +225,26 @@ abstract class CoRegGPPrior[I: ClassTag, J: ClassTag, MeanFuncParams](
     MatrixNormalRV(m, u, v)
   }
 
+  /**
+    * Define a prior over the process which is a scaled version of the base GP.
+    *
+    * z ~ GP(m(.), K(.,.))
+    *
+    * y = g(x)&times;z
+    *
+    * y ~ GP(g(x)&times;m(x), g(x)K(x,x')g(x'))
+    **/
+  def *(scalingFunc: ParallelPipe[I, Double, J, Double]) =
+    CoRegGPPrior(
+      ScaledKernel[I](self.covarianceI, scalingFunc._1),
+      ScaledKernel[J](self.covarianceJ, scalingFunc._2),
+      ScaledKernel[I](self.noiseCovarianceI, scalingFunc._1),
+      ScaledKernel[J](self.noiseCovarianceJ, scalingFunc._2))(
+      MetaPipe((p: MeanFuncParams) => (x: (I, J)) => {
+        self.meanFunctionPipe(p)(x)*scalingFunc._1(x._1)*scalingFunc._2(x._2)
+      }),
+      self._meanFuncParams
+    )
 }
 
 object CoRegGPPrior {

@@ -98,13 +98,21 @@ object DataPipe {
 trait ParallelPipe[-Source1, +Result1, -Source2, +Result2]
   extends DataPipe[(Source1, Source2), (Result1, Result2)] {
 
+  val _1: DataPipe[Source1, Result1]
+  val _2: DataPipe[Source2, Result2]
+
 }
 
 object ParallelPipe {
   def apply[S1, D1, S2, D2](func1: (S1) => D1, func2: (S2) => D2):
   ParallelPipe[S1, D1, S2, D2] = {
     new ParallelPipe[S1, D1, S2, D2] {
+
       def run(data: (S1, S2)) = (func1(data._1), func2(data._2))
+
+      override val _1 = DataPipe(func1)
+
+      override val _2 = DataPipe(func2)
     }
   }
 }
