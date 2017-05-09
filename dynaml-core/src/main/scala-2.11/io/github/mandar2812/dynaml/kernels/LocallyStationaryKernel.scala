@@ -50,7 +50,6 @@ class LocallyStationaryKernel[I](
 }
 
 /**
-  * @author mandar2812 date: 31/03/2017
   *
   * Represents covariance function of a GP which is
   * scaled version of a base GP.
@@ -58,6 +57,9 @@ class LocallyStationaryKernel[I](
   * y = g(x)*z
   *
   * y ~ GP(g(x)*m(x), g(x)K(x,x')g(x'))
+  *
+  * @author mandar2812 date: 31/03/2017
+  *
   * */
 class ScaledKernel[I](
   baseKernel: LocalScalarKernel[I],
