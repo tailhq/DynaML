@@ -27,14 +27,15 @@ import spire.algebra.InnerProductSpace
 
 
 /**
-  * @author mandar2812 date: 16/02/2017.
-  *
   * Represents a stochastic process with a
   * defined prior distribution.
-  */
+  *
+  * @author mandar2812 date: 16/02/2017.
+  *
+  * */
 trait StochasticProcessPrior[I, Y, Y1,
 D <: RandomVarWithDistr[Y1, _], W,
-StochasticModel <: StochasticProcessModel[Seq[(I, Y)], I, Y, W]] {
+StochasticModel <: StochasticProcessModel[Seq[(I, Y)], I, Y, W]] extends Serializable {
 
   protected var hyperPrior: Map[String, ContinuousDistrRV[Double]] = Map()
 

@@ -37,7 +37,7 @@ import io.github.mandar2812.dynaml.utils._
   *                the random variable is defined;
   *                i.e. the range of values it can take
   */
-abstract class RandomVariable[Domain] {
+abstract class RandomVariable[Domain] extends Serializable {
 
   self =>
   /**
@@ -91,7 +91,7 @@ abstract class RandomVariable[Domain] {
   * underlying probability density function.
   *
   * */
-trait HasDistribution[Domain] {
+trait HasDistribution[Domain] extends Serializable {
 
   /**
     * The actual probability density

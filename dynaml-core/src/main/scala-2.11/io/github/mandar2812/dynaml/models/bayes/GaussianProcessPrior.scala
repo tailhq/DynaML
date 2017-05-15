@@ -28,7 +28,7 @@ import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe2
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 
 import scala.reflect.ClassTag
-import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe, ParallelPipe}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder, MetaPipe, ParallelPipe}
 import io.github.mandar2812.dynaml.probability.{MatrixNormalRV, MultGaussianPRV}
 
 /**
@@ -46,7 +46,8 @@ import io.github.mandar2812.dynaml.probability.{MatrixNormalRV, MultGaussianPRV}
   * */
 abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
   val covariance: LocalScalarKernel[I],
-  val noiseCovariance: LocalScalarKernel[I]) extends
+  val noiseCovariance: LocalScalarKernel[I],
+  val trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]]) extends
   StochasticProcessPrior[
     I, Double, PartitionedVector,
     MultGaussianPRV, MultGaussianPRV,
@@ -138,6 +139,7 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
     ScaledKernel[I](self.covariance, scalingFunc),
     ScaledKernel[I](self.noiseCovariance, scalingFunc),
     MetaPipe((p: MeanFuncParams) => (x: I) => self.meanFunctionPipe(p)(x)*scalingFunc(x)),
+    self.trendParamsEncoder,
     self._meanFuncParams)
 
 }
@@ -151,8 +153,9 @@ object GaussianProcessPrior {
     covariance: LocalScalarKernel[I],
     noiseCovariance: LocalScalarKernel[I],
     meanFPipe: MetaPipe[MeanFuncParams, I, Double],
+    trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]],
     initialParams: MeanFuncParams): GaussianProcessPrior[I, MeanFuncParams] =
-    new GaussianProcessPrior[I, MeanFuncParams](covariance, noiseCovariance) {
+    new GaussianProcessPrior[I, MeanFuncParams](covariance, noiseCovariance, trendParamsEncoder) {
 
       private var params = initialParams
 
@@ -173,9 +176,10 @@ object GaussianProcessPrior {
   * */
 class LinearTrendGaussianPrior[I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
+  trendParamsEncoder: Encoder[(I, Double), Map[String, Double]],
   trendParams: I, intercept: Double)(
   implicit inner: InnerProductSpace[I, Double]) extends
-  GaussianProcessPrior[I, (I, Double)](cov, n) with
+  GaussianProcessPrior[I, (I, Double)](cov, n, trendParamsEncoder) with
   LinearTrendStochasticPrior[I, MultGaussianPRV, MultGaussianPRV, AbstractGPRegressionModel[Seq[(I, Double)], I]]{
 
   override val innerProduct = inner
@@ -210,8 +214,12 @@ class LinearTrendGaussianPrior[I: ClassTag](
   * */
 abstract class CoRegGPPrior[I: ClassTag, J: ClassTag, MeanFuncParams](
   covarianceI: LocalScalarKernel[I], covarianceJ: LocalScalarKernel[J],
-  noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J]) extends
-  GaussianProcessPrior[(I,J), MeanFuncParams](covarianceI:*covarianceJ, noiseCovarianceI:*noiseCovarianceJ) {
+  noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J],
+  trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]]) extends
+  GaussianProcessPrior[(I,J), MeanFuncParams](
+    covarianceI:*covarianceJ,
+    noiseCovarianceI:*noiseCovarianceJ,
+    trendParamsEncoder) {
 
   self =>
 
@@ -243,6 +251,7 @@ abstract class CoRegGPPrior[I: ClassTag, J: ClassTag, MeanFuncParams](
       MetaPipe((p: MeanFuncParams) => (x: (I, J)) => {
         self.meanFunctionPipe(p)(x)*scalingFunc._1(x._1)*scalingFunc._2(x._2)
       }),
+      self.trendParamsEncoder,
       self._meanFuncParams
     )
 }
@@ -268,8 +277,12 @@ object CoRegGPPrior {
     covarianceI: LocalScalarKernel[I], covarianceJ: LocalScalarKernel[J],
     noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J])(
     meanFPipe: MetaPipe[MeanFuncParams, (I, J), Double],
+    trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]],
     initialParams: MeanFuncParams) =
-    new CoRegGPPrior[I, J, MeanFuncParams](covarianceI, covarianceJ, noiseCovarianceI, noiseCovarianceJ) {
+    new CoRegGPPrior[I, J, MeanFuncParams](
+      covarianceI, covarianceJ,
+      noiseCovarianceI, noiseCovarianceJ,
+      trendParamsEncoder) {
 
       private var params = initialParams
 

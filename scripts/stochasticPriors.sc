@@ -13,6 +13,11 @@ val encoder = Encoder(
   (conf: Map[String, Double]) => (conf("c"), conf("s")),
   (cs: (Double, Double)) => Map("c" -> cs._1, "s" -> cs._2))
 
+val trendEncoder = Encoder(
+  (cs: (Double, Double)) => Map("slope" -> cs._1, "intercept" -> cs._2),
+  (conf: Map[String, Double]) => (conf("slope"), conf("intercept"))
+)
+
 val hyp_prior: Map[String, ContinuousDistrRV[Double]] = Map(
   "c" -> GaussianRV(2.5, 1.5),
   "s" -> RandomVariable(Gamma(2.0, 2.0)),
@@ -23,7 +28,7 @@ val sgp_hyp_prior = hyp_prior ++ Map("cutoff" -> GaussianRV(0.0, 1.0), "skewness
 val gsmKernel = GaussianSpectralKernel[Double](3.5, 2.0, encoder)
 val n = new MAKernel(0.8)
 
-val gp_prior = new LinearTrendGaussianPrior[Double](gsmKernel, n, 0.0, 0.0)
+val gp_prior = new LinearTrendGaussianPrior[Double](gsmKernel, n, trendEncoder, 0.0, 0.0)
 //gp_prior.hyperPrior_(hyp_prior)
 
 val sgp_prior = new LinearTrendESGPrior[Double](gsmKernel, n, 0.75, 0.1, 0.0, 0.0)

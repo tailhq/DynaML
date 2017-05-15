@@ -36,7 +36,7 @@ JointDist <: Density[(ConditioningSet, Domain)] with Rand[(ConditioningSet, Doma
 
   override val sample = prior.sample >
     DataPipe[ConditioningSet, ConditioningSet, Domain](
-      (c: ConditioningSet) => (c, likelihood(c).sample())
+      (c: ConditioningSet) => (c, likelihood(c).draw)
     )
 
   override val posterior: DataPipe[Domain, RandomVariable[ConditioningSet]] =

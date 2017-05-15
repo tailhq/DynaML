@@ -45,7 +45,7 @@ val abcPosterior = abcModel.posterior(data)
 
 val posterior: RandomVariable[(Double, Double)] = gModel.posterior(data)
 
-val samples = (1 to 3000).map(_ => {posterior.sample()})
+val samples = (1 to 3000).map(_ => posterior.draw)
 
 histogram(data)
 title("Histogram of data")
@@ -73,7 +73,7 @@ c_model.tolerance_(0.05)
 
 val post = c_model.posterior(350)
 
-val postSamples = (1 to 2000).map(_ => post.sample())
+val postSamples = (1 to 2000).map(_ => post.draw)
 
 histogram((1 to 2000).map(_ => p.sample()))
 hold()
