@@ -6,7 +6,7 @@ import io.github.mandar2812.dynaml.analysis.PartitionedVectorField
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.modelpipe.ESGPPipe4
 import io.github.mandar2812.dynaml.models.sgp.ESGPModel
-import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder, MetaPipe}
 import io.github.mandar2812.dynaml.probability.BlockedMESNRV
 import spire.algebra.{Field, InnerProductSpace}
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
@@ -43,6 +43,8 @@ abstract class ESGPPrior[I: ClassTag, MeanFuncParams](
     covariance.state ++ noiseCovariance.state ++ Map("skewness" -> lambda, "cutoff" -> tau)
 
   val meanFunctionPipe: MetaPipe[MeanFuncParams, I, Double]
+
+  val trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]]
 
   private var globalOptConfig = Map(
     "globalOpt" -> "GS",
@@ -107,14 +109,14 @@ abstract class ESGPPrior[I: ClassTag, MeanFuncParams](
 }
 
 /**
-  * @author mandar2812 date 21/02/2017.
-  *
   * An extended skew gaussian process prior with a
   * linear trend function.
+  *
+  * @author mandar2812 date 21/02/2017.
   * */
 class LinearTrendESGPrior[I: ClassTag](
-  cov: LocalScalarKernel[I],
-  n: LocalScalarKernel[I],
+  cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
+  override val trendParamsEncoder: Encoder[(I, Double), Map[String, Double]],
   lambda: Double, tau: Double,
   trendParams: I, intercept: Double)(
   implicit inner: InnerProductSpace[I, Double]) extends

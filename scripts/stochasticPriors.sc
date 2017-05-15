@@ -31,7 +31,7 @@ val n = new MAKernel(0.8)
 val gp_prior = new LinearTrendGaussianPrior[Double](gsmKernel, n, trendEncoder, 0.0, 0.0)
 //gp_prior.hyperPrior_(hyp_prior)
 
-val sgp_prior = new LinearTrendESGPrior[Double](gsmKernel, n, 0.75, 0.1, 0.0, 0.0)
+val sgp_prior = new LinearTrendESGPrior[Double](gsmKernel, n, trendEncoder, 0.75, 0.1, 0.0, 0.0)
 sgp_prior.hyperPrior_(sgp_hyp_prior)
 
 val xs = Seq.tabulate[Double](20)(0.5*_)

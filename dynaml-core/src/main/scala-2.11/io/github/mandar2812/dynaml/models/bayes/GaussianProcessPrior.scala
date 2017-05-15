@@ -46,8 +46,7 @@ import io.github.mandar2812.dynaml.probability.{MatrixNormalRV, MultGaussianPRV}
   * */
 abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
   val covariance: LocalScalarKernel[I],
-  val noiseCovariance: LocalScalarKernel[I],
-  val trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]]) extends
+  val noiseCovariance: LocalScalarKernel[I]) extends
   StochasticProcessPrior[
     I, Double, PartitionedVector,
     MultGaussianPRV, MultGaussianPRV,
@@ -60,6 +59,8 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
   def _meanFuncParams: MeanFuncParams
 
   def meanFuncParams_(p: MeanFuncParams): Unit
+
+  val trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]]
 
   protected val initial_covariance_state: Map[String, Double] = covariance.state ++ noiseCovariance.state
 
@@ -153,9 +154,9 @@ object GaussianProcessPrior {
     covariance: LocalScalarKernel[I],
     noiseCovariance: LocalScalarKernel[I],
     meanFPipe: MetaPipe[MeanFuncParams, I, Double],
-    trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]],
+    trendEncoder: Encoder[MeanFuncParams, Map[String, Double]],
     initialParams: MeanFuncParams): GaussianProcessPrior[I, MeanFuncParams] =
-    new GaussianProcessPrior[I, MeanFuncParams](covariance, noiseCovariance, trendParamsEncoder) {
+    new GaussianProcessPrior[I, MeanFuncParams](covariance, noiseCovariance) {
 
       private var params = initialParams
 
@@ -164,6 +165,8 @@ object GaussianProcessPrior {
       override def meanFuncParams_(p: MeanFuncParams) = params = p
 
       override val meanFunctionPipe = meanFPipe
+
+      override val trendParamsEncoder = trendEncoder
     }
 
 }
@@ -176,10 +179,10 @@ object GaussianProcessPrior {
   * */
 class LinearTrendGaussianPrior[I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
-  trendParamsEncoder: Encoder[(I, Double), Map[String, Double]],
+  override val trendParamsEncoder: Encoder[(I, Double), Map[String, Double]],
   trendParams: I, intercept: Double)(
   implicit inner: InnerProductSpace[I, Double]) extends
-  GaussianProcessPrior[I, (I, Double)](cov, n, trendParamsEncoder) with
+  GaussianProcessPrior[I, (I, Double)](cov, n) with
   LinearTrendStochasticPrior[I, MultGaussianPRV, MultGaussianPRV, AbstractGPRegressionModel[Seq[(I, Double)], I]]{
 
   override val innerProduct = inner
@@ -193,6 +196,7 @@ class LinearTrendGaussianPrior[I: ClassTag](
   override val meanFunctionPipe = MetaPipe(
     (parameters: (I, Double)) => (x: I) => inner.dot(parameters._1, x) + parameters._2
   )
+
 }
 
 /**
@@ -215,11 +219,10 @@ class LinearTrendGaussianPrior[I: ClassTag](
 abstract class CoRegGPPrior[I: ClassTag, J: ClassTag, MeanFuncParams](
   covarianceI: LocalScalarKernel[I], covarianceJ: LocalScalarKernel[J],
   noiseCovarianceI: LocalScalarKernel[I], noiseCovarianceJ: LocalScalarKernel[J],
-  trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]]) extends
+  override val trendParamsEncoder: Encoder[MeanFuncParams, Map[String, Double]]) extends
   GaussianProcessPrior[(I,J), MeanFuncParams](
     covarianceI:*covarianceJ,
-    noiseCovarianceI:*noiseCovarianceJ,
-    trendParamsEncoder) {
+    noiseCovarianceI:*noiseCovarianceJ) {
 
   self =>
 
