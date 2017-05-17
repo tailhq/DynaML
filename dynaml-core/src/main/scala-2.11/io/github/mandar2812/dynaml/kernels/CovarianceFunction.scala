@@ -5,13 +5,14 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 import spire.algebra.InnerProductSpace
 
 /**
-  * @author mandar2812
-  * A covariance function implementation. Covariance functions are
+  * A (symmeteric positive definite) covariance function. Covariance functions are
   * central to Gaussian/Student T Process Models as well as SVMs.
   *
   * @tparam T The index set over which K(.,.) is defined K: T &times; T -> V
   * @tparam V The value outputted by the kernel
   * @tparam M The type of the kernel matrix object.
+  * @author mandar2812
+  *
   * */
 abstract class CovarianceFunction[T, V, M] extends Kernel[T, V] with Serializable {
 
