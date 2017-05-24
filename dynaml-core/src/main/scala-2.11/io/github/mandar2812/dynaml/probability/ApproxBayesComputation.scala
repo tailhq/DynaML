@@ -40,14 +40,14 @@ BayesJointProbabilityScheme[
       //If acceptance condition is met
 
       val sampler = () => {
-        var candidate = prior.sample()
-        var generatedData = likelihood(candidate).sample()
+        var candidate = prior.draw
+        var generatedData = likelihood(candidate).draw
 
         cfor(1)(count =>
           count < MAX_ITERATIONS && !acceptance(data, generatedData),
           count => count + 1)(count => {
-          candidate = prior.sample()
-          generatedData = likelihood(candidate).sample()
+          candidate = prior.draw
+          generatedData = likelihood(candidate).draw
         })
         candidate
       }

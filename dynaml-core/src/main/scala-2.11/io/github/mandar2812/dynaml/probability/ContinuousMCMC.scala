@@ -23,7 +23,7 @@ class ContinuousMCMC[ConditioningSet, Domain](
   p: ContinuousDistrRV[ConditioningSet],
   c: DataPipe[ConditioningSet, ContinuousDistrRV[Domain]],
   proposalDist: RandomVarWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]],
-  burnIn: Long = 1000L)(implicit vectorSpace: Field[ConditioningSet])
+  burnIn: Long = 1000L, dropCount: Int = 100)(implicit vectorSpace: Field[ConditioningSet])
   extends RejectionSamplingScheme[ConditioningSet, Domain,
     ContinuousDistr[ConditioningSet],
     ContinuousDistr[Domain],
@@ -56,9 +56,9 @@ class ContinuousMCMC[ConditioningSet, Domain](
     //Initialize an MCMC sampler
     val sampler = GeneralMetropolisHastings(
       LikelihoodModel(logLikelihoodFunc), proposalDist.underlyingDist,
-      prior.sample.run(), burnIn)
+      prior.sample.run(), burnIn, dropCount)
 
-    RandomVariable(() => sampler.draw())
+    RandomVariable(sampler.draw _)
   })
 }
 
