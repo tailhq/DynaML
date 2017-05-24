@@ -32,8 +32,8 @@ implicit val pField = utils.productField[Double, Double]
 val prop =
   RandomVariable(new Gaussian(0.0, 0.4)) :* RandomVariable(new Gaussian(0.0, 0.1))
 
-val gModel: ContinuousMCMC[(Double, Double), Stream[Double]] =
-  new ContinuousMCMC(prior, likelihood, prop, 10000L)
+val gModel: GenericContinuousMCMC[(Double, Double), Stream[Double]] =
+  new GenericContinuousMCMC(prior, likelihood, prop, 10000L)
 
 val dataM: (Stream[Double], Stream[Double]) => Double = (xs, ys) => {
   val n = xs.length.toDouble

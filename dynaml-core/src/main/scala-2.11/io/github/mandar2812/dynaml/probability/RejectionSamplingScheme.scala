@@ -89,5 +89,5 @@ object RejectionSamplingScheme {
     p: ContinuousDistrRV[ConditioningSet], c: DataPipe[ConditioningSet, ContinuousDistrRV[Domain]],
     proposalDist: RandomVarWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]])(
      implicit vectorSpace: Field[ConditioningSet]) =
-    new ContinuousMCMC(p, c, proposalDist)
+    new GenericContinuousMCMC(p, c, proposalDist)
 }
