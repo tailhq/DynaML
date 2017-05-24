@@ -272,7 +272,7 @@ package object utils {
   }
 
   /**
-    * Convert a hyper-prior specification to a continuous distrbution
+    * Convert a hyper-prior specification to a continuous distribution
     * over [[Map]]
     * */
   def getPriorMapDistr(d: Map[String, ContinuousDistr[Double]]) = {

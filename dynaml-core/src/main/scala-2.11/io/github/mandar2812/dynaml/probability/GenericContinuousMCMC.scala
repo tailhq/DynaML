@@ -67,31 +67,4 @@ class GenericContinuousMCMC[ConditioningSet, Domain](
   })
 }
 
-class EnergyMCMC[
-Model <: GloballyOptimizable,
-Distr <: ContinuousDistr[Double]](
-  system: Model, hyper_prior: Map[String, Distr],
-  proposal: RandomVarWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]])
-  extends RandomVariable[Map[String, Double]] {
 
-  val encoder: ConfigEncoding = ConfigEncoding(hyper_prior.keys.toList)
-
-  implicit val vector_field = VectorField(hyper_prior.size)
-
-  val processed_prior = EncodedContDistrRV(getPriorMapDistr(hyper_prior), encoder)
-
-  private val logLikelihoodFunction = (candidate: DenseVector[Double]) => {
-    processed_prior.underlyingDist.logPdf(candidate) - system.energy(encoder.i(candidate))
-  }
-
-  var burnIn = 0
-  var dropCount = 0
-
-  val metropolisHastings = GeneralMetropolisHastings(
-    LikelihoodModel(logLikelihoodFunction), proposal.underlyingDist,
-    processed_prior.sample.run(), burnIn, dropCount)
-
-  val base_draw = DataPipe(() => metropolisHastings.draw())
-
-  override val sample = base_draw > encoder.i
-}
