@@ -15,29 +15,29 @@ CovarianceFunction[DenseVector[Double], Double, M]
 with Serializable {
 
   /**
-   * Builds an approximate nonlinear feature map
-   * which corresponds to an SVM Kernel. This is
-   * done using the Nystrom method i.e. approximating
-   * the eigenvalues and eigenvectors of the Kernel
-   * matrix of a given RDD
-   *
-   * For each data point,
-   * calculate m dimensions of the
-   * feature map where m is the number
-   * of eigenvalues/vectors obtained from
-   * the Eigen Decomposition.
-   *
-   * phi_i(x) = (1/sqrt(eigenvalue(i)))*Sum(k, 1, m, K(k, x)*eigenvector(i)(k))
-   *
-   * @param decomposition The Eigenvalue decomposition calculated
-   *                      from the kernel matrix of the prototype
-   *                      subset.
-   * @param prototypes The prototype subset.
-   *
-   * @param data  The dataset on which the feature map
-   *              is to be applied.
-   *
-   **/
+    * Builds an approximate nonlinear feature map
+    * which corresponds to an SVM Kernel. This is
+    * done using the Nystrom method i.e. approximating
+    * the eigenvalues and eigenvectors of the Kernel
+    * matrix of some data set.
+    *
+    * For each data point,
+    * calculate m dimensions of the
+    * feature map where m is the number
+    * of eigenvalues/vectors obtained from
+    * the Eigen Decomposition.
+    *
+    * phi_i(x) = (1/sqrt(eigenvalue(i)))*Sum(k, 1, m, K(k, x)*eigenvector(i)(k))
+    *
+    * @param decomposition The Eigenvalue decomposition calculated
+    *                      from the kernel matrix of the prototype
+    *                      subset.
+    * @param prototypes The prototype subset.
+    *
+    * @param data  The dataset on which the feature map
+    *              is to be applied.
+    *
+    * */
   def featureMapping(decomposition: (DenseVector[Double], DenseMatrix[Double]))
                     (prototypes: List[DenseVector[Double]])
                     (data: DenseVector[Double])
@@ -46,7 +46,7 @@ with Serializable {
     val buff: Transpose[DenseVector[Double]] = kernel.t * decomposition._2
     val lambda: DenseVector[Double] = decomposition._1.map(lam => 1/math.sqrt(lam))
     val ans = buff.t
-    ans :* lambda
+    ans *:* lambda
   }
 }
 

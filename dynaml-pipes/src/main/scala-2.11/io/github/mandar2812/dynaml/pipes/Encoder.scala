@@ -19,18 +19,20 @@ under the License.
 package io.github.mandar2812.dynaml.pipes
 
 /**
-  * @author mandar2812 date 23/10/2016.
-  *
   * A deterministic and reversible encoding
   * from a domain to a range. Mathematically equivalent
   * to a bijective function.
   * @tparam S The domain type
   * @tparam D The output type
-  */
+  *
+  * @author mandar2812 date 23/10/2016.
+  *
+  * */
 trait Encoder[S, D] extends DataPipe[S, D] {
+
   /**
     * Represents the decoding operation.
-    */
+    * */
   val i: DataPipe[D, S]
 
   /**
@@ -41,7 +43,7 @@ trait Encoder[S, D] extends DataPipe[S, D] {
     * [[S]] -> [[D]] :: [[D]] -> [[Further]] ==
     * [[S]] -> [[Further]]
     *
-    **/
+    * */
   def >[Further](that: Encoder[D, Further]): Encoder[S, Further] = {
     val fPipe1 = DataPipe(this.run _)
 
@@ -62,7 +64,7 @@ object Encoder {
 
   /**
     * Create an encoder on the fly by supplying the encode and decode function
-    */
+    * */
   def apply[S, D](forwardEnc: (S) => D, reverseEnc: (D) => S): Encoder[S, D] =
     new Encoder[S, D] {
 

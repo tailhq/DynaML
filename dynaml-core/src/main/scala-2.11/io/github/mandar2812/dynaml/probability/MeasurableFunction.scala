@@ -22,6 +22,7 @@ import breeze.numerics.log
 import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.analysis.PushforwardMap
 import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes.Encoder
 
 /**
   *
@@ -110,4 +111,34 @@ class MeasurableDistrRV[Domain1, Domain2, Jacobian](
     override def draw() = func.run(baseRV.underlyingDist.draw())
   }
 
+}
+
+/**
+  * A random variable which consists of a base random variable in [[Domain1]]
+  * and an invertible homeomorphism from [[Domain1]] to [[Domain2]].
+  *
+  * @tparam Domain1 Domain of the base random variable
+  * @tparam Domain2 Domain of the morphed random variable.
+  * @param base A distribution [[Distr]] over [[Domain1]] which extends breeze [[ContinuousDistr]]
+  * @param encoder The morphing function from [[Domain1]] to [[Domain2]]
+  * @author mandar2812 date 16/05/2017.
+  * */
+class EncodedContDistrRV[Domain1, Domain2, Distr <: ContinuousDistr[Domain1]](
+  base: Distr, encoder: Encoder[Domain1, Domain2])
+  extends ContinuousDistrRV[Domain2] {
+
+  override val underlyingDist = new ContinuousDistr[Domain2] {
+    override def unnormalizedLogPdf(x: Domain2) = base.unnormalizedLogPdf(encoder.i(x))
+
+    override def logNormalizer = base.logNormalizer
+
+    override def draw() = encoder(base.draw())
+  }
+}
+
+object EncodedContDistrRV {
+
+  def apply[Domain1, Domain2, Distr <: ContinuousDistr[Domain1]](
+    base: Distr, encoder: Encoder[Domain1, Domain2]): EncodedContDistrRV[Domain1, Domain2, Distr] =
+    new EncodedContDistrRV(base, encoder)
 }

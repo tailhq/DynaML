@@ -32,6 +32,7 @@ import scala.util.matching.Regex
 import sys.process._
 import java.net.URL
 
+import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrix
 import org.apache.spark.annotation.Experimental
 
@@ -43,9 +44,11 @@ import scala.util.Random
 /**
   * A set of pre-processing utilities
   * and library functions.
-  */
+  * */
 package object utils {
+
   val log1pExp: (Double) => Double = (x) => {x + math.log1p(math.exp(-x))}
+
   /**
     * Get a [[CSVReader]] object from a file name and delimiter
     * character.
@@ -268,12 +271,32 @@ package object utils {
     }
   }
 
+  /**
+    * Convert a hyper-prior specification to a continuous distrbution
+    * over [[Map]]
+    * */
+  def getPriorMapDistr(d: Map[String, ContinuousDistr[Double]]) = {
 
-  /*
-  * Calculate the value of the hermite polynomials
-  * tail recursively. This is needed to calculate
-  * the Gaussian derivatives at a point x.
-  * */
+
+    new ContinuousDistr[Map[String, Double]] {
+
+      override def unnormalizedLogPdf(x: Map[String, Double]) = {
+
+        x.map(c => d(c._1).unnormalizedLogPdf(c._2)).sum
+      }
+
+      override def logNormalizer = d.values.map(_.logNormalizer).sum
+
+      override def draw() = d.mapValues(_.draw())
+    }
+
+  }
+
+  /**
+    * Calculate the value of the hermite polynomials
+    * tail recursively. This is needed to calculate
+    * the Gaussian derivatives at a point x.
+    * */
   def hermite(n: Int, x: Double): Double = {
     @tailrec
     def hermiteHelper(k: Int, x: Double, a: Double, b: Double): Double =
@@ -287,7 +310,7 @@ package object utils {
 
   @tailrec
   def factorial(n: Int, accumulator: Long = 1): Long = {
-    if(n == 0) accumulator else factorial(n - 1, (accumulator * n))
+    if(n == 0) accumulator else factorial(n - 1, accumulator*n)
   }
 
   def getTypeTag[T: ru.TypeTag](obj: T) = ru.typeTag[T]
@@ -311,10 +334,13 @@ package object utils {
   def textFileToStream(fileName: String): Stream[String] =
     Source.fromFile(new File(fileName)).getLines().toStream
 
-  def strReplace(fileName: String)
-                (findStringRegex: String, replaceString: String)
-  : Stream[String] = optimize {textFileToStream(fileName)
-    .map(replace(findStringRegex)(replaceString))}
+  def strReplace(fileName: String)(
+    findStringRegex: String,
+    replaceString: String): Stream[String] = optimize {
+
+    textFileToStream(fileName).map(
+      replace(findStringRegex)(replaceString))
+  }
 
   def writeToFile(destination: String)(lines: Stream[String]): Unit = {
     val writer = new BufferedWriter(new FileWriter(new File(destination)))
@@ -327,8 +353,10 @@ package object utils {
   def transformData(transform: (String) => String)(lines: Stream[String]): Stream[String] =
     optimize { lines.map(transform) }
 
-  def extractColumns(lines: Stream[String], sep: String,
-                     columns: List[Int], naStrings:Map[Int, String]): Stream[String] = {
+  def extractColumns(
+    lines: Stream[String], sep: String,
+    columns: List[Int], naStrings:Map[Int, String]): Stream[String] = {
+
     val tFunc = (line: String) => {
       val fields = line.split(sep)
 
@@ -350,15 +378,17 @@ package object utils {
   }
 
   /**
-    * Construct a haar transform matrix of size n
+    * Construct a Haar transform matrix of size n
     *
     * NOTE: n must be a power of 2.
     *
     * */
   def haarMatrix(n: Int) = {
+
     val pos = DenseMatrix(Array(1.0, 1.0))
     val neg = DenseMatrix(Array(-1.0, 1.0))
     val hMat = DenseMatrix(Array(1.0, 1.0), Array(-1.0, 1.0))
+
     def haarMatrixAcc(i: Int, hMatAcc: DenseMatrix[Double]): DenseMatrix[Double] = i match {
       case `n` => hMatAcc
       case index =>
@@ -367,6 +397,7 @@ package object utils {
             kron(hMatAcc, pos),
             kron(DenseMatrix.eye[Double](i), neg)))
     }
+
     haarMatrixAcc(2, hMat)
   }
 

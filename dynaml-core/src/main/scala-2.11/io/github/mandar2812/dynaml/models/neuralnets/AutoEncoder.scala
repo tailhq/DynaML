@@ -26,13 +26,14 @@ import io.github.mandar2812.dynaml.pipes.{ReversibleScaler, Scaler}
 import io.github.mandar2812.dynaml.probability.RandomVariable
 
 /**
-  * @author mandar2812 22/6/16.
-  *
   * Base implementation of a Sparse Autoencoder
   *
   * It is represented as a [[ReversibleScaler]] transforming
   * a breeze [[DenseVector]] into another breeze Dense Vector.
-  */
+  *
+  * @author mandar2812 22/6/16.
+  *
+  * */
 @deprecated("AutoEncoder is deprecated as of DynaML v1.4.2 in favour of GenericAutoEncoder")
 class AutoEncoder(inDim: Int, outDim: Int,
                   acts: List[String] = List("logsig", "logsig"))
@@ -77,12 +78,12 @@ class AutoEncoder(inDim: Int, outDim: Int,
 }
 
 /**
-  * @author mandar2812 date: 29/03/17
-  *
   * Represents an auto-encoder acting on generic types.
   *
   * @tparam LayerP The type of parameters specifying layer weights
   * @tparam I The type of input features
+  * @author mandar2812 date: 29/03/17
+  *
   * */
 class GenericAutoEncoder[LayerP, I](
   learningAlgorithm: GradBasedBackPropagation[LayerP, I],
