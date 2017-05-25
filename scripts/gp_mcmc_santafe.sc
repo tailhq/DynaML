@@ -2,7 +2,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.{ContinuousDistr, Gamma}
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.analysis.VectorField
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, SEKernel}
+import io.github.mandar2812.dynaml.kernels.{DiracKernel, LaplacianKernel, SEKernel}
 import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import io.github.mandar2812.dynaml.probability.MultGaussianRV
@@ -19,6 +19,7 @@ type Data = Stream[(Features, Features)]
 implicit val f = VectorField(deltaT)
 
 val kernel = new SEKernel(1.5, 1.5)
+val kernel2 = new LaplacianKernel(2.0)
 val noise_kernel = new DiracKernel(1.0)
 
 val data_size = 500
@@ -42,7 +43,7 @@ val prepare_data = {
 
 val create_gp_model = GPRegressionPipe(
   (d: Data) => d.toSeq.map(p => (p._1, p._2(0))),
-  kernel, noise_kernel
+  kernel2, noise_kernel
 )
 
 val model_flow = DataPipe(create_gp_model, scales_flow_stub)
@@ -52,15 +53,21 @@ val workflow = prepare_data > model_flow
 val (model, scales) = workflow("data/santafelaser.csv")
 
 val num_hyp = model._hyper_parameters.length
-val proposal = MultGaussianRV(num_hyp)(DenseVector.zeros[Double](num_hyp), DenseMatrix.eye[Double](num_hyp))
+
+val proposal = MultGaussianRV(
+  num_hyp)(
+  DenseVector.zeros[Double](num_hyp),
+  DenseMatrix.eye[Double](num_hyp)*0.001)
 
 val mcmc = HyperParameterMCMC[model.type, ContinuousDistr[Double]](
-  model, model._hyper_parameters.map(h => (h, new Gamma(1.0, 1.0))).toMap,
+  model, model._hyper_parameters.map(h => (h, new Gamma(1.0, 2.0))).toMap,
   proposal)
 
-val samples = mcmc.iid(500).draw
+mcmc.burnIn = 50
 
-val samples_se = samples.map(h => (h("bandwidth"), h("amplitude")))
+val samples = mcmc.iid(1000).draw
+
+val samples_se = samples.map(h => (h("beta"), h("noiseLevel")))
 
 scatter(samples_se)
 title("x,y ~ P(sigma, a | Data)")

@@ -20,9 +20,9 @@ Distr <: ContinuousDistr[Double]](
 
   val encoder: ConfigEncoding = ConfigEncoding(hyper_prior.keys.toList)
 
-  implicit val vector_field = VectorField(hyper_prior.size)
+  implicit private val vector_field = VectorField(hyper_prior.size)
 
-  val processed_prior = EncodedContDistrRV(getPriorMapDistr(hyper_prior), encoder)
+  private val processed_prior = EncodedContDistrRV(getPriorMapDistr(hyper_prior), encoder)
 
   private val logLikelihoodFunction = (candidate: DenseVector[Double]) => {
     processed_prior.underlyingDist.logPdf(candidate) - system.energy(encoder.i(candidate))
