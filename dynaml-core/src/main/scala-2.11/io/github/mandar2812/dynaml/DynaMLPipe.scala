@@ -28,7 +28,7 @@ import io.github.mandar2812.dynaml.models.sgp.ESGPModel
 import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.probability.ContinuousDistrRV
-import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MinMaxScaler}
+import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MeanScaler, MinMaxScaler}
 import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
@@ -382,6 +382,31 @@ object DynaMLPipe {
 
       (result, (featuresScaler, targetsScaler))
     })
+
+  /**
+    * Returns a pipe which takes a data set and mean centers it.
+    * @param standardize Set to true if one wants the standardized data and false if one
+    *                    does wants the original data with the [[MeanScaler]] instances.
+    * */
+  def calculateMeanScales(standardize: Boolean = true): DataPipe[
+    Stream[(DenseVector[Double], DenseVector[Double])],
+    (Stream[(DenseVector[Double], DenseVector[Double])], (MeanScaler, MeanScaler))] =
+    DataPipe((data: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+
+      val (num_features, num_targets) = (data.head._1.length, data.head._2.length)
+
+      val (mean, _) = utils.getStats(data.map(tup =>
+        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+      val featuresScaler = MeanScaler(mean(0 until num_features))
+
+      val targetsScaler = MeanScaler(mean(num_features until num_features + num_targets))
+
+      val result = if(standardize) (featuresScaler * targetsScaler)(data) else data
+
+      (result, (featuresScaler, targetsScaler))
+    })
+
 
   /**
     * Multivariate version of [[calculateGaussianScales]]

@@ -22,19 +22,19 @@ import breeze.linalg.{DenseMatrix, DenseVector, cholesky, inv}
 import io.github.mandar2812.dynaml.pipes.{ReversibleScaler, Scaler}
 
 /**
-  * @author mandar2812 date: 17/6/16.
-  *
   * Scales attributes of a vector pattern using the sample mean and variance of
   * each dimension. This assumes that there is no covariance between the data
   * dimensions.
   *
   * @param mean Sample mean of the data
   * @param sigma Sample variance of each data dimension
-  */
+  * @author mandar2812 date: 17/6/16.
+  *
+  * */
 case class GaussianScaler(mean: DenseVector[Double], sigma: DenseVector[Double])
   extends ReversibleScaler[DenseVector[Double]]{
   override val i: Scaler[DenseVector[Double]] =
-    Scaler((pattern: DenseVector[Double]) => (pattern :* sigma) + mean)
+    Scaler((pattern: DenseVector[Double]) => (pattern *:* sigma) + mean)
 
   override def run(data: DenseVector[Double]): DenseVector[Double] = (data-mean) :/ sigma
 
