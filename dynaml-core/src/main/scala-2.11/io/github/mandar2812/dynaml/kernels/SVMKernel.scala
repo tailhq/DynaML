@@ -9,7 +9,7 @@ import scalaxy.streams.optimize
 /**
  * Defines an abstract class outlines the basic
  * functionality requirements of an SVM Kernel
- */
+ * */
 trait SVMKernel[M] extends
 CovarianceFunction[DenseVector[Double], Double, M]
 with Serializable {

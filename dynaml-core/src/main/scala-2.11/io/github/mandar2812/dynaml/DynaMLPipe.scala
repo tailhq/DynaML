@@ -28,7 +28,7 @@ import io.github.mandar2812.dynaml.models.sgp.ESGPModel
 import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.probability.ContinuousDistrRV
-import io.github.mandar2812.dynaml.utils.{GaussianScaler, MVGaussianScaler, MeanScaler, MinMaxScaler}
+import io.github.mandar2812.dynaml.utils._
 import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
@@ -437,6 +437,53 @@ object DynaMLPipe {
     })
 
   /**
+    * Returns a pipe which performs PCA on data features and gaussian scaling on data targets
+    * @param standardize Set to true if one wants the standardized data and false if one
+    *                    does wants the original data with the [[MVGaussianScaler]] instances.
+    * */
+  def calculatePCAScales(standardize: Boolean = true): DataPipe[
+    Stream[(DenseVector[Double], DenseVector[Double])],
+    (Stream[(DenseVector[Double], DenseVector[Double])], (PCAScaler, MVGaussianScaler))] =
+    DataPipe((data: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+
+      val (num_features, num_targets) = (data.head._1.length, data.head._2.length)
+
+      val (m, sigma) = utils.getStatsMult(data.map(tup =>
+        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+
+      val featuresScaler = PCAScaler(
+        m(0 until num_features),
+        sigma(0 until num_features, 0 until num_features))
+
+      val targetsScaler = MVGaussianScaler(
+        m(num_features until num_features + num_targets),
+        sigma(num_features until num_features + num_targets, num_features until num_features + num_targets))
+
+      val result = if(standardize) (featuresScaler * targetsScaler)(data) else data
+
+      (result, (featuresScaler, targetsScaler))
+    })
+
+  /**
+    * Returns a pipe which performs PCA on data features and gaussian scaling on data targets
+    * @param standardize Set to true if one wants the standardized data and false if one
+    *                    does wants the original data with the [[MVGaussianScaler]] instances.
+    * */
+  def calculatePCAScalesFeatures(standardize: Boolean = true): DataPipe[
+    Stream[DenseVector[Double]],
+    (Stream[DenseVector[Double]], PCAScaler)] =
+    DataPipe((data: Stream[DenseVector[Double]]) => {
+
+      val (m, sigma) = utils.getStatsMult(data.toList)
+
+      val featuresScaler = PCAScaler(m, sigma)
+
+      val result = if(standardize) featuresScaler(data) else data
+
+      (result, featuresScaler)
+    })
+
+  /**
     * Returns a pipe which takes a data set and calculates the minimum and maximum of each dimension.
     * @param standardize Set to true if one wants the standardized data and false if one
     *                    does wants the original data with the [[MinMaxScaler]] instances.
@@ -520,6 +567,16 @@ object DynaMLPipe {
     (calculateMVGaussianScales()*identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]]) >
       scaleTestPipe[DenseVector[Double], MVGaussianScaler]
 
+  /**
+    * Transform a data set by performing PCA on its patterns.
+    * */
+  val pcaFeatureScaling = calculatePCAScalesFeatures()
+
+  /**
+    * Transform a data set consisting of features and targets.
+    * Perform PCA scaling of features and gaussian scaling of targets.
+    * */
+  val pcaScaling = calculatePCAScales()
 
   /**
     * Scale a data set which is stored as a [[Stream]],
