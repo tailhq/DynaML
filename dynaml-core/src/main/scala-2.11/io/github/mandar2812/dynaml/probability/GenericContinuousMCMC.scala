@@ -1,12 +1,8 @@
 package io.github.mandar2812.dynaml.probability
 
-import breeze.linalg.DenseVector
 import spire.algebra.Field
 import breeze.stats.distributions.ContinuousDistr
-import io.github.mandar2812.dynaml.analysis.VectorField
-import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.utils._
 import io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr
 import io.github.mandar2812.dynaml.probability.mcmc.GeneralMetropolisHastings
 
