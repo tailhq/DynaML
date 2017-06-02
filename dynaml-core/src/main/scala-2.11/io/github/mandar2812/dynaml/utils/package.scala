@@ -293,6 +293,27 @@ package object utils {
   }
 
   /**
+    * Calculates the Chebyshev polynomials of the first and second kind,
+    * in a tail recursive manner, using their recurrence relations.
+    * */
+  def chebyshev(n: Int, x: Double, kind: Int = 1): Double = {
+    require(
+      kind >= 1 && kind <= 2,
+      "Chebyshev function can only be of the first or second kind")
+
+    def chebyshev_T(k: Int, arg: Double, a: Double, b: Double): Double =
+      k match {
+        case 0 => a
+        case 1 => b
+        case _ => chebyshev_T(k-1, arg, b, 2*arg*b - a)
+      }
+
+    val c1 = if(kind == 1) x else 2*x
+
+    chebyshev_T(n, x, 1, c1)
+  }
+
+  /**
     * Calculate the value of the hermite polynomials
     * tail recursively. This is needed to calculate
     * the Gaussian derivatives at a point x.
