@@ -240,7 +240,7 @@ class FFBackProp(stackF: NeuralStackFactory[(DenseMatrix[Double], DenseVector[Do
     **/
   override val computeOutputDelta = StreamDataPipe((s: (PatternType, PatternType, PatternType)) => {
     val diff = s._1 - s._2
-    (s._3:*diff, diff.t*diff)
+    (s._3*:*diff, diff.t*diff)
   })
 
   /**
