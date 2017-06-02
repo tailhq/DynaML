@@ -55,3 +55,36 @@ trait DifferentiableLikelihoodModel[Q] extends LikelihoodModel[Q] {
     * */
   def gradLogLikelihood(q: Q): Q
 }
+
+object DifferentiableLikelihoodModel {
+
+  def apply[Q](d: ContinuousDistr[Q], grad: DataPipe[Q, Q]): DifferentiableLikelihoodModel[Q] =
+    new DifferentiableLikelihoodModel[Q] {
+
+      val density = d
+
+      val gradPotential = grad
+
+      /**
+        * Returns log p(q)
+        **/
+      override def loglikelihood(q: Q) = density.logPdf(q)
+
+      /**
+        * Returns d(log p(q|r))/dr
+        **/
+      override def gradLogLikelihood(q: Q) = gradPotential(q)
+    }
+
+  def apply[Q](f: (Q) => Double, grad: (Q) => Q) = new DifferentiableLikelihoodModel[Q] {
+    /**
+      * Returns log p(q)
+      **/
+    override def loglikelihood(q: Q) = f(q)
+
+    /**
+      * Returns d(log p(q|r))/dr
+      **/
+    override def gradLogLikelihood(q: Q) = grad(q)
+  }
+}
