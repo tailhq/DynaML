@@ -20,40 +20,51 @@ package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.DynaMLPipe._
-import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe
-import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GPRegression}
-import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
+import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
+import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe, StreamDataPipe}
+import io.github.mandar2812.dynaml.utils.GaussianScaler
 
 /**
-  * Created by mandar on 15/12/15.
-  */
+  *
+  * @author mandar2812 date 15/12/15.
+  * */
 object TestGPHousing {
-  
-  
+
+  /*
+  * Instantiate type aliases
+  * */
   type Features = DenseVector[Double]
   type Output = Double
   type Pattern = (Features, Output)
+  type PatternAlt = (Features, Features)
   type Data = Stream[Pattern]
   type DataAlt = Seq[Pattern]
   type TTData = (Data, Data)
   type Kernel = LocalScalarKernel[Features]
-  type Scales = (Features, Features)
-  type GP = AbstractGPRegressionModel[Data, Features]
+  type Scales = (GaussianScaler, GaussianScaler)
   type GPAlt = AbstractGPRegressionModel[DataAlt, Features]
   type PredictionsAndErrBars = Seq[(Features, Output, Output, Output, Output)]
   type PredictionsAndOutputs = List[(Output, Output)]
-  
 
-  def apply(kernel: Kernel,
-            bandwidth: Double = 0.5,
-            noise: Kernel,
-            trainFraction: Double = 0.75,
-            columns: List[Int] = List(13,0,1,2,3,4,5,6,7,8,9,10,11,12),
-            grid: Int = 5, step: Double = 0.2, globalOpt: String = "ML",
-            stepSize: Double = 0.01, maxIt: Int = 300, policy: String = "GS"): Unit =
+  val preScaling = StreamDataPipe(
+    (pattern: (Features, Double)) => (pattern._1, DenseVector(pattern._2))
+  )
+
+  val postScaling = StreamDataPipe(
+    (pattern: (Features, Features)) => (pattern._1, pattern._2(0))
+  )
+
+
+  def apply(
+    kernel: Kernel, bandwidth: Double = 0.5,
+    noise: Kernel, trainFraction: Double = 0.75,
+    columns: List[Int] = List(13,0,1,2,3,4,5,6,7,8,9,10,11,12),
+    grid: Int = 5, step: Double = 0.2,
+    globalOpt: String = "ML", stepSize: Double = 0.01,
+    maxIt: Int = 300, policy: String = "GS"): Unit =
     runExperiment(kernel, bandwidth,
       noise, (506*trainFraction).toInt, columns,
       grid, step, globalOpt, policy,
@@ -63,19 +74,18 @@ object TestGPHousing {
       )
     )
 
-  def runExperiment(kernel: Kernel,
-                    bandwidth: Double = 0.5,
-                    noise: Kernel,
-                    num_training: Int = 200, columns: List[Int] = List(40,16,21,23,24,22,25),
-                    grid: Int = 5, step: Double = 0.2,
-                    globalOpt: String = "ML", pol: String = "GS",
-                    opt: Map[String, String]): Unit = {
-
+  def runExperiment(
+    kernel: Kernel, bandwidth: Double = 0.5,
+    noise: Kernel, num_training: Int = 200,
+    columns: List[Int] = List(40,16,21,23,24,22,25),
+    grid: Int = 5, step: Double = 0.2,
+    globalOpt: String = "ML", pol: String = "GS",
+    opt: Map[String, String]): Unit = {
 
     val startConf = kernel.effective_state ++ noise.effective_state
 
     val modelpipe =
-      GPRegressionPipe[(TTData, Scales), Features]((tt: (TTData, Scales)) => tt._1._1, kernel, noise) >
+      GPRegressionPipe[(Data, Data, Scales), Features]((tt: (Data, Data, Scales)) => tt._1, kernel, noise) >
       gpTuning[DataAlt, Features](startConf, globalOpt, grid, step, opt("maxIterations").toInt, pol) >
       DataPipe((modelCouple: (GPAlt, Map[String, Double])) => {
         modelCouple._1
@@ -83,11 +93,11 @@ object TestGPHousing {
 
     val testPipe = DataPipe((testSample: (GPAlt, (Data, Scales))) => {
       val (model, (data, scales)) = testSample
-      (model.test(data), scales) }) >
-      DataPipe((res: (PredictionsAndErrBars, Scales)) =>
-        res._1
-          .map(i => (i._3, i._2)).toList
-          .map(l => (l._1*res._2._2(-1) + res._2._1(-1), l._2*res._2._2(-1) + res._2._1(-1)))) >
+      (model.test(data), scales)}) >
+      DataPipe((res: (PredictionsAndErrBars, Scales)) => {
+        val rescaleOutputs = res._2._2(0).i
+        (rescaleOutputs*rescaleOutputs)(res._1.toList.map(i => (i._3, i._2)))
+      }) >
       DataPipe((scoresAndLabels: PredictionsAndOutputs) => {
 
         val metrics = new RegressionMetrics(scoresAndLabels, scoresAndLabels.length)
@@ -112,10 +122,15 @@ object TestGPHousing {
 
     val trainTestPipe = duplicate(preProcessPipe) >
       splitTrainingTest(num_training, 506-num_training) >
-      trainTestGaussianStandardization >
+      duplicate(preScaling) >
+      gaussianScalingTrainTest >
+      DataPipe((d: (Stream[PatternAlt], Stream[PatternAlt], Scales)) => {
+        val (dataTr, dataT): (Data, Data) = duplicate(postScaling)((d._1, d._2))
+        (dataTr, dataT, d._3)
+      }) >
       BifurcationPipe(
         modelpipe,
-        DataPipe((tt: (TTData, Scales)) => (tt._1._2, tt._2))
+        DataPipe((tt: (Data, Data, Scales)) => (tt._2, tt._3))
       ) >
       testPipe
 

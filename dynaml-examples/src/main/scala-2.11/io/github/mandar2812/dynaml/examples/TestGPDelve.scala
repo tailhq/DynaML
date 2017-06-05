@@ -48,8 +48,13 @@ object TestGPDelve {
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
 
-    val preScaling = StreamDataPipe((pattern: (DenseVector[Double], Double)) => (pattern._1, DenseVector(pattern._2)))
-    val postScaling = StreamDataPipe((pattern: (Features, Features)) => (pattern._1, pattern._2(0)))
+    val preScaling = StreamDataPipe(
+      (pattern: (Features, Double)) => (pattern._1, DenseVector(pattern._2))
+    )
+
+    val postScaling = StreamDataPipe(
+      (pattern: (Features, Features)) => (pattern._1, pattern._2(0))
+    )
 
 
     val modelPipe = GPRegressionPipe(
