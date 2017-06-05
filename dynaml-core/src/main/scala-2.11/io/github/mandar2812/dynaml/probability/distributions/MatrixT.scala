@@ -27,6 +27,7 @@ import org.apache.spark.annotation.Experimental
 /**
   * Matrix Students T distribution over n &times; p matrices
   *
+  * @param mu Degrees of freedom
   * @param m The mode, mean and center of the distribution
   * @param omega The p &times; p covariance matrix of the columns
   * @param sigma The n &times; n covariance matrix of the rows
