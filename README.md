@@ -132,4 +132,4 @@ DynaML>
 
 Getting Started
 ===============
-Refer to the [user guide](https://transcendent-ai-labs.github.io/DynaML/mydoc_introduction.html) for a more detailed introduction, for contributing; refer to the [wiki](https://github.com/transcendent-ai-labs.github.io/DynaML/wiki).
+Refer to the [user guide](https://transcendent-ai-labs.github.io/DynaML/) for a more detailed introduction, for contributing; refer to the [wiki](https://github.com/transcendent-ai-labs.github.io/DynaML/wiki).
