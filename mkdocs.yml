@@ -80,3 +80,4 @@ repo_name: 'transcendent-ai-labs/DynaML'
 repo_url: 'https://github.com/transcendent-ai-labs/DynaML'
 extra_javascript:
   - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+google_analytics: ['UA-59996358-2', 'transcendent-ai-labs.github.io/DynaML/']
