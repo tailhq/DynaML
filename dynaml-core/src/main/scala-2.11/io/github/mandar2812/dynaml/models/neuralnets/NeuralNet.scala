@@ -93,11 +93,9 @@ class GenericFFNeuralNet[Data, LayerP, I](
 
   /**
     * Learn the parameters
-    * of the model which
-    * are in a node of the
-    * graph.
+    * of the model.
     *
-    **/
+    * */
   override def learn() = {
     params = optimizer.optimize(numPoints, transform(g), initParams())
   }

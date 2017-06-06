@@ -73,9 +73,7 @@ trait ParameterizedLearner[G, T, Q, R, S]
   protected val optimizer: RegularizedOptimizer[T, Q, R, S]
   /**
    * Learn the parameters
-   * of the model which
-   * are in a node of the
-   * graph.
+   * of the model.
    *
    * */
   def learn(): Unit
