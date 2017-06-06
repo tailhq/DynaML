@@ -1,0 +1,82 @@
+site_name: DynaML User Guide
+site_dir: 'site'
+pages:
+    - 'Home': index.md
+    - 'Using DynaML':
+      - 'Installation': installation/installation.md
+      - 'Import': installation/include.md
+    - 'Supported Features': supported_features.md
+    - 'Structure': structure.md
+    - Releases:
+      - 'v1.4.2': 'releases/mydoc_release_notes_142.md'
+      - 'v1.4.1': 'releases/mydoc_release_notes_141.md'
+      - 'v1.4': 'releases/mydoc_release_notes_14.md'
+    - 'User Guide':
+      - 'Core':
+        - Models:
+          - Model Hierarchy: 'core/core_model_hierarchy.md'
+          - Neural Networks: 'core/core_ann.md'
+          - Linear Models: 'core/core_glm.md'
+          - Gaussian Processes: 'core/core_gp.md'
+          - Students T Processes: 'core/core_stp.md'
+          - Least Squares SVM: 'core/core_lssvm.md'
+        - 'Optimizers & Solvers':
+          - 'Convex': 'core/core_opt_convex.md'
+          - 'Global': 'core/core_opt_global.md'
+        - Kernels:
+          - Kernel API: 'core/core_kernels.md'
+          - Stationary Kernels: 'core/core_kernel_stat.md'
+          - Non Stationary Kernels: 'core/core_kernel_nonstat.md'
+          - Automatic Feature Extraction: 'core/core_kernel_nystrom.md'
+        - Performance Evaluation: 'core/core_model_evaluation.md'
+        - Probability:
+          - Random Variables: 'core/core_prob_randomvar.md'
+          - Operations on Random Variables: 'core/core_prob_operations.md'
+          - Probability Distributions: 'core/core_prob_dist.md'
+      - 'Pipes':
+        - 'DynaML Pipes': 'pipes/pipes.md'
+        - 'Pipes API': 'pipes/pipes_api.md'
+        - 'Model Pipes': 'pipes/model_pipes.md'
+        - 'DynaML Pipes Library':
+          - 'String & File Processing': 'pipes/file_processing.md'
+          - 'Feature Processing': 'pipes/feature_processing.md'
+          - 'Time Series': 'pipes/pipes_time_series.md'
+          - 'Scalers & Encoders': 'pipes/scalers_encoders.md'
+          - 'Workflows on Models': 'pipes/pipes_models.md'
+          - Miscellaneuos: 'pipes/pipes_misc.md'
+        - 'Pipes Example': 'pipes/pipes_library.md'
+      - REPL Examples:
+        - Boston Housing: 'repl-examples/p2_boston_housing.md'
+        - Wine Quality: 'repl-examples/p2_winequality_logistic.md'
+        - Pont-sur-Sambre Power Plant: 'repl-examples/p2_lssvm_powerplant.md'
+    - 'License': 'license.md'
+    - 'About Us': 'about.md'
+    - DynaML Blog:
+        - State of DynaML 2016: 'blog/2016-12-11-dynaml-new-features.md'
+        - Resources for Beginners: 'blog/2016-12-08-getting-started-ml.md'
+theme: material
+markdown_extensions:
+  - admonition
+  - codehilite(guess_lang=false, linenums=true)
+  - toc(permalink=true)
+  - footnotes
+  - pymdownx.arithmatex
+  - pymdownx.betterem(smart_enable=all)
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist(custom_checkbox=true)
+  - pymdownx.tilde
+#extra:
+#  feature:
+#    tabs: true
+repo_name: 'transcendent-ai-labs/DynaML'
+repo_url: 'https://github.com/transcendent-ai-labs/DynaML'
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
