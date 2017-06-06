@@ -220,7 +220,19 @@ Takes an argument returns a `DataPipe`
 
 `#!scala MetaPipe21[A, B, C, D]`
 
-Takes 2 arguments returns a `DataPipe`
+Takes 2 arguments returns a `DataPipe`.
+
+```scala
+val pipe21 = MetaPipe21(
+  (alpha: Double, beta: Double) => (rv: ContinuousRandomVariable[Double]) => (rv*beta) + alpha
+)
+
+val random_func = pipe21(1.5, -0.5)
+val result_rv = random_func(RandomVariable(Gamma(1.5, 2.5)))
+
+//Draw samples from resulting random variable
+result_rv.iid(500).draw
+```
 
 ### Meta Pipe (1, 2)
 

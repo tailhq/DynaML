@@ -36,6 +36,7 @@ pages:
       - 'Pipes':
         - 'DynaML Pipes': 'pipes/pipes.md'
         - 'Pipes API': 'pipes/pipes_api.md'
+        - 'Scalers & Encoders': 'pipes/pipes_scalers_encoders.md'
         - 'Model Pipes': 'pipes/model_pipes.md'
         - 'DynaML Pipes Library':
           - 'String & File Processing': 'pipes/file_processing.md'
@@ -73,9 +74,6 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tasklist(custom_checkbox=true)
   - pymdownx.tilde
-#extra:
-#  feature:
-#    tabs: true
 repo_name: 'transcendent-ai-labs/DynaML'
 repo_url: 'https://github.com/transcendent-ai-labs/DynaML'
 extra_javascript:
