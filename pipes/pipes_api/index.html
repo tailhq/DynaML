@@ -873,6 +873,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
+      Scalers & Encoders
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../model_pipes/" title="Model Pipes" class="md-nav__link">
       Model Pipes
     </a>
@@ -886,13 +898,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-2-4" type="checkbox" id="nav-6-2-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-2-5" type="checkbox" id="nav-6-2-5">
     
-    <label class="md-nav__link" for="nav-6-2-4">
+    <label class="md-nav__link" for="nav-6-2-5">
       DynaML Pipes Library
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
-      <label class="md-nav__title" for="nav-6-2-4">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="8">
+      <label class="md-nav__title" for="nav-6-2-5">
         DynaML Pipes Library
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1506,7 +1518,27 @@ more complex workflow components some of which are shown below.</p>
 <p>Takes an argument returns a <code>DataPipe</code></p>
 <h3 id="meta-pipe-2-1">Meta Pipe (2, 1)<a class="headerlink" href="#meta-pipe-2-1" title="Permanent link">&para;</a></h3>
 <p><code class="codehilite"><span class="nc">MetaPipe21</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span>, <span class="kt">D</span><span class="o">]</span></code></p>
-<p>Takes 2 arguments returns a <code>DataPipe</code></p>
+<p>Takes 2 arguments returns a <code>DataPipe</code>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">pipe21</span> <span class="k">=</span> <span class="nc">MetaPipe21</span><span class="o">(</span>
+  <span class="o">(</span><span class="n">alpha</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">beta</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">rv</span><span class="k">:</span> <span class="kt">ContinuousRandomVariable</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">rv</span><span class="o">*</span><span class="n">beta</span><span class="o">)</span> <span class="o">+</span> <span class="n">alpha</span>
+<span class="o">)</span>
+
+<span class="k">val</span> <span class="n">random_func</span> <span class="k">=</span> <span class="n">pipe21</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">result_rv</span> <span class="k">=</span> <span class="n">random_func</span><span class="o">(</span><span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">Gamma</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">)))</span>
+
+<span class="c1">//Draw samples from resulting random variable</span>
+<span class="n">result_rv</span><span class="o">.</span><span class="n">iid</span><span class="o">(</span><span class="mi">500</span><span class="o">).</span><span class="n">draw</span>
+</pre></div>
+</td></tr></table>
+
 <h3 id="meta-pipe-1-2">Meta Pipe (1, 2)<a class="headerlink" href="#meta-pipe-1-2" title="Permanent link">&para;</a></h3>
 <p><code class="codehilite"><span class="nc">MetaPipe12</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span>, <span class="kt">D</span><span class="o">]</span></code></p>
 <p>Takes an argument returns a <code>DataPipe2</code></p>
@@ -1554,13 +1586,13 @@ more complex workflow components some of which are shown below.</p>
           </a>
         
         
-          <a href="../model_pipes/" title="Model Pipes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../pipes_scalers_encoders/" title="Scalers & Encoders" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Model Pipes
+                Scalers & Encoders
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

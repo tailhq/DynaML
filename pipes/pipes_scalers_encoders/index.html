@@ -15,7 +15,7 @@
     
     
       
-        <title>Model Pipes</title>
+        <title>Scalers & Encoders - DynaML User Guide</title>
       
     
     
@@ -82,7 +82,7 @@
                 </span>
               
             
-            Model Pipes
+            Scalers & Encoders
           
         </span>
       </div>
@@ -709,18 +709,6 @@
           
           
 
-
-  <li class="md-nav__item">
-    <a href="../pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
-      Scalers & Encoders
-    </a>
-  </li>
-
-        
-          
-          
-          
-
   
 
 
@@ -730,11 +718,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Model Pipes
+        Scalers & Encoders
       </label>
     
-    <a href="./" title="Model Pipes" class="md-nav__link md-nav__link--active">
-      Model Pipes
+    <a href="./" title="Scalers & Encoders" class="md-nav__link md-nav__link--active">
+      Scalers & Encoders
     </a>
     
       
@@ -746,36 +734,23 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dynaml-model-pipes" title="DynaML Model Pipes" class="md-nav__link">
-    DynaML Model Pipes
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#generalized-linear-model-pipe" title="Generalized Linear Model pipe" class="md-nav__link">
-    Generalized Linear Model pipe
+  <a href="#encoders" title="Encoders" class="md-nav__link">
+    Encoders
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#gaussian-process-regression-model-pipe" title="Gaussian Process Regression Model Pipe" class="md-nav__link">
-    Gaussian Process Regression Model Pipe
+      
+        <li class="md-nav__item">
+  <a href="#scalers" title="Scalers" class="md-nav__link">
+    Scalers
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#dual-ls-svm-model-pipe" title="Dual LS-SVM Model Pipe" class="md-nav__link">
-    Dual LS-SVM Model Pipe
+      
+        <li class="md-nav__item">
+  <a href="#reversible-scalers" title="Reversible Scalers" class="md-nav__link">
+    Reversible Scalers
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -785,6 +760,18 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../model_pipes/" title="Model Pipes" class="md-nav__link">
+      Model Pipes
+    </a>
   </li>
 
         
@@ -1057,36 +1044,23 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dynaml-model-pipes" title="DynaML Model Pipes" class="md-nav__link">
-    DynaML Model Pipes
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#generalized-linear-model-pipe" title="Generalized Linear Model pipe" class="md-nav__link">
-    Generalized Linear Model pipe
+  <a href="#encoders" title="Encoders" class="md-nav__link">
+    Encoders
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#gaussian-process-regression-model-pipe" title="Gaussian Process Regression Model Pipe" class="md-nav__link">
-    Gaussian Process Regression Model Pipe
+      
+        <li class="md-nav__item">
+  <a href="#scalers" title="Scalers" class="md-nav__link">
+    Scalers
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#dual-ls-svm-model-pipe" title="Dual LS-SVM Model Pipe" class="md-nav__link">
-    Dual LS-SVM Model Pipe
+      
+        <li class="md-nav__item">
+  <a href="#reversible-scalers" title="Reversible Scalers" class="md-nav__link">
+    Reversible Scalers
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1105,61 +1079,35 @@
               
                 
                 
-                  <h1>Model Pipes</h1>
+                  <h1>Scalers & Encoders</h1>
                 
-                <h2 id="dynaml-model-pipes">DynaML Model Pipes<a class="headerlink" href="#dynaml-model-pipes" title="Permanent link">&para;</a></h2>
-<p>We saw in the previous section that certain operations like training/tuning of models are expressed as pipes which take input the relevant model and perform an operation on it. But it is evident that the model creation itself is a common step in the data analysis workflow, therefore one needs library pipes which instantiate DynaML machine learning models given the training data and other relevant inputs. Model creation pipes are not in the <code class="codehilite"><span class="nc">DynaMLPipe</span></code> object but exist as an independent class hierarchy. Below we explore a section of it.</p>
-<h3 id="generalized-linear-model-pipe">Generalized Linear Model pipe<a class="headerlink" href="#generalized-linear-model-pipe" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">GLMPipe</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">Source</span><span class="o">](</span>
-  <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)],</span>
-  <span class="n">map</span><span class="k">:</span> <span class="o">(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=</span> <span class="n">identity</span> <span class="k">_</span><span class="o">,</span>
-  <span class="n">task</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;regression&quot;</span><span class="o">,</span> <span class="n">modelType</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Source</span>, <span class="kt">GeneralizedLinearModel</span><span class="o">[</span><span class="kt">T</span><span class="o">]]</span></code></li>
-<li><em>Result</em>: Takes as input a data of type <code class="codehilite"><span class="nc">Source</span></code> and outputs a <em>Generalized Linear Model</em>.</li>
-</ul>
-<h3 id="gaussian-process-regression-model-pipe">Gaussian Process Regression Model Pipe<a class="headerlink" href="#gaussian-process-regression-model-pipe" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6
-7</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">GPRegressionPipe</span><span class="o">[</span>
-<span class="kt">M</span> <span class="k">&lt;:</span> <span class="kt">AbstractGPRegressionModel</span><span class="o">[</span><span class="kt">Seq</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span>,
-<span class="kt">Source</span><span class="o">](</span>
-  <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Seq</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)],</span>
-  <span class="n">cov</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]],</span>
-  <span class="n">n</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]],</span>
-  <span class="n">order</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Source</span>, <span class="kt">M</span><span class="o">]</span></code></li>
-<li><em>Result</em>: Takes as input data of type <code class="codehilite"><span class="nc">Source</span></code> and intializes a <em>Gaussian Process</em> regression model as the output.</li>
-</ul>
-<h3 id="dual-ls-svm-model-pipe">Dual LS-SVM Model Pipe<a class="headerlink" href="#dual-ls-svm-model-pipe" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">DLSSVMPipe</span><span class="o">[</span><span class="kt">Source</span><span class="o">](</span>
-  <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)],</span>
-  <span class="n">cov</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]],</span>
-  <span class="n">task</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;regression&quot;</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Source</span>, <span class="kt">DLSSVM</span><span class="o">]</span></code></li>
-<li><em>Result</em>: Takes as input data of type <code class="codehilite"><span class="nc">Source</span></code> and intializes a <em>LS-SVM</em> regression/classification model as the output.</li>
-</ul>
+                <div class="admonition summary">
+<p class="admonition-title">Summary</p>
+<p>The pipes API provides a good foundation to construct data processing pipelines, in this section we show how it is extended for application to a specific application i.e. attribute scaling &amp; transformation.  </p>
+</div>
+<p>Transforming data attributes is an often repeated task, some examples include re-scaling values in a finite domain <span>\([min, max]\)</span>, gaussian centering, <em>principal component analysis</em> (PCA), <em>discreet Haar wavelet</em> (DWT) transform etc.</p>
+<p>The pipes API contains traits for these tasks, they are abstract skeletons which can be extended by the user to create arbitrary feature re-scaling transformations.</p>
+<h2 id="encoders">Encoders<a class="headerlink" href="#encoders" title="Permanent link">&para;</a></h2>
+<p><code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code> are an extension of <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code> class which has an extra value member <code class="codehilite"><span class="n">i</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">J</span>, <span class="kt">I</span><span class="o">]</span></code> which represents the inverse transformation.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code> implies a reversible, one to one transformation of the input. Mathematically this can be expressed as</p>
+<span>\[
+\begin{align}
+g: \mathcal{X} &amp;\rightarrow \mathcal{Y} \\
+h: \mathcal{Y} &amp;\rightarrow \mathcal{X} \\
+h(g(x)) &amp;= x \ \ \ \forall x \in \mathcal{X} \\
+h &amp;\equiv g^{-1}
+\end{align}
+\]</span></div>
+<h2 id="scalers">Scalers<a class="headerlink" href="#scalers" title="Permanent link">&para;</a></h2>
+<p><code class="codehilite"><span class="nc">Scaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> is an extension of the <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">I</span><span class="o">]</span></code> trait. Represents re-scaling of inputs.</p>
+<h2 id="reversible-scalers">Reversible Scalers<a class="headerlink" href="#reversible-scalers" title="Permanent link">&para;</a></h2>
+<p><code class="codehilite"><span class="nc">ReversibleScaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> extends <code class="codehilite"><span class="nc">Scaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> along with <code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code>, a reversible re-scaling of inputs.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Common attribute transformations like gaussian centering, min-max scaling, etc are included in the <code class="codehilite"><span class="n">dynaml</span><span class="o">.</span><span class="n">utils</span></code> package, click <a href="/utils/scalers.md">here</a> to see their syntax.</p>
+</div>
                 
                   
                 
@@ -1178,7 +1126,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../pipes_scalers_encoders/" title="Scalers & Encoders" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../pipes_api/" title="Pipes API" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1187,19 +1135,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Scalers & Encoders
+                Pipes API
               </span>
             </div>
           </a>
         
         
-          <a href="../file_processing/" title="String & File Processing" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../model_pipes/" title="Model Pipes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                String & File Processing
+                Model Pipes
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
