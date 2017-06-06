@@ -1,0 +1,1355 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.0">
+    
+    
+      
+        <title>Introduction to the Model Hierarchy</title>
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application-c147e0d28f.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+  
+  
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <a href="../.." title="DynaML User Guide" class="md-icon md-icon--home md-header-nav__button">
+          </a>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+                <span class="md-header-nav__parent">
+                  Core
+                </span>
+              
+                <span class="md-header-nav__parent">
+                  Models
+                </span>
+              
+            
+            Model Hierarchy
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <div class="md-header-nav__source">
+          
+            
+
+
+  
+
+
+  <a href="https://github.com/transcendent-ai-labs/DynaML" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      transcendent-ai-labs/DynaML
+    </div>
+  </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    
+      <i class="md-icon md-icon--home md-nav__button"></i>
+    
+    DynaML User Guide
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/transcendent-ai-labs/DynaML" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      transcendent-ai-labs/DynaML
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Using DynaML
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Using DynaML
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installation/installation/" title="Installation" class="md-nav__link">
+      Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installation/include/" title="Import" class="md-nav__link">
+      Import
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../supported_features/" title="Supported Features" class="md-nav__link">
+      Supported Features
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../structure/" title="Structure" class="md-nav__link">
+      Structure
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Releases
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Releases
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
+      v1.4.2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
+      v1.4.1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
+      v1.4
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
+    
+    <label class="md-nav__link" for="nav-6">
+      User Guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        User Guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1" checked>
+    
+    <label class="md-nav__link" for="nav-6-1">
+      Core
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        Core
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1" checked>
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Model Hierarchy
+      </label>
+    
+    <a href="./" title="Model Hierarchy" class="md-nav__link md-nav__link--active">
+      Model Hierarchy
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#model-classes" title="Model Classes" class="md-nav__link">
+    Model Classes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameterized-models" title="Parameterized Models" class="md-nav__link">
+    Parameterized Models
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linear-models" title="Linear Models" class="md-nav__link">
+    Linear Models
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#neural-networks" title="Neural Networks" class="md-nav__link">
+    Neural Networks
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-parametric-models" title="Non Parametric Models" class="md-nav__link">
+    Non Parametric Models
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lssvm" title="LSSVM" class="md-nav__link">
+    LSSVM
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stochastic-processes" title="Stochastic Processes" class="md-nav__link">
+    Stochastic Processes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gaussian-processes" title="Gaussian Processes" class="md-nav__link">
+    Gaussian Processes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#student-t-processes" title="Student T Processes" class="md-nav__link">
+    Student T Processes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#meta-modelsmodel-ensembles" title="Meta Models/Model Ensembles" class="md-nav__link">
+    Meta Models/Model Ensembles
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann/" title="Neural Networks" class="md-nav__link">
+      Neural Networks
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_glm/" title="Linear Models" class="md-nav__link">
+      Linear Models
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_gp/" title="Gaussian Processes" class="md-nav__link">
+      Gaussian Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_stp/" title="Students T Processes" class="md-nav__link">
+      Students T Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_lssvm/" title="Least Squares SVM" class="md-nav__link">
+      Least Squares SVM
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-2" type="checkbox" id="nav-6-1-2">
+    
+    <label class="md-nav__link" for="nav-6-1-2">
+      Optimizers & Solvers
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-6-1-2">
+        Optimizers & Solvers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_opt_convex/" title="Convex" class="md-nav__link">
+      Convex
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_opt_global/" title="Global" class="md-nav__link">
+      Global
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-3" type="checkbox" id="nav-6-1-3">
+    
+    <label class="md-nav__link" for="nav-6-1-3">
+      Kernels
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+      <label class="md-nav__title" for="nav-6-1-3">
+        Kernels
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_kernels/" title="Kernel API" class="md-nav__link">
+      Kernel API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
+      Stationary Kernels
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
+      Non Stationary Kernels
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
+      Automatic Feature Extraction
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
+      Performance Evaluation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-5" type="checkbox" id="nav-6-1-5">
+    
+    <label class="md-nav__link" for="nav-6-1-5">
+      Probability
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-6-1-5">
+        Probability
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_prob_randomvar/" title="Random Variables" class="md-nav__link">
+      Random Variables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
+      Operations on Random Variables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_prob_dist/" title="Probability Distributions" class="md-nav__link">
+      Probability Distributions
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2">
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Pipes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-2">
+        Pipes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes/" title="DynaML Pipes" class="md-nav__link">
+      DynaML Pipes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_api/" title="Pipes API" class="md-nav__link">
+      Pipes API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/model_pipes/" title="Model Pipes" class="md-nav__link">
+      Model Pipes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-2-4" type="checkbox" id="nav-6-2-4">
+    
+    <label class="md-nav__link" for="nav-6-2-4">
+      DynaML Pipes Library
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-6-2-4">
+        DynaML Pipes Library
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/file_processing/" title="String & File Processing" class="md-nav__link">
+      String & File Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/feature_processing/" title="Feature Processing" class="md-nav__link">
+      Feature Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_time_series/" title="Time Series" class="md-nav__link">
+      Time Series
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
+      Scalers & Encoders
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
+      Workflows on Models
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_misc/" title="Miscellaneuos" class="md-nav__link">
+      Miscellaneuos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_library/" title="Pipes Example" class="md-nav__link">
+      Pipes Example
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-3" type="checkbox" id="nav-6-3">
+    
+    <label class="md-nav__link" for="nav-6-3">
+      REPL Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-6-3">
+        REPL Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../repl-examples/p2_boston_housing/" title="Boston Housing" class="md-nav__link">
+      Boston Housing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../repl-examples/p2_winequality_logistic/" title="Wine Quality" class="md-nav__link">
+      Wine Quality
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../repl-examples/p2_lssvm_powerplant/" title="Pont-sur-Sambre Power Plant" class="md-nav__link">
+      Pont-sur-Sambre Power Plant
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../about/" title="About Us" class="md-nav__link">
+      About Us
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9">
+    
+    <label class="md-nav__link" for="nav-9">
+      DynaML Blog
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-9">
+        DynaML Blog
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../blog/2016-12-11-dynaml-new-features/" title="State of DynaML 2016" class="md-nav__link">
+      State of DynaML 2016
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../blog/2016-12-08-getting-started-ml/" title="Resources for Beginners" class="md-nav__link">
+      Resources for Beginners
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#model-classes" title="Model Classes" class="md-nav__link">
+    Model Classes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameterized-models" title="Parameterized Models" class="md-nav__link">
+    Parameterized Models
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linear-models" title="Linear Models" class="md-nav__link">
+    Linear Models
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#neural-networks" title="Neural Networks" class="md-nav__link">
+    Neural Networks
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-parametric-models" title="Non Parametric Models" class="md-nav__link">
+    Non Parametric Models
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lssvm" title="LSSVM" class="md-nav__link">
+    LSSVM
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stochastic-processes" title="Stochastic Processes" class="md-nav__link">
+    Stochastic Processes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gaussian-processes" title="Gaussian Processes" class="md-nav__link">
+    Gaussian Processes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#student-t-processes" title="Student T Processes" class="md-nav__link">
+    Student T Processes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#meta-modelsmodel-ensembles" title="Meta Models/Model Ensembles" class="md-nav__link">
+    Meta Models/Model Ensembles
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Model Hierarchy</h1>
+                
+                <h2 id="model-classes">Model Classes<a class="headerlink" href="#model-classes" title="Permanent link">&para;</a></h2>
+<p>In DynaML all model implementations fit into a well defined class hierarchy. In fact every DynaML machine learning model is an extension of the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.Model"><code class="codehilite"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span>,<span class="kt">Q</span>,<span class="kt">R</span><span class="o">]</span></code></a> trait.</p>
+<div class="admonition note">
+<p class="admonition-title"><code class="codehilite"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span>,<span class="kt">Q</span>,<span class="kt">R</span><span class="o">]</span></code></p>
+<p>The <code class="codehilite"><span class="nc">Model</span></code> trait is quite bare bones: machine learning models are viewed as objects containing two parts or components.</p>
+<ol>
+<li>
+<p>A training data set (of type <code class="codehilite"><span class="n">T</span></code>).  </p>
+</li>
+<li>
+<p>A method <code class="codehilite"><span class="n">predict</span><span class="o">(</span><span class="n">point</span><span class="k">:</span> <span class="kt">Q</span><span class="o">)</span><span class="k">:</span><span class="kt">R</span></code> to generate a prediction of type <code class="codehilite"><span class="n">R</span></code> given a data point of type <code class="codehilite"><span class="n">Q</span></code>.</p>
+</li>
+</ol>
+</div>
+<h2 id="parameterized-models">Parameterized Models<a class="headerlink" href="#parameterized-models" title="Permanent link">&para;</a></h2>
+<p>Many predictive models calculate predictions by formulating an expression which includes a set of parameters which are used along with the data points to generate predictions, the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ParameterizedLearner"><code>ParameterizedLearner[G, T, Q, R, S]</code></a> class represents a skeleton for all parametric machine learning models such as <a href="../core_glm/"><em>Generalized Linear Models</em></a>, <a href="../core_ann/"><em>Neural Networks</em></a>, etc.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The defining characteristic of classes which extend <code class="codehilite"><span class="nc">ParameterizedLearner</span></code> is that they must contain a member variable <code>optimizer: RegularizedOptimizer[T, Q, R, S]</code> which represents a <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">regularization enabled optimizer</a> implementation along with a <code class="codehilite"><span class="n">learn</span><span class="o">()</span></code> method which uses the optimizer member to calculate approximate values of the model parameters given the training data.</p>
+</div>
+<h3 id="linear-models">Linear Models<a class="headerlink" href="#linear-models" title="Permanent link">&para;</a></h3>
+<p>Linear models; represented by the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.LinearModel"><code class="codehilite"><span class="nc">LinearModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">P</span>, <span class="kt">Q</span> , <span class="kt">R</span>, <span class="kt">S</span><span class="o">]</span></code></a> trait are extensions of <code class="codehilite"><span class="nc">ParameterizedLearner</span></code>, this top level trait is extended to yield many useful linear prediction models.</p>
+<p><a href="../core_glm/"><em>Generalized Linear Models</em></a> which are linear in parameters expression for the predictions <span>\(<span>\(y\)</span>\)</span> given a vector of processed features <span>\(\phi(x)\)</span> or basis functions.</p>
+<span>\[
+    \begin{equation}
+        y = w^T\varphi(x) + \epsilon
+    \end{equation}
+\]</span><h3 id="neural-networks">Neural Networks<a class="headerlink" href="#neural-networks" title="Permanent link">&para;</a></h3>
+<p><br/></p>
+<p><img alt="feedforward-NN" src="../../images/fnn.png" /></p>
+<p><br/></p>
+<p>Feed forward neural networks are the most common network architectures in predictive modeling, DynaML has an implementation of feed forward architectures that is trained using <em>Backpropogation</em> with momentum.</p>
+<p>In a feed forward neural network with a single hidden layer the predicted target <span>\(y\)</span> is expressed using the edge weights and node values in the following manner (this expression is easily extended for multi-layer nets).</p>
+<span>\[
+\begin{equation}
+y = W_2 \sigma(W_1 \mathbf{x} + b_1) + b_2
+\end{equation}
+\]</span><p>Where <span>\(W_1 , \ W_2\)</span>  are matrices representing edge weights for the hidden layer and output layer respectively and <span>\(\sigma(.)\)</span> represents a monotonic <em>activation</em> function, the usual choices are <em>sigmoid</em>, <em>tanh</em>, <em>linear</em> or <em>rectified linear</em> functions.</p>
+<h2 id="non-parametric-models">Non Parametric Models<a class="headerlink" href="#non-parametric-models" title="Permanent link">&para;</a></h2>
+<p>Non parametric models generally grow with the size of the data set, some examples include <em>Gaussian Processes</em> and <em>Dual LSSVM</em> among others.</p>
+<h3 id="lssvm">LSSVM<a class="headerlink" href="#lssvm" title="Permanent link">&para;</a></h3>
+<p>Least Squares Support Vector Machines are a modification of the classical Support Vector Machine, please see <a href="http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511">Suykens et. al</a> for a complete background.</p>
+<p><img alt="lssvm-book" src="../../images/cover_js_small.jpg" /></p>
+<h3 id="stochastic-processes">Stochastic Processes<a class="headerlink" href="#stochastic-processes" title="Permanent link">&para;</a></h3>
+<p>Stochastic processes are general probabilistic models which can be used to construct finite dimensional distributions over a set of sampled domain points. More specifically a stochastic process is a probabilistic function <span>\(f(.)\)</span> defined on any <em>domain</em> or <em>index set</em> <span>\(\mathcal{X}\)</span> such that for any finite collection <span>\(x_i \in \mathcal{X}, i = 1 \cdots N\)</span>, the finite dimensional distribution <span>\(P(f(x_1), \cdots, f(x_N))\)</span> is coherently defined.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcess"><code class="codehilite"><span class="nc">StochasticProcess</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> trait extends <code class="codehilite"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span><span class="o">]</span></code> and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution <code class="codehilite"><span class="n">predictiveDistribution</span><span class="o">()</span></code>.</p>
+</div>
+<h3 id="gaussian-processes">Gaussian Processes<a class="headerlink" href="#gaussian-processes" title="Permanent link">&para;</a></h3>
+<p><img alt="gp" src="../../images/gp.png" /></p>
+<p><br/>
+<em>Gaussian Processes</em> are stochastic processes whose finite dimensional distributions are multivariate gaussians.</p>
+<p><em>Gaussian Processes</em> are powerful non-parametric predictive models, which represent probability measures over spaces of functions. <a href="https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&amp;hl=en">Ramussen and Williams</a> is the definitive guide on understanding their applications in machine learning and a gateway to their deeper theoretical foundations.</p>
+<p><img alt="gp-book" src="../../images/gpbook.jpg" /></p>
+<p><br/></p>
+<h3 id="student-t-processes">Student T Processes<a class="headerlink" href="#student-t-processes" title="Permanent link">&para;</a></h3>
+<p><a href="https://www.cs.cmu.edu/~andrewgw/tprocess.pdf">Student T processes</a> are generalizations of Gaussian Processes, where the finite dimensional distribution on a set of points is a multivariate t distribution.</p>
+<h2 id="meta-modelsmodel-ensembles">Meta Models/Model Ensembles<a class="headerlink" href="#meta-modelsmodel-ensembles" title="Permanent link">&para;</a></h2>
+<p>Meta models use predictions from several candidate models and derive a prediction that is a meaningful combination of the individual predictions. This may be achieved in several ways some of which are.</p>
+<ul>
+<li>Average of predictions/voting</li>
+<li>Weighted predictions: Problem is now transferred to calculating appropriate weights.</li>
+<li>Learning some non-trivial functional transformation of the individual prediction, also known as <em>gating networks</em>.  </li>
+</ul>
+<p>Currently the DynaML API has the following classes providing capabilities of meta models.</p>
+<p><em>Abstract Classes</em></p>
+<ul>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.MetaModel"><code>MetaModel[D, D1, BaseModel]</code></a></li>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.CommitteeModel"><code>CommitteeModel[D, D1, BaseModel]</code></a></li>
+</ul>
+<p><em>Implementations</em></p>
+<ul>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.svm.LSSVMCommittee">LS-SVM Committee</a></li>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.CommitteeNetwork">Neural Committee</a></li>
+</ul>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../releases/mydoc_release_notes_14/" title="v1.4" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                v1.4
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../core_ann/" title="Neural Networks" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Neural Networks
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application-e3caa82af6.js"></script>
+      
+      
+      <script>app.initialize({url:{base:"../.."}})</script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+    
+      
+      <script>!function(e,t,a,n,o,c,i){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,c=t.createElement(a),i=t.getElementsByTagName(a)[0],c.async=1,c.src=n,i.parentNode.insertBefore(c,i)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-59996358-2","transcendent-ai-labs.github.io/DynaML/"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var t=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",t,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      
+    
+  </body>
+</html>

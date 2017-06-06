@@ -1,0 +1,1349 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.0">
+    
+    
+      
+        <title>File/String Processing</title>
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application-c147e0d28f.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+  
+  
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <a href="../.." title="DynaML User Guide" class="md-icon md-icon--home md-header-nav__button">
+          </a>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+                <span class="md-header-nav__parent">
+                  Pipes
+                </span>
+              
+                <span class="md-header-nav__parent">
+                  DynaML Pipes Library
+                </span>
+              
+            
+            String & File Processing
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <div class="md-header-nav__source">
+          
+            
+
+
+  
+
+
+  <a href="https://github.com/transcendent-ai-labs/DynaML" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      transcendent-ai-labs/DynaML
+    </div>
+  </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    
+      <i class="md-icon md-icon--home md-nav__button"></i>
+    
+    DynaML User Guide
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/transcendent-ai-labs/DynaML" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      transcendent-ai-labs/DynaML
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Using DynaML
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Using DynaML
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installation/installation/" title="Installation" class="md-nav__link">
+      Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installation/include/" title="Import" class="md-nav__link">
+      Import
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../supported_features/" title="Supported Features" class="md-nav__link">
+      Supported Features
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../structure/" title="Structure" class="md-nav__link">
+      Structure
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Releases
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Releases
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
+      v1.4.2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
+      v1.4.1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
+      v1.4
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
+    
+    <label class="md-nav__link" for="nav-6">
+      User Guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        User Guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1">
+    
+    <label class="md-nav__link" for="nav-6-1">
+      Core
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        Core
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_model_hierarchy/" title="Model Hierarchy" class="md-nav__link">
+      Model Hierarchy
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_ann/" title="Neural Networks" class="md-nav__link">
+      Neural Networks
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_glm/" title="Linear Models" class="md-nav__link">
+      Linear Models
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_gp/" title="Gaussian Processes" class="md-nav__link">
+      Gaussian Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_stp/" title="Students T Processes" class="md-nav__link">
+      Students T Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_lssvm/" title="Least Squares SVM" class="md-nav__link">
+      Least Squares SVM
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-2" type="checkbox" id="nav-6-1-2">
+    
+    <label class="md-nav__link" for="nav-6-1-2">
+      Optimizers & Solvers
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-6-1-2">
+        Optimizers & Solvers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_opt_convex/" title="Convex" class="md-nav__link">
+      Convex
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_opt_global/" title="Global" class="md-nav__link">
+      Global
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-3" type="checkbox" id="nav-6-1-3">
+    
+    <label class="md-nav__link" for="nav-6-1-3">
+      Kernels
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+      <label class="md-nav__title" for="nav-6-1-3">
+        Kernels
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_kernels/" title="Kernel API" class="md-nav__link">
+      Kernel API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
+      Stationary Kernels
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
+      Non Stationary Kernels
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
+      Automatic Feature Extraction
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
+      Performance Evaluation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-5" type="checkbox" id="nav-6-1-5">
+    
+    <label class="md-nav__link" for="nav-6-1-5">
+      Probability
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-6-1-5">
+        Probability
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_prob_randomvar/" title="Random Variables" class="md-nav__link">
+      Random Variables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
+      Operations on Random Variables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_prob_dist/" title="Probability Distributions" class="md-nav__link">
+      Probability Distributions
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2" checked>
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Pipes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-2">
+        Pipes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../pipes/" title="DynaML Pipes" class="md-nav__link">
+      DynaML Pipes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../pipes_api/" title="Pipes API" class="md-nav__link">
+      Pipes API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../model_pipes/" title="Model Pipes" class="md-nav__link">
+      Model Pipes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-2-4" type="checkbox" id="nav-6-2-4" checked>
+    
+    <label class="md-nav__link" for="nav-6-2-4">
+      DynaML Pipes Library
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-6-2-4">
+        DynaML Pipes Library
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        String & File Processing
+      </label>
+    
+    <a href="./" title="String & File Processing" class="md-nav__link md-nav__link--active">
+      String & File Processing
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-pre-processing" title="Data Pre-processing" class="md-nav__link">
+    Data Pre-processing
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-to-stream-of-lines" title="File to Stream of Lines" class="md-nav__link">
+    File to Stream of Lines
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write-stream-of-lines-to-file" title="Write Stream of Lines to File" class="md-nav__link">
+    Write Stream of Lines to File
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drop-first-line-in-stream" title="Drop first line in Stream" class="md-nav__link">
+    Drop first line in Stream
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replace-occurrences-in-of-a-string" title="Replace Occurrences in of a String" class="md-nav__link">
+    Replace Occurrences in of a String
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replace-white-spaces" title="Replace White Spaces" class="md-nav__link">
+    Replace White Spaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-trailing-white-spaces" title="Remove Trailing White Spaces" class="md-nav__link">
+    Remove Trailing White Spaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-white-spaces" title="Remove White Spaces" class="md-nav__link">
+    Remove White Spaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-missing-records" title="Remove Missing Records" class="md-nav__link">
+    Remove Missing Records
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-traintest-splits" title="Create Train/Test splits" class="md-nav__link">
+    Create Train/Test splits
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../feature_processing/" title="Feature Processing" class="md-nav__link">
+      Feature Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../pipes_time_series/" title="Time Series" class="md-nav__link">
+      Time Series
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
+      Scalers & Encoders
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../pipes_models/" title="Workflows on Models" class="md-nav__link">
+      Workflows on Models
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../pipes_misc/" title="Miscellaneuos" class="md-nav__link">
+      Miscellaneuos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../pipes_library/" title="Pipes Example" class="md-nav__link">
+      Pipes Example
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-3" type="checkbox" id="nav-6-3">
+    
+    <label class="md-nav__link" for="nav-6-3">
+      REPL Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-6-3">
+        REPL Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../repl-examples/p2_boston_housing/" title="Boston Housing" class="md-nav__link">
+      Boston Housing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../repl-examples/p2_winequality_logistic/" title="Wine Quality" class="md-nav__link">
+      Wine Quality
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../repl-examples/p2_lssvm_powerplant/" title="Pont-sur-Sambre Power Plant" class="md-nav__link">
+      Pont-sur-Sambre Power Plant
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../about/" title="About Us" class="md-nav__link">
+      About Us
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9">
+    
+    <label class="md-nav__link" for="nav-9">
+      DynaML Blog
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-9">
+        DynaML Blog
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../blog/2016-12-11-dynaml-new-features/" title="State of DynaML 2016" class="md-nav__link">
+      State of DynaML 2016
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../blog/2016-12-08-getting-started-ml/" title="Resources for Beginners" class="md-nav__link">
+      Resources for Beginners
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-pre-processing" title="Data Pre-processing" class="md-nav__link">
+    Data Pre-processing
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-to-stream-of-lines" title="File to Stream of Lines" class="md-nav__link">
+    File to Stream of Lines
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write-stream-of-lines-to-file" title="Write Stream of Lines to File" class="md-nav__link">
+    Write Stream of Lines to File
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drop-first-line-in-stream" title="Drop first line in Stream" class="md-nav__link">
+    Drop first line in Stream
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replace-occurrences-in-of-a-string" title="Replace Occurrences in of a String" class="md-nav__link">
+    Replace Occurrences in of a String
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replace-white-spaces" title="Replace White Spaces" class="md-nav__link">
+    Replace White Spaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-trailing-white-spaces" title="Remove Trailing White Spaces" class="md-nav__link">
+    Remove Trailing White Spaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-white-spaces" title="Remove White Spaces" class="md-nav__link">
+    Remove White Spaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-missing-records" title="Remove Missing Records" class="md-nav__link">
+    Remove Missing Records
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-traintest-splits" title="Create Train/Test splits" class="md-nav__link">
+    Create Train/Test splits
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>String & File Processing</h1>
+                
+                <div class="admonition summary">
+<p class="admonition-title">Summary</p>
+<p>A List of data pipes useful for processing contents of data files.</p>
+</div>
+<h2 id="data-pre-processing">Data Pre-processing<a class="headerlink" href="#data-pre-processing" title="Permanent link">&para;</a></h2>
+<h3 id="file-to-stream-of-lines">File to Stream of Lines<a class="headerlink" href="#file-to-stream-of-lines" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">fileToStream</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span></code></li>
+<li><em>Result</em>: Converts a text file (inputted as a file path string) into <code class="codehilite"><span class="nc">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span></code>   </li>
+</ul>
+<h3 id="write-stream-of-lines-to-file">Write Stream of Lines to File<a class="headerlink" href="#write-stream-of-lines-to-file" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">streamToFile</span><span class="o">(</span><span class="n">fileName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Unit</span><span class="o">]</span></code></li>
+<li><em>Result</em>: Writes a stream of lines to the file specified by <code class="codehilite"><span class="n">filePath</span></code></li>
+</ul>
+<h3 id="drop-first-line-in-stream">Drop first line in Stream<a class="headerlink" href="#drop-first-line-in-stream" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">dropHead</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span></code></li>
+<li><em>Result</em>: Drop the first element of a <code class="codehilite"><span class="nc">Stream</span></code> of <code class="codehilite"><span class="nc">String</span></code></li>
+</ul>
+<h3 id="replace-occurrences-in-of-a-string">Replace Occurrences in of a String<a class="headerlink" href="#replace-occurrences-in-of-a-string" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">replace</span><span class="o">(</span><span class="n">original</span><span class="o">,</span> <span class="n">newString</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span></code></li>
+<li><em>Result</em>: Replace all occurrences of a regular expression or string in a <code class="codehilite"><span class="nc">Stream</span></code> of <code class="codehilite"><span class="nc">String</span></code> with with a specified replacement string.</li>
+</ul>
+<h3 id="replace-white-spaces">Replace White Spaces<a class="headerlink" href="#replace-white-spaces" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">replaceWhiteSpaces</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span></code></li>
+<li><em>Result</em>: Replace all white space characters in a stream of lines.</li>
+</ul>
+<h3 id="remove-trailing-white-spaces">Remove Trailing White Spaces<a class="headerlink" href="#remove-trailing-white-spaces" title="Permanent link">&para;</a></h3>
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span></code></li>
+<li><em>Result</em>: Trim white spaces from both sides of every line.</li>
+</ul>
+<h3 id="remove-white-spaces">Remove White Spaces<a class="headerlink" href="#remove-white-spaces" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">replaceWhiteSpaces</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span></code></li>
+<li><em>Result</em>: Replace all white space characters in a stream of lines.</li>
+</ul>
+<h3 id="remove-missing-records">Remove Missing Records<a class="headerlink" href="#remove-missing-records" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">removeMissingLines</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span></code></li>
+<li><em>Result</em>: Remove all lines/records which contain missing values</li>
+</ul>
+<h3 id="create-traintest-splits">Create Train/Test splits<a class="headerlink" href="#create-traintest-splits" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">splitTrainingTest</span><span class="o">(</span><span class="n">num_training</span><span class="o">,</span> <span class="n">num_test</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[(</span><span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)])</span>, <span class="o">(</span><span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)])]</span></code></li>
+<li><em>Result</em>: Extract a subset of the data into a <code class="codehilite"><span class="nc">Tuple2</span></code> which can be used as a training, test combo for model learning and evaluation.</li>
+</ul>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../model_pipes/" title="Model Pipes" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Model Pipes
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../feature_processing/" title="Feature Processing" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Feature Processing
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application-e3caa82af6.js"></script>
+      
+      
+      <script>app.initialize({url:{base:"../.."}})</script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+    
+      
+      <script>!function(e,t,a,n,o,c,i){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,c=t.createElement(a),i=t.getElementsByTagName(a)[0],c.async=1,c.src=n,i.parentNode.insertBefore(c,i)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-59996358-2","transcendent-ai-labs.github.io/DynaML/"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var t=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",t,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1459 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.0">
+    
+    
+      
+        <title>"Wine Quality: Logit & Probit Models"</title>
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application-c147e0d28f.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+  
+  
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <a href="../.." title="DynaML User Guide" class="md-icon md-icon--home md-header-nav__button">
+          </a>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+                <span class="md-header-nav__parent">
+                  User Guide
+                </span>
+              
+                <span class="md-header-nav__parent">
+                  REPL Examples
+                </span>
+              
+            
+            Wine Quality
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <div class="md-header-nav__source">
+          
+            
+
+
+  
+
+
+  <a href="https://github.com/transcendent-ai-labs/DynaML" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      transcendent-ai-labs/DynaML
+    </div>
+  </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    
+      <i class="md-icon md-icon--home md-nav__button"></i>
+    
+    DynaML User Guide
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/transcendent-ai-labs/DynaML" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      transcendent-ai-labs/DynaML
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Using DynaML
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Using DynaML
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installation/installation/" title="Installation" class="md-nav__link">
+      Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installation/include/" title="Import" class="md-nav__link">
+      Import
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../supported_features/" title="Supported Features" class="md-nav__link">
+      Supported Features
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../structure/" title="Structure" class="md-nav__link">
+      Structure
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Releases
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Releases
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
+      v1.4.2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
+      v1.4.1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
+      v1.4
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
+    
+    <label class="md-nav__link" for="nav-6">
+      User Guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        User Guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1">
+    
+    <label class="md-nav__link" for="nav-6-1">
+      Core
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        Core
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_model_hierarchy/" title="Model Hierarchy" class="md-nav__link">
+      Model Hierarchy
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_ann/" title="Neural Networks" class="md-nav__link">
+      Neural Networks
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_glm/" title="Linear Models" class="md-nav__link">
+      Linear Models
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_gp/" title="Gaussian Processes" class="md-nav__link">
+      Gaussian Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_stp/" title="Students T Processes" class="md-nav__link">
+      Students T Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_lssvm/" title="Least Squares SVM" class="md-nav__link">
+      Least Squares SVM
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-2" type="checkbox" id="nav-6-1-2">
+    
+    <label class="md-nav__link" for="nav-6-1-2">
+      Optimizers & Solvers
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-6-1-2">
+        Optimizers & Solvers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_opt_convex/" title="Convex" class="md-nav__link">
+      Convex
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_opt_global/" title="Global" class="md-nav__link">
+      Global
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-3" type="checkbox" id="nav-6-1-3">
+    
+    <label class="md-nav__link" for="nav-6-1-3">
+      Kernels
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+      <label class="md-nav__title" for="nav-6-1-3">
+        Kernels
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_kernels/" title="Kernel API" class="md-nav__link">
+      Kernel API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
+      Stationary Kernels
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
+      Non Stationary Kernels
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
+      Automatic Feature Extraction
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
+      Performance Evaluation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-5" type="checkbox" id="nav-6-1-5">
+    
+    <label class="md-nav__link" for="nav-6-1-5">
+      Probability
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-6-1-5">
+        Probability
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_prob_randomvar/" title="Random Variables" class="md-nav__link">
+      Random Variables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
+      Operations on Random Variables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core/core_prob_dist/" title="Probability Distributions" class="md-nav__link">
+      Probability Distributions
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2">
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Pipes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-2">
+        Pipes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes/" title="DynaML Pipes" class="md-nav__link">
+      DynaML Pipes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_api/" title="Pipes API" class="md-nav__link">
+      Pipes API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/model_pipes/" title="Model Pipes" class="md-nav__link">
+      Model Pipes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-2-4" type="checkbox" id="nav-6-2-4">
+    
+    <label class="md-nav__link" for="nav-6-2-4">
+      DynaML Pipes Library
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-6-2-4">
+        DynaML Pipes Library
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/file_processing/" title="String & File Processing" class="md-nav__link">
+      String & File Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/feature_processing/" title="Feature Processing" class="md-nav__link">
+      Feature Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_time_series/" title="Time Series" class="md-nav__link">
+      Time Series
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
+      Scalers & Encoders
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
+      Workflows on Models
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_misc/" title="Miscellaneuos" class="md-nav__link">
+      Miscellaneuos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_library/" title="Pipes Example" class="md-nav__link">
+      Pipes Example
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-3" type="checkbox" id="nav-6-3" checked>
+    
+    <label class="md-nav__link" for="nav-6-3">
+      REPL Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-6-3">
+        REPL Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../p2_boston_housing/" title="Boston Housing" class="md-nav__link">
+      Boston Housing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Wine Quality
+      </label>
+    
+    <a href="./" title="Wine Quality" class="md-nav__link md-nav__link--active">
+      Wine Quality
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#attribute-information" title="Attribute Information:" class="md-nav__link">
+    Attribute Information:
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inputs" title="Inputs:" class="md-nav__link">
+    Inputs:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-based-on-sensory-data" title="Output (based on sensory data):" class="md-nav__link">
+    Output (based on sensory data):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-output-preprocessing" title="Data Output Preprocessing" class="md-nav__link">
+    Data Output Preprocessing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model" title="Model" class="md-nav__link">
+    Model
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logit" title="Logit" class="md-nav__link">
+    Logit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#probit" title="Probit" class="md-nav__link">
+    Probit
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#syntax" title="Syntax" class="md-nav__link">
+    Syntax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#red-wine" title="Red Wine" class="md-nav__link">
+    Red Wine
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#white-wine" title="White Wine" class="md-nav__link">
+    White Wine
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-code" title="Source Code" class="md-nav__link">
+    Source Code
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../p2_lssvm_powerplant/" title="Pont-sur-Sambre Power Plant" class="md-nav__link">
+      Pont-sur-Sambre Power Plant
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../about/" title="About Us" class="md-nav__link">
+      About Us
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9">
+    
+    <label class="md-nav__link" for="nav-9">
+      DynaML Blog
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-9">
+        DynaML Blog
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../blog/2016-12-11-dynaml-new-features/" title="State of DynaML 2016" class="md-nav__link">
+      State of DynaML 2016
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../blog/2016-12-08-getting-started-ml/" title="Resources for Beginners" class="md-nav__link">
+      Resources for Beginners
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#attribute-information" title="Attribute Information:" class="md-nav__link">
+    Attribute Information:
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inputs" title="Inputs:" class="md-nav__link">
+    Inputs:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-based-on-sensory-data" title="Output (based on sensory data):" class="md-nav__link">
+    Output (based on sensory data):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-output-preprocessing" title="Data Output Preprocessing" class="md-nav__link">
+    Data Output Preprocessing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model" title="Model" class="md-nav__link">
+    Model
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logit" title="Logit" class="md-nav__link">
+    Logit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#probit" title="Probit" class="md-nav__link">
+    Probit
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#syntax" title="Syntax" class="md-nav__link">
+    Syntax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#red-wine" title="Red Wine" class="md-nav__link">
+    Red Wine
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#white-wine" title="White Wine" class="md-nav__link">
+    White Wine
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-code" title="Source Code" class="md-nav__link">
+    Source Code
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Wine Quality</h1>
+                
+                <p>The <a href="https://archive.ics.uci.edu/ml/datasets/Wine+Quality"><em>wine quality</em></a> data set is a common example used to benchmark classification models. Here we use the <a href="../mandar2812.github.io/DynaML">DynaML</a> scala machine learning environment to train classifiers to detect 'good' wine from 'bad' wine. A short listing of the data attributes/columns is given below. The UCI archive has two files in the wine quality data set namely <code>winequality-red.csv</code> and <code>winequality-white.csv</code>. We train two separate classification models, one for red wine and one for white.</p>
+<p><img alt="Wine: Representative Image" src="../../images/wine.jpg" /></p>
+<h2 id="attribute-information">Attribute Information:<a class="headerlink" href="#attribute-information" title="Permanent link">&para;</a></h2>
+<h3 id="inputs">Inputs:<a class="headerlink" href="#inputs" title="Permanent link">&para;</a></h3>
+<ol>
+<li>fixed acidity</li>
+<li>volatile acidity</li>
+<li>citric acid</li>
+<li>residual sugar</li>
+<li>chlorides</li>
+<li>free sulfur dioxide</li>
+<li>total sulfur dioxide</li>
+<li>density</li>
+<li>pH</li>
+<li>sulphates</li>
+<li>alcohol</li>
+</ol>
+<h3 id="output-based-on-sensory-data">Output (based on sensory data):<a class="headerlink" href="#output-based-on-sensory-data" title="Permanent link">&para;</a></h3>
+<ol>
+<li>quality (score between 0 and 10)</li>
+</ol>
+<h3 id="data-output-preprocessing">Data Output Preprocessing<a class="headerlink" href="#data-output-preprocessing" title="Permanent link">&para;</a></h3>
+<p>The wine quality target variable can take integer values from <code>0</code> to <code>10</code>, first we convert this into a binary class variable by setting the quality to be 'good'(encoded by the value <code>1</code>) if the numerical value is greater than <code>6</code> and 'bad' (encoded by value <code>0</code>) otherwise.</p>
+<h2 id="model">Model<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
+<p>Below is a classification model for predicting the quality label <span>\(y\)</span>.</p>
+<h3 id="logit">Logit<a class="headerlink" href="#logit" title="Permanent link">&para;</a></h3>
+<span>\[
+\begin{align}
+  P(y \ = 1 \ | \ \mathbf{x}) &amp;= \sigma(w^T \varphi(\mathbf{x}) + b) \\
+  \sigma(z) &amp;= \frac{1}{1 + exp(-z)}
+\end{align}
+\]</span><h3 id="probit">Probit<a class="headerlink" href="#probit" title="Permanent link">&para;</a></h3>
+<p>The <em>probit regression</em> model is an alternative to the <em>logit</em> model it is represented as.</p>
+<span>\[
+\begin{align}
+  P(y \ = 1 \ | \ \mathbf{x}) &amp;= \Phi(w^T \varphi(\mathbf{x}) + b) \\
+  \Phi(z) &amp;= \int_{-\infty}^{z} \frac{1}{\sqrt{2 \pi}} exp(-\frac{z^{2}}{2}) dz  
+\end{align}
+\]</span><h2 id="syntax">Syntax<a class="headerlink" href="#syntax" title="Permanent link">&para;</a></h2>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-examples/index.html#io.github.mandar2812.dynaml.examples.TestLogisticWineQuality$"><code>TestLogisticWineQuality</code></a> program in the <code>examples</code> package trains and tests logit and probit models on the wine quality data.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default value</th>
+<th>Notes</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>training</td>
+<td><code class="codehilite"><span class="nc">Int</span></code></td>
+<td>100</td>
+<td>Number of training samples</td>
+<td></td>
+</tr>
+<tr>
+<td>test</td>
+<td><code class="codehilite"><span class="nc">Int</span></code></td>
+<td>1000</td>
+<td>Number of test samples</td>
+<td></td>
+</tr>
+<tr>
+<td>columns</td>
+<td><code class="codehilite"><span class="nc">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span></code></td>
+<td>11, 0, ... , 10</td>
+<td>The columns to be selected for analysis (indexed from 0), first one is the target column.</td>
+<td></td>
+</tr>
+<tr>
+<td>stepSize</td>
+<td><code class="codehilite"><span class="nc">Double</span></code></td>
+<td>0.01</td>
+<td>Step size chosen for <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GradientDescent"><code class="codehilite"><span class="nc">GradientDescent</span></code></a></td>
+<td></td>
+</tr>
+<tr>
+<td>maxIt</td>
+<td><code class="codehilite"><span class="nc">Int</span></code></td>
+<td>30</td>
+<td>Maximum number of iterations for gradient descent update.</td>
+<td></td>
+</tr>
+<tr>
+<td>mini</td>
+<td><code class="codehilite"><span class="nc">Double</span></code></td>
+<td>1.0</td>
+<td>Fraction of training samples to sample for each batch update.</td>
+<td></td>
+</tr>
+<tr>
+<td>regularization</td>
+<td><code class="codehilite"><span class="nc">Double</span></code></td>
+<td>0.5</td>
+<td>Regularization parameter.</td>
+<td></td>
+</tr>
+<tr>
+<td>wineType</td>
+<td><code class="codehilite"><span class="nc">String</span></code></td>
+<td>red</td>
+<td>The type of wine: red or white</td>
+<td></td>
+</tr>
+<tr>
+<td>modelType</td>
+<td><code class="codehilite"><span class="nc">String</span></code></td>
+<td>logistic</td>
+<td>The type of model: logistic or probit</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="red-wine">Red Wine<a class="headerlink" href="#red-wine" title="Permanent link">&para;</a></h2>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">TestLogisticWineQuality</span><span class="o">(</span><span class="n">stepSize</span> <span class="k">=</span> <span class="mf">0.2</span><span class="o">,</span> <span class="n">maxIt</span> <span class="k">=</span> <span class="mi">120</span><span class="o">,</span>
+<span class="n">mini</span> <span class="k">=</span> <span class="mf">1.0</span><span class="o">,</span> <span class="n">training</span> <span class="k">=</span> <span class="mi">800</span><span class="o">,</span>
+<span class="n">test</span> <span class="k">=</span> <span class="mi">800</span><span class="o">,</span> <span class="n">regularization</span> <span class="k">=</span> <span class="mf">0.2</span><span class="o">,</span>
+<span class="n">wineType</span> <span class="k">=</span> <span class="s">&quot;red&quot;</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>16/04/01 15:21:57 INFO BinaryClassificationMetrics: Classification Model Performance
+16/04/01 15:21:57 INFO BinaryClassificationMetrics: ============================
+16/04/01 15:21:57 INFO BinaryClassificationMetrics: Accuracy: 0.8475
+16/04/01 15:21:57 INFO BinaryClassificationMetrics: Area under ROC: 0.7968417788802267
+16/04/01 15:21:57 INFO BinaryClassificationMetrics: Maximum F Measure: 0.7493563745371187
+</pre></div>
+</td></tr></table>
+
+<p><img alt="red-roc" src="../../images/red-wine-logistic-roc.png" /></p>
+<p><img alt="red-fmeasure" src="../../images/red-wine-logistic-fmeasure.png" /></p>
+<h2 id="white-wine">White Wine<a class="headerlink" href="#white-wine" title="Permanent link">&para;</a></h2>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">TestLogisticWineQuality</span><span class="o">(</span><span class="n">stepSize</span> <span class="k">=</span> <span class="mf">0.26</span><span class="o">,</span> <span class="n">maxIt</span> <span class="k">=</span> <span class="mi">300</span><span class="o">,</span>
+<span class="n">mini</span> <span class="k">=</span> <span class="mf">1.0</span><span class="o">,</span> <span class="n">training</span> <span class="k">=</span> <span class="mi">3800</span><span class="o">,</span>
+<span class="n">test</span> <span class="k">=</span> <span class="mi">1000</span><span class="o">,</span> <span class="n">regularization</span> <span class="k">=</span> <span class="mf">0.0</span><span class="o">,</span>
+<span class="n">wineType</span> <span class="k">=</span> <span class="s">&quot;white&quot;</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>16/04/01 15:27:17 INFO BinaryClassificationMetrics: Classification Model Performance
+16/04/01 15:27:17 INFO BinaryClassificationMetrics: ============================
+16/04/01 15:27:17 INFO BinaryClassificationMetrics: Accuracy: 0.829
+16/04/01 15:27:17 INFO BinaryClassificationMetrics: Area under ROC: 0.7184782682020251
+16/04/01 15:27:17 INFO BinaryClassificationMetrics: Maximum F Measure: 0.7182203962483446
+</pre></div>
+</td></tr></table>
+
+<p><img alt="red-roc" src="../../images/white-wine-logistic-roc.png" /></p>
+<p><img alt="red-fmeasure" src="../../images/white-wine-logistic-fmeasure.png" /></p>
+<h2 id="source-code">Source Code<a class="headerlink" href="#source-code" title="Permanent link">&para;</a></h2>
+<script src="https://gist.github.com/mandar2812/b309d5c26b5aba9c84415d2f7cd6d913.js"></script>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../p2_boston_housing/" title="Boston Housing" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Boston Housing
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../p2_lssvm_powerplant/" title="Pont-sur-Sambre Power Plant" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Pont-sur-Sambre Power Plant
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application-e3caa82af6.js"></script>
+      
+      
+      <script>app.initialize({url:{base:"../.."}})</script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+    
+      
+      <script>!function(e,t,a,n,o,c,i){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,c=t.createElement(a),i=t.getElementsByTagName(a)[0],c.async=1,c.src=n,i.parentNode.insertBefore(c,i)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-59996358-2","transcendent-ai-labs.github.io/DynaML/"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var t=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",t,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      
+    
+  </body>
+</html>
