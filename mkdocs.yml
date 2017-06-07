@@ -1,7 +1,11 @@
 site_name: DynaML User Guide
 site_dir: 'site'
+site_description: 'User guide and documentation for the DynaML machine learning library and API'
+site_author: 'Mandar Chandorkar'
+site_url: 'https://transcendent-ai-labs.github.io/DynaML'
+copyright: 'Copyright &copy; 2015 Mandar Chandorkar'
 pages:
-    - 'Home': index.md
+    - 'DynaML': index.md
     - 'Using DynaML':
       - 'Installation': installation/installation.md
       - 'Import': installation/include.md
@@ -80,3 +84,13 @@ repo_url: 'https://github.com/transcendent-ai-labs/DynaML'
 extra_javascript:
   - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
 google_analytics: ['UA-59996358-2', 'transcendent-ai-labs.github.io/DynaML/']
+extra:
+  disqus: 'dynaml'
+  palette:
+    primary: 'deep purple'
+    accent: 'purple'
+  social:
+    - type: 'github'
+      link: 'https://github.com/transcendent-ai-labs'
+    - type: 'twitter'
+      link: 'https://twitter.com/dyna_ml'
