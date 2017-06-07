@@ -788,18 +788,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../pipes/scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
-      Scalers & Encoders
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
       Workflows on Models
     </a>
@@ -1024,8 +1012,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#min-max-centering" title="Min-Max Centering" class="md-nav__link">
-    Min-Max Centering
+  <a href="#min-max-scaling" title="Min-Max Scaling" class="md-nav__link">
+    Min-Max Scaling
   </a>
   
 </li>
@@ -1221,8 +1209,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#min-max-centering" title="Min-Max Centering" class="md-nav__link">
-    Min-Max Centering
+  <a href="#min-max-scaling" title="Min-Max Scaling" class="md-nav__link">
+    Min-Max Scaling
   </a>
   
 </li>
@@ -1256,8 +1244,18 @@
 <p>Some attribute transformations are included in the DynaML distribution, here we show how to use them. All of them inherit <code class="codehilite"><span class="nc">ReversibleScaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> trait. They are contained in the <code>dynml.utils</code> package.</p>
 </div>
 <h2 id="gaussian-centering">Gaussian Centering<a class="headerlink" href="#gaussian-centering" title="Permanent link">&para;</a></h2>
+<p>Gaussian scaling/centering involves calculating the sample mean and variance of data and applying a gaussian standardization operations using the calculated statistics.</p>
+<p>It has different implementations in slightly varying contexts.</p>
 <h3 id="univariate">Univariate<a class="headerlink" href="#univariate" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<p>Univariate gaussian scaling involves</p>
+<span>\[
+\begin{align}
+x &amp;\in \mathbb{R} \\
+\mu &amp;\in \mathbb{R} \\
+\sigma &amp;\in \mathbb{R} \\
+\bar{x} &amp;= \frac{x-\mu}{\sigma}
+\end{align}
+\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -1280,8 +1278,24 @@
 </td></tr></table>
 
 <h3 id="multivariate">Multivariate<a class="headerlink" href="#multivariate" title="Permanent link">&para;</a></h3>
-<h4 id="diagonal">Diagonal<a class="headerlink" href="#diagonal" title="Permanent link">&para;</a></h4>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<p>The data attributes form components of a vector, in this case we can assume each component is independent and calculate the diagonal variance or compute all the component covariances in the form of a symmetric matrix.</p>
+<span>\[
+\begin{align}
+x &amp;\in \mathbb{R}^n \\
+\mu &amp;\in \mathbb{R}^n \\
+\Sigma &amp;\in \mathbb{R}^{n \times n}\\
+L L^\intercal &amp;= \Sigma \\
+\bar{x} &amp;= L^\intercal (x - \mu)
+\end{align}
+\]</span><h4 id="diagonal">Diagonal<a class="headerlink" href="#diagonal" title="Permanent link">&para;</a></h4>
+<p>In this case the sample covariance matrix calculated from the data is diagonal and neglecting the correlations between the attributes.</p>
+<span>\[
+\Sigma = \begin{pmatrix}
+\sigma^{2}_1 &amp; \cdots &amp; 0\\
+ \vdots &amp; \ddots  &amp; \vdots\\
+ 0 &amp; \cdots &amp; \sigma^{2}_n  
+\end{pmatrix}
+\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -1304,6 +1318,7 @@
 </td></tr></table>
 
 <h4 id="full-matrix">Full Matrix<a class="headerlink" href="#full-matrix" title="Permanent link">&para;</a></h4>
+<p>When the sample covariance matrix is calculated taking into account correlations between data attributes.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -1336,7 +1351,13 @@
 
 <h2 id="mean-centering">Mean Centering<a class="headerlink" href="#mean-centering" title="Permanent link">&para;</a></h2>
 <h3 id="univariate_1">Univariate<a class="headerlink" href="#univariate_1" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<span>\[
+\begin{align}
+x &amp;\in \mathbb{R} \\
+\mu &amp;\in \mathbb{R} \\
+\bar{x} &amp;= x-\mu
+\end{align}
+\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
@@ -1357,7 +1378,13 @@
 </td></tr></table>
 
 <h3 id="multivariate_1">Multivariate<a class="headerlink" href="#multivariate_1" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<span>\[
+\begin{align}
+x &amp;\in \mathbb{R}^n \\
+\mu &amp;\in \mathbb{R}^n \\
+\bar{x} &amp;= x - \mu
+\end{align}
+\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
@@ -1377,7 +1404,8 @@
 </pre></div>
 </td></tr></table>
 
-<h2 id="min-max-centering">Min-Max Centering<a class="headerlink" href="#min-max-centering" title="Permanent link">&para;</a></h2>
+<h2 id="min-max-scaling">Min-Max Scaling<a class="headerlink" href="#min-max-scaling" title="Permanent link">&para;</a></h2>
+<p>Min-max scaling is also known as <span>\(0,1\)</span> scaling because attributes are scaled down to the domain <span>\([0, 1]\)</span>. This is done by calculating the minimum and maximum of attribute values.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -1401,6 +1429,7 @@
 </td></tr></table>
 
 <h2 id="principal-component-analysis">Principal Component Analysis<a class="headerlink" href="#principal-component-analysis" title="Permanent link">&para;</a></h2>
+<p><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Principal component analysis</a> consists of projecting data onto the eigenvectors of its sample covariance matrix.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
