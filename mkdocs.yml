@@ -50,6 +50,8 @@ pages:
         - Boston Housing: 'repl-examples/p2_boston_housing.md'
         - Wine Quality: 'repl-examples/p2_winequality_logistic.md'
         - Pont-sur-Sambre Power Plant: 'repl-examples/p2_lssvm_powerplant.md'
+      - 'Misc. Utilities':
+        - Data Transforms: 'utils/scalers.md'
     - 'License': 'license.md'
     - 'About Us': 'about.md'
     - DynaML Blog:
