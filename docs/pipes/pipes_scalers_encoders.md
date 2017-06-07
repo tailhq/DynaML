@@ -83,4 +83,4 @@ val linTr = Scaler((x: Double) => x*5.0 + -1.5)
 
 
 !!! tip
-    Common attribute transformations like gaussian centering, min-max scaling, etc are included in the `#!scala dynaml.utils` package, click [here](/utils/scalers.md) to see their syntax.
+    Common attribute transformations like gaussian centering, min-max scaling, etc are included in the `#!scala dynaml.utils` package, click [here](/utils/utils_data_transforms.md) to see their syntax.
