@@ -42,7 +42,6 @@ pages:
           - 'String & File Processing': 'pipes/file_processing.md'
           - 'Feature Processing': 'pipes/feature_processing.md'
           - 'Time Series': 'pipes/pipes_time_series.md'
-          - 'Scalers & Encoders': 'pipes/scalers_encoders.md'
           - 'Workflows on Models': 'pipes/pipes_models.md'
           - Miscellaneuos: 'pipes/pipes_misc.md'
         - 'Pipes Example': 'pipes/pipes_library.md'
@@ -51,7 +50,7 @@ pages:
         - Wine Quality: 'repl-examples/p2_winequality_logistic.md'
         - Pont-sur-Sambre Power Plant: 'repl-examples/p2_lssvm_powerplant.md'
       - 'Misc. Utilities':
-        - Data Transforms: 'utils/scalers.md'
+        - Data Transforms: 'utils/utils_data_transforms.md'
     - 'License': 'license.md'
     - 'About Us': 'about.md'
     - DynaML Blog:

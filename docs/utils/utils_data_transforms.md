@@ -4,7 +4,22 @@
 
 ## Gaussian Centering
 
+Gaussian scaling/centering involves calculating the sample mean and variance of data and applying a gaussian standardization operations using the calculated statistics.
+
+It has different implementations in slightly varying contexts.
+
 ### Univariate
+
+Univariate gaussian scaling involves
+
+$$
+\begin{align}
+x &\in \mathbb{R} \\
+\mu &\in \mathbb{R} \\
+\sigma &\in \mathbb{R} \\
+\bar{x} &= \frac{x-\mu}{\sigma}
+\end{align}
+$$
 
 ```scala
 val mean = -1.5
@@ -22,7 +37,31 @@ val xhat = ugs.i(xs)
 
 ### Multivariate
 
+The data attributes form components of a vector, in this case we can assume each component is independent and calculate the diagonal variance or compute all the component covariances in the form of a symmetric matrix.
+
+$$
+\begin{align}
+x &\in \mathbb{R}^n \\
+\mu &\in \mathbb{R}^n \\
+\Sigma &\in \mathbb{R}^{n \times n}\\
+L L^\intercal &= \Sigma \\
+\bar{x} &= L^\intercal (x - \mu)
+\end{align}
+$$
+
+
 #### Diagonal
+
+In this case the sample covariance matrix calculated from the data is diagonal and neglecting the correlations between the attributes.
+
+$$
+\Sigma = \begin{pmatrix}
+\sigma^{2}_1 & \cdots & 0\\
+ \vdots & \ddots  & \vdots\\
+ 0 & \cdots & \sigma^{2}_n  
+\end{pmatrix}
+$$
+
 
 ```scala
 val mean: DenseVector[Double] = DenseVector(-1.5, 1.5, 0.25)
@@ -38,6 +77,8 @@ val xhat = gs.i(xs)
 ```
 
 #### Full Matrix
+
+When the sample covariance matrix is calculated taking into account correlations between data attributes.
 
 ```scala
 val mean: DenseVector[Double] = DenseVector(-1.5, 1.5, 0.25)
@@ -60,6 +101,15 @@ val xhat = mv_gs.i(xs)
 
 ### Univariate
 
+$$
+\begin{align}
+x &\in \mathbb{R} \\
+\mu &\in \mathbb{R} \\
+\bar{x} &= x-\mu
+\end{align}
+$$
+
+
 ```scala
 val c = -1.5
 
@@ -74,6 +124,15 @@ val xhat = ums.i(xs)
 
 ### Multivariate
 
+$$
+\begin{align}
+x &\in \mathbb{R}^n \\
+\mu &\in \mathbb{R}^n \\
+\bar{x} &= x - \mu
+\end{align}
+$$
+
+
 ```scala
 val mean: DenseVector[Double] = DenseVector(-1.5, 1.5, 0.25)
 
@@ -87,7 +146,10 @@ val xhat = mms.i(xs)
 ```
 
 
-## Min-Max Centering
+## Min-Max Scaling
+
+Min-max scaling is also known as $0,1$ scaling because attributes are scaled down to the domain $[0, 1]$. This is done by calculating the minimum and maximum of attribute values.
+
 
 ```scala
 val min: DenseVector[Double] = DenseVector(-1.5, 1.5, 0.25)
@@ -104,6 +166,9 @@ val xhat = min_max_scaler.i(xs)
 
 
 ## Principal Component Analysis
+
+[Principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis) consists of projecting data onto the eigenvectors of its sample covariance matrix.
+
 
 ```scala
 val mean: DenseVector[Double] = DenseVector(-1.5, 1.5, 0.25)
