@@ -4,7 +4,7 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -13,13 +13,13 @@
         
     <url>
      <loc>/installation/installation/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/installation/include/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -28,7 +28,7 @@
     
     <url>
      <loc>/supported_features/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -36,7 +36,7 @@
     
     <url>
      <loc>/structure/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -45,25 +45,31 @@
         
     <url>
      <loc>/releases/mydoc_release_notes_142/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/releases/mydoc_release_notes_141/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/releases/mydoc_release_notes_14/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     
 
     
+        
+    <url>
+     <loc></loc>
+     <lastmod></lastmod>
+     <changefreq>daily</changefreq>
+    </url>
         
     <url>
      <loc></loc>
@@ -88,7 +94,7 @@
     
     <url>
      <loc>/license/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -96,7 +102,7 @@
     
     <url>
      <loc>/about/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -105,13 +111,13 @@
         
     <url>
      <loc>/blog/2016-12-11-dynaml-new-features/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/blog/2016-12-08-getting-started-ml/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         

@@ -948,6 +948,42 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-4" type="checkbox" id="nav-6-4">
+    
+    <label class="md-nav__link" for="nav-6-4">
+      Misc. Utilities
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+      <label class="md-nav__title" for="nav-6-4">
+        Misc. Utilities
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../utils/scalers/" title="Data Transforms" class="md-nav__link">
+      Data Transforms
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -1089,8 +1125,8 @@
 <p>The pipes API contains traits for these tasks, they are abstract skeletons which can be extended by the user to create arbitrary feature re-scaling transformations.</p>
 <h2 id="encoders">Encoders<a class="headerlink" href="#encoders" title="Permanent link">&para;</a></h2>
 <p><code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code> are an extension of <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code> class which has an extra value member <code class="codehilite"><span class="n">i</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">J</span>, <span class="kt">I</span><span class="o">]</span></code> which represents the inverse transformation.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p><code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code> implies a reversible, one to one transformation of the input. Mathematically this can be expressed as</p>
 <span>\[
 \begin{align}
@@ -1100,13 +1136,74 @@ h(g(x)) &amp;= x \ \ \ \forall x \in \mathcal{X} \\
 h &amp;\equiv g^{-1}
 \end{align}
 \]</span></div>
+<p>An encoder can be created by calling the <code>apply</code> method of the <code class="codehilite"><span class="nc">Encoder</span></code> object.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Converts a point expressed in cartesian coordinates</span>
+<span class="c1">//into a point expressed in polar coordinates and vice versa.</span>
+<span class="k">val</span> <span class="n">cartesianToPolar</span> <span class="k">=</span> <span class="nc">Encoder</span><span class="o">(</span>
+  <span class="o">(</span><span class="n">pointCart</span><span class="k">:</span> <span class="o">(</span><span class="kt">Double</span><span class="o">,</span> <span class="kt">Double</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="o">)</span> <span class="k">=</span> <span class="n">pointCart</span>
+    <span class="k">val</span> <span class="n">r</span> <span class="k">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="o">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="o">)</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">r</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="o">)</span> <span class="o">(</span><span class="n">r</span><span class="o">,</span> <span class="n">math</span><span class="o">.</span><span class="n">arcsin</span><span class="o">(</span><span class="n">y</span><span class="o">/</span><span class="n">r</span><span class="o">))</span> <span class="k">else</span> <span class="o">(</span><span class="mf">0.0</span><span class="o">,</span> <span class="mf">0.0</span><span class="o">)</span>
+  <span class="o">}),</span>
+  <span class="o">(</span><span class="n">pointPolar</span><span class="k">:</span> <span class="o">(</span><span class="kt">Double</span><span class="o">,</span> <span class="kt">Double</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="o">(</span><span class="n">r</span><span class="o">,</span> <span class="n">theta</span><span class="o">)</span> <span class="k">=</span> <span class="n">pointPolar</span>
+    <span class="o">(</span><span class="n">r</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="o">(</span><span class="n">theta</span><span class="o">),</span> <span class="n">r</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="o">(</span><span class="n">theta</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the above example, we created a cartesian to polar coordinate converter by specifying the forward and reverse transformations as anonymous scala functions. But we could as well have passed the forward and reverse transforms as <code class="codehilite"><span class="nc">DataPipe</span></code> instances.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">forwardTransform</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">reverseTransform</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">J</span>, <span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="c1">//Still works.</span>
+<span class="k">val</span> <span class="n">enc</span> <span class="k">=</span> <span class="nc">Encoder</span><span class="o">(</span><span class="n">forwardTransform</span><span class="o">,</span> <span class="n">reverseTransform</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+</div>
 <h2 id="scalers">Scalers<a class="headerlink" href="#scalers" title="Permanent link">&para;</a></h2>
-<p><code class="codehilite"><span class="nc">Scaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> is an extension of the <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">I</span><span class="o">]</span></code> trait. Represents re-scaling of inputs.</p>
+<p><code class="codehilite"><span class="nc">Scaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> is an extension of the <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">I</span><span class="o">]</span></code> trait. Represents transformations of inputs which don't change their type.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">linTr</span> <span class="k">=</span> <span class="nc">Scaler</span><span class="o">((</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">*</span><span class="mf">5.0</span> <span class="o">+</span> <span class="o">-</span><span class="mf">1.5</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
 <h2 id="reversible-scalers">Reversible Scalers<a class="headerlink" href="#reversible-scalers" title="Permanent link">&para;</a></h2>
 <p><code class="codehilite"><span class="nc">ReversibleScaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> extends <code class="codehilite"><span class="nc">Scaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> along with <code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code>, a reversible re-scaling of inputs.</p>
+<div class="admonition note">
+<p class="admonition-title">The <code class="codehilite"><span class="o">&gt;</span></code> and <code class="codehilite"><span class="o">*</span></code> for scalers and encoders</p>
+<p>Since <code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">D</span><span class="o">]</span></code>, <code class="codehilite"><span class="nc">Scaler</span><span class="o">[</span><span class="kt">S</span><span class="o">]</span></code> and <code class="codehilite"><span class="nc">ReversibleScaler</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">D</span><span class="o">]</span></code> are inherit the <code class="codehilite"><span class="nc">DataPipe</span></code> trait, they can be composed with any data pipeline as usual, but there are special cases.</p>
+<p>If an <code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span></code> instance is composed with <code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">J</span>, <span class="kt">K</span><span class="o">]</span></code>, the result is of type <code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">K</span><span class="o">]</span></code> and accordingly for <code class="codehilite"><span class="nc">Scaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> and <code class="codehilite"><span class="nc">ReversibleScaler</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code>.</p>
+<p>The <code>*</code> can be used to create cartesian products of encoders and scalers.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">enc1</span><span class="k">:</span> <span class="kt">Encoder</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">J</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">enc2</span><span class="k">:</span> <span class="kt">Encoder</span><span class="o">[</span><span class="kt">K</span>, <span class="kt">L</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">enc3</span><span class="k">:</span> <span class="kt">Encoder</span><span class="o">[(</span><span class="kt">I</span>, <span class="kt">K</span><span class="o">)</span>, <span class="o">(</span><span class="kt">J</span>, <span class="kt">L</span><span class="o">)]</span> <span class="k">=</span> <span class="n">enc1</span><span class="o">*</span><span class="n">enc2</span>
+</pre></div>
+</td></tr></table>
+
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Common attribute transformations like gaussian centering, min-max scaling, etc are included in the <code class="codehilite"><span class="n">dynaml</span><span class="o">.</span><span class="n">utils</span></code> package, click <a href="/utils/scalers.md">here</a> to see their syntax.</p>
+<p>Common attribute transformations like gaussian centering, min-max scaling, etc are included in the <code class="codehilite"><span class="n">dynaml</span><span class="o">.</span><span class="n">utils</span></code> package, click <a href="../../utils/scalers/">here</a> to see their syntax.</p>
 </div>
                 
                   
