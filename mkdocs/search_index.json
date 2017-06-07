@@ -206,6 +206,36 @@
             "title": "Pipes"
         },
         {
+            "location": "/scaladoc/v1.4.2/core/",
+            "text": "",
+            "title": "dynaml-core"
+        },
+        {
+            "location": "/scaladoc/v1.4.2/pipes/",
+            "text": "",
+            "title": "dynaml-pipes"
+        },
+        {
+            "location": "/scaladoc/v1.4.1/core/",
+            "text": "",
+            "title": "dynaml-core"
+        },
+        {
+            "location": "/scaladoc/v1.4.1/pipes/",
+            "text": "",
+            "title": "dynaml-pipes"
+        },
+        {
+            "location": "/scaladoc/v1.4/core/",
+            "text": "",
+            "title": "dynaml-core"
+        },
+        {
+            "location": "/scaladoc/v1.4/pipes/",
+            "text": "",
+            "title": "dynaml-pipes"
+        },
+        {
             "location": "/core/core_model_hierarchy/",
             "text": "Model Classes\n\u00b6\n\n\nIn DynaML all model implementations fit into a well defined class hierarchy. In fact every DynaML machine learning model is an extension of the \nModel\n[\nT\n,\nQ\n,\nR\n]\n trait.\n\n\n\n\nModel\n[\nT\n,\nQ\n,\nR\n]\n\n\nThe \nModel\n trait is quite bare bones: machine learning models are viewed as objects containing two parts or components.\n\n\n\n\n\n\nA training data set (of type \nT\n).  \n\n\n\n\n\n\nA method \npredict\n(\npoint\n:\n \nQ\n)\n:\nR\n to generate a prediction of type \nR\n given a data point of type \nQ\n.\n\n\n\n\n\n\n\n\nParameterized Models\n\u00b6\n\n\nMany predictive models calculate predictions by formulating an expression which includes a set of parameters which are used along with the data points to generate predictions, the \nParameterizedLearner[G, T, Q, R, S]\n class represents a skeleton for all parametric machine learning models such as \nGeneralized Linear Models\n, \nNeural Networks\n, etc.\n\n\n\n\nTip\n\n\nThe defining characteristic of classes which extend \nParameterizedLearner\n is that they must contain a member variable \noptimizer: RegularizedOptimizer[T, Q, R, S]\n which represents a \nregularization enabled optimizer\n implementation along with a \nlearn\n()\n method which uses the optimizer member to calculate approximate values of the model parameters given the training data.\n\n\n\n\nLinear Models\n\u00b6\n\n\nLinear models; represented by the \nLinearModel\n[\nT\n, \nP\n, \nQ\n , \nR\n, \nS\n]\n trait are extensions of \nParameterizedLearner\n, this top level trait is extended to yield many useful linear prediction models.\n\n\nGeneralized Linear Models\n which are linear in parameters expression for the predictions \n\\(\n\\(y\\)\n\\)\n given a vector of processed features \n\\(\\phi(x)\\)\n or basis functions.\n\n\n\\[\n    \\begin{equation}\n        y = w^T\\varphi(x) + \\epsilon\n    \\end{equation}\n\\]\nNeural Networks\n\u00b6\n\n\n\n\n\n\n\n\nFeed forward neural networks are the most common network architectures in predictive modeling, DynaML has an implementation of feed forward architectures that is trained using \nBackpropogation\n with momentum.\n\n\nIn a feed forward neural network with a single hidden layer the predicted target \n\\(y\\)\n is expressed using the edge weights and node values in the following manner (this expression is easily extended for multi-layer nets).\n\n\n\\[\n\\begin{equation}\ny = W_2 \\sigma(W_1 \\mathbf{x} + b_1) + b_2\n\\end{equation}\n\\]\nWhere \n\\(W_1 , \\ W_2\\)\n  are matrices representing edge weights for the hidden layer and output layer respectively and \n\\(\\sigma(.)\\)\n represents a monotonic \nactivation\n function, the usual choices are \nsigmoid\n, \ntanh\n, \nlinear\n or \nrectified linear\n functions.\n\n\nNon Parametric Models\n\u00b6\n\n\nNon parametric models generally grow with the size of the data set, some examples include \nGaussian Processes\n and \nDual LSSVM\n among others.\n\n\nLSSVM\n\u00b6\n\n\nLeast Squares Support Vector Machines are a modification of the classical Support Vector Machine, please see \nSuykens et. al\n for a complete background.\n\n\n\n\nStochastic Processes\n\u00b6\n\n\nStochastic processes are general probabilistic models which can be used to construct finite dimensional distributions over a set of sampled domain points. More specifically a stochastic process is a probabilistic function \n\\(f(.)\\)\n defined on any \ndomain\n or \nindex set\n \n\\(\\mathcal{X}\\)\n such that for any finite collection \n\\(x_i \\in \\mathcal{X}, i = 1 \\cdots N\\)\n, the finite dimensional distribution \n\\(P(f(x_1), \\cdots, f(x_N))\\)\n is coherently defined.\n\n\n\n\nTip\n\n\nThe \nStochasticProcess\n[\nT\n, \nI\n, \nY\n, \nW\n]\n trait extends \nModel\n[\nT\n, \nI\n, \nY\n]\n and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution \npredictiveDistribution\n()\n.\n\n\n\n\nGaussian Processes\n\u00b6\n\n\n\n\n\n\nGaussian Processes\n are stochastic processes whose finite dimensional distributions are multivariate gaussians.\n\n\nGaussian Processes\n are powerful non-parametric predictive models, which represent probability measures over spaces of functions. \nRamussen and Williams\n is the definitive guide on understanding their applications in machine learning and a gateway to their deeper theoretical foundations.\n\n\n\n\n\n\nStudent T Processes\n\u00b6\n\n\nStudent T processes\n are generalizations of Gaussian Processes, where the finite dimensional distribution on a set of points is a multivariate t distribution.\n\n\nMeta Models/Model Ensembles\n\u00b6\n\n\nMeta models use predictions from several candidate models and derive a prediction that is a meaningful combination of the individual predictions. This may be achieved in several ways some of which are.\n\n\n\n\nAverage of predictions/voting\n\n\nWeighted predictions: Problem is now transferred to calculating appropriate weights.\n\n\nLearning some non-trivial functional transformation of the individual prediction, also known as \ngating networks\n.  \n\n\n\n\nCurrently the DynaML API has the following classes providing capabilities of meta models.\n\n\nAbstract Classes\n\n\n\n\nMetaModel[D, D1, BaseModel]\n\n\nCommitteeModel[D, D1, BaseModel]\n\n\n\n\nImplementations\n\n\n\n\nLS-SVM Committee\n\n\nNeural Committee",
             "title": "Model Hierarchy"
