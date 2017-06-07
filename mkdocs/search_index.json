@@ -1271,6 +1271,76 @@
             "title": "Principal Component Analysis"
         },
         {
+            "location": "/utils/package/",
+            "text": "Summary\n\n\nThe \nutils\n object contains some useful helper functions which are used by a number of API components of DynaML.\n\n\n\n\nString/File Processing\n\u00b6\n\n\nLoad File into a Stream\n\u00b6\n\n\n1\nval\n \ncontent\n \n=\n \nutils\n.\ntextFileToStream\n(\n\"data.csv\"\n)\n\n\n\n\n\n\n\nString Replace\n\u00b6\n\n\nReplace all occurrences of a string (or regular expression) in a target string\n\n\n1\nval\n \nnew_str\n \n=\n \nutils\n.\nreplace\n(\nfind\n \n=\n \n\",\"\n)(\nreplace\n \n=\n \n\"|\"\n)(\ninput\n \n=\n \n\"1,2,3,4\"\n)\n\n\n\n\n\n\n\nURL download\n\u00b6\n\n\nDownload the content of a url to a specified location on disk.\n\n\n1\nutils\n.\ndownloadURL\n(\n\"www.google.com\"\n,\n \n\"google_home_page.html\"\n)\n\n\n\n\n\n\n\nWrite to File\n\u00b6\n\n\n1\n2\nval\n \ncontent\n:\n \nStream\n[\nString\n]\n \n=\n \n_\n\n\nutils\n.\nwriteToFile\n(\n\"foo.csv\"\n)(\ncontent\n)\n\n\n\n\n\n\n\nNumerics\n\u00b6\n\n\nlog1p\n\u00b6\n\n\nCalculates \n\\(log_{e}(1+x)\\)\n.\n\n\n1\nval\n \nl\n \n=\n \nutils\n.\nlog1pExp\n(\n0.02\n)\n\n\n\n\n\n\n\nHaar DWT Matrix\n\u00b6\n\n\nConstructs the Haar \ndiscrete wavelet transform\n matrix for orders which are powers of two.\n\n\n1\nval\n \ndwt_mat\n \n=\n \nutils\n.\nhaarMatrix\n(\nmath\n.\npow\n(\n2\n,\n \n3\n).\ntoInt\n)\n\n\n\n\n\n\n\nHermite Polynomials\n\u00b6\n\n\nThe \nHermite polynomials\n are an important class of orthogonal polynomials used in numerical analysis. There are two definitions of the \nHermite\n polynomials i.e. the probabilist and physicist definitions, which are equivalent up-to a scale factor. The the \nutils\n object, the probabilist polynomials are calculated.\n\n\n1\n2\n3\n4\n5\n//Calculate the 3rd order Hermite polynomial\n\n\n\nval\n \nh3\n \n=\n \n(\nx\n:\n \nDouble\n)\n \n=>\n \nutils\n.\nhermite\n(\n3\n,\n \nx\n)\n\n\n\nh3\n(\n2.5\n)\n\n\n\n\n\n\n\nChebyshev Polynomials\n\u00b6\n\n\nChebyshev polynomials\n are another important class of orthogonal polynomials used in numerical analysis. There are two types, the \nfirst kind\n and \nsecond kind\n.\n\n\n1\n2\n3\n4\n5\n//Calculate the Chebyshev polynomial of second kind order 3\n\n\n\nval\n \nc23\n \n=\n \n(\nx\n:\n \nDouble\n)\n \n=>\n \nutils\n.\nchebyshev\n(\n3\n,\n \nx\n,\n \nkind\n \n=\n \n2\n)\n\n\n\nc23\n(\n2.5\n)\n\n\n\n\n\n\n\nQuick Select\n\u00b6\n\n\nThe quick select aims to find the \n\\(k^{th}\\)\n smallest element of a list of numbers.\n\n\n1\nval\n \nsecond\n \n=\n \nutils\n.\nquickselect\n(\nList\n(\n3\n,\n2\n,\n4\n,\n5\n,\n1\n,\n6\n),\n \n2\n)\n\n\n\n\n\n\n\nMedian\n\u00b6\n\n\n1\nval\n \nsecond\n \n=\n \nutils\n.\nmedian\n(\nList\n(\n3\n,\n2\n,\n4\n,\n5\n,\n1\n,\n6\n))\n\n\n\n\n\n\n\nSample Statistics\n\u00b6\n\n\nCalculate the mean and variance (or covariance), minimum, maximum of a list of \nDenseVector\n[\nDouble\n]\n instances.\n\n\n1\n2\n3\n4\n5\n6\n7\n8\n9\nval\n \ndata\n:\n \nList\n[\nDenseVector\n[\nDouble\n]]\n \n=\n \n_\n\n\n\nval\n \n(\nmu\n,\n \nvard\n)\n:\n \n(\nDenseVector\n[\nDouble\n],\n \nDenseVector\n[\nDouble\n])\n \n=\n\n  \nutils\n.\ngetStats\n(\ndata\n)\n\n\n\nval\n \n(\nmean\n,\n \ncov\n)\n:\n \n(\nDenseVector\n[\nDouble\n],\n \nDenseMatrix\n[\nDouble\n])\n \n=\n\n  \nutils\n.\ngetStatsMult\n(\ndata\n)\n\n\n\nval\n \n(\nmin\n,\n \nmax\n)\n \n=\n \nutils\n.\ngetMinMax\n(\ndata\n)",
+            "title": "`utils` object"
+        },
+        {
+            "location": "/utils/package/#stringfile-processing",
+            "text": "",
+            "title": "String/File Processing"
+        },
+        {
+            "location": "/utils/package/#load-file-into-a-stream",
+            "text": "1 val   content   =   utils . textFileToStream ( \"data.csv\" )",
+            "title": "Load File into a Stream"
+        },
+        {
+            "location": "/utils/package/#string-replace",
+            "text": "Replace all occurrences of a string (or regular expression) in a target string  1 val   new_str   =   utils . replace ( find   =   \",\" )( replace   =   \"|\" )( input   =   \"1,2,3,4\" )",
+            "title": "String Replace"
+        },
+        {
+            "location": "/utils/package/#url-download",
+            "text": "Download the content of a url to a specified location on disk.  1 utils . downloadURL ( \"www.google.com\" ,   \"google_home_page.html\" )",
+            "title": "URL download"
+        },
+        {
+            "location": "/utils/package/#write-to-file",
+            "text": "1\n2 val   content :   Stream [ String ]   =   _  utils . writeToFile ( \"foo.csv\" )( content )",
+            "title": "Write to File"
+        },
+        {
+            "location": "/utils/package/#numerics",
+            "text": "",
+            "title": "Numerics"
+        },
+        {
+            "location": "/utils/package/#log1p",
+            "text": "Calculates  \\(log_{e}(1+x)\\) .  1 val   l   =   utils . log1pExp ( 0.02 )",
+            "title": "log1p"
+        },
+        {
+            "location": "/utils/package/#haar-dwt-matrix",
+            "text": "Constructs the Haar  discrete wavelet transform  matrix for orders which are powers of two.  1 val   dwt_mat   =   utils . haarMatrix ( math . pow ( 2 ,   3 ). toInt )",
+            "title": "Haar DWT Matrix"
+        },
+        {
+            "location": "/utils/package/#hermite-polynomials",
+            "text": "The  Hermite polynomials  are an important class of orthogonal polynomials used in numerical analysis. There are two definitions of the  Hermite  polynomials i.e. the probabilist and physicist definitions, which are equivalent up-to a scale factor. The the  utils  object, the probabilist polynomials are calculated.  1\n2\n3\n4\n5 //Calculate the 3rd order Hermite polynomial  val   h3   =   ( x :   Double )   =>   utils . hermite ( 3 ,   x )  h3 ( 2.5 )",
+            "title": "Hermite Polynomials"
+        },
+        {
+            "location": "/utils/package/#chebyshev-polynomials",
+            "text": "Chebyshev polynomials  are another important class of orthogonal polynomials used in numerical analysis. There are two types, the  first kind  and  second kind .  1\n2\n3\n4\n5 //Calculate the Chebyshev polynomial of second kind order 3  val   c23   =   ( x :   Double )   =>   utils . chebyshev ( 3 ,   x ,   kind   =   2 )  c23 ( 2.5 )",
+            "title": "Chebyshev Polynomials"
+        },
+        {
+            "location": "/utils/package/#quick-select",
+            "text": "The quick select aims to find the  \\(k^{th}\\)  smallest element of a list of numbers.  1 val   second   =   utils . quickselect ( List ( 3 , 2 , 4 , 5 , 1 , 6 ),   2 )",
+            "title": "Quick Select"
+        },
+        {
+            "location": "/utils/package/#median",
+            "text": "1 val   second   =   utils . median ( List ( 3 , 2 , 4 , 5 , 1 , 6 ))",
+            "title": "Median"
+        },
+        {
+            "location": "/utils/package/#sample-statistics",
+            "text": "Calculate the mean and variance (or covariance), minimum, maximum of a list of  DenseVector [ Double ]  instances.  1\n2\n3\n4\n5\n6\n7\n8\n9 val   data :   List [ DenseVector [ Double ]]   =   _  val   ( mu ,   vard ) :   ( DenseVector [ Double ],   DenseVector [ Double ])   = \n   utils . getStats ( data )  val   ( mean ,   cov ) :   ( DenseVector [ Double ],   DenseMatrix [ Double ])   = \n   utils . getStatsMult ( data )  val   ( min ,   max )   =   utils . getMinMax ( data )",
+            "title": "Sample Statistics"
+        },
+        {
             "location": "/license/",
             "text": "Copyright 2015 Mandar Chandorkar (\nmandar2812@gmail.com\n)\n\n\n\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n\nApache License\n\n\n\n\n\n\nWarning\n\n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
             "title": "License"
