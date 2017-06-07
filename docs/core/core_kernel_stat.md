@@ -121,3 +121,24 @@ val encoder = Encoder(
 
 val gsmKernel = GaussianSpectralKernel[Double](3.5, 2.0, encoder)
 ```
+
+## Matern Half Integer
+
+The Matern kernel is an important family of covariance functions. Matern covariances are parameterized via two quantities i.e. order $\nu$ and $\sigma$ the characteristic length scale. The general matern covariance is defined in terms of modified _Bessel_ functions.
+
+$$
+C_{\nu}(\mathbf{x},\mathbf{y}) = \frac{2^{1-\nu}}{\Gamma(\nu)} \left(\sqrt{2\nu}\frac{d}{\rho}\right)^{\nu} K_{\nu}\left(\sqrt{2\nu}\frac{d}{\rho}\right)
+$$
+
+But for the case $\nu = p + \frac{1}{2}, p \in \mathbb{N}$ the expression becomes.
+
+$$
+C_{\nu}(\mathbf{x},\mathbf{y}) =  exp\left(-\sqrt{2\nu}\frac{d}{\rho}\right) \frac{\Gamma(p+1)}{\Gamma(2p+1)} \sum_{i = 0}^{p}{\frac{(p+1)!}{i!(p-i)!}\left(\sqrt{8\nu}\frac{d}{\rho}\right)^{p-i}}
+$$
+
+Currently there is only support for matern half integer kernels.
+
+```scala
+implicit ev = VectorField(2)
+val matKern = new GenericMaternKernel(1.5, p = 1)
+```

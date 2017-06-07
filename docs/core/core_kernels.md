@@ -72,6 +72,9 @@ val kernel = CovarianceFunction(mapFunc)
 
 ```
 
+!!! note "Feature map kernels"
+    Covariance functions constructed using feature mappings as shown above return a special object; an instance of the `#!scala FeatureMapCovariance[T, DenseVector[Double]]` class. In the section on composite kernels we will see why this is important.
+
 ### Constructing kernels via direct evaluation
 
 Instead of defining a feature representation like $\varphi(.)$ as in the section above, you can also directly define the evaluation expression of the kernel.
@@ -97,7 +100,11 @@ val kernel = CovarianceFunction(mapFunc)(
 
 ## Creating Composite Kernels
 
+
+### Algebraic Operations
+
 In machine learning it is well known that kernels can be combined to give other valid kernels. The symmetric positive semi-definite property of a kernel is preserved as long as it is added or multiplied to another valid kernel. In DynaML adding and multiplying kernels is elementary.
+
 
 
 ```scala
@@ -107,6 +114,33 @@ val k2 = new RationalQuadraticKernel(2.0)
 
 val k = k1 + k2
 val k3 = k*k2
+```
+
+### Composition
+
+From Mercer's theorem, every kernel can be expressed as a dot product of feature mappings evaluated at the respective data points. We can use this to construct more complex covariances i.e. by successively applying feature mappings.
+
+$$
+\begin{align}
+C_{a}(\mathbf{x}, \mathbf{y}) &= \varphi_{a}(\mathbf{x})^\intercal \varphi_{a}(\mathbf{y}) \\
+C_{b}(\mathbf{x}, \mathbf{y}) &= \varphi_{b}(\mathbf{x})^\intercal \varphi_{b}(\mathbf{y}) \\
+C_{b . a}(\mathbf{x}, \mathbf{y}) &= \varphi_{b}(\varphi_{a}(\mathbf{x}))^\intercal \varphi_{b}(\varphi_{a}(\mathbf{y}))
+\end{align}
+$$
+
+In DynaML, we can create a composite kernel if the kernel represented by the map $\varphi_{a}$, is explicitly of type `#!scala FeatureMapCovariance[T, DenseVector[Double]]`
+
+```scala
+val mapFunc = (vec: DenseVector[Double]) => {
+	vec/2d
+}
+
+val k1 = CovarianceFunction(mapFunc)
+
+val k2 = new RationalQuadraticKernel(2.0)
+
+//Composite kernel
+val k3 = k2 > k1
 ```
 
 -----
