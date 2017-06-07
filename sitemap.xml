@@ -3,7 +3,7 @@
 
     
     <url>
-     <loc>/</loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/</loc>
      <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
@@ -12,51 +12,13 @@
     
         
     <url>
-     <loc>/installation/installation/</loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/installation/installation/</loc>
      <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/installation/include/</loc>
-     <lastmod>2017-06-07</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    
-
-    
-    <url>
-     <loc>/supported_features/</loc>
-     <lastmod>2017-06-07</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    
-
-    
-    <url>
-     <loc>/structure/</loc>
-     <lastmod>2017-06-07</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    
-
-    
-        
-    <url>
-     <loc>/releases/mydoc_release_notes_142/</loc>
-     <lastmod>2017-06-07</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>/releases/mydoc_release_notes_141/</loc>
-     <lastmod>2017-06-07</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>/releases/mydoc_release_notes_14/</loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/installation/include/</loc>
      <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
@@ -64,27 +26,65 @@
     
 
     
+    <url>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/supported_features/</loc>
+     <lastmod>2017-06-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/structure/</loc>
+     <lastmod>2017-06-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
         
     <url>
-     <loc></loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/releases/mydoc_release_notes_142/</loc>
+     <lastmod>2017-06-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/releases/mydoc_release_notes_141/</loc>
+     <lastmod>2017-06-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/releases/mydoc_release_notes_14/</loc>
+     <lastmod>2017-06-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
+    
+        
+    <url>
+     <loc>https://transcendent-ai-labs.github.io/DynaML</loc>
      <lastmod></lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc></loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML</loc>
      <lastmod></lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc></loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML</loc>
      <lastmod></lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc></loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML</loc>
      <lastmod></lastmod>
      <changefreq>daily</changefreq>
     </url>
@@ -93,7 +93,7 @@
 
     
     <url>
-     <loc>/license/</loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/license/</loc>
      <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
@@ -101,7 +101,7 @@
 
     
     <url>
-     <loc>/about/</loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/about/</loc>
      <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
@@ -110,13 +110,13 @@
     
         
     <url>
-     <loc>/blog/2016-12-11-dynaml-new-features/</loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/blog/2016-12-11-dynaml-new-features/</loc>
      <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/blog/2016-12-08-getting-started-ml/</loc>
+     <loc>https://transcendent-ai-labs.github.io/DynaML/blog/2016-12-08-getting-started-ml/</loc>
      <lastmod>2017-06-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
