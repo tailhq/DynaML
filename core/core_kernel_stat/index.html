@@ -799,6 +799,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#matern-half-integer" title="Matern Half Integer" class="md-nav__link">
+    Matern Half Integer
+  </a>
+  
+</li>
+      
       
       
         <li class="md-nav__item">
@@ -1340,6 +1347,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#matern-half-integer" title="Matern Half Integer" class="md-nav__link">
+    Matern Half Integer
+  </a>
+  
+</li>
+      
       
       
         <li class="md-nav__item">
@@ -1455,6 +1469,20 @@ C(\mathbf{x},\mathbf{y}) = cos(2\pi \mu ||\mathbf{x}-\mathbf{y}||) \ exp(-2\pi^{
   <span class="o">(</span><span class="n">cs</span><span class="k">:</span> <span class="o">(</span><span class="kt">Double</span><span class="o">,</span> <span class="kt">Double</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;c&quot;</span> <span class="o">-&gt;</span> <span class="n">cs</span><span class="o">.</span><span class="n">_1</span><span class="o">,</span> <span class="s">&quot;s&quot;</span> <span class="o">-&gt;</span> <span class="n">cs</span><span class="o">.</span><span class="n">_2</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">gsmKernel</span> <span class="k">=</span> <span class="nc">GaussianSpectralKernel</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mf">3.5</span><span class="o">,</span> <span class="mf">2.0</span><span class="o">,</span> <span class="n">encoder</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="matern-half-integer">Matern Half Integer<a class="headerlink" href="#matern-half-integer" title="Permanent link">&para;</a></h2>
+<p>The Matern kernel is an important family of covariance functions. Matern covariances are parameterized via two quantities i.e. order <span>\(\nu\)</span> and <span>\(\sigma\)</span> the characteristic length scale. The general matern covariance is defined in terms of modified <em>Bessel</em> functions.</p>
+<span>\[
+C_{\nu}(\mathbf{x},\mathbf{y}) = \frac{2^{1-\nu}}{\Gamma(\nu)} \left(\sqrt{2\nu}\frac{d}{\rho}\right)^{\nu} K_{\nu}\left(\sqrt{2\nu}\frac{d}{\rho}\right)
+\]</span><p>But for the case <span>\(\nu = p + \frac{1}{2}, p \in \mathbb{N}\)</span> the expression becomes.</p>
+<span>\[
+C_{\nu}(\mathbf{x},\mathbf{y}) =  exp\left(-\sqrt{2\nu}\frac{d}{\rho}\right) \frac{\Gamma(p+1)}{\Gamma(2p+1)} \sum_{i = 0}^{p}{\frac{(p+1)!}{i!(p-i)!}\left(\sqrt{8\nu}\frac{d}{\rho}\right)^{p-i}}
+\]</span><p>Currently there is only support for matern half integer kernels.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">implicit</span> <span class="n">ev</span> <span class="k">=</span> <span class="nc">VectorField</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">matKern</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">GenericMaternKernel</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="n">p</span> <span class="k">=</span> <span class="mi">1</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
                 

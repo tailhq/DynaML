@@ -777,6 +777,26 @@
     Creating Composite Kernels
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-operations" title="Algebraic Operations" class="md-nav__link">
+    Algebraic Operations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composition" title="Composition" class="md-nav__link">
+    Composition
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
       
@@ -1322,6 +1342,26 @@
     Creating Composite Kernels
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-operations" title="Algebraic Operations" class="md-nav__link">
+    Algebraic Operations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composition" title="Composition" class="md-nav__link">
+    Composition
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
       
@@ -1417,6 +1457,10 @@ For practical purposes, the <a href="https://transcendent-ai-labs.github.io/api_
 </pre></div>
 </td></tr></table>
 
+<div class="admonition note">
+<p class="admonition-title">Feature map kernels</p>
+<p>Covariance functions constructed using feature mappings as shown above return a special object; an instance of the <code class="codehilite"><span class="nc">FeatureMapCovariance</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span></code> class. In the section on composite kernels we will see why this is important.</p>
+</div>
 <h3 id="constructing-kernels-via-direct-evaluation">Constructing kernels via direct evaluation<a class="headerlink" href="#constructing-kernels-via-direct-evaluation" title="Permanent link">&para;</a></h3>
 <p>Instead of defining a feature representation like <span>\(\varphi(.)\)</span> as in the section above, you can also directly define the evaluation expression of the kernel.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -1445,6 +1489,7 @@ For practical purposes, the <a href="https://transcendent-ai-labs.github.io/api_
 
 <hr />
 <h2 id="creating-composite-kernels">Creating Composite Kernels<a class="headerlink" href="#creating-composite-kernels" title="Permanent link">&para;</a></h2>
+<h3 id="algebraic-operations">Algebraic Operations<a class="headerlink" href="#algebraic-operations" title="Permanent link">&para;</a></h3>
 <p>In machine learning it is well known that kernels can be combined to give other valid kernels. The symmetric positive semi-definite property of a kernel is preserved as long as it is added or multiplied to another valid kernel. In DynaML adding and multiplying kernels is elementary.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
@@ -1455,6 +1500,37 @@ For practical purposes, the <a href="https://transcendent-ai-labs.github.io/api_
 
 <span class="k">val</span> <span class="n">k</span> <span class="k">=</span> <span class="n">k1</span> <span class="o">+</span> <span class="n">k2</span>
 <span class="k">val</span> <span class="n">k3</span> <span class="k">=</span> <span class="n">k</span><span class="o">*</span><span class="n">k2</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="composition">Composition<a class="headerlink" href="#composition" title="Permanent link">&para;</a></h3>
+<p>From Mercer's theorem, every kernel can be expressed as a dot product of feature mappings evaluated at the respective data points. We can use this to construct more complex covariances i.e. by successively applying feature mappings.</p>
+<span>\[
+\begin{align}
+C_{a}(\mathbf{x}, \mathbf{y}) &amp;= \varphi_{a}(\mathbf{x})^\intercal \varphi_{a}(\mathbf{y}) \\
+C_{b}(\mathbf{x}, \mathbf{y}) &amp;= \varphi_{b}(\mathbf{x})^\intercal \varphi_{b}(\mathbf{y}) \\
+C_{b . a}(\mathbf{x}, \mathbf{y}) &amp;= \varphi_{b}(\varphi_{a}(\mathbf{x}))^\intercal \varphi_{b}(\varphi_{a}(\mathbf{y}))
+\end{align}
+\]</span><p>In DynaML, we can create a composite kernel if the kernel represented by the map <span>\(\varphi_{a}\)</span>, is explicitly of type <code class="codehilite"><span class="nc">FeatureMapCovariance</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span></code></p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mapFunc</span> <span class="k">=</span> <span class="o">(</span><span class="n">vec</span><span class="k">:</span> <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    <span class="n">vec</span><span class="o">/</span><span class="mi">2</span><span class="n">d</span>
+<span class="o">}</span>
+
+<span class="k">val</span> <span class="n">k1</span> <span class="k">=</span> <span class="nc">CovarianceFunction</span><span class="o">(</span><span class="n">mapFunc</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">k2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RationalQuadraticKernel</span><span class="o">(</span><span class="mf">2.0</span><span class="o">)</span>
+
+<span class="c1">//Composite kernel</span>
+<span class="k">val</span> <span class="n">k3</span> <span class="k">=</span> <span class="n">k2</span> <span class="o">&gt;</span> <span class="n">k1</span>
 </pre></div>
 </td></tr></table>
 
