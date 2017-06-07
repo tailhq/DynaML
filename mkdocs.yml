@@ -65,6 +65,7 @@ pages:
         - Pont-sur-Sambre Power Plant: 'repl-examples/p2_lssvm_powerplant.md'
       - 'Misc. Utilities':
         - Data Transforms: 'utils/utils_data_transforms.md'
+        - '`utils` object': 'utils/package.md'
     - 'License': 'license.md'
     - 'About Us': 'about.md'
     - DynaML Blog:
