@@ -216,6 +216,16 @@ val pipe4 = DataPipe4(f4)
 
 Takes an argument returns a `DataPipe`
 
+```scala
+
+val mpipe = MetaPipe(
+  (omega: DenseVector[Double]) =>
+  (x: DenseVector[Double]) => math.exp(-omega.t*x))
+
+//Returns a pipe which computes exp(-2pi/10 1Tx)
+val expPipe = mpipe(DenseVector.fill[Double](10)(2.0*math.Pi/10.0))
+```
+
 ### Meta Pipe (2, 1)
 
 `#!scala MetaPipe21[A, B, C, D]`
@@ -224,7 +234,8 @@ Takes 2 arguments returns a `DataPipe`.
 
 ```scala
 val pipe21 = MetaPipe21(
-  (alpha: Double, beta: Double) => (rv: ContinuousRandomVariable[Double]) => (rv*beta) + alpha
+  (alpha: Double, beta: Double) =>
+  (rv: ContinuousRandomVariable[Double]) => (rv*beta) + alpha
 )
 
 val random_func = pipe21(1.5, -0.5)
@@ -239,3 +250,25 @@ result_rv.iid(500).draw
 `#!scala MetaPipe12[A, B, C, D]`
 
 Takes an argument returns a `DataPipe2`
+
+
+!!! warning "`>` and `>>` operators on higher order pipes"
+
+    Although the `>` operator is defined on higher order pipes, it quickly becomes difficult
+    to imagine what transformation it can be joined with. For example the `>` operator applied
+    after a `#!scala MetaPipe[I, J, K]` instance would expect a `#!scala DataPipe[DataPipe[J,K], _]`
+    instance in order for the join to proceed.
+
+    The `>>` operator on the other hand has a different and easier purpose.
+
+    ```scala
+    val mpipe = MetaPipe(
+      (omega: DenseVector[Double]) =>
+      (x: DenseVector[Double]) => math.exp(-omega.t*x))
+
+    val further_pipe = DataPipe((y: Double) => y*y + 2.0)
+
+    //Returns MetaPipe[DenseVector[Double], DenseVector[Double], Double]
+    //Computes exp(2*omega.x) + 2.0
+    val final_pipe = mpipe >> further_pipe
+    ```
