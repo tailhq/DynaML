@@ -1,6 +1,3 @@
----
-title: Generalized Linear Models
----
 
 _Generalized Linear Models_ (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The ```GeneralizedLinearModel[T]``` class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.
 

@@ -29,24 +29,29 @@ pages:
       - 'Core':
         - Models:
           - Model Hierarchy: 'core/core_model_hierarchy.md'
-          - Neural Networks: 'core/core_ann.md'
           - Linear Models: 'core/core_glm.md'
           - Gaussian Processes: 'core/core_gp.md'
           - Students T Processes: 'core/core_stp.md'
+          - Neural Networks: 'core/core_ann.md'
           - Least Squares SVM: 'core/core_lssvm.md'
-        - 'Optimizers & Solvers':
-          - 'Convex': 'core/core_opt_convex.md'
-          - 'Global': 'core/core_opt_global.md'
         - Kernels:
           - Kernel API: 'core/core_kernels.md'
           - Stationary Kernels: 'core/core_kernel_stat.md'
           - Non Stationary Kernels: 'core/core_kernel_nonstat.md'
           - Automatic Feature Extraction: 'core/core_kernel_nystrom.md'
-        - Performance Evaluation: 'core/core_model_evaluation.md'
+        - Algebra:
+          - Blocked Algebraic Objects: 'core/partitioned_objects.md'
+          - Block Vectors: 'core/partitioned_vectors.md'
+          - Block Matrices: 'core/partitioned_matrices.md'
+          - Block Algebra Utilities: 'core/partitioned_alg_utils.md'
         - Probability:
           - Random Variables: 'core/core_prob_randomvar.md'
           - Operations on Random Variables: 'core/core_prob_operations.md'
           - Probability Distributions: 'core/core_prob_dist.md'
+        - 'Optimizers & Solvers':
+          - 'Convex': 'core/core_opt_convex.md'
+          - 'Global': 'core/core_opt_global.md'
+        - Performance Evaluation: 'core/core_model_evaluation.md'
       - 'Pipes':
         - 'DynaML Pipes': 'pipes/pipes.md'
         - 'Pipes API': 'pipes/pipes_api.md'
