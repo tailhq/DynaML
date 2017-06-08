@@ -9,28 +9,28 @@
         <meta name="description" content="User guide and documentation for the DynaML machine learning library and API">
       
       
-        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/structure/">
+        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/core/partitioned_matrices/">
       
       
         <meta name="author" content="Mandar Chandorkar">
       
       
-        <link rel="shortcut icon" href="../assets/images/favicon.png">
+        <link rel="shortcut icon" href="../../assets/images/favicon.png">
       
       <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.0">
     
     
       
-        <title>Structure - DynaML User Guide</title>
+        <title>Block Matrices - DynaML User Guide</title>
       
     
     
-      <script src="../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-c147e0d28f.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application-c147e0d28f.css">
       
-        <link rel="stylesheet" href="../assets/stylesheets/application-8817cfa535.palette.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-8817cfa535.palette.css">
       
     
     
@@ -81,8 +81,16 @@
           
             
               
+                <span class="md-header-nav__parent">
+                  Core
+                </span>
+              
+                <span class="md-header-nav__parent">
+                  Algebra
+                </span>
+              
             
-            Structure
+            Block Matrices
           
         </span>
       </div>
@@ -189,7 +197,7 @@
 
 
   <li class="md-nav__item">
-    <a href=".." title="DynaML" class="md-nav__link">
+    <a href="../.." title="DynaML" class="md-nav__link">
       DynaML
     </a>
   </li>
@@ -220,7 +228,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../installation/installation/" title="Installation" class="md-nav__link">
+    <a href="../../installation/installation/" title="Installation" class="md-nav__link">
       Installation
     </a>
   </li>
@@ -232,7 +240,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../installation/include/" title="Import" class="md-nav__link">
+    <a href="../../installation/include/" title="Import" class="md-nav__link">
       Import
     </a>
   </li>
@@ -249,7 +257,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../supported_features/" title="Supported Features" class="md-nav__link">
+    <a href="../../supported_features/" title="Supported Features" class="md-nav__link">
       Supported Features
     </a>
   </li>
@@ -259,97 +267,11 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Structure
-      </label>
-    
-    <a href="./" title="Structure" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../structure/" title="Structure" class="md-nav__link">
       Structure
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#motivation" title="Motivation" class="md-nav__link">
-    Motivation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#modules" title="Modules" class="md-nav__link">
-    Modules
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#core" title="Core" class="md-nav__link">
-    Core
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#data-workflows-pipes" title="Data workflows &amp; Pipes" class="md-nav__link">
-    Data workflows &amp; Pipes
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dynaml-repl" title="DynaML REPL" class="md-nav__link">
-    DynaML REPL
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dynaml-examples" title="DynaML Examples" class="md-nav__link">
-    DynaML Examples
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#libraries-used" title="Libraries Used" class="md-nav__link">
-    Libraries Used
-  </a>
-  
-</li>
-      
-      
-      
-        <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
-            Comments
-          </a>
-        </li>
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
     
@@ -378,7 +300,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../releases/mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
+    <a href="../../releases/mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
       v1.4.2
     </a>
   </li>
@@ -390,7 +312,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../releases/mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
+    <a href="../../releases/mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
       v1.4.1
     </a>
   </li>
@@ -402,7 +324,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../releases/mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
+    <a href="../../releases/mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
       v1.4
     </a>
   </li>
@@ -457,7 +379,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../scaladoc/v1.4.2/core/" title="dynaml-core" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.2/core/" title="dynaml-core" class="md-nav__link">
       dynaml-core
     </a>
   </li>
@@ -469,7 +391,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../scaladoc/v1.4.2/pipes/" title="dynaml-pipes" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.2/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
     </a>
   </li>
@@ -505,7 +427,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../scaladoc/v1.4.1/core/" title="dynaml-core" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.1/core/" title="dynaml-core" class="md-nav__link">
       dynaml-core
     </a>
   </li>
@@ -517,7 +439,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../scaladoc/v1.4.1/pipes/" title="dynaml-pipes" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.1/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
     </a>
   </li>
@@ -553,7 +475,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../scaladoc/v1.4/core/" title="dynaml-core" class="md-nav__link">
+    <a href="../../scaladoc/v1.4/core/" title="dynaml-core" class="md-nav__link">
       dynaml-core
     </a>
   </li>
@@ -565,7 +487,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../scaladoc/v1.4/pipes/" title="dynaml-pipes" class="md-nav__link">
+    <a href="../../scaladoc/v1.4/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
     </a>
   </li>
@@ -585,10 +507,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
     
     <label class="md-nav__link" for="nav-7">
       User Guide
@@ -604,10 +528,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1" type="checkbox" id="nav-7-1">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1" type="checkbox" id="nav-7-1" checked>
     
     <label class="md-nav__link" for="nav-7-1">
       Core
@@ -644,7 +570,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_model_hierarchy/" title="Model Hierarchy" class="md-nav__link">
+    <a href="../core_model_hierarchy/" title="Model Hierarchy" class="md-nav__link">
       Model Hierarchy
     </a>
   </li>
@@ -656,7 +582,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_glm/" title="Linear Models" class="md-nav__link">
+    <a href="../core_glm/" title="Linear Models" class="md-nav__link">
       Linear Models
     </a>
   </li>
@@ -668,7 +594,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_gp/" title="Gaussian Processes" class="md-nav__link">
+    <a href="../core_gp/" title="Gaussian Processes" class="md-nav__link">
       Gaussian Processes
     </a>
   </li>
@@ -680,7 +606,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_stp/" title="Students T Processes" class="md-nav__link">
+    <a href="../core_stp/" title="Students T Processes" class="md-nav__link">
       Students T Processes
     </a>
   </li>
@@ -692,7 +618,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_ann/" title="Neural Networks" class="md-nav__link">
+    <a href="../core_ann/" title="Neural Networks" class="md-nav__link">
       Neural Networks
     </a>
   </li>
@@ -704,7 +630,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_lssvm/" title="Least Squares SVM" class="md-nav__link">
+    <a href="../core_lssvm/" title="Least Squares SVM" class="md-nav__link">
       Least Squares SVM
     </a>
   </li>
@@ -740,7 +666,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_kernels/" title="Kernel API" class="md-nav__link">
+    <a href="../core_kernels/" title="Kernel API" class="md-nav__link">
       Kernel API
     </a>
   </li>
@@ -752,7 +678,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
+    <a href="../core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
       Stationary Kernels
     </a>
   </li>
@@ -764,7 +690,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
+    <a href="../core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
       Non Stationary Kernels
     </a>
   </li>
@@ -776,7 +702,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
+    <a href="../core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
       Automatic Feature Extraction
     </a>
   </li>
@@ -791,10 +717,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-3" type="checkbox" id="nav-7-1-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-3" type="checkbox" id="nav-7-1-3" checked>
     
     <label class="md-nav__link" for="nav-7-1-3">
       Algebra
@@ -812,7 +740,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/partitioned_objects/" title="Blocked Algebraic Objects" class="md-nav__link">
+    <a href="../partitioned_objects/" title="Blocked Algebraic Objects" class="md-nav__link">
       Blocked Algebraic Objects
     </a>
   </li>
@@ -824,7 +752,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/partitioned_vectors/" title="Block Vectors" class="md-nav__link">
+    <a href="../partitioned_vectors/" title="Block Vectors" class="md-nav__link">
       Block Vectors
     </a>
   </li>
@@ -834,11 +762,90 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../core/partitioned_matrices/" title="Block Matrices" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Block Matrices
+      </label>
+    
+    <a href="./" title="Block Matrices" class="md-nav__link md-nav__link--active">
       Block Matrices
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creation" title="Creation" class="md-nav__link">
+    Creation
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-input-blocks" title="From Input Blocks" class="md-nav__link">
+    From Input Blocks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-tabulating-functions" title="From Tabulating Functions" class="md-nav__link">
+    From Tabulating Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-outer-product" title="From Outer Product" class="md-nav__link">
+    From Outer Product
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-concatenation" title="Matrix Concatenation" class="md-nav__link">
+    Matrix Concatenation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algebraic-operations" title="Algebraic Operations" class="md-nav__link">
+    Algebraic Operations
+  </a>
+  
+</li>
+      
+      
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -848,7 +855,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/partitioned_alg_utils/" title="Block Algebra Utilities" class="md-nav__link">
+    <a href="../partitioned_alg_utils/" title="Block Algebra Utilities" class="md-nav__link">
       Block Algebra Utilities
     </a>
   </li>
@@ -884,7 +891,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_prob_randomvar/" title="Random Variables" class="md-nav__link">
+    <a href="../core_prob_randomvar/" title="Random Variables" class="md-nav__link">
       Random Variables
     </a>
   </li>
@@ -896,7 +903,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
+    <a href="../core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
       Operations on Random Variables
     </a>
   </li>
@@ -908,7 +915,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_prob_dist/" title="Probability Distributions" class="md-nav__link">
+    <a href="../core_prob_dist/" title="Probability Distributions" class="md-nav__link">
       Probability Distributions
     </a>
   </li>
@@ -944,7 +951,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_opt_convex/" title="Convex" class="md-nav__link">
+    <a href="../core_opt_convex/" title="Convex" class="md-nav__link">
       Convex
     </a>
   </li>
@@ -956,7 +963,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_opt_global/" title="Global" class="md-nav__link">
+    <a href="../core_opt_global/" title="Global" class="md-nav__link">
       Global
     </a>
   </li>
@@ -973,7 +980,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
+    <a href="../core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
       Performance Evaluation
     </a>
   </li>
@@ -1009,7 +1016,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/pipes/" title="DynaML Pipes" class="md-nav__link">
+    <a href="../../pipes/pipes/" title="DynaML Pipes" class="md-nav__link">
       DynaML Pipes
     </a>
   </li>
@@ -1021,7 +1028,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/pipes_api/" title="Pipes API" class="md-nav__link">
+    <a href="../../pipes/pipes_api/" title="Pipes API" class="md-nav__link">
       Pipes API
     </a>
   </li>
@@ -1033,7 +1040,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
+    <a href="../../pipes/pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
       Scalers & Encoders
     </a>
   </li>
@@ -1045,7 +1052,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/model_pipes/" title="Model Pipes" class="md-nav__link">
+    <a href="../../pipes/model_pipes/" title="Model Pipes" class="md-nav__link">
       Model Pipes
     </a>
   </li>
@@ -1076,7 +1083,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/file_processing/" title="String & File Processing" class="md-nav__link">
+    <a href="../../pipes/file_processing/" title="String & File Processing" class="md-nav__link">
       String & File Processing
     </a>
   </li>
@@ -1088,7 +1095,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/feature_processing/" title="Feature Processing" class="md-nav__link">
+    <a href="../../pipes/feature_processing/" title="Feature Processing" class="md-nav__link">
       Feature Processing
     </a>
   </li>
@@ -1100,7 +1107,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/pipes_time_series/" title="Time Series" class="md-nav__link">
+    <a href="../../pipes/pipes_time_series/" title="Time Series" class="md-nav__link">
       Time Series
     </a>
   </li>
@@ -1112,7 +1119,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
+    <a href="../../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
       Workflows on Models
     </a>
   </li>
@@ -1124,7 +1131,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/pipes_misc/" title="Miscellaneuos" class="md-nav__link">
+    <a href="../../pipes/pipes_misc/" title="Miscellaneuos" class="md-nav__link">
       Miscellaneuos
     </a>
   </li>
@@ -1141,7 +1148,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/pipes_library/" title="Pipes Example" class="md-nav__link">
+    <a href="../../pipes/pipes_library/" title="Pipes Example" class="md-nav__link">
       Pipes Example
     </a>
   </li>
@@ -1177,7 +1184,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../repl-examples/p2_boston_housing/" title="Boston Housing" class="md-nav__link">
+    <a href="../../repl-examples/p2_boston_housing/" title="Boston Housing" class="md-nav__link">
       Boston Housing
     </a>
   </li>
@@ -1189,7 +1196,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../repl-examples/p2_winequality_logistic/" title="Wine Quality" class="md-nav__link">
+    <a href="../../repl-examples/p2_winequality_logistic/" title="Wine Quality" class="md-nav__link">
       Wine Quality
     </a>
   </li>
@@ -1201,7 +1208,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../repl-examples/p2_lssvm_powerplant/" title="Pont-sur-Sambre Power Plant" class="md-nav__link">
+    <a href="../../repl-examples/p2_lssvm_powerplant/" title="Pont-sur-Sambre Power Plant" class="md-nav__link">
       Pont-sur-Sambre Power Plant
     </a>
   </li>
@@ -1237,7 +1244,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../utils/utils_data_transforms/" title="Data Transforms" class="md-nav__link">
+    <a href="../../utils/utils_data_transforms/" title="Data Transforms" class="md-nav__link">
       Data Transforms
     </a>
   </li>
@@ -1249,7 +1256,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../utils/package/" title="`utils` object" class="md-nav__link">
+    <a href="../../utils/package/" title="`utils` object" class="md-nav__link">
       `utils` object
     </a>
   </li>
@@ -1271,7 +1278,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../license/" title="License" class="md-nav__link">
+    <a href="../../license/" title="License" class="md-nav__link">
       License
     </a>
   </li>
@@ -1283,7 +1290,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../about/" title="About Us" class="md-nav__link">
+    <a href="../../about/" title="About Us" class="md-nav__link">
       About Us
     </a>
   </li>
@@ -1314,7 +1321,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../blog/2016-12-11-dynaml-new-features/" title="State of DynaML 2016" class="md-nav__link">
+    <a href="../../blog/2016-12-11-dynaml-new-features/" title="State of DynaML 2016" class="md-nav__link">
       State of DynaML 2016
     </a>
   </li>
@@ -1326,7 +1333,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../blog/2016-12-08-getting-started-ml/" title="Resources for Beginners" class="md-nav__link">
+    <a href="../../blog/2016-12-08-getting-started-ml/" title="Resources for Beginners" class="md-nav__link">
       Resources for Beginners
     </a>
   </li>
@@ -1356,44 +1363,37 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#motivation" title="Motivation" class="md-nav__link">
-    Motivation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#modules" title="Modules" class="md-nav__link">
-    Modules
+  <a href="#creation" title="Creation" class="md-nav__link">
+    Creation
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#core" title="Core" class="md-nav__link">
-    Core
+  <a href="#from-input-blocks" title="From Input Blocks" class="md-nav__link">
+    From Input Blocks
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#data-workflows-pipes" title="Data workflows &amp; Pipes" class="md-nav__link">
-    Data workflows &amp; Pipes
+  <a href="#from-tabulating-functions" title="From Tabulating Functions" class="md-nav__link">
+    From Tabulating Functions
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#dynaml-repl" title="DynaML REPL" class="md-nav__link">
-    DynaML REPL
+  <a href="#from-outer-product" title="From Outer Product" class="md-nav__link">
+    From Outer Product
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#dynaml-examples" title="DynaML Examples" class="md-nav__link">
-    DynaML Examples
+  <a href="#matrix-concatenation" title="Matrix Concatenation" class="md-nav__link">
+    Matrix Concatenation
   </a>
   
 </li>
@@ -1404,8 +1404,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#libraries-used" title="Libraries Used" class="md-nav__link">
-    Libraries Used
+  <a href="#algebraic-operations" title="Algebraic Operations" class="md-nav__link">
+    Algebraic Operations
   </a>
   
 </li>
@@ -1431,46 +1431,223 @@
               
                 
                 
-                  <h1>Structure</h1>
+                  <h1>Block Matrices</h1>
                 
-                <h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h2>
-<p>DynaML was born out of the need to have a performant, extensible and easy to use Machine Learning research environment. Scala was a natural choice for these requirements due to its sprawling data science ecosystem (i.e. <a href="http://spark.apache.org/">Apache Spark</a>), its functional object-oriented duality and its interoperability with the Java Virtual Machine.</p>
-<p>The DynaML distribution is divided into four principal modules.</p>
-<h2 id="modules">Modules<a class="headerlink" href="#modules" title="Permanent link">&para;</a></h2>
-<h3 id="core">Core<a class="headerlink" href="#core" title="Permanent link">&para;</a></h3>
-<p>The heart of the DynaML distribution is the <code>dynaml-core</code> module.</p>
-<p>The core api consists of :</p>
+                <div class="admonition summary">
+<p class="admonition-title">Summary</p>
+<p>Here we show how to use the block matrix API</p>
+</div>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.algebra.package"><code>algebra</code></a> package
+contains a number of block matrix implementations.</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Represents</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="codehilite"><span class="nc">PartitionedMatrix</span></code></td>
+<td>A general block matrix</td>
+<td>User facing i.e. can be instantiated directly</td>
+</tr>
+<tr>
+<td><code class="codehilite"><span class="nc">LowerTriPartitionedMatrix</span></code></td>
+<td>Lower triangular block matrix</td>
+<td>Result of <code>algebra</code> API calls</td>
+</tr>
+<tr>
+<td><code class="codehilite"><span class="nc">UpperTriPartitionedMatrix</span></code></td>
+<td>Upper triangular block matrix</td>
+<td>Result of <code>algebra</code> API calls</td>
+</tr>
+<tr>
+<td><code class="codehilite"><span class="nc">PartitionedPSDMatrix</span></code></td>
+<td>Symmetric positive semi-definite matrix</td>
+<td>Result of applying kernel function on data.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="creation">Creation<a class="headerlink" href="#creation" title="Permanent link">&para;</a></h2>
+<p>Block can be created in two major ways.</p>
+<h3 id="from-input-blocks">From Input Blocks<a class="headerlink" href="#from-input-blocks" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">index_set</span> <span class="k">=</span> <span class="o">(</span><span class="mi">0L</span> <span class="n">until</span> <span class="mi">10L</span><span class="o">).</span><span class="n">toStream</span>
+<span class="c1">//Create the data blocks</span>
+<span class="k">val</span> <span class="n">data_blocks</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[((</span><span class="kt">Long</span>, <span class="kt">Long</span><span class="o">)</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]</span> <span class="k">=</span>
+  <span class="n">utils</span><span class="o">.</span><span class="n">combine</span><span class="o">(</span><span class="n">index_set</span><span class="o">).</span><span class="n">map</span><span class="o">(</span>
+    <span class="n">indices</span> <span class="k">=&gt;</span> <span class="o">(</span>
+      <span class="o">(</span><span class="n">indices</span><span class="o">.</span><span class="n">head</span><span class="o">,</span> <span class="n">indices</span><span class="o">.</span><span class="n">last</span><span class="o">),</span> <span class="nc">DenseMatrix</span><span class="o">.</span><span class="n">ones</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">500</span><span class="o">,</span> <span class="mi">500</span><span class="o">)</span>
+    <span class="o">)</span>
+  <span class="o">)</span>
+
+<span class="c1">//Instantiate the partitioned matrix</span>
+<span class="c1">//must provide dimensions</span>
+<span class="k">val</span> <span class="n">part_matrix</span> <span class="k">=</span> <span class="nc">PartitionedMatrix</span><span class="o">(</span>
+  <span class="n">data_blocks</span><span class="o">,</span> <span class="n">numrows</span> <span class="k">=</span> <span class="mi">5000L</span><span class="o">,</span> <span class="n">numcols</span> <span class="k">=</span> <span class="mi">5000L</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="from-tabulating-functions">From Tabulating Functions<a class="headerlink" href="#from-tabulating-functions" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">tabFunc</span><span class="k">:</span> <span class="o">(</span><span class="kt">Long</span><span class="o">,</span> <span class="kt">Long</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span>
+  <span class="o">(</span><span class="n">indexR</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">indexC</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="o">(</span><span class="mi">2</span><span class="n">d</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="nc">Pi</span><span class="o">*</span><span class="n">indexR</span><span class="o">/</span><span class="mi">5000</span><span class="n">d</span><span class="o">)*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="o">(</span><span class="mi">2</span><span class="n">d</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="nc">Pi</span><span class="o">*</span><span class="n">indexC</span><span class="o">/</span><span class="mi">5000</span><span class="n">d</span><span class="o">)</span>
+  <span class="o">}</span>
+
+<span class="c1">//Instantiate the partitioned matrix</span>
+<span class="k">val</span> <span class="n">part_matrix</span> <span class="k">=</span> <span class="nc">PartitionedMatrix</span><span class="o">(</span>
+  <span class="n">nRows</span> <span class="k">=</span> <span class="mi">5000L</span><span class="o">,</span> <span class="n">nCols</span> <span class="k">=</span> <span class="mi">5000L</span><span class="o">,</span>
+  <span class="n">numElementsPerRBlock</span> <span class="k">=</span> <span class="mi">1000</span><span class="o">,</span>
+  <span class="n">numElementsPerCBlock</span> <span class="k">=</span> <span class="mi">1000</span><span class="o">,</span>
+  <span class="n">tabFunc</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="from-outer-product">From Outer Product<a class="headerlink" href="#from-outer-product" title="Permanent link">&para;</a></h3>
+<p>A <code class="codehilite"><span class="nc">PartitionedMatrix</span></code> can also be constructed from the product of a <code class="codehilite"><span class="nc">PartitionedDualVector</span></code> and
+<code class="codehilite"><span class="nc">PartitionedVector</span></code>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">random_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="k">new</span> <span class="nc">Beta</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">rand_vec1</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">2000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="n">random_var</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">rand_vec2</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">2000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="n">random_var</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">p_mat</span> <span class="k">=</span> <span class="n">rand_vec1</span><span class="o">*</span><span class="n">rand_vec2</span><span class="o">.</span><span class="n">t</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="matrix-concatenation">Matrix Concatenation<a class="headerlink" href="#matrix-concatenation" title="Permanent link">&para;</a></h3>
+<p>You can vertically join matrices, as long as the number of rows and row blocks match.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mat1</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">mat2</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">mat3</span> <span class="k">=</span> <span class="nc">PartitionedMatrix</span><span class="o">.</span><span class="n">vertcat</span><span class="o">(</span><span class="n">mat1</span><span class="o">,</span> <span class="n">mat2</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<div class="admonition note">
+<p class="admonition-title">Positive Semi-Definite Matrices</p>
+<p>The class <code class="codehilite"><span class="nc">PartitionedPSDMatrix</span></code> can be instantiated in two ways.</p>
 <ul>
-<li>Model implementations<ul>
-<li>Parametric Models</li>
-<li>Stochastic Process Models</li>
-</ul>
+<li>
+<p>From outer product.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">random_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="k">new</span> <span class="nc">Beta</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">rand_vec</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">2000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="n">random_var</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">psd_mat</span> <span class="k">=</span> <span class="nc">PartitionedPSDMatrix</span><span class="o">.</span><span class="n">fromOuterProduct</span><span class="o">(</span><span class="n">rand_vec</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
 </li>
-<li>Optimization solvers</li>
-<li>Probability distributions/random variables</li>
-<li>Kernel functions for Non parametric models</li>
+<li>
+<p>From kernel evaluation</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Obtain data</span>
+<span class="k">val</span> <span class="n">data</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="c1">//Create kernel instance</span>
+<span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">psd_gram_mat</span> <span class="k">=</span> <span class="n">kernel</span><span class="o">..</span><span class="n">buildBlockedKernelMatrix</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="n">data</span><span class="o">.</span><span class="n">length</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+</li>
 </ul>
-<h3 id="data-workflows-pipes">Data workflows &amp; Pipes<a class="headerlink" href="#data-workflows-pipes" title="Permanent link">&para;</a></h3>
-<p>The <code>dynaml-pipes</code> module provides an API for creating modular data processing workflows.</p>
-<p>The <a href="../pipes/pipes/">pipes</a> module aims to separate model pre-processing tasks such as cleaning data files, replacing missing or corrupt records, applying transformations on data etc.</p>
-<ul>
-<li>Ability to create arbitrary workflows from scala functions and join them</li>
-<li>Feature transformations such as wavelet transform, gaussian scaling, auto-encoders etc</li>
-</ul>
-<h3 id="dynaml-repl">DynaML REPL<a class="headerlink" href="#dynaml-repl" title="Permanent link">&para;</a></h3>
-<p>The <em>read evaluate print loop</em> (REPL) gives the user the ability to experiment with the data pre-processing and model building process in a mix and match fashion. The DynaML shell is based on the <a href="http://www.lihaoyi.com/Ammonite/">Ammonite</a> project which is an augmented Scala REPL, all the features of the Ammonite REPL are a part of the DynaML REPL.</p>
-<h3 id="dynaml-examples">DynaML Examples<a class="headerlink" href="#dynaml-examples" title="Permanent link">&para;</a></h3>
-<p>The module <code>dynaml-examples</code> contains programs which build regression and classification models on various data sets. These examples serve as case studies as well as instructional material to show the capabilities of DynaML in a hands on manner. Click <a href="/repl-examples/p2_examples.md">here</a> to get started with the examples.</p>
-<h2 id="libraries-used">Libraries Used<a class="headerlink" href="#libraries-used" title="Permanent link">&para;</a></h2>
-<p>DynaML leverages a number of open source projects and builds on their useful features.</p>
-<ul>
-<li><a href="https://github.com/scalanlp/breeze">Breeze</a> for linear algebra operations with vectors, matrices etc.</li>
-<li><a href="https://github.com/tinkerpop/gremlin">Gremlin</a> for building graphs in Neural network based models.</li>
-<li><a href="https://github.com/non/spire">Spire</a> for creating algebraic entities like Fields, Groups etc.</li>
-<li><a href="http://www.lihaoyi.com/Ammonite/">Ammonite</a> for the shell environment.</li>
-<li>DynaML uses the newly minted <a href="https://github.com/quantifind/wisp">Wisp</a> plotting library to generate aesthetic charts of common model validation metrics. There is also support for the  <a href="http://jzy3d.org">JZY3D</a> scientific plotting library.</li>
-</ul>
-<p><img alt="plots" src="../images/plot-screen.png" /></p>
+</div>
+<h2 id="algebraic-operations">Algebraic Operations<a class="headerlink" href="#algebraic-operations" title="Permanent link">&para;</a></h2>
+<p>Partitioned vectors and dual vectors have a number of algebraic operations available in the API.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">beta_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">Beta</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
+<span class="k">val</span> <span class="n">gamma_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">Gamma</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">p_vec_beta</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">,</span> <span class="n">beta_var</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">p_vec_gamma</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">,</span> <span class="n">gamma_var</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">dvec_beta</span> <span class="k">=</span> <span class="n">p_vec_beta</span><span class="o">.</span><span class="n">t</span>
+<span class="k">val</span> <span class="n">dvec_gamma</span> <span class="k">=</span> <span class="n">p_vec_gamma</span><span class="o">.</span><span class="n">t</span>
+
+<span class="k">val</span> <span class="n">mat1</span> <span class="k">=</span> <span class="n">p_vec_gamma</span><span class="o">*</span><span class="n">dvec_gamma</span>
+<span class="k">val</span> <span class="n">mat2</span> <span class="k">=</span> <span class="n">p_vec_beta</span><span class="o">*</span><span class="n">dvec_beta</span>
+
+<span class="c1">//Addition</span>
+<span class="k">val</span> <span class="n">add_mat</span> <span class="k">=</span> <span class="n">mat1</span> <span class="o">+</span> <span class="n">mat2</span>
+
+<span class="c1">//Subtraction</span>
+<span class="k">val</span> <span class="n">sub_mat</span> <span class="k">=</span> <span class="n">mat2</span> <span class="o">-</span> <span class="n">mat1</span>
+
+<span class="c1">//Element wise multiplication</span>
+<span class="k">val</span> <span class="n">mult_mat</span> <span class="k">=</span> <span class="n">mat1</span> <span class="o">:*</span> <span class="n">mat2</span>
+
+<span class="c1">//matrix vector Product</span>
+<span class="k">val</span> <span class="n">prod</span> <span class="k">=</span> <span class="n">mat1</span><span class="o">*</span><span class="n">p_vec_beta</span>
+<span class="k">val</span> <span class="n">prod_dual</span> <span class="k">=</span> <span class="n">dvec_gamma</span><span class="o">*</span><span class="n">mat2</span>
+
+<span class="c1">//Scaler multiplication</span>
+<span class="k">val</span> <span class="n">sc_mat</span> <span class="k">=</span> <span class="n">mat1</span><span class="o">*</span><span class="mf">1.5</span>
+</pre></div>
+</td></tr></table>
                 
                   
                 
@@ -1481,9 +1658,9 @@
                   <div id="disqus_thread"></div>
 <script>
   var disqus_config = function () {
-    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/structure/";
+    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/core/partitioned_matrices/";
     this.page.identifier =
-      "/structure/";
+      "/core/partitioned_matrices/";
   };
   (function() {
     var d = document, s = d.createElement("script");
@@ -1505,7 +1682,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../supported_features/" title="Supported Features" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../partitioned_vectors/" title="Block Vectors" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1514,19 +1691,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Supported Features
+                Block Vectors
               </span>
             </div>
           </a>
         
         
-          <a href="../releases/mydoc_release_notes_142/" title="v1.4.2" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../partitioned_alg_utils/" title="Block Algebra Utilities" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                v1.4.2
+                Block Algebra Utilities
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -1570,10 +1747,10 @@
       
     </div>
     
-      <script src="../assets/javascripts/application-e3caa82af6.js"></script>
+      <script src="../../assets/javascripts/application-e3caa82af6.js"></script>
       
       
-      <script>app.initialize({url:{base:".."}})</script>
+      <script>app.initialize({url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
       
