@@ -863,6 +863,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#misc-operations" title="Misc. Operations" class="md-nav__link">
+    Misc. Operations
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map-partitions" title="Map Partitions" class="md-nav__link">
+    Map Partitions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slice" title="Slice" class="md-nav__link">
+    Slice
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reverse" title="Reverse" class="md-nav__link">
+    Reverse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convert-to-breeze-vector" title="Convert to Breeze Vector" class="md-nav__link">
+    Convert to Breeze Vector
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
       
       
         <li class="md-nav__item">
@@ -1492,6 +1533,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#misc-operations" title="Misc. Operations" class="md-nav__link">
+    Misc. Operations
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map-partitions" title="Map Partitions" class="md-nav__link">
+    Map Partitions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slice" title="Slice" class="md-nav__link">
+    Slice
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reverse" title="Reverse" class="md-nav__link">
+    Reverse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convert-to-breeze-vector" title="Convert to Breeze Vector" class="md-nav__link">
+    Convert to Breeze Vector
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
       
       
         <li class="md-nav__item">
@@ -1738,6 +1820,54 @@ on a <code class="codehilite"><span class="nc">PartitionedVector</span></code> i
 <span class="c1">//Scaler multiplication</span>
 <span class="k">val</span> <span class="n">sc_vec</span> <span class="k">=</span> <span class="n">add_vec</span><span class="o">*</span><span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">sc_dvec</span> <span class="k">=</span> <span class="n">add_dvec</span><span class="o">*</span><span class="mf">2.5</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="misc-operations">Misc. Operations<a class="headerlink" href="#misc-operations" title="Permanent link">&para;</a></h2>
+<h3 id="map-partitions">Map Partitions<a class="headerlink" href="#map-partitions" title="Permanent link">&para;</a></h3>
+<p>Map each index, partition pair by a scala function.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">other_vec</span> <span class="k">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">map</span><span class="o">(</span>
+   <span class="o">(</span><span class="n">pair</span><span class="k">:</span> <span class="o">(</span><span class="kt">Long</span><span class="o">,</span> <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]))</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="n">_1</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="n">_2</span><span class="o">*</span><span class="mf">1.5</span><span class="o">)</span>
+<span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="slice">Slice<a class="headerlink" href="#slice" title="Permanent link">&para;</a></h3>
+<p>Obtain subset of elements, the new vector is repartitioned and re-indexed accordingly.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">ones</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">other_vec</span> <span class="k">=</span> <span class="n">vec</span><span class="o">(</span><span class="mi">999L</span> <span class="n">until</span> <span class="mi">2000L</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="reverse">Reverse<a class="headerlink" href="#reverse" title="Permanent link">&para;</a></h3>
+<p>Reverse a block vector</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">ones</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">reverse_vec</span> <span class="k">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">reverse</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="convert-to-breeze-vector">Convert to Breeze Vector<a class="headerlink" href="#convert-to-breeze-vector" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">ones</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">)</span>
+
+<span class="c1">//Do not use on large vectors as</span>
+<span class="c1">//it might lead to overflow of memory.</span>
+<span class="k">val</span> <span class="n">breeze_vec</span> <span class="k">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">toBreezeVector</span>
 </pre></div>
 </td></tr></table>
                 

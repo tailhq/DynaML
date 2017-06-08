@@ -834,6 +834,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#misc-operations" title="Misc. Operations" class="md-nav__link">
+    Misc. Operations
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map-partitions" title="Map Partitions" class="md-nav__link">
+    Map Partitions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slice" title="Slice" class="md-nav__link">
+    Slice
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upper-and-lower-triangular-sections" title="Upper and Lower Triangular Sections" class="md-nav__link">
+    Upper and Lower Triangular Sections
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convert-to-breeze-matrix" title="Convert to Breeze Matrix" class="md-nav__link">
+    Convert to Breeze Matrix
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
       
       
         <li class="md-nav__item">
@@ -1410,6 +1451,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#misc-operations" title="Misc. Operations" class="md-nav__link">
+    Misc. Operations
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map-partitions" title="Map Partitions" class="md-nav__link">
+    Map Partitions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slice" title="Slice" class="md-nav__link">
+    Slice
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upper-and-lower-triangular-sections" title="Upper and Lower Triangular Sections" class="md-nav__link">
+    Upper and Lower Triangular Sections
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convert-to-breeze-matrix" title="Convert to Breeze Matrix" class="md-nav__link">
+    Convert to Breeze Matrix
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
       
       
         <li class="md-nav__item">
@@ -1619,7 +1701,11 @@ contains a number of block matrix implementations.</p>
 24
 25
 26
-27</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">beta_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">Beta</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
+27
+28
+29
+30
+31</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">beta_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">Beta</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">gamma_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">Gamma</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">p_vec_beta</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">,</span> <span class="n">beta_var</span><span class="o">)</span>
@@ -1640,12 +1726,73 @@ contains a number of block matrix implementations.</p>
 <span class="c1">//Element wise multiplication</span>
 <span class="k">val</span> <span class="n">mult_mat</span> <span class="k">=</span> <span class="n">mat1</span> <span class="o">:*</span> <span class="n">mat2</span>
 
+<span class="c1">//Matrix matrix product</span>
+
+<span class="k">val</span> <span class="n">prod_mat</span> <span class="k">=</span> <span class="n">mat1</span><span class="o">*</span><span class="n">mat2</span>
+
 <span class="c1">//matrix vector Product</span>
 <span class="k">val</span> <span class="n">prod</span> <span class="k">=</span> <span class="n">mat1</span><span class="o">*</span><span class="n">p_vec_beta</span>
 <span class="k">val</span> <span class="n">prod_dual</span> <span class="k">=</span> <span class="n">dvec_gamma</span><span class="o">*</span><span class="n">mat2</span>
 
 <span class="c1">//Scaler multiplication</span>
 <span class="k">val</span> <span class="n">sc_mat</span> <span class="k">=</span> <span class="n">mat1</span><span class="o">*</span><span class="mf">1.5</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="misc-operations">Misc. Operations<a class="headerlink" href="#misc-operations" title="Permanent link">&para;</a></h2>
+<h3 id="map-partitions">Map Partitions<a class="headerlink" href="#map-partitions" title="Permanent link">&para;</a></h3>
+<p>Map each index, partition pair by a Scala function.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">other_vec</span> <span class="k">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">map</span><span class="o">(</span>
+   <span class="o">(</span><span class="n">pair</span><span class="k">:</span> <span class="o">((</span><span class="kt">Long</span><span class="o">,</span> <span class="kt">Long</span><span class="o">),</span> <span class="nc">DenseMatrix</span><span class="o">[</span><span class="kt">Double</span><span class="o">]))</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="n">_1</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="n">_2</span><span class="o">*</span><span class="mf">1.5</span><span class="o">)</span>
+<span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="slice">Slice<a class="headerlink" href="#slice" title="Permanent link">&para;</a></h3>
+<p>Obtain subset of elements, the new matrix is repartitioned and re-indexed accordingly.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">ones</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">mat</span> <span class="k">=</span> <span class="n">vec</span><span class="o">*</span><span class="n">vec</span><span class="o">.</span><span class="n">t</span>
+
+<span class="k">val</span> <span class="n">other_mat</span> <span class="k">=</span> <span class="n">vec</span><span class="o">(</span><span class="mi">999L</span> <span class="n">until</span> <span class="mi">2000L</span><span class="o">,</span> <span class="mi">0L</span> <span class="n">until</span> <span class="mi">999L</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="upper-and-lower-triangular-sections">Upper and Lower Triangular Sections<a class="headerlink" href="#upper-and-lower-triangular-sections" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">ones</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">mat</span> <span class="k">=</span> <span class="n">vec</span><span class="o">*</span><span class="n">vec</span><span class="o">.</span><span class="n">t</span>
+
+<span class="k">val</span> <span class="n">lower_tri</span><span class="k">:</span> <span class="kt">LowerTriPartitionedMatrix</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">L</span>
+<span class="k">val</span> <span class="n">upper_tri</span><span class="k">:</span> <span class="kt">UpperTriPartitionedMatrix</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">U</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="convert-to-breeze-matrix">Convert to Breeze Matrix<a class="headerlink" href="#convert-to-breeze-matrix" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mat</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="c1">//Do not use on large vectors as</span>
+<span class="c1">//it might lead to overflow of memory.</span>
+<span class="k">val</span> <span class="n">breeze_mat</span> <span class="k">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">toBreezeMatrix</span>
 </pre></div>
 </td></tr></table>
                 

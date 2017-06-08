@@ -782,9 +782,88 @@
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Block Algebra Utilities
+      </label>
+    
     <a href="./" title="Block Algebra Utilities" class="md-nav__link md-nav__link--active">
       Block Algebra Utilities
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#blocked-operations" title="Blocked Operations" class="md-nav__link">
+    Blocked Operations
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lu-decomposition" title="\(LU\) Decomposition" class="md-nav__link">
+    \(LU\) Decomposition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cholesky-decomposition" title="Cholesky Decomposition" class="md-nav__link">
+    Cholesky Decomposition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace" title="Trace" class="md-nav__link">
+    Trace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determinant" title="Determinant" class="md-nav__link">
+    Determinant
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagonal" title="Diagonal" class="md-nav__link">
+    Diagonal
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quadratic-forms" title="Quadratic Forms" class="md-nav__link">
+    Quadratic Forms
+  </a>
+  
+</li>
+      
+      
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -1287,6 +1366,74 @@
   
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#blocked-operations" title="Blocked Operations" class="md-nav__link">
+    Blocked Operations
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lu-decomposition" title="\(LU\) Decomposition" class="md-nav__link">
+    \(LU\) Decomposition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cholesky-decomposition" title="Cholesky Decomposition" class="md-nav__link">
+    Cholesky Decomposition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace" title="Trace" class="md-nav__link">
+    Trace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determinant" title="Determinant" class="md-nav__link">
+    Determinant
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagonal" title="Diagonal" class="md-nav__link">
+    Diagonal
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quadratic-forms" title="Quadratic Forms" class="md-nav__link">
+    Quadratic Forms
+  </a>
+  
+</li>
+      
+      
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1300,7 +1447,139 @@
                 
                   <h1>Block Algebra Utilities</h1>
                 
-                
+                <div class="admonition summary">
+<p class="admonition-title">Summary</p>
+<p>The <code>algebra</code> package has utility functions for commonly used operations on block matrices and vectors. We give
+the user a glimpse here.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The routines in this section assume that the block sizes of the input matrix are homogenous i.e. the number of row blocks
+is equal to number of column blocks.</p>
+</div>
+<h2 id="blocked-operations">Blocked Operations<a class="headerlink" href="#blocked-operations" title="Permanent link">&para;</a></h2>
+<p>Following operations are the blocked implementations of standard algorithms used for matrices.</p>
+<h3 id="lu-decomposition"><span>\(LU\)</span> Decomposition<a class="headerlink" href="#lu-decomposition" title="Permanent link">&para;</a></h3>
+<p><a href="https://en.wikipedia.org/wiki/LU_decomposition"><span>\(LU\)</span> decomposition</a> consists of decomposing a square matrix into
+lower and upper triangular factors.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Initialize a square matrix</span>
+<span class="k">val</span> <span class="n">sq_mat</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="o">(</span><span class="n">lower</span><span class="o">,</span> <span class="n">upper</span><span class="o">)</span> <span class="k">=</span> <span class="n">bLU</span><span class="o">(</span><span class="n">sq_mat</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="cholesky-decomposition">Cholesky Decomposition<a class="headerlink" href="#cholesky-decomposition" title="Permanent link">&para;</a></h3>
+<p><a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decomposition</a> consists of decomposing a
+symmetric positive semi-definite matrix uniquely into lower and upper triangular factors.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Initialize a psd matrix</span>
+<span class="k">val</span> <span class="n">psd_mat</span><span class="k">:</span> <span class="kt">PartitionedPSDMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="o">(</span><span class="n">lower</span><span class="o">,</span> <span class="n">upper</span><span class="o">)</span> <span class="k">=</span> <span class="n">bcholesky</span><span class="o">(</span><span class="n">psd_mat</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="trace">Trace<a class="headerlink" href="#trace" title="Permanent link">&para;</a></h3>
+<p>Trace of a square matrix is the sum of the diagonal elements.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Initialize a square matrix</span>
+<span class="k">val</span> <span class="n">sq_mat</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">tr</span> <span class="k">=</span> <span class="n">btrace</span><span class="o">(</span><span class="n">sq_mat</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="determinant">Determinant<a class="headerlink" href="#determinant" title="Permanent link">&para;</a></h3>
+<p>The <a href="https://en.wikipedia.org/wiki/Determinant">determinant</a> of a square matrix represents the scaling factor of the
+transformation described by the matrix</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Initialize a square matrix</span>
+<span class="k">val</span> <span class="n">sq_mat</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">de</span> <span class="k">=</span> <span class="n">bdet</span><span class="o">(</span><span class="n">sq_mat</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="diagonal">Diagonal<a class="headerlink" href="#diagonal" title="Permanent link">&para;</a></h3>
+<p>Obtain diagonal elements of a square block matrix in the form of a block vector.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Initialize a square matrix</span>
+<span class="k">val</span> <span class="n">sq_mat</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">dia</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="n">bdiagonal</span><span class="o">(</span><span class="n">sq_mat</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="quadratic-forms">Quadratic Forms<a class="headerlink" href="#quadratic-forms" title="Permanent link">&para;</a></h2>
+<p>Quadratic forms are often encountered in algebra, they involve products on inverse positive semi-definite matrices with
+vectors. The two common quadratic forms are.</p>
+<ul>
+<li>
+<p><em>Self Quadratic Forms</em>:  <span>\(\mathbf{x}^\intercal \Omega^{-1} \mathbf{x}\)</span></p>
+</li>
+<li>
+<p><em>Cross Quadratic Form</em>:  <span>\(\mathbf{y}^\intercal \Omega^{-1} \mathbf{x}\)</span></p>
+</li>
+</ul>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">],</span> <span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=</span> <span class="o">(</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">omega</span><span class="k">:</span> <span class="kt">DenseMatrix</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="c1">//Use breeze function</span>
+<span class="k">val</span> <span class="n">lower</span> <span class="k">=</span> <span class="n">cholesky</span><span class="o">(</span><span class="n">omega</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">x_omega_x</span> <span class="k">=</span> <span class="n">quadraticForm</span><span class="o">(</span><span class="n">lower</span><span class="o">,</span> <span class="n">x</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">y_omega_x</span> <span class="k">=</span> <span class="n">crossQuadraticForm</span><span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="n">lower</span><span class="o">,</span> <span class="n">x</span><span class="o">)</span>
+
+<span class="c1">//Blocked Version of the same.</span>
+
+<span class="k">val</span> <span class="o">(</span><span class="n">xb</span><span class="o">,</span><span class="n">yb</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">PartitionedVector</span><span class="o">,</span> <span class="kt">PartitionedVector</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">omegab</span><span class="k">:</span> <span class="kt">PartitionedPSDMatrix</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="c1">//Use DynaML algebra function</span>
+<span class="k">val</span> <span class="n">lowerb</span> <span class="k">=</span> <span class="n">bcholesky</span><span class="o">(</span><span class="n">omegab</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">x_omega_x_b</span> <span class="k">=</span> <span class="n">blockedQuadraticForm</span><span class="o">(</span><span class="n">lowerb</span><span class="o">,</span> <span class="n">xb</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">y_omega_x_b</span> <span class="k">=</span> <span class="n">blockedCrossQuadraticForm</span><span class="o">(</span><span class="n">yb</span><span class="o">,</span> <span class="n">lowerb</span><span class="o">,</span> <span class="n">xb</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
                 
                   
                 
