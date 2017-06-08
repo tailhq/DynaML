@@ -45,7 +45,7 @@ x &\in \mathbb{R}^n \\
 \mu &\in \mathbb{R}^n \\
 \Sigma &\in \mathbb{R}^{n \times n}\\
 L L^\intercal &= \Sigma \\
-\bar{x} &= L^\intercal (x - \mu)
+\bar{x} &= L^{-1} (x - \mu)
 \end{align}
 $$
 
