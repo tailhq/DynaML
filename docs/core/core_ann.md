@@ -1,3 +1,5 @@
+!!! warning
+		This API is deprecated since v1.4.2, users are advised to use the new [neural stack API](/core/core_ann_new.md).
 
 ## Feed-forward Network
 

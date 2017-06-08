@@ -32,7 +32,9 @@ pages:
           - Linear Models: 'core/core_glm.md'
           - Gaussian Processes: 'core/core_gp.md'
           - Students T Processes: 'core/core_stp.md'
-          - Neural Networks: 'core/core_ann.md'
+          - Neural Networks:
+            - Old Neural Net API: 'core/core_ann.md'
+            - Neural Stack API: 'core/core_ann_new.md'
           - Least Squares SVM: 'core/core_lssvm.md'
         - Kernels:
           - Kernel API: 'core/core_kernels.md'
