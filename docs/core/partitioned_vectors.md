@@ -172,3 +172,47 @@ val prod = dvec_gamma*p_vec_beta
 val sc_vec = add_vec*1.5
 val sc_dvec = add_dvec*2.5
 ```
+
+## Misc. Operations
+
+### Map Partitions
+
+Map each index, partition pair by a scala function.
+
+```scala
+val vec: PartitionedVector = _
+
+val other_vec = vec.map(
+   (pair: (Long, DenseVector[Double])) => (pair._1, pair._2*1.5)
+)
+```
+
+### Slice
+
+Obtain subset of elements, the new vector is repartitioned and re-indexed accordingly.
+
+```scala
+val vec: PartitionedVector = PartitionedVector.ones(5000L, 500)
+
+val other_vec = vec(999L until 2000L)
+```
+
+### Reverse
+
+Reverse a block vector
+
+```scala
+val vec: PartitionedVector = PartitionedVector.ones(5000L, 500)
+
+val reverse_vec = vec.reverse
+```
+
+### Convert to Breeze Vector
+
+```scala
+val vec: PartitionedVector = PartitionedVector.ones(5000L, 500)
+
+//Do not use on large vectors as
+//it might lead to overflow of memory.
+val breeze_vec = vec.toBreezeVector
+```

@@ -99,7 +99,7 @@ val mat3 = PartitionedMatrix.vertcat(mat1, mat2)
         //Create kernel instance
         val kernel: LocalScalarKernel[DenseVector[Double]] = _
 
-        val psd_gram_mat = kernel..buildBlockedKernelMatrix(data, data.length)
+        val psd_gram_mat = kernel.buildBlockedKernelMatrix(data, data.length)
         ```
 
 
@@ -129,10 +129,63 @@ val sub_mat = mat2 - mat1
 //Element wise multiplication
 val mult_mat = mat1 :* mat2
 
+//Matrix matrix product
+
+val prod_mat = mat1*mat2
+
 //matrix vector Product
 val prod = mat1*p_vec_beta
 val prod_dual = dvec_gamma*mat2
 
 //Scaler multiplication
 val sc_mat = mat1*1.5
+```
+
+## Misc. Operations
+
+### Map Partitions
+
+Map each index, partition pair by a Scala function.
+
+```scala
+val vec: PartitionedMatrix = _
+
+val other_vec = vec.map(
+   (pair: ((Long, Long), DenseMatrix[Double])) => (pair._1, pair._2*1.5)
+)
+```
+
+### Slice
+
+Obtain subset of elements, the new matrix is repartitioned and re-indexed accordingly.
+
+```scala
+val vec: PartitionedVector = PartitionedVector.ones(5000L, 1000)
+
+val mat = vec*vec.t
+
+val other_mat = vec(999L until 2000L, 0L until 999L)
+```
+
+### Upper and Lower Triangular Sections
+
+
+```scala
+val vec: PartitionedVector = PartitionedVector.ones(5000L, 1000)
+
+val mat = vec*vec.t
+
+val lower_tri: LowerTriPartitionedMatrix = mat.L
+val upper_tri: UpperTriPartitionedMatrix = mat.U
+
+```
+
+### Convert to Breeze Matrix
+
+```scala
+val mat: PartitionedMatrix = _
+
+//Do not use on large vectors as
+//it might lead to overflow of memory.
+val breeze_mat = mat.toBreezeMatrix
 ```
