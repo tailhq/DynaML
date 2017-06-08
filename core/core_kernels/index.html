@@ -794,6 +794,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#scaling-covariances" title="Scaling Covariances" class="md-nav__link">
+    Scaling Covariances
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1359,6 +1366,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#scaling-covariances" title="Scaling Covariances" class="md-nav__link">
+    Scaling Covariances
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1395,6 +1409,10 @@
 <li>Represent degree of 'closeness' or affinity in unsupervised learning: <a href="http://arxiv.org/pdf/1505.00477.pdf"><em>Kernel Spectral Clustering</em></a></li>
 </ol>
 <p>For an in depth review of the various applications of kernels in the machine learning domain, refer to <a href="http://www.kernel-machines.org/publications/pdfs/0701907.pdf">Scholkopf et. al</a></p>
+<div class="admonition note">
+<p class="admonition-title">Nomenclature</p>
+<p>In the machine learning community the words <em>kernel</em> and <em>covariance function</em> are used interchangeably.</p>
+</div>
 <h2 id="kernel-api">Kernel API<a class="headerlink" href="#kernel-api" title="Permanent link">&para;</a></h2>
 <p>The kernel class hierarchy all stems from a simple trait shown here.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
@@ -1531,6 +1549,22 @@ C_{b . a}(\mathbf{x}, \mathbf{y}) &amp;= \varphi_{b}(\varphi_{a}(\mathbf{x}))^\i
 
 <span class="c1">//Composite kernel</span>
 <span class="k">val</span> <span class="n">k3</span> <span class="k">=</span> <span class="n">k2</span> <span class="o">&gt;</span> <span class="n">k1</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="scaling-covariances">Scaling Covariances<a class="headerlink" href="#scaling-covariances" title="Permanent link">&para;</a></h3>
+<p>If <span>\(C(\mathbf{x}, \mathbf{y})\)</span> is a valid covariance function, then <span>\(g(\mathbf{x}) C(\mathbf{x}, \mathbf{y}) g(\mathbf{x})\)</span> is also a valid covariance function, where <span>\(g(.): \mathcal{X} \rightarrow \mathbb{R}\)</span> is a non-negative function from the domain of the inputs <span>\(\mathcal{X}\)</span> to the real number line. We call these covariances <em>scaled covariance functions</em>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Instantiate some kernel</span>
+<span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">scalingFunction</span><span class="k">:</span> <span class="o">(</span><span class="kt">I</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">scKernel</span> <span class="k">=</span> <span class="nc">ScaledKernel</span><span class="o">(</span><span class="n">kernel</span><span class="o">,</span> <span class="nc">DataPipe</span><span class="o">(</span><span class="n">scalingFunction</span><span class="o">))</span>
 </pre></div>
 </td></tr></table>
 

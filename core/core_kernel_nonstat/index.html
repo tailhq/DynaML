@@ -21,7 +21,7 @@
     
     
       
-        <title>Non-stationary Kernels</title>
+        <title>Non Stationary Kernels - DynaML User Guide</title>
       
     
     
@@ -763,6 +763,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#locally-stationary-kernels" title="Locally Stationary Kernels" class="md-nav__link">
+    Locally Stationary Kernels
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#polynomial-kernel" title="Polynomial Kernel" class="md-nav__link">
     Polynomial Kernel
   </a>
@@ -1271,6 +1278,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#locally-stationary-kernels" title="Locally Stationary Kernels" class="md-nav__link">
+    Locally Stationary Kernels
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#polynomial-kernel" title="Polynomial Kernel" class="md-nav__link">
     Polynomial Kernel
   </a>
@@ -1321,10 +1335,32 @@
                 
                   <h1>Non Stationary Kernels</h1>
                 
-                <h2 id="polynomial-kernel">Polynomial Kernel<a class="headerlink" href="#polynomial-kernel" title="Permanent link">&para;</a></h2>
+                <p>Non-stationary covariance functions cannot be expressed as simply a function of the distance between their inputs <span>\(\mathbf{x} - \mathbf{y}\)</span>.</p>
+<h2 id="locally-stationary-kernels">Locally Stationary Kernels<a class="headerlink" href="#locally-stationary-kernels" title="Permanent link">&para;</a></h2>
+<p>A simple way to construct non-stationary covariances from stationary ones is by scaling the original stationary covariance; <span>\(K(\mathbf{x} - \mathbf{y})\)</span>, by a function of <span>\(\mathbf{x} + \mathbf{y}\)</span>.</p>
+<span>\[
+C(\mathbf{x}, \mathbf{y}) = G(\mathbf{x} + \mathbf{y}) K(\mathbf{x} - \mathbf{y})
+\]</span><p>Here <span>\(G(.): \mathcal{X} \rightarrow \mathbb{R}\)</span> is a non-negative function of its inputs. These kernels are called <em>locally stationary kernels</em>. For an in-depth review of locally stationary kernels refer to <a href="http://jmlr.csail.mit.edu/papers/volume2/genton01a/genton01a.pdf">Genton et. al</a>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Instantiate the base kernel</span>
+<span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">scalingFunction</span><span class="k">:</span> <span class="o">(</span><span class="kt">I</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">scKernel</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">LocallyStationaryKernel</span><span class="o">(</span>
+    <span class="n">kernel</span><span class="o">,</span> <span class="nc">DataPipe</span><span class="o">(</span><span class="n">scalingFunction</span><span class="o">))</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="polynomial-kernel">Polynomial Kernel<a class="headerlink" href="#polynomial-kernel" title="Permanent link">&para;</a></h2>
 <p>A very popular non-stationary kernel used in machine learning, the polynomial represents the data features as polynomial expansions up to an index <span>\(d\)</span>.</p>
 <span>\[
-    C(\mathbf{x},\mathbf{y}) = (\mathbf{x}.\mathbf{y} + a)^{d}
+C(\mathbf{x},\mathbf{y}) = (\mathbf{x}^\intercal \mathbf{y} + a)^{d}
 \]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">fbm</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">PolynomialKernel</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">0.99</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>

@@ -751,16 +751,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#radial-basis-function-kernel-squared-exponential-kernel" title="Radial Basis Function Kernel / Squared Exponential Kernel" class="md-nav__link">
-    Radial Basis Function Kernel / Squared Exponential Kernel
+  <a href="#radial-basis-function-kernel" title="Radial Basis Function Kernel" class="md-nav__link">
+    Radial Basis Function Kernel
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#squared-exponential-kernel" title="Squared Exponential Kernel" class="md-nav__link">
+    Squared Exponential Kernel
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#laplacian-kernel" title="Laplacian Kernel" class="md-nav__link">
-    Laplacian Kernel
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -786,13 +792,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#wavelet-kernel" title="Wavelet Kernel" class="md-nav__link">
-    Wavelet Kernel
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#gaussian-spectral-kernel" title="Gaussian Spectral Kernel" class="md-nav__link">
     Gaussian Spectral Kernel
   </a>
@@ -802,6 +801,27 @@
         <li class="md-nav__item">
   <a href="#matern-half-integer" title="Matern Half Integer" class="md-nav__link">
     Matern Half Integer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wavelet-kernel" title="Wavelet Kernel" class="md-nav__link">
+    Wavelet Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#periodic-kernel" title="Periodic Kernel" class="md-nav__link">
+    Periodic Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laplacian-kernel" title="Laplacian Kernel" class="md-nav__link">
+    Laplacian Kernel
   </a>
   
 </li>
@@ -1299,16 +1319,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#radial-basis-function-kernel-squared-exponential-kernel" title="Radial Basis Function Kernel / Squared Exponential Kernel" class="md-nav__link">
-    Radial Basis Function Kernel / Squared Exponential Kernel
+  <a href="#radial-basis-function-kernel" title="Radial Basis Function Kernel" class="md-nav__link">
+    Radial Basis Function Kernel
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#squared-exponential-kernel" title="Squared Exponential Kernel" class="md-nav__link">
+    Squared Exponential Kernel
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#laplacian-kernel" title="Laplacian Kernel" class="md-nav__link">
-    Laplacian Kernel
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1334,13 +1360,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#wavelet-kernel" title="Wavelet Kernel" class="md-nav__link">
-    Wavelet Kernel
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#gaussian-spectral-kernel" title="Gaussian Spectral Kernel" class="md-nav__link">
     Gaussian Spectral Kernel
   </a>
@@ -1350,6 +1369,27 @@
         <li class="md-nav__item">
   <a href="#matern-half-integer" title="Matern Half Integer" class="md-nav__link">
     Matern Half Integer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wavelet-kernel" title="Wavelet Kernel" class="md-nav__link">
+    Wavelet Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#periodic-kernel" title="Periodic Kernel" class="md-nav__link">
+    Periodic Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laplacian-kernel" title="Laplacian Kernel" class="md-nav__link">
+    Laplacian Kernel
   </a>
   
 </li>
@@ -1399,27 +1439,20 @@
 
 </p>
 </div>
-<h2 id="radial-basis-function-kernel-squared-exponential-kernel">Radial Basis Function Kernel / Squared Exponential Kernel<a class="headerlink" href="#radial-basis-function-kernel-squared-exponential-kernel" title="Permanent link">&para;</a></h2>
+<h2 id="radial-basis-function-kernel">Radial Basis Function Kernel<a class="headerlink" href="#radial-basis-function-kernel" title="Permanent link">&para;</a></h2>
 <p><img alt="kernel" src="../../images/gaussiankernel.jpg" /></p>
 <span>\[
-    C(\mathbf{x},\mathbf{y}) = e^{-\frac{1}{2}||\mathbf{x}-\mathbf{y}||_{2}^2/\sigma^2}
+C(\mathbf{x},\mathbf{y}) = exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2\sigma^2}\right)
 \]</span><p>The RBF kernel is the most popular kernel function applied in machine learning, it represents an inner product space which is spanned by the <em>Hermite</em> polynomials and as such is suitable to model smooth functions. The RBF kernel is also called a <em>universal</em> kernel for the reason that any smooth function can be represented with a high degree of accuracy assuming we can find a suitable value of the bandwidth.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">rbf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RBFKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
-<p>A genralization of the RBF Kernel is the Squared Exponential Kernel</p>
+<h3 id="squared-exponential-kernel">Squared Exponential Kernel<a class="headerlink" href="#squared-exponential-kernel" title="Permanent link">&para;</a></h3>
+<p>A generalization of the RBF Kernel is the Squared Exponential Kernel</p>
 <span>\[
-    C(\mathbf{x},\mathbf{y}) = h e^{-\frac{||\mathbf{x}-\mathbf{y}||_{2}^2}{2l^2}}
+    C(\mathbf{x},\mathbf{y}) = h \ exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2l^2}\right)
 \]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">rbf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SEKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">,</span> <span class="mf">2.0</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<h2 id="laplacian-kernel">Laplacian Kernel<a class="headerlink" href="#laplacian-kernel" title="Permanent link">&para;</a></h2>
-<span>\[
-    C(\mathbf{x},\mathbf{y}) = e^{-\frac{1}{2}||\mathbf{x}-\mathbf{y}||_1/\beta}
-\]</span><p>The Laplacian kernel is the covariance function of the well known <a href="https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process">Ornstein Ulhenbeck process</a>, samples drawn from this process are continuous and only once differentiable.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">lap</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">LaplacianKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
@@ -1444,17 +1477,6 @@
 </pre></div>
 </td></tr></table>
 
-<h2 id="wavelet-kernel">Wavelet Kernel<a class="headerlink" href="#wavelet-kernel" title="Permanent link">&para;</a></h2>
-<p>The Wavelet kernel (<a href="http://dx.doi.org/10.1109/TSMCB.2003.811113">Zhang et al, 2004</a>) comes from Wavelet theory and is given as</p>
-<span>\[
-    C(\mathbf{x},\mathbf{y}) = \prod_{i = 1}^{d} h\left(\frac{x_i-y_i}{a}\right)
-\]</span><p>Where the function <code>h</code> is known as the mother wavelet function, Zhang et. al suggest the following expression for the mother wavelet function.</p>
-<span>\[
-    h(x) = cos(1.75x)e^{-x^2/2}
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">wv</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">WaveletKernel</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="o">(</span><span class="mf">1.75</span><span class="o">*</span><span class="n">x</span><span class="o">)*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="o">(-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="o">))(</span><span class="mf">1.5</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
 <h2 id="gaussian-spectral-kernel">Gaussian Spectral Kernel<a class="headerlink" href="#gaussian-spectral-kernel" title="Permanent link">&para;</a></h2>
 <span>\[
 C(\mathbf{x},\mathbf{y}) = cos(2\pi \mu ||\mathbf{x}-\mathbf{y}||) \ exp(-2\pi^{2} \sigma^{2} ||\mathbf{x}-\mathbf{y}||^{2} )
@@ -1473,16 +1495,46 @@ C(\mathbf{x},\mathbf{y}) = cos(2\pi \mu ||\mathbf{x}-\mathbf{y}||) \ exp(-2\pi^{
 </td></tr></table>
 
 <h2 id="matern-half-integer">Matern Half Integer<a class="headerlink" href="#matern-half-integer" title="Permanent link">&para;</a></h2>
-<p>The Matern kernel is an important family of covariance functions. Matern covariances are parameterized via two quantities i.e. order <span>\(\nu\)</span> and <span>\(\sigma\)</span> the characteristic length scale. The general matern covariance is defined in terms of modified <em>Bessel</em> functions.</p>
+<p>The Matern kernel is an important family of covariance functions. Matern covariances are parameterized via two quantities i.e. order <span>\(\nu\)</span> and <span>\(\rho\)</span> the characteristic length scale. The general matern covariance is defined in terms of modified <em>Bessel</em> functions.</p>
 <span>\[
 C_{\nu}(\mathbf{x},\mathbf{y}) = \frac{2^{1-\nu}}{\Gamma(\nu)} \left(\sqrt{2\nu}\frac{d}{\rho}\right)^{\nu} K_{\nu}\left(\sqrt{2\nu}\frac{d}{\rho}\right)
-\]</span><p>But for the case <span>\(\nu = p + \frac{1}{2}, p \in \mathbb{N}\)</span> the expression becomes.</p>
+\]</span><p>Where <span>\(d = ||\mathbf{x} - \mathbf{y}||\)</span> is the Euclidean (<span>\(L_2\)</span>) distance between points.</p>
+<p>For the case <span>\(\nu = p + \frac{1}{2}, p \in \mathbb{N}\)</span> the expression becomes.</p>
 <span>\[
 C_{\nu}(\mathbf{x},\mathbf{y}) =  exp\left(-\sqrt{2\nu}\frac{d}{\rho}\right) \frac{\Gamma(p+1)}{\Gamma(2p+1)} \sum_{i = 0}^{p}{\frac{(p+1)!}{i!(p-i)!}\left(\sqrt{8\nu}\frac{d}{\rho}\right)^{p-i}}
 \]</span><p>Currently there is only support for matern half integer kernels.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">implicit</span> <span class="n">ev</span> <span class="k">=</span> <span class="nc">VectorField</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">matKern</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">GenericMaternKernel</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="n">p</span> <span class="k">=</span> <span class="mi">1</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="wavelet-kernel">Wavelet Kernel<a class="headerlink" href="#wavelet-kernel" title="Permanent link">&para;</a></h2>
+<p>The Wavelet kernel (<a href="http://dx.doi.org/10.1109/TSMCB.2003.811113">Zhang et al, 2004</a>) comes from Wavelet theory and is given as</p>
+<span>\[
+    C(\mathbf{x},\mathbf{y}) = \prod_{i = 1}^{d} h\left(\frac{x_i-y_i}{a}\right)
+\]</span><p>Where the function <code>h</code> is known as the mother wavelet function, Zhang et. al suggest the following expression for the mother wavelet function.</p>
+<span>\[
+    h(x) = cos(1.75x)exp(-\frac{1}{2}x^2)
+\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">wv</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">WaveletKernel</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="o">(</span><span class="mf">1.75</span><span class="o">*</span><span class="n">x</span><span class="o">)*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="o">(-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="o">))(</span><span class="mf">1.5</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="periodic-kernel">Periodic Kernel<a class="headerlink" href="#periodic-kernel" title="Permanent link">&para;</a></h2>
+<p>The periodic kernel has <em>Fourier</em> series as its orthogonal eigenfunctions. It is used when constructing predictive models over quantities which are known to have some periodic behavior.</p>
+<span>\[
+C(\mathbf{x},\mathbf{y}) = exp\left(-2 \ sin^{2}\left(\frac{\pi \omega ||\mathbf{x}-\mathbf{y}||}{l^2}\right)\right)
+\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">periodic_kernel</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">PeriodicKernel</span><span class="o">(</span><span class="n">lengthscale</span> <span class="k">=</span> <span class="mf">1.5</span><span class="o">,</span> <span class="n">freq</span> <span class="k">=</span> <span class="mf">2.5</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="laplacian-kernel">Laplacian Kernel<a class="headerlink" href="#laplacian-kernel" title="Permanent link">&para;</a></h2>
+<p>The Laplacian kernel is the covariance function of the well known <a href="https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process">Ornstein Ulhenbeck process</a>, samples drawn from this process are continuous and only once differentiable.</p>
+<span>\[
+\begin{equation}
+C(\mathbf{x},\mathbf{y}) = exp \left(-\frac{||\mathbf{x}-\mathbf{y}||_{1}}{2\beta}\right)
+\end{equation}
+\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">lap</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">LaplacianKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
                 
