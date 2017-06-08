@@ -22,12 +22,12 @@ Note that any norm may be used to quantify the distance between the two vectors 
 			implicit val f = VectorField(num_features)
 		```
 
-## Radial Basis Function Kernel / Squared Exponential Kernel
+## Radial Basis Function Kernel
 
 ![kernel](/images/gaussiankernel.jpg)
 
 $$
-	C(\mathbf{x},\mathbf{y}) = e^{-\frac{1}{2}||\mathbf{x}-\mathbf{y}||_{2}^2/\sigma^2}
+C(\mathbf{x},\mathbf{y}) = exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2\sigma^2}\right)
 $$
 
 The RBF kernel is the most popular kernel function applied in machine learning, it represents an inner product space which is spanned by the _Hermite_ polynomials and as such is suitable to model smooth functions. The RBF kernel is also called a _universal_ kernel for the reason that any smooth function can be represented with a high degree of accuracy assuming we can find a suitable value of the bandwidth.
@@ -36,26 +36,16 @@ The RBF kernel is the most popular kernel function applied in machine learning, 
 val rbf = new RBFKernel(4.0)
 ```
 
-A genralization of the RBF Kernel is the Squared Exponential Kernel
+### Squared Exponential Kernel
+
+A generalization of the RBF Kernel is the Squared Exponential Kernel
 
 $$
-	C(\mathbf{x},\mathbf{y}) = h e^{-\frac{||\mathbf{x}-\mathbf{y}||_{2}^2}{2l^2}}
+	C(\mathbf{x},\mathbf{y}) = h \ exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2l^2}\right)
 $$
 
 ```scala
 val rbf = new SEKernel(4.0, 2.0)
-```
-
-## Laplacian Kernel
-
-$$
-	C(\mathbf{x},\mathbf{y}) = e^{-\frac{1}{2}||\mathbf{x}-\mathbf{y}||_1/\beta}
-$$
-
-The Laplacian kernel is the covariance function of the well known [Ornstein Ulhenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process), samples drawn from this process are continuous and only once differentiable.
-
-```scala
-val lap = new LaplacianKernel(4.0)
 ```
 
 ## Student T Kernel
@@ -89,24 +79,6 @@ $$
 val cau = new CauchyKernel(2.5)
 ```
 
-## Wavelet Kernel
-
-The Wavelet kernel ([Zhang et al, 2004](http://dx.doi.org/10.1109/TSMCB.2003.811113)) comes from Wavelet theory and is given as
-
-$$
-	C(\mathbf{x},\mathbf{y}) = \prod_{i = 1}^{d} h\left(\frac{x_i-y_i}{a}\right)
-$$
-
-Where the function `h` is known as the mother wavelet function, Zhang et. al suggest the following expression for the mother wavelet function.
-
-$$
-	h(x) = cos(1.75x)e^{-x^2/2}
-$$
-
-```scala
-val wv = new WaveletKernel(x => math.cos(1.75*x)*math.exp(-1.0*x*x/2.0))(1.5)
-```
-
 ## Gaussian Spectral Kernel
 
 $$
@@ -124,13 +96,15 @@ val gsmKernel = GaussianSpectralKernel[Double](3.5, 2.0, encoder)
 
 ## Matern Half Integer
 
-The Matern kernel is an important family of covariance functions. Matern covariances are parameterized via two quantities i.e. order $\nu$ and $\sigma$ the characteristic length scale. The general matern covariance is defined in terms of modified _Bessel_ functions.
+The Matern kernel is an important family of covariance functions. Matern covariances are parameterized via two quantities i.e. order $\nu$ and $\rho$ the characteristic length scale. The general matern covariance is defined in terms of modified _Bessel_ functions.
 
 $$
 C_{\nu}(\mathbf{x},\mathbf{y}) = \frac{2^{1-\nu}}{\Gamma(\nu)} \left(\sqrt{2\nu}\frac{d}{\rho}\right)^{\nu} K_{\nu}\left(\sqrt{2\nu}\frac{d}{\rho}\right)
 $$
 
-But for the case $\nu = p + \frac{1}{2}, p \in \mathbb{N}$ the expression becomes.
+Where $d = ||\mathbf{x} - \mathbf{y}||$ is the Euclidean ($L_2$) distance between points.
+
+For the case $\nu = p + \frac{1}{2}, p \in \mathbb{N}$ the expression becomes.
 
 $$
 C_{\nu}(\mathbf{x},\mathbf{y}) =  exp\left(-\sqrt{2\nu}\frac{d}{\rho}\right) \frac{\Gamma(p+1)}{\Gamma(2p+1)} \sum_{i = 0}^{p}{\frac{(p+1)!}{i!(p-i)!}\left(\sqrt{8\nu}\frac{d}{\rho}\right)^{p-i}}
@@ -141,4 +115,50 @@ Currently there is only support for matern half integer kernels.
 ```scala
 implicit ev = VectorField(2)
 val matKern = new GenericMaternKernel(1.5, p = 1)
+```
+
+## Wavelet Kernel
+
+The Wavelet kernel ([Zhang et al, 2004](http://dx.doi.org/10.1109/TSMCB.2003.811113)) comes from Wavelet theory and is given as
+
+$$
+	C(\mathbf{x},\mathbf{y}) = \prod_{i = 1}^{d} h\left(\frac{x_i-y_i}{a}\right)
+$$
+
+Where the function `h` is known as the mother wavelet function, Zhang et. al suggest the following expression for the mother wavelet function.
+
+$$
+	h(x) = cos(1.75x)exp(-\frac{1}{2}x^2)
+$$
+
+```scala
+val wv = new WaveletKernel(x => math.cos(1.75*x)*math.exp(-1.0*x*x/2.0))(1.5)
+```
+
+## Periodic Kernel
+
+The periodic kernel has _Fourier_ series as its orthogonal eigenfunctions. It is used when constructing predictive models over quantities which are known to have some periodic behavior.
+
+$$
+C(\mathbf{x},\mathbf{y}) = exp\left(-2 \ sin^{2}\left(\frac{\pi \omega ||\mathbf{x}-\mathbf{y}||}{l^2}\right)\right)
+$$
+
+```scala
+val periodic_kernel = new PeriodicKernel(lengthscale = 1.5, freq = 2.5)
+```
+
+## Laplacian Kernel
+
+The Laplacian kernel is the covariance function of the well known [Ornstein Ulhenbeck process](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process), samples drawn from this process are continuous and only once differentiable.
+
+
+$$
+\begin{equation}
+C(\mathbf{x},\mathbf{y}) = exp \left(-\frac{||\mathbf{x}-\mathbf{y}||_{1}}{2\beta}\right)
+\end{equation}
+$$
+
+
+```scala
+val lap = new LaplacianKernel(4.0)
 ```

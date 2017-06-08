@@ -14,6 +14,9 @@ _Positive definite_ functions or _positive type_ functions occupy an important p
 
 For an in depth review of the various applications of kernels in the machine learning domain, refer to [Scholkopf et. al](http://www.kernel-machines.org/publications/pdfs/0701907.pdf)
 
+!!! note "Nomenclature"
+    In the machine learning community the words _kernel_ and _covariance function_ are used interchangeably.
+
 ## Kernel API
 
 The kernel class hierarchy all stems from a simple trait shown here.
@@ -141,6 +144,19 @@ val k2 = new RationalQuadraticKernel(2.0)
 
 //Composite kernel
 val k3 = k2 > k1
+```
+
+### Scaling Covariances
+
+If $C(\mathbf{x}, \mathbf{y})$ is a valid covariance function, then $g(\mathbf{x}) C(\mathbf{x}, \mathbf{y}) g(\mathbf{x})$ is also a valid covariance function, where $g(.): \mathcal{X} \rightarrow \mathbb{R}$ is a non-negative function from the domain of the inputs $\mathcal{X}$ to the real number line. We call these covariances _scaled covariance functions_.
+
+```scala
+//Instantiate some kernel
+val kernel: LocalScalarKernel[I] = _
+
+val scalingFunction: (I) => Double = _
+
+val scKernel = ScaledKernel(kernel, DataPipe(scalingFunction))
 ```
 
 -----

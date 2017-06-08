@@ -1,13 +1,31 @@
----
-title: Non-stationary Kernels
----
+Non-stationary covariance functions cannot be expressed as simply a function of the distance between their inputs $\mathbf{x} - \mathbf{y}$.
+
+## Locally Stationary Kernels
+
+A simple way to construct non-stationary covariances from stationary ones is by scaling the original stationary covariance; $K(\mathbf{x} - \mathbf{y})$, by a function of $\mathbf{x} + \mathbf{y}$.
+
+$$
+C(\mathbf{x}, \mathbf{y}) = G(\mathbf{x} + \mathbf{y}) K(\mathbf{x} - \mathbf{y})
+$$
+
+Here $G(.): \mathcal{X} \rightarrow \mathbb{R}$ is a non-negative function of its inputs. These kernels are called _locally stationary kernels_. For an in-depth review of locally stationary kernels refer to [Genton et. al](http://jmlr.csail.mit.edu/papers/volume2/genton01a/genton01a.pdf).
+
+```scala
+//Instantiate the base kernel
+val kernel: LocalScalarKernel[I] = _
+
+val scalingFunction: (I) => Double = _
+
+val scKernel = new LocallyStationaryKernel(
+	kernel, DataPipe(scalingFunction))
+```
 
 ## Polynomial Kernel
 
 A very popular non-stationary kernel used in machine learning, the polynomial represents the data features as polynomial expansions up to an index $d$.
 
 $$
-	C(\mathbf{x},\mathbf{y}) = (\mathbf{x}.\mathbf{y} + a)^{d}
+C(\mathbf{x},\mathbf{y}) = (\mathbf{x}^\intercal \mathbf{y} + a)^{d}
 $$
 
 ```scala
