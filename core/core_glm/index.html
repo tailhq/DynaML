@@ -21,7 +21,7 @@
     
     
       
-        <title>Linear Models - DynaML User Guide</title>
+        <title>Generalized Linear Models - DynaML User Guide</title>
       
     
     
@@ -82,15 +82,15 @@
             
               
                 <span class="md-header-nav__parent">
-                  Core
-                </span>
-              
-                <span class="md-header-nav__parent">
                   Models
                 </span>
               
+                <span class="md-header-nav__parent">
+                  Linear Models
+                </span>
+              
             
-            Linear Models
+            Generalized Linear Models
           
         </span>
       </div>
@@ -585,17 +585,38 @@
   
 
 
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-2" type="checkbox" id="nav-7-1-1-2" checked>
+    
+    <label class="md-nav__link" for="nav-7-1-1-2">
+      Linear Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+      <label class="md-nav__title" for="nav-7-1-1-2">
+        Linear Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
   <li class="md-nav__item md-nav__item--active">
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Linear Models
+        Generalized Linear Models
       </label>
     
-    <a href="./" title="Linear Models" class="md-nav__link md-nav__link--active">
-      Linear Models
+    <a href="./" title="Generalized Linear Models" class="md-nav__link md-nav__link--active">
+      Generalized Linear Models
     </a>
     
       
@@ -639,6 +660,23 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_gls/" title="Generalized Least Squares" class="md-nav__link">
+      Generalized Least Squares
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1449,9 +1487,13 @@
               
                 
                 
-                  <h1>Linear Models</h1>
+                  <h1>Generalized Linear Models</h1>
                 
-                <p><em>Generalized Linear Models</em> (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The <code class="codehilite"><span class="nc">GeneralizedLinearModel</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code> class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.</p>
+                <div class="admonition summary">
+<p class="admonition-title">Summary<p><em>Generalized Linear Models</em> are a class of models which belong to the <em>ordinary least squares</em> framework. They generally consist of a set of parameters <span>\(\mathbf{w}\)</span>, a feature mapping <span>\(\varphi()\)</span> and a <em>link function</em> which dictates how the probability distribution of the output quantity is described.</p>
+</p>
+</div>
+<p><a href="https://en.wikipedia.org/wiki/Generalized_linear_model"><em>Generalized Linear Models</em></a> (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The <code class="codehilite"><span class="nc">GeneralizedLinearModel</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code> class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -1511,6 +1553,10 @@ $$
     \end{equation}
 $$
 Where <span>\(\Phi(z)\)</span> is the cumulative distribution function of the standard normal distribution.</p>
+<div class="admonition seealso">
+<p class="admonition-title">GLS<p>The <a href="../core_gls/"><em>Generalized Least Squares</em></a> model which is a more broad formulation of the <em>Ordinary Least Squares</em> (OLS) regression model.</p>
+</p>
+</div>
                 
                   
                 
@@ -1560,13 +1606,13 @@ Where <span>\(\Phi(z)\)</span> is the cumulative distribution function of the st
           </a>
         
         
-          <a href="../core_gp/" title="Gaussian Processes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../core_gls/" title="Generalized Least Squares" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Gaussian Processes
+                Generalized Least Squares
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

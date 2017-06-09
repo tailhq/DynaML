@@ -581,10 +581,46 @@
           
 
 
-  <li class="md-nav__item">
-    <a href="../core_glm/" title="Linear Models" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-2" type="checkbox" id="nav-7-1-1-2">
+    
+    <label class="md-nav__link" for="nav-7-1-1-2">
       Linear Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+      <label class="md-nav__title" for="nav-7-1-1-2">
+        Linear Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_glm/" title="Generalized Linear Models" class="md-nav__link">
+      Generalized Linear Models
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_gls/" title="Generalized Least Squares" class="md-nav__link">
+      Generalized Least Squares
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1463,16 +1499,14 @@
                 
                   <h1>Random Variables</h1>
                 
-                <div class="admonition summary">
+                <div class="admonition cite">
+<p>What I cannot create, I do not understand - Richard Feynman</p>
+</div>
+<p><br/></p>
+<div class="admonition summary">
 <p class="admonition-title">Summary</p>
 <p>Since version 1.4 a new package called <code class="codehilite"><span class="n">probability</span></code> has been added to the core api with an aim to aid in the modeling of random variables and measurable functions.</p>
 </div>
-<p><br/>
-<br/></p>
-<blockquote>
-<p>What I cannot create, I do not understand.
-- Richard Feynman</p>
-</blockquote>
 <p>Random variables and probability distributions form the bedrock of modern statistical based approaches to inference. Furthermore, analytically tractable inference is only possible for a small number of models while a wealth of interesting model structures don't yield themselves to analytical inference and approximate sampling based approaches are often employed.</p>
 <h2 id="random-variable-api">Random Variable API<a class="headerlink" href="#random-variable-api" title="Permanent link">&para;</a></h2>
 <p>Although both random variable with tractable and intractable distributions can be constructed, the emphasis is on the sampling capabilities of random variable objects.</p>
