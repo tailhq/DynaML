@@ -1526,18 +1526,18 @@ construction of neural networks. The main idioms will be computational layers &a
 </div>
 <p>The neural stack API extends these abstract skeletons by defining two kinds of primitives.</p>
 <ul>
-<li>Computational layers: Defining how inputs are propagated forward; <code class="codehilite"><span class="nc">NeuralLayer</span></code></li>
-<li>Activation functions: <code class="codehilite"><span class="nc">ActivationFunction</span></code></li>
+<li>Computational layers: Defining how inputs are propagated forward; <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="codehilite"><span class="nc">NeuralLayer</span></code></a></li>
+<li>Activation functions: <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.Activation"><code class="codehilite"><span class="nc">Activation</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code></a></li>
 <li>Computational stacks: composed of a number of layers; <code class="codehilite"><span class="nc">GenericNeuralStack</span></code></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The classes <code class="codehilite"><span class="nc">NeuralLayer</span></code> and <code class="codehilite"><span class="nc">GenericNeuralStack</span></code> define layers and stacks in an abstract manner, meaning that the parameters could be in principle of any type.</p>
+<p>The classes <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="codehilite"><span class="nc">NeuralLayer</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.GenericNeuralStack"><code class="codehilite"><span class="nc">GenericNeuralStack</span></code></a> define layers and stacks in an abstract manner, meaning that the parameters could be in principle of any type.</p>
 <p>The key point to understand is that once a layer or stack is defined, it is immutable i.e. the parameters defining its forward computation can't be changed.</p>
 <p>The API rather provides <em>factory</em> objects which can spawn a particular layer or stack with any parameter assignments.</p>
 </div>
 <h2 id="activation-functions">Activation Functions<a class="headerlink" href="#activation-functions" title="Permanent link">&para;</a></h2>
-<p>Activation functions are implemented using the <code class="codehilite"><span class="nc">Activation</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> object, its <code class="codehilite"><span class="n">apply</span></code> method requires two
+<p>Activation functions are implemented using the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.Activation"><code class="codehilite"><span class="nc">Activation</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code></a> object, its <code class="codehilite"><span class="n">apply</span></code> method requires two
 arguments.</p>
 <ol>
 <li>Implementation of the activation</li>
@@ -1557,7 +1557,7 @@ arguments.</p>
 </pre></div>
 </td></tr></table>
 
-<p>The <code>dynaml.models.neuralnets</code> package also contains implementation of the following activations.</p>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.package"><code>dynaml.models.neuralnets</code></a> package also contains implementation of the following activations.</p>
 <ul>
 <li>
 <p>Sigmoid <span>\(g(x) = \frac{1}{1 + exp(-x)}\)</span></p>
@@ -1579,9 +1579,9 @@ arguments.</p>
 <h2 id="computational-layers">Computational Layers<a class="headerlink" href="#computational-layers" title="Permanent link">&para;</a></h2>
 <p>Computational layers are the most basic unit of neural networks. They define transformations of their inputs and with that define the forward data flow.</p>
 <p>Every computational layer generally has a set of parameters describing how this transformation is going to be calculated given the inputs.</p>
-<p>In DynaML, the central component of the <code class="codehilite"><span class="nc">NeuralLayer</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code> trait is a <code class="codehilite"><span class="nc">MetaPipe</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code> (higher order pipe) instance.</p>
+<p>In DynaML, the central component of the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="codehilite"><span class="nc">NeuralLayer</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code></a> trait is a <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/index.html#io.github.mandar2812.dynaml.pipes.MetaPipe"><code class="codehilite"><span class="nc">MetaPipe</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code></a> (<a href="../../pipes/pipes_api/#meta-pipe">higher order pipe</a>) instance.</p>
 <h3 id="creating-layers">Creating Layers.<a class="headerlink" href="#creating-layers" title="Permanent link">&para;</a></h3>
-<p>Creating an immutable computational layer can be done using the <code class="codehilite"><span class="nc">NeuralLayer</span></code> object.</p>
+<p>Creating an immutable computational layer can be done using the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer$"><code class="codehilite"><span class="nc">NeuralLayer</span></code></a> object.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
