@@ -34,60 +34,22 @@ $$
 	\end{equation}
 $$
 
-### Neural Networks
 
-<br/>
+## Stochastic Processes
 
-![feedforward-NN](/images/fnn.png)
-
-<br/>
-
-Feed forward neural networks are the most common network architectures in predictive modeling, DynaML has an implementation of feed forward architectures that is trained using _Backpropogation_ with momentum.
-
-In a feed forward neural network with a single hidden layer the predicted target $y$ is expressed using the edge weights and node values in the following manner (this expression is easily extended for multi-layer nets).
-
-$$
-\begin{equation}
-y = W_2 \sigma(W_1 \mathbf{x} + b_1) + b_2
-\end{equation}
-$$
-
-Where $W_1 , \ W_2$  are matrices representing edge weights for the hidden layer and output layer respectively and $\sigma(.)$ represents a monotonic _activation_ function, the usual choices are _sigmoid_, _tanh_, _linear_ or _rectified linear_ functions.
-
-## Non Parametric Models
-
-Non parametric models generally grow with the size of the data set, some examples include _Gaussian Processes_ and _Dual LSSVM_ among others.
-
-### LSSVM
-
-Least Squares Support Vector Machines are a modification of the classical Support Vector Machine, please see [Suykens et. al](http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511) for a complete background.
-
-![lssvm-book](/images/cover_js_small.jpg)
-
-
-### Stochastic Processes
-
-Stochastic processes are general probabilistic models which can be used to construct finite dimensional distributions over a set of sampled domain points. More specifically a stochastic process is a probabilistic function $f(.)$ defined on any _domain_ or _index set_ $\mathcal{X}$ such that for any finite collection $x_i \in \mathcal{X}, i = 1 \cdots N$, the finite dimensional distribution $P(f(x_1), \cdots, f(x_N))$ is coherently defined.
+Stochastic processes (or random functions) are general probabilistic models which can be used to construct finite dimensional distributions over a set of sampled domain points. More specifically a stochastic process is a probabilistic function $f(.)$ defined on any _domain_ or _index set_ $\mathcal{X}$ such that for any finite collection $x_i \in \mathcal{X}, i = 1 \cdots N$, the finite dimensional distribution $P(f(x_1), \cdots, f(x_N))$ is coherently defined.
 
 !!! tip
-    The [`#!scala StochasticProcess[T, I, Y, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcess) trait extends `#!scala Model[T, I, Y]` and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution `#!scala predictiveDistribution()`.
+    The [`#!scala StochasticProcessModel[T, I, Y, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcessModel) trait extends `#!scala Model[T, I, Y]` and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution `#!scala predictiveDistribution()`.
 
-### Gaussian Processes
+### Continuous Processes
 
-![gp](/images/gp.png)
+By continuous processes, we mean processes whose values lie on a continuous domain (such as $\mathbb{R}^d$). The [`#!scala ContinuousProcessModel[T, I, Y, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel) abstract class provides a template which can be extended to implement continuous random process models. 
 
-<br/>
-_Gaussian Processes_ are stochastic processes whose finite dimensional distributions are multivariate gaussians.
+### Second Order Processes
 
-_Gaussian Processes_ are powerful non-parametric predictive models, which represent probability measures over spaces of functions. [Ramussen and Williams](https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&hl=en) is the definitive guide on understanding their applications in machine learning and a gateway to their deeper theoretical foundations.
+Second order stochastic processes can be described by specifying the _mean_ (first order statistic) and _variance_ (second order statistic) of their finite dimensional distribution. The [`#!scala SecondOrderProcessModel[T, I, Y, K, M, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcessModel) trait is an abstract skeleton which describes what elements a second order process model must have i.e. the mean and covariance functions.
 
-![gp-book](/images/gpbook.jpg)
-
-<br/>
-
-### Student T Processes
-
-[Student T processes](https://www.cs.cmu.edu/~andrewgw/tprocess.pdf) are generalizations of Gaussian Processes, where the finite dimensional distribution on a set of points is a multivariate t distribution.
 
 ## Meta Models/Model Ensembles
 
@@ -101,8 +63,8 @@ Currently the DynaML API has the following classes providing capabilities of met
 
 *Abstract Classes*
 
-* [```MetaModel[D, D1, BaseModel]```](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.MetaModel)
-* [```CommitteeModel[D, D1, BaseModel]```](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.CommitteeModel)
+* [`#!scala MetaModel[D, D1, BaseModel]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.MetaModel)
+* [`#!scala CommitteeModel[D, D1, BaseModel]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.CommitteeModel)
 
 *Implementations*
 

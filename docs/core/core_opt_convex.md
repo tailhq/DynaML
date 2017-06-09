@@ -91,24 +91,47 @@ val x = optimizer.setRegParam(0.05).optimize(
   DenseVector.ones[Double](num_dim))
 ```
 
-### Backpropagation with Momentum
+### Back propagation with Momentum
 
 This is the most common learning methods for supervised training of feed forward neural networks, the edge weights are adjusted using the _generalized delta rule_.
 
 ```scala
-val data: Stream[(DenseVector[Double], DenseVector[Double])] = ...
+val data: Seq[(DenseVector[Double], DenseVector[Double])] = _
 
-val initParam = FFNeuralGraph(num_inputs = data.head._1.length,
-	num_outputs = data.head._2.length,
-	hidden_layers = 1, List("logsig", "linear"),
-	List(5))
+//Input, Hidden, Output
+val num_units_by_layer = Seq(5, 8, 3)
+val acts = Seq(VectorSigmoid, VectorTansig)
+val breezeStackFactory = NeuralStackFactory(num_units_by_layer)(acts)
 
-val optimizer = new BackPropogation()
-	.setNumIterations(100)
-	.setStepSize(0.01)
+//Random variable which samples layer weights
+val stackInitializer = GenericFFNeuralNet.getWeightInitializer(
+  num_units_by_layer
+)
 
-val newparams = optimizer.optimize(data.length, data, initParam)
+val opt_backprop = new FFBackProp(breezeStackFactory)
+
+val learned_stack = opt_backprop.optimize(
+  data.length, data,
+  stackInitializer.draw)
 ```
+
+
+!!! warning "Deprecated back propagation API"
+
+    ```scala  
+    val data: Stream[(DenseVector[Double], DenseVector[Double])] = ...
+
+    val initParam = FFNeuralGraph(num_inputs = data.head._1.length,
+	     num_outputs = data.head._2.length,
+	     hidden_layers = 1, List("logsig", "linear"),
+	     List(5))
+
+    val optimizer = new BackPropogation()
+	     .setNumIterations(100)
+	     .setStepSize(0.01)
+
+    val newparams = optimizer.optimize(data.length, data, initParam)
+    ```
 
 ### Conjugate Gradient
 

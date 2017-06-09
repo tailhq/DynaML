@@ -3,15 +3,6 @@
     construction of neural networks. The main idioms will be computational layers & stacks.  
 
 
-The new neural network API extends the same top level traits as the old API, i.e.
-`#!scala NeuralNet[Data, BaseGraph, Input, Output,Graph <: NeuralGraph[BaseGraph, Input, Output]]` which itself extends
-the `#!scala ParameterizedLearner[Data, Graph, Input, Output, Stream[(Input, Output)]]` trait.
-
-!!! tip
-    To learn more about `#!scala ParameterizedLearner` and other major model classes, refer to the [model hierarchy](/core/core_model_hierarchy.md) specification.
-
-In the case of `#!scala NeuralNet`, the _parameters_ are of a generic (unknown) type `#!scala Graph` which has to be an extension of `#!scala NeuralGraph[BaseGraph, Input, Output]]` trait.
-
 The neural stack API extends these abstract skeletons by defining two kinds of primitives.
 
  - Computational layers: Defining how inputs are propagated forward; `#!scala NeuralLayer`
@@ -120,9 +111,9 @@ val layer1 = fact(0.25)
 
 ## Neural Stacks
 
-A neural stack is a sequence of computational layers. The top level class for neural stacks is `#!scala GenericNeuralStack`. Extending the base class there are two stack implementations.
+A neural stack is a sequence of computational layers. Every layer represents some computation, so the neural stack is nothing but a sequence of computations or forward data flow. The top level class for neural stacks is `#!scala GenericNeuralStack`. Extending the base class there are two stack implementations.
 
-  - Eagerly evaluated stack
+  - Eagerly evaluated stack: Layers are spawned as soon as the stack is created.
 
     ```scala
     val layers: Seq[NeuralLayer[P, I, I]] = _
@@ -133,14 +124,11 @@ A neural stack is a sequence of computational layers. The top level class for ne
     val stack = NeuralStack(layers:_*)
     ```
 
-  - Lazy stack: The layers are spawned only as needed.
+  - Lazy stack: Layers are spawned only as needed, but once created they are [_memoized_](https://en.wikipedia.org/wiki/Memoization).
 
     ```scala
     val layers_func: (Int) => NeuralLayer[P, I, I] = _
 
-    //Variable argument apply function
-    //so the elements of the sequence
-    //must be enumerated.
     val stack = LazyNeuralStack(layers_func, num_layers = 4)
     ```
 
@@ -148,3 +136,18 @@ A neural stack is a sequence of computational layers. The top level class for ne
 ### Stack Factories
 
 Stack factories like layer factories are pipe lines, which take as input a sequence of layer parameters and return a neural stack of the spawned layers.
+
+```scala
+val layerFactories: Seq[NeuralLayerFactory[P, I, I]] = _
+//Create a stack factory from a sequence of layer factories
+val stackFactory = NeuralStackFactory(layerFactories:_*)
+
+//Create a stack factory that creates
+//feed forward neural stacks that take as inputs
+//breeze vectors.
+
+//Input, Hidden, Output
+val num_units_by_layer = Seq(5, 8, 3)
+val acts = Seq(VectorSigmoid, VectorTansig)
+val breezeStackFactory = NeuralStackFactory(num_units_by_layer)(acts)
+```

@@ -1,10 +1,17 @@
----
-title: Gaussian Processes
----
+![gp](/images/gp.png)
+
+<br/>
+_Gaussian Processes_ are stochastic processes whose finite dimensional distributions are multivariate gaussians.
+
+_Gaussian Processes_ are powerful non-parametric predictive models, which represent probability measures over spaces of functions. [Ramussen and Williams](https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&hl=en) is the definitive guide on understanding their applications in machine learning and a gateway to their deeper theoretical foundations.
+
+![gp-book](/images/gpbook.jpg)
+
+<br/>
 
 _Gaussian Process_ models are well supported in DynaML, the [`#!scala AbstractGPRegressionModel[T, I]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel) and [`#!scala AbstractGPClassification[T, I]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPClassification) classes which extend the [`#!scala StochasticProcessModel[T, I, Y, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcessModel) base trait are the starting point for all GP implementations.
 
-The `#!scala StochasticProcess[T, I, Y, W]` trait contains the `#!scala predictiveDistribution[U <: Seq[I]](test: U): W` method which returns the posterior predictive distribution (represented by the generic type `#!scala W`).
+The `#!scala StochasticProcessModel[T, I, Y, W]` trait contains the `#!scala predictiveDistribution[U <: Seq[I]](test: U): W` method which returns the posterior predictive distribution (represented by the generic type `#!scala W`).
 
 The base trait is extended by [`#!scala SecondOrderProcessModel[T, I, Y, K, M, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcessModel) which defines a skeleton for processes which are defined by their first and second order statistics (_mean functions_ and _covariance functions_).
 

@@ -1,6 +1,6 @@
----
-title: Least Squares Support Vector Machines
----
+Least Squares Support Vector Machines are a modification of the classical Support Vector Machine, please see [Suykens et. al](http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511) for a complete background.
+
+![lssvm-book](/images/cover_js_small.jpg)
 
 ## LSSVM Regression
 

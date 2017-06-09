@@ -1,5 +1,5 @@
 
-_Generalized Linear Models_ (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The ```GeneralizedLinearModel[T]``` class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.
+_Generalized Linear Models_ (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The `#!scala GeneralizedLinearModel[T]` class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.
 
 ```scala
 val data: Stream[(DenseVector[Double], Double)] = ...
@@ -21,7 +21,8 @@ val glm = GeneralizedLinearModel(data, task, map, modeltype)
 
 ## Normal GLM
 
-The most common regression model, also known as _least squares linear regression_, implemented as the class ```RegularizedGLM``` which represents a regression model with the following prediction:
+The most common regression model, also known as _least squares linear regression_, implemented as the class `#!scala RegularizedGLM` which represents a regression model with the following prediction:
+
 $$
 	\begin{equation}
 		y \ | \ \mathbf{x} \sim \mathcal{N}(w^T \varphi(\mathbf{x}), \sigma^{2})

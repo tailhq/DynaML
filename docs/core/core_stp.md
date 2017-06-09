@@ -1,10 +1,3 @@
----
-title: Student T Processes
-sidebar: coreapi_sidebar
-permalink: core_stp.html
-folder: coreapi
----
-
 [Student T Processes](https://www.cs.cmu.edu/~andrewgw/tprocess.pdf) (STP) can be viewed as a generalization of Gaussian Processes, in GP models we use the multivariate normal distribution to model noisy observations of an unknown function. Likewise for STP models, we employ the multivariate student t distribution. Formally a student t process is a stochastic process where the finite dimensional distribution is multivariate t.
 
 $$

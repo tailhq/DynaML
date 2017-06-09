@@ -30,11 +30,13 @@ pages:
         - Models:
           - Model Hierarchy: 'core/core_model_hierarchy.md'
           - Linear Models: 'core/core_glm.md'
-          - Gaussian Processes: 'core/core_gp.md'
-          - Students T Processes: 'core/core_stp.md'
+          - Stochastic Processes:
+            - Gaussian Processes: 'core/core_gp.md'
+            - Students T Processes: 'core/core_stp.md'
           - Neural Networks:
-            - Old Neural Net API: 'core/core_ann.md'
+            - Feed Forward Networks: 'core/core_ffn_new.md'
             - Neural Stack API: 'core/core_ann_new.md'
+            - Old Neural Net API: 'core/core_ann.md'
           - Least Squares SVM: 'core/core_lssvm.md'
         - Kernels:
           - Kernel API: 'core/core_kernels.md'
@@ -106,7 +108,7 @@ extra:
   disqus: 'dynaml'
   palette:
     primary: 'deep purple'
-    accent: 'purple'
+    accent: 'deep purple'
   social:
     - type: 'github'
       link: 'https://github.com/transcendent-ai-labs'
