@@ -50,7 +50,7 @@
   
   
   
-    <body data-md-color-primary="deep-purple" data-md-color-accent="purple">
+    <body data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
   
     <svg class="md-svg">
       <defs>
@@ -647,6 +647,25 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-3" type="checkbox" id="nav-7-1-1-3">
+    
+    <label class="md-nav__link" for="nav-7-1-1-3">
+      Stochastic Processes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="6">
+      <label class="md-nav__title" for="nav-7-1-1-3">
+        Stochastic Processes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="../core_gp/" title="Gaussian Processes" class="md-nav__link">
       Gaussian Processes
@@ -666,15 +685,68 @@
   </li>
 
         
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-4" type="checkbox" id="nav-7-1-1-4">
+    
+    <label class="md-nav__link" for="nav-7-1-1-4">
+      Neural Networks
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-7-1-1-4">
+        Neural Networks
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
           
           
 
 
   <li class="md-nav__item">
-    <a href="../core_ann/" title="Neural Networks" class="md-nav__link">
-      Neural Networks
+    <a href="../core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
+      Feed Forward Networks
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann_new/" title="Neural Stack API" class="md-nav__link">
+      Neural Stack API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann/" title="Old Neural Net API" class="md-nav__link">
+      Old Neural Net API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1379,7 +1451,7 @@
                 
                   <h1>Linear Models</h1>
                 
-                <p><em>Generalized Linear Models</em> (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The <code>GeneralizedLinearModel[T]</code> class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.</p>
+                <p><em>Generalized Linear Models</em> (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The <code class="codehilite"><span class="nc">GeneralizedLinearModel</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code> class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -1413,13 +1485,12 @@
 </td></tr></table>
 
 <h2 id="normal-glm">Normal GLM<a class="headerlink" href="#normal-glm" title="Permanent link">&para;</a></h2>
-<p>The most common regression model, also known as <em>least squares linear regression</em>, implemented as the class <code>RegularizedGLM</code> which represents a regression model with the following prediction:
-$$
+<p>The most common regression model, also known as <em>least squares linear regression</em>, implemented as the class <code class="codehilite"><span class="nc">RegularizedGLM</span></code> which represents a regression model with the following prediction:</p>
+<span>\[
     \begin{equation}
-        y  |  \mathbf{x} \sim \mathcal{N}(w^T \varphi(\mathbf{x}), \sigma^{2})
+        y \ | \ \mathbf{x} \sim \mathcal{N}(w^T \varphi(\mathbf{x}), \sigma^{2})
     \end{equation}
-$$</p>
-<p>Here <span>\(\varphi(.)\)</span> is an appropriately chosen set of <em>basis functions</em>. The inference problem is formulated as</p>
+\]</span><p>Here <span>\(\varphi(.)\)</span> is an appropriately chosen set of <em>basis functions</em>. The inference problem is formulated as</p>
 <span>\[
     \begin{equation}
         \min_{w} \ \mathcal{J}_P(w) = \frac{1}{2} \gamma \  w^Tw + \frac{1}{2} \sum_{k = 1}^{N} (y_k - w^T \varphi(x_k))^2

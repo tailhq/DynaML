@@ -21,7 +21,7 @@
     
     
       
-        <title>Gaussian Processes</title>
+        <title>Gaussian Processes - DynaML User Guide</title>
       
     
     
@@ -50,7 +50,7 @@
   
   
   
-    <body data-md-color-primary="deep-purple" data-md-color-accent="purple">
+    <body data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
   
     <svg class="md-svg">
       <defs>
@@ -82,11 +82,11 @@
             
               
                 <span class="md-header-nav__parent">
-                  Core
+                  Models
                 </span>
               
                 <span class="md-header-nav__parent">
-                  Models
+                  Stochastic Processes
                 </span>
               
             
@@ -597,6 +597,27 @@
   
 
 
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-3" type="checkbox" id="nav-7-1-1-3" checked>
+    
+    <label class="md-nav__link" for="nav-7-1-1-3">
+      Stochastic Processes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="6">
+      <label class="md-nav__title" for="nav-7-1-1-3">
+        Stochastic Processes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
   <li class="md-nav__item md-nav__item--active">
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
@@ -679,15 +700,68 @@
   </li>
 
         
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-4" type="checkbox" id="nav-7-1-1-4">
+    
+    <label class="md-nav__link" for="nav-7-1-1-4">
+      Neural Networks
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-7-1-1-4">
+        Neural Networks
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
           
           
 
 
   <li class="md-nav__item">
-    <a href="../core_ann/" title="Neural Networks" class="md-nav__link">
-      Neural Networks
+    <a href="../core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
+      Feed Forward Networks
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann_new/" title="Neural Stack API" class="md-nav__link">
+      Neural Stack API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann/" title="Old Neural Net API" class="md-nav__link">
+      Old Neural Net API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1405,8 +1479,14 @@
                 
                   <h1>Gaussian Processes</h1>
                 
-                <p><em>Gaussian Process</em> models are well supported in DynaML, the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel"><code class="codehilite"><span class="nc">AbstractGPRegressionModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span><span class="o">]</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPClassification"><code class="codehilite"><span class="nc">AbstractGPClassification</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span><span class="o">]</span></code></a> classes which extend the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcessModel"><code class="codehilite"><span class="nc">StochasticProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> base trait are the starting point for all GP implementations.</p>
-<p>The <code class="codehilite"><span class="nc">StochasticProcess</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code> trait contains the <code class="codehilite"><span class="n">predictiveDistribution</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">I</span><span class="o">]](</span><span class="n">test</span><span class="k">:</span> <span class="kt">U</span><span class="o">)</span><span class="k">:</span> <span class="kt">W</span></code> method which returns the posterior predictive distribution (represented by the generic type <code class="codehilite"><span class="n">W</span></code>).</p>
+                <p><img alt="gp" src="../../images/gp.png" /></p>
+<p><br/>
+<em>Gaussian Processes</em> are stochastic processes whose finite dimensional distributions are multivariate gaussians.</p>
+<p><em>Gaussian Processes</em> are powerful non-parametric predictive models, which represent probability measures over spaces of functions. <a href="https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&amp;hl=en">Ramussen and Williams</a> is the definitive guide on understanding their applications in machine learning and a gateway to their deeper theoretical foundations.</p>
+<p><img alt="gp-book" src="../../images/gpbook.jpg" /></p>
+<p><br/></p>
+<p><em>Gaussian Process</em> models are well supported in DynaML, the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel"><code class="codehilite"><span class="nc">AbstractGPRegressionModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span><span class="o">]</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPClassification"><code class="codehilite"><span class="nc">AbstractGPClassification</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span><span class="o">]</span></code></a> classes which extend the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcessModel"><code class="codehilite"><span class="nc">StochasticProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> base trait are the starting point for all GP implementations.</p>
+<p>The <code class="codehilite"><span class="nc">StochasticProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code> trait contains the <code class="codehilite"><span class="n">predictiveDistribution</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">I</span><span class="o">]](</span><span class="n">test</span><span class="k">:</span> <span class="kt">U</span><span class="o">)</span><span class="k">:</span> <span class="kt">W</span></code> method which returns the posterior predictive distribution (represented by the generic type <code class="codehilite"><span class="n">W</span></code>).</p>
 <p>The base trait is extended by <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcessModel"><code class="codehilite"><span class="nc">SecondOrderProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">K</span>, <span class="kt">M</span>, <span class="kt">W</span><span class="o">]</span></code></a> which defines a skeleton for processes which are defined by their first and second order statistics (<em>mean functions</em> and <em>covariance functions</em>).</p>
 <p>Since for most applications it is assumed that the training data is standardized, the mean function is often chosen to be zero <span>\(\mu(\mathbf{x}) = 0\)</span>, thus the covariance function or kernel defines all the interesting behavior of <em>second order processes</em>. For a more in depth information on the types of covariance functions available visit the <a href="../core/core_kernels.html">kernels</a> page.</p>
 <h2 id="gaussian-process-regression">Gaussian Process Regression<a class="headerlink" href="#gaussian-process-regression" title="Permanent link">&para;</a></h2>

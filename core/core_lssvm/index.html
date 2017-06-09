@@ -21,7 +21,7 @@
     
     
       
-        <title>Least Squares Support Vector Machines</title>
+        <title>Least Squares SVM - DynaML User Guide</title>
       
     
     
@@ -50,7 +50,7 @@
   
   
   
-    <body data-md-color-primary="deep-purple" data-md-color-accent="purple">
+    <body data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
   
     <svg class="md-svg">
       <defs>
@@ -595,6 +595,25 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-3" type="checkbox" id="nav-7-1-1-3">
+    
+    <label class="md-nav__link" for="nav-7-1-1-3">
+      Stochastic Processes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="6">
+      <label class="md-nav__title" for="nav-7-1-1-3">
+        Stochastic Processes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="../core_gp/" title="Gaussian Processes" class="md-nav__link">
       Gaussian Processes
@@ -614,15 +633,68 @@
   </li>
 
         
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-4" type="checkbox" id="nav-7-1-1-4">
+    
+    <label class="md-nav__link" for="nav-7-1-1-4">
+      Neural Networks
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-7-1-1-4">
+        Neural Networks
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
           
           
 
 
   <li class="md-nav__item">
-    <a href="../core_ann/" title="Neural Networks" class="md-nav__link">
-      Neural Networks
+    <a href="../core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
+      Feed Forward Networks
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann_new/" title="Neural Stack API" class="md-nav__link">
+      Neural Stack API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann/" title="Old Neural Net API" class="md-nav__link">
+      Old Neural Net API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1365,7 +1437,9 @@
                 
                   <h1>Least Squares SVM</h1>
                 
-                <h2 id="lssvm-regression">LSSVM Regression<a class="headerlink" href="#lssvm-regression" title="Permanent link">&para;</a></h2>
+                <p>Least Squares Support Vector Machines are a modification of the classical Support Vector Machine, please see <a href="http://www.amazon.com/Least-Squares-Support-Vector-Machines/dp/9812381511">Suykens et. al</a> for a complete background.</p>
+<p><img alt="lssvm-book" src="../../images/cover_js_small.jpg" /></p>
+<h2 id="lssvm-regression">LSSVM Regression<a class="headerlink" href="#lssvm-regression" title="Permanent link">&para;</a></h2>
 <p>In case of LSSVM regression one solves (by applying the <a href="https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions">KKT</a> conditions) the following constrained optimization problem.</p>
 <span>\[
     \begin{align}
@@ -1496,7 +1570,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../core_ann/" title="Neural Networks" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../core_ann/" title="Old Neural Net API" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1505,7 +1579,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Neural Networks
+                Old Neural Net API
               </span>
             </div>
           </a>

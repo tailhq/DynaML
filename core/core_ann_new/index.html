@@ -9,7 +9,7 @@
         <meta name="description" content="User guide and documentation for the DynaML machine learning library and API">
       
       
-        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/pipes/pipes_time_series/">
+        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/core/core_ann_new/">
       
       
         <meta name="author" content="Mandar Chandorkar">
@@ -21,7 +21,7 @@
     
     
       
-        <title>Time Series - DynaML User Guide</title>
+        <title>Neural Stack API - DynaML User Guide</title>
       
     
     
@@ -82,15 +82,15 @@
             
               
                 <span class="md-header-nav__parent">
-                  Pipes
+                  Models
                 </span>
               
                 <span class="md-header-nav__parent">
-                  DynaML Pipes Library
+                  Neural Networks
                 </span>
               
             
-            Time Series
+            Neural Stack API
           
         </span>
       </div>
@@ -528,10 +528,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1" type="checkbox" id="nav-7-1">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1" type="checkbox" id="nav-7-1" checked>
     
     <label class="md-nav__link" for="nav-7-1">
       Core
@@ -547,10 +549,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1" type="checkbox" id="nav-7-1-1">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1" type="checkbox" id="nav-7-1-1" checked>
     
     <label class="md-nav__link" for="nav-7-1-1">
       Models
@@ -568,7 +572,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_model_hierarchy/" title="Model Hierarchy" class="md-nav__link">
+    <a href="../core_model_hierarchy/" title="Model Hierarchy" class="md-nav__link">
       Model Hierarchy
     </a>
   </li>
@@ -580,7 +584,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_glm/" title="Linear Models" class="md-nav__link">
+    <a href="../core_glm/" title="Linear Models" class="md-nav__link">
       Linear Models
     </a>
   </li>
@@ -611,7 +615,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_gp/" title="Gaussian Processes" class="md-nav__link">
+    <a href="../core_gp/" title="Gaussian Processes" class="md-nav__link">
       Gaussian Processes
     </a>
   </li>
@@ -623,7 +627,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_stp/" title="Students T Processes" class="md-nav__link">
+    <a href="../core_stp/" title="Students T Processes" class="md-nav__link">
       Students T Processes
     </a>
   </li>
@@ -638,10 +642,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-4" type="checkbox" id="nav-7-1-1-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-4" type="checkbox" id="nav-7-1-1-4" checked>
     
     <label class="md-nav__link" for="nav-7-1-1-4">
       Neural Networks
@@ -659,7 +665,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
+    <a href="../core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
       Feed Forward Networks
     </a>
   </li>
@@ -669,11 +675,96 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../core/core_ann_new/" title="Neural Stack API" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Neural Stack API
+      </label>
+    
+    <a href="./" title="Neural Stack API" class="md-nav__link md-nav__link--active">
       Neural Stack API
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#activation-functions" title="Activation Functions" class="md-nav__link">
+    Activation Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#computational-layers" title="Computational Layers" class="md-nav__link">
+    Computational Layers
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-layers" title="Creating Layers." class="md-nav__link">
+    Creating Layers.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-factories" title="Layer Factories." class="md-nav__link">
+    Layer Factories.
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neural-stacks" title="Neural Stacks" class="md-nav__link">
+    Neural Stacks
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stack-factories" title="Stack Factories" class="md-nav__link">
+    Stack Factories
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -683,7 +774,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_ann/" title="Old Neural Net API" class="md-nav__link">
+    <a href="../core_ann/" title="Old Neural Net API" class="md-nav__link">
       Old Neural Net API
     </a>
   </li>
@@ -700,7 +791,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_lssvm/" title="Least Squares SVM" class="md-nav__link">
+    <a href="../core_lssvm/" title="Least Squares SVM" class="md-nav__link">
       Least Squares SVM
     </a>
   </li>
@@ -736,7 +827,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_kernels/" title="Kernel API" class="md-nav__link">
+    <a href="../core_kernels/" title="Kernel API" class="md-nav__link">
       Kernel API
     </a>
   </li>
@@ -748,7 +839,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
+    <a href="../core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
       Stationary Kernels
     </a>
   </li>
@@ -760,7 +851,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
+    <a href="../core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
       Non Stationary Kernels
     </a>
   </li>
@@ -772,7 +863,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
+    <a href="../core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
       Automatic Feature Extraction
     </a>
   </li>
@@ -808,7 +899,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/partitioned_objects/" title="Blocked Algebraic Objects" class="md-nav__link">
+    <a href="../partitioned_objects/" title="Blocked Algebraic Objects" class="md-nav__link">
       Blocked Algebraic Objects
     </a>
   </li>
@@ -820,7 +911,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/partitioned_vectors/" title="Block Vectors" class="md-nav__link">
+    <a href="../partitioned_vectors/" title="Block Vectors" class="md-nav__link">
       Block Vectors
     </a>
   </li>
@@ -832,7 +923,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/partitioned_matrices/" title="Block Matrices" class="md-nav__link">
+    <a href="../partitioned_matrices/" title="Block Matrices" class="md-nav__link">
       Block Matrices
     </a>
   </li>
@@ -844,7 +935,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/partitioned_alg_utils/" title="Block Algebra Utilities" class="md-nav__link">
+    <a href="../partitioned_alg_utils/" title="Block Algebra Utilities" class="md-nav__link">
       Block Algebra Utilities
     </a>
   </li>
@@ -880,7 +971,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_prob_randomvar/" title="Random Variables" class="md-nav__link">
+    <a href="../core_prob_randomvar/" title="Random Variables" class="md-nav__link">
       Random Variables
     </a>
   </li>
@@ -892,7 +983,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
+    <a href="../core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
       Operations on Random Variables
     </a>
   </li>
@@ -904,7 +995,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_prob_dist/" title="Probability Distributions" class="md-nav__link">
+    <a href="../core_prob_dist/" title="Probability Distributions" class="md-nav__link">
       Probability Distributions
     </a>
   </li>
@@ -940,7 +1031,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_opt_convex/" title="Convex" class="md-nav__link">
+    <a href="../core_opt_convex/" title="Convex" class="md-nav__link">
       Convex
     </a>
   </li>
@@ -952,7 +1043,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_opt_global/" title="Global" class="md-nav__link">
+    <a href="../core_opt_global/" title="Global" class="md-nav__link">
       Global
     </a>
   </li>
@@ -969,7 +1060,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../core/core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
+    <a href="../core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
       Performance Evaluation
     </a>
   </li>
@@ -984,12 +1075,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2">
     
     <label class="md-nav__link" for="nav-7-2">
       Pipes
@@ -1007,7 +1096,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/" title="DynaML Pipes" class="md-nav__link">
+    <a href="../../pipes/pipes/" title="DynaML Pipes" class="md-nav__link">
       DynaML Pipes
     </a>
   </li>
@@ -1019,7 +1108,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_api/" title="Pipes API" class="md-nav__link">
+    <a href="../../pipes/pipes_api/" title="Pipes API" class="md-nav__link">
       Pipes API
     </a>
   </li>
@@ -1031,7 +1120,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
+    <a href="../../pipes/pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
       Scalers & Encoders
     </a>
   </li>
@@ -1043,7 +1132,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../model_pipes/" title="Model Pipes" class="md-nav__link">
+    <a href="../../pipes/model_pipes/" title="Model Pipes" class="md-nav__link">
       Model Pipes
     </a>
   </li>
@@ -1053,12 +1142,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2-5" type="checkbox" id="nav-7-2-5" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2-5" type="checkbox" id="nav-7-2-5">
     
     <label class="md-nav__link" for="nav-7-2-5">
       DynaML Pipes Library
@@ -1076,7 +1163,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../file_processing/" title="String & File Processing" class="md-nav__link">
+    <a href="../../pipes/file_processing/" title="String & File Processing" class="md-nav__link">
       String & File Processing
     </a>
   </li>
@@ -1088,7 +1175,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../feature_processing/" title="Feature Processing" class="md-nav__link">
+    <a href="../../pipes/feature_processing/" title="Feature Processing" class="md-nav__link">
       Feature Processing
     </a>
   </li>
@@ -1098,77 +1185,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Time Series
-      </label>
-    
-    <a href="./" title="Time Series" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_time_series/" title="Time Series" class="md-nav__link">
       Time Series
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#extract-data-as-univariate-time-series" title="Extract Data as Univariate Time Series" class="md-nav__link">
-    Extract Data as Univariate Time Series
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#extract-data-as-multivariate-time-series" title="Extract data as Multivariate Time Series" class="md-nav__link">
-    Extract data as Multivariate Time Series
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#construct-time-differenced-data" title="Construct Time differenced Data" class="md-nav__link">
-    Construct Time differenced Data
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#construct-multivariate-time-differenced-data" title="Construct multivariate Time differenced Data" class="md-nav__link">
-    Construct multivariate Time differenced Data
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#haar-discrete-wavelet-transform" title="Haar Discrete Wavelet Transform" class="md-nav__link">
-    Haar Discrete Wavelet Transform
-  </a>
-  
-</li>
-      
-      
-      
-        <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
-            Comments
-          </a>
-        </li>
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -1178,7 +1199,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_models/" title="Workflows on Models" class="md-nav__link">
+    <a href="../../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
       Workflows on Models
     </a>
   </li>
@@ -1190,7 +1211,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_misc/" title="Miscellaneuos" class="md-nav__link">
+    <a href="../../pipes/pipes_misc/" title="Miscellaneuos" class="md-nav__link">
       Miscellaneuos
     </a>
   </li>
@@ -1207,7 +1228,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_library/" title="Pipes Example" class="md-nav__link">
+    <a href="../../pipes/pipes_library/" title="Pipes Example" class="md-nav__link">
       Pipes Example
     </a>
   </li>
@@ -1422,37 +1443,56 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#extract-data-as-univariate-time-series" title="Extract Data as Univariate Time Series" class="md-nav__link">
-    Extract Data as Univariate Time Series
+  <a href="#activation-functions" title="Activation Functions" class="md-nav__link">
+    Activation Functions
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#extract-data-as-multivariate-time-series" title="Extract data as Multivariate Time Series" class="md-nav__link">
-    Extract data as Multivariate Time Series
+  <a href="#computational-layers" title="Computational Layers" class="md-nav__link">
+    Computational Layers
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-layers" title="Creating Layers." class="md-nav__link">
+    Creating Layers.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-factories" title="Layer Factories." class="md-nav__link">
+    Layer Factories.
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#construct-time-differenced-data" title="Construct Time differenced Data" class="md-nav__link">
-    Construct Time differenced Data
+  <a href="#neural-stacks" title="Neural Stacks" class="md-nav__link">
+    Neural Stacks
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stack-factories" title="Stack Factories" class="md-nav__link">
+    Stack Factories
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#construct-multivariate-time-differenced-data" title="Construct multivariate Time differenced Data" class="md-nav__link">
-    Construct multivariate Time differenced Data
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#haar-discrete-wavelet-transform" title="Haar Discrete Wavelet Transform" class="md-nav__link">
-    Haar Discrete Wavelet Transform
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1477,53 +1517,182 @@
               
                 
                 
-                  <h1>Time Series</h1>
+                  <h1>Neural Stack API</h1>
                 
-                <h3 id="extract-data-as-univariate-time-series">Extract Data as Univariate Time Series<a class="headerlink" href="#extract-data-as-univariate-time-series" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">extractTimeSeries</span><span class="o">(</span><span class="nc">Tfunc</span><span class="o">)</span>
+                <div class="admonition summary">
+<p class="admonition-title">Summary</p>
+<p>In v1.4.2, the neural stack API was introduced. It defines some primitives for modular
+construction of neural networks. The main idioms will be computational layers &amp; stacks.  </p>
+</div>
+<p>The neural stack API extends these abstract skeletons by defining two kinds of primitives.</p>
+<ul>
+<li>Computational layers: Defining how inputs are propagated forward; <code class="codehilite"><span class="nc">NeuralLayer</span></code></li>
+<li>Activation functions: <code class="codehilite"><span class="nc">ActivationFunction</span></code></li>
+<li>Computational stacks: composed of a number of layers; <code class="codehilite"><span class="nc">GenericNeuralStack</span></code></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The classes <code class="codehilite"><span class="nc">NeuralLayer</span></code> and <code class="codehilite"><span class="nc">GenericNeuralStack</span></code> define layers and stacks in an abstract manner, meaning that the parameters could be in principle of any type.</p>
+<p>The key point to understand is that once a layer or stack is defined, it is immutable i.e. the parameters defining its forward computation can't be changed.</p>
+<p>The API rather provides <em>factory</em> objects which can spawn a particular layer or stack with any parameter assignments.</p>
+</div>
+<h2 id="activation-functions">Activation Functions<a class="headerlink" href="#activation-functions" title="Permanent link">&para;</a></h2>
+<p>Activation functions are implemented using the <code class="codehilite"><span class="nc">Activation</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code> object, its <code class="codehilite"><span class="n">apply</span></code> method requires two
+arguments.</p>
+<ol>
+<li>Implementation of the activation</li>
+<li>Implementation of the derivative of the activation.</li>
+</ol>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Define forward mapping</span>
+<span class="k">val</span> <span class="n">actFunc</span><span class="k">:</span> <span class="o">(</span><span class="kt">I</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">I</span> <span class="k">=</span> <span class="k">_</span>
+<span class="c1">//Define derivative of forward mapping</span>
+<span class="k">val</span> <span class="n">gradAct</span><span class="k">:</span> <span class="o">(</span><span class="kt">I</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">I</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">Activation</span><span class="o">(</span><span class="n">actFunc</span><span class="o">,</span> <span class="n">gradAct</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
+<p>The <code>dynaml.models.neuralnets</code> package also contains implementation of the following activations.</p>
 <ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">Double</span>, <span class="kt">Double</span><span class="o">)]]</span></code></li>
-<li><em>Result</em>: This pipe assumes its input to be of the form <code>YYYY,Day,Hour,Value</code>. It takes as input a function (TFunc) which converts a <code class="codehilite"><span class="o">(</span><span class="nc">Double</span><span class="o">,</span> <span class="nc">Double</span><span class="o">,</span> <span class="nc">Double</span><span class="o">)</span></code> into a single <em>timestamp</em> like value. The pipe processes its data source line by line and outputs a <code class="codehilite"><span class="nc">Tuple2</span></code> in the following format <code>(Timestamp,Value)</code>.</li>
+<li>
+<p>Sigmoid <span>\(g(x) = \frac{1}{1 + exp(-x)}\)</span></p>
+<p><code class="codehilite"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorSigmoid</span></code></p>
+</li>
+<li>
+<p>Tanh <span>\(g(x) = tanh(x)\)</span></p>
+<p><code class="codehilite"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorTansig</span></code></p>
+</li>
+<li>
+<p>Linear <span>\(g(x) = x\)</span></p>
+<p><code class="codehilite"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorLinear</span></code></p>
+</li>
+<li>
+<p>Rectified Linear <span>\(g(x) = \begin{cases} x &amp; x \geq 0\\0 &amp; else\end{cases}\)</span></p>
+<p><code class="codehilite"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorRecLin</span></code></p>
+</li>
 </ul>
-<h3 id="extract-data-as-multivariate-time-series">Extract data as Multivariate Time Series<a class="headerlink" href="#extract-data-as-multivariate-time-series" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">extractTimeSeriesVec</span><span class="o">(</span><span class="nc">Tfunc</span><span class="o">)</span>
+<h2 id="computational-layers">Computational Layers<a class="headerlink" href="#computational-layers" title="Permanent link">&para;</a></h2>
+<p>Computational layers are the most basic unit of neural networks. They define transformations of their inputs and with that define the forward data flow.</p>
+<p>Every computational layer generally has a set of parameters describing how this transformation is going to be calculated given the inputs.</p>
+<p>In DynaML, the central component of the <code class="codehilite"><span class="nc">NeuralLayer</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code> trait is a <code class="codehilite"><span class="nc">MetaPipe</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code> (higher order pipe) instance.</p>
+<h3 id="creating-layers">Creating Layers.<a class="headerlink" href="#creating-layers" title="Permanent link">&para;</a></h3>
+<p>Creating an immutable computational layer can be done using the <code class="codehilite"><span class="nc">NeuralLayer</span></code> object.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">scala.math._</span>
+
+<span class="k">val</span> <span class="n">compute</span> <span class="k">=</span> <span class="nc">MetaPipe</span><span class="o">(</span>
+  <span class="o">(</span><span class="n">params</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="mi">2</span><span class="n">d</span><span class="o">*</span><span class="nc">Pi</span><span class="o">*</span><span class="n">params</span><span class="o">*</span><span class="n">x</span>
+<span class="o">)</span>
+
+<span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">Activation</span><span class="o">(</span>
+  <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">tanh</span><span class="o">(</span><span class="n">x</span><span class="o">),</span>
+  <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">tanh</span><span class="o">(</span><span class="n">x</span><span class="o">)/(</span><span class="n">sinh</span><span class="o">(</span><span class="n">x</span><span class="o">)*</span><span class="n">cosh</span><span class="o">(</span><span class="n">x</span><span class="o">)))</span>
+
+<span class="k">val</span> <span class="n">layer</span> <span class="k">=</span> <span class="nc">NeuralLayer</span><span class="o">(</span><span class="n">compute</span><span class="o">,</span> <span class="n">act</span><span class="o">)(</span><span class="mf">0.5</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
-<ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">Double</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]]</span></code></li>
-<li><em>Result</em>: This pipe is similar to <code class="codehilite"><span class="n">extractTimeSeries</span></code> but for application in multivariate time series analysis such as nonlinear autoregressive models with exogenous inputs. The pipe processes its data source line by line and outputs a <code class="codehilite"><span class="o">(</span><span class="nc">Double</span><span class="o">,</span> <span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span></code> in the following format <code>(Timestamp,Values)</code>.</li>
-</ul>
-<h3 id="construct-time-differenced-data">Construct Time differenced Data<a class="headerlink" href="#construct-time-differenced-data" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">deltaOperation</span><span class="o">(</span><span class="n">deltaT</span><span class="o">,</span> <span class="n">timelag</span><span class="o">)</span>
+<div class="admonition seealso">
+<p class="admonition-title">Vector feed forward layers</p>
+<p>A common layer is the feed forward vector to vector layer which is given by.
+$$
+\mathbf{h} = \sigma(\mathbf{W} \mathbf{x} + \mathbf{b})
+$$</p>
+</div>
+<h3 id="layer-factories">Layer Factories.<a class="headerlink" href="#layer-factories" title="Permanent link">&para;</a></h3>
+<p>Since the computation and activation are the only two relevant inputs required to spawn any computational layer, the <code class="codehilite"><span class="nc">NeuralLayerFactory</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code> class is the <em>factory</em> for creating layers on the fly. Layer factories are data pipes which take the layer parameters as input and create computational layers on demand.</p>
+<p>A layer factory can be created as follows.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">fact</span> <span class="k">=</span> <span class="nc">NeuralLayerFactory</span><span class="o">(</span><span class="n">compute</span><span class="o">,</span> <span class="n">act</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">layer1</span> <span class="k">=</span> <span class="n">fact</span><span class="o">(</span><span class="mf">0.25</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
-<ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[(</span><span class="kt">Double</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]]</span></code></li>
-<li><em>Result</em>: In order to generate features for auto-regressive models, one needs to construct sliding windows in time. This function takes two parameters <code class="codehilite"><span class="n">deltaT</span></code>: the auto-regressive order and <code class="codehilite"><span class="n">timelag</span></code>: the time lag after which the windowing is conducted. E.g Let <code class="codehilite"><span class="n">deltaT</span> <span class="k">=</span> <span class="mi">2</span></code> and <code class="codehilite"><span class="n">timelag</span> <span class="k">=</span> <span class="mi">1</span></code> This pipe will take stream data of the form <span>\((t, y(t))\)</span> and output a stream which looks like <span>\((t, [y(t-2), y(t-3)])\)</span></li>
-</ul>
-<h3 id="construct-multivariate-time-differenced-data">Construct multivariate Time differenced Data<a class="headerlink" href="#construct-multivariate-time-differenced-data" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">deltaOperationVec</span><span class="o">(</span><span class="n">deltaT</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<div class="admonition seealso">
+<p class="admonition-title">Vector layer factory</p>
+<p>Vector layers can be created using the <code class="codehilite"><span class="nc">Vec2VecLayerFactory</span></code></p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">layerFactory</span> <span class="k">=</span>
+  <span class="k">new</span> <span class="nc">Vec2VecLayerFactory</span><span class="o">(</span><span class="nc">VectorTansig</span><span class="o">)(</span><span class="n">inDim</span> <span class="k">=</span> <span class="mi">4</span><span class="o">,</span> <span class="n">outDim</span> <span class="k">=</span> <span class="mi">5</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
+</div>
+<h2 id="neural-stacks">Neural Stacks<a class="headerlink" href="#neural-stacks" title="Permanent link">&para;</a></h2>
+<p>A neural stack is a sequence of computational layers. Every layer represents some computation, so the neural stack is nothing but a sequence of computations or forward data flow. The top level class for neural stacks is <code class="codehilite"><span class="nc">GenericNeuralStack</span></code>. Extending the base class there are two stack implementations.</p>
 <ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[(</span><span class="kt">Double</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]]</span></code></li>
-<li><em>Result</em>: A variant of <code class="codehilite"><span class="n">deltaOperation</span></code> for NARX models.</li>
-</ul>
-<h3 id="haar-discrete-wavelet-transform">Haar Discrete Wavelet Transform<a class="headerlink" href="#haar-discrete-wavelet-transform" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">haarWaveletFilter</span><span class="o">(</span><span class="n">order</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<li>
+<p>Eagerly evaluated stack: Layers are spawned as soon as the stack is created.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">layers</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">NeuralLayer</span><span class="o">[</span><span class="kt">P</span>, <span class="kt">I</span>, <span class="kt">I</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="c1">//Variable argument apply function</span>
+<span class="c1">//so the elements of the sequence</span>
+<span class="c1">//must be enumerated.</span>
+<span class="k">val</span> <span class="n">stack</span> <span class="k">=</span> <span class="nc">NeuralStack</span><span class="o">(</span><span class="n">layers</span><span class="k">:_</span><span class="kt">*</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
-<ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span></code></li>
-<li><em>Result</em>: A Haar Discrete wavelet transform.</li>
+</li>
+<li>
+<p>Lazy stack: Layers are spawned only as needed, but once created they are <a href="https://en.wikipedia.org/wiki/Memoization"><em>memoized</em></a>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">layers_func</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">NeuralLayer</span><span class="o">[</span><span class="kt">P</span>, <span class="kt">I</span>, <span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">stack</span> <span class="k">=</span> <span class="nc">LazyNeuralStack</span><span class="o">(</span><span class="n">layers_func</span><span class="o">,</span> <span class="n">num_layers</span> <span class="k">=</span> <span class="mi">4</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+</li>
 </ul>
+<h3 id="stack-factories">Stack Factories<a class="headerlink" href="#stack-factories" title="Permanent link">&para;</a></h3>
+<p>Stack factories like layer factories are pipe lines, which take as input a sequence of layer parameters and return a neural stack of the spawned layers.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">layerFactories</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">NeuralLayerFactory</span><span class="o">[</span><span class="kt">P</span>, <span class="kt">I</span>, <span class="kt">I</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="c1">//Create a stack factory from a sequence of layer factories</span>
+<span class="k">val</span> <span class="n">stackFactory</span> <span class="k">=</span> <span class="nc">NeuralStackFactory</span><span class="o">(</span><span class="n">layerFactories</span><span class="k">:_</span><span class="kt">*</span><span class="o">)</span>
+
+<span class="c1">//Create a stack factory that creates</span>
+<span class="c1">//feed forward neural stacks that take as inputs</span>
+<span class="c1">//breeze vectors.</span>
+
+<span class="c1">//Input, Hidden, Output</span>
+<span class="k">val</span> <span class="n">num_units_by_layer</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">acts</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">VectorSigmoid</span><span class="o">,</span> <span class="nc">VectorTansig</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">breezeStackFactory</span> <span class="k">=</span> <span class="nc">NeuralStackFactory</span><span class="o">(</span><span class="n">num_units_by_layer</span><span class="o">)(</span><span class="n">acts</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
                 
                   
                 
@@ -1534,9 +1703,9 @@
                   <div id="disqus_thread"></div>
 <script>
   var disqus_config = function () {
-    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/pipes/pipes_time_series/";
+    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/core/core_ann_new/";
     this.page.identifier =
-      "/pipes/pipes_time_series/";
+      "/core/core_ann_new/";
   };
   (function() {
     var d = document, s = d.createElement("script");
@@ -1558,7 +1727,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../feature_processing/" title="Feature Processing" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../core_ffn_new/" title="Feed Forward Networks" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1567,19 +1736,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Feature Processing
+                Feed Forward Networks
               </span>
             </div>
           </a>
         
         
-          <a href="../pipes_models/" title="Workflows on Models" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../core_ann/" title="Old Neural Net API" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Workflows on Models
+                Old Neural Net API
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

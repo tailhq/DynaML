@@ -21,7 +21,7 @@
     
     
       
-        <title>Neural Networks - DynaML User Guide</title>
+        <title>Old Neural Net API - DynaML User Guide</title>
       
     
     
@@ -50,7 +50,7 @@
   
   
   
-    <body data-md-color-primary="deep-purple" data-md-color-accent="purple">
+    <body data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
   
     <svg class="md-svg">
       <defs>
@@ -82,15 +82,15 @@
             
               
                 <span class="md-header-nav__parent">
-                  Core
-                </span>
-              
-                <span class="md-header-nav__parent">
                   Models
                 </span>
               
+                <span class="md-header-nav__parent">
+                  Neural Networks
+                </span>
+              
             
-            Neural Networks
+            Old Neural Net API
           
         </span>
       </div>
@@ -595,6 +595,25 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-3" type="checkbox" id="nav-7-1-1-3">
+    
+    <label class="md-nav__link" for="nav-7-1-1-3">
+      Stochastic Processes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="6">
+      <label class="md-nav__title" for="nav-7-1-1-3">
+        Stochastic Processes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="../core_gp/" title="Gaussian Processes" class="md-nav__link">
       Gaussian Processes
@@ -614,6 +633,56 @@
   </li>
 
         
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-4" type="checkbox" id="nav-7-1-1-4" checked>
+    
+    <label class="md-nav__link" for="nav-7-1-1-4">
+      Neural Networks
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-7-1-1-4">
+        Neural Networks
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
+      Feed Forward Networks
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann_new/" title="Neural Stack API" class="md-nav__link">
+      Neural Stack API
+    </a>
+  </li>
+
+        
           
           
           
@@ -627,11 +696,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Neural Networks
+        Old Neural Net API
       </label>
     
-    <a href="./" title="Neural Networks" class="md-nav__link md-nav__link--active">
-      Neural Networks
+    <a href="./" title="Old Neural Net API" class="md-nav__link md-nav__link--active">
+      Old Neural Net API
     </a>
     
       
@@ -708,6 +777,11 @@
   
 </nav>
     
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1443,9 +1517,13 @@
               
                 
                 
-                  <h1>Neural Networks</h1>
+                  <h1>Old Neural Net API</h1>
                 
-                <h2 id="feed-forward-network">Feed-forward Network<a class="headerlink" href="#feed-forward-network" title="Permanent link">&para;</a></h2>
+                <div class="admonition warning">
+<p class="admonition-title">Warning<p>This API is deprecated since v1.4.2, users are advised to use the new <a href="../core_ann_new/">neural stack API</a>.</p>
+</p>
+</div>
+<h2 id="feed-forward-network">Feed-forward Network<a class="headerlink" href="#feed-forward-network" title="Permanent link">&para;</a></h2>
 <p>To create a feedforward network we need three entities.</p>
 <ul>
 <li>The training data (type parameter <code>D</code>)</li>
@@ -1622,7 +1700,7 @@ KL(\hat{\rho}\ ||\ \rho) &amp;= \sum_{i = 1}^{n_h} \rho log(\frac{\rho}{\hat{\rh
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../core_stp/" title="Students T Processes" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../core_ann_new/" title="Neural Stack API" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1631,7 +1709,7 @@ KL(\hat{\rho}\ ||\ \rho) &amp;= \sum_{i = 1}^{n_h} \rho log(\frac{\rho}{\hat{\rh
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Students T Processes
+                Neural Stack API
               </span>
             </div>
           </a>

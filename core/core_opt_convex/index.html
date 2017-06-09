@@ -50,7 +50,7 @@
   
   
   
-    <body data-md-color-primary="deep-purple" data-md-color-accent="purple">
+    <body data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
   
     <svg class="md-svg">
       <defs>
@@ -593,6 +593,25 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-3" type="checkbox" id="nav-7-1-1-3">
+    
+    <label class="md-nav__link" for="nav-7-1-1-3">
+      Stochastic Processes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="6">
+      <label class="md-nav__title" for="nav-7-1-1-3">
+        Stochastic Processes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="../core_gp/" title="Gaussian Processes" class="md-nav__link">
       Gaussian Processes
@@ -612,15 +631,68 @@
   </li>
 
         
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-4" type="checkbox" id="nav-7-1-1-4">
+    
+    <label class="md-nav__link" for="nav-7-1-1-4">
+      Neural Networks
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+      <label class="md-nav__title" for="nav-7-1-1-4">
+        Neural Networks
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
           
           
           
 
 
   <li class="md-nav__item">
-    <a href="../core_ann/" title="Neural Networks" class="md-nav__link">
-      Neural Networks
+    <a href="../core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
+      Feed Forward Networks
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann_new/" title="Neural Stack API" class="md-nav__link">
+      Neural Stack API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core_ann/" title="Old Neural Net API" class="md-nav__link">
+      Old Neural Net API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -944,8 +1016,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#backpropagation-with-momentum" title="Backpropagation with Momentum" class="md-nav__link">
-    Backpropagation with Momentum
+  <a href="#back-propagation-with-momentum" title="Back propagation with Momentum" class="md-nav__link">
+    Back propagation with Momentum
   </a>
   
 </li>
@@ -1446,8 +1518,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#backpropagation-with-momentum" title="Backpropagation with Momentum" class="md-nav__link">
-    Backpropagation with Momentum
+  <a href="#back-propagation-with-momentum" title="Back propagation with Momentum" class="md-nav__link">
+    Back propagation with Momentum
   </a>
   
 </li>
@@ -1634,8 +1706,46 @@
 </pre></div>
 </td></tr></table>
 
-<h3 id="backpropagation-with-momentum">Backpropagation with Momentum<a class="headerlink" href="#backpropagation-with-momentum" title="Permanent link">&para;</a></h3>
+<h3 id="back-propagation-with-momentum">Back propagation with Momentum<a class="headerlink" href="#back-propagation-with-momentum" title="Permanent link">&para;</a></h3>
 <p>This is the most common learning methods for supervised training of feed forward neural networks, the edge weights are adjusted using the <em>generalized delta rule</em>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">data</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="c1">//Input, Hidden, Output</span>
+<span class="k">val</span> <span class="n">num_units_by_layer</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">acts</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">VectorSigmoid</span><span class="o">,</span> <span class="nc">VectorTansig</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">breezeStackFactory</span> <span class="k">=</span> <span class="nc">NeuralStackFactory</span><span class="o">(</span><span class="n">num_units_by_layer</span><span class="o">)(</span><span class="n">acts</span><span class="o">)</span>
+
+<span class="c1">//Random variable which samples layer weights</span>
+<span class="k">val</span> <span class="n">stackInitializer</span> <span class="k">=</span> <span class="nc">GenericFFNeuralNet</span><span class="o">.</span><span class="n">getWeightInitializer</span><span class="o">(</span>
+  <span class="n">num_units_by_layer</span>
+<span class="o">)</span>
+
+<span class="k">val</span> <span class="n">opt_backprop</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">FFBackProp</span><span class="o">(</span><span class="n">breezeStackFactory</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">learned_stack</span> <span class="k">=</span> <span class="n">opt_backprop</span><span class="o">.</span><span class="n">optimize</span><span class="o">(</span>
+  <span class="n">data</span><span class="o">.</span><span class="n">length</span><span class="o">,</span> <span class="n">data</span><span class="o">,</span>
+  <span class="n">stackInitializer</span><span class="o">.</span><span class="n">draw</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<div class="admonition warning">
+<p class="admonition-title">Deprecated back propagation API</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -1650,18 +1760,19 @@
 12</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">data</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]</span> <span class="k">=</span> <span class="o">...</span>
 
 <span class="k">val</span> <span class="n">initParam</span> <span class="k">=</span> <span class="nc">FFNeuralGraph</span><span class="o">(</span><span class="n">num_inputs</span> <span class="k">=</span> <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">_1</span><span class="o">.</span><span class="n">length</span><span class="o">,</span>
-    <span class="n">num_outputs</span> <span class="k">=</span> <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">length</span><span class="o">,</span>
-    <span class="n">hidden_layers</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="s">&quot;logsig&quot;</span><span class="o">,</span> <span class="s">&quot;linear&quot;</span><span class="o">),</span>
-    <span class="nc">List</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
+     <span class="n">num_outputs</span> <span class="k">=</span> <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">length</span><span class="o">,</span>
+     <span class="n">hidden_layers</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="s">&quot;logsig&quot;</span><span class="o">,</span> <span class="s">&quot;linear&quot;</span><span class="o">),</span>
+     <span class="nc">List</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">optimizer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">BackPropogation</span><span class="o">()</span>
-    <span class="o">.</span><span class="n">setNumIterations</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span>
-    <span class="o">.</span><span class="n">setStepSize</span><span class="o">(</span><span class="mf">0.01</span><span class="o">)</span>
+     <span class="o">.</span><span class="n">setNumIterations</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span>
+     <span class="o">.</span><span class="n">setStepSize</span><span class="o">(</span><span class="mf">0.01</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">newparams</span> <span class="k">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="n">length</span><span class="o">,</span> <span class="n">data</span><span class="o">,</span> <span class="n">initParam</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
+</div>
 <h3 id="conjugate-gradient">Conjugate Gradient<a class="headerlink" href="#conjugate-gradient" title="Permanent link">&para;</a></h3>
 <p>The conjugate gradient method is used to solve linear systems of the form <span>\(Ax = b\)</span> where <span>\(A\)</span> is a symmetric positive definite matrix.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
