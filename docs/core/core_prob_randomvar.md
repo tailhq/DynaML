@@ -1,11 +1,10 @@
+!!! cite ""
+    What I cannot create, I do not understand - Richard Feynman
+
+<br/>
+
 !!! summary
     Since version 1.4 a new package called `#!scala probability` has been added to the core api with an aim to aid in the modeling of random variables and measurable functions.
-
-<br/>
-<br/>
-
->What I cannot create, I do not understand.
-> - Richard Feynman
 
 Random variables and probability distributions form the bedrock of modern statistical based approaches to inference. Furthermore, analytically tractable inference is only possible for a small number of models while a wealth of interesting model structures don't yield themselves to analytical inference and approximate sampling based approaches are often employed.
 

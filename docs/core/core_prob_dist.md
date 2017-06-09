@@ -60,7 +60,7 @@ $\mathcal{X} \equiv  \mathbb{R}^{n \times p}$
 
 $f(x) = \left|{\mathbf {I}}_{n}+{\boldsymbol \Sigma }^{{-1}}({\mathbf {X}}-{\mathbf {M}}){\boldsymbol \Omega }^{{-1}}({\mathbf {X}}-{\mathbf {M}})^{{{\rm {T}}}}\right|^{{-{\frac {\nu +n+p-1}{2}}}}$  
 
-$Z = {\frac {\Gamma _{p}\left({\frac {\nu +n+p-1}{2}}\right)}{(\pi )^{{\frac {np}{2}}}\Gamma _{p}\left({\frac {\nu +p-1}{2}}\right)}}|{\boldsymbol \Omega }|^{{-{\frac {n}{2}}}}|{\boldsymbol \Sigma }|^{{-{\frac {p}{2}}}}$
+$Z = {\frac {\Gamma_{p}\left({\frac {\nu +n+p-1}{2}}\right)}{(\pi )^{{\frac {np}{2}}}\Gamma _{p}\left({\frac {\nu +p-1}{2}}\right)}}|{\boldsymbol \Omega }|^{{-{\frac {n}{2}}}}|{\boldsymbol \Sigma }|^{{-{\frac {p}{2}}}}$
 
 *Usage*:
 ```scala

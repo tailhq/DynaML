@@ -29,7 +29,9 @@ pages:
       - 'Core':
         - Models:
           - Model Hierarchy: 'core/core_model_hierarchy.md'
-          - Linear Models: 'core/core_glm.md'
+          - Linear Models:
+            - Generalized Linear Models: 'core/core_glm.md'
+            - Generalized Least Squares: 'core/core_gls.md'
           - Stochastic Processes:
             - Gaussian Processes: 'core/core_gp.md'
             - Students T Processes: 'core/core_stp.md'

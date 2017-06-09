@@ -1,5 +1,7 @@
+!!! summary
+		_Generalized Linear Models_ are a class of models which belong to the _ordinary least squares_ framework. They generally consist of a set of parameters $\mathbf{w}$, a feature mapping $\varphi()$ and a _link function_ which dictates how the probability distribution of the output quantity is described.
 
-_Generalized Linear Models_ (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The `#!scala GeneralizedLinearModel[T]` class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.
+[_Generalized Linear Models_](https://en.wikipedia.org/wiki/Generalized_linear_model) (GLM) are available in the context of regression and binary classification, more specifically in DynaML the following members of the GLM family are implemented. The `#!scala GeneralizedLinearModel[T]` class is the base of the GLM hierarchy in DynaML, all linear models are extensions of it. It's companion object is used for the creation of GLM instances as follows.
 
 ```scala
 val data: Stream[(DenseVector[Double], Double)] = ...
@@ -58,3 +60,6 @@ $$
 	\end{equation}
 $$
 Where $\Phi(z)$ is the cumulative distribution function of the standard normal distribution.
+
+!!! seealso "GLS"
+		The [_Generalized Least Squares_](/core/core_gls.md) model which is a more broad formulation of the _Ordinary Least Squares_ (OLS) regression model.

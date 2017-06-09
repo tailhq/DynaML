@@ -19,7 +19,7 @@ DynaML is a Scala environment for conducting research and education in Machine L
 Refer to the [installation](installation/installation.md) guide for getting up and running. The `data/` directory contains data sets, which are used by the programs in the `dynaml-examples/` module. Lets run a Gaussian Process (GP) regression model on the synthetic 'delve' data set.
 
 ```scala
-DynaML>TestGPDelve("RBF", 2.0, 1.0, 500, 1000)
+TestGPDelve("RBF", 2.0, 1.0, 500, 1000)
 ```
 
 ![dynaml](images/screenshot-delve.png)
