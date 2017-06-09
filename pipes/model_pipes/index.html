@@ -21,7 +21,7 @@
     
     
       
-        <title>Model Pipes</title>
+        <title>Model Pipes - DynaML User Guide</title>
       
     
     
@@ -1102,16 +1102,23 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dynaml-model-pipes" title="DynaML Model Pipes" class="md-nav__link">
-    DynaML Model Pipes
+  <a href="#model-creation" title="Model Creation" class="md-nav__link">
+    Model Creation
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#generalized-linear-model-pipe" title="Generalized Linear Model pipe" class="md-nav__link">
-    Generalized Linear Model pipe
+  <a href="#generalized-linear-model-pipe" title="Generalized Linear Model Pipe" class="md-nav__link">
+    Generalized Linear Model Pipe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generalized-least-squares-model-pipe" title="Generalized Least Squares Model Pipe" class="md-nav__link">
+    Generalized Least Squares Model Pipe
   </a>
   
 </li>
@@ -1132,6 +1139,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-prediction" title="Model Prediction" class="md-nav__link">
+    Model Prediction
+  </a>
   
 </li>
       
@@ -1467,16 +1481,23 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dynaml-model-pipes" title="DynaML Model Pipes" class="md-nav__link">
-    DynaML Model Pipes
+  <a href="#model-creation" title="Model Creation" class="md-nav__link">
+    Model Creation
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#generalized-linear-model-pipe" title="Generalized Linear Model pipe" class="md-nav__link">
-    Generalized Linear Model pipe
+  <a href="#generalized-linear-model-pipe" title="Generalized Linear Model Pipe" class="md-nav__link">
+    Generalized Linear Model Pipe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generalized-least-squares-model-pipe" title="Generalized Least Squares Model Pipe" class="md-nav__link">
+    Generalized Least Squares Model Pipe
   </a>
   
 </li>
@@ -1497,6 +1518,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-prediction" title="Model Prediction" class="md-nav__link">
+    Model Prediction
+  </a>
   
 </li>
       
@@ -1523,22 +1551,78 @@
                 
                   <h1>Model Pipes</h1>
                 
-                <h2 id="dynaml-model-pipes">DynaML Model Pipes<a class="headerlink" href="#dynaml-model-pipes" title="Permanent link">&para;</a></h2>
-<p>We saw in the previous section that certain operations like training/tuning of models are expressed as pipes which take input the relevant model and perform an operation on it. But it is evident that the model creation itself is a common step in the data analysis workflow, therefore one needs library pipes which instantiate DynaML machine learning models given the training data and other relevant inputs. Model creation pipes are not in the <code class="codehilite"><span class="nc">DynaMLPipe</span></code> object but exist as an independent class hierarchy. Below we explore a section of it.</p>
-<h3 id="generalized-linear-model-pipe">Generalized Linear Model pipe<a class="headerlink" href="#generalized-linear-model-pipe" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">GLMPipe</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">Source</span><span class="o">](</span>
-  <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)],</span>
-  <span class="n">map</span><span class="k">:</span> <span class="o">(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=</span> <span class="n">identity</span> <span class="k">_</span><span class="o">,</span>
-  <span class="n">task</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;regression&quot;</span><span class="o">,</span> <span class="n">modelType</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">)</span>
+                <div class="admonition summary">
+<p class="admonition-title">Summary</p>
+<p>Model pipes define pipelines which involve predictive models.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The classes described here exist in the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.modelpipe.package"><code>dynaml.modelpipe</code></a> package of the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#package"><code>dynaml-core</code></a> module. Although they are not strictly part of the pipes module, they are included here for clarity and continuity.  </p>
+</div>
+<p>The pipes module gives the user the ability to create workflows of arbitrary complexity. In order to enable end to end machine learning, we need pipelines which involve predictive models. These pipelines can be of two types.</p>
+<ul>
+<li>
+<p>Pipelines which take data as input and output a predictive model.</p>
+<p>It is evident that the model creation itself is a common step in the data analysis workflow, therefore one needs library pipes which create machine learning models given the training data and other relevant inputs.</p>
+</li>
+<li>
+<p>Pipelines which encapsulate predictive models and generate predictions for test data splits.</p>
+<p>Once a model has been tuned/trained, it can be a part of a pipeline which generates predictions for previously unobserved data.</p>
+</li>
+</ul>
+<h2 id="model-creation">Model Creation<a class="headerlink" href="#model-creation" title="Permanent link">&para;</a></h2>
+<p>All pipelines which return predictive models as outputs extend the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.modelpipe.ModelPipe"><code class="codehilite"><span class="nc">ModelPipe</span></code></a> trait.</p>
+<h3 id="generalized-linear-model-pipe">Generalized Linear Model Pipe<a class="headerlink" href="#generalized-linear-model-pipe" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Pre-process data</span>
+<span class="k">val</span> <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">feature_map</span><span class="k">:</span> <span class="o">(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">glm_pipe</span> <span class="k">=</span>
+  <span class="nc">GLMPipe</span><span class="o">[(</span><span class="kt">DenseMatrix</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span>, <span class="kt">Source</span><span class="o">](</span>
+    <span class="n">pre</span><span class="o">,</span> <span class="n">map</span><span class="o">,</span> <span class="n">task</span> <span class="k">=</span> <span class="s">&quot;regression&quot;</span><span class="o">,</span>
+    <span class="n">modelType</span> <span class="k">=</span> <span class="s">&quot;&quot;</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">dataSource</span><span class="k">:</span> <span class="kt">Source</span> <span class="o">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">glm_model</span> <span class="k">=</span> <span class="n">glm_pipe</span><span class="o">(</span><span class="n">dataSource</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <ul>
 <li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Source</span>, <span class="kt">GeneralizedLinearModel</span><span class="o">[</span><span class="kt">T</span><span class="o">]]</span></code></li>
-<li><em>Result</em>: Takes as input a data of type <code class="codehilite"><span class="nc">Source</span></code> and outputs a <em>Generalized Linear Model</em>.</li>
+<li><em>Result</em>: Takes as input a data of type <code class="codehilite"><span class="nc">Source</span></code> and outputs a <a href="../../core/core_glm/"><em>Generalized Linear Model</em></a>.</li>
+</ul>
+<h3 id="generalized-least-squares-model-pipe">Generalized Least Squares Model Pipe<a class="headerlink" href="#generalized-least-squares-model-pipe" title="Permanent link">&para;</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span>
+<span class="k">val</span> <span class="n">gls_pipe2</span> <span class="k">=</span> <span class="nc">GeneralizedLeastSquaresPipe2</span><span class="o">(</span><span class="n">kernel</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">featuremap</span><span class="k">:</span> <span class="o">(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">data</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">gls_model</span> <span class="k">=</span> <span class="n">gls_pipe2</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="n">featuremap</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe2</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span>, <span class="kt">GeneralizedLeastSquaresModel</span><span class="o">]</span><span class="err">]</span></code></li>
+<li><em>Result</em>: Takes as inputs data and a feature mapping and outputs a <a href="../../core/core_gls/"><em>Generalized Least Squares Model</em></a>.</li>
 </ul>
 <h3 id="gaussian-process-regression-model-pipe">Gaussian Process Regression Model Pipe<a class="headerlink" href="#gaussian-process-regression-model-pipe" title="Permanent link">&para;</a></h3>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
@@ -1547,35 +1631,94 @@
 4
 5
 6
-7</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">GPRegressionPipe</span><span class="o">[</span>
-<span class="kt">M</span> <span class="k">&lt;:</span> <span class="kt">AbstractGPRegressionModel</span><span class="o">[</span><span class="kt">Seq</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span>,
-<span class="kt">Source</span><span class="o">](</span>
-  <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Seq</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)],</span>
-  <span class="n">cov</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]],</span>
-  <span class="n">n</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]],</span>
+7
+8
+9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Pre-process data</span>
+<span class="k">val</span> <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="c1">//Declare kernel and noise</span>
+<span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">noise</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="nc">GPRegressionPipe</span><span class="o">(</span>
+  <span class="n">pre</span><span class="o">,</span> <span class="n">kernel</span><span class="o">,</span> <span class="n">noise</span><span class="o">,</span>
   <span class="n">order</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <ul>
 <li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Source</span>, <span class="kt">M</span><span class="o">]</span></code></li>
-<li><em>Result</em>: Takes as input data of type <code class="codehilite"><span class="nc">Source</span></code> and intializes a <em>Gaussian Process</em> regression model as the output.</li>
+<li><em>Result</em>: Takes as input data of type <code class="codehilite"><span class="nc">Source</span></code> and outputs a <a href="../../core/core_gp/"><em>Gaussian Process</em> regression</a> model as the output.</li>
 </ul>
 <h3 id="dual-ls-svm-model-pipe">Dual LS-SVM Model Pipe<a class="headerlink" href="#dual-ls-svm-model-pipe" title="Permanent link">&para;</a></h3>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">DLSSVMPipe</span><span class="o">[</span><span class="kt">Source</span><span class="o">](</span>
-  <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)],</span>
-  <span class="n">cov</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]],</span>
-  <span class="n">task</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;regression&quot;</span><span class="o">)</span>
+4
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Pre-process data</span>
+<span class="k">val</span> <span class="n">pre</span><span class="k">:</span> <span class="o">(</span><span class="kt">Source</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="c1">//Declare kernel</span>
+<span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="nc">DLSSVMPipe</span><span class="o">(</span><span class="n">pre</span><span class="o">,</span> <span class="n">kernel</span><span class="o">,</span> <span class="n">task</span> <span class="k">=</span> <span class="s">&quot;regression&quot;</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <ul>
 <li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Source</span>, <span class="kt">DLSSVM</span><span class="o">]</span></code></li>
-<li><em>Result</em>: Takes as input data of type <code class="codehilite"><span class="nc">Source</span></code> and intializes a <em>LS-SVM</em> regression/classification model as the output.</li>
+<li><em>Result</em>: Takes as input data of type <code class="codehilite"><span class="nc">Source</span></code> and outputs a <a href="../../core/core_lssvm/"><em>LS-SVM</em></a> regression/classification model as the output.</li>
 </ul>
+<h2 id="model-prediction">Model Prediction<a class="headerlink" href="#model-prediction" title="Permanent link">&para;</a></h2>
+<p>Prediction pipelines encapsulate predictive models, the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.modelpipe.ModelPredictionPipe"><code class="codehilite"><span class="nc">ModelPredictionPipe</span></code></a> class provides an expressive API for creating prediction pipelines.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Any model</span>
+<span class="k">val</span> <span class="n">model</span><span class="k">:</span> <span class="kt">Model</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">Q</span>, <span class="kt">R</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="c1">//Data pre and post processing</span>
+<span class="k">val</span> <span class="n">preprocessing</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">P</span>, <span class="kt">Q</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">postprocessing</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">R</span>, <span class="kt">S</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">prediction_pipeline</span> <span class="k">=</span> <span class="nc">ModelPredictionPipe</span><span class="o">(</span>
+  <span class="n">preprocessing</span><span class="o">,</span>
+  <span class="n">model</span><span class="o">,</span>
+  <span class="n">postprocessing</span><span class="o">)</span>
+
+<span class="c1">//In case no pre or post processing is done.</span>
+<span class="k">val</span> <span class="n">prediction_pipeline2</span> <span class="k">=</span> <span class="nc">ModelPredictionPipe</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
+
+<span class="c1">//Incase feature and target scaling is performed</span>
+
+<span class="k">val</span> <span class="n">featureScaling</span><span class="k">:</span> <span class="kt">ReversibleScaler</span><span class="o">[</span><span class="kt">Q</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">targetScaling</span><span class="k">:</span> <span class="kt">ReversibleScaler</span><span class="o">[</span><span class="kt">R</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="k">val</span> <span class="n">prediction_pipeline3</span> <span class="k">=</span> <span class="nc">ModelPredictionPipe</span><span class="o">(</span>
+  <span class="n">featureScaling</span><span class="o">,</span>
+  <span class="n">model</span><span class="o">,</span>
+  <span class="n">targetScaling</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
                 
                   
                 
