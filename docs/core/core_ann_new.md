@@ -5,12 +5,12 @@
 
 The neural stack API extends these abstract skeletons by defining two kinds of primitives.
 
- - Computational layers: Defining how inputs are propagated forward; `#!scala NeuralLayer`
- - Activation functions: `#!scala ActivationFunction`
+ - Computational layers: Defining how inputs are propagated forward; [`#!scala NeuralLayer`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer)
+ - Activation functions: [`#!scala Activation[I]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.Activation)
  - Computational stacks: composed of a number of layers; `#!scala GenericNeuralStack`
 
 !!! note
-    The classes `#!scala NeuralLayer` and `#!scala GenericNeuralStack` define layers and stacks in an abstract manner, meaning that the parameters could be in principle of any type.
+    The classes [`#!scala NeuralLayer`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer) and [`#!scala GenericNeuralStack`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.GenericNeuralStack) define layers and stacks in an abstract manner, meaning that the parameters could be in principle of any type.
 
     The key point to understand is that once a layer or stack is defined, it is immutable i.e. the parameters defining its forward computation can't be changed.
 
@@ -20,7 +20,7 @@ The neural stack API extends these abstract skeletons by defining two kinds of p
 
 ## Activation Functions
 
-Activation functions are implemented using the `#!scala Activation[I]` object, its `#!scala apply` method requires two
+Activation functions are implemented using the [`#!scala Activation[I]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.Activation) object, its `#!scala apply` method requires two
 arguments.
 
   1. Implementation of the activation
@@ -35,7 +35,7 @@ val gradAct: (I) => I = _
 val act = Activation(actFunc, gradAct)
 ```
 
-The `dynaml.models.neuralnets` package also contains implementation of the following activations.
+The [`dynaml.models.neuralnets`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.package) package also contains implementation of the following activations.
 
  - Sigmoid $g(x) = \frac{1}{1 + exp(-x)}$
 
@@ -60,11 +60,11 @@ Computational layers are the most basic unit of neural networks. They define tra
 
 Every computational layer generally has a set of parameters describing how this transformation is going to be calculated given the inputs.
 
-In DynaML, the central component of the `#!scala NeuralLayer[Params, Input, Output]` trait is a `#!scala MetaPipe[Params, Input, Output]` (higher order pipe) instance.
+In DynaML, the central component of the [`#!scala NeuralLayer[Params, Input, Output]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer) trait is a [`#!scala MetaPipe[Params, Input, Output]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/index.html#io.github.mandar2812.dynaml.pipes.MetaPipe) ([higher order pipe](/pipes/pipes_api/#meta-pipe)) instance.
 
 ### Creating Layers.
 
-Creating an immutable computational layer can be done using the `#!scala NeuralLayer` object.
+Creating an immutable computational layer can be done using the [`#!scala NeuralLayer`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer$) object.
 
 ```scala
 import scala.math._

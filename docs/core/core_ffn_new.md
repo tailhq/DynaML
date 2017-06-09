@@ -19,7 +19,7 @@
 
 
 The new neural network API extends the same top level traits as the old API, i.e.
-`#!scala NeuralNet[Data, BaseGraph, Input, Output,Graph <: NeuralGraph[BaseGraph, Input, Output]]` which itself extends the `#!scala ParameterizedLearner[Data, Graph, Input, Output, Stream[(Input, Output)]]` trait.
+[`#!scala NeuralNet[Data, BaseGraph, Input, Output,Graph <: NeuralGraph[BaseGraph, Input, Output]]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralNet) which itself extends the `#!scala ParameterizedLearner[Data, Graph, Input, Output, Stream[(Input, Output)]]` trait.
 
 !!! tip
     To learn more about `#!scala ParameterizedLearner` and other major model classes, refer to the [model hierarchy](/core/core_model_hierarchy.md) specification.
