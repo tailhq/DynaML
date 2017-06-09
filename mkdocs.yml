@@ -71,6 +71,7 @@ pages:
           - Miscellaneuos: 'pipes/pipes_misc.md'
         - 'Pipes Example': 'pipes/pipes_library.md'
       - REPL Examples:
+        - Examples Module: 'repl-examples/p2_examples.md'
         - Boston Housing: 'repl-examples/p2_boston_housing.md'
         - Wine Quality: 'repl-examples/p2_winequality_logistic.md'
         - Pont-sur-Sambre Power Plant: 'repl-examples/p2_lssvm_powerplant.md'

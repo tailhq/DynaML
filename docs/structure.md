@@ -10,7 +10,7 @@ The DynaML distribution is divided into four principal modules.
 
 The heart of the DynaML distribution is the `dynaml-core` module.
 
-The core api consists of :
+The [core](/core/core_model_hierarchy.md) api consists of :
 
   - Model implementations
     * Parametric Models
