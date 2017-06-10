@@ -1,5 +1,5 @@
 !!! summary
-    Some attribute transformations are included in the DynaML distribution, here we show how to use them. All of them inherit `#!scala ReversibleScaler[I]` trait. They are contained in the `dynml.utils` package.
+    Some attribute transformations are included in the DynaML distribution, here we show how to use them. All of them inherit [`#!scala ReversibleScaler[I]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/#io.github.mandar2812.dynaml.pipes.ReversibleScaler) trait. They are contained in the [`dynml.utils`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.utils.package) package.
 
 
 ## Gaussian Centering

@@ -19,12 +19,15 @@ pages:
       - v1.4.2:
         - dynaml-core: 'scaladoc/v1.4.2/core.md'
         - dynaml-pipes: 'scaladoc/v1.4.2/pipes.md'
+        - dynaml-examples: 'scaladoc/v1.4.2/examples.md'
       - v1.4.1:
         - dynaml-core: 'scaladoc/v1.4.1/core.md'
         - dynaml-pipes: 'scaladoc/v1.4.1/pipes.md'
+        - dynaml-examples: 'scaladoc/v1.4.1/examples.md'
       - v1.4:
         - dynaml-core: 'scaladoc/v1.4/core.md'
         - dynaml-pipes: 'scaladoc/v1.4/pipes.md'
+        - dynaml-examples: 'scaladoc/v1.4/examples.md'
     - 'User Guide':
       - 'Core':
         - Models:

@@ -1,7 +1,3 @@
----
-title: Stationary Kernels
----
-
 Stationary kernels can be expressed as a function of the difference between their inputs.
 
 $$
@@ -46,6 +42,25 @@ $$
 
 ```scala
 val rbf = new SEKernel(4.0, 2.0)
+```
+
+### Mahalanobis Kernel
+
+This kernel is a further generalization of the SE kernel. It uses the [Mahalanobis distance](https://en.wikipedia.org/wiki/Mahalanobis_distance) instead of the Euclidean distance between the inputs.
+
+$$
+	C(\mathbf{x},\mathbf{y}) = h \ exp\left(-\frac{1}{2}(\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})\right)
+$$
+
+The Mahalanobis distance $(\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})$ is characterized by a symmetric positive definite matrix $\Sigma$. This distance metric reduces to the Euclidean distance if $\Sigma$ is the _identity matrix_. Further, if $\Sigma$ is diagonal, the _Mahalanobis kernel_ becomes the _Automatic Relevance Determination_ version of the SE kernel (SE-ARD).
+
+In DynaML the class `#!scala MahalanobisKernel` implements the SE-ARD kernel with diagonal $\Sigma$.
+
+```scala
+val bandwidths: DenseVector[Double] = _
+val amp = 1.5
+
+val maha_kernel = new MahalanobisKernel(bandwidths, amp)
 ```
 
 ## Student T Kernel
@@ -145,6 +160,16 @@ $$
 
 ```scala
 val periodic_kernel = new PeriodicKernel(lengthscale = 1.5, freq = 2.5)
+```
+
+## Wave Kernel
+
+$$
+C(\mathbf{x},\mathbf{y}) = \frac{\theta}{||\mathbf{x} - \mathbf{y}||^2} \times sin(\frac{||\mathbf{x} - \mathbf{y}||^2}{\theta})
+$$
+
+```scala
+val wv_kernel = WaveKernel(th = 1.0)
 ```
 
 ## Laplacian Kernel

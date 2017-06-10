@@ -1,7 +1,9 @@
----
-title: Kernels
----
+!!! summary ""
 
+    The [`dynaml.kernels`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.kernels.package) package has a highly developed API for creating kernel functions for machine learning applications. Here
+    we give the user an in-depth introduction to its capabilities.
+
+<br/>
 
 ![kernel](/images/kernel.png)
 
@@ -108,8 +110,6 @@ val kernel = CovarianceFunction(mapFunc)(
 
 In machine learning it is well known that kernels can be combined to give other valid kernels. The symmetric positive semi-definite property of a kernel is preserved as long as it is added or multiplied to another valid kernel. In DynaML adding and multiplying kernels is elementary.
 
-
-
 ```scala
 
 val k1 = new RBFKernel(2.5)
@@ -156,7 +156,45 @@ val kernel: LocalScalarKernel[I] = _
 
 val scalingFunction: (I) => Double = _
 
-val scKernel = ScaledKernel(kernel, DataPipe(scalingFunction))
+val scKernel = ScaledKernel(
+  kernel, DataPipe(scalingFunction))
+```
+
+### Advanced Composite Kernels
+
+Sometimes we would like to express a kernel function as a product (or sum) of component kernels each of which act on
+a sub-set of the dimensions (degree of freedom) of the input attributes.
+
+For example; for 4 dimensional input vector, we may define two component kernels acting on the first two and
+last two dimensions respectively and combine their evaluations via addition or multiplication. For this purpose the
+[`dynaml.kernels`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.kernels.package) package has the [`#!scala DecomposableCovariance[S]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.kernels.DecomposableCovariance) class.
+
+
+In order to create a decomposable kernel you need three components.
+
+ 1. The component kernels (order matters)
+ 2. An [`#!scala Encoder[S, Array[S]]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/#io.github.mandar2812.dynaml.pipes.Encoder) instance which splits the input into an array of components
+ 3. A [`#!scala Reducer`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/#io.github.mandar2812.dynaml.pipes.Reducer$) which combines the individual kernel evaluations.
+
+```scala
+//Not required in REPL, already imported
+import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.mandar2812.dynaml.pipes._
+
+val kernel1: LocalScalarKernel[DenseVector[Double]] = _
+val kernel2: LocalScalarKernel[DenseVector[Double]] = _
+
+//Default Reducer is addition
+val decomp_kernel =
+  new DecomposableCovariance[DenseVector[Double]](
+    kernel1, kernel2)(
+    breezeDVSplitEncoder(2))
+
+val decomp_kernel_mult =
+  new DecomposableCovariance[DenseVector[Double]](
+    kernel1, kernel2)(
+    breezeDVSplitEncoder(2),
+    Reducer.:*:)
 ```
 
 -----

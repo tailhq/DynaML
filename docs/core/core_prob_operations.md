@@ -28,10 +28,14 @@ histogram((1 to 1000).map(_ => multR.sample()))
 In many cases random variables can be expressed as functions of one another, for example chi square random variables are obtained by squaring normally distributed samples.
 
 ```scala
-val chsq = MeasurableFunction(n)(DataPipe((x: Double) => x*x))
+val chsq = MeasurableFunction(n, DataPipe((x: Double) => x*x))
 
 //Generate a chi square distribution with one degree of freedom
 histogram((1 to 1000).map(_ => chsq.sample()))
 ```
 
 ![histogram](/images/histogram-ch.png)
+
+## Push-forward Maps
+
+![pushforward](/images/randomVar.gif)
