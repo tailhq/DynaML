@@ -21,7 +21,7 @@
     
     
       
-        <title>Stationary Kernels</title>
+        <title>Stationary Kernels - DynaML User Guide</title>
       
     
     
@@ -861,6 +861,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#mahalanobis-kernel" title="Mahalanobis Kernel" class="md-nav__link">
+    Mahalanobis Kernel
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -911,6 +918,13 @@
         <li class="md-nav__item">
   <a href="#periodic-kernel" title="Periodic Kernel" class="md-nav__link">
     Periodic Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wave-kernel" title="Wave Kernel" class="md-nav__link">
+    Wave Kernel
   </a>
   
 </li>
@@ -1561,6 +1575,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#mahalanobis-kernel" title="Mahalanobis Kernel" class="md-nav__link">
+    Mahalanobis Kernel
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1611,6 +1632,13 @@
         <li class="md-nav__item">
   <a href="#periodic-kernel" title="Periodic Kernel" class="md-nav__link">
     Periodic Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wave-kernel" title="Wave Kernel" class="md-nav__link">
+    Wave Kernel
   </a>
   
 </li>
@@ -1684,6 +1712,22 @@ C(\mathbf{x},\mathbf{y}) = exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2\sigma^
 </pre></div>
 </td></tr></table>
 
+<h3 id="mahalanobis-kernel">Mahalanobis Kernel<a class="headerlink" href="#mahalanobis-kernel" title="Permanent link">&para;</a></h3>
+<p>This kernel is a further generalization of the SE kernel. It uses the <a href="https://en.wikipedia.org/wiki/Mahalanobis_distance">Mahalanobis distance</a> instead of the Euclidean distance between the inputs.</p>
+<span>\[
+    C(\mathbf{x},\mathbf{y}) = h \ exp\left(-\frac{1}{2}(\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})\right)
+\]</span><p>The Mahalanobis distance <span>\((\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})\)</span> is characterized by a symmetric positive definite matrix <span>\(\Sigma\)</span>. This distance metric reduces to the Euclidean distance if <span>\(\Sigma\)</span> is the <em>identity matrix</em>. Further, if <span>\(\Sigma\)</span> is diagonal, the <em>Mahalanobis kernel</em> becomes the <em>Automatic Relevance Determination</em> version of the SE kernel (SE-ARD).</p>
+<p>In DynaML the class <code class="codehilite"><span class="nc">MahalanobisKernel</span></code> implements the SE-ARD kernel with diagonal <span>\(\Sigma\)</span>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">bandwidths</span><span class="k">:</span> <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">amp</span> <span class="k">=</span> <span class="mf">1.5</span>
+
+<span class="k">val</span> <span class="n">maha_kernel</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MahalanobisKernel</span><span class="o">(</span><span class="n">bandwidths</span><span class="o">,</span> <span class="n">amp</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
 <h2 id="student-t-kernel">Student T Kernel<a class="headerlink" href="#student-t-kernel" title="Permanent link">&para;</a></h2>
 <span>\[
     C(\mathbf{x},\mathbf{y}) = \frac{1}{1 + ||\mathbf{x}-\mathbf{y}||^d}
@@ -1753,6 +1797,13 @@ C_{\nu}(\mathbf{x},\mathbf{y}) =  exp\left(-\sqrt{2\nu}\frac{d}{\rho}\right) \fr
 <span>\[
 C(\mathbf{x},\mathbf{y}) = exp\left(-2 \ sin^{2}\left(\frac{\pi \omega ||\mathbf{x}-\mathbf{y}||}{l^2}\right)\right)
 \]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">periodic_kernel</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">PeriodicKernel</span><span class="o">(</span><span class="n">lengthscale</span> <span class="k">=</span> <span class="mf">1.5</span><span class="o">,</span> <span class="n">freq</span> <span class="k">=</span> <span class="mf">2.5</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<h2 id="wave-kernel">Wave Kernel<a class="headerlink" href="#wave-kernel" title="Permanent link">&para;</a></h2>
+<span>\[
+C(\mathbf{x},\mathbf{y}) = \frac{\theta}{||\mathbf{x} - \mathbf{y}||^2} \times sin(\frac{||\mathbf{x} - \mathbf{y}||^2}{\theta})
+\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">wv_kernel</span> <span class="k">=</span> <span class="nc">WaveKernel</span><span class="o">(</span><span class="n">th</span> <span class="k">=</span> <span class="mf">1.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
