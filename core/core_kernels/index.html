@@ -897,6 +897,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#advanced-composite-kernels" title="Advanced Composite Kernels" class="md-nav__link">
+    Advanced Composite Kernels
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1601,6 +1608,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#advanced-composite-kernels" title="Advanced Composite Kernels" class="md-nav__link">
+    Advanced Composite Kernels
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1787,12 +1801,64 @@ C_{b . a}(\mathbf{x}, \mathbf{y}) &amp;= \varphi_{b}(\varphi_{a}(\mathbf{x}))^\i
 3
 4
 5
-6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Instantiate some kernel</span>
+6
+7</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Instantiate some kernel</span>
 <span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
 
 <span class="k">val</span> <span class="n">scalingFunction</span><span class="k">:</span> <span class="o">(</span><span class="kt">I</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="k">_</span>
 
-<span class="k">val</span> <span class="n">scKernel</span> <span class="k">=</span> <span class="nc">ScaledKernel</span><span class="o">(</span><span class="n">kernel</span><span class="o">,</span> <span class="nc">DataPipe</span><span class="o">(</span><span class="n">scalingFunction</span><span class="o">))</span>
+<span class="k">val</span> <span class="n">scKernel</span> <span class="k">=</span> <span class="nc">ScaledKernel</span><span class="o">(</span>
+  <span class="n">kernel</span><span class="o">,</span> <span class="nc">DataPipe</span><span class="o">(</span><span class="n">scalingFunction</span><span class="o">))</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="advanced-composite-kernels">Advanced Composite Kernels<a class="headerlink" href="#advanced-composite-kernels" title="Permanent link">&para;</a></h3>
+<p>Sometimes we would like to express a kernel function as a product (or sum) of component kernels each of which act on
+a sub-set of the dimensions (degree of freedom) of the input attributes.</p>
+<p>For example; for 4 dimensional input vector, we may define two component kernels acting on the first two and
+last two dimensions respectively and combine their evaluations via addition or multiplication. For this purpose the
+<code>dynaml.kernels</code> package has the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.kernels.DecomposableCovariance"><code class="codehilite"><span class="nc">DecomposableCovariance</span><span class="o">[</span><span class="kt">S</span><span class="o">]</span></code></a> class.</p>
+<p>In order to create a decomposable kernel you need three components.</p>
+<ol>
+<li>The component kernels (order matters)</li>
+<li>An <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/#io.github.mandar2812.dynaml.pipes.Encoder"><code class="codehilite"><span class="nc">Encoder</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">Array</span><span class="o">[</span><span class="kt">S</span><span class="o">]]</span></code></a> instance which splits the input into an array of components</li>
+<li>A <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/#io.github.mandar2812.dynaml.pipes.Reducer$"><code class="codehilite"><span class="nc">Reducer</span></code></a> which combines the individual kernel evaluations.</li>
+</ol>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Not required in REPL, already imported</span>
+<span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.DynaMLPipe._</span>
+<span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.pipes._</span>
+
+<span class="k">val</span> <span class="n">kernel1</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">kernel2</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+
+<span class="c1">//Default Reducer is addition</span>
+<span class="k">val</span> <span class="n">decomp_kernel</span> <span class="k">=</span>
+  <span class="k">new</span> <span class="nc">DecomposableCovariance</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]](</span>
+    <span class="n">kernel1</span><span class="o">,</span> <span class="n">kernel2</span><span class="o">)(</span>
+    <span class="n">breezeDVSplitEncoder</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">decomp_kernel_mult</span> <span class="k">=</span>
+  <span class="k">new</span> <span class="nc">DecomposableCovariance</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]](</span>
+    <span class="n">kernel1</span><span class="o">,</span> <span class="n">kernel2</span><span class="o">)(</span>
+    <span class="n">breezeDVSplitEncoder</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span>
+    <span class="nc">Reducer</span><span class="o">.:*:)</span>
 </pre></div>
 </td></tr></table>
 
