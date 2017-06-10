@@ -216,6 +216,11 @@
             "title": "dynaml-pipes"
         },
         {
+            "location": "/scaladoc/v1.4.2/examples/",
+            "text": "",
+            "title": "dynaml-examples"
+        },
+        {
             "location": "/scaladoc/v1.4.1/core/",
             "text": "",
             "title": "dynaml-core"
@@ -226,6 +231,11 @@
             "title": "dynaml-pipes"
         },
         {
+            "location": "/scaladoc/v1.4.1/examples/",
+            "text": "",
+            "title": "dynaml-examples"
+        },
+        {
             "location": "/scaladoc/v1.4/core/",
             "text": "",
             "title": "dynaml-core"
@@ -234,6 +244,11 @@
             "location": "/scaladoc/v1.4/pipes/",
             "text": "",
             "title": "dynaml-pipes"
+        },
+        {
+            "location": "/scaladoc/v1.4/examples/",
+            "text": "",
+            "title": "dynaml-examples"
         },
         {
             "location": "/core/core_model_hierarchy/",
@@ -812,7 +827,7 @@
         },
         {
             "location": "/core/core_prob_operations/",
-            "text": "Apart from just creating wrapper code around sampling procedures which represent random variables, it is also important to do transformations on random variables to yield new more interesting random variables and distributions. In statistics one often formulates certain random variables as algebraic operations on other simpler random variables.\n\n\n\n\nAlgebraic Operations\n\u00b6\n\n\nIt is possible to do common algebraic operations on instances of continuous random variables.\n\n\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\nimport\n \nspire.implicits._\n\n\n\nval\n \nb\n \n=\n \nRandomVariable\n(\nnew\n \nBeta\n(\n7.5\n,\n \n7.5\n))\n\n\nval\n \ng\n \n=\n \nRandomVariable\n(\nnew\n \nGamma\n(\n1.5\n,\n \n1.2\n))\n\n\nval\n \nn\n \n=\n \nGaussianRV\n(\n0.0\n,\n \n1.0\n)\n\n\n\nval\n \naddR\n \n=\n \nb\n \n+\n \nn\n \n-\n \ng\n\n\n\nval\n \nmultR\n \n=\n \nb\n \n*\n \n(\nn\n \n+\n \ng\n)\n\n\n\nhistogram\n((\n1\n \nto\n \n1000\n).\nmap\n(\n_\n \n=>\n \nmultR\n.\nsample\n()))\n\n\n\n\n\n\n\n\n\nMeasurable Functions\n\u00b6\n\n\nIn many cases random variables can be expressed as functions of one another, for example chi square random variables are obtained by squaring normally distributed samples.\n\n\n1\n2\n3\n4\nval\n \nchsq\n \n=\n \nMeasurableFunction\n(\nn\n)(\nDataPipe\n((\nx\n:\n \nDouble\n)\n \n=>\n \nx\n*\nx\n))\n\n\n\n//Generate a chi square distribution with one degree of freedom\n\n\nhistogram\n((\n1\n \nto\n \n1000\n).\nmap\n(\n_\n \n=>\n \nchsq\n.\nsample\n()))",
+            "text": "Apart from just creating wrapper code around sampling procedures which represent random variables, it is also important to do transformations on random variables to yield new more interesting random variables and distributions. In statistics one often formulates certain random variables as algebraic operations on other simpler random variables.\n\n\n\n\nAlgebraic Operations\n\u00b6\n\n\nIt is possible to do common algebraic operations on instances of continuous random variables.\n\n\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\nimport\n \nspire.implicits._\n\n\n\nval\n \nb\n \n=\n \nRandomVariable\n(\nnew\n \nBeta\n(\n7.5\n,\n \n7.5\n))\n\n\nval\n \ng\n \n=\n \nRandomVariable\n(\nnew\n \nGamma\n(\n1.5\n,\n \n1.2\n))\n\n\nval\n \nn\n \n=\n \nGaussianRV\n(\n0.0\n,\n \n1.0\n)\n\n\n\nval\n \naddR\n \n=\n \nb\n \n+\n \nn\n \n-\n \ng\n\n\n\nval\n \nmultR\n \n=\n \nb\n \n*\n \n(\nn\n \n+\n \ng\n)\n\n\n\nhistogram\n((\n1\n \nto\n \n1000\n).\nmap\n(\n_\n \n=>\n \nmultR\n.\nsample\n()))\n\n\n\n\n\n\n\n\n\nMeasurable Functions\n\u00b6\n\n\nIn many cases random variables can be expressed as functions of one another, for example chi square random variables are obtained by squaring normally distributed samples.\n\n\n1\n2\n3\n4\nval\n \nchsq\n \n=\n \nMeasurableFunction\n(\nn\n,\n \nDataPipe\n((\nx\n:\n \nDouble\n)\n \n=>\n \nx\n*\nx\n))\n\n\n\n//Generate a chi square distribution with one degree of freedom\n\n\nhistogram\n((\n1\n \nto\n \n1000\n).\nmap\n(\n_\n \n=>\n \nchsq\n.\nsample\n()))\n\n\n\n\n\n\n\n\n\nPush-forward Maps\n\u00b6",
             "title": "Operations on Random Variables"
         },
         {
@@ -822,8 +837,13 @@
         },
         {
             "location": "/core/core_prob_operations/#measurable-functions",
-            "text": "In many cases random variables can be expressed as functions of one another, for example chi square random variables are obtained by squaring normally distributed samples.  1\n2\n3\n4 val   chsq   =   MeasurableFunction ( n )( DataPipe (( x :   Double )   =>   x * x ))  //Generate a chi square distribution with one degree of freedom  histogram (( 1   to   1000 ). map ( _   =>   chsq . sample ()))",
+            "text": "In many cases random variables can be expressed as functions of one another, for example chi square random variables are obtained by squaring normally distributed samples.  1\n2\n3\n4 val   chsq   =   MeasurableFunction ( n ,   DataPipe (( x :   Double )   =>   x * x ))  //Generate a chi square distribution with one degree of freedom  histogram (( 1   to   1000 ). map ( _   =>   chsq . sample ()))",
             "title": "Measurable Functions"
+        },
+        {
+            "location": "/core/core_prob_operations/#push-forward-maps",
+            "text": "",
+            "title": "Push-forward Maps"
         },
         {
             "location": "/core/core_prob_dist/",

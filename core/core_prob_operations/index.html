@@ -397,6 +397,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scaladoc/v1.4.2/examples/" title="dynaml-examples" class="md-nav__link">
+      dynaml-examples
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -445,6 +457,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scaladoc/v1.4.1/examples/" title="dynaml-examples" class="md-nav__link">
+      dynaml-examples
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -489,6 +513,18 @@
   <li class="md-nav__item">
     <a href="../../scaladoc/v1.4/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scaladoc/v1.4/examples/" title="dynaml-examples" class="md-nav__link">
+      dynaml-examples
     </a>
   </li>
 
@@ -964,6 +1000,13 @@
         <li class="md-nav__item">
   <a href="#measurable-functions" title="Measurable Functions" class="md-nav__link">
     Measurable Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#push-forward-maps" title="Push-forward Maps" class="md-nav__link">
+    Push-forward Maps
   </a>
   
 </li>
@@ -1462,6 +1505,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#push-forward-maps" title="Push-forward Maps" class="md-nav__link">
+    Push-forward Maps
+  </a>
+  
+</li>
+      
       
       
         <li class="md-nav__item">
@@ -1520,7 +1570,7 @@
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">chsq</span> <span class="k">=</span> <span class="nc">MeasurableFunction</span><span class="o">(</span><span class="n">n</span><span class="o">)(</span><span class="nc">DataPipe</span><span class="o">((</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">))</span>
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">chsq</span> <span class="k">=</span> <span class="nc">MeasurableFunction</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="nc">DataPipe</span><span class="o">((</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">))</span>
 
 <span class="c1">//Generate a chi square distribution with one degree of freedom</span>
 <span class="n">histogram</span><span class="o">((</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">1000</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="k">=&gt;</span> <span class="n">chsq</span><span class="o">.</span><span class="n">sample</span><span class="o">()))</span>
@@ -1528,6 +1578,8 @@
 </td></tr></table>
 
 <p><img alt="histogram" src="../../images/histogram-ch.png" /></p>
+<h2 id="push-forward-maps">Push-forward Maps<a class="headerlink" href="#push-forward-maps" title="Permanent link">&para;</a></h2>
+<p><img alt="pushforward" src="../../images/randomVar.gif" /></p>
                 
                   
                 
