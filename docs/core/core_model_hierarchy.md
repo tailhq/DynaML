@@ -44,7 +44,9 @@ Stochastic processes (or random functions) are general probabilistic models whic
 
 ### Continuous Processes
 
-By continuous processes, we mean processes whose values lie on a continuous domain (such as $\mathbb{R}^d$). The [`#!scala ContinuousProcessModel[T, I, Y, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel) abstract class provides a template which can be extended to implement continuous random process models. 
+By continuous processes, we mean processes whose values lie on a continuous domain (such as $\mathbb{R}^d$). The [`#!scala ContinuousProcessModel[T, I, Y, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel) abstract class provides a template which can be extended to implement continuous random process models.
+
+The [`#!scala ContinuousProcessModel`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel) class contains the method `predictionWithErrorBars()` which takes inputs test data and number of standard deviations, and generates predictions with upper and lower error bars around them.
 
 ### Second Order Processes
 
