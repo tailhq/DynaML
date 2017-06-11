@@ -1070,12 +1070,52 @@
     Skew Gaussian
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#univariate" title="Univariate" class="md-nav__link">
+    Univariate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multivariate" title="Multivariate" class="md-nav__link">
+    Multivariate
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
   <a href="#extended-skew-gaussian" title="Extended Skew Gaussian" class="md-nav__link">
     Extended Skew Gaussian
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#univariate_1" title="Univariate" class="md-nav__link">
+    Univariate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multivariate_1" title="Multivariate" class="md-nav__link">
+    Multivariate
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1620,12 +1660,52 @@
     Skew Gaussian
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#univariate" title="Univariate" class="md-nav__link">
+    Univariate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multivariate" title="Multivariate" class="md-nav__link">
+    Multivariate
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
   <a href="#extended-skew-gaussian" title="Extended Skew Gaussian" class="md-nav__link">
     Extended Skew Gaussian
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#univariate_1" title="Univariate" class="md-nav__link">
+    Univariate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multivariate_1" title="Multivariate" class="md-nav__link">
+    Multivariate
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1667,7 +1747,7 @@
 <p>An important analytical way to create skewed distributions was described by <a href="http://azzalini.stat.unipd.it/SN/skew-prop-aism.pdf">Azzalani et. al</a>. It consists of four components.</p>
 <ul>
 <li>A symmetric probability density <span>\(\varphi(.)\)</span></li>
-<li>An odd function <span>\(w()\)</span></li>
+<li>An odd function <span>\(w(.)\)</span></li>
 <li>A cumulative distribution function <span>\(G(.)\)</span> of some symmetric density</li>
 <li>A cut-off parameter <span>\(\tau\)</span></li>
 </ul>
@@ -1749,36 +1829,82 @@
 </pre></div>
 </td></tr></table></p>
 <h3 id="skew-gaussian">Skew Gaussian<a class="headerlink" href="#skew-gaussian" title="Permanent link">&para;</a></h3>
-<p>The univariate skew <em>Gaussian</em> distribution.</p>
+<h4 id="univariate">Univariate<a class="headerlink" href="#univariate" title="Permanent link">&para;</a></h4>
 <p><span>\(\mathcal{X} \equiv  \mathbb{R}\)</span></p>
 <p><span>\(f(x) = \phi(\frac{x - \mu}{\sigma}) \Phi(\alpha (\frac{x-\mu}{\sigma}))\)</span>  </p>
-<p><span>\(\phi()\)</span> and <span>\(\Phi()\)</span> being the standard gaussian density function and cumulative distribution function respectively</p>
 <p><span>\(Z = \frac{1}{2}\)</span></p>
+<p><span>\(\phi()\)</span> and <span>\(\Phi()\)</span> being the standard gaussian density function and cumulative distribution function respectively</p>
+<h4 id="multivariate">Multivariate<a class="headerlink" href="#multivariate" title="Permanent link">&para;</a></h4>
+<p><span>\(\mathcal{X} \equiv  \mathbb{R}^d\)</span></p>
+<p><span>\(f(x) = \phi_{d}(\mathbf{x}; \mathbf{\mu}, {\Sigma}) \Phi(\mathbf{\alpha}^{\intercal} L^{-1}(\mathbf{x} - \mathbf{\mu}))\)</span>  </p>
+<p><span>\(Z = \frac{1}{2}\)</span></p>
+<p><span>\(\phi_{d}(.; \mathbf{\mu}, {\Sigma})\)</span> and <span>\(\Phi()\)</span> are the multivariate gaussian density function and standard gaussian univariate cumulative distribution function respectively and <span>\(L\)</span> is the lower triangular Cholesky decomposition of <span>\(\Sigma\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The parameter <span>\(\alpha\)</span> determines the skewness of the distribution and its sign tells us in which direction the distribution has a fatter tail. In the univariate case the parameter <span>\(\alpha\)</span> is a scalar, while in the multivariate case <span>\(\alpha \in \mathbb{R}^d\)</span>, so for the multivariate skew gaussian distribution, there is a skewness value for each component.</p>
+</div>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Univariate</span>
+<span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">sigma</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="o">-</span><span class="mf">0.5</span>
 <span class="k">val</span> <span class="n">d</span> <span class="k">=</span> <span class="nc">SkewGaussian</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">mean</span><span class="o">,</span> <span class="n">sigma</span><span class="o">)</span>
+
+<span class="c1">//Multivariate</span>
+<span class="k">val</span> <span class="n">mu</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">.</span><span class="n">ones</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">alpha</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">.</span><span class="n">fill</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)(</span><span class="mf">1.2</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">cov</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">.</span><span class="n">eye</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)*</span><span class="mf">1.5</span>
+<span class="k">val</span> <span class="n">md</span> <span class="k">=</span> <span class="nc">MultivariateSkewNormal</span><span class="o">(</span><span class="n">alpha</span><span class="o">,</span> <span class="n">mu</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span>
 </pre></div>
 </td></tr></table></p>
 <h3 id="extended-skew-gaussian">Extended Skew Gaussian<a class="headerlink" href="#extended-skew-gaussian" title="Permanent link">&para;</a></h3>
+<h4 id="univariate_1">Univariate<a class="headerlink" href="#univariate_1" title="Permanent link">&para;</a></h4>
 <p>The generalization of the univariate skew <em>Gaussian</em> distribution.</p>
 <p><span>\(\mathcal{X} \equiv  \mathbb{R}\)</span></p>
-<p><span>\(f(x) = \frac{1}{\Phi(\tau)} \phi(\frac{x - \mu}{\sigma}) \Phi(\alpha (\frac{x-\mu}{\sigma}) + \tau\sqrt{1 + \alpha^{2}})\)</span>  </p>
+<p><span>\(f(x) = \phi(\frac{x - \mu}{\sigma}) \Phi(\alpha (\frac{x-\mu}{\sigma}) + \tau\sqrt{1 + \alpha^{2}})\)</span>  </p>
+<p><span>\(Z = \Phi(\tau)\)</span></p>
 <p><span>\(\phi()\)</span> and <span>\(\Phi()\)</span> being the standard gaussian density function and cumulative distribution function respectively</p>
+<h4 id="multivariate_1">Multivariate<a class="headerlink" href="#multivariate_1" title="Permanent link">&para;</a></h4>
+<p><span>\(\mathcal{X} \equiv  \mathbb{R}^d\)</span></p>
+<p><span>\(f(x) = \phi_{d}(\mathbf{x}; \mathbf{\mu}, {\Sigma}) \Phi(\mathbf{\alpha}^{\intercal} L^{-1}(\mathbf{x} - \mathbf{\mu}) + \tau\sqrt{1 + \mathbf{\alpha}^{\intercal}\mathbf{\alpha}})\)</span>  </p>
+<p><span>\(Z = \Phi(\tau)\)</span></p>
+<p><span>\(\phi_{d}(.; \mathbf{\mu}, {\Sigma})\)</span> and <span>\(\Phi()\)</span> are the multivariate gaussian density function and standard gaussian univariate cumulative distribution function respectively and <span>\(L\)</span> is the lower triangular Cholesky decomposition of <span>\(\Sigma\)</span>.</p>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//univariate</span>
+<span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">sigma</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="o">-</span><span class="mf">0.5</span>
 <span class="k">val</span> <span class="n">c</span> <span class="k">=</span> <span class="mf">0.5</span>
 <span class="k">val</span> <span class="n">d</span> <span class="k">=</span> <span class="nc">ExtendedSkewGaussian</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">a</span><span class="o">,</span> <span class="n">mean</span><span class="o">,</span> <span class="n">sigma</span><span class="o">)</span>
+
+<span class="c1">//Multivariate</span>
+<span class="k">val</span> <span class="n">mu</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">.</span><span class="n">ones</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">alpha</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">.</span><span class="n">fill</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)(</span><span class="mf">1.2</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">cov</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">.</span><span class="n">eye</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)*</span><span class="mf">1.5</span>
+<span class="k">val</span> <span class="n">tau</span> <span class="k">=</span> <span class="mf">0.2</span>
+<span class="k">val</span> <span class="n">md</span> <span class="k">=</span> <span class="nc">ExtendedMultivariateSkewNormal</span><span class="o">(</span><span class="n">tau</span><span class="o">,</span> <span class="n">alpha</span><span class="o">,</span> <span class="n">mu</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span>
 </pre></div>
 </td></tr></table></p>
                 
