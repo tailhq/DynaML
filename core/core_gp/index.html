@@ -766,6 +766,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../core_esgp/" title="Extended Skew Gaussian Processes" class="md-nav__link">
+      Extended Skew Gaussian Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../core_stp/" title="Students T Processes" class="md-nav__link">
       Students T Processes
     </a>
@@ -1570,9 +1582,6 @@
 <p><img alt="gp-book" src="../../images/gpbook.jpg" /></p>
 <p><br/></p>
 <p><em>Gaussian Process</em> models are well supported in DynaML, the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel"><code class="codehilite"><span class="nc">AbstractGPRegressionModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span><span class="o">]</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.AbstractGPClassification"><code class="codehilite"><span class="nc">AbstractGPClassification</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span><span class="o">]</span></code></a> classes which extend the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcessModel"><code class="codehilite"><span class="nc">StochasticProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> base trait are the starting point for all GP implementations.</p>
-<p>The <code class="codehilite"><span class="nc">StochasticProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code> trait contains the <code class="codehilite"><span class="n">predictiveDistribution</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">I</span><span class="o">]](</span><span class="n">test</span><span class="k">:</span> <span class="kt">U</span><span class="o">)</span><span class="k">:</span> <span class="kt">W</span></code> method which returns the posterior predictive distribution (represented by the generic type <code class="codehilite"><span class="n">W</span></code>).</p>
-<p>The base trait is extended by <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcessModel"><code class="codehilite"><span class="nc">SecondOrderProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">K</span>, <span class="kt">M</span>, <span class="kt">W</span><span class="o">]</span></code></a> which defines a skeleton for processes which are defined by their first and second order statistics (<em>mean functions</em> and <em>covariance functions</em>).</p>
-<p>Since for most applications it is assumed that the training data is standardized, the mean function is often chosen to be zero <span>\(\mu(\mathbf{x}) = 0\)</span>, thus the covariance function or kernel defines all the interesting behavior of <em>second order processes</em>. For a more in depth information on the types of covariance functions available visit the <a href="../core/core_kernels.html">kernels</a> page.</p>
 <h2 id="gaussian-process-regression">Gaussian Process Regression<a class="headerlink" href="#gaussian-process-regression" title="Permanent link">&para;</a></h2>
 <p>The GP regression framework aims to infer an unknown function <span>\(f(x)\)</span> given <span>\(y_i\)</span> which are noise corrupted observations of this unknown function. This is done by adopting an explicit probabilistic formulation to the multi-variate distribution of the noise corrupted observations <span>\(y_i\)</span> conditioned on the input features (or design matrix) <span>\(X\)</span></p>
 <span>\[
@@ -1772,13 +1781,13 @@ val coRegDiracMatrix = new CoRegDiracKernel</p>
           </a>
         
         
-          <a href="../core_stp/" title="Students T Processes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../core_esgp/" title="Extended Skew Gaussian Processes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Students T Processes
+                Extended Skew Gaussian Processes
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

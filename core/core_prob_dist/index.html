@@ -697,6 +697,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../core_esgp/" title="Extended Skew Gaussian Processes" class="md-nav__link">
+      Extended Skew Gaussian Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../core_stp/" title="Students T Processes" class="md-nav__link">
       Students T Processes
     </a>
@@ -1116,6 +1128,13 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mesn" title="MESN" class="md-nav__link">
+    MESN
+  </a>
   
 </li>
         
@@ -1709,6 +1728,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#mesn" title="MESN" class="md-nav__link">
+    MESN
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1840,8 +1866,8 @@
 <p><span>\(Z = \frac{1}{2}\)</span></p>
 <p><span>\(\phi_{d}(.; \mathbf{\mu}, {\Sigma})\)</span> and <span>\(\Phi()\)</span> are the multivariate gaussian density function and standard gaussian univariate cumulative distribution function respectively and <span>\(L\)</span> is the lower triangular Cholesky decomposition of <span>\(\Sigma\)</span>.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The parameter <span>\(\alpha\)</span> determines the skewness of the distribution and its sign tells us in which direction the distribution has a fatter tail. In the univariate case the parameter <span>\(\alpha\)</span> is a scalar, while in the multivariate case <span>\(\alpha \in \mathbb{R}^d\)</span>, so for the multivariate skew gaussian distribution, there is a skewness value for each component.</p>
+<p class="admonition-title">Skewness parameter <span>\(\alpha\)</span></p>
+<p>The parameter <span>\(\alpha\)</span> determines the skewness of the distribution and its sign tells us in which direction the distribution has a fatter tail. In the univariate case the parameter <span>\(\alpha\)</span> is a scalar, while in the multivariate case <span>\(\alpha \in \mathbb{R}^d\)</span>, so for the multivariate skew gaussian distribution, there is a skewness value for each dimension.</p>
 </div>
 <p><em>Usage</em>:
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -1892,7 +1918,7 @@
 10
 11
 12
-13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//univariate</span>
+13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Univariate</span>
 <span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">sigma</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="o">-</span><span class="mf">0.5</span>
@@ -1907,6 +1933,49 @@
 <span class="k">val</span> <span class="n">md</span> <span class="k">=</span> <span class="nc">ExtendedMultivariateSkewNormal</span><span class="o">(</span><span class="n">tau</span><span class="o">,</span> <span class="n">alpha</span><span class="o">,</span> <span class="n">mu</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span>
 </pre></div>
 </td></tr></table></p>
+<div class="admonition warning">
+<p class="admonition-title">Confusing Nomenclature</p>
+<p>The following distribution has a very similar form and name to the <em>extended skew gaussian</em> distribution shown above. But despite its deceptively similar formula, it is a very different object.</p>
+<p>We use the name MESN to denote the variant below instead of its expanded form.</p>
+</div>
+<h3 id="mesn">MESN<a class="headerlink" href="#mesn" title="Permanent link">&para;</a></h3>
+<p>The  <em>Multivariate Extended Skew Normal</em> or MESN distribution was formulated by <a href="https://www.sheffield.ac.uk/polopoly_fs/1.137010!/file/Adcock-Skew-normal-exponential-.pdf">Adcock and Schutes</a>. It is given by</p>
+<p><span>\(\mathcal{X} \equiv  \mathbb{R}^d\)</span></p>
+<p><span>\(f(x) = \phi_{d}(\mathbf{x}; \mathbf{\mu} + \mathbf{\alpha}\tau, {\Sigma} + \mathbf{\alpha}\mathbf{\alpha}^\intercal) \Phi\left(\frac{\mathbf{\alpha}^{\intercal} \Sigma^{-1}(\mathbf{x} - \mathbf{\mu}) + \tau}{\sqrt{1 + \mathbf{\alpha}^{\intercal}\Sigma^{-1}\mathbf{\alpha}}}\right)\)</span>  </p>
+<p><span>\(Z = \Phi(\tau)\)</span></p>
+<p><span>\(\phi_{d}(.; \mathbf{\mu}, {\Sigma})\)</span> and <span>\(\Phi()\)</span> are the multivariate gaussian density function and standard gaussian univariate cumulative distribution function respectively.</p>
+<p><em>Usage</em>:
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Univariate</span>
+<span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
+<span class="k">val</span> <span class="n">sigma</span> <span class="k">=</span> <span class="mf">1.5</span>
+<span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="o">-</span><span class="mf">0.5</span>
+<span class="k">val</span> <span class="n">c</span> <span class="k">=</span> <span class="mf">0.5</span>
+<span class="k">val</span> <span class="n">d</span> <span class="k">=</span> <span class="nc">UESN</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">a</span><span class="o">,</span> <span class="n">mean</span><span class="o">,</span> <span class="n">sigma</span><span class="o">)</span>
+
+<span class="c1">//Multivariate</span>
+<span class="k">val</span> <span class="n">mu</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">.</span><span class="n">ones</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">alpha</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">.</span><span class="n">fill</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)(</span><span class="mf">1.2</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">cov</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">.</span><span class="n">eye</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)*</span><span class="mf">1.5</span>
+<span class="k">val</span> <span class="n">tau</span> <span class="k">=</span> <span class="mf">0.2</span>
+<span class="k">val</span> <span class="n">md</span> <span class="k">=</span> <span class="nc">MESN</span><span class="o">(</span><span class="n">tau</span><span class="o">,</span> <span class="n">alpha</span><span class="o">,</span> <span class="n">mu</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span>
+</pre></div>
+</td></tr></table></p>
+<div class="admonition seealso">
+<p class="admonition-title"><em>Extended Skew Gaussian Process</em> ESGP</p>
+<p>The MESN distribution is used to define the finite dimensional probabilities for the <a href="../core_esgp/">ESGP</a> process.</p>
+</div>
                 
                   
                 

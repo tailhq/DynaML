@@ -791,6 +791,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../core_esgp/" title="Extended Skew Gaussian Processes" class="md-nav__link">
+      Extended Skew Gaussian Processes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../core_stp/" title="Students T Processes" class="md-nav__link">
       Students T Processes
     </a>
@@ -1649,7 +1661,8 @@
 <p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcessModel"><code class="codehilite"><span class="nc">StochasticProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> trait extends <code class="codehilite"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span><span class="o">]</span></code> and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution <code class="codehilite"><span class="n">predictiveDistribution</span><span class="o">()</span></code>.</p>
 </div>
 <h3 id="continuous-processes">Continuous Processes<a class="headerlink" href="#continuous-processes" title="Permanent link">&para;</a></h3>
-<p>By continuous processes, we mean processes whose values lie on a continuous domain (such as <span>\(\mathbb{R}^d\)</span>). The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel"><code class="codehilite"><span class="nc">ContinuousProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> abstract class provides a template which can be extended to implement continuous random process models. </p>
+<p>By continuous processes, we mean processes whose values lie on a continuous domain (such as <span>\(\mathbb{R}^d\)</span>). The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel"><code class="codehilite"><span class="nc">ContinuousProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> abstract class provides a template which can be extended to implement continuous random process models.</p>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel"><code class="codehilite"><span class="nc">ContinuousProcessModel</span></code></a> class contains the method <code>predictionWithErrorBars()</code> which takes inputs test data and number of standard deviations, and generates predictions with upper and lower error bars around them.</p>
 <h3 id="second-order-processes">Second Order Processes<a class="headerlink" href="#second-order-processes" title="Permanent link">&para;</a></h3>
 <p>Second order stochastic processes can be described by specifying the <em>mean</em> (first order statistic) and <em>variance</em> (second order statistic) of their finite dimensional distribution. The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcessModel"><code class="codehilite"><span class="nc">SecondOrderProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">K</span>, <span class="kt">M</span>, <span class="kt">W</span><span class="o">]</span></code></a> trait is an abstract skeleton which describes what elements a second order process model must have i.e. the mean and covariance functions.</p>
 <h2 id="meta-modelsmodel-ensembles">Meta Models/Model Ensembles<a class="headerlink" href="#meta-modelsmodel-ensembles" title="Permanent link">&para;</a></h2>
