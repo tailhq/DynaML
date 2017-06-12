@@ -80,6 +80,14 @@ object TransferFunctions {
     * */
   val DrecLin = (x: Double) => if(x < 0 ) 0.0 else 1.0
 
+
+  val selu = (l: Double, a: Double) => (x: Double) => if(x <= 0d) l*(a*math.exp(x) - a) else x
+
+
+
+  val Dselu = (l: Double, a: Double) => (x: Double) => if(x <= 0d) l*a*math.exp(x) else 1.0
+
+
   /**
    * Function which returns
    * the appropriate activation
@@ -158,6 +166,26 @@ object VectorRecLin extends Activation[DenseVector[Double]] {
 
   override def run(data: DenseVector[Double]) = data.map(TransferFunctions.recLin)
 }
+
+/**
+  * Implementation of the SELU activation function
+  * proposed by Hochreiter et. al
+  * */
+case class VectorSELU(lambda: Double, alpha: Double) extends Activation[DenseVector[Double]] {
+
+  val SELU = TransferFunctions.selu(lambda, alpha)
+
+  val DSELU = TransferFunctions.Dselu(lambda, alpha)
+
+  override val grad = Scaler((x: DenseVector[Double]) => x.map(DSELU))
+
+  override def run(data: DenseVector[Double]) = data.map(SELU)
+}
+
+/**
+  * 'Magic' SELU activation with specific values of lambda and alpha
+  * */
+object MagicSELU extends VectorSELU(1.050700987355, 1.67326324235)
 
 @Experimental
 class VectorWavelet(motherWavelet: (Double) => Double, motherWaveletGr: (Double) => Double)
