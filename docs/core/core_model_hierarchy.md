@@ -1,7 +1,3 @@
----
-title: Introduction to the Model Hierarchy
----
-
 
 ## Model Classes
 
@@ -19,7 +15,7 @@ In DynaML all model implementations fit into a well defined class hierarchy. In 
 
 Many predictive models calculate predictions by formulating an expression which includes a set of parameters which are used along with the data points to generate predictions, the [```ParameterizedLearner[G, T, Q, R, S]```](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ParameterizedLearner) class represents a skeleton for all parametric machine learning models such as [_Generalized Linear Models_](core_glm.md), [_Neural Networks_](core_ann.md), etc.
 
-!!! Tip
+!!! tip
     The defining characteristic of classes which extend `#!scala ParameterizedLearner` is that they must contain a member variable ```optimizer: RegularizedOptimizer[T, Q, R, S]``` which represents a [regularization enabled optimizer](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.RegularizedOptimizer) implementation along with a `#!scala learn()` method which uses the optimizer member to calculate approximate values of the model parameters given the training data.
 
 ### Linear Models
@@ -46,7 +42,8 @@ Stochastic processes (or random functions) are general probabilistic models whic
 
 By continuous processes, we mean processes whose values lie on a continuous domain (such as $\mathbb{R}^d$). The [`#!scala ContinuousProcessModel[T, I, Y, W]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel) abstract class provides a template which can be extended to implement continuous random process models.
 
-The [`#!scala ContinuousProcessModel`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel) class contains the method `predictionWithErrorBars()` which takes inputs test data and number of standard deviations, and generates predictions with upper and lower error bars around them.
+!!! tip
+    The [`#!scala ContinuousProcessModel`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel) class contains the method `predictionWithErrorBars()` which takes inputs test data and number of standard deviations, and generates predictions with upper and lower error bars around them. In order to create a sub-class of `#!scala ContinuousProcessModel`, you must implement the method `predictionWithErrorBars()`.
 
 ### Second Order Processes
 
