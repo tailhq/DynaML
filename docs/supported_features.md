@@ -1,7 +1,3 @@
----
-title: Supported features
----
-
 !!! summary
     "If you're not sure whether DynaML fits your requirements, this list provides a semi-comprehensive overview of available features."
 
@@ -10,9 +6,12 @@ title: Supported features
 Model Family | Supported | Notes
 --------|-----------|-----------
 [Generalized Linear Models](/core/core_glm.md) | Yes | Supports regularized least squares based models for regression as well as logistic and probit models for classification.
+[Generalized Least Squares Models](/core/core_gls.md) | Yes | -
 [Least Squares Support Vector Machines](/core/core_lssvm.md) | Yes | Contains implementation of dual LS-SVM applied to classification and regression.
 [Gaussian Processes](/core/core_gp.md) | Yes | Supports gaussian process inference models for regression and binary classification; the binary classification GP implementation uses the Laplace approximation for posterior mode computation. For regression problems, there are also multi-output and multi-task GP implementations.
-[Feed forward Neural Networks](/core/core_ann.md)| Yes | Can build and learn feedforward neural nets of various sizes.
+[Student T Processes](/core/core_stp.md) | Yes | Supports student T process inference models for regression, there are also multi-output and multi-task STP implementations.
+[Skew Gaussian Processes](/core/core_esgp.md) | Yes | Supports extended skew gaussian process inference models for regression.
+[Feed forward Neural Networks](/core/core_ffn_new.md)| Yes | Can build and learn feedforward neural nets of various sizes.
 [Committee/Meta Models](/core/core_model_hierarchy.md#meta-modelsmodel-ensembles) | Yes | Supports creation of gating networks or committee models.
 
 ## Optimizers & Solvers
