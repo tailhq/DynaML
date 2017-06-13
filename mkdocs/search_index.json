@@ -121,6 +121,46 @@
             "title": "Libraries Used"
         },
         {
+            "location": "/releases/mydoc_release_notes_143/",
+            "text": "Version 1.4.3 of DynaML, released June 13, 2017. Updates, improvements and new features.\n\n\n\n\nDynaML REPL\n\u00b6\n\n\nAdditions\n\u00b6\n\n\nModule\n \nscripts\n\n\n\n\nAdded \ngp_mcmc_santafe.sc\n worksheet to try new MCMC feature on GP models; applied on the Santa Fe laser data set. \n\n\n\n\nGeneral\n\n\n\n\nUpdated Ammonite version to \n0.9.9\n\n\n\n\nPipes API\n\u00b6\n\n\nAdditions\n\u00b6\n\n\nPackage\n \ndynaml.pipes\n\n\n\n\nAdded \n._1\n and \n._2\n members in \nParallelPipe\n \n\n\n\n\nCore API\n\u00b6\n\n\nAdditions\n\u00b6\n\n\nPackage\n \ndynaml.models.neuralnets\n\n\n\n\nAdded \nSELU\n activation function proposed by \nHochreiter et. al\n\n\n\n\nPackage\n \ndynaml.models.bayes\n\n\n\n\nAdded \n*\n method to \nCoRegGPPrior\n which scales it with to a \nParallelPipe\n\n\n\n\nPackage\n \ndynaml.probability.mcmc\n\n\n\n\nAdded \nHyperParameterMCMC\n for performing MCMC sampling for models extending \nGloballyOptimizable\n.\n\n\n\n\nPackage\n \ndynaml.utils\n\n\n\n\n\n\nAdded trait \nHyperParameters\n outlining methods that must be implemented by entities having hyper-parameters\n\n\n\n\n\n\nAdded \nMeanScaler\n, \nPCAScaler\n to perform mean centering and PCA on data sets. Also added to \nDynaMLPipe\n pipe library.\n\n\n\n\n\n\nAdded tail recursive computation of the \nChebyshev\n polynomials of the first and second kind in \nutils\n.\nchebyshev\n. \n\n\n\n\n\n\nImprovements\n\u00b6\n\n\nPackage\n \ndynaml.models.bayes\n\n\n\n\nAdded \ntrendParamsEncoder\n which converts the trend/mean parameters into a scala \nMap\n[\nString\n, \nDouble\n]\n making them \n     consistent with covariance parameters. Added to \nGaussianProcessPrior\n and \nESGPPrior\n families.",
+            "title": "v1.4.3"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_143/#dynaml-repl",
+            "text": "",
+            "title": "DynaML REPL"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_143/#additions",
+            "text": "Module   scripts   Added  gp_mcmc_santafe.sc  worksheet to try new MCMC feature on GP models; applied on the Santa Fe laser data set.    General   Updated Ammonite version to  0.9.9",
+            "title": "Additions"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_143/#pipes-api",
+            "text": "",
+            "title": "Pipes API"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_143/#additions_1",
+            "text": "Package   dynaml.pipes   Added  ._1  and  ._2  members in  ParallelPipe",
+            "title": "Additions"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_143/#core-api",
+            "text": "",
+            "title": "Core API"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_143/#additions_2",
+            "text": "Package   dynaml.models.neuralnets   Added  SELU  activation function proposed by  Hochreiter et. al   Package   dynaml.models.bayes   Added  *  method to  CoRegGPPrior  which scales it with to a  ParallelPipe   Package   dynaml.probability.mcmc   Added  HyperParameterMCMC  for performing MCMC sampling for models extending  GloballyOptimizable .   Package   dynaml.utils    Added trait  HyperParameters  outlining methods that must be implemented by entities having hyper-parameters    Added  MeanScaler ,  PCAScaler  to perform mean centering and PCA on data sets. Also added to  DynaMLPipe  pipe library.    Added tail recursive computation of the  Chebyshev  polynomials of the first and second kind in  utils . chebyshev .",
+            "title": "Additions"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_143/#improvements",
+            "text": "Package   dynaml.models.bayes   Added  trendParamsEncoder  which converts the trend/mean parameters into a scala  Map [ String ,  Double ]  making them \n     consistent with covariance parameters. Added to  GaussianProcessPrior  and  ESGPPrior  families.",
+            "title": "Improvements"
+        },
+        {
             "location": "/releases/mydoc_release_notes_142/",
             "text": "Version 1.4.2 of DynaML, released May 7, 2017. Updates, improvements and new features.\n\n\n\n\nCore API\n\u00b6\n\n\nAdditions\n\u00b6\n\n\nPackage\n \ndynaml\n.\nmodels\n.\nneuralnets\n\n\n\n\nAdded \nGenericAutoEncoder\n[\nLayerP\n, \nI\n]\n, the class \nAutoEncoder\n is now \ndeprecated\n\n\nAdded \nGenericNeuralStack\n[\nP\n, \nI\n, \nT\n]\n as a base class for Neural Stack API\n\n\nAdded \nLazyNeuralStack\n[\nP\n, \nI\n]\n where the layers are lazily spawned.\n\n\n\n\nPackage\n \ndynaml\n.\nkernels\n\n\n\n\nAdded \nScaledKernel\n[\nI\n]\n representing kernels of scaled Gaussian Processes.\n\n\n\n\nPackage\n \ndynaml\n.\nmodels\n.\nbayes\n\n\n\n\nAdded \n*\n method to \nGaussianProcessPrior\n[\nI\n, \nM\n]\n which creates a scaled Gaussian Process prior using the newly minted \nScaledKernel\n[\nI\n]\n class\n\n\nAdded Kronecker product GP priors with the \nCoRegGPPrior\n[\nI\n, \nJ\n, \nM\n]\n class\n\n\n\n\nPackage\n \ndynaml\n.\nmodels\n.\nstp\n\n\n\n\nAdded multi-output Students' T Regression model of \nConti & O' Hagan\n in class \nMVStudentsTModel\n\n\n\n\nPackage\n \ndynaml\n.\nprobability\n.\ndistributions\n\n\n\n\nAdded \nHasErrorBars\n[\nT\n]\n generic trait representing distributions which can generate confidence intervals around their mean value.\n\n\n\n\nImprovements\n\u00b6\n\n\nPackage\n \ndynaml\n.\nprobability\n\n\n\n\nFixed issue with creation of \nMeasurableFunction\n instances from \nRandomVariable\n instances\n\n\n\n\nPackage\n \ndynaml\n.\nprobability\n.\ndistributions\n\n\n\n\nChanged error bar calculations and sampling of Students T distributions (vector and matrix) and Matrix Normal distribution.\n\n\n\n\nPackage\n \ndynaml\n.\nmodels\n.\ngp\n\n\n\n\nAdded \nKronecker\n structure speed up to \nenergy\n (marginal likelihood) calculation of multi-output GP models\n\n\n\n\nPackage\n \ndynaml\n.\nkernels\n\n  - Improved implicit paramterization of Matern Covariance classes\n\n\nGeneral\n\n\n\n\nUpdated breeze version to latest.\n\n\nUpdated Ammonite version to latest",
             "title": "v1.4.2"
@@ -204,6 +244,21 @@
             "location": "/releases/mydoc_release_notes_14/#pipes",
             "text": "Added  Scaler  and  ReversibleScaler  traits to represent transformations which input and output into the same domain set, these traits are extensions of  DataPipe .    Added  Discrete Wavelet Transform  based on the  Haar  wavelet.",
             "title": "Pipes"
+        },
+        {
+            "location": "/scaladoc/v1.4.3/core/",
+            "text": "",
+            "title": "dynaml-core"
+        },
+        {
+            "location": "/scaladoc/v1.4.3/pipes/",
+            "text": "",
+            "title": "dynaml-pipes"
+        },
+        {
+            "location": "/scaladoc/v1.4.3/examples/",
+            "text": "",
+            "title": "dynaml-examples"
         },
         {
             "location": "/scaladoc/v1.4.2/core/",

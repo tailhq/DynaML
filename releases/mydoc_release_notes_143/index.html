@@ -9,7 +9,7 @@
         <meta name="description" content="User guide and documentation for the DynaML machine learning library and API">
       
       
-        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/pipes/pipes_time_series/">
+        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/releases/mydoc_release_notes_143/">
       
       
         <meta name="author" content="Mandar Chandorkar">
@@ -21,7 +21,7 @@
     
     
       
-        <title>Time Series - DynaML User Guide</title>
+        <title>v1.4.3 - DynaML User Guide</title>
       
     
     
@@ -82,15 +82,11 @@
             
               
                 <span class="md-header-nav__parent">
-                  Pipes
-                </span>
-              
-                <span class="md-header-nav__parent">
-                  DynaML Pipes Library
+                  Releases
                 </span>
               
             
-            Time Series
+            v1.4.3
           
         </span>
       </div>
@@ -279,10 +275,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
     
     <label class="md-nav__link" for="nav-5">
       Releases
@@ -298,11 +296,109 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../releases/mydoc_release_notes_143/" title="v1.4.3" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        v1.4.3
+      </label>
+    
+    <a href="./" title="v1.4.3" class="md-nav__link md-nav__link--active">
       v1.4.3
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dynaml-repl" title="DynaML REPL" class="md-nav__link">
+    DynaML REPL
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additions" title="Additions" class="md-nav__link">
+    Additions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipes-api" title="Pipes API" class="md-nav__link">
+    Pipes API
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additions_1" title="Additions" class="md-nav__link">
+    Additions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-api" title="Core API" class="md-nav__link">
+    Core API
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additions_2" title="Additions" class="md-nav__link">
+    Additions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#improvements" title="Improvements" class="md-nav__link">
+    Improvements
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -312,7 +408,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../releases/mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
+    <a href="../mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
       v1.4.2
     </a>
   </li>
@@ -324,7 +420,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../releases/mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
+    <a href="../mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
       v1.4.1
     </a>
   </li>
@@ -336,7 +432,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../releases/mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
+    <a href="../mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
       v1.4
     </a>
   </li>
@@ -615,12 +711,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
     
     <label class="md-nav__link" for="nav-7">
       User Guide
@@ -1140,12 +1234,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2">
     
     <label class="md-nav__link" for="nav-7-2">
       Pipes
@@ -1163,7 +1255,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/" title="DynaML Pipes" class="md-nav__link">
+    <a href="../../pipes/pipes/" title="DynaML Pipes" class="md-nav__link">
       DynaML Pipes
     </a>
   </li>
@@ -1175,7 +1267,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_api/" title="Pipes API" class="md-nav__link">
+    <a href="../../pipes/pipes_api/" title="Pipes API" class="md-nav__link">
       Pipes API
     </a>
   </li>
@@ -1187,7 +1279,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
+    <a href="../../pipes/pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
       Scalers & Encoders
     </a>
   </li>
@@ -1199,7 +1291,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../model_pipes/" title="Model Pipes" class="md-nav__link">
+    <a href="../../pipes/model_pipes/" title="Model Pipes" class="md-nav__link">
       Model Pipes
     </a>
   </li>
@@ -1209,12 +1301,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2-5" type="checkbox" id="nav-7-2-5" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2-5" type="checkbox" id="nav-7-2-5">
     
     <label class="md-nav__link" for="nav-7-2-5">
       DynaML Pipes Library
@@ -1232,7 +1322,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../file_processing/" title="String & File Processing" class="md-nav__link">
+    <a href="../../pipes/file_processing/" title="String & File Processing" class="md-nav__link">
       String & File Processing
     </a>
   </li>
@@ -1244,7 +1334,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../feature_processing/" title="Feature Processing" class="md-nav__link">
+    <a href="../../pipes/feature_processing/" title="Feature Processing" class="md-nav__link">
       Feature Processing
     </a>
   </li>
@@ -1254,77 +1344,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Time Series
-      </label>
-    
-    <a href="./" title="Time Series" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../pipes/pipes_time_series/" title="Time Series" class="md-nav__link">
       Time Series
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#extract-data-as-univariate-time-series" title="Extract Data as Univariate Time Series" class="md-nav__link">
-    Extract Data as Univariate Time Series
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#extract-data-as-multivariate-time-series" title="Extract data as Multivariate Time Series" class="md-nav__link">
-    Extract data as Multivariate Time Series
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#construct-time-differenced-data" title="Construct Time differenced Data" class="md-nav__link">
-    Construct Time differenced Data
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#construct-multivariate-time-differenced-data" title="Construct multivariate Time differenced Data" class="md-nav__link">
-    Construct multivariate Time differenced Data
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#haar-discrete-wavelet-transform" title="Haar Discrete Wavelet Transform" class="md-nav__link">
-    Haar Discrete Wavelet Transform
-  </a>
-  
-</li>
-      
-      
-      
-        <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
-            Comments
-          </a>
-        </li>
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -1334,7 +1358,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_models/" title="Workflows on Models" class="md-nav__link">
+    <a href="../../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
       Workflows on Models
     </a>
   </li>
@@ -1346,7 +1370,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_misc/" title="Miscellaneuos" class="md-nav__link">
+    <a href="../../pipes/pipes_misc/" title="Miscellaneuos" class="md-nav__link">
       Miscellaneuos
     </a>
   </li>
@@ -1363,7 +1387,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes_library/" title="Pipes Example" class="md-nav__link">
+    <a href="../../pipes/pipes_library/" title="Pipes Example" class="md-nav__link">
       Pipes Example
     </a>
   </li>
@@ -1590,37 +1614,69 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#extract-data-as-univariate-time-series" title="Extract Data as Univariate Time Series" class="md-nav__link">
-    Extract Data as Univariate Time Series
+  <a href="#dynaml-repl" title="DynaML REPL" class="md-nav__link">
+    DynaML REPL
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additions" title="Additions" class="md-nav__link">
+    Additions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#extract-data-as-multivariate-time-series" title="Extract data as Multivariate Time Series" class="md-nav__link">
-    Extract data as Multivariate Time Series
+  <a href="#pipes-api" title="Pipes API" class="md-nav__link">
+    Pipes API
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additions_1" title="Additions" class="md-nav__link">
+    Additions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#construct-time-differenced-data" title="Construct Time differenced Data" class="md-nav__link">
-    Construct Time differenced Data
+  <a href="#core-api" title="Core API" class="md-nav__link">
+    Core API
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additions_2" title="Additions" class="md-nav__link">
+    Additions
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#construct-multivariate-time-differenced-data" title="Construct multivariate Time differenced Data" class="md-nav__link">
-    Construct multivariate Time differenced Data
+        
+          <li class="md-nav__item">
+  <a href="#improvements" title="Improvements" class="md-nav__link">
+    Improvements
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#haar-discrete-wavelet-transform" title="Haar Discrete Wavelet Transform" class="md-nav__link">
-    Haar Discrete Wavelet Transform
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1645,52 +1701,58 @@
               
                 
                 
-                  <h1>Time Series</h1>
+                  <h1>v1.4.3</h1>
                 
-                <h3 id="extract-data-as-univariate-time-series">Extract Data as Univariate Time Series<a class="headerlink" href="#extract-data-as-univariate-time-series" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">extractTimeSeries</span><span class="o">(</span><span class="nc">Tfunc</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
+                <div class="admonition summary">
+<p>Version 1.4.3 of DynaML, released June 13, 2017. Updates, improvements and new features.</p>
+</div>
+<h2 id="dynaml-repl">DynaML REPL<a class="headerlink" href="#dynaml-repl" title="Permanent link">&para;</a></h2>
+<h3 id="additions">Additions<a class="headerlink" href="#additions" title="Permanent link">&para;</a></h3>
+<p><strong>Module</strong> <code>scripts</code></p>
 <ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">Double</span>, <span class="kt">Double</span><span class="o">)]]</span></code></li>
-<li><em>Result</em>: This pipe assumes its input to be of the form <code>YYYY,Day,Hour,Value</code>. It takes as input a function (TFunc) which converts a <code class="codehilite"><span class="o">(</span><span class="nc">Double</span><span class="o">,</span> <span class="nc">Double</span><span class="o">,</span> <span class="nc">Double</span><span class="o">)</span></code> into a single <em>timestamp</em> like value. The pipe processes its data source line by line and outputs a <code class="codehilite"><span class="nc">Tuple2</span></code> in the following format <code>(Timestamp,Value)</code>.</li>
+<li>Added <code>gp_mcmc_santafe.sc</code> worksheet to try new MCMC feature on GP models; applied on the Santa Fe laser data set. </li>
 </ul>
-<h3 id="extract-data-as-multivariate-time-series">Extract data as Multivariate Time Series<a class="headerlink" href="#extract-data-as-multivariate-time-series" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">extractTimeSeriesVec</span><span class="o">(</span><span class="nc">Tfunc</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
+<p><strong>General</strong></p>
 <ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">Double</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]]</span></code></li>
-<li><em>Result</em>: This pipe is similar to <code class="codehilite"><span class="n">extractTimeSeries</span></code> but for application in multivariate time series analysis such as nonlinear autoregressive models with exogenous inputs. The pipe processes its data source line by line and outputs a <code class="codehilite"><span class="o">(</span><span class="nc">Double</span><span class="o">,</span> <span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span></code> in the following format <code>(Timestamp,Values)</code>.</li>
+<li>Updated Ammonite version to <code>0.9.9</code></li>
 </ul>
-<h3 id="construct-time-differenced-data">Construct Time differenced Data<a class="headerlink" href="#construct-time-differenced-data" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">deltaOperation</span><span class="o">(</span><span class="n">deltaT</span><span class="o">,</span> <span class="n">timelag</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
+<h2 id="pipes-api">Pipes API<a class="headerlink" href="#pipes-api" title="Permanent link">&para;</a></h2>
+<h3 id="additions_1">Additions<a class="headerlink" href="#additions_1" title="Permanent link">&para;</a></h3>
+<p><strong>Package</strong> <code>dynaml.pipes</code></p>
 <ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[(</span><span class="kt">Double</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]]</span></code></li>
-<li><em>Result</em>: In order to generate features for auto-regressive models, one needs to construct sliding windows in time. This function takes two parameters <code class="codehilite"><span class="n">deltaT</span></code>: the auto-regressive order and <code class="codehilite"><span class="n">timelag</span></code>: the time lag after which the windowing is conducted. E.g Let <code class="codehilite"><span class="n">deltaT</span> <span class="k">=</span> <span class="mi">2</span></code> and <code class="codehilite"><span class="n">timelag</span> <span class="k">=</span> <span class="mi">1</span></code> This pipe will take stream data of the form <span>\((t, y(t))\)</span> and output a stream which looks like <span>\((t, [y(t-2), y(t-3)])\)</span></li>
+<li>Added <code>._1</code> and <code>._2</code> members in <code class="codehilite"><span class="nc">ParallelPipe</span></code> </li>
 </ul>
-<h3 id="construct-multivariate-time-differenced-data">Construct multivariate Time differenced Data<a class="headerlink" href="#construct-multivariate-time-differenced-data" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">deltaOperationVec</span><span class="o">(</span><span class="n">deltaT</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
+<h2 id="core-api">Core API<a class="headerlink" href="#core-api" title="Permanent link">&para;</a></h2>
+<h3 id="additions_2">Additions<a class="headerlink" href="#additions_2" title="Permanent link">&para;</a></h3>
+<p><strong>Package</strong> <code>dynaml.models.neuralnets</code></p>
 <ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">Stream</span><span class="o">[(</span><span class="kt">Double</span>, <span class="kt">Double</span><span class="o">)]</span>, <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]]</span></code></li>
-<li><em>Result</em>: A variant of <code class="codehilite"><span class="n">deltaOperation</span></code> for NARX models.</li>
+<li>Added <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.models.neuralnets.VectorSELU">SELU</a> activation function proposed by <a href="https://arxiv.org/abs/1706.02515">Hochreiter et. al</a></li>
 </ul>
-<h3 id="haar-discrete-wavelet-transform">Haar Discrete Wavelet Transform<a class="headerlink" href="#haar-discrete-wavelet-transform" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">haarWaveletFilter</span><span class="o">(</span><span class="n">order</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
+<p><strong>Package</strong> <code>dynaml.models.bayes</code></p>
 <ul>
-<li><em>Type</em>: <code class="codehilite"><span class="nc">DataPipe</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span></code></li>
-<li><em>Result</em>: A Haar Discrete wavelet transform.</li>
+<li>Added <code>*</code> method to <code class="codehilite"><span class="nc">CoRegGPPrior</span></code> which scales it with to a <code class="codehilite"><span class="nc">ParallelPipe</span></code></li>
+</ul>
+<p><strong>Package</strong> <code>dynaml.probability.mcmc</code></p>
+<ul>
+<li>Added <code class="codehilite"><span class="nc">HyperParameterMCMC</span></code> for performing MCMC sampling for models extending <code class="codehilite"><span class="nc">GloballyOptimizable</span></code>.</li>
+</ul>
+<p><strong>Package</strong> <code>dynaml.utils</code></p>
+<ul>
+<li>
+<p>Added trait <code class="codehilite"><span class="nc">HyperParameters</span></code> outlining methods that must be implemented by entities having hyper-parameters</p>
+</li>
+<li>
+<p>Added <code class="codehilite"><span class="nc">MeanScaler</span></code>, <code class="codehilite"><span class="nc">PCAScaler</span></code> to perform mean centering and PCA on data sets. Also added to <code class="codehilite"><span class="nc">DynaMLPipe</span></code> pipe library.</p>
+</li>
+<li>
+<p>Added tail recursive computation of the <a href="https://en.wikipedia.org/wiki/Chebyshev_polynomials">Chebyshev</a> polynomials of the first and second kind in <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.utils.package"><code class="codehilite"><span class="n">utils</span><span class="o">.</span><span class="n">chebyshev</span></code></a>. </p>
+</li>
+</ul>
+<h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">&para;</a></h3>
+<p><strong>Package</strong> <code>dynaml.models.bayes</code></p>
+<ul>
+<li>Added <code class="codehilite"><span class="n">trendParamsEncoder</span></code> which converts the trend/mean parameters into a scala <code class="codehilite"><span class="nc">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span></code> making them 
+     consistent with covariance parameters. Added to <code class="codehilite"><span class="nc">GaussianProcessPrior</span></code> and <code class="codehilite"><span class="nc">ESGPPrior</span></code> families.</li>
 </ul>
                 
                   
@@ -1702,9 +1764,9 @@
                   <div id="disqus_thread"></div>
 <script>
   var disqus_config = function () {
-    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/pipes/pipes_time_series/";
+    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/releases/mydoc_release_notes_143/";
     this.page.identifier =
-      "/pipes/pipes_time_series/";
+      "/releases/mydoc_release_notes_143/";
   };
   (function() {
     var d = document, s = d.createElement("script");
@@ -1726,7 +1788,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../feature_processing/" title="Feature Processing" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../structure/" title="Structure" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1735,19 +1797,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Feature Processing
+                Structure
               </span>
             </div>
           </a>
         
         
-          <a href="../pipes_models/" title="Workflows on Models" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../mydoc_release_notes_142/" title="v1.4.2" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Workflows on Models
+                v1.4.2
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
