@@ -19,6 +19,7 @@ import spire.implicits._
 * DynaML imports
 * */
 import io.github.mandar2812.dynaml.analysis.VectorField
+import io.github.mandar2812.dynaml.algebra._
 //The pipes API
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.DynaMLPipe
