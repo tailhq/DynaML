@@ -23,7 +23,7 @@ package io.github.mandar2812.dynaml.models.stp
 import breeze.linalg.{DenseMatrix, DenseVector, det}
 import breeze.numerics.log
 import io.github.mandar2812.dynaml.kernels.{LocalScalarKernel, SVMKernel}
-import io.github.mandar2812.dynaml.models.ContinuousProcessModel
+import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.models.stp.MVStudentsTModel.InferencePrimitives
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.DataPipe
@@ -55,6 +55,7 @@ abstract class MVStudentsTModel[T, I: ClassTag](
   data: T, num: Int, numOutputs: Int,
   h: DataPipe[I, DenseVector[Double]]) extends
   ContinuousProcessModel[T, I, DenseVector[Double], MatrixTRV] with
+  SecondOrderProcessModel[T, I, DenseVector[Double], Double, DenseMatrix[Double], MatrixTRV] with
   GloballyOptimizable {
 
   private val logger = Logger.getLogger(this.getClass)
@@ -89,6 +90,13 @@ abstract class MVStudentsTModel[T, I: ClassTag](
 
 
   /**
+    * Mean Function: Takes a member of the index set (input)
+    * and returns the corresponding mean of the distribution
+    * corresponding to input.
+    **/
+  override val mean = DataPipe((_: I) => DenseVector.zeros[Double](num_outputs))
+
+  /**
     * Set the model "state" which
     * contains values of its hyper-parameters
     * with respect to the covariance and noise
@@ -111,7 +119,7 @@ abstract class MVStudentsTModel[T, I: ClassTag](
     * Underlying covariance function of the
     * Gaussian Processes.
     **/
-  val covariance = cov
+  override val covariance = cov
 
   val noiseModel = n
 
