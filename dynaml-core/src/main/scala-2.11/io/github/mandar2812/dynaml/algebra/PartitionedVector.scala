@@ -7,17 +7,24 @@ import org.apache.spark.rdd.RDD
 import scala.collection.immutable.NumericRange
 
 /**
-  * @author mandar2812 date 13/10/2016.
   * A distributed vector that is stored in blocks.
   * @param data The underlying [[RDD]] which should consist of
   *             block indices and a breeze [[DenseVector]] containing
   *             all the elements in the said block.
-  */
+  * @param num_rows Number of elements as a [[Long]], in case not specified
+  *                 is calculated on instance creation.
+  * @param num_row_blocks Number of blocks, in case not specified
+  *                 is calculated on instance creation.
+  * @author mandar2812 date 13/10/2016.
+  *
+  * */
 private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])],
                                         num_rows: Long = -1L,
                                         num_row_blocks: Long = -1L)
   extends AbstractPartitionedVector[DenseVector[Double]](data, num_row_blocks)
     with NumericOps[PartitionedVector] {
+
+  self =>
 
   lazy val rows: Long = if(num_rows == -1L) data.map(_._2.length).sum.toLong else num_rows
 
@@ -36,6 +43,8 @@ private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])
   
   def toBreezeVector = DenseVector.vertcat(data.sortBy(_._1).map(_._2):_*)
 
+  def toStream = PartitionedVector.toStream(self)
+
   def reverse: PartitionedVector = map(c => (rowBlocks - 1L - c._1, DenseVector(c._2.toArray.reverse)))
 
 }
@@ -46,7 +55,7 @@ object PartitionedVector {
   /**
     * Create a [[PartitionedVector]] given the input blocks.
     *
-    */
+    * */
   def apply(data: Stream[(Long, DenseVector[Double])], num_rows: Long = -1L): PartitionedVector = {
 
     val nC = if(num_rows == -1L) data.map(_._2.length).sum else num_rows
@@ -58,7 +67,7 @@ object PartitionedVector {
   /**
     * Create a [[PartitionedVector]] from a tabulation function
     *
-    */
+    * */
   def apply(length: Long, numElementsPerBlock: Int, tabFunc: (Long) => Double): PartitionedVector = {
     val num_blocks: Long = math.ceil(length.toDouble/numElementsPerBlock).toLong
     val blockIndices = 0L until num_blocks
@@ -76,7 +85,7 @@ object PartitionedVector {
     * @param length The size of the stream
     * @param num_elements_per_block The size of each block
     * @return A [[PartitionedVector]] instance.
-    */
+    * */
   def apply(d: Stream[Double], length: Long, num_elements_per_block: Int): PartitionedVector = {
     val num_blocks: Long = math.ceil(length.toDouble/num_elements_per_block).toLong
     val data = d.grouped(num_elements_per_block)
@@ -92,7 +101,7 @@ object PartitionedVector {
     * @param v input vector
     * @param num_elements_per_block The size of each block
     * @return A [[PartitionedVector]] instance.
-    */
+    * */
   def apply(v: DenseVector[Double], num_elements_per_block: Int): PartitionedVector = {
     val blocks = v.toArray
       .grouped(num_elements_per_block)
@@ -106,7 +115,7 @@ object PartitionedVector {
 
   /**
     * Vertically merge a number of partitioned vectors.
-    */
+    * */
   def vertcat(vectors: PartitionedVector*): PartitionedVector = {
     //sanity check
     assert(vectors.map(_.colBlocks).distinct.length == 1,
@@ -121,22 +130,28 @@ object PartitionedVector {
 
   /**
     * Populate a partitioned vector with zeros.
-    */
+    * */
   def zeros(numElements: Long, numElementsPerBlock: Int): PartitionedVector =
     PartitionedVector(numElements, numElementsPerBlock, _ => 0.0)
 
   /**
     * Populate a partitioned vector with ones.
-    */
+    * */
   def ones(numElements: Long, numElementsPerBlock: Int): PartitionedVector =
     PartitionedVector(numElements, numElementsPerBlock, _ => 1.0)
 
   /**
     * Populate a partitioned vector with I.I.D samples from a
     * specified [[RandomVariable]]
-    */
+    * */
   def rand(numElements: Long, numElementsPerBlock: Int, r: RandomVariable[Double]): PartitionedVector =
-    PartitionedVector(numElements, numElementsPerBlock, _ => r.sample())
+    PartitionedVector(numElements, numElementsPerBlock, _ => r.draw)
+
+  /**
+    * Convert a [[PartitionedVector]] to a Scala [[Stream]].
+    * */
+  def toStream(pvec: PartitionedVector): Stream[Double] =
+    pvec._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
 
 
 }

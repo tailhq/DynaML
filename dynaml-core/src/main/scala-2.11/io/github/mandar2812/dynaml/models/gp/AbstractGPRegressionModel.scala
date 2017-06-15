@@ -74,6 +74,8 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
   override protected val g: T = data
 
+  def _data = g
+
   val npoints = num
 
   protected var blockSize = 1000
@@ -309,13 +311,12 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     val varD: PartitionedVector = bdiag(postcov)
     val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)*/
 
-    val mean = posterior.mu._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val mean = posterior.mu.toStream
 
     val (lower, upper) = posterior.underlyingDist.confidenceInterval(sigma.toDouble)
 
-    val lowerErrorBars = lower._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a++b)
-    val upperErrorBars = upper._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a++b)
-
+    val lowerErrorBars = lower.toStream
+    val upperErrorBars = upper.toStream
 
     logger.info("Generating error bars")
     //val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))

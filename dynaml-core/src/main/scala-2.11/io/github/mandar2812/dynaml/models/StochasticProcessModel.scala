@@ -20,19 +20,19 @@ package io.github.mandar2812.dynaml.models
 
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.ContinuousRandomVariable
+import io.github.mandar2812.dynaml.probability.{ContinuousMixtureRV, ContinuousRandomVariable}
 import org.apache.log4j.Logger
 
 /**
-  * date 26/08/16.
   * High Level description of a stochastic process based predictive model.
   *
-  * @author mandar2812
   * @tparam T The underlying data structure storing the training & test data.
   * @tparam I The type of the index set (i.e. Double for time series, DenseVector for GP regression)
   * @tparam Y The type of the output label
   * @tparam W Implementing class of the posterior distribution
-  */
+  * @author mandar2812 date 26/08/16.
+  *
+  * */
 trait StochasticProcessModel[T, I, Y, W] extends Model[T, I, Y] {
 
   /** Calculates posterior predictive distribution for
@@ -62,8 +62,6 @@ trait StochasticProcessModel[T, I, Y, W] extends Model[T, I, Y] {
 }
 
 /**
-  * @author mandar2812
-  *
   * Processes which can be specified by upto second order statistics i.e. mean and covariance
   * @tparam T The underlying data structure storing the training & test data.
   * @tparam I The type of the index set (i.e. Double for time series, DenseVector for GP regression)
@@ -71,6 +69,7 @@ trait StochasticProcessModel[T, I, Y, W] extends Model[T, I, Y] {
   * @tparam K The type returned by the kernel function.
   * @tparam M The data structure holding the kernel/covariance matrix
   * @tparam W Implementing class of the posterior distribution
+  * @author mandar2812
   *
   * */
 trait SecondOrderProcessModel[T, I, Y, K, M, W] extends StochasticProcessModel[T, I, Y, W] {
@@ -92,13 +91,13 @@ trait SecondOrderProcessModel[T, I, Y, K, M, W] extends StochasticProcessModel[T
 }
 
 /**
-  * @author mandar2812 date: 11/10/2016
-  *
   * Blueprint for a continuous valued stochastic process, abstracts away the behavior
   * common to sub-classes such as [[io.github.mandar2812.dynaml.models.gp.GPRegression]],
   * [[io.github.mandar2812.dynaml.models.stp.StudentTRegression]] and others.
   *
-  */
+  * @author mandar2812 date: 11/10/2016
+  *
+  * */
 abstract class ContinuousProcessModel[T, I, Y, W <: ContinuousRandomVariable[_]]
   extends StochasticProcessModel[T, I, Y, W] {
 
@@ -139,3 +138,16 @@ abstract class ContinuousProcessModel[T, I, Y, W <: ContinuousRandomVariable[_]]
   }
 
 }
+
+/**
+  * A process which is a multinomial mixture of
+  * component processes.
+  * @tparam I The type of the index set (i.e. Double for time series, DenseVector for GP regression)
+  * @tparam Y The type of the output label
+  * @tparam W Implementing class of the posterior distribution,
+  *           should inherit from [[ContinuousMixtureRV]]
+  * @author mandar2812 date 14/06/2017
+  * */
+abstract class StochasticProcessMixtureModel[
+T, I, Y, W <: ContinuousMixtureRV[_, _]] extends
+  ContinuousProcessModel[T, I, Y, W]

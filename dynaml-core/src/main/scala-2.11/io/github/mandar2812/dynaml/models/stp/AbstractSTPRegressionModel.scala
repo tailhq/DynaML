@@ -223,12 +223,12 @@ abstract class AbstractSTPRegressionModel[T, I](
     val varD: PartitionedVector = bdiag(postcov)
     val stdDev = varD._data.map(c => (c._1, sqrt(c._2))).map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)*/
 
-    val mean = posterior.mean._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val mean = posterior.mean.toStream
 
     val (lower, upper) = posterior.underlyingDist.confidenceInterval(sigma.toDouble)
 
-    val lowerErrorBars = lower._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a++b)
-    val upperErrorBars = upper._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a++b)
+    val lowerErrorBars = lower.toStream
+    val upperErrorBars = upper.toStream
 
 
     logger.info("Generating error bars")

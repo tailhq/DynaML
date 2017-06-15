@@ -36,18 +36,26 @@ object MixtureRV {
 
 }
 
+/**
+  * A random variable mixture over a continuous domain
+  * @author mandar2812 date 14/06/2017
+  * */
 trait ContinuousMixtureRV[Domain, BaseRV <: ContinuousRandomVariable[Domain]] extends
   ContinuousRandomVariable[Domain] with
   MixtureRV[Domain, BaseRV]
 
-
+/**
+  * A random variable mixture over a continuous domain,
+  * having a computable probability distribution
+  * @author mandar2812 date 14/06/2017
+  * */
 class ContinuousDistrMixture[
 Domain, BaseRV <: ContinuousDistrRV[Domain]](
   distributions: Seq[BaseRV],
   selector: MultinomialRV) extends
   ContinuousMixtureRV[Domain, BaseRV] with
   ContinuousDistrRV[Domain] {
-  
+
   override val mixture_selector = selector
 
   override val components = distributions
@@ -57,3 +65,10 @@ Domain, BaseRV <: ContinuousDistrRV[Domain]](
     selector.underlyingDist.params)
 }
 
+object ContinuousDistrMixture {
+
+  def apply[Domain, BaseRV <: ContinuousDistrRV[Domain]](
+    distributions: Seq[BaseRV],
+    selector: DenseVector[Double]): ContinuousDistrMixture[Domain, BaseRV] =
+    new ContinuousDistrMixture(distributions, MultinomialRV(selector))
+}
