@@ -59,7 +59,13 @@ val sgpModel = sgp_prior.posteriorModel(dataset)
 
 gp_prior.globalOptConfig_(Map("gridStep" -> "0.0", "gridSize" -> "1", "globalOpt" -> "GS", "policy" -> "GS"))
 val gpModel1 = gp_prior.posteriorModel(dataset)
+
 val mixt_machine = new ProbGPMixtureMachine(gpModel1)
+  .setGridSize(2)
+  .setStepSize(0.75)
+  .setLogScale(true)
+  .setMaxIterations(30)
+
 val (mix_model, _) = mixt_machine.optimize(gp_prior.covariance.state ++ gp_prior.noiseCovariance.state)
 
 
