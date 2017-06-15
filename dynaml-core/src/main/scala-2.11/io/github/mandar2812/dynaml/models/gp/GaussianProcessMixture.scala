@@ -10,7 +10,6 @@ import org.apache.log4j.Logger
 import scala.reflect.ClassTag
 
 /**
-  *
   * Represents a multinomial mixture of GP models
   * @tparam I The index set (input domain) over which each component GP is
   *           defined.
