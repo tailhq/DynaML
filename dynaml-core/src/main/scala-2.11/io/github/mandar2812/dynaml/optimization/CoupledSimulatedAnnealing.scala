@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
 import breeze.stats.distributions.CauchyDistribution
+import io.github.mandar2812.dynaml.probability.RandomVariable
 import io.github.mandar2812.dynaml.utils
 
 import scala.util.Random
@@ -112,6 +113,10 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
       computeAcceptanceProb(c._1, c._1, gamma_init, accTemp)
     })
 
+    val hyp = initialConfig.keys
+
+    val usePriorFlag: Boolean = hyp.forall(meanFieldPrior.contains)
+
     def CSATRec(eLandscape: List[(Double, Map[String, Double])], it: Int): List[(Double, Map[String, Double])] =
       it match {
         case 0 => eLandscape
@@ -142,7 +147,15 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M)
           val (newEnergyLandscape,probabilities) = eLandscape.map((config) => {
             //mutate this config
             val new_config = mutate(config._2, mutTemp)
-            val new_energy = system.energy(new_config, options)
+
+            val priorEnergy =
+              if(usePriorFlag)
+                new_config.foldLeft(0.0)(
+                  (p_acc, keyValue) => p_acc - meanFieldPrior(keyValue._1).underlyingDist.logPdf(keyValue._2)
+                )
+              else 0.0
+
+            val new_energy = system.energy(new_config, options) + priorEnergy
 
             logger.info("New Configuration: \n"+GlobalOptimizer.prettyPrint(new_config))
             logger.info("Energy = "+new_energy)

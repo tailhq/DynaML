@@ -24,11 +24,11 @@ import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
 
 /**
- * @author mandar2812 datum 24/6/15.
- *
- * High level interface defining the
- * core functions of a global optimizer
- */
+  * High level interface defining the
+  * core functions of a global optimizer
+  * @author mandar2812 datum 24/6/15.
+  *
+  * */
 trait GlobalOptimizer[T <: GloballyOptimizable] {
 
   val system: T
