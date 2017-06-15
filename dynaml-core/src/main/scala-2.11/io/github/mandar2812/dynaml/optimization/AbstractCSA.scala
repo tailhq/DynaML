@@ -25,15 +25,20 @@ import io.github.mandar2812.dynaml.utils
 import scala.util.Random
 
 /**
+  * Skeleton implementation of the Coupled Simulated Annealing algorithm
   * @author mandar datum 01/12/15.
-  *
-  * Implementation of the Coupled Simulated Annealing algorithm
-  * for global optimization.
   */
-class AbstractCSA[M <: GloballyOptimizable](model: M)
-  extends AbstractGridSearch[M](model: M){
+abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
+  extends AbstractGridSearch[M, M1](model: M) {
 
   protected var MAX_ITERATIONS: Int = 10
+
+  protected var variant = AbstractCSA.MuSA
+
+  def setVariant(v: String) = {
+    variant = v
+    this
+  }
 
   def setMaxIterations(m: Int) = {
     MAX_ITERATIONS = m
@@ -55,20 +60,26 @@ class AbstractCSA[M <: GloballyOptimizable](model: M)
     this
   }
 
-  protected val acceptance = (energy: Double,
-                              coupling: Double,
-                              temperature: Double) => {
-    val prob = math.exp(-1.0*energy/temperature)
-    prob/(prob+coupling)
-  }
+  var iTemp = 1.0
 
-  protected val mutate = (config: Map[String, Double], temperature: Double) => {
-    config.map((param) => {
-      val dist = new CauchyDistribution(0.0, temperature)
-      val mutated = param._2 + dist.sample()
-      (param._1, math.abs(mutated))
-    })
-  }
+  var alpha = 0.05
+
+  private def computeDesiredVariance = AbstractCSA.varianceDesired(variant) _
+
+  private def computeCouplingFactor = AbstractCSA.couplingFactor(variant) _
+
+  private def computeAcceptanceProb = AbstractCSA.acceptanceProbability(variant) _
+
+  protected val mutate: (Map[String, Double], Double) => Map[String, Double] =
+    (config: Map[String, Double], temperature: Double) => {
+      logger.info("Mutating configuration: \n"+GlobalOptimizer.prettyPrint(config)+"\n")
+
+      config.map((param) => {
+        val dist = new CauchyDistribution(0.0, temperature)
+        val mutated = param._2 + dist.sample()
+        (param._1, math.abs(mutated))
+      })
+    }
 
   def acceptanceTemperature(initialTemp: Double)(k: Int): Double =
     initialTemp/math.log(k.toDouble+1.0)
@@ -76,83 +87,158 @@ class AbstractCSA[M <: GloballyOptimizable](model: M)
   def mutationTemperature(initialTemp: Double)(k: Int): Double =
     initialTemp/k.toDouble
 
-  override def optimize(initialConfig: Map[String, Double],
-                        options: Map[String, String] = Map()) = {
+  protected def performCSA(
+    initialConfig: Map[String, Double],
+    options: Map[String, String] = Map()): List[(Double, Map[String, Double])] = {
 
-    //create grid
-    val iTemp = 1.0
+    logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    logger.info("Coupled Simulated Annealing (CSA): "+AbstractCSA.algorithm(variant))
+    logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+
     var accTemp = iTemp
     var mutTemp = iTemp
-    //one list for each key in initialConfig
-    val hyper_params = initialConfig.keys.toList
-    val scaleFunc = if(logarithmicScale) (i: Int) => math.exp((i+1).toDouble*step) else
-      (i: Int) => (i+1).toDouble*step
 
-    val gridvecs = initialConfig.map((keyValue) => {
-      (keyValue._1, List.tabulate[Double](gridsize)(scaleFunc))
+    //Calculate desired variance
+    val sigmaD = computeDesiredVariance(math.pow(gridsize, initialConfig.size).toInt)
+
+    val initialEnergyLandscape = getEnergyLandscape(initialConfig, options, meanFieldPrior)
+
+    val gamma_init = computeCouplingFactor(initialEnergyLandscape.map(_._1), accTemp)
+
+    var acceptanceProbs: List[Double] = initialEnergyLandscape.map(c => {
+      computeAcceptanceProb(c._1, c._1, gamma_init, accTemp)
     })
 
-    val grid = utils.combine(gridvecs.map(_._2)).map(x => DenseVector(x.toArray))
+    val hyp = initialConfig.keys
 
-    val energyLandscape = grid.map((config) => {
-      val configMap = List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
-      logger.info("Evaluating Configuration: "+configMap)
+    val usePriorFlag: Boolean = hyp.forall(meanFieldPrior.contains)
 
-      val configEnergy = system.energy(configMap, options)
+    def CSATRec(eLandscape: List[(Double, Map[String, Double])], it: Int): List[(Double, Map[String, Double])] =
+      it match {
+        case 0 => eLandscape
+        case num =>
+          logger.info("**************************")
+          logger.info("CSA Iteration: "+(MAX_ITERATIONS-it+1))
+          //mutate each element of the grid with
+          //the generating distribution
+          //and accept using the acceptance distribution
+          mutTemp = mutationTemperature(iTemp)(it)
+          accTemp = variant match {
+            case AbstractCSA.MwVC =>
+              val (_,variance) = utils.getStats(acceptanceProbs.map(DenseVector(_)))
 
-      logger.info("Energy = "+configEnergy+"\n")
+              if (variance(0) < sigmaD)
+                accTemp * (1-alpha)
+              else accTemp * (1+alpha)
+            case _ =>
+              acceptanceTemperature(iTemp)(it)
+          }
 
-      (configEnergy, configMap)
-    }).toMap
+          val maxEnergy = eLandscape.map(_._1).max
 
-    var currentEnergyLandscape = energyLandscape
-    var newEnergyLandscape = energyLandscape
+          val couplingFactor = computeCouplingFactor(eLandscape.map(t => t._1 - maxEnergy), accTemp)
 
-    (1 to MAX_ITERATIONS).foreach((iteration) => {
-      logger.info("**************************")
-      logger.info("CSA Iteration: "+iteration)
-      //mutate each element of the grid with
-      //the generating distribution
-      //and accept using the acceptance distribution
-      mutTemp = mutationTemperature(iTemp)(iteration)
-      accTemp = acceptanceTemperature(iTemp)(iteration)
-      val couplingFactor = currentEnergyLandscape.map(c => math.exp(-1.0*c._1/accTemp)).sum
-      //Now mutate each solution and accept/reject
-      //according to the acceptance probability
+          //Now mutate each solution and accept/reject
+          //according to the acceptance probability
+          val (newEnergyLandscape,probabilities) = eLandscape.map((config) => {
+            //mutate this config
+            val new_config = mutate(config._2, mutTemp)
 
-      newEnergyLandscape = currentEnergyLandscape.map((config) => {
-        //mutate this config
-        val new_config = mutate(config._2, mutTemp)
-        val new_energy = system.energy(new_config, options)
-        val ans = if(new_energy < config._1) {
-          (new_energy, new_config)
-        } else {
-          val acc = acceptance(new_energy, couplingFactor, accTemp)
-          if(Random.nextDouble <= acc) (new_energy, new_config) else config
-        }
-        ans
-      })
+            val priorEnergy =
+              if(usePriorFlag)
+                new_config.foldLeft(0.0)(
+                  (p_acc, keyValue) => p_acc - meanFieldPrior(keyValue._1).underlyingDist.logPdf(keyValue._2)
+                )
+              else 0.0
 
-      currentEnergyLandscape = newEnergyLandscape
+            val new_energy = system.energy(new_config, options) + priorEnergy
 
-    })
+            logger.info("New Configuration: \n"+GlobalOptimizer.prettyPrint(new_config))
+            logger.info("Energy = "+new_energy)
 
+            //Calculate the acceptance probability
+            val acceptanceProbability =
+              computeAcceptanceProb(
+                new_energy - maxEnergy, config._1,
+                couplingFactor, accTemp)
 
-    val optimum = currentEnergyLandscape.keys.min
+            val ans = if(new_energy < config._1) {
 
-    logger.info("Optimum value of energy is: "+optimum+
-      "\nConfiguration: "+currentEnergyLandscape(optimum))
+              logger.info("Status: Accepted\n")
+              ((new_energy, new_config), acceptanceProbability)
 
-    system.energy(currentEnergyLandscape(optimum), options)
-    (system, currentEnergyLandscape(optimum))
+            } else {
+
+              if(Random.nextDouble <= acceptanceProbability) {
+                logger.info("Status: Accepted\n")
+                ((new_energy, new_config), acceptanceProbability)
+              } else {
+                logger.info("Status: Rejected\n")
+                (config, acceptanceProbability)
+              }
+            }
+
+            ans
+          }).unzip
+
+          acceptanceProbs = probabilities
+          CSATRec(newEnergyLandscape, it-1)
+      }
+
+    CSATRec(initialEnergyLandscape, MAX_ITERATIONS)
   }
+
 }
 
 object AbstractCSA {
-  def apply[M <: GloballyOptimizable](model: M,
-                                      initialConfig: Map[String, Double],
-                                      options: Map[String, String] = Map()): M = {
-    new AbstractCSA[M](model).optimize(initialConfig, options)._1
+
+  val MuSA = "CSA-MuSA"
+  val BA = "CSA-BA"
+  val M = "CSA-M"
+  val MwVC = "CSA-MwVC"
+  val SA = "SA"
+
+  def algorithm(variant: String): String = variant match {
+    case MuSA => "Multi-state Simulated Annealing"
+    case BA => "Blind Acceptance"
+    case M => "Modified CSA"
+    case MwVC => "Modified CSA with Variance Control"
   }
+
+  def couplingFactor(variant: String)(
+    landscape: Seq[Double],
+    Tacc: Double): Double = {
+
+    if(variant == MuSA || variant == BA)
+      landscape.map(energy => math.exp(-1.0*energy/Tacc)).sum
+    else if (variant == M || variant == MwVC)
+      landscape.map(energy => math.exp(energy/Tacc)).sum
+    else 1.0
+
+  }
+
+  def acceptanceProbability(variant: String)(
+    energy: Double, oldEnergy: Double,
+    gamma: Double, temperature: Double) = {
+
+    if(variant == MuSA )
+      math.exp(-1.0*energy/temperature)/(math.exp(-1.0*energy/temperature)+gamma)
+    else if (variant == BA)
+      1.0 - (math.exp(-1.0*oldEnergy/temperature)/gamma)
+    else if (variant == M || variant == MwVC)
+      math.exp(oldEnergy/temperature)/gamma
+    else gamma/(1.0 + math.exp((energy - oldEnergy)/temperature))
+
+  }
+
+  def varianceDesired(variant: String)(m: Int):Double = {
+    if(variant == MuSA || variant == BA)
+      0.99
+    else
+      0.99*(m-1)/math.pow(m, 2.0)
+
+  }
+
 }
+
 

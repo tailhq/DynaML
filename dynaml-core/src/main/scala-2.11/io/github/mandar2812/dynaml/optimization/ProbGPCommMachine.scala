@@ -22,7 +22,7 @@ import breeze.linalg.{DenseMatrix, DenseVector, max, min, sum}
 import breeze.numerics.exp
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.kernels.DecomposableCovariance
-import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
+import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GaussianProcessMixture}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, WeightedSumReducer}
 
 import scala.reflect.ClassTag
@@ -123,7 +123,7 @@ class ProbGPCommMachine[T, I: ClassTag](
       DataPipe((x: I) => meanFuncs.map(_(x)).sum))
 
     logger.info("===============================================")
-    logger.info("Constructing probabilistic Committee GP model")
+    logger.info("Constructing Probabilistic GP Committee")
     //Create the GP committee with the calculated specifications
     val committeeGP: AbstractGPRegressionModel[T, I] =
       AbstractGPRegressionModel(
@@ -221,3 +221,49 @@ object ProbGPCommMachine {
 
 
 }
+
+/*
+class ProbGPMixtureMachine[T, I: ClassTag](
+  model: AbstractGPRegressionModel[T, I]) extends
+  ModelTuner[AbstractGPRegressionModel[T, I], GaussianProcessMixture[I]] {
+
+  private var policy: String = "CSA"
+
+  private var baselinePolicy: String = "max"
+
+  def _policy = policy
+
+  def setPolicy(p: String): this.type = {
+    if(p == "CSA" || p == "Coupled Simulated Annealing")
+      policy = "CSA"
+    else
+      policy = "GS"
+
+    this
+  }
+
+  def setBaseLinePolicy(p: String): this.type = {
+
+    if(p == "avg" || p == "mean" || p == "average")
+      baselinePolicy = "mean"
+    else if(p == "min")
+      baselinePolicy = "min"
+    else if(p == "max")
+      baselinePolicy = "max"
+    else
+      baselinePolicy = "mean"
+
+    this
+  }
+
+  override val system = model
+
+  override def optimize(
+    initialConfig: Map[String, Double],
+    options: Map[String, String]) = {
+
+
+
+  }
+}
+*/

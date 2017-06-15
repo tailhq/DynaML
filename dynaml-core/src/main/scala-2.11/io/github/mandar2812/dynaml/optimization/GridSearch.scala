@@ -18,7 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
-import io.github.mandar2812.dynaml.probability.ContinuousDistrRV
 import org.apache.log4j.Logger
 
 /**
@@ -27,27 +26,9 @@ import org.apache.log4j.Logger
  * An implementation of Grid Search
  * global optimization for Kernel Models
  */
-class GridSearch[M <: GloballyOptimizable](model: M)
-  extends GlobalOptimizer[M]{
-
-  override protected val logger: Logger = Logger.getLogger(this.getClass)
-
-  override val system = model
-
-  override def setLogScale(t: Boolean) = {
-    logarithmicScale = t
-    this
-  }
-
-  override def setGridSize(s: Int) = {
-    this.gridsize = s
-    this
-  }
-
-  override def setStepSize(s: Double) = {
-    this.step = s
-    this
-  }
+class GridSearch[M <: GloballyOptimizable](model: M) extends
+  AbstractGridSearch[M, M](model) with
+  GlobalOptimizer[M] {
 
   override def optimize(initialConfig: Map[String, Double],
                         options: Map[String, String] = Map()) = {

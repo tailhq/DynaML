@@ -740,7 +740,7 @@ object DynaMLPipe {
           .setGridSize(grid)
           .setStepSize(step)
           .setLogScale(false)
-          .setVariant(CoupledSimulatedAnnealing.MwVC)
+          .setVariant(AbstractCSA.MwVC)
       }
 
       gs.optimize(startingState, Map("tolerance" -> "0.0001",
@@ -770,7 +770,7 @@ object DynaMLPipe {
           .setStepSize(step)
           .setLogScale(false)
           .setMaxIterations(maxIt)
-          .setVariant(CoupledSimulatedAnnealing.MwVC)
+          .setVariant(AbstractCSA.MwVC)
           .setPrior(prior)
           .setNumSamples(prior.size*grid)
 
@@ -810,7 +810,7 @@ object DynaMLPipe {
           .setStepSize(step)
           .setLogScale(false)
           .setMaxIterations(maxIt)
-          .setVariant(CoupledSimulatedAnnealing.MwVC)
+          .setVariant(AbstractCSA.MwVC)
           .setPrior(prior)
           .setNumSamples(prior.size*grid)
 
