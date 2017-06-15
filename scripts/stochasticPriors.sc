@@ -5,6 +5,7 @@ import io.github.mandar2812.dynaml.models.bayes.{LinearTrendESGPrior, LinearTren
 import io.github.mandar2812.dynaml.probability._
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.analysis.implicits._
+import io.github.mandar2812.dynaml.optimization.ProbGPMixtureMachine
 import io.github.mandar2812.dynaml.pipes.Encoder
 
 val rbfc = new RBFCovFunc(1.5)
@@ -55,8 +56,16 @@ sgp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "40"))
 val gpModel = gp_prior.posteriorModel(dataset)
 val sgpModel = sgp_prior.posteriorModel(dataset)
 
+
+gp_prior.globalOptConfig_(Map("gridStep" -> "0.0", "gridSize" -> "1", "globalOpt" -> "GS", "policy" -> "GS"))
+val gpModel1 = gp_prior.posteriorModel(dataset)
+val mixt_machine = new ProbGPMixtureMachine(gpModel1)
+val (mix_model, _) = mixt_machine.optimize(gp_prior.covariance.state ++ gp_prior.noiseCovariance.state)
+
+
 val zs: MultGaussianPRV = gpModel.predictiveDistribution(xs)
 val sgp_zs: BlockedMESNRV = sgpModel.predictiveDistribution(xs)
+val mix_zs = mix_model.predictiveDistribution(xs)
 
 val MultGaussianPRV(m, c) = zs
 val eigD = eig(c.toBreezeMatrix)
@@ -75,13 +84,22 @@ if(eValuesPositive) {
   println("Predictive Covariance Ill-Posed!")
 }
 
-val samplesSGPPost = sgp_zs.iid(8).sample().map(s => s.toBreezeVector.toArray.toSeq)
+val samplesSGPPost = sgp_zs.iid(8).sample().map(_.toBreezeVector.toArray.toSeq)
 
 spline(xs, samplesSGPPost.head)
 hold()
 samplesSGPPost.tail.foreach((s: Seq[Double]) => spline(xs, s))
 unhold()
 title("Ext. Skew Gaussian Process posterior samples")
+
+val samplesMixPost = mix_zs.iid(8).sample().map(_.toBreezeVector.toArray.toSeq)
+
+spline(xs, samplesMixPost.head)
+hold()
+samplesMixPost.tail.foreach((s: Seq[Double]) => spline(xs, s))
+unhold()
+title("Gaussian Process Mixture posterior samples")
+
 
 val (dx, dy) = dataset.sorted.unzip
 

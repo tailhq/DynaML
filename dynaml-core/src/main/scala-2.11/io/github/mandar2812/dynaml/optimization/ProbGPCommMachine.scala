@@ -222,10 +222,10 @@ object ProbGPCommMachine {
 
 }
 
-/*
+
 class ProbGPMixtureMachine[T, I: ClassTag](
   model: AbstractGPRegressionModel[T, I]) extends
-  ModelTuner[AbstractGPRegressionModel[T, I], GaussianProcessMixture[I]] {
+  AbstractCSA[AbstractGPRegressionModel[T, I], GaussianProcessMixture[I]](model) {
 
   private var policy: String = "CSA"
 
@@ -256,14 +256,67 @@ class ProbGPMixtureMachine[T, I: ClassTag](
     this
   }
 
-  override val system = model
+  private def calculateEnergyLandscape(initialConfig: Map[String, Double], options: Map[String, String]) =
+    if(policy == "CSA") performCSA(initialConfig, options)
+    else getEnergyLandscape(initialConfig, options, meanFieldPrior)
+
+  private def modelProbabilities = DataPipe(ProbGPCommMachine.calculateModelWeightsSigmoid(baselinePolicy) _)
 
   override def optimize(
     initialConfig: Map[String, Double],
     options: Map[String, String]) = {
 
+    //Find out the blocked hyper parameters and their values
+    val blockedHypParams = system.covariance.blocked_hyper_parameters ++ system.noiseModel.blocked_hyper_parameters
+
+    val (kernelPipe, noisePipe) = (system.covariance.asPipe, system.noiseModel.asPipe)
+
+    val (kernelParams, noiseParams) = (
+      system.covariance.hyper_parameters,
+      system.noiseModel.hyper_parameters)
+
+    val blockedState = system._current_state.filterKeys(blockedHypParams.contains)
+
+    val energyLandscape = calculateEnergyLandscape(initialConfig, options)
+
+    val data = system.data
+
+    //Calculate the weights of each configuration
+    val (weights, models) = modelProbabilities(energyLandscape).map(c => {
+
+      val model_state = c._2 ++ blockedState
+
+      implicit val transform = DataPipe(system.dataAsSeq _)
+
+      val model = AbstractGPRegressionModel(
+        kernelPipe(model_state), noisePipe(model_state),
+        system.mean)(
+        data, system.npoints)
 
 
+      (c._1, model)
+    }).unzip
+
+
+    val configsAndWeights = modelProbabilities(energyLandscape).map(c => (c._1, c._2 ++ blockedState))
+
+    logger.info("===============================================")
+    logger.info("Constructing Gaussian Process Mixture")
+
+    logger.info("Number of model instances = "+weights.length)
+    logger.info("--------------------------------------")
+    logger.info(
+      "Calculated model probabilities/weights are \n"+
+        configsAndWeights.map(wc =>
+          "\nConfiguration: \n"+
+            GlobalOptimizer.prettyPrint(wc._2)+
+            "\nProbability = "+wc._1+"\n"
+        ).reduceLeft((a, b) => a++b)
+    )
+    logger.info("--------------------------------------")
+
+
+
+    (new GaussianProcessMixture[I](models, DenseVector(weights.toArray)), Map())
   }
 }
-*/

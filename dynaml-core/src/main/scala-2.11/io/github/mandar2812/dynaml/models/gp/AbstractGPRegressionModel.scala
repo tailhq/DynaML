@@ -74,8 +74,6 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
   override protected val g: T = data
 
-  def _data = g
-
   val npoints = num
 
   protected var blockSize = 1000

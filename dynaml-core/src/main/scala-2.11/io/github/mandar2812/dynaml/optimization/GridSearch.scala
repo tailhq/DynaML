@@ -18,7 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
-import org.apache.log4j.Logger
 
 /**
  * @author mandar2812 datum 24/6/15.
