@@ -1744,7 +1744,7 @@
                 <h2 id="model-solvers">Model Solvers<a class="headerlink" href="#model-solvers" title="Permanent link">&para;</a></h2>
 <p>Model solvers are implementations which either solve for the parameters/coefficients which determine the prediction of a model. Below is a list of all model solvers currently implemented, they are all sub-classes/subtraits of the top level optimization API. Refer to the <a href="https://github.com/mandar2812/DynaML/wiki/Optimization-%26-Model-Selection">wiki page</a> on optimizers for more details on extending the API and writing your own optimizers.</p>
 <h3 id="gradient-descent">Gradient Descent<a class="headerlink" href="#gradient-descent" title="Permanent link">&para;</a></h3>
-<p>The bread and butter of any machine learning framework, the <code>GradientDescent</code> class in the <code>io.github.mandar2812.dynaml.optimization</code> package provides gradient based optimization primitives for solving optimization problems of the form.</p>
+<p>The bread and butter of any machine learning framework, the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GradientDescent"><code class="codehilite"><span class="nc">GradientDescent</span></code></a> class in the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.package"><code class="codehilite"><span class="n">dynaml</span><span class="o">.</span><span class="n">optimization</span></code></a> package provides gradient based optimization primitives for solving optimization problems of the form.</p>
 <span>\[
 \begin{equation}
     f(w) :=
@@ -1765,12 +1765,12 @@
 <tbody>
 <tr>
 <td>Logistic Gradient</td>
-<td><code>LogisticGradient</code></td>
+<td><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.LogisticGradient"><code class="codehilite"><span class="nc">LogisticGradient</span></code></a></td>
 <td><span>\(L = \frac1n \sum_{k=1}^n \log(1+\exp( -y_k w^T x_k)), y_k \in \{-1, +1\}\)</span></td>
 </tr>
 <tr>
 <td>Least Squares Gradient</td>
-<td><code>LeastSquaresGradient</code></td>
+<td><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.LeastSquaresGradient"><code class="codehilite"><span class="nc">LeastSquaresGradient</span></code></a></td>
 <td><span>\(L = \frac1n \sum_{k=1}^n \|w^{T} \cdot x_k - y_k\|^2\)</span></td>
 </tr>
 </tbody>
@@ -1787,17 +1787,17 @@
 <tbody>
 <tr>
 <td><span>\(L_1\)</span> Updater</td>
-<td><code>L1Updater</code></td>
-<td><span>\(R = \|\|w\|\|_1\)</span></td>
+<td><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.L1Updater"><code class="codehilite"><span class="n">L1Updater</span></code></a></td>
+<td><span>\(R = \|\|w\|\|_{1}\)</span></td>
 </tr>
 <tr>
 <td><span>\(L_2\)</span> Updater</td>
-<td><code>SquaredL2Updater</code></td>
+<td><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.SquaredL2Updater"><code class="codehilite"><span class="nc">SquaredL2Updater</span></code></a></td>
 <td><span>\(R = \frac{1}{2} \|\|w\|\|^2\)</span></td>
 </tr>
 <tr>
 <td>BFGS Updater</td>
-<td><code>SimpleBFGSUpdater</code></td>
+<td><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.SimpleBFGSUpdater"><code class="codehilite"><span class="nc">SimpleBFGSUpdater</span></code></a></td>
 <td></td>
 </tr>
 </tbody>
