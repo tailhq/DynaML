@@ -1,10 +1,10 @@
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.algebra.PartitionedVector
+import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.models.StochasticProcessMixtureModel
-import io.github.mandar2812.dynaml.probability.{ContinuousDistrMixture, MultGaussianPRV}
-import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
+import io.github.mandar2812.dynaml.probability.{ContMixtureRVBars, ContinuousDistrMixture}
+import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian
 import org.apache.log4j.Logger
 
 import scala.reflect.ClassTag
@@ -20,12 +20,13 @@ class GaussianProcessMixture[I: ClassTag](
   val component_processes: Seq[AbstractGPRegressionModel[_, I]],
   val weights: DenseVector[Double]) extends
   StochasticProcessMixtureModel[
-    Seq[(I, Double)], I, Double,
-    ContinuousDistrMixture[
-      PartitionedVector,
-      MultGaussianPRV]] {
+    Seq[(I, Double)], I, Double, ContMixtureRVBars[
+    PartitionedVector, PartitionedPSDMatrix, BlockedMultiVariateGaussian]] {
 
   private val logger = Logger.getLogger(this.getClass)
+
+
+  protected val blockSize: Int = component_processes.head._blockSize
 
   /**
     *
@@ -36,8 +37,8 @@ class GaussianProcessMixture[I: ClassTag](
     *             storing the values of the input patters.
     * */
   override def predictiveDistribution[U <: Seq[I]](test: U) =
-    ContinuousDistrMixture[PartitionedVector, MultGaussianPRV](
-      component_processes.map(_.predictiveDistribution(test)),
+    ContinuousDistrMixture(blockSize)(
+      component_processes.map(_.predictiveDistribution(test).underlyingDist),
       weights)
 
 
@@ -54,31 +55,17 @@ class GaussianProcessMixture[I: ClassTag](
     * */
   override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int) = {
 
-    val posterior_components = component_processes.map(_.predictiveDistribution(testData))
+    val posterior = predictiveDistribution(testData)
 
-    val post_means = posterior_components.map(_.mu)
+    val mean = posterior.underlyingDist.mean.toStream
 
-    //._data.map(_._2.toArray.toStream).reduceLeft((a, b) => a ++ b)
+    val (lower, upper) = posterior.underlyingDist.confidenceInterval(sigma.toDouble)
 
-    val error_bars_components = posterior_components.map(
-      _.underlyingDist.confidenceInterval(sigma.toDouble)
-    )
-
-    val weightsArr = weights.toArray
-
-    val mean = post_means.zip(weightsArr).map(c => c._1*c._2).reduce((a, b) => a+b).toStream
-
-    val combined_error_bars_vec = error_bars_components.zip(weightsArr)
-      .map(c => (c._1._1*c._2,c._1._2*c._2))
-      .reduce((a,b) => (a._1+b._1, a._2+b._2))
-
-    val (lowerErrorBars, upperErrorBars) = (
-      combined_error_bars_vec._1.toStream,
-      combined_error_bars_vec._2.toStream)
-
+    val lowerErrorBars = lower.toStream
+    val upperErrorBars = upper.toStream
 
     logger.info("Generating error bars")
-    //val preds = (mean zip stdDev).map(j => (j._1, j._1 - sigma*j._2, j._1 + sigma*j._2))
+
     val preds = mean.zip(lowerErrorBars.zip(upperErrorBars)).map(t => (t._1, t._2._1, t._2._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
   }

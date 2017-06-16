@@ -1,8 +1,14 @@
 package io.github.mandar2812.dynaml.probability
 
+import spire.algebra.{Field, VectorSpace}
 import breeze.linalg.DenseVector
+import breeze.stats.distributions.{ContinuousDistr, Moments}
+import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
+import io.github.mandar2812.dynaml.analysis.PartitionedVectorField
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.distributions.MixtureDistribution
+import io.github.mandar2812.dynaml.probability.distributions.{
+BlockedMultiVariateGaussian, HasErrorBars,
+MixtureDistribution, MixtureWithConfBars}
 
 
 /**
@@ -49,8 +55,7 @@ trait ContinuousMixtureRV[Domain, BaseRV <: ContinuousRandomVariable[Domain]] ex
   * having a computable probability distribution
   * @author mandar2812 date 14/06/2017
   * */
-class ContinuousDistrMixture[
-Domain, BaseRV <: ContinuousDistrRV[Domain]](
+class ContinuousDistrMixture[Domain, BaseRV <: ContinuousDistrRV[Domain]](
   distributions: Seq[BaseRV],
   selector: MultinomialRV) extends
   ContinuousMixtureRV[Domain, BaseRV] with
@@ -65,10 +70,38 @@ Domain, BaseRV <: ContinuousDistrRV[Domain]](
     selector.underlyingDist.params)
 }
 
+private[dynaml] class ContMixtureRVBars[Domain, Var,
+BaseDistr <: ContinuousDistr[Domain] with Moments[Domain, Var] with HasErrorBars[Domain]](
+  distributions: Seq[BaseDistr],
+  selector: MultinomialRV)(
+  implicit f: Field[Domain], v: VectorSpace[Domain, Double]) extends
+  ContinuousDistrMixture[Domain, ContinuousDistrRV[Domain]](
+    distributions.map(RandomVariable(_)), selector) {
+
+  override val underlyingDist = MixtureWithConfBars(distributions, selector.underlyingDist.params)
+}
+
 object ContinuousDistrMixture {
 
   def apply[Domain, BaseRV <: ContinuousDistrRV[Domain]](
     distributions: Seq[BaseRV],
     selector: DenseVector[Double]): ContinuousDistrMixture[Domain, BaseRV] =
     new ContinuousDistrMixture(distributions, MultinomialRV(selector))
+
+  def apply[Domain, Var, BaseDistr <: ContinuousDistr[Domain] with Moments[Domain, Var] with HasErrorBars[Domain]](
+    distributions: Seq[BaseDistr], selector: DenseVector[Double])(
+    implicit f: Field[Domain], v: VectorSpace[Domain, Double]) =
+    new ContMixtureRVBars[Domain, Var, BaseDistr](distributions, MultinomialRV(selector))
+
+  def apply(num_elements_per_block: Int)(
+    distributions: Seq[BlockedMultiVariateGaussian],
+    selector: DenseVector[Double]) = {
+
+    val num_dim = distributions.head.mean.rows
+
+    implicit val ev = PartitionedVectorField(num_dim, num_elements_per_block)
+
+    apply[PartitionedVector, PartitionedPSDMatrix, BlockedMultiVariateGaussian](distributions, selector)
+  }
+
 }

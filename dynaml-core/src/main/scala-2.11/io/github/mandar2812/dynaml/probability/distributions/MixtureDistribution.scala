@@ -78,3 +78,12 @@ class MixtureWithConfBars[I, V](
     .reduce((a,b) => vI.plus(a,b))
 
 }
+
+object MixtureWithConfBars {
+
+  def apply[I, V](
+    distributions: Seq[ContinuousDistr[I] with Moments[I, V] with HasErrorBars[I]],
+    weights: DenseVector[Double])(
+    implicit vI: VectorSpace[I, Double]): MixtureWithConfBars[I, V] =
+    new MixtureWithConfBars(distributions, new Multinomial[DenseVector[Double], Int](weights))
+}

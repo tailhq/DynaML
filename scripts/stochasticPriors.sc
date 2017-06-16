@@ -32,7 +32,7 @@ val n = new MAKernel(0.8)
 val gp_prior = new LinearTrendGaussianPrior[Double](gsmKernel, n, trendEncoder, 0.0, 0.0)
 //gp_prior.hyperPrior_(hyp_prior)
 
-val sgp_prior = new LinearTrendESGPrior[Double](gsmKernel, n, trendEncoder, 0.75, 0.1, 0.0, 0.0)
+val sgp_prior = new LinearTrendESGPrior[Double](rbfc, n, trendEncoder, 0.75, 0.1, 0.0, 0.0)
 sgp_prior.hyperPrior_(sgp_hyp_prior)
 
 val xs = Seq.tabulate[Double](20)(0.5*_)
@@ -51,7 +51,7 @@ val dataset = xs.map{i => (i + GaussianRV(0.0, 0.02).sample(), noiseAdd.sample()
 
 //Set hyper-parameter selection configuration
 gp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "5", "globalOpt" -> "GPC", "policy" -> "GS"))
-sgp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "40"))
+sgp_prior.globalOptConfig_(Map("gridStep" -> "0.15", "gridSize" -> "4"))
 
 val gpModel = gp_prior.posteriorModel(dataset)
 val sgpModel = sgp_prior.posteriorModel(dataset)
@@ -62,9 +62,9 @@ val gpModel1 = gp_prior.posteriorModel(dataset)
 
 val mixt_machine = new ProbGPMixtureMachine(gpModel1)
   .setGridSize(2)
-  .setStepSize(0.75)
+  .setStepSize(0.50)
   .setLogScale(true)
-  .setMaxIterations(30)
+  .setMaxIterations(16)
 
 val (mix_model, _) = mixt_machine.optimize(gp_prior.covariance.state ++ gp_prior.noiseCovariance.state)
 
