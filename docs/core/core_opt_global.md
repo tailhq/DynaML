@@ -86,7 +86,7 @@ Gradient based model selection can be used if the model fitness function impleme
 
 ### Maximum Likelihood ML-II
 
-In the _Maximum Likelihood_ (ML-II) algorithm (refer to [Ramussen & Williams](https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&hl=en ) for more details), we aim to maximize the log marginal likelihood by calculating its gradient with respect to the hyper-parameters $$\theta_j$$ in each iteration and performing _steepest ascent_. The calculations are summarized below.
+In the _Maximum Likelihood_ (ML-II) algorithm (refer to [Ramussen & Williams](https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&hl=en ) for more details), we aim to maximize the log marginal likelihood by calculating its gradient with respect to the hyper-parameters $\theta_j$ in each iteration and performing _steepest ascent_. The calculations are summarized below.
 
 
 
