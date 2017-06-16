@@ -82,7 +82,7 @@ model.setState(conf)
 
 ## Gradient based Model Selection
 
-Gradient based model selection can be used if the model fitness function implemented in the ```energy``` method has differentiability properties (e.g. using marginal likelihood in the case of stochastic process inference). The [```GloballyOptWithGrad```](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad) trait is an extension of ```GlobalOptimizer``` and adds a method ```gradEnergy``` that should return the gradient of the fitness function in each hyper-parameter in the form of a ```Map[String, Double]```.
+Gradient based model selection can be used if the model fitness function implemented in the `#!scala energy` method has differentiability properties (e.g. using marginal likelihood in the case of stochastic process inference). The [`#!scala GloballyOptWithGrad`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad) trait is an extension of `#!scala GlobalOptimizer` and adds a method `#!scala gradEnergy` that should return the gradient of the fitness function in each hyper-parameter in the form of a `#!scala Map[String, Double]`.
 
 ### Maximum Likelihood ML-II
 
@@ -103,7 +103,7 @@ $$
 \end{align}
 $$
 
-The [```GPMLOptimizer[I, T, M]```](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer) class implements ML-II, by using the ```gradEnergy``` method implemented by the ```system: M``` member value (which refers to a model extending  [```GloballyOptWithGrad```](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad)).
+The [`#!scala GPMLOptimizer[I, T, M]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GPMLOptimizer) class implements ML-II, by using the `#!scala gradEnergy` method implemented by the `#!scala system: M` member value (which refers to a model extending  [`#!scala GloballyOptWithGrad`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad)).
 
 ```scala
 val kernel = ...
