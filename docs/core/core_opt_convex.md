@@ -4,7 +4,7 @@ Model solvers are implementations which either solve for the parameters/coeffici
 
 ### Gradient Descent
 
-The bread and butter of any machine learning framework, the ```GradientDescent``` class in the ```io.github.mandar2812.dynaml.optimization``` package provides gradient based optimization primitives for solving optimization problems of the form.
+The bread and butter of any machine learning framework, the [`#!scala GradientDescent`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.GradientDescent) class in the [`#!scala dynaml.optimization`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.package) package provides gradient based optimization primitives for solving optimization problems of the form.
 
 $$
 \begin{equation}
@@ -21,8 +21,8 @@ $$
 
 Name | Class | Equation
 ------------ | ------------- | -------------
-Logistic Gradient | ```LogisticGradient``` | $L = \frac1n \sum_{k=1}^n \log(1+\exp( -y_k w^T x_k)), y_k \in \{-1, +1\}$
-Least Squares Gradient | ```LeastSquaresGradient``` | $L = \frac1n \sum_{k=1}^n \|w^{T} \cdot x_k - y_k\|^2$
+Logistic Gradient | [`#!scala LogisticGradient`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.LogisticGradient) | $L = \frac1n \sum_{k=1}^n \log(1+\exp( -y_k w^T x_k)), y_k \in \{-1, +1\}$
+Least Squares Gradient | [`#!scala LeastSquaresGradient`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.LeastSquaresGradient) | $L = \frac1n \sum_{k=1}^n \|w^{T} \cdot x_k - y_k\|^2$
 
 
 
@@ -30,9 +30,9 @@ Least Squares Gradient | ```LeastSquaresGradient``` | $L = \frac1n \sum_{k=1}^n 
 
 Name | Class | Equation
 ------------ | ------------- | -------------
-$L_1$ Updater | ```L1Updater```| $R = \|\|w\|\|_1$
-$L_2$ Updater | ```SquaredL2Updater``` | $R = \frac{1}{2} \|\|w\|\|^2$
-BFGS Updater      | ```SimpleBFGSUpdater``` |
+$L_1$ Updater | [`#!scala L1Updater`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.L1Updater)| $R = \|\|w\|\|_{1}$
+$L_2$ Updater | [`#!scala SquaredL2Updater`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.SquaredL2Updater) | $R = \frac{1}{2} \|\|w\|\|^2$
+BFGS Updater      | [`#!scala SimpleBFGSUpdater`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.SimpleBFGSUpdater) |
 
 
 ```scala
