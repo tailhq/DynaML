@@ -9,7 +9,7 @@
         <meta name="description" content="User guide and documentation for the DynaML machine learning library and API">
       
       
-        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/core/partitioned_matrices/">
+        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/core/core_multi_output_t/">
       
       
         <meta name="author" content="Mandar Chandorkar">
@@ -21,7 +21,7 @@
     
     
       
-        <title>Block Matrices - DynaML User Guide</title>
+        <title>Multi-output Matrix T Process - DynaML User Guide</title>
       
     
     
@@ -82,15 +82,15 @@
             
               
                 <span class="md-header-nav__parent">
-                  Core
+                  Models
                 </span>
               
                 <span class="md-header-nav__parent">
-                  Algebra
+                  Stochastic Processes
                 </span>
               
             
-            Block Matrices
+            Multi-output Matrix T Process
           
         </span>
       </div>
@@ -657,10 +657,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1" type="checkbox" id="nav-7-1-1">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1" type="checkbox" id="nav-7-1-1" checked>
     
     <label class="md-nav__link" for="nav-7-1-1">
       Models
@@ -736,10 +738,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-3" type="checkbox" id="nav-7-1-1-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-1-3" type="checkbox" id="nav-7-1-1-3" checked>
     
     <label class="md-nav__link" for="nav-7-1-1-3">
       Stochastic Processes
@@ -791,11 +795,56 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../core_multi_output_t/" title="Multi-output Matrix T Process" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Multi-output Matrix T Process
+      </label>
+    
+    <a href="./" title="Multi-output Matrix T Process" class="md-nav__link md-nav__link--active">
       Multi-output Matrix T Process
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#formulation" title="Formulation" class="md-nav__link">
+    Formulation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-output-regression" title="Multi-output Regression" class="md-nav__link">
+    Multi-output Regression
+  </a>
+  
+</li>
+      
+      
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -957,12 +1006,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-3" type="checkbox" id="nav-7-1-3" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1-3" type="checkbox" id="nav-7-1-3">
     
     <label class="md-nav__link" for="nav-7-1-3">
       Algebra
@@ -1002,131 +1049,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Block Matrices
-      </label>
-    
-    <a href="./" title="Block Matrices" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../partitioned_matrices/" title="Block Matrices" class="md-nav__link">
       Block Matrices
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#creation" title="Creation" class="md-nav__link">
-    Creation
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#from-input-blocks" title="From Input Blocks" class="md-nav__link">
-    From Input Blocks
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-tabulating-functions" title="From Tabulating Functions" class="md-nav__link">
-    From Tabulating Functions
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-outer-product" title="From Outer Product" class="md-nav__link">
-    From Outer Product
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#matrix-concatenation" title="Matrix Concatenation" class="md-nav__link">
-    Matrix Concatenation
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#algebraic-operations" title="Algebraic Operations" class="md-nav__link">
-    Algebraic Operations
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#misc-operations" title="Misc. Operations" class="md-nav__link">
-    Misc. Operations
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#map-partitions" title="Map Partitions" class="md-nav__link">
-    Map Partitions
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#slice" title="Slice" class="md-nav__link">
-    Slice
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#upper-and-lower-triangular-sections" title="Upper and Lower Triangular Sections" class="md-nav__link">
-    Upper and Lower Triangular Sections
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#convert-to-breeze-matrix" title="Convert to Breeze Matrix" class="md-nav__link">
-    Convert to Breeze Matrix
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-        <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
-            Comments
-          </a>
-        </li>
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -1656,91 +1583,16 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#creation" title="Creation" class="md-nav__link">
-    Creation
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#from-input-blocks" title="From Input Blocks" class="md-nav__link">
-    From Input Blocks
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-tabulating-functions" title="From Tabulating Functions" class="md-nav__link">
-    From Tabulating Functions
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-outer-product" title="From Outer Product" class="md-nav__link">
-    From Outer Product
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#matrix-concatenation" title="Matrix Concatenation" class="md-nav__link">
-    Matrix Concatenation
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#algebraic-operations" title="Algebraic Operations" class="md-nav__link">
-    Algebraic Operations
+  <a href="#formulation" title="Formulation" class="md-nav__link">
+    Formulation
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#misc-operations" title="Misc. Operations" class="md-nav__link">
-    Misc. Operations
+  <a href="#multi-output-regression" title="Multi-output Regression" class="md-nav__link">
+    Multi-output Regression
   </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#map-partitions" title="Map Partitions" class="md-nav__link">
-    Map Partitions
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#slice" title="Slice" class="md-nav__link">
-    Slice
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#upper-and-lower-triangular-sections" title="Upper and Lower Triangular Sections" class="md-nav__link">
-    Upper and Lower Triangular Sections
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#convert-to-breeze-matrix" title="Convert to Breeze Matrix" class="md-nav__link">
-    Convert to Breeze Matrix
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1765,168 +1617,44 @@
               
                 
                 
-                  <h1>Block Matrices</h1>
+                  <h1>Multi-output Matrix T Process</h1>
                 
                 <div class="admonition summary">
 <p class="admonition-title">Summary</p>
-<p>Here we show how to use the block matrix API</p>
+<p>The multi-output matrix T regression model was first described by <a href="http://www.sciencedirect.com/science/article/pii/S0378375809002559">Conti and O' Hagan</a> in their paper on Bayesian emulation of multi-output computer codes.</p>
 </div>
-<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.algebra.package"><code>algebra</code></a> package
-contains a number of block matrix implementations.</p>
-<table>
-<thead>
-<tr>
-<th>Class</th>
-<th>Represents</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code class="codehilite"><span class="nc">PartitionedMatrix</span></code></td>
-<td>A general block matrix</td>
-<td>User facing i.e. can be instantiated directly</td>
-</tr>
-<tr>
-<td><code class="codehilite"><span class="nc">LowerTriPartitionedMatrix</span></code></td>
-<td>Lower triangular block matrix</td>
-<td>Result of <code>algebra</code> API calls</td>
-</tr>
-<tr>
-<td><code class="codehilite"><span class="nc">UpperTriPartitionedMatrix</span></code></td>
-<td>Upper triangular block matrix</td>
-<td>Result of <code>algebra</code> API calls</td>
-</tr>
-<tr>
-<td><code class="codehilite"><span class="nc">PartitionedPSDMatrix</span></code></td>
-<td>Symmetric positive semi-definite matrix</td>
-<td>Result of applying kernel function on data.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="creation">Creation<a class="headerlink" href="#creation" title="Permanent link">&para;</a></h2>
-<p>Block can be created in two major ways.</p>
-<h3 id="from-input-blocks">From Input Blocks<a class="headerlink" href="#from-input-blocks" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">index_set</span> <span class="k">=</span> <span class="o">(</span><span class="mi">0L</span> <span class="n">until</span> <span class="mi">10L</span><span class="o">).</span><span class="n">toStream</span>
-<span class="c1">//Create the data blocks</span>
-<span class="k">val</span> <span class="n">data_blocks</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[((</span><span class="kt">Long</span>, <span class="kt">Long</span><span class="o">)</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]</span> <span class="k">=</span>
-  <span class="n">utils</span><span class="o">.</span><span class="n">combine</span><span class="o">(</span><span class="n">index_set</span><span class="o">).</span><span class="n">map</span><span class="o">(</span>
-    <span class="n">indices</span> <span class="k">=&gt;</span> <span class="o">(</span>
-      <span class="o">(</span><span class="n">indices</span><span class="o">.</span><span class="n">head</span><span class="o">,</span> <span class="n">indices</span><span class="o">.</span><span class="n">last</span><span class="o">),</span> <span class="nc">DenseMatrix</span><span class="o">.</span><span class="n">ones</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">500</span><span class="o">,</span> <span class="mi">500</span><span class="o">)</span>
-    <span class="o">)</span>
-  <span class="o">)</span>
-
-<span class="c1">//Instantiate the partitioned matrix</span>
-<span class="c1">//must provide dimensions</span>
-<span class="k">val</span> <span class="n">part_matrix</span> <span class="k">=</span> <span class="nc">PartitionedMatrix</span><span class="o">(</span>
-  <span class="n">data_blocks</span><span class="o">,</span> <span class="n">numrows</span> <span class="k">=</span> <span class="mi">5000L</span><span class="o">,</span> <span class="n">numcols</span> <span class="k">=</span> <span class="mi">5000L</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<h3 id="from-tabulating-functions">From Tabulating Functions<a class="headerlink" href="#from-tabulating-functions" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">tabFunc</span><span class="k">:</span> <span class="o">(</span><span class="kt">Long</span><span class="o">,</span> <span class="kt">Long</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span>
-  <span class="o">(</span><span class="n">indexR</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">indexC</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span>
-    <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="o">(</span><span class="mi">2</span><span class="n">d</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="nc">Pi</span><span class="o">*</span><span class="n">indexR</span><span class="o">/</span><span class="mi">5000</span><span class="n">d</span><span class="o">)*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="o">(</span><span class="mi">2</span><span class="n">d</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="nc">Pi</span><span class="o">*</span><span class="n">indexC</span><span class="o">/</span><span class="mi">5000</span><span class="n">d</span><span class="o">)</span>
-  <span class="o">}</span>
-
-<span class="c1">//Instantiate the partitioned matrix</span>
-<span class="k">val</span> <span class="n">part_matrix</span> <span class="k">=</span> <span class="nc">PartitionedMatrix</span><span class="o">(</span>
-  <span class="n">nRows</span> <span class="k">=</span> <span class="mi">5000L</span><span class="o">,</span> <span class="n">nCols</span> <span class="k">=</span> <span class="mi">5000L</span><span class="o">,</span>
-  <span class="n">numElementsPerRBlock</span> <span class="k">=</span> <span class="mi">1000</span><span class="o">,</span>
-  <span class="n">numElementsPerCBlock</span> <span class="k">=</span> <span class="mi">1000</span><span class="o">,</span>
-  <span class="n">tabFunc</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<h3 id="from-outer-product">From Outer Product<a class="headerlink" href="#from-outer-product" title="Permanent link">&para;</a></h3>
-<p>A <code class="codehilite"><span class="nc">PartitionedMatrix</span></code> can also be constructed from the product of a <code class="codehilite"><span class="nc">PartitionedDualVector</span></code> and
-<code class="codehilite"><span class="nc">PartitionedVector</span></code>.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">random_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="k">new</span> <span class="nc">Beta</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
-
-<span class="k">val</span> <span class="n">rand_vec1</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">2000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="n">random_var</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">rand_vec2</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">2000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="n">random_var</span><span class="o">)</span>
-
-<span class="k">val</span> <span class="n">p_mat</span> <span class="k">=</span> <span class="n">rand_vec1</span><span class="o">*</span><span class="n">rand_vec2</span><span class="o">.</span><span class="n">t</span>
-</pre></div>
-</td></tr></table>
-
-<h3 id="matrix-concatenation">Matrix Concatenation<a class="headerlink" href="#matrix-concatenation" title="Permanent link">&para;</a></h3>
-<p>You can vertically join matrices, as long as the number of rows and row blocks match.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mat1</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
-<span class="k">val</span> <span class="n">mat2</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
-
-<span class="k">val</span> <span class="n">mat3</span> <span class="k">=</span> <span class="nc">PartitionedMatrix</span><span class="o">.</span><span class="n">vertcat</span><span class="o">(</span><span class="n">mat1</span><span class="o">,</span> <span class="n">mat2</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<div class="admonition note">
-<p class="admonition-title">Positive Semi-Definite Matrices</p>
-<p>The class <code class="codehilite"><span class="nc">PartitionedPSDMatrix</span></code> can be instantiated in two ways.</p>
+<h2 id="formulation">Formulation<a class="headerlink" href="#formulation" title="Permanent link">&para;</a></h2>
+<p>The model starts from the multi-output gaussian process framework. The quantity of interest is some unknown function <span>\(\mathbf{f}: \mathcal{X} \rightarrow \mathbb{R}^q\)</span>, which maps inputs in <span>\(\mathcal{X}\)</span> (an arbitrary input space) to a <span>\(q\)</span> dimensional vector outputs.</p>
+<span>\[
+\begin{align}
+\mathbf{f}(.)|B,\Sigma, \theta &amp;\sim \mathcal{GP}(\mathbf{m}(.), c(.,.)\Sigma) \\
+\mathbf{m}(x) &amp;= B^\intercal \varphi(x)
+\end{align}
+\]</span><p>The input <span>\(x\)</span> is transformed through <span>\(\varphi(.): \mathcal{X} \rightarrow \mathbb{R}^m\)</span> which is a deterministic feature mapping which then calculates the inputs for a linear <em>mean function</em> <span>\(\mathbf{m}(.)\)</span>. The parameters of this linear trend are contained in the matrix <span>\(B \in \mathbb{R}^{m \times q}\)</span> and <span>\(\theta\)</span> contains all the covariance function hyper-parameters.</p>
+<p>The prior distribution of the multi-output function is represented as a matrix normal distribution, with <span>\(c(.,.)\)</span> representing the covariance between two input points, and the entries of <span>\(\Sigma\)</span> being the covariance between the output dimensions.</p>
+<p>The predictive distribution when the output data <span>\(D \in \mathbb{R}^{n\times q}\)</span> is observed is calculated by first computing the conditional predictive distribution of <span>\(\mathbf{f}(.) | D, \Sigma, B, \theta\)</span> and then integrating this distribution with respect to the posterior distributions <span>\(\Sigma|D\)</span> and <span>\(B|D\)</span>.</p>
+<p>The resulting predictive distribution <span>\(\mathbf{f}(.)| \theta, D\)</span> has the following structure.</p>
+<span>\[
+\begin{align}
+\mathbf{f}(.)|\theta,D &amp;\sim \mathcal{T}(\mathbf{m}^{**}(.), c^{**}\Sigma_{GLS};n-m) \\
+\end{align}
+\]</span><p>The distribution is a <a href="https://en.wikipedia.org/wiki/Matrix_t-distribution">matrix variate T distribution</a>. It is described by</p>
 <ul>
-<li>
-<p>From outer product.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">random_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="k">new</span> <span class="nc">Beta</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
-
-<span class="k">val</span> <span class="n">rand_vec</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">2000L</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="n">random_var</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">psd_mat</span> <span class="k">=</span> <span class="nc">PartitionedPSDMatrix</span><span class="o">.</span><span class="n">fromOuterProduct</span><span class="o">(</span><span class="n">rand_vec</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-</li>
-<li>
-<p>From kernel evaluation</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Obtain data</span>
-<span class="k">val</span> <span class="n">data</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
-<span class="c1">//Create kernel instance</span>
-<span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
-
-<span class="k">val</span> <span class="n">psd_gram_mat</span> <span class="k">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">buildBlockedKernelMatrix</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="n">data</span><span class="o">.</span><span class="n">length</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-</li>
+<li>Mean <span>\(\mathbf{m}^{**}(x)\)</span>.</li>
+<li>Covariance between rows <span>\(c^{**}(x_{1}, x_{2})\)</span></li>
+<li>Covariance function between output columns <span>\(\Sigma_{GLS}\)</span></li>
+<li>Degrees of freedom <span>\(n-m\)</span>.</li>
 </ul>
-</div>
-<h2 id="algebraic-operations">Algebraic Operations<a class="headerlink" href="#algebraic-operations" title="Permanent link">&para;</a></h2>
-<p>Partitioned vectors and dual vectors have a number of algebraic operations available in the API.</p>
+<span>\[\begin{align}
+\mathbf{m}^{**}(x_{1}) &amp;= B_{GLS}^{\intercal}\varphi(x_{1}) + (D-\varphi(X)B_{GLS})^{\intercal} C^{-1}c(x_{1},.)\\
+c^{**}(x_{1}, x_{2}) &amp;= \bar{c}(x_{1}, x_{2}) + \hat{c}(x_{1}, x_{2})\\
+\bar{c}(x_{1}, x_{2}) &amp;= c(x_{1}, x_{2}) - C(x_{1},.)^{\intercal}C^{-1}C(x_{2},.) \\
+\hat{c}(x_{1}, x_{2}) &amp;= H(x_{1})^{\intercal}.A^{-1}.H(x_{2})\\
+H(x) &amp;= (\varphi(x) - \varphi(X)C^{-1}c(x,.)) \\
+A &amp;= \varphi(X)^{\intercal}C^{-1}\varphi(X)\\
+\end{align}\]</span><p>The matrices <span>\(B_{GLS} = (\varphi(X)^{\intercal}C^{-1}\varphi(X))^{-1}\varphi(X)^{\intercal}C^{-1}D\)</span> and <span>\(\Sigma_{GLS} = (n-m)^{-1}(D - \varphi(X)B_{GLS})^{\intercal}C^{-1}(D - \varphi(X)B_{GLS})\)</span> are the <a href="../core_gls/"><em>generalized least squares</em></a> estimators for the matrices <span>\(B\)</span> and <span>\(\Sigma\)</span> which we saw in the formulation above.</p>
+<h2 id="multi-output-regression">Multi-output Regression<a class="headerlink" href="#multi-output-regression" title="Permanent link">&para;</a></h2>
+<p>An implementation of the multi-output matrix T model is available via the class <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.models.stp.MVStudentsTModel"><code class="codehilite"><span class="nc">MVStudentsTModel</span></code></a>. Instantiating the model is very similar to other stochastic process models in DynaML i.e. by specifying the covariance structures on signal and noise, training data, etc.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -1941,110 +1669,21 @@ contains a number of block matrix implementations.</p>
 12
 13
 14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">beta_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">Beta</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
-<span class="k">val</span> <span class="n">gamma_var</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">Gamma</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
+15</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Obtain the data, some generic type</span>
+<span class="k">val</span> <span class="n">trainingdata</span><span class="k">:</span> <span class="kt">DataType</span> <span class="o">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">num_data_points</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">num_outputs</span><span class="k">:</span><span class="kt">Int</span> <span class="o">=</span> <span class="k">_</span>
 
-<span class="k">val</span> <span class="n">p_vec_beta</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">,</span> <span class="n">beta_var</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">p_vec_gamma</span> <span class="k">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">rand</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">,</span> <span class="n">gamma_var</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">kernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">noiseKernel</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<span class="k">val</span> <span class="n">feature_map</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
 
-<span class="k">val</span> <span class="n">dvec_beta</span> <span class="k">=</span> <span class="n">p_vec_beta</span><span class="o">.</span><span class="n">t</span>
-<span class="k">val</span> <span class="n">dvec_gamma</span> <span class="k">=</span> <span class="n">p_vec_gamma</span><span class="o">.</span><span class="n">t</span>
+<span class="c1">//Define how the data is converted to a compatible type</span>
+<span class="k">implicit</span> <span class="k">val</span> <span class="n">transform</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">DataType</span>, <span class="kt">Seq</span><span class="o">[(</span><span class="kt">I</span>, <span class="kt">Double</span><span class="o">)]]</span> <span class="k">=</span> <span class="k">_</span>
 
-<span class="k">val</span> <span class="n">mat1</span> <span class="k">=</span> <span class="n">p_vec_gamma</span><span class="o">*</span><span class="n">dvec_gamma</span>
-<span class="k">val</span> <span class="n">mat2</span> <span class="k">=</span> <span class="n">p_vec_beta</span><span class="o">*</span><span class="n">dvec_beta</span>
-
-<span class="c1">//Addition</span>
-<span class="k">val</span> <span class="n">add_mat</span> <span class="k">=</span> <span class="n">mat1</span> <span class="o">+</span> <span class="n">mat2</span>
-
-<span class="c1">//Subtraction</span>
-<span class="k">val</span> <span class="n">sub_mat</span> <span class="k">=</span> <span class="n">mat2</span> <span class="o">-</span> <span class="n">mat1</span>
-
-<span class="c1">//Element wise multiplication</span>
-<span class="k">val</span> <span class="n">mult_mat</span> <span class="k">=</span> <span class="n">mat1</span> <span class="o">:*</span> <span class="n">mat2</span>
-
-<span class="c1">//Matrix matrix product</span>
-
-<span class="k">val</span> <span class="n">prod_mat</span> <span class="k">=</span> <span class="n">mat1</span><span class="o">*</span><span class="n">mat2</span>
-
-<span class="c1">//matrix vector Product</span>
-<span class="k">val</span> <span class="n">prod</span> <span class="k">=</span> <span class="n">mat1</span><span class="o">*</span><span class="n">p_vec_beta</span>
-<span class="k">val</span> <span class="n">prod_dual</span> <span class="k">=</span> <span class="n">dvec_gamma</span><span class="o">*</span><span class="n">mat2</span>
-
-<span class="c1">//Scaler multiplication</span>
-<span class="k">val</span> <span class="n">sc_mat</span> <span class="k">=</span> <span class="n">mat1</span><span class="o">*</span><span class="mf">1.5</span>
-</pre></div>
-</td></tr></table>
-
-<h2 id="misc-operations">Misc. Operations<a class="headerlink" href="#misc-operations" title="Permanent link">&para;</a></h2>
-<h3 id="map-partitions">Map Partitions<a class="headerlink" href="#map-partitions" title="Permanent link">&para;</a></h3>
-<p>Map each index, partition pair by a Scala function.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
-
-<span class="k">val</span> <span class="n">other_vec</span> <span class="k">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">map</span><span class="o">(</span>
-   <span class="o">(</span><span class="n">pair</span><span class="k">:</span> <span class="o">((</span><span class="kt">Long</span><span class="o">,</span> <span class="kt">Long</span><span class="o">),</span> <span class="nc">DenseMatrix</span><span class="o">[</span><span class="kt">Double</span><span class="o">]))</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="n">_1</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="n">_2</span><span class="o">*</span><span class="mf">1.5</span><span class="o">)</span>
-<span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<h3 id="slice">Slice<a class="headerlink" href="#slice" title="Permanent link">&para;</a></h3>
-<p>Obtain subset of elements, the new matrix is repartitioned and re-indexed accordingly.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">ones</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
-
-<span class="k">val</span> <span class="n">mat</span> <span class="k">=</span> <span class="n">vec</span><span class="o">*</span><span class="n">vec</span><span class="o">.</span><span class="n">t</span>
-
-<span class="k">val</span> <span class="n">other_mat</span> <span class="k">=</span> <span class="n">vec</span><span class="o">(</span><span class="mi">999L</span> <span class="n">until</span> <span class="mi">2000L</span><span class="o">,</span> <span class="mi">0L</span> <span class="n">until</span> <span class="mi">999L</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
-
-<h3 id="upper-and-lower-triangular-sections">Upper and Lower Triangular Sections<a class="headerlink" href="#upper-and-lower-triangular-sections" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">vec</span><span class="k">:</span> <span class="kt">PartitionedVector</span> <span class="o">=</span> <span class="nc">PartitionedVector</span><span class="o">.</span><span class="n">ones</span><span class="o">(</span><span class="mi">5000L</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
-
-<span class="k">val</span> <span class="n">mat</span> <span class="k">=</span> <span class="n">vec</span><span class="o">*</span><span class="n">vec</span><span class="o">.</span><span class="n">t</span>
-
-<span class="k">val</span> <span class="n">lower_tri</span><span class="k">:</span> <span class="kt">LowerTriPartitionedMatrix</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">L</span>
-<span class="k">val</span> <span class="n">upper_tri</span><span class="k">:</span> <span class="kt">UpperTriPartitionedMatrix</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">U</span>
-</pre></div>
-</td></tr></table>
-
-<h3 id="convert-to-breeze-matrix">Convert to Breeze Matrix<a class="headerlink" href="#convert-to-breeze-matrix" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mat</span><span class="k">:</span> <span class="kt">PartitionedMatrix</span> <span class="o">=</span> <span class="k">_</span>
-
-<span class="c1">//Do not use on large vectors as</span>
-<span class="c1">//it might lead to overflow of memory.</span>
-<span class="k">val</span> <span class="n">breeze_mat</span> <span class="k">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">toBreezeMatrix</span>
+<span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">MVStudentsTModel</span><span class="o">(</span>
+  <span class="n">kernel</span><span class="o">,</span> <span class="n">noiseKernel</span><span class="o">,</span> <span class="n">feature_map</span><span class="o">)(</span>
+  <span class="n">trainingData</span><span class="o">,</span> <span class="n">num_data_points</span><span class="o">,</span> <span class="n">num_outputs</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
                 
@@ -2057,9 +1696,9 @@ contains a number of block matrix implementations.</p>
                   <div id="disqus_thread"></div>
 <script>
   var disqus_config = function () {
-    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/core/partitioned_matrices/";
+    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/core/core_multi_output_t/";
     this.page.identifier =
-      "/core/partitioned_matrices/";
+      "/core/core_multi_output_t/";
   };
   (function() {
     var d = document, s = d.createElement("script");
@@ -2081,7 +1720,7 @@ contains a number of block matrix implementations.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../partitioned_vectors/" title="Block Vectors" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../core_stp/" title="Students T Processes" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -2090,19 +1729,19 @@ contains a number of block matrix implementations.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Block Vectors
+                Students T Processes
               </span>
             </div>
           </a>
         
         
-          <a href="../partitioned_alg_utils/" title="Block Algebra Utilities" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../core_ffn_new/" title="Feed Forward Networks" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Block Algebra Utilities
+                Feed Forward Networks
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
