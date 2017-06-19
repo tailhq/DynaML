@@ -1,5 +1,5 @@
 !!! summary
-    The multi-output matrix T regression model was first described by [Conti and O' Hagan](http://www.sciencedirect.com/science/article/pii/S0378375809002559) in their paper on Bayesian emulation of multi-output computer codes.
+    The multi-output matrix T regression model was first described by [Conti and O' Hagan](http://www.sciencedirect.com/science/article/pii/S0378375809002559) in their paper on Bayesian emulation of multi-output computer codes. It has been available in the [`dynaml.models.stp`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.models.stp.package) package of the `dynaml-core` module since [v1.4.2](/releases/mydoc_release_notes_142.md#additions).
 
 
 ## Formulation
