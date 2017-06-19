@@ -44,6 +44,7 @@ pages:
             - Gaussian Processes: 'core/core_gp.md'
             - Extended Skew Gaussian Processes: 'core/core_esgp.md'
             - Students T Processes: 'core/core_stp.md'
+            - Multi-output Matrix T Process: 'core/core_multi_output_t.md'
           - Neural Networks:
             - Feed Forward Networks: 'core/core_ffn_new.md'
             - Neural Stack API: 'core/core_ann_new.md'
