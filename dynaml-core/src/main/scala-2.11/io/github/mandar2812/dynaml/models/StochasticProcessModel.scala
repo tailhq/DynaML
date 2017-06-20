@@ -177,6 +177,27 @@ BaseProcesses <: ContinuousProcessModel[T, I, Y, W1]](
     ContinuousDistrMixture[YDomain, W1](component_processes.map(_.predictiveDistribution(test)), weights)
 }
 
+/**
+  * A multinomial mixture of component processes, each
+  * of which can output predictive distributions which have
+  * error bars around the mean/mode.
+  *
+  * @tparam T The training data type of each component
+  * @tparam I The input feature type accepted by each component
+  * @tparam Y The type of the output label
+  * @tparam YDomain The type of a collection of outputs, e.g. vector
+  * @tparam YDomainVar The type of the second moment (variance) returned
+  *                    by the predictive distribution of each component process
+  * @tparam BaseDistr The type of the predictive distribution of each process.
+  * @tparam W1 The random variable type returned by the [[predictiveDistribution()]] method
+  *            of each component.
+  * @tparam BaseProcesses The type of the stochastic process components
+  *
+  *
+  * @param component_processes The stochastic processes which form the components of the mixture
+  * @param weights The probability weights assigned to each component.
+  * @author mandar2812 date 19/06/2017
+  * */
 abstract class ContMixtureErrorBarsModel[
 T, I: ClassTag, Y, YDomain, YDomainVar,
 BaseDistr <: ContinuousDistr[YDomain] with Moments[YDomain, YDomainVar] with HasErrorBars[YDomain],
@@ -229,7 +250,7 @@ BaseProcesses <: ContinuousProcessModel[T, I, Y, W1]](
     * 1) Mean or MAP estimate Y
     * 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
     * 3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
-    **/
+    * */
   override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int) = {
 
     val posterior = predictiveDistribution(testData)
