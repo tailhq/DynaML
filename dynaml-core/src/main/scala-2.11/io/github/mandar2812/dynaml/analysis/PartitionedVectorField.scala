@@ -42,3 +42,27 @@ object PartitionedVectorField {
 
   def apply(n: Long, nE: Int) = new PartitionedVectorField(n, nE)
 }
+
+abstract class InnerProductPV extends InnerProductSpace[PartitionedVector, Double] {
+  override def dot(v: PartitionedVector, w: PartitionedVector) = v dot w
+
+  override implicit def scalar = Field[Double]
+
+  override def timesl(r: Double, v: PartitionedVector) = v*r
+
+  override def negate(x: PartitionedVector) = x*(-1d)
+
+  override def plus(x: PartitionedVector, y: PartitionedVector) = x+y
+}
+
+object InnerProductPV {
+
+  def apply(num_dim: Long, num_elements_per_block: Int) = new InnerProductPV {
+    override def zero = PartitionedVector.zeros(num_dim, num_elements_per_block)
+  }
+
+  def apply(zeroElem: PartitionedVector): InnerProductPV = new InnerProductPV {
+    override def zero = zeroElem
+  }
+
+}

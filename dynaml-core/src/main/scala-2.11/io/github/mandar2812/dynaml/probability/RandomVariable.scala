@@ -235,18 +235,24 @@ trait RandomVarWithDistr[Domain, Dist <: Density[Domain] with Rand[Domain]]
 
 }
 
+trait ContinuousRVWithDistr[Domain, Distr <: ContinuousDistr[Domain]] extends
+  ContinuousRandomVariable[Domain] with
+  RandomVarWithDistr[Domain, Distr] {
+
+  override val underlyingDist: Distr
+
+  override val sample = DataPipe(() => underlyingDist.sample())
+
+}
+
 /**
   * A continuous random variable that has an associated
   * probability density function.
   *
   * */
-trait ContinuousDistrRV[Domain]
-  extends ContinuousRandomVariable[Domain]
-    with RandomVarWithDistr[Domain, ContinuousDistr[Domain]] { self =>
+trait ContinuousDistrRV[Domain] extends
+  ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]] { self =>
 
-  override val underlyingDist: ContinuousDistr[Domain]
-
-  override val sample = DataPipe(() => underlyingDist.sample())
 
   def :*[Domain1](other: ContinuousDistrRV[Domain1])(implicit ev: Field[Domain], ev1: Field[Domain1])
   : ContinuousDistrRV[(Domain, Domain1)] = {
@@ -336,12 +342,12 @@ object RandomVariable {
     * Creates a continuous random variable with a specified distribution.
     * @tparam O The domain of values over which the random variable is defined.
     * @param d A breeze continuous distribution
-    * @param ev A spire [[Field]] implementation for the domain [[O]]
     * @return A continuous random variable instance.
     * */
-  def apply[O](d: ContinuousDistr[O])(implicit ev: Field[O]): ContinuousDistrRV[O] = new ContinuousDistrRV[O] {
-    override val underlyingDist = d
-  }
+  def apply[O](d: ContinuousDistr[O]): ContinuousRVWithDistr[O, ContinuousDistr[O]] =
+    new ContinuousRVWithDistr[O, ContinuousDistr[O]] {
+      override val underlyingDist = d
+    }
 
   /**
     * Creates a continuous random variable with a specified distribution.

@@ -18,10 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models.bayes
 
+import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.models.StochasticProcessModel
 import io.github.mandar2812.dynaml.pipes.MetaPipe
-import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, RandomVarWithDistr}
+import io.github.mandar2812.dynaml.probability.{ContinuousRVWithDistr, RandomVarWithDistr}
 import spire.algebra.InnerProductSpace
 
 
@@ -33,13 +34,14 @@ import spire.algebra.InnerProductSpace
   * @author mandar2812 date: 16/02/2017.
   *
   * */
-trait StochasticProcessPrior[I, Y, Y1,
+trait StochasticProcessPrior[
+I, Y, Y1,
 D <: RandomVarWithDistr[Y1, _], W,
 StochasticModel <: StochasticProcessModel[Seq[(I, Y)], I, Y, W]] extends Serializable {
 
-  protected var hyperPrior: Map[String, ContinuousDistrRV[Double]] = Map()
+  protected var hyperPrior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map()
 
-  def hyperPrior_(h: Map[String, ContinuousDistrRV[Double]]) = {
+  def hyperPrior_(h: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]]) = {
     hyperPrior = h
   }
 

@@ -15,7 +15,7 @@ import scala.reflect.ClassTag
   * */
 class ProbGPMixtureMachine[T, I: ClassTag](
   model: AbstractGPRegressionModel[T, I]) extends
-  AbstractCSA[AbstractGPRegressionModel[T, I], GaussianProcessMixture[I]](model) {
+  AbstractCSA[AbstractGPRegressionModel[T, I], GaussianProcessMixture[T, I]](model) {
 
   private var policy: String = "CSA"
 
@@ -105,6 +105,6 @@ class ProbGPMixtureMachine[T, I: ClassTag](
 
 
 
-    (new GaussianProcessMixture[I](models, DenseVector(weights.toArray)), Map())
+    (new GaussianProcessMixture[T, I](models, DenseVector(weights.toArray)), Map())
   }
 }

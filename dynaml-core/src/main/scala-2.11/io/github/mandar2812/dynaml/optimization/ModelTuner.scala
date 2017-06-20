@@ -19,7 +19,8 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, RandomVariable}
+import breeze.stats.distributions.ContinuousDistr
+import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, ContinuousRVWithDistr, RandomVariable}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
 
@@ -41,9 +42,9 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
 
   protected var num_samples: Int = 20
 
-  protected var meanFieldPrior: Map[String, ContinuousDistrRV[Double]] = Map()
+  protected var meanFieldPrior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map()
 
-  def setPrior(p: Map[String, ContinuousDistrRV[Double]]) = {
+  def setPrior(p: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]]) = {
     meanFieldPrior = p
     this
   }
@@ -89,7 +90,7 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
   def getEnergyLandscape(
     initialConfig: Map[String, Double],
     options: Map[String, String] = Map(),
-    prior: Map[String, ContinuousDistrRV[Double]] = Map())
+    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map())
   : List[(Double, Map[String, Double])] = {
 
     //create grid

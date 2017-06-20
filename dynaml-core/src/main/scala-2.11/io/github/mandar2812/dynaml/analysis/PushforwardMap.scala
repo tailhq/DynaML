@@ -18,8 +18,9 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.analysis
 
+import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
-import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, MeasurableDistrRV}
+import io.github.mandar2812.dynaml.probability._
 import spire.algebra.Field
 
 /**
@@ -40,8 +41,16 @@ abstract class PushforwardMap[
     */
   override val i: DifferentiableMap[Destination, Source, Jacobian]
 
-  def ->[R <: ContinuousDistrRV[Source]](r: R): MeasurableDistrRV[Source, Destination, Jacobian] =
-    new MeasurableDistrRV[Source, Destination, Jacobian](r)(self)
+  def ->[
+  Distr1 <: ContinuousDistr[Source],
+  R <: ContinuousRVWithDistr[Source, Distr1]](r: R)
+  : MeasurableDistrRV[Source, Destination, Jacobian, Distr1] =
+    new MeasurableDistrRV[Source, Destination, Jacobian, Distr1](r)(self)
+
+  def ->[R <: ContinuousDistrRV[Source]](r: R)
+  : MeasurableDistrRV[Source, Destination, Jacobian, ContinuousDistr[Source]] =
+    new MeasurableDistrRV[Source, Destination, Jacobian, ContinuousDistr[Source]](r)(self)
+
 
   //def ->[P <: ContinuousProcess[_, _, ]]
 

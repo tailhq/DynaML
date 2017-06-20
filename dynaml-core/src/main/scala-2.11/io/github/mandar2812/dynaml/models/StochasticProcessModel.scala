@@ -18,10 +18,16 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models
 
+import breeze.linalg.DenseVector
+import breeze.stats.distributions.{ContinuousDistr, Moments}
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.{ContinuousMixtureRV, ContinuousRandomVariable}
+import io.github.mandar2812.dynaml.probability._
+import io.github.mandar2812.dynaml.probability.distributions.HasErrorBars
 import org.apache.log4j.Logger
+import spire.algebra.InnerProductSpace
+
+import scala.reflect.ClassTag
 
 /**
   * High Level description of a stochastic process based predictive model.
@@ -139,15 +145,106 @@ abstract class ContinuousProcessModel[T, I, Y, W <: ContinuousRandomVariable[_]]
 
 }
 
+abstract class StochasticProcessMixtureModel[
+I, Y, W <: ContinuousMixtureRV[_, _]] extends
+  ContinuousProcessModel[Seq[(I, Y)], I, Y, W]
+
+
 /**
   * A process which is a multinomial mixture of
-  * component processes.
+  * continuous component processes.
   * @tparam I The type of the index set (i.e. Double for time series, DenseVector for GP regression)
   * @tparam Y The type of the output label
-  * @tparam W Implementing class of the posterior distribution,
+  * @tparam W1 Implementing class of the posterior distribution for the base processes
   *           should inherit from [[ContinuousMixtureRV]]
-  * @author mandar2812 date 14/06/2017
+  * @author mandar2812 date 19/06/2017
   * */
-abstract class StochasticProcessMixtureModel[
-T, I, Y, W <: ContinuousMixtureRV[_, _]] extends
-  ContinuousProcessModel[T, I, Y, W]
+abstract class ContinuousMixtureModel[
+T, I: ClassTag, Y, YDomain,
+W1 <: ContinuousDistrRV[YDomain],
+BaseProcesses <: ContinuousProcessModel[T, I, Y, W1]](
+  val component_processes: Seq[BaseProcesses],
+  val weights: DenseVector[Double]) extends
+  StochasticProcessMixtureModel[I, Y, ContinuousDistrMixture[YDomain, W1]] {
+
+  /** Calculates posterior predictive distribution for
+    * a particular set of test data points.
+    *
+    * @param test A Sequence or Sequence like data structure
+    *             storing the values of the input patters.
+    * */
+  override def predictiveDistribution[U <: Seq[I]](test: U) =
+    ContinuousDistrMixture[YDomain, W1](component_processes.map(_.predictiveDistribution(test)), weights)
+}
+
+abstract class ContMixtureErrorBarsModel[
+T, I: ClassTag, Y, YDomain, YDomainVar,
+BaseDistr <: ContinuousDistr[YDomain] with Moments[YDomain, YDomainVar] with HasErrorBars[YDomain],
+W1 <: ContinuousRVWithDistr[YDomain, BaseDistr],
+BaseProcesses <: ContinuousProcessModel[T, I, Y, W1]](
+  val component_processes: Seq[BaseProcesses],
+  val weights: DenseVector[Double]) extends
+  StochasticProcessMixtureModel[I, Y, ContMixtureRVBars[YDomain, YDomainVar, BaseDistr]] {
+
+  private val logger = Logger.getLogger(this.getClass)
+
+  /**
+    * The training data
+    * */
+  override protected val g: Seq[(I, Y)] = Seq()
+
+  /**
+    * Convert from the underlying data structure to
+    * Seq[(I, Y)] where I is the index set of the GP
+    * and Y is the value/label type.
+    * */
+  override def dataAsSeq(data: Seq[(I, Y)]) = data
+
+  /**
+    * Predict the value of the
+    * target variable given a
+    * point.
+    *
+    * */
+  override def predict(point: I) = predictionWithErrorBars(Seq(point), 1).head._2
+
+  protected def toStream(y: YDomain): Stream[Y]
+
+  protected def getVectorSpace(num_dim: Int): InnerProductSpace[YDomain, Double]
+
+
+  /** Calculates posterior predictive distribution for
+    * a particular set of test data points.
+    *
+    * @param test A Sequence or Sequence like data structure
+    *             storing the values of the input patters.
+    * */
+  override def predictiveDistribution[U <: Seq[I]](test: U): ContMixtureRVBars[YDomain, YDomainVar, BaseDistr] =
+    ContinuousDistrMixture[YDomain, YDomainVar, BaseDistr](
+      component_processes.map(_.predictiveDistribution(test).underlyingDist),
+      weights)(getVectorSpace(test.length))
+
+  /**
+    * Draw three predictions from the posterior predictive distribution
+    * 1) Mean or MAP estimate Y
+    * 2) Y- : The lower error bar estimate (mean - sigma*stdDeviation)
+    * 3) Y+ : The upper error bar. (mean + sigma*stdDeviation)
+    **/
+  override def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int) = {
+
+    val posterior = predictiveDistribution(testData)
+
+    val mean = toStream(posterior.underlyingDist.mean)
+
+    val (lower, upper) = posterior.underlyingDist.confidenceInterval(sigma.toDouble)
+
+    val lowerErrorBars = toStream(lower)
+    val upperErrorBars = toStream(upper)
+
+    logger.info("Generating error bars")
+
+    val preds = mean.zip(lowerErrorBars.zip(upperErrorBars)).map(t => (t._1, t._2._1, t._2._2))
+    (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
+
+  }
+}

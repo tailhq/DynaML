@@ -6,6 +6,7 @@ import io.github.mandar2812.dynaml.analysis.{DifferentiableMap, PartitionedVecto
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
+import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian
 import io.github.mandar2812.dynaml.probability.{E, MeasurableDistrRV}
 import io.github.mandar2812.dynaml.utils
 import org.apache.spark.annotation.Experimental
@@ -25,10 +26,10 @@ class WarpedGPModel[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
   transform: Encoder[T, Seq[(I, Double)]])
   extends ContinuousProcessModel[
     T, I, Double,
-    MeasurableDistrRV[PartitionedVector, PartitionedVector, PartitionedMatrix]]
+    MeasurableDistrRV[PartitionedVector, PartitionedVector, PartitionedMatrix, BlockedMultiVariateGaussian]]
   with SecondOrderProcessModel[
     T, I, Double, Double, DenseMatrix[Double],
-    MeasurableDistrRV[PartitionedVector, PartitionedVector, PartitionedMatrix]]
+    MeasurableDistrRV[PartitionedVector, PartitionedVector, PartitionedMatrix, BlockedMultiVariateGaussian]]
   with GloballyOptWithGrad {
 
   /**

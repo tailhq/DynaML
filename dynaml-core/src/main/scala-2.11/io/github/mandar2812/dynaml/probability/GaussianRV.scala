@@ -19,28 +19,34 @@ under the License.
 package io.github.mandar2812.dynaml.probability
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import breeze.stats.distributions.{ContinuousDistr, Gaussian, MultivariateGaussian}
+import breeze.stats.distributions.{ContinuousDistr, Gaussian, Moments, MultivariateGaussian}
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.analysis.{PartitionedVectorField, VectorField}
-import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultiVariateGaussian, MatrixNormal}
+import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.probability.distributions._
 import spire.implicits._
 import spire.algebra.Field
 
-abstract class AbstractGaussianRV[T, V] extends ContinuousDistrRV[T]
+abstract class AbstractGaussianRV[T, V, Distr <: ContinuousDistr[T] with Moments[T, V] with HasErrorBars[T]]
+  extends ContinuousRVWithDistr[T, Distr] {
+
+  override val sample = DataPipe(() => underlyingDist.sample())
+}
 
 /**
   * @author mandar2812 on 26/7/16.
   * */
-case class GaussianRV(mu: Double, sigma: Double) extends AbstractGaussianRV[Double, Double] {
-  override val underlyingDist = new Gaussian(mu, sigma)
+case class GaussianRV(mu: Double, sigma: Double) extends
+  AbstractGaussianRV[Double, Double, UnivariateGaussian] {
+  override val underlyingDist = new UnivariateGaussian(mu, sigma)
 }
 
 case class MultGaussianRV(
   mu: DenseVector[Double], covariance: DenseMatrix[Double])(
   implicit ev: Field[DenseVector[Double]])
-  extends AbstractGaussianRV[DenseVector[Double], DenseMatrix[Double]] {
+  extends AbstractGaussianRV[DenseVector[Double], DenseMatrix[Double], MVGaussian] {
 
-  override val underlyingDist = MultivariateGaussian(mu, covariance)
+  override val underlyingDist = MVGaussian(mu, covariance)
 
 }
 
@@ -57,9 +63,11 @@ object MultGaussianRV {
   }
 }
 
-case class MultGaussianPRV(mu: PartitionedVector, covariance: PartitionedPSDMatrix)(
+case class MultGaussianPRV(
+  mu: PartitionedVector,
+  covariance: PartitionedPSDMatrix)(
   implicit ev: Field[PartitionedVector])
-  extends AbstractGaussianRV[PartitionedVector, PartitionedPSDMatrix] {
+  extends AbstractGaussianRV[PartitionedVector, PartitionedPSDMatrix, BlockedMultiVariateGaussian] {
 
   override val underlyingDist: BlockedMultiVariateGaussian = BlockedMultiVariateGaussian(mu, covariance)
 
@@ -82,7 +90,7 @@ object MultGaussianPRV {
 case class MatrixNormalRV(
   m: DenseMatrix[Double], u: DenseMatrix[Double],
   v: DenseMatrix[Double]) extends AbstractGaussianRV[
-  DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double])] {
+  DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double]), MatrixNormal] {
 
   override val underlyingDist = MatrixNormal(m, u, v)
 }

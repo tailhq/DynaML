@@ -21,13 +21,14 @@ package io.github.mandar2812.dynaml
 import scala.collection.mutable.{MutableList => ML}
 import breeze.linalg.DenseVector
 import breeze.numerics.sqrt
+import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.models.ParameterizedLearner
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.models.sgp.ESGPModel
 import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.probability.ContinuousDistrRV
+import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, ContinuousRVWithDistr}
 import io.github.mandar2812.dynaml.utils._
 import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
 import org.apache.log4j.Logger
@@ -753,7 +754,7 @@ object DynaMLPipe {
     globalOpt: String = "GS",
     grid: Int = 3, step: Double = 0.02,
     maxIt: Int = 20, policy: String = "GS",
-    prior: Map[String, ContinuousDistrRV[Double]] = Map()) =
+    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map()) =
     DataPipe((model: AbstractGPRegressionModel[T, I]) => {
       val gs = globalOpt match {
         case "GS" => new GridSearch(model)
@@ -795,7 +796,7 @@ object DynaMLPipe {
   def sgpTuning[T, I:ClassTag](
     startingState: Map[String, Double], globalOpt: String = "GS",
     grid: Int = 3, step: Double = 0.02, maxIt: Int = 20,
-    prior: Map[String, ContinuousDistrRV[Double]] = Map()) =
+    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map()) =
     DataPipe((model: ESGPModel[T, I]) => {
       val gs = globalOpt match {
         case "GS" => new GridSearch(model)

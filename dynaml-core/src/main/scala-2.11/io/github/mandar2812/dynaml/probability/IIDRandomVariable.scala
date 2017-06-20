@@ -15,7 +15,7 @@ trait IIDRandomVariable[D, +R <: RandomVariable[D]] extends RandomVariable[Strea
 
   val num: Int
 
-  override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.sample()))
+  override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.draw))
 }
 
 object IIDRandomVariable {
@@ -51,7 +51,7 @@ R <: RandomVarWithDistr[D, Dist]]
 
   val num: Int
 
-  override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.sample()))
+  override val sample = DataPipe(() => Stream.tabulate[D](num)(_ => baseRandomVariable.draw))
 
   override val underlyingDist = new GenericDistribution[Stream[D]] {
     override def apply(x: Stream[D]): Double = x.map(baseRandomVariable.underlyingDist(_)).product

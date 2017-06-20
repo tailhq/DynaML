@@ -55,7 +55,7 @@ trait ContinuousMixtureRV[Domain, BaseRV <: ContinuousRandomVariable[Domain]] ex
   * having a computable probability distribution
   * @author mandar2812 date 14/06/2017
   * */
-class ContinuousDistrMixture[Domain, BaseRV <: ContinuousDistrRV[Domain]](
+class ContinuousDistrMixture[Domain, BaseRV <: ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]]](
   distributions: Seq[BaseRV],
   selector: MultinomialRV) extends
   ContinuousMixtureRV[Domain, BaseRV] with
@@ -74,8 +74,8 @@ private[dynaml] class ContMixtureRVBars[Domain, Var,
 BaseDistr <: ContinuousDistr[Domain] with Moments[Domain, Var] with HasErrorBars[Domain]](
   distributions: Seq[BaseDistr],
   selector: MultinomialRV)(
-  implicit f: Field[Domain], v: VectorSpace[Domain, Double]) extends
-  ContinuousDistrMixture[Domain, ContinuousDistrRV[Domain]](
+  implicit v: VectorSpace[Domain, Double]) extends
+  ContinuousDistrMixture[Domain, ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]]](
     distributions.map(RandomVariable(_)), selector) {
 
   override val underlyingDist = MixtureWithConfBars(distributions, selector.underlyingDist.params)
@@ -90,7 +90,7 @@ object ContinuousDistrMixture {
 
   def apply[Domain, Var, BaseDistr <: ContinuousDistr[Domain] with Moments[Domain, Var] with HasErrorBars[Domain]](
     distributions: Seq[BaseDistr], selector: DenseVector[Double])(
-    implicit f: Field[Domain], v: VectorSpace[Domain, Double]) =
+    implicit v: VectorSpace[Domain, Double]) =
     new ContMixtureRVBars[Domain, Var, BaseDistr](distributions, MultinomialRV(selector))
 
   def apply(num_elements_per_block: Int)(

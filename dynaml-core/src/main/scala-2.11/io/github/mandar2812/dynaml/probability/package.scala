@@ -1,5 +1,7 @@
 package io.github.mandar2812.dynaml
 
+import breeze.stats.distributions.ContinuousDistr
+
 import scalaxy.streams.optimize
 import spire.algebra.InnerProductSpace
 
@@ -49,7 +51,8 @@ package object probability {
     * @param alpha Probability of exclusion, i.e. return 100(1-alpha) % confidence interval.
     *              alpha should be between 0 and 1
     * */
-  def OrderStats(r: ContinuousDistrRV[Double], alpha: Double): (Double, Double, Double, Double, Double) = {
+  def OrderStats(r: ContinuousRVWithDistr[Double, ContinuousDistr[Double]], alpha: Double)
+  : (Double, Double, Double, Double, Double) = {
 
     val samples = r.iid(candidates).sample()
 

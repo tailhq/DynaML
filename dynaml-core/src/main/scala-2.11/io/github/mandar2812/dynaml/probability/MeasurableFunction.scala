@@ -96,10 +96,12 @@ object ContinuousMeasurableFunc {
   *          as an [[PushforwardMap]] instance.
   *
   * */
-class MeasurableDistrRV[Domain1, Domain2, Jacobian](
-  override val baseRV: ContinuousDistrRV[Domain1])(
+class MeasurableDistrRV[Domain1, Domain2, Jacobian, Distr1 <: ContinuousDistr[Domain1]](
+  override val baseRV: ContinuousRVWithDistr[Domain1, Distr1])(
   override val func: PushforwardMap[Domain1, Domain2, Jacobian]) extends
-  ContinuousMeasurableFunc[Domain1, Domain2, ContinuousDistrRV[Domain1]] with
+  ContinuousMeasurableFunc[
+    Domain1, Domain2,
+    ContinuousRVWithDistr[Domain1, Distr1]] with
   ContinuousDistrRV[Domain2] {
 
   override val underlyingDist = new ContinuousDistr[Domain2] {

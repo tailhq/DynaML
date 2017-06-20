@@ -1,5 +1,5 @@
 import breeze.linalg.eig
-import breeze.stats.distributions.{Gamma, Gaussian}
+import breeze.stats.distributions.{ContinuousDistr, Gamma, Gaussian}
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.bayes.{LinearTrendESGPrior, LinearTrendGaussianPrior}
 import io.github.mandar2812.dynaml.probability._
@@ -7,6 +7,7 @@ import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.analysis.implicits._
 import io.github.mandar2812.dynaml.optimization.ProbGPMixtureMachine
 import io.github.mandar2812.dynaml.pipes.Encoder
+import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
 
 val rbfc = new RBFCovFunc(1.5)
 
@@ -19,12 +20,14 @@ val trendEncoder = Encoder(
   (conf: Map[String, Double]) => (conf("slope"), conf("intercept"))
 )
 
-val hyp_prior: Map[String, ContinuousDistrRV[Double]] = Map(
-  "c" -> GaussianRV(2.5, 1.5),
+val hyp_prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map(
+  "c" -> RandomVariable(UnivariateGaussian(2.5, 1.5)),
   "s" -> RandomVariable(Gamma(2.0, 2.0)),
   "noiseLevel" -> RandomVariable(Gamma(2.0, 2.0)))
 
-val sgp_hyp_prior = hyp_prior ++ Map("cutoff" -> GaussianRV(0.0, 1.0), "skewness" -> GaussianRV(0.0, 1.0))
+val sgp_hyp_prior = hyp_prior ++ Map(
+  "cutoff" -> RandomVariable(UnivariateGaussian(0.0, 1.0)),
+  "skewness" -> RandomVariable(UnivariateGaussian(0.0, 1.0)))
 
 val gsmKernel = GaussianSpectralKernel[Double](3.5, 2.0, encoder)
 val n = new MAKernel(0.8)
