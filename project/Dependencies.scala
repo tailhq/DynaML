@@ -98,7 +98,8 @@ object Dependencies {
 
   val rPackages = Seq(
     "org.renjin.cran" % "plyr" % "1.8.3-renjin-10",
-    "org.renjin.cran" % "abc" % "2.1-b274"
+    "org.renjin.cran" % "abc" % "2.1-b274",
+    "org.renjin.cran" % "ggplot2" % "2.2.1-b78"
   )
 
   val cppCompatDependencies = Seq(
