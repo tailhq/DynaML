@@ -134,7 +134,8 @@ object TestGPHousing {
       ) >
       testPipe
 
-    trainTestPipe.run(("data/housing.data", "data/housing.data"))
+    val dataFile = dataDir+"/housing.data"
+    trainTestPipe.run((dataFile, dataFile))
 
   }
 

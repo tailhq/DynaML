@@ -103,7 +103,8 @@ object TestNNHousing {
       DynaMLPipe.trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe.run(("data/housing.data", "data/housing.data"))
+    val dataFile = dataDir+"/housing.data"
+    trainTestPipe.run((dataFile, dataFile))
 
   }
 

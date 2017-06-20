@@ -1,15 +1,14 @@
 package io.github.mandar2812.dynaml.examples
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.gp.GPRegression
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
-import io.github.mandar2812.dynaml.utils
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe
 import io.github.mandar2812.dynaml.utils.GaussianScaler
+import io.github.mandar2812.dynaml.examples._
 
 /**
   * Example: Gaussian Process regression on fried delve data.
@@ -92,7 +91,8 @@ object TestGPDelve {
       gaussianScalingTrainTest >
       DataPipe(modelTrainTest)
 
-    trainTestPipe.run(("data/delve.csv", "data/delve.csv"))
+    val dataFile = dataDir+"/delve.csv"
+    trainTestPipe.run((dataFile, dataFile))
 
   }
 

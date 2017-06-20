@@ -208,7 +208,9 @@ object TestNeuralStackDelve {
 
     val dataFlow = preProcessPipe > modelTrainTestPipe
 
-    dataFlow(("data/delve.csv", "data/delve.csv"))
+
+    val dataFile = dataDir+"/delve.csv"
+    dataFlow((dataFile, dataFile))
   }
 
 }

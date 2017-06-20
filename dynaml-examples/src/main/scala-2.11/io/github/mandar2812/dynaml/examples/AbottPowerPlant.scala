@@ -266,10 +266,7 @@ object AbottPowerPlant {
       trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe.run(
-      ("data/steamgen.csv",
-      "data/steamgen.csv")
-    )
-
+    val dataFile = dataDir+"/steamgen.csv"
+    trainTestPipe((dataFile, dataFile))
   }
 }

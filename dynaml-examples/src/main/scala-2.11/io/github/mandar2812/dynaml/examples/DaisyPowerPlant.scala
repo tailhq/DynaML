@@ -130,8 +130,9 @@ object DaisyPowerPlant {
       DynaMLPipe.trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe.run(("data/powerplant.csv",
-      "data/powerplant.csv"))
+    val dataFile = dataDir+"/powerplant.csv"
+    trainTestPipe((dataFile, dataFile))
+
 
   }
 }

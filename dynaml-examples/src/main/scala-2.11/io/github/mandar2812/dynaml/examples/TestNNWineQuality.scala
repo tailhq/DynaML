@@ -116,9 +116,9 @@ object TestNNWineQuality {
       DynaMLPipe.featuresGaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe run
-      ("data/winequality-"+wineType+".csv",
-        "data/winequality-"+wineType+".csv")
+    val dataFile = dataDir+"winequality-" + wineType + ".csv"
+
+    trainTestPipe(dataFile, dataFile)
 
   }
 
@@ -191,9 +191,10 @@ object TestLogisticWineQuality {
             (BDV[Double], BDV[Double]))) => tt._1._2)) >
       testPipe
 
-    trainTestPipe run
-      ("data/winequality-" + wineType + ".csv",
-        "data/winequality-" + wineType + ".csv")
+
+    val dataFile = dataDir+"winequality-" + wineType + ".csv"
+
+    trainTestPipe(dataFile, dataFile)
 
   }
 
@@ -251,9 +252,9 @@ object TestLSSVMWineQuality {
       DynaMLPipe.featuresGaussianStandardization >
       DataPipe(modelTrainTest)
 
-    trainTestPipe run
-      ("data/winequality-"+wineType+".csv",
-        "data/winequality-"+wineType+".csv")
+    val dataFile = dataDir+"winequality-" + wineType + ".csv"
+
+    trainTestPipe(dataFile, dataFile)
 
   }
 }
