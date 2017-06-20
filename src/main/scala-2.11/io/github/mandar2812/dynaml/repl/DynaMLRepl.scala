@@ -50,12 +50,16 @@ class DynaMLRepl(input: InputStream,
 
 object Defaults{
 
+  val dynaml_install_dir = System.getenv("DYNAML_HOME")
+
+  val root_dir = if (dynaml_install_dir != null) dynaml_install_dir else "."
+
   val welcomeBanner = {
     def ammoniteVersion = ammonite.Constants.version
     def scalaVersion = scala.util.Properties.versionNumberString
     def javaVersion = System.getProperty("java.version")
     def version = BuildInfo.version
-    def banner = Source.fromFile("./conf/banner.txt").getLines.mkString("\n")
+    def banner = Source.fromFile(root_dir+"/conf/banner.txt").getLines.mkString("\n")
 
     Util.normalizeNewlines(
       banner+s"""\nWelcome to DynaML $version \nInteractive Scala shell for Machine Learning Research
@@ -118,7 +122,7 @@ object Defaults{
                                |  _
                                |"""
 
-  def dynaMlPredef = Source.fromFile("./conf/DynaMLInit.scala").getLines.mkString("\n")
+  def dynaMlPredef = Source.fromFile(root_dir+"/conf/DynaMLInit.scala").getLines.mkString("\n")
 
 }
 

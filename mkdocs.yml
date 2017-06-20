@@ -6,7 +6,7 @@ site_url: 'https://transcendent-ai-labs.github.io/DynaML'
 copyright: 'Copyright &copy; 2015 Mandar Chandorkar'
 pages:
     - 'DynaML': index.md
-    - 'Using DynaML':
+    - 'Getting DynaML':
       - 'Installation': installation/installation.md
       - 'Import': installation/include.md
     - 'Supported Features': supported_features.md
