@@ -69,7 +69,7 @@ val mixt_machine = new ProbGPMixtureMachine(gpModel1)
   .setLogScale(true)
   .setMaxIterations(16)
 
-val (mix_model, _) = mixt_machine.optimize(gp_prior.covariance.state ++ gp_prior.noiseCovariance.state)
+val (mix_model, mixt_model_conf) = mixt_machine.optimize(gp_prior.covariance.state ++ gp_prior.noiseCovariance.state)
 
 
 val zs: MultGaussianPRV = gpModel.predictiveDistribution(xs)

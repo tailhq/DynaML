@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.models.StochasticProcessMixtureModel
 import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GaussianProcessMixture}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
@@ -105,6 +106,14 @@ class ProbGPMixtureMachine[T, I: ClassTag](
 
 
 
-    (new GaussianProcessMixture[T, I](models, DenseVector(weights.toArray)), Map())
+    (
+      StochasticProcessMixtureModel[T, I](
+        models, DenseVector(weights.toArray)
+      ),
+      models.map(m => {
+        val model_id = m.toString.split("\\.").last
+        m._current_state.map(c => (model_id+"/"+c._1,c._2))
+      }).reduceLeft((m1, m2) => m1++m2)
+    )
   }
 }
