@@ -1,14 +1,16 @@
 package io.github.mandar2812.dynaml.kernels
 
+import breeze.linalg.DenseMatrix
+
 /**
-  * @author mandar date: 22/01/2017.
-  *
   * A kernel formed by multiplication
   * of two kernels k(.,.) = k1(.,.) * k2(.,.)
+  * @author mandar date: 22/01/2017.
+  *
   * */
 class MultiplicativeCovariance[Index](
-  firstKernel: LocalScalarKernel[Index],
-  otherKernel: LocalScalarKernel[Index])
+  val firstKernel: LocalScalarKernel[Index],
+  val otherKernel: LocalScalarKernel[Index])
   extends CompositeCovariance[Index] {
 
   val (fID, sID) = (firstKernel.toString.split("\\.").last, otherKernel.toString.split("\\.").last)
@@ -17,7 +19,7 @@ class MultiplicativeCovariance[Index](
     firstKernel.hyper_parameters.map(h => fID+"/"+h) ++
       otherKernel.hyper_parameters.map(h => sID+"/"+h)
 
-  private def getKernelConfigs(config: Map[String, Double]) = (
+  protected def getKernelConfigs(config: Map[String, Double]) = (
     config.filter(_._1.contains(fID)).map(CompositeCovariance.truncateHyperParams),
     config.filter(_._1.contains(sID)).map(CompositeCovariance.truncateHyperParams)
   )
@@ -64,3 +66,45 @@ class MultiplicativeCovariance[Index](
     SVMKernel.crossKernelMatrix(dataset1, dataset2, this.evaluate)
 
 }
+
+/**
+  * Implementation of separable stationary kernels as defined in
+  * http://jmlr.csail.mit.edu/papers/volume2/genton01a/genton01a.pdf
+  *
+  * K(x,y) = K1(x)&times;K2(y)
+  *
+  * @tparam I The index set or input domain over which the kernel function is evaluated.
+  * @tparam Kernel A kernel type which extends [[StationaryKernel]] as well as [[LocalScalarKernel]]
+  * @param firstKernel The kernel given by K1,
+  *                    it is assumed that the user inputs a valid stationary kernel of type [[Kernel]]
+  * @param otherKernel The kernel given by K2,
+  *                    it is assumed that the user inputs a valid stationary kernel of type [[Kernel]]
+  * @author mandar2812 date 21/06/2017
+  * */
+class SeparableStationaryKernel[
+I, Kernel <: StationaryKernel[I, Double, DenseMatrix[Double]] with LocalScalarKernel[I]](
+  override val firstKernel: Kernel, override val otherKernel: Kernel) extends
+  MultiplicativeCovariance[I](firstKernel, otherKernel) {
+
+
+  override def evaluateAt(config: Map[String, Double])(x: I, y: I) = {
+
+    val (firstKernelConfig, secondKernelConfig) = getKernelConfigs(config)
+
+    firstKernel.evalAt(firstKernelConfig)(x) * otherKernel.evalAt(secondKernelConfig)(y)
+
+  }
+
+  override def gradientAt(config: Map[String, Double])(x: I, y: I) = {
+
+    val (firstKernelConfig, secondKernelConfig) = getKernelConfigs(config)
+
+    firstKernel.gradientAt(firstKernelConfig)(x, x).map((couple) =>
+      (fID+"/"+couple._1, couple._2*otherKernel.evaluateAt(secondKernelConfig)(y,y))
+    ) ++ otherKernel.gradientAt(secondKernelConfig)(y,y).map((couple) =>
+      (sID+"/"+couple._1, couple._2*firstKernel.evaluateAt(firstKernelConfig)(x,x))
+    )
+
+  }
+}
+

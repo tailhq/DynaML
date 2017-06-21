@@ -1,14 +1,14 @@
 package io.github.mandar2812.dynaml.kernels
 
 /**
-  * @author mandar date: 22/01/2017.
-  *
   * A kernel formed by addition
   * of two kernels k(.,.) = k1(.,.) + k2(.,.)
-  */
+  * @author mandar date: 22/01/2017.
+  *
+  * */
 class AdditiveCovariance[Index](
-  firstKernel: LocalScalarKernel[Index],
-  otherKernel: LocalScalarKernel[Index]) extends
+  val firstKernel: LocalScalarKernel[Index],
+  val otherKernel: LocalScalarKernel[Index]) extends
   CompositeCovariance[Index] {
 
   val (fID, sID) = (firstKernel.toString.split("\\.").last, otherKernel.toString.split("\\.").last)

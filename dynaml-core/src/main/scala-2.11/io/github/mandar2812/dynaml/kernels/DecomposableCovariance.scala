@@ -8,7 +8,7 @@ import io.github.mandar2812.dynaml.pipes._
   * of base kernels over a subset of the input space.
   *
   * for example K((x1, y1), (x1, y2)) = k1(x1,x2) + k2(y1,y2)
-  */
+  * */
 class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
   implicit encoding: Encoder[S, Array[S]],
   reducer: Reducer = Reducer.:+:) extends CompositeCovariance[S] {
