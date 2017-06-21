@@ -24,11 +24,11 @@ import io.github.mandar2812.dynaml.probability._
 import spire.algebra.Field
 
 /**
-  * @author mandar2812 on 22/12/2016.
-  *
   * Push forward map is a function that has a well defined inverse
   * as well as Jacobian of the inverse.
-  */
+  * @author mandar2812 on 22/12/2016.
+  *
+  * */
 abstract class PushforwardMap[
 @specialized(Double) Source,
 @specialized(Double) Destination,
@@ -48,9 +48,6 @@ abstract class PushforwardMap[
   def ->[R <: ContinuousDistrRV[Source]](r: R)
   : MeasurableDistrRV[Source, Destination, Jacobian, ContinuousDistr[Source]] =
     new MeasurableDistrRV[Source, Destination, Jacobian, ContinuousDistr[Source]](r)(self)
-
-
-  //def ->[P <: ContinuousProcess[_, _, ]]
 
   /**
     * Return the implementation used for calculating
