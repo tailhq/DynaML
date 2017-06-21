@@ -38,9 +38,40 @@ class LocallyStationaryKernel[I](
   scalingFunc: DataPipe[I, Double])(implicit ev: Field[I])
   extends LocalScalarKernel[I] {
 
-  state = baseKernel.state
+  private val header: String = "LocStatKernel"
 
-  override val hyper_parameters: List[String] = baseKernel.hyper_parameters
+  override def toString = {
+    val oid = super.toString.split("\\.").last.split("@").last
+    header+"@"+oid
+  }
+
+  val base_kernel_id = baseKernel.toString.split("\\.").last
+
+  private val stringify = (h: String) => base_kernel_id+"/"+h
+
+  private val revstringify = (h: String) => h.split("/").last
+
+  override val hyper_parameters: List[String] = baseKernel.hyper_parameters.map(stringify)
+
+  blocked_hyper_parameters = baseKernel.blocked_hyper_parameters.map(stringify)
+
+  state = baseKernel.state.map(c => (stringify(c._1), c._2))
+
+  override def block(h: String*) = {
+    baseKernel.block(h.map(revstringify):_*)
+    blocked_hyper_parameters = h.toList
+  }
+
+  override def block_all_hyper_parameters = {
+    baseKernel.block_all_hyper_parameters
+    blocked_hyper_parameters = hyper_parameters
+  }
+
+  override def setHyperParameters(h: Map[String, Double]) = {
+    baseKernel.setHyperParameters(h.map(c => (revstringify(c._1), c._2)))
+    state = baseKernel.state.map(c => (stringify(c._1), c._2))
+    this
+  }
 
   override def evaluateAt(config: Map[String, Double])(x: I, y: I): Double =
     scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5)))*baseKernel.evaluateAt(config)(x,y)
