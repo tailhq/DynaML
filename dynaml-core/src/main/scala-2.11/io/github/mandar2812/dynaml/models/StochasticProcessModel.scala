@@ -25,7 +25,7 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.probability.distributions.HasErrorBars
 import org.apache.log4j.Logger
-import spire.algebra.InnerProductSpace
+import spire.algebra.{InnerProductSpace, VectorSpace}
 
 import scala.reflect.ClassTag
 
@@ -198,7 +198,7 @@ BaseProcesses <: ContinuousProcessModel[T, I, Y, W1]](
   * @param weights The probability weights assigned to each component.
   * @author mandar2812 date 19/06/2017
   * */
-abstract class ContMixtureErrorBarsModel[
+abstract class GenContinuousMixtureModel[
 T, I: ClassTag, Y, YDomain, YDomainVar,
 BaseDistr <: ContinuousDistr[YDomain] with Moments[YDomain, YDomainVar] with HasErrorBars[YDomain],
 W1 <: ContinuousRVWithDistr[YDomain, BaseDistr],
@@ -231,7 +231,7 @@ BaseProcesses <: ContinuousProcessModel[T, I, Y, W1]](
 
   protected def toStream(y: YDomain): Stream[Y]
 
-  protected def getVectorSpace(num_dim: Int): InnerProductSpace[YDomain, Double]
+  protected def getVectorSpace(num_dim: Int): VectorSpace[YDomain, Double]
 
 
   /** Calculates posterior predictive distribution for

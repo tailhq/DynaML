@@ -8,8 +8,8 @@ import scala.math.log1p
 import scala.runtime.ScalaRunTime
 
 /**
-  * Created by mandar on 20/06/2017.
-  */
+  * @author mandar date 20/06/2017.
+  * */
 class UnivariateGaussian(mu: Double, sigma: Double)
   extends Gaussian(mu, sigma) with HasErrorBars[Double] {
   override def confidenceInterval(s: Double) = {

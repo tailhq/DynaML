@@ -1,29 +1,32 @@
 package io.github.mandar2812.dynaml.probability
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import breeze.stats.distributions.{ContinuousDistr, StudentsT}
+import breeze.stats.distributions.{ContinuousDistr, Moments, StudentsT}
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.analysis.{PartitionedVectorField, VectorField}
-import io.github.mandar2812.dynaml.probability.distributions.{
-BlockedMultivariateStudentsT, MatrixT, MultivariateStudentsT}
+import io.github.mandar2812.dynaml.probability.distributions._
 import spire.implicits._
 import spire.algebra.Field
 
-abstract class AbstractStudentsTRandVar[I](mu: Double) extends ContinuousDistrRV[I]
+abstract class AbstractStudentsTRandVar[
+T, V, Distr <: ContinuousDistr[T] with Moments[T, V] with HasErrorBars[T]](mu: Double) extends
+  ContinuousRVWithDistr[T, Distr]
 
 /**
   * @author mandar2812 date 26/08/16.
   * */
-case class StudentsTRV(mu: Double) extends AbstractStudentsTRandVar[Double](mu) {
-  override val underlyingDist = new StudentsT(mu)
+case class StudentsTRV(mu: Double, mean: Double, sigma: Double) extends
+  AbstractStudentsTRandVar[Double, Double, UnivariateStudentsT](mu) {
+
+  override val underlyingDist = UnivariateStudentsT(mu, mean, sigma)
 
 }
 
-case class MultStudentsTRV(mu: Double,
-                           mean: DenseVector[Double],
-                           covariance : DenseMatrix[Double])(
+case class MultStudentsTRV(
+  mu: Double, mean: DenseVector[Double],
+  covariance : DenseMatrix[Double])(
   implicit ev: Field[DenseVector[Double]])
-  extends AbstractStudentsTRandVar[DenseVector[Double]](mu) {
+  extends AbstractStudentsTRandVar[DenseVector[Double], DenseMatrix[Double], MultivariateStudentsT](mu) {
 
   override val underlyingDist: MultivariateStudentsT = MultivariateStudentsT(mu, mean, covariance)
 }
@@ -45,7 +48,7 @@ case class MultStudentsTPRV(mu: Double,
                             mean: PartitionedVector,
                             covariance: PartitionedPSDMatrix)(
   implicit ev: Field[PartitionedVector])
-  extends AbstractStudentsTRandVar[PartitionedVector](mu) {
+  extends AbstractStudentsTRandVar[PartitionedVector, PartitionedPSDMatrix, BlockedMultivariateStudentsT](mu) {
 
   override val underlyingDist: BlockedMultivariateStudentsT = BlockedMultivariateStudentsT(mu, mean, covariance)
 }
@@ -68,7 +71,7 @@ case class MatrixTRV(
   mu: Double, m: DenseMatrix[Double],
   u: DenseMatrix[Double],
   v: DenseMatrix[Double]) extends
-  AbstractStudentsTRandVar[DenseMatrix[Double]](mu) {
+  AbstractStudentsTRandVar[DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double]), MatrixT](mu) {
 
   override val underlyingDist = MatrixT(mu, m, v, u)
 }

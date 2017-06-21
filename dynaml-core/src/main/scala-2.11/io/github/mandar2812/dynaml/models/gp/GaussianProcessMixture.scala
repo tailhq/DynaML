@@ -21,11 +21,11 @@ package io.github.mandar2812.dynaml.models.gp
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.analysis.InnerProductPV
-import io.github.mandar2812.dynaml.models.{ContMixtureErrorBarsModel, StochasticProcessMixtureModel}
-import io.github.mandar2812.dynaml.probability.{ContMixtureRVBars, ContinuousDistrMixture, MultGaussianPRV}
+import io.github.mandar2812.dynaml.models.GenContinuousMixtureModel
+import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian
 import org.apache.log4j.Logger
-import spire.algebra.InnerProductSpace
+import spire.algebra.VectorSpace
 
 import scala.reflect.ClassTag
 
@@ -39,17 +39,15 @@ import scala.reflect.ClassTag
 class GaussianProcessMixture[T, I: ClassTag](
   override val component_processes: Seq[AbstractGPRegressionModel[T, I]],
   override val weights: DenseVector[Double]) extends
-  ContMixtureErrorBarsModel[
+  GenContinuousMixtureModel[
     T, I, Double, PartitionedVector, PartitionedPSDMatrix, BlockedMultiVariateGaussian,
     MultGaussianPRV, AbstractGPRegressionModel[T, I]](component_processes, weights) {
-
-  private val logger = Logger.getLogger(this.getClass)
 
   protected val blockSize: Int = component_processes.head._blockSize
 
   override protected def toStream(y: PartitionedVector): Stream[Double] = y.toStream
 
-  override protected def getVectorSpace(num_dim: Int): InnerProductSpace[PartitionedVector, Double] =
+  override protected def getVectorSpace(num_dim: Int): VectorSpace[PartitionedVector, Double] =
     InnerProductPV(num_dim, blockSize)
 
 

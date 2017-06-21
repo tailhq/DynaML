@@ -28,13 +28,55 @@ import org.apache.spark.annotation.Experimental
 import scala.runtime.ScalaRunTime
 
 /**
+  * @author mandar date 20/06/2017.
+  * */
+case class UnivariateStudentsT(
+  mu:Double, mean: Double, sigma: Double)(
+  implicit rand: RandBasis = Rand) extends
+  AbstractContinuousDistr[Double] with
+  Moments[Double, Double] with
+  HasErrorBars[Double] {
+
+  assert(mu > 2d, "Parameter mu in Multivariate Students T must be greater than 2")
+
+  private val chisq = new ChiSquared(mu)
+
+  override def variance = sigma*sigma*mu/(mu-2d)
+
+  override def entropy =
+    0.5*(mu+1d)*(digamma(0.5*(mu+1d)) - digamma(0.5*mu)) +
+      log(sqrt(mu)) + lbeta(0.5*mu, 0.5)
+
+  override def mode = mean
+
+  override def draw() = {
+    val w = math.sqrt(mu/chisq.draw())
+    val z = rand.gaussian(0.0, 1.0).draw()*w
+    (sigma * z) + mean
+  }
+
+  override def unnormalizedLogPdf(x: Double) = {
+    val x_std = (x-mean)/sigma
+    -0.5*(mu+1d)*log(1d + math.pow(x_std, 2d)/mu)
+  }
+
+  override def logNormalizer =
+    lgamma(0.5*(mu+1d)) - 0.5*log(math.Pi*mu) - log(sigma) -lgamma(0.5*mu)
+
+  override def confidenceInterval(s: Double) = {
+    (mu-s*sigma, mu+s*sigma)
+  }
+}
+
+
+/**
   * Represents a multivariate students t distribution
   * @author mandar2812
   *
   * @param mu The degrees of freedom
   * @param mean The mean vector
   * @param covariance Covariance matrix
-  */
+  * */
 case class MultivariateStudentsT(
   mu: Double,
   mean: DenseVector[Double],
