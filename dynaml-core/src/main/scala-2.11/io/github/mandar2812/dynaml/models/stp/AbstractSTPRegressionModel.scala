@@ -36,9 +36,10 @@ import org.apache.log4j.Logger
 import scala.reflect.ClassTag
 
 /**
-  * @author mandar2812 date 26/08/16.
   * Implementation of a Students' T Regression model.
-  */
+  * @author mandar2812 date 26/08/16.
+  *
+  * */
 abstract class AbstractSTPRegressionModel[T, I](
   mu: Double, cov: LocalScalarKernel[I],
   n: LocalScalarKernel[I],

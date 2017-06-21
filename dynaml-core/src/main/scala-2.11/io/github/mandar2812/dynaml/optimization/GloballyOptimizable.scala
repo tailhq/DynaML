@@ -19,13 +19,13 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 /**
- * @author mandar2812, datum: 23/6/15.
- *
- * We define a common binding
- * characteristic between all "globally optimizable"
- * models i.e. models where hyper-parameters can
- * be optimized/tuned.
- */
+  * A common binding characteristic between all "globally optimizable"
+  * models i.e. models where hyper-parameters can
+  * be optimized/tuned.
+  *
+  * @author mandar2812, date 23/6/15.
+  *
+  * */
 trait GloballyOptimizable {
 
   /**

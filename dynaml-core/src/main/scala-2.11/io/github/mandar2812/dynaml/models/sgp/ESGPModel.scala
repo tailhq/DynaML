@@ -39,12 +39,13 @@ import org.apache.log4j.Logger
 import scala.reflect.ClassTag
 
 /**
-  * @author mandar2812 date: 28/02/2017.
-  *
   * Implementation of Extended Skew-Gaussian Process regression model.
   * This is represented with a finite dimensional [[BlockedMESNRV]]
   * distribution of Adcock and Schutes.
-  */
+  *
+  * @author mandar2812 date 28/02/2017.
+  *
+  * */
 abstract class ESGPModel[T, I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
   data: T, num: Int, lambda: Double, tau: Double,
