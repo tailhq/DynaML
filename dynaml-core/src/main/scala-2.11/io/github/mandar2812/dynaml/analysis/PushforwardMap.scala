@@ -41,9 +41,7 @@ abstract class PushforwardMap[
     */
   override val i: DifferentiableMap[Destination, Source, Jacobian]
 
-  def ->[
-  Distr1 <: ContinuousDistr[Source],
-  R <: ContinuousRVWithDistr[Source, Distr1]](r: R)
+  def ->[Distr1 <: ContinuousDistr[Source]](r: ContinuousRVWithDistr[Source, Distr1])
   : MeasurableDistrRV[Source, Destination, Jacobian, Distr1] =
     new MeasurableDistrRV[Source, Destination, Jacobian, Distr1](r)(self)
 
