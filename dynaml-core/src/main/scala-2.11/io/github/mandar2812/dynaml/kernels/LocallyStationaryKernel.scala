@@ -74,10 +74,13 @@ class LocallyStationaryKernel[I](
   }
 
   override def evaluateAt(config: Map[String, Double])(x: I, y: I): Double =
-    scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5)))*baseKernel.evaluateAt(config)(x,y)
+    scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5)))*
+      baseKernel.evaluateAt(config.map(c => (revstringify(c._1), c._2)))(x,y)
 
   override def gradientAt(config: Map[String, Double])(x: I, y: I) =
-    baseKernel.gradientAt(config)(x, y).mapValues(_*scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5))))
+    baseKernel.gradientAt(config.map(c => (revstringify(c._1), c._2)))(x, y).mapValues(
+      _*scalingFunc(ev.div(ev.plus(x,y),ev.fromDouble(0.5)))
+    )
 }
 
 /**
