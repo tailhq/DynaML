@@ -21,6 +21,8 @@ package io.github.mandar2812.dynaml.models
 import breeze.linalg.DenseVector
 import breeze.stats.distributions.{ContinuousDistr, Moments}
 import io.github.mandar2812.dynaml.kernels.CovarianceFunction
+import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GaussianProcessMixture}
+import io.github.mandar2812.dynaml.models.stp.{AbstractSTPRegressionModel, MVStudentsTModel, MVTMixture, StudentTProcessMixture}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.probability.distributions.HasErrorBars
@@ -149,6 +151,26 @@ abstract class StochasticProcessMixtureModel[
 I, Y, W <: ContinuousMixtureRV[_, _]] extends
   ContinuousProcessModel[Seq[(I, Y)], I, Y, W]
 
+
+object StochasticProcessMixtureModel {
+
+  def apply[T, I: ClassTag](
+    component_processes: Seq[AbstractGPRegressionModel[T, I]],
+    weights: DenseVector[Double]) =
+    new GaussianProcessMixture[T, I](component_processes, weights)
+
+  def apply[T, I: ClassTag](
+    component_processes: Seq[AbstractSTPRegressionModel[T, I]],
+    weights: DenseVector[Double]) =
+    new StudentTProcessMixture[T, I](component_processes, weights)
+
+
+  def apply[T, I: ClassTag](
+    component_processes: Seq[MVStudentsTModel[T, I]],
+    weights: DenseVector[Double]) =
+    new MVTMixture[T, I](component_processes, weights)
+
+}
 
 /**
   * A process which is a multinomial mixture of
