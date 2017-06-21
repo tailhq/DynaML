@@ -1,10 +1,10 @@
 #! /bin/bash
 
-mkdir ../transcendent-ai-labs.github.io/api_docs/DynaML/$1
-mkdir ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-core
-mkdir ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-pipes
-mkdir ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-examples
-mkdir ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-repl
+mkdir -p ../transcendent-ai-labs.github.io/api_docs/DynaML/$1
+mkdir -p ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-core
+mkdir -p ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-pipes
+mkdir -p ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-examples
+mkdir -p ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-repl
 
 sbt stage
 
