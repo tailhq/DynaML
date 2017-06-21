@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml
 
 import breeze.stats.distributions.ContinuousDistr
+import io.github.mandar2812.dynaml.pipes.DataPipe
 
 import scalaxy.streams.optimize
 import spire.algebra.InnerProductSpace
@@ -39,6 +40,13 @@ package object probability {
 
   def E(rv: RandomVariable[Double]): Double = optimize {
     rv.iid(candidates).sample().sum/candidates.toDouble
+  }
+
+
+  def entropy[I, Distr <: ContinuousDistr[I]](rv: ContinuousRVWithDistr[I, Distr]): Double = {
+    val logp_x: RandomVariable[Double] = MeasurableFunction[I, Double, ContinuousRVWithDistr[I, Distr]](
+      rv, DataPipe((sample: I) => -1d*rv.underlyingDist.logPdf(sample)))
+    E(logp_x)
   }
 
 
