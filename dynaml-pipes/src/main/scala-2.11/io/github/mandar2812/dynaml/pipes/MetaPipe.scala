@@ -1,10 +1,10 @@
 package io.github.mandar2812.dynaml.pipes
 
 /**
+  * Data Pipe wrapper of a curried function of order 1
   * @author mandar2812 date: 21/02/2017.
   *
-  * Data Pipe wrapper of a curried function of order 1
-  */
+  * */
 trait MetaPipe[Source, Intermediate, Destination] extends
   DataPipe[Source, DataPipe[Intermediate, Destination]] {
 
@@ -37,10 +37,9 @@ object MetaPipe {
 }
 
 /**
-  * @author mandar2812 date: 21/02/2017
-  *
   * Wraps a curried function of order 1 which takes 2 arguments
   * and returns a [[Function1]].
+  * @author mandar2812 date: 21/02/2017
   *
   * */
 trait MetaPipe21[A, B, C, D] extends DataPipe2[A, B, DataPipe[C, D]] {
@@ -60,10 +59,9 @@ object MetaPipe21 {
 }
 
 /**
-  * @author mandar2812 date: 21/02/2017
-  *
   * Wraps a curried function of order 1 which takes 1 arguments
   * and returns a [[Function2]].
+  * @author mandar2812 date: 21/02/2017
   *
   * */
 trait MetaPipe12[A, B, C, D] extends DataPipe[A, DataPipe2[B, C, D]] {
