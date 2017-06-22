@@ -42,7 +42,7 @@ object IIDRandomVariable {
   * An i.i.d random variable with a defined distribution.
   * */
 trait IIDRandomVarDistr[
-D, Dist <: Density[D] with Rand[D],
+D, +Dist <: Density[D] with Rand[D],
 R <: RandomVarWithDistr[D, Dist]]
   extends IIDRandomVariable[D, R] with
     RandomVarWithDistr[Stream[D], Density[Stream[D]] with Rand[Stream[D]]] {

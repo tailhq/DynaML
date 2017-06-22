@@ -13,21 +13,19 @@ import io.github.mandar2812.dynaml.probability.mcmc.GeneralMetropolisHastings
   *
   * @tparam ConditioningSet The type representing the model parameters
   * @tparam Domain The type representing the observed data.
-  *
-  * @param p The prior distribution on model parameters
+  * @param p The prior distribution on model parameters as a DynaML random variable
   * @param c The likelihood of the data given a particular value of parameters
   *
   * @author mandar2812 date 06/01/2017
   *
   * */
 class GenericContinuousMCMC[ConditioningSet, Domain](
-  p: ContinuousDistrRV[ConditioningSet],
-  c: DataPipe[ConditioningSet, ContinuousDistrRV[Domain]],
-  proposalDist: RandomVarWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]],
+  p: ContinuousRVWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]],
+  c: DataPipe[ConditioningSet, ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]]],
+  proposalDist: ContinuousRVWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]],
   burnIn: Long = 1000L, dropCount: Int = 100)(implicit vectorSpace: Field[ConditioningSet])
-  extends RejectionSamplingScheme[ConditioningSet, Domain,
-    ContinuousDistr[ConditioningSet],
-    ContinuousDistr[Domain],
+  extends RejectionSamplingScheme[
+    ConditioningSet, Domain, ContinuousDistr[ConditioningSet], ContinuousDistr[Domain],
     AbstractContinuousDistr[(ConditioningSet, Domain)]](p, c) {
 
 

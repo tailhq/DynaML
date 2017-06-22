@@ -127,7 +127,7 @@ class MeasurableDistrRV[Domain1, Domain2, Jacobian, Distr1 <: ContinuousDistr[Do
   * */
 class EncodedContDistrRV[Domain1, Domain2, Distr <: ContinuousDistr[Domain1]](
   base: Distr, encoder: Encoder[Domain1, Domain2])
-  extends ContinuousDistrRV[Domain2] {
+  extends ContinuousRVWithDistr[Domain2, ContinuousDistr[Domain2]] {
 
   override val underlyingDist = new ContinuousDistr[Domain2] {
     override def unnormalizedLogPdf(x: Domain2) = base.unnormalizedLogPdf(encoder.i(x))

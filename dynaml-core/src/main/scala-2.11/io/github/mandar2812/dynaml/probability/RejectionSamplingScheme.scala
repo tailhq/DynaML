@@ -83,11 +83,3 @@ JointDist <: Density[(ConditioningSet, Domain)] with Rand[(ConditioningSet, Doma
   })
 
 }
-
-object RejectionSamplingScheme {
-  def apply[ConditioningSet, Domain](
-    p: ContinuousDistrRV[ConditioningSet], c: DataPipe[ConditioningSet, ContinuousDistrRV[Domain]],
-    proposalDist: RandomVarWithDistr[ConditioningSet, ContinuousDistr[ConditioningSet]])(
-     implicit vectorSpace: Field[ConditioningSet]) =
-    new GenericContinuousMCMC(p, c, proposalDist)
-}

@@ -200,7 +200,7 @@ abstract class ContinuousRandomVariable[Domain] extends RandomVariable[Domain] {
   * @tparam Dist A breeze probability density defined on the
   *              [[Domain]]
   * */
-trait RandomVarWithDistr[Domain, Dist <: Density[Domain] with Rand[Domain]]
+trait RandomVarWithDistr[Domain, +Dist <: Density[Domain] with Rand[Domain]]
   extends RandomVariable[Domain]
     with HasDistribution[Domain] {
 
@@ -227,7 +227,7 @@ trait RandomVarWithDistr[Domain, Dist <: Density[Domain] with Rand[Domain]]
   }
 
   override def iid(n: Int) =
-    new IIDRandomVarDistr[Domain, Dist, RandomVarWithDistr[Domain, Dist]] {
+    new IIDRandomVariable[Domain, RandomVarWithDistr[Domain, Dist]] {
       override val baseRandomVariable: RandomVarWithDistr[Domain, Dist] = self
       override val num: Int = n
 
@@ -235,7 +235,7 @@ trait RandomVarWithDistr[Domain, Dist <: Density[Domain] with Rand[Domain]]
 
 }
 
-trait ContinuousRVWithDistr[Domain, Distr <: ContinuousDistr[Domain]] extends
+trait ContinuousRVWithDistr[Domain, +Distr <: ContinuousDistr[Domain]] extends
   ContinuousRandomVariable[Domain] with
   RandomVarWithDistr[Domain, Distr] {
 

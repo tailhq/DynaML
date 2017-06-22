@@ -5,7 +5,7 @@ import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.{EncodedContDistrRV, LikelihoodModel, RandomVarWithDistr, RandomVariable}
+import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.utils.{ConfigEncoding, getPriorMapDistr}
 
 /**
@@ -15,7 +15,7 @@ class HyperParameterMCMC[
 Model <: GloballyOptimizable,
 Distr <: ContinuousDistr[Double]](
   system: Model, hyper_prior: Map[String, Distr],
-  proposal: RandomVarWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]])
+  proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]])
   extends RandomVariable[Map[String, Double]] {
 
   val encoder: ConfigEncoding = ConfigEncoding(hyper_prior.keys.toList)
@@ -46,7 +46,7 @@ object HyperParameterMCMC {
   Model <: GloballyOptimizable,
   Distr <: ContinuousDistr[Double]](
     system: Model, hyper_prior: Map[String, Distr],
-    proposal: RandomVarWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]])
+    proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]])
   : HyperParameterMCMC[Model, Distr] = new HyperParameterMCMC(system, hyper_prior, proposal)
 
 }
