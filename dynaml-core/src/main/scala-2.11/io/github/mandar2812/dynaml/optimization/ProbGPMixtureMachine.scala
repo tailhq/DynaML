@@ -22,14 +22,13 @@ class ProbGPMixtureMachine[T, I: ClassTag](
   MixtureMachine[T, I, Double, PartitionedVector, PartitionedPSDMatrix, BlockedMultiVariateGaussian,
     MultGaussianPRV, AbstractGPRegressionModel[T, I]](model) {
 
-
   val (kernelPipe, noisePipe) = (system.covariance.asPipe, system.noiseModel.asPipe)
 
   def blockedHypParams = system.covariance.blocked_hyper_parameters ++ system.noiseModel.blocked_hyper_parameters
 
   def blockedState = system._current_state.filterKeys(blockedHypParams.contains)
 
-  implicit val transform: DataPipe[T, Seq[(I, Double)]] = DataPipe(system.dataAsSeq _)
+  implicit val transform: DataPipe[T, Seq[(I, Double)]] = DataPipe(system.dataAsSeq)
 
   override val confToModel = DataPipe((model_state: Map[String, Double]) =>
     AbstractGPRegressionModel(
@@ -39,5 +38,5 @@ class ProbGPMixtureMachine[T, I: ClassTag](
   override val mixturePipe = DataPipe2(
     (models: Seq[AbstractGPRegressionModel[T, I]], weights: DenseVector[Double]) =>
     StochasticProcessMixtureModel[T, I](models, weights))
-  
+
 }

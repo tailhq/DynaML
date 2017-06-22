@@ -26,8 +26,8 @@ import scala.util.Random
 
 /**
   * Skeleton implementation of the Coupled Simulated Annealing algorithm
-  * @author mandar datum 01/12/15.
-  */
+  * @author mandar2812 date 01/12/15.
+  * */
 abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
   extends AbstractGridSearch[M, M1](model: M) {
 
@@ -35,12 +35,12 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
 
   protected var variant = AbstractCSA.MuSA
 
-  def setVariant(v: String) = {
+  def setVariant(v: String): this.type = {
     variant = v
     this
   }
 
-  def setMaxIterations(m: Int) = {
+  def setMaxIterations(m: Int): this.type = {
     MAX_ITERATIONS = m
     this
   }
@@ -116,7 +116,7 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
     def CSATRec(eLandscape: List[(Double, Map[String, Double])], it: Int): List[(Double, Map[String, Double])] =
       it match {
         case 0 => eLandscape
-        case num =>
+        case _ =>
           logger.info("**************************")
           logger.info("CSA Iteration: "+(MAX_ITERATIONS-it+1))
           //mutate each element of the grid with

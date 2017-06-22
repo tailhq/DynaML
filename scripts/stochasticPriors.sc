@@ -33,7 +33,7 @@ val gsmKernel = GaussianSpectralKernel[Double](3.5, 2.0, encoder)
 val n = new MAKernel(0.8)
 
 val gp_prior = new LinearTrendGaussianPrior[Double](gsmKernel, n, trendEncoder, 0.0, 0.0)
-//gp_prior.hyperPrior_(hyp_prior)
+gp_prior.hyperPrior_(hyp_prior)
 
 val sgp_prior = new LinearTrendESGPrior[Double](rbfc, n, trendEncoder, 0.75, 0.1, 0.0, 0.0)
 sgp_prior.hyperPrior_(sgp_hyp_prior)
@@ -63,13 +63,9 @@ val sgpModel = sgp_prior.posteriorModel(dataset)
 gp_prior.globalOptConfig_(Map("gridStep" -> "0.0", "gridSize" -> "1", "globalOpt" -> "GS", "policy" -> "GS"))
 val gpModel1 = gp_prior.posteriorModel(dataset)
 
-val mixt_machine = new ProbGPMixtureMachine(gpModel1)
-  .setGridSize(2)
-  .setStepSize(0.50)
-  .setLogScale(true)
-  .setMaxIterations(16)
+val mixt_machine = new ProbGPMixtureMachine(gpModel1).setPrior(hyp_prior).setGridSize(2).setStepSize(0.50).setLogScale(true).setMaxIterations(200).setNumSamples(3)
 
-val (mix_model, mixt_model_conf) = mixt_machine.optimize(gp_prior.covariance.state ++ gp_prior.noiseCovariance.state)
+val (mix_model, mixt_model_conf) = mixt_machine.optimize(gp_prior.covariance.effective_state ++ gp_prior.noiseCovariance.effective_state)
 
 
 val zs: MultGaussianPRV = gpModel.predictiveDistribution(xs)

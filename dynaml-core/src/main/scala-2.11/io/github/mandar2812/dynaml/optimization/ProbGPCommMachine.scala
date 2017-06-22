@@ -181,7 +181,7 @@ object ProbGPCommMachine {
 
   def calculateModelWeightsSigmoid(
     baselineMethod: String = "mean")(
-    energyLandscape: List[(Double, Map[String, Double])])
+    energyLandscape: Seq[(Double, Map[String, Double])])
   : Seq[(Double, Map[String, Double])] = {
 
     val h = DenseVector(energyLandscape.map(_._1).toArray)

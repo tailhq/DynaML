@@ -65,11 +65,14 @@ BaseProcess <: ContinuousProcessModel[T, I, Y, W1]
     this
   }
 
-  protected def calculateEnergyLandscape(initialConfig: Map[String, Double], options: Map[String, String]) =
+  protected def calculateEnergyLandscape(
+    initialConfig: Map[String, Double],
+    options: Map[String, String]): Seq[(Double, Map[String, Double])] =
     if(policy == "CSA") performCSA(initialConfig, options)
     else getEnergyLandscape(initialConfig, options, meanFieldPrior)
 
-  protected def modelProbabilities = DataPipe(ProbGPCommMachine.calculateModelWeightsSigmoid(baselinePolicy) _)
+  protected def modelProbabilities: DataPipe[Seq[(Double, Map[String, Double])], Seq[(Double, Map[String, Double])]] =
+    DataPipe(ProbGPCommMachine.calculateModelWeightsSigmoid(baselinePolicy))
 
   override def optimize(
     initialConfig: Map[String, Double],

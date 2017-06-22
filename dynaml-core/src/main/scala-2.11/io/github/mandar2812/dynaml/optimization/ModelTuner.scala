@@ -44,27 +44,27 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
 
   protected var meanFieldPrior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map()
 
-  def setPrior(p: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]]) = {
+  def setPrior(p: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]]): this.type = {
     meanFieldPrior = p
     this
   }
 
-  def setNumSamples(n: Int) = {
+  def setNumSamples(n: Int): this.type = {
     num_samples = n
     this
   }
 
-  def setLogScale(t: Boolean) = {
+  def setLogScale(t: Boolean): this.type = {
     logarithmicScale = t
     this
   }
 
-  def setGridSize(s: Int) = {
+  def setGridSize(s: Int): this.type = {
     this.gridsize = s
     this
   }
 
-  def setStepSize(s: Double) = {
+  def setStepSize(s: Double): this.type = {
     this.step = s
     this
   }
