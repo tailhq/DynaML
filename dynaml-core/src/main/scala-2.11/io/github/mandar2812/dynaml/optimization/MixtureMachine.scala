@@ -131,5 +131,24 @@ BaseProcess <: ContinuousProcessModel[T, I, Y, W1]
     )
   }
 
+}
 
+object MixtureMachine {
+
+  def apply[
+    T, I: ClassTag, Y, YDomain, YDomainVar,
+    BaseDistr <: ContinuousDistr[YDomain] with Moments[YDomain, YDomainVar] with HasErrorBars[YDomain],
+    W1 <: ContinuousRVWithDistr[YDomain, BaseDistr],
+    BaseProcess <: ContinuousProcessModel[T, I, Y, W1]
+      with SecondOrderProcessModel[T, I, Y, Double, DenseMatrix[Double], W1]
+      with GloballyOptimizable](model: BaseProcess)(
+    confModelPipe: DataPipe[Map[String, Double], BaseProcess],
+    mixtPipe: DataPipe2[Seq[BaseProcess], DenseVector[Double], GenContinuousMixtureModel[
+      T, I, Y, YDomain, YDomainVar,
+      BaseDistr, W1, BaseProcess]]) =
+    new MixtureMachine[T, I, Y, YDomain, YDomainVar, BaseDistr, W1, BaseProcess](model) {
+      override val confToModel = confModelPipe
+      override val mixturePipe = mixtPipe
+    }
+  
 }

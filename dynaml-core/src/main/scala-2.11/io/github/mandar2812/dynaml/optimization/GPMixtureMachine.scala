@@ -16,10 +16,12 @@ import scala.reflect.ClassTag
   * @tparam I The index set/input domain of the GP model.
   * @author mandar2812 date 15/06/2017.
   * */
-class ProbGPMixtureMachine[T, I: ClassTag](
+class GPMixtureMachine[T, I: ClassTag](
   model: AbstractGPRegressionModel[T, I]) extends
-  MixtureMachine[T, I, Double, PartitionedVector, PartitionedPSDMatrix, BlockedMultiVariateGaussian,
-    MultGaussianPRV, AbstractGPRegressionModel[T, I]](model) {
+  MixtureMachine[
+    T, I, Double, PartitionedVector, PartitionedPSDMatrix,
+    BlockedMultiVariateGaussian, MultGaussianPRV,
+    AbstractGPRegressionModel[T, I]](model) {
 
   val (kernelPipe, noisePipe) = (system.covariance.asPipe, system.noiseModel.asPipe)
 
@@ -33,7 +35,8 @@ class ProbGPMixtureMachine[T, I: ClassTag](
     (model_state: Map[String, Double]) =>
       AbstractGPRegressionModel(
         kernelPipe(model_state), noisePipe(model_state),
-        system.mean)(system.data, system.npoints))
+        system.mean)(system.data, system.npoints)
+  )
 
   override val mixturePipe = new GPMixturePipe[T, I]
 

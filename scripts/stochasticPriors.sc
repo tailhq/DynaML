@@ -5,7 +5,7 @@ import io.github.mandar2812.dynaml.models.bayes.{LinearTrendESGPrior, LinearTren
 import io.github.mandar2812.dynaml.probability._
 import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.analysis.implicits._
-import io.github.mandar2812.dynaml.optimization.ProbGPMixtureMachine
+import io.github.mandar2812.dynaml.optimization.GPMixtureMachine
 import io.github.mandar2812.dynaml.pipes.Encoder
 import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
 
@@ -63,7 +63,7 @@ val sgpModel = sgp_prior.posteriorModel(dataset)
 gp_prior.globalOptConfig_(Map("gridStep" -> "0.0", "gridSize" -> "1", "globalOpt" -> "GS", "policy" -> "GS"))
 val gpModel1 = gp_prior.posteriorModel(dataset)
 
-val mixt_machine = new ProbGPMixtureMachine(gpModel1).setPrior(hyp_prior).setGridSize(2).setStepSize(0.50).setLogScale(true).setMaxIterations(200).setNumSamples(3)
+val mixt_machine = new GPMixtureMachine(gpModel1).setPrior(hyp_prior).setGridSize(2).setStepSize(0.50).setLogScale(true).setMaxIterations(200).setNumSamples(3)
 
 val (mix_model, mixt_model_conf) = mixt_machine.optimize(gp_prior.covariance.effective_state ++ gp_prior.noiseCovariance.effective_state)
 

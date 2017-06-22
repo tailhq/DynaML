@@ -5,11 +5,15 @@ import breeze.stats.distributions.{ContinuousDistr, Moments}
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.models.stp.{AbstractSTPRegressionModel, MVStudentsTModel}
-import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, GenContinuousMixtureModel, SecondOrderProcessModel, StochasticProcessMixtureModel}
+import io.github.mandar2812.dynaml.models.{
+ContinuousProcessModel, GenContinuousMixtureModel,
+SecondOrderProcessModel, StochasticProcessMixtureModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.DataPipe2
 import io.github.mandar2812.dynaml.probability.{ContinuousRVWithDistr, MatrixTRV, MultGaussianPRV, MultStudentsTPRV}
-import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultiVariateGaussian, BlockedMultivariateStudentsT, HasErrorBars, MatrixT}
+import io.github.mandar2812.dynaml.probability.distributions.{
+BlockedMultiVariateGaussian, BlockedMultivariateStudentsT,
+HasErrorBars, MatrixT}
 
 import scala.reflect.ClassTag
 

@@ -15,10 +15,11 @@ import scala.reflect.ClassTag
 
 /**
   * ::Experimental::
-  * @author mandar date 02/01/2017.
   *
   * A warped Gaussian Process.
-  */
+  * @author mandar date 02/01/2017.
+  *
+  * */
 @Experimental
 class WarpedGPModel[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
   warpingFunc: PushforwardMap[Double, Double, Double])(
