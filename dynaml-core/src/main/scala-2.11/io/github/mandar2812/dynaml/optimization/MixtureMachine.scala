@@ -10,8 +10,8 @@ import io.github.mandar2812.dynaml.probability.distributions.HasErrorBars
 import scala.reflect.ClassTag
 
 /**
-  * Created by mandar on 21/06/2017.
-  */
+  * @author mandar2812 date 21/06/2017.
+  * */
 abstract class MixtureMachine[
 T, I: ClassTag, Y, YDomain, YDomainVar,
 BaseDistr <: ContinuousDistr[YDomain]
@@ -71,7 +71,8 @@ BaseProcess <: ContinuousProcessModel[T, I, Y, W1]
     if(policy == "CSA") performCSA(initialConfig, options)
     else getEnergyLandscape(initialConfig, options, meanFieldPrior)
 
-  protected def modelProbabilities: DataPipe[Seq[(Double, Map[String, Double])], Seq[(Double, Map[String, Double])]] =
+  protected def modelProbabilities
+  : DataPipe[Seq[(Double, Map[String, Double])], Seq[(Double, Map[String, Double])]] =
     DataPipe(ProbGPCommMachine.calculateModelWeightsSigmoid(baselinePolicy))
 
   override def optimize(

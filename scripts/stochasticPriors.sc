@@ -1,5 +1,5 @@
 import breeze.linalg.eig
-import breeze.stats.distributions.{ContinuousDistr, Gamma, Gaussian}
+import breeze.stats.distributions.{ContinuousDistr, Gamma}
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.bayes.{LinearTrendESGPrior, LinearTrendGaussianPrior}
 import io.github.mandar2812.dynaml.probability._

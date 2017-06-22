@@ -2,8 +2,9 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
+import io.github.mandar2812.dynaml.modelpipe._
 import io.github.mandar2812.dynaml.models.StochasticProcessMixtureModel
-import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GaussianProcessMixture}
+import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian
@@ -30,13 +31,12 @@ class ProbGPMixtureMachine[T, I: ClassTag](
 
   implicit val transform: DataPipe[T, Seq[(I, Double)]] = DataPipe(system.dataAsSeq)
 
-  override val confToModel = DataPipe((model_state: Map[String, Double]) =>
-    AbstractGPRegressionModel(
-    kernelPipe(model_state), noisePipe(model_state),
-    system.mean)(system.data, system.npoints))
+  override val confToModel = DataPipe(
+    (model_state: Map[String, Double]) =>
+      AbstractGPRegressionModel(
+        kernelPipe(model_state), noisePipe(model_state),
+        system.mean)(system.data, system.npoints))
 
-  override val mixturePipe = DataPipe2(
-    (models: Seq[AbstractGPRegressionModel[T, I]], weights: DenseVector[Double]) =>
-    StochasticProcessMixtureModel[T, I](models, weights))
+  override val mixturePipe = new GPMixturePipe[T, I]
 
 }
