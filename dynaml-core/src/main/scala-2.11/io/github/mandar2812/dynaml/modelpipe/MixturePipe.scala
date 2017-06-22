@@ -4,12 +4,12 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.{ContinuousDistr, Moments}
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.models.stp.AbstractSTPRegressionModel
+import io.github.mandar2812.dynaml.models.stp.{AbstractSTPRegressionModel, MVStudentsTModel}
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, GenContinuousMixtureModel, SecondOrderProcessModel, StochasticProcessMixtureModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.DataPipe2
-import io.github.mandar2812.dynaml.probability.{ContinuousRVWithDistr, MultGaussianPRV, MultStudentsTPRV}
-import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultiVariateGaussian, BlockedMultivariateStudentsT, HasErrorBars}
+import io.github.mandar2812.dynaml.probability.{ContinuousRVWithDistr, MatrixTRV, MultGaussianPRV, MultStudentsTPRV}
+import io.github.mandar2812.dynaml.probability.distributions.{BlockedMultiVariateGaussian, BlockedMultivariateStudentsT, HasErrorBars, MatrixT}
 
 import scala.reflect.ClassTag
 
@@ -51,6 +51,19 @@ class StudentTMixturePipe[T, I: ClassTag] extends
 
   override def run(
     models: Seq[AbstractSTPRegressionModel[T, I]],
+    weights: DenseVector[Double]) =
+    StochasticProcessMixtureModel(models, weights)
+}
+
+class MVStudentsTMixturePipe[T, I: ClassTag] extends
+  MixturePipe[
+    T, I, DenseVector[Double], DenseMatrix[Double],
+    (DenseMatrix[Double], DenseMatrix[Double]),
+    MatrixT, MatrixTRV,
+    MVStudentsTModel[T, I]] {
+
+  override def run(
+    models: Seq[MVStudentsTModel[T, I]],
     weights: DenseVector[Double]) =
     StochasticProcessMixtureModel(models, weights)
 }

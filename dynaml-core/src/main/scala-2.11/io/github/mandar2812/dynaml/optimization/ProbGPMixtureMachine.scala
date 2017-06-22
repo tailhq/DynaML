@@ -1,11 +1,9 @@
 package io.github.mandar2812.dynaml.optimization
 
-import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.modelpipe._
-import io.github.mandar2812.dynaml.models.StochasticProcessMixtureModel
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian
 
