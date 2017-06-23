@@ -27,8 +27,6 @@ import io.github.mandar2812.dynaml.utils._
 
 
 /**
-  * @author mandar date: 26/7/16.
-  *
   * Represents a bare bones representation
   * of a random variable only in terms of
   * samples.
@@ -36,7 +34,9 @@ import io.github.mandar2812.dynaml.utils._
   * @tparam Domain The domain or space over which
   *                the random variable is defined;
   *                i.e. the range of values it can take
-  */
+  *
+  * @author mandar date: 26/7/16.
+  * */
 abstract class RandomVariable[Domain] extends Serializable {
 
   self =>

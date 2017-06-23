@@ -1,3 +1,21 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+* */
 package io.github.mandar2812.dynaml.probability
 
 import breeze.stats.distributions.{ContinuousDistr, Density, Rand}
@@ -8,6 +26,8 @@ import io.github.mandar2812.dynaml.probability.distributions.{AbstractContinuous
   * An independent and identically distributed
   * [[RandomVariable]] represented as a [[Stream]]
   *
+  * @tparam D The base domain
+  * @tparam R Random variable defined over the base domain
   * */
 trait IIDRandomVariable[D, +R <: RandomVariable[D]] extends RandomVariable[Stream[D]] {
 
@@ -40,6 +60,12 @@ object IIDRandomVariable {
 
 /**
   * An i.i.d random variable with a defined distribution.
+  *
+  * @tparam D Base domain
+  * @tparam Dist A breeze distribution defined over the
+  *              base domain.
+  * @tparam R A random variable defined over the base domain
+  *           and having distribution of type [[Dist]]
   * */
 trait IIDRandomVarDistr[
 D, +Dist <: Density[D] with Rand[D],
@@ -64,6 +90,12 @@ D, +Dist <: Density[D] with Rand[D],
   * An IID Random variable constructed
   * from a continuous random variable having
   * a defined distribution.
+  *
+  * @tparam D Base domain
+  * @tparam Distr A breeze probability density defined over the
+  *              base domain.
+  * @tparam R A random variable defined over the base domain
+  *           and having distribution of type [[Distr]]
   * */
 trait IIDContinuousRVDistr[
 D, +Distr <: ContinuousDistr[D],
