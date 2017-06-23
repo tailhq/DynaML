@@ -15,6 +15,11 @@ MixtureDistribution, MixtureWithConfBars}
   * Top level class for representing
   * random variable mixtures.
   *
+  * @tparam Domain Domain over which each mixture
+  *                component is defined
+  *
+  * @tparam BaseRV The type of each mixture component, must
+  *                be a sub type of [[RandomVariable]]
   * @author mandar2812 date 14/06/2017.
   * */
 trait MixtureRV[Domain, BaseRV <: RandomVariable[Domain]] extends
@@ -44,6 +49,13 @@ object MixtureRV {
 
 /**
   * A random variable mixture over a continuous domain
+  *
+  * @tparam Domain Domain over which each mixture
+  *                component is defined
+  *
+  * @tparam BaseRV The type of each mixture component, must
+  *                be a sub type of [[ContinuousRandomVariable]]
+  *
   * @author mandar2812 date 14/06/2017
   * */
 trait ContinuousMixtureRV[Domain, BaseRV <: ContinuousRandomVariable[Domain]] extends
@@ -53,6 +65,13 @@ trait ContinuousMixtureRV[Domain, BaseRV <: ContinuousRandomVariable[Domain]] ex
 /**
   * A random variable mixture over a continuous domain,
   * having a computable probability distribution
+  *
+  * @tparam Domain Domain over which each mixture
+  *                component is defined
+  *
+  * @tparam BaseRV The type of each mixture component, must
+  *                be a sub type of [[ContinuousRVWithDistr]]
+  *
   * @author mandar2812 date 14/06/2017
   * */
 class ContinuousDistrMixture[Domain, BaseRV <: ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]]](
@@ -70,6 +89,23 @@ class ContinuousDistrMixture[Domain, BaseRV <: ContinuousRVWithDistr[Domain, Con
     selector.underlyingDist.params)
 }
 
+/**
+  * A random variable mixture over a continuous domain,
+  * having a computable probability distribution and ability
+  * to generate error bars/confidence intervals.
+  *
+  * @tparam Domain Domain over which each mixture
+  *                component is defined
+  *
+  * @tparam Var The type of second moment i.e. variance of the random variables
+  *             defined over [[Domain]].
+  *
+  * @tparam BaseDistr The type of each mixture component distribution,
+  *                   must be a continuous breeze distribution with
+  *                   defined moments and implement [[HasErrorBars]]
+  *
+  * @author mandar2812 date 14/06/2017
+  * */
 private[dynaml] class ContMixtureRVBars[Domain, Var,
 BaseDistr <: ContinuousDistr[Domain] with Moments[Domain, Var] with HasErrorBars[Domain]](
   distributions: Seq[BaseDistr],
@@ -81,6 +117,10 @@ BaseDistr <: ContinuousDistr[Domain] with Moments[Domain, Var] with HasErrorBars
   override val underlyingDist = MixtureWithConfBars(distributions, selector.underlyingDist.params)
 }
 
+/**
+  * Contains convenience methods for creating
+  * various mixture random variable instances.
+  * */
 object ContinuousDistrMixture {
 
   def apply[Domain, BaseRV <: ContinuousDistrRV[Domain]](
