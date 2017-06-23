@@ -1762,7 +1762,7 @@
         },
         {
             "location": "/about/",
-            "text": "Affliations\n\u00b6\n\n\nDynaML is developed and maintained by \nTranscendent AI Labs\n\n\nDynaML is proud to be a part of the \nMozilla Science\n Collaborate \nplatform\n\n\nContributors\n\u00b6\n\n\n\n\n\n\nMandar Chandorkar\n\n\n\n\n\n\nAmit Kumar Jaiswal\n\n\n\n\n\n\nHave questions or suggestions? Feel free to \nopen an issue on GitHub\n or \nask me on Twitter\n.",
+            "text": "Affliations\n\u00b6\n\n\nDynaML is developed and maintained by \nTranscendent AI Labs\n\n\nDynaML is proud to be a part of the \nMozilla Science\n Collaborate \nplatform\n\n\nContributors\n\u00b6\n\n\n\n\n\n\nMandar Chandorkar\n\n\n\n\n\n\nAmit Kumar Jaiswal\n\n\n\n\n\n\nHave questions or suggestions? Feel free to \nopen an issue on GitHub\n or \nask me on Twitter\n.\n\n\nAttributions\n\u00b6\n\n\nLogo\n\u00b6\n\n\nBusiness graphic by \nroundicons\n from \nFlaticon\n is licensed under \nCC BY 3.0\n.",
             "title": "About Us"
         },
         {
@@ -1774,6 +1774,16 @@
             "location": "/about/#contributors",
             "text": "Mandar Chandorkar    Amit Kumar Jaiswal    Have questions or suggestions? Feel free to  open an issue on GitHub  or  ask me on Twitter .",
             "title": "Contributors"
+        },
+        {
+            "location": "/about/#attributions",
+            "text": "",
+            "title": "Attributions"
+        },
+        {
+            "location": "/about/#logo",
+            "text": "Business graphic by  roundicons  from  Flaticon  is licensed under  CC BY 3.0 .",
+            "title": "Logo"
         },
         {
             "location": "/blog/2016-12-11-dynaml-new-features/",
