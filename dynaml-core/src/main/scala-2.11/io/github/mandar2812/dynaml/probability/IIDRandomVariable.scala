@@ -2,7 +2,7 @@ package io.github.mandar2812.dynaml.probability
 
 import breeze.stats.distributions.{ContinuousDistr, Density, Rand}
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.distributions.GenericDistribution
+import io.github.mandar2812.dynaml.probability.distributions.{AbstractContinuousDistr, GenericDistribution}
 
 /**
   * An independent and identically distributed
@@ -43,7 +43,7 @@ object IIDRandomVariable {
   * */
 trait IIDRandomVarDistr[
 D, +Dist <: Density[D] with Rand[D],
-R <: RandomVarWithDistr[D, Dist]]
++R <: RandomVarWithDistr[D, Dist]]
   extends IIDRandomVariable[D, R] with
     RandomVarWithDistr[Stream[D], Density[Stream[D]] with Rand[Stream[D]]] {
 
@@ -60,10 +60,12 @@ R <: RandomVarWithDistr[D, Dist]]
   }
 }
 
-trait IIDContinuousRV[D] extends
-  ContinuousDistrRV[Stream[D]] with IIDRandomVariable[D, ContinuousDistrRV[D]] {
+trait IIDContinuousRVDistr[
+D, +Distr <: ContinuousDistr[D],
++R <: ContinuousRVWithDistr[D, Distr]] extends
+  IIDRandomVarDistr[D, Distr, R] {
 
-  override val underlyingDist = new ContinuousDistr[Stream[D]] {
+  override val underlyingDist = new AbstractContinuousDistr[Stream[D]] {
 
     override def unnormalizedLogPdf(x: Stream[D]) = x.map(baseRandomVariable.underlyingDist.unnormalizedLogPdf).sum
 
@@ -81,11 +83,13 @@ object IIDRandomVarDistr {
       val num = n
     }
 
-  def apply[D](base : ContinuousDistrRV[D])(n: Int) =
-    new IIDContinuousRV[D] {
-      val baseRandomVariable = base
-      val num = n
-    }
+  def apply[
+  D, Distr <: ContinuousDistr[D],
+  R <: ContinuousRVWithDistr[D, Distr]](base: R)(n: Int) = new IIDContinuousRVDistr[D, Distr, R] {
+    override val baseRandomVariable = base
+    override val num = n
+  }
+
 }
 
 

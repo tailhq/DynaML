@@ -243,6 +243,7 @@ trait ContinuousRVWithDistr[Domain, +Distr <: ContinuousDistr[Domain]] extends
 
   override val sample = DataPipe(() => underlyingDist.sample())
 
+  override def iid(n: Int) = IIDRandomVarDistr[Domain, Distr, this.type](this)(n)
 }
 
 /**
