@@ -60,6 +60,11 @@ D, +Dist <: Density[D] with Rand[D],
   }
 }
 
+/**
+  * An IID Random variable constructed
+  * from a continuous random variable having
+  * a defined distribution.
+  * */
 trait IIDContinuousRVDistr[
 D, +Distr <: ContinuousDistr[D],
 +R <: ContinuousRVWithDistr[D, Distr]] extends
