@@ -5,7 +5,7 @@
 
 <br/>
 
-<img src="images/dynaml_logo.png" alt="DynaML Logo" style="width: 256px;"/>
+<img src="images/dynaml_logo3.png" alt="DynaML Logo" style="width: 256px;"/>
 
 <br/>
 
