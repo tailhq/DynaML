@@ -64,7 +64,7 @@ val model = new MOStudentTRegression[DenseVector[Double]](
 ```
 
 !!! tip
-		Working with multi-output Student T models is similar to [multi-output GP](/core/core_gp.html#gp-models-for-multiple-outputs) models. We need to create a kernel function over the combined index set `#!scala (DenseVector[Double], Int)`. This can be done using the _sum of separable_ kernel idea.
+		Working with multi-output Student T models is similar to [multi-output GP](/core/core_gp/#gp-models-for-multiple-outputs) models. We need to create a kernel function over the combined index set `#!scala (DenseVector[Double], Int)`. This can be done using the _sum of separable_ kernel idea.
 
 		```scala
 
