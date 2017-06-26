@@ -1729,20 +1729,31 @@ K((\mathbf{x}, d), (\mathbf{x}', d')) = \sum_{i = 1}^{D} K^{i}_{x}(\mathbf{x}, \
 \end{equation}
 \]</span><div class="admonition tip">
 <p class="admonition-title">Creating separable kernels<p>Creating SoS kernels in DynaML is quite straightforward, use the <code class="codehilite"><span class="o">:*</span></code> operator to multiply a kernel defined on <code class="codehilite"><span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span></code> with a kernel defined on <code class="codehilite"><span class="nc">Int</span></code>.</p>
-<p>```scala</p>
-<p>val linearK = new PolynomialKernel(2, 1.0)
-val tKernel = new TStudentKernel(0.2)
-val d = new DiracKernel(0.037)</p>
-<p>val mixedEffects = new MixedEffectRegularizer(0.5)
-val coRegCauchyMatrix = new CoRegCauchyKernel(10.0)
-val coRegDiracMatrix = new CoRegDiracKernel</p>
-<p>val sos_kernel: CompositeCovariance[(DenseVector[Double], Int)] =
-    (linearK :* mixedEffects)  + (tKernel :* coRegCauchyMatrix)</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>val sos_noise: CompositeCovariance[(DenseVector[Double], Int)] = d :* coRegDiracMatrix
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">linearK</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">PolynomialKernel</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">tKernel</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">TStudentKernel</span><span class="o">(</span><span class="mf">0.2</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">d</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DiracKernel</span><span class="o">(</span><span class="mf">0.037</span><span class="o">)</span>
 
-```
+<span class="k">val</span> <span class="n">mixedEffects</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MixedEffectRegularizer</span><span class="o">(</span><span class="mf">0.5</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">coRegCauchyMatrix</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">CoRegCauchyKernel</span><span class="o">(</span><span class="mf">10.0</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">coRegDiracMatrix</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">CoRegDiracKernel</span>
+
+<span class="k">val</span> <span class="n">sos_kernel</span><span class="k">:</span> <span class="kt">CompositeCovariance</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span>
+    <span class="o">(</span><span class="n">linearK</span> <span class="o">:*</span> <span class="n">mixedEffects</span><span class="o">)</span>  <span class="o">+</span> <span class="o">(</span><span class="n">tKernel</span> <span class="o">:*</span> <span class="n">coRegCauchyMatrix</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">sos_noise</span><span class="k">:</span> <span class="kt">CompositeCovariance</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span>
+    <span class="n">d</span> <span class="o">:*</span> <span class="n">coRegDiracMatrix</span>
 </pre></div>
 </td></tr></table>
 
@@ -1754,11 +1765,13 @@ val coRegDiracMatrix = new CoRegDiracKernel</p>
 2
 3
 4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">trainingdata</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]</span> <span class="k">=</span> <span class="o">...</span>
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">trainingdata</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]</span> <span class="k">=</span> <span class="k">_</span>
 
 <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MOGPRegressionModel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]](</span>
     <span class="n">sos_kernel</span><span class="o">,</span> <span class="n">sos_noise</span><span class="o">,</span> <span class="n">trainingdata</span><span class="o">,</span>
-<span class="n">trainingdata</span><span class="o">.</span><span class="n">length</span><span class="o">,</span> <span class="n">trainingdata</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">length</span><span class="o">)</span>
+    <span class="n">trainingdata</span><span class="o">.</span><span class="n">length</span><span class="o">,</span>
+    <span class="n">trainingdata</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">length</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
