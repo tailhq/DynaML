@@ -90,7 +90,6 @@ $$
 		Creating SoS kernels in DynaML is quite straightforward, use the `#!scala :*` operator to multiply a kernel defined on `#!scala DenseVector[Double]` with a kernel defined on `#!scala Int`.
 
 		```scala
-
 		val linearK = new PolynomialKernel(2, 1.0)
 		val tKernel = new TStudentKernel(0.2)
 		val d = new DiracKernel(0.037)
@@ -102,20 +101,22 @@ $$
 		val sos_kernel: CompositeCovariance[(DenseVector[Double], Int)] =
 			(linearK :* mixedEffects)  + (tKernel :* coRegCauchyMatrix)
 
-			val sos_noise: CompositeCovariance[(DenseVector[Double], Int)] = d :* coRegDiracMatrix
+		val sos_noise: CompositeCovariance[(DenseVector[Double], Int)] =
+			d :* coRegDiracMatrix
 
-			```
+		```
 
 !!! tip
 
 		You can use the [`#!scala MOGPRegressionModel[I]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.MOGPRegressionModel) class to create multi-output GP models.
 
 		```scala
-		val trainingdata: Stream[(DenseVector[Double], DenseVector[Double])] = ...
+		val trainingdata: Stream[(DenseVector[Double], DenseVector[Double])] = _
 
 		val model = new MOGPRegressionModel[DenseVector[Double]](
 			sos_kernel, sos_noise, trainingdata,
-    	trainingdata.length, trainingdata.head._2.length)
+			trainingdata.length,
+			trainingdata.head._2.length)
 
 		```
 
