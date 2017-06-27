@@ -44,9 +44,10 @@ object MultStudentsTRV {
   }
 }
 
-case class MultStudentsTPRV(mu: Double,
-                            mean: PartitionedVector,
-                            covariance: PartitionedPSDMatrix)(
+case class MultStudentsTPRV(
+  mu: Double,
+  mean: PartitionedVector,
+  covariance: PartitionedPSDMatrix)(
   implicit ev: Field[PartitionedVector])
   extends AbstractStudentsTRandVar[PartitionedVector, PartitionedPSDMatrix, BlockedMultivariateStudentsT](mu) {
 

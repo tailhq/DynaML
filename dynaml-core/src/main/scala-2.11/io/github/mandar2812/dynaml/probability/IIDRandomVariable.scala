@@ -18,9 +18,9 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.probability
 
-import breeze.stats.distributions.{ContinuousDistr, Density, Rand}
+import breeze.stats.distributions.{ContinuousDistr, Density, DiscreteDistr, Rand}
 import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.distributions.{AbstractContinuousDistr, GenericDistribution}
+import io.github.mandar2812.dynaml.probability.distributions.{AbstractContinuousDistr, AbstractDiscreteDistr, GenericDistribution}
 
 /**
   * An independent and identically distributed
@@ -86,6 +86,16 @@ D, +Dist <: Density[D] with Rand[D],
   }
 }
 
+object IIDRandomVarDistr {
+  def apply[D, Dist <: Density[D] with Rand[D]](base : RandomVarWithDistr[D, Dist])(n: Int)
+  : IIDRandomVarDistr[D, Dist, RandomVarWithDistr[D, Dist]] =
+    new IIDRandomVarDistr[D, Dist, RandomVarWithDistr[D, Dist]] {
+      val baseRandomVariable = base
+      val num = n
+    }
+
+}
+
 /**
   * An IID Random variable constructed
   * from a continuous random variable having
@@ -113,19 +123,39 @@ D, +Distr <: ContinuousDistr[D],
 
 }
 
-object IIDRandomVarDistr {
-  def apply[D, Dist <: Density[D] with Rand[D]](base : RandomVarWithDistr[D, Dist])(n: Int) =
-    new IIDRandomVarDistr[D, Dist, RandomVarWithDistr[D, Dist]] {
-      val baseRandomVariable = base
-      val num = n
-    }
+object IIDContinuousRVDistr {
 
   def apply[
   D, Distr <: ContinuousDistr[D],
-  R <: ContinuousRVWithDistr[D, Distr]](base: R)(n: Int) = new IIDContinuousRVDistr[D, Distr, R] {
-    override val baseRandomVariable = base
-    override val num = n
+  R <: ContinuousRVWithDistr[D, Distr]](base: R)(n: Int): IIDContinuousRVDistr[D, Distr, R] =
+    new IIDContinuousRVDistr[D, Distr, R] {
+      override val baseRandomVariable = base
+      override val num = n
+    }
+
+
+}
+
+trait IIDDiscreteRVDistr[
+D, +Distr <: DiscreteDistr[D],
++R <: DiscreteRVWithDistr[D, Distr]] extends
+  IIDRandomVarDistr[D, Distr, R] {
+
+  override val underlyingDist = new AbstractDiscreteDistr[Stream[D]] {
+    override def probabilityOf(x: Stream[D]) = x.map(baseRandomVariable.underlyingDist.probabilityOf).product
+
+    override def draw() = Stream.tabulate[D](num)(_ => baseRandomVariable.underlyingDist.draw())
   }
+}
+
+object IIDDiscreteRVDistr {
+  def apply[
+  D, Distr <: DiscreteDistr[D],
+  R <: DiscreteRVWithDistr[D, Distr]](base: R)(n: Int): IIDDiscreteRVDistr[D, Distr, R] =
+    new IIDDiscreteRVDistr[D, Distr, R] {
+      override val baseRandomVariable = base
+      override val num = n
+    }
 
 }
 

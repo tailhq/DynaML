@@ -235,15 +235,68 @@ trait RandomVarWithDistr[Domain, +Dist <: Density[Domain] with Rand[Domain]]
 
 }
 
+/**
+  * A continuous random variable that has an associated
+  * probability density function.
+  *
+  * @tparam Domain Support/Sample space of the random variable
+  * @tparam Distr Type of the probability density as a subtype of breeze [[ContinuousDistr]]
+  * */
 trait ContinuousRVWithDistr[Domain, +Distr <: ContinuousDistr[Domain]] extends
   ContinuousRandomVariable[Domain] with
   RandomVarWithDistr[Domain, Distr] {
+
+  self  =>
 
   override val underlyingDist: Distr
 
   override val sample = DataPipe(() => underlyingDist.sample())
 
-  override def iid(n: Int) = IIDRandomVarDistr[Domain, Distr, this.type](this)(n)
+  override def iid(n: Int) = IIDContinuousRVDistr[Domain, Distr, self.type](self)(n)
+
+  def :*[OtherDomain, OtherDistr <: ContinuousDistr[OtherDomain]](
+    other: ContinuousRVWithDistr[OtherDomain, OtherDistr]) = {
+
+    val productDensity = new ContinuousDistr[(Domain, OtherDomain)] {
+
+      override def unnormalizedLogPdf(x: (Domain, OtherDomain)) =
+        self.underlyingDist.logPdf(x._1) + other.underlyingDist.logPdf(x._2)
+
+      override def logNormalizer = self.underlyingDist.logNormalizer + other.underlyingDist.logNormalizer
+
+      override def draw() = (self.underlyingDist.draw, other.underlyingDist.draw)
+    }
+
+    RandomVariable(productDensity)
+  }
+
+}
+
+trait DiscreteRVWithDistr[Domain, +Distr <: DiscreteDistr[Domain]] extends
+  RandomVarWithDistr[Domain, Distr] {
+
+  self  =>
+
+  override val underlyingDist: Distr
+
+  override val sample = DataPipe(() => underlyingDist.sample())
+
+  override def iid(n: Int) = IIDDiscreteRVDistr[Domain, Distr, self.type](self)(n)
+
+  def :*[OtherDomain, OtherDistr <: DiscreteDistr[OtherDomain]](
+    other: DiscreteRVWithDistr[OtherDomain, OtherDistr]) = {
+
+    val productDensity = new DiscreteDistr[(Domain, OtherDomain)] {
+
+      override def probabilityOf(x: (Domain, OtherDomain)) =
+        self.underlyingDist.probabilityOf(x._1)*other.underlyingDist.probabilityOf(x._2)
+
+      override def draw() = (self.underlyingDist.draw, other.underlyingDist.draw)
+    }
+
+    RandomVariable(productDensity)
+  }
+
 }
 
 /**
@@ -251,6 +304,7 @@ trait ContinuousRVWithDistr[Domain, +Distr <: ContinuousDistr[Domain]] extends
   * probability density function.
   *
   * */
+@deprecated("ContinuousDistrRV is deprecated as of DynaML v1.5, prefer ContinuousRVWithDistr")
 trait ContinuousDistrRV[Domain] extends
   ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]] { self =>
 
@@ -356,9 +410,10 @@ object RandomVariable {
     * @param d A breeze discrete distribution
     * @return A discrete random variable instance.
     * */
-  def apply[O](d: DiscreteDistr[O]): DiscreteDistrRV[O] = new DiscreteDistrRV[O] {
-    override val underlyingDist = d
-  }
+  def apply[O](d: DiscreteDistr[O]): DiscreteRVWithDistr[O, DiscreteDistr[O]] =
+    new DiscreteRVWithDistr[O, DiscreteDistr[O]] {
+      override val underlyingDist = d
+    }
 
   def apply[O](g: ThreadedBufferedRand[O]) = new ThreadedRandomVariable[O](g)
 
