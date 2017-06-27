@@ -21,12 +21,12 @@ package io.github.mandar2812.dynaml.pipes
 import scalaxy.streams.optimize
 
 /**
-  * @author mandar2812 on 18/11/15.
-  *
   * Top level trait representing an
   * abstract pipe that defines a transformation
   * between two data types, i.e. [[Source]] and [[Destination]]
-  */
+  * @author mandar2812 on 18/11/15.
+  *
+  * */
 trait DataPipe[-Source, +Destination] extends Serializable {
 
   self =>
