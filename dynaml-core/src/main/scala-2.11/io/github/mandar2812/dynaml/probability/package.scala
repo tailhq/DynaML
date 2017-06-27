@@ -43,10 +43,31 @@ package object probability {
   }
 
 
+  /**
+    * Calculate the entropy of a random variable
+    * */
   def entropy[I, Distr <: ContinuousDistr[I]](rv: ContinuousRVWithDistr[I, Distr]): Double = {
     val logp_x: RandomVariable[Double] = MeasurableFunction[I, Double, ContinuousRVWithDistr[I, Distr]](
       rv, DataPipe((sample: I) => -1d*rv.underlyingDist.logPdf(sample)))
     E(logp_x)
+  }
+
+
+  /**
+    * KL divergence:
+    * @param p The base random variable
+    * @param q The random variable used to approximate p
+    * @return The Kulback Leibler divergence KL(P||Q)
+    * */
+  def KL[I, Distr <: ContinuousDistr[I]](
+    p: ContinuousRVWithDistr[I, Distr])(
+    q: ContinuousRVWithDistr[I, Distr]): Double = {
+
+
+    val log_q_p: RandomVariable[Double] = MeasurableFunction[I, Double, ContinuousRVWithDistr[I, Distr]](
+      p, DataPipe((sample: I) => p.underlyingDist.logPdf(sample)-q.underlyingDist.logPdf(sample)))
+
+    E(log_q_p)
   }
 
 
