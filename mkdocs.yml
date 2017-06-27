@@ -118,7 +118,7 @@ extra_javascript:
   - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
 google_analytics: ['UA-59996358-2', 'transcendent-ai-labs.github.io/DynaML/']
 extra:
-  #logo: 'images/dynaml_logo3.png'
+  logo: 'images/dynaml_logo3_small.png'
   disqus: 'dynaml'
   palette:
     primary: 'teal'
