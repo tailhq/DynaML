@@ -51,10 +51,20 @@ abstract class BSplineGenerator extends MetaPipe21[Int, Int, Double, Double] {
   }
 }
 
+/**
+  * The [[BSplineGenerator]] companion object has convenience methods for
+  * creating arbitrary b-spline generators from knot sequences.
+  * */
 object BSplineGenerator {
 
+  /**
+    * Create a b-spline generator from a supplied sequence of knots.
+    * @param knots A sequence of knots
+    * @param isSorted Set to true if the sequence is already sorted (defaults to false).
+    * @return a [[BSplineGenerator]] instance.
+    * */
   def apply(knots: Seq[Double], isSorted: Boolean = false) = {
-    val sorted_knots = knots.sorted
+    val sorted_knots = if (isSorted) knots else knots.sorted
 
     new BSplineGenerator {
       override val knot = (i: Int) =>
@@ -64,21 +74,42 @@ object BSplineGenerator {
     }
   }
 
+  /**
+    * Create a b-spline generator from a
+    * bi-infinite sequence of knots (specified as a function)
+    *
+    * @param knotFunction A function from [[Int]] to [[Double]] which outputs
+    *                     the knot for any index.
+    * @return a [[BSplineGenerator]] instance.
+    * */
   def apply(knotFunction: (Int) => Double) = new BSplineGenerator {
     override val knot = knotFunction
   }
 
+  /**
+    * Create a b-spline generator from a
+    * bi-infinite sequence of knots (specified as a [[DataPipe]])
+    *
+    * @param knotFunction A [[DataPipe]] from [[Int]] to [[Double]] which outputs
+    *                     the knot for any index.
+    * @return a [[BSplineGenerator]] instance.
+    * */
   def apply(knotFunction: DataPipe[Int, Double]) = new BSplineGenerator {
     override val knot = knotFunction.run _
   }
 
 }
 
-
+/**
+  * Cardinal B-Splines have knots as the sequence of integers.
+  * */
 object CardinalBSplineGenerator extends BSplineGenerator {
   override val knot = (i: Int) => i.toDouble
 }
 
+/**
+  * Bernstein B-Splines have knots as (.....0011....)
+  * */
 object BernsteinSplineGenerator extends BSplineGenerator {
   override val knot = (i: Int) => if(i <= 0) 0d else 1d
 }
