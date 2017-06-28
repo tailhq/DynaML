@@ -43,18 +43,18 @@ To include DynaML in your maven JVM project edit your ```pom.xml``` file as foll
 
 ```xml
 <repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
+  <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+  </repository>
 </repositories>
 ```
 
 ```xml
 <dependency>
-    <groupId>com.github.transcendent-ai-labs</groupId>
-    <artifactId>DynaML</artifactId>
-    <version>v1.4</version>
+  <groupId>com.github.transcendent-ai-labs</groupId>
+  <artifactId>DynaML</artifactId>
+  <version>v1.4</version>
 </dependency>
 ```
 
