@@ -7,13 +7,10 @@
 Aim
 ============
 
-DynaML is a scala library/repl for implementing and working with general Machine Learning models. Machine Learning/AI applications make heavy use of various entities such as graphs, vectors, matrices etc as well as classes of mathematical models which deal with broadly three kinds of tasks, prediction, classification and clustering.
-
-The aim is to build a robust set of abstract classes and interfaces, which can be extended easily to implement advanced models for small and large scale applications.
-
-But the library can also be used as an educational/research tool for data analysis.
+DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows. It can also be used as an educational/research tool for data analysis.
 
 Currently DynaML supports.
+
 * Regularized Ordinary Least Squares
 * Logistic and Probit Models for binary classification
 * Regression and Classification with kernel based Dual LS-SVM
@@ -61,8 +58,8 @@ To include DynaML in your maven JVM project edit your ```pom.xml``` file as foll
 for sbt projects edit your `build.sbt` (see [JitPack](https://jitpack.io/#transcendent-ai-labs/DynaML) for more details)
 
 ```scala
-    resolvers += "jitpack" at "https://jitpack.io"
-    libraryDependencies += "com.github.transcendent-ai-labs" % "DynaML" % version
+resolvers += "jitpack" at "https://jitpack.io"
+libraryDependencies += "com.github.transcendent-ai-labs" % "DynaML" % version
 ```
 
 
@@ -72,7 +69,7 @@ Installation
 
 Platform Compatibility
 ----------------------
-Currently DynaML installs and runs on *nix platforms, though it is possible to build the project on windows, running the generated .bat file might not work and one would need to resort to using the `java -jar` command.
+DynaML installs and runs on *nix platforms, though it is possible to build the project on windows, running the generated .bat file might not work and one would need to resort to using the `java -jar` command.
 
 Pre-requisites
 -------------
