@@ -135,6 +135,18 @@ object DynaMLPipe {
   val trimLines = StreamDataPipe((s: String) => s.trim())
 
   /**
+    * Generate a numeric range by dividing an interval into bins.
+    * */
+  val numeric_range: MetaPipe21[Double, Double, Int, Seq[Double]] = MetaPipe21(
+    (lower: Double, upper: Double) => (bins: Int) =>
+      Seq.tabulate[Double](bins+1)(i =>
+        if(i == 0) lower
+        else if(i == bins) upper
+        else lower + i*(upper-lower)/bins
+      )
+  )
+
+  /**
     * This pipe assumes its input to be of the form
     * "YYYY,Day,Hour,Value"
     *
