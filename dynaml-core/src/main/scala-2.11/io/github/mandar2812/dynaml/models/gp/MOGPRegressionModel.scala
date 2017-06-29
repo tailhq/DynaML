@@ -7,12 +7,14 @@ import io.github.mandar2812.dynaml.probability.distributions.MatrixNormal
 import org.apache.log4j.Logger
 
 /**
-  * @author mandar2812 date: 19/7/16.
+  * <h3>Multi-Output GP Regression</h3>
   *
   * Abstract implementation of multi-output gaussian process
   * as outlined in Lawrence et. al 2012 on arxiv
   *
   * @tparam I The index set of the GP.
+  * @author mandar2812 date: 19/7/16.
+  *
   * */
 class MOGPRegressionModel[I](
   cov: LocalScalarKernel[(I, Int)],

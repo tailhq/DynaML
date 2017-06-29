@@ -24,13 +24,14 @@ import io.github.mandar2812.dynaml.analysis.InnerProductPV
 import io.github.mandar2812.dynaml.models.GenContinuousMixtureModel
 import io.github.mandar2812.dynaml.probability.MultGaussianPRV
 import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariateGaussian
-import org.apache.log4j.Logger
 import spire.algebra.VectorSpace
 
 import scala.reflect.ClassTag
 
 /**
-  * Represents a multinomial mixture of GP models
+  * <h3>GP Mixtures</h3>
+  *
+  * Represents a multinomial mixture of Gaussian Process regression models
   * @tparam I The index set (input domain) over which each component GP is
   *           defined.
   *

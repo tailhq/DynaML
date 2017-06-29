@@ -35,6 +35,8 @@ import org.apache.log4j.Logger
 import scala.reflect.ClassTag
 
 /**
+  * <h3>Gaussian Process Regression</h3>
+  *
   * Single-Output Gaussian Process Regression Model
   * Performs gp/spline smoothing/regression with
   * vector inputs and a singular scalar output.
