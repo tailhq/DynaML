@@ -7,8 +7,10 @@ import spire.algebra.{Field, InnerProductSpace}
 import io.github.mandar2812.dynaml.utils._
 
 /**
+  * <h3>Matern Half Integer Covariance Family</h3>
+  *
   * Implementation of the half integer Matern
-  * covariance function
+  * covariance function, for arbitrary domains.
   *
   * @author mandar2812 date: 27/01/2017.
   *
@@ -87,9 +89,10 @@ class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
   *
   * */
 abstract class GenericMaternARDKernel[T](private var l: T, private var p: Int = 3)(
-  implicit evInner: InnerProductSpace[T, Double], evField: Field[T])
-  extends StationaryKernel[T, Double, DenseMatrix[Double]]
-    with LocalScalarKernel[T] with Serializable { self =>
+  implicit evInner: InnerProductSpace[T, Double], evField: Field[T]) extends
+  StationaryKernel[T, Double, DenseMatrix[Double]] with
+  LocalScalarKernel[T] with
+  Serializable { self =>
 
   blocked_hyper_parameters = List("p")
 

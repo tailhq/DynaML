@@ -18,7 +18,8 @@ import io.github.mandar2812.dynaml.pipes.Encoder
   *            a [[Map]] to tuple of [[T]], implemented as an [[Encoder]]
   *
   * */
-class GaussianSpectralKernel[T](center: T, scale: T, enc: Encoder[Map[String, Double], (T, T)])(
+class GaussianSpectralKernel[T](
+  center: T, scale: T, enc: Encoder[Map[String, Double], (T, T)])(
   implicit field: Field[T], innerProd: InnerProductSpace[T, Double]) extends
   StationaryKernel[T, Double, DenseMatrix[Double]] with
   LocalScalarKernel[T] {
