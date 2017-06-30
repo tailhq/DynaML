@@ -18,10 +18,9 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.kernels
 
-import spire.algebra.Field
+import spire.algebra.{Field, NRoot, NormedVectorSpace}
 import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.pipes.Encoder
-import spire.algebra.NormedVectorSpace
 
 /**
   * <h3>Cubic Spline Covariance</h3>
@@ -59,7 +58,7 @@ class CubicSplineKernel[I](theta: Double)(
 
     Map("theta" -> {
       if(d < th/2d) 12d*d*d/math.pow(th, 3) - 18d*d*d*d/math.pow(th, 4)
-      else if(d >= th/2d && d < th) -6d*math.pow(1d - dth, 2d)*d
+      else if(d >= th/2d && d < th) 6d*math.pow(1d - dth, 2d)*d/(th*th)
       else 0d
     })
   }
@@ -83,7 +82,7 @@ class CubicSplineKernel[I](theta: Double)(
   * */
 abstract class CubicSplineARDKernel[I](
   theta: I, enc: Encoder[Map[String, Double], I])(
-  implicit f: Field[I], n: NormedVectorSpace[I, Double]) extends
+  implicit f: Field[I] with NRoot[I], n: NormedVectorSpace[I, Double]) extends
   StationaryKernel[I, Double, DenseMatrix[Double]] with
   LocalScalarKernel[I] {
 
@@ -91,32 +90,43 @@ abstract class CubicSplineARDKernel[I](
 
   state = parameter_encoder.i(theta)
 
-  override val hyper_parameters = state.keys
+  override val hyper_parameters = state.keys.toList
 
   override def evalAt(config: Map[String, Double])(x: I) = {
-    val d = n.norm(x)
     val th = parameter_encoder(config)
-    val dth = n.norm(f.div(x, th))
 
-    if(dth < 0.5) 1 - 6d*dth*dth + 6d*dth*dth*dth
-    else if(dth >= 0.5 && d < 1d) 2d*math.pow(1d - dth, 3d)
+    val sqrt_th = f.sqrt(th)
+
+    val r = n.norm(f.div(x, sqrt_th))
+
+    if(r < 0.5) 1 - 6d*r*r + 6d*r*r*r
+    else if(r >= 0.5 && r < 1d) 2d*math.pow(1d - r, 3d)
     else 0d
   }
 
-  /*
   override def gradientAt(config: Map[String, Double])(x: I, y: I) = {
     val d = f.minus(x,y)
     val th = parameter_encoder(config)
-    val dth = n.norm(f.div(d, th))
 
-    state.map(th => {
+    val sqrt_th = f.sqrt(th)
+
+    val r = n.norm(f.div(d, sqrt_th))
+
+    val d_map = parameter_encoder.i(d)
+
+    val drBydth = config.map(kv => {
+      val (theta_i_key, theta_i) = kv
+      (theta_i_key, -0.5*math.pow(d_map(theta_i_key), 2)/(math.pow(theta_i, 2)*r))
+    })
+
+    drBydth.map(th => {
       val (t, v) = th
       (t,
-        if(dth < 0.5) 12d*dth*d/math.pow(th, 3) - 18d*d*d*d/math.pow(th, 4)
-        else if(dth >= 0.5 && d < 1d) -6d*math.pow(1d - dth, 2d)*d
+        if(r < 0.5) 18d*math.pow(r, 2)*v - 12d*r*v
+        else if(r >= 0.5 && r < 1d) -6d*math.pow(1d - r, 2d)*v
         else 0d)
     })
-  }*/
+  }
 }
 
 object CubicSplineARDKernel {
