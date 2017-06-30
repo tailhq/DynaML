@@ -8,6 +8,7 @@ import io.github.mandar2812.dynaml.analysis.implicits._
 import io.github.mandar2812.dynaml.optimization.GPMixtureMachine
 import io.github.mandar2812.dynaml.pipes.Encoder
 import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
+import spire.implicits._
 
 val rbfc = new RBFCovFunc(1.5)
 
@@ -30,9 +31,11 @@ val sgp_hyp_prior = hyp_prior ++ Map(
   "skewness" -> RandomVariable(UnivariateGaussian(0.0, 1.0)))
 
 val gsmKernel = GaussianSpectralKernel[Double](3.5, 2.0, encoder)
+val cubsplineKernel = new CubicSplineKernel[Double](2.0)
+
 val n = new MAKernel(0.8)
 
-val gp_prior = new LinearTrendGaussianPrior[Double](gsmKernel, n, trendEncoder, 0.0, 0.0)
+val gp_prior = new LinearTrendGaussianPrior[Double](cubsplineKernel, n, trendEncoder, 0.0, 0.0)
 gp_prior.hyperPrior_(hyp_prior)
 
 val sgp_prior = new LinearTrendESGPrior[Double](rbfc, n, trendEncoder, 0.75, 0.1, 0.0, 0.0)
