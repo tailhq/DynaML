@@ -21,6 +21,10 @@ package io.github.mandar2812.dynaml.kernels
 import spire.algebra.Field
 
 /**
+  * <h3>Stationary Covariance Functions</h3>
+  *
+  * C(x,y) = C<sub>s</sub>(||x-y||)
+  *
   * An abstract representation of stationary kernel functions,
   * this requires an implicit variable which represents how addition, subtraction etc
   * are carried out for the input domain [[T]]
