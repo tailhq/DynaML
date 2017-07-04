@@ -29,19 +29,18 @@ import fastparse.utils.Compat.Context
   */
 class DynaMLRepl(input: InputStream,
                  output: OutputStream,
-                 info: OutputStream,
                  error: OutputStream,
                  storage: Storage,
-                 defaultPredef: String,
-                 mainPredef: String,
+                 basePredefs: Seq[PredefInfo],
+                 customPredefs: Seq[PredefInfo],
                  wd: ammonite.ops.Path,
                  welcomeBanner: Option[String],
                  replArgs: IndexedSeq[Bind[_]] = Vector.empty,
                  initialColors: Colors = Colors.Default,
                  remoteLogger: Option[RemoteLogger]) extends
   Repl(
-    input, output, info, error, storage,
-    defaultPredef, mainPredef, wd, welcomeBanner,
+    input, output, error, storage,
+    basePredefs, customPredefs, wd, welcomeBanner,
     replArgs, initialColors, remoteLogger) {
 
   override val prompt = Ref("DynaML>")
@@ -147,8 +146,9 @@ object Cli{
                       (implicit val reader: scopt.Read[V]){
     def runAction(t: T, s: String) = action(t, reader.reads(s))
   }
-  case class Config(predef: String = "",
+  case class Config(predefCode: String = "",
                     defaultPredef: Boolean = true,
+                    homePredef: Boolean = true,
                     storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
                     wd: Path = ammonite.ops.pwd,
                     welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
@@ -158,23 +158,17 @@ object Cli{
                     code: Option[String] = None,
                     home: Path = Defaults.ammoniteHome,
                     predefFile: Option[Path] = None,
-                    help: Boolean = false)
+                    help: Boolean = false,
+                    colored: Option[Boolean] = None)
 
 
   import Scripts.pathScoptRead
 
   val genericSignature = Seq(
     Arg[Config, String](
-      "predef", Some('p'),
+      "predef-code", None,
       "Any commands you want to execute at the start of the REPL session",
-      (c, v) => c.copy(predef = v)
-    ),
-    Arg[Config, Unit](
-      "no-default-predef", None,
-      """Disable the default predef and run Ammonite with the minimal predef
-        |possible
-        |""".stripMargin,
-      (c, v) => c.copy(defaultPredef = false)
+      (c, v) => c.copy(predefCode = v)
     ),
 
     Arg[Config, String](
@@ -188,11 +182,28 @@ object Cli{
       (c, v) => c.copy(home = v)
     ),
     Arg[Config, Path](
-      "predef-file", Some('f'),
+      "predef", Some('p'),
       """Lets you load your predef from a custom location, rather than the
         |default location in your Ammonite home""".stripMargin,
       (c, v) => c.copy(predefFile = Some(v))
     ),
+    Arg[Config, Unit](
+      "no-home-predef", None,
+      """Disables the default behavior of loading predef files from your
+        |~/.ammonite/predef.sc, predefScript.sc, or predefShared.sc. You can
+        |choose an additional predef to use using `--predef
+        |""".stripMargin,
+      (c, v) => c.copy(homePredef = false)
+    ),
+
+    Arg[Config, Unit](
+      "no-default-predef", None,
+      """Disable the default predef and run Ammonite with the minimal predef
+        |possible
+        |""".stripMargin,
+      (c, v) => c.copy(defaultPredef = false)
+    ),
+
     Arg[Config, Unit](
       "silent", Some('s'),
       """Make ivy logs go silent instead of printing though failures will
@@ -203,9 +214,14 @@ object Cli{
       "help", None,
       """Print this message""".stripMargin,
       (c, v) => c.copy(help = true)
-    )
-  )
-  val scriptSignature = Seq(
+    ),
+    Arg[Config, Boolean](
+      "color", None,
+      """Enable or disable colored output; by default colors are enabled
+        |in both REPL and scripts if the console is interactive, and disabled
+        |otherwise""".stripMargin,
+      (c, v) => c.copy(colored = Some(v))
+    ),
     Arg[Config, Unit](
       "watch", Some('w'),
       "Watch and re-run your scripts when they change",
@@ -228,7 +244,7 @@ object Cli{
 
   )
 
-  val ammoniteArgSignature = genericSignature ++ scriptSignature ++ replSignature
+  val ammoniteArgSignature = genericSignature ++ replSignature
 
   def showArg(arg: Arg[_, _]) =
     "  " + arg.shortName.fold("")("-" + _ + ", ") + "--" + arg.name
@@ -237,7 +253,7 @@ object Cli{
 
     for(arg <- args) yield {
       showArg(arg).padTo(leftMargin, ' ').mkString +
-        arg.doc.lines.mkString("\n" + " " * leftMargin)
+        arg.doc.lines.mkString(Util.newLine + " " * leftMargin)
     }
   }
   def ammoniteHelp = {
@@ -247,19 +263,16 @@ object Cli{
     s"""Ammonite REPL & Script-Runner, ${ammonite.Constants.version}
        |usage: amm [ammonite-options] [script-file [script-options]]
        |
-       |${formatBlock(genericSignature, leftMargin).mkString("\n")}
+       |${formatBlock(genericSignature, leftMargin).mkString(Util.newLine)}
        |
        |REPL-specific args:
-       |${formatBlock(replSignature, leftMargin).mkString("\n")}
-       |
-       |Script-specific args:
-       |${formatBlock(scriptSignature, leftMargin).mkString("\n")}
+       |${formatBlock(replSignature, leftMargin).mkString(Util.newLine)}
     """.stripMargin
   }
 
   def groupArgs[T](flatArgs: List[String],
                    args: Seq[Arg[T, _]],
-                   initial: T): Either[(Boolean, String), (T, List[String])] = {
+                   initial: T): Either[String, (T, List[String])] = {
 
     val argsMap0: Seq[(String, Arg[T, _])] = args
       .flatMap{x => Seq(x.name -> x) ++ x.shortName.map(_.toString -> x)}
@@ -267,7 +280,7 @@ object Cli{
     val argsMap = argsMap0.toMap
 
     @tailrec def rec(keywordTokens: List[String],
-                     current: T): Either[(Boolean, String), (T, List[String])] = {
+                     current: T): Either[String, (T, List[String])] = {
       keywordTokens match{
         case head :: rest if head(0) == '-' =>
           val realName = if(head(1) == '-') head.drop(2) else head.drop(1)
@@ -278,7 +291,7 @@ object Cli{
                 rec(rest, cliArg.runAction(current, ""))
               } else rest match{
                 case next :: rest2 => rec(rest2, cliArg.runAction(current, next))
-                case Nil => Left(false -> s"Expected a value after argument $head")
+                case Nil => Left(s"Expected a value after argument $head")
               }
 
             case None => Right((current, keywordTokens))
@@ -525,7 +538,6 @@ object Router{
     }
   }
 }
-
 class Router [C <: Context](val c: C) {
   import c.universe._
   def getValsOrMeths(curCls: Type): Iterable[MethodSymbol] = {
@@ -707,7 +719,7 @@ object Scripts {
 
     for{
       scriptTxt <- try Res.Success(Util.normalizeNewlines(read(path))) catch{
-        case e: NoSuchFileException => Res.Failure(Some(e), "Script file not found: " + path)
+        case e: NoSuchFileException => Res.Failure("Script file not found: " + path)
       }
       processed <- interp.processModule(
         scriptTxt,
@@ -736,7 +748,6 @@ object Scripts {
 
       routesCls =
       interp
-        .eval
         .evalClassloader
         .loadClass(routeClsName + "$$routes$")
 
@@ -747,7 +758,7 @@ object Scripts {
         .asInstanceOf[() => Seq[Router.EntryPoint]]
         .apply()
 
-      res <- interp.eval.withContextClassloader{
+      res <- Util.withContextClassloader(interp.evalClassloader){
         scriptMains match {
           // If there are no @main methods, there's nothing to do
           case Seq() =>
@@ -757,10 +768,7 @@ object Scripts {
                 scriptArgs.flatMap{case (a, b) => Seq(a) ++ b}.map(literalize(_))
                   .mkString(" ")
 
-              Res.Failure(
-                None,
-                "Script " + path.last + " does not take arguments: " + scriptArgString
-              )
+              Res.Failure("Script " + path.last + " does not take arguments: " + scriptArgString)
             }
 
           // If there's one @main method, we run it with all args
@@ -773,12 +781,10 @@ object Scripts {
             scriptArgs match{
               case Seq() =>
                 Res.Failure(
-                  None,
                   s"Need to specify a subcommand to call when running " + path.last + suffix
                 )
               case Seq((head, Some(_)), tail @ _*) =>
                 Res.Failure(
-                  None,
                   "To select a subcommand to run, you don't need --s." + Util.newLine +
                     s"Did you mean `${head.drop(2)}` instead of `$head`?"
                 )
@@ -786,7 +792,6 @@ object Scripts {
                 mainMethods.find(_.name == head) match{
                   case None =>
                     Res.Failure(
-                      None,
                       s"Unable to find subcommand: " + backtickWrap(head) + suffix
                     )
                   case Some(main) =>
@@ -835,8 +840,12 @@ object Scripts {
           val rhsPadded = rhs.lines.mkString(Util.newLine)
           s"$leftIndentStr  $lhsPadded  $rhsPadded"
         }
+    val mainDocSuffix = main.doc match{
+      case Some(d) => Util.newLine + leftIndentStr + softWrap(d, leftIndent, 80)
+      case None => ""
+    }
 
-    s"""$leftIndentStr${main.name}
+    s"""$leftIndentStr${main.name}${mainDocSuffix}
        |${argStrings.map(_ + Util.newLine).mkString}""".stripMargin
   }
   def runMainMethod(mainMethod: Router.EntryPoint,
@@ -859,10 +868,10 @@ object Scripts {
           else {
             val chunks =
               for (x <- missing)
-                yield "(--" + x.name + ": " + x.typeString + ")"
+                yield "--" + x.name + ": " + x.typeString
 
             val argumentsStr = pluralize("argument", chunks.length)
-            s"Missing $argumentsStr: ${chunks.mkString(", ")}" + Util.newLine
+            s"Missing $argumentsStr: (${chunks.mkString(", ")})" + Util.newLine
           }
 
 
@@ -895,7 +904,6 @@ object Scripts {
         }
 
         Res.Failure(
-          None,
           Util.normalizeNewlines(
             s"""$missingStr$unknownStr$duplicateStr$incompleteStr
                |Arguments provided did not match expected signature:
@@ -917,7 +925,6 @@ object Scripts {
         }
 
         Res.Failure(
-          None,
           Util.normalizeNewlines(
             s"""The following $argumentsStr failed to parse:
                |
@@ -983,5 +990,74 @@ object Scripts {
     * Additional [[scopt.Read]] instance to teach it how to read Ammonite paths
     */
   implicit def pathScoptRead: scopt.Read[Path] = scopt.Read.stringRead.map(Path(_, pwd))
+
+}
+
+/**
+  * Give Ammonite the ability to read (linux) system proxy environment variables
+  * and convert them into java proxy properties. Which allows Ammonite to work
+  * through proxy automatically, instead of setting `System.properties` manually.
+  *
+  * See issue 460.
+  *
+  * Parameter pattern:
+  * https://docs.oracle.com/javase/7/docs/api/java/net/doc-files/net-properties.html
+  *
+  * Created by cuz on 17-5-21.
+  */
+private[dynaml] object ProxyFromEnv {
+  private lazy val KeyPattern ="""([\w\d]+)_proxy""".r
+  private lazy val UrlPattern ="""([\w\d]+://)?(.+@)?([\w\d\.]+):(\d+)/?""".r
+
+  /**
+    * Get current proxy environment variables.
+    */
+  private def getEnvs =
+    sys.env.map { case (k, v) => (k.toLowerCase, v.toLowerCase) }
+      .filterKeys(_.endsWith("proxy"))
+
+  /**
+    * Convert single proxy environment variable to corresponding system proxy properties.
+    */
+  private def envToProps(env: (String, String)): Map[String, String] = env match {
+    case ("no_proxy", noProxySeq) =>
+      val converted = noProxySeq.split(""",""").mkString("|")
+      //https uses the same as http's. Ftp need not to be set here.
+      Map("http.nonProxyHosts" -> converted)
+
+    case (KeyPattern(proto), UrlPattern(_, cred, host, port)) =>
+      val propHost = s"$proto.proxyHost" -> host
+      val propPort = s"$proto.proxyPort" -> port
+      val propCred = if (cred.isDefined) {
+        val credPair = cred.dropRight(1).split(":")
+        val propUser = s"$proto.proxyUser" -> credPair.head
+        val propPassword = credPair.drop(1).map(s"$proto.proxyPassword" -> _)
+        Seq(propUser) ++ propPassword
+      } else Nil
+      Seq(propHost, propPort) ++ propCred toMap
+    case bad => Map.empty
+  }
+
+
+  /**
+    * Set system proxy properties from environment variables.
+    * Existing properties will not be overwritten.
+    */
+  def setPropProxyFromEnv(envs: Map[String, String] = this.getEnvs): Unit = {
+    val sysProps = sys.props
+    val proxyProps = envs.flatMap { env =>
+      val props = envToProps(env)
+      if (props.isEmpty) println(s"Warn: environment variable$env cannot be parsed.")
+      props
+    }.filter(p => !sysProps.exists(sp => sp._1 == p._1))
+    sysProps ++= proxyProps
+  }
+
+  /**
+    * helper implicit conversion: add isDefined method to String.
+    */
+  implicit private class StringIsDefined(s: String) {
+    def isDefined: Boolean = s != null && s.length > 0
+  }
 
 }
