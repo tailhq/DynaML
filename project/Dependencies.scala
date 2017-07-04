@@ -53,7 +53,6 @@ object Dependencies {
     "com.typesafe.akka" %% "akka-stream" % "2.4.6",
     "com.github.scopt" % "scopt_2.11" % "3.5.0",
     "com.nativelibs4java" % "scalaxy-streams_2.11" % "0.3.4" % "provided",
-    "com.diffplug.matsim" % "matfilerw" % "3.0.0",
     "org.scalameta" % "scalameta_2.11" % "1.4.0",
     "com.signalcollect" % "signal-collect_2.11" % "8.0.6",
     "com.signalcollect" % "triplerush_2.11" % "9.0.0"
@@ -115,5 +114,10 @@ object Dependencies {
     "com.sksamuel.scrimage" % "scrimage-core_2.11" % "2.1.7",
     "com.sksamuel.scrimage" % "scrimage-io-extra_2.11" % "2.1.7",
     "com.sksamuel.scrimage" % "scrimage-filters_2.11" % "2.1.7"
+  )
+
+  val dataFormatDependencies = Seq(
+    "info.folone" % "poi-scala_2.11" % "0.18",
+    "com.diffplug.matsim" % "matfilerw" % "3.0.0"
   )
 }

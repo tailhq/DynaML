@@ -34,7 +34,7 @@ lazy val commonSettings = Seq(
       tinkerpopDependency ++ notebookInterfaceDependency ++
       openMLDependency ++ rejinDependency ++
       rPackages ++ cppCompatDependencies ++
-      imageDependencies),
+      imageDependencies ++ dataFormatDependencies),
 
   scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
 )
