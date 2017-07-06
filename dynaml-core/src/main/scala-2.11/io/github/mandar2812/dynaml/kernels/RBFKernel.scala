@@ -24,10 +24,10 @@ import spire.algebra.{Field, InnerProductSpace}
 /**
  * RBF Kernels of the form
  * K(x,y) = exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
- */
+ * */
 
 class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
-  implicit ev: Field[T] with InnerProductSpace[T, Double])
+  implicit val ev: Field[T] with InnerProductSpace[T, Double])
   extends StationaryKernel[T, Double, DenseMatrix[Double]]
     with LocalScalarKernel[T] with Serializable { self =>
 
