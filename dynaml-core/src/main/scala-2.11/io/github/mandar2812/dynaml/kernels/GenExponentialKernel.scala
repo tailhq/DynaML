@@ -1,5 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
+import io.github.mandar2812.dynaml.pipes.DataPipe2
 import spire.algebra.MetricSpace
 
 /**
@@ -33,6 +34,8 @@ class GenExponentialKernel[I](
       "lengthScale" -> 0.5*d*c/(theta*theta)
     )
   }
+
+
 }
 
 object GenExponentialKernel {
@@ -57,6 +60,49 @@ object GenExponentialKernel {
 
     apply[I](sigma, theta)
 
+  }
+
+}
+
+/**
+  * An exponential family covariance function between space time coordinates
+  * */
+abstract class GenExpSpaceTimeKernel[I](
+  sigma: Double, theta_space: Double, theta_time: Double)(
+  val ds: DataPipe2[I, I, Double],
+  val dt: DataPipe2[Double, Double, Double]) extends
+  LocalScalarKernel[(I, Double)] {
+
+  override val hyper_parameters = List("sigma", "spaceScale", "timeScale")
+
+  override def evaluateAt(config: Map[String, Double])(x: (I, Double), y: (I, Double)) = {
+    val (sigma, thetas, thetat) = (
+      config("sigma"),
+      config("spaceScale"),
+      config("timeScale"))
+
+    val (xs, xt) = x
+    val (ys, yt) = y
+
+    val d = ds(xs, ys)
+    val t = dt(xt, yt)
+
+    sigma*sigma*math.exp(-0.5*((d/thetas) + (t/thetat)))
+  }
+
+  override def gradientAt(config: Map[String, Double])(x: (I, Double), y: (I, Double)) = {
+    val (sigma, thetas, thetat) = (config("sigma"), config("spaceScale"), config("timeScale"))
+    val (xs, xt) = x
+    val (ys, yt) = y
+    val d = ds(xs, ys)
+    val t = dt(xt, yt)
+    val c = evaluateAt(config)(x, y)
+
+    Map(
+      "sigma" -> 2*c/sigma,
+      "spaceScale" -> 0.5*d*c/(thetas*thetas),
+      "timeScale" -> 0.5*t*c/(thetat*thetat)
+    )
   }
 
 }
