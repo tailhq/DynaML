@@ -67,7 +67,7 @@ object GenExponentialKernel {
 /**
   * An exponential family covariance function between space time coordinates
   * */
-abstract class GenExpSpaceTimeKernel[I](
+class GenExpSpaceTimeKernel[I](
   sigma: Double, theta_space: Double, theta_time: Double)(
   val ds: DataPipe2[I, I, Double],
   val dt: DataPipe2[Double, Double, Double]) extends
