@@ -25,7 +25,7 @@ import breeze.numerics.{log, sqrt}
 import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, KroneckerProductKernel, LocalScalarKernel, SVMKernel}
+import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
@@ -228,6 +228,19 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
   override def gradEnergy(h: Map[String, Double]): Map[String, Double] =
     calculateGradEnergyPipe(h)(trainingData, trainingDataLabels)
 
+
+  protected def getCrossKernelMatrix[U <: Seq[I]](test: U) =
+    SVMKernel.crossPartitonedKernelMatrix(
+      trainingData, test,
+      _blockSize, _blockSize,
+      covariance.evaluate)
+
+  protected def getTestKernelMatrix[U <: Seq[I]](test: U) =
+    SVMKernel.buildPartitionedKernelMatrix(
+      test, test.length.toLong,
+      _blockSize, _blockSize,
+      covariance.evaluate)
+
   /**
    * Calculates posterior predictive distribution for
    * a particular set of test data points.
@@ -270,16 +283,11 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
     logger.info("---------------------------------------------------------------")
     logger.info("Calculating covariance matrix for test points")
-    val kernelTest = SVMKernel.buildPartitionedKernelMatrix(
-      test, test.length.toLong,
-      _blockSize, _blockSize, covariance.evaluate)
+    val kernelTest = getTestKernelMatrix(test)
 
     logger.info("---------------------------------------------------------------")
     logger.info("Calculating covariance matrix between training and test points")
-    val crossKernel = SVMKernel.crossPartitonedKernelMatrix(
-      trainingData, test,
-      _blockSize, _blockSize,
-      covariance.evaluate)
+    val crossKernel = getCrossKernelMatrix(test)
 
     //Calculate the predictive mean and co-variance
     val (postPredictiveMean, postPredictiveCovariance) =
