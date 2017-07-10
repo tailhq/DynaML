@@ -76,7 +76,7 @@ class GenExpSpaceTimeKernel[I](
   override val hyper_parameters = List("sigma", "spaceScale", "timeScale")
 
   override def evaluateAt(config: Map[String, Double])(x: (I, Double), y: (I, Double)) = {
-    val (sigma, thetas, thetat) = (
+    val (sigma, theta_s, theta_t) = (
       config("sigma"),
       config("spaceScale"),
       config("timeScale"))
@@ -87,11 +87,11 @@ class GenExpSpaceTimeKernel[I](
     val d = ds(xs, ys)
     val t = dt(xt, yt)
 
-    sigma*sigma*math.exp(-0.5*((d/thetas) + (t/thetat)))
+    sigma*sigma*math.exp(-0.5*((d/theta_s) + (t/theta_t)))
   }
 
   override def gradientAt(config: Map[String, Double])(x: (I, Double), y: (I, Double)) = {
-    val (sigma, thetas, thetat) = (config("sigma"), config("spaceScale"), config("timeScale"))
+    val (sigma, theta_s, theta_t) = (config("sigma"), config("spaceScale"), config("timeScale"))
     val (xs, xt) = x
     val (ys, yt) = y
     val d = ds(xs, ys)
@@ -100,8 +100,8 @@ class GenExpSpaceTimeKernel[I](
 
     Map(
       "sigma" -> 2*c/sigma,
-      "spaceScale" -> 0.5*d*c/(thetas*thetas),
-      "timeScale" -> 0.5*t*c/(thetat*thetat)
+      "spaceScale" -> 0.5*d*c/(theta_s*theta_s),
+      "timeScale" -> 0.5*t*c/(theta_t*theta_t)
     )
   }
 
