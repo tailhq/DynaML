@@ -4,23 +4,17 @@ package io.github.mandar2812.dynaml.kernels
   * Kernels for linear PDE operator equations.
   * @author mandar2812 date 07/07/2017.
   * */
-abstract class LinearPDEKernel[I] extends LocalScalarKernel[(I, Double)] {
-
-  type exIndexSet = (I, Double)
+trait LinearPDEKernel[I] extends LocalScalarKernel[(I, Double)] {
 
   val baseKernel: LocalScalarKernel[(I, Double)]
 
+  type exIndexSet = (I, Double)
+
   def invOperatorKernel: (exIndexSet, exIndexSet) => Double
 
-  val baseID = "base::"+baseKernel.toString.split("\\.").last
+  val baseID: String
 
-  val operator_hyper_parameters: List[String]
-
-  protected var operator_state: Map[String, Double]
-
-  override val hyper_parameters =
-    baseKernel.hyper_parameters.map(h => baseID+"/"+h) ++
-      operator_hyper_parameters
+  def _operator_hyper_parameters: List[String]
 
   override def setHyperParameters(h: Map[String, Double]) = {
     assert(
@@ -29,7 +23,7 @@ abstract class LinearPDEKernel[I] extends LocalScalarKernel[(I, Double)] {
 
     //Set the base kernel hyper-parameters
 
-    val base_kernel_state = h.filterKeys(_.contains(baseID)).map(c => (c._1.replace(baseID, ""), c._2))
+    val base_kernel_state = h.filterKeys(_.contains(baseID)).map(c => (c._1.replace(baseID, "").tail, c._2))
 
     baseKernel.setHyperParameters(base_kernel_state)
 
@@ -43,6 +37,6 @@ abstract class LinearPDEKernel[I] extends LocalScalarKernel[(I, Double)] {
   override def block(h: String*) = {
     super.block(h:_*)
     //Block parameters of base kernel
-    baseKernel.block(h.filter(_.contains(baseID)).map(c => c.replace(baseID, "")):_*)
+    baseKernel.block(h.filter(_.contains(baseID)).map(c => c.replace(baseID, "").tail):_*)
   }
 }

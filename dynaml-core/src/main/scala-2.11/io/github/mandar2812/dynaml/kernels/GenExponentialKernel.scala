@@ -75,6 +75,8 @@ class GenExpSpaceTimeKernel[I](
 
   override val hyper_parameters = List("sigma", "spaceScale", "timeScale")
 
+  state = Map("sigma" -> sigma, "spaceScale" -> theta_space, "timeScale" -> theta_time)
+
   override def evaluateAt(config: Map[String, Double])(x: (I, Double), y: (I, Double)) = {
     val (sigma, theta_s, theta_t) = (
       config("sigma"),
