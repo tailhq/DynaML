@@ -15,10 +15,13 @@ class HyperParameterMCMC[
 Model <: GloballyOptimizable,
 Distr <: ContinuousDistr[Double]](
   system: Model, hyper_prior: Map[String, Distr],
-  proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]])
-  extends RandomVariable[Map[String, Double]] {
+  proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]],
+  val burnIn: Long) extends
+  RandomVariable[Map[String, Double]] {
 
   val encoder: ConfigEncoding = ConfigEncoding(hyper_prior.keys.toList)
+
+  val initialState = encoder(system._current_state)
 
   implicit private val vector_field = VectorField(hyper_prior.size)
 
@@ -28,12 +31,11 @@ Distr <: ContinuousDistr[Double]](
     processed_prior.underlyingDist.logPdf(candidate) - system.energy(encoder.i(candidate))
   }
 
-  var burnIn = 0
-  var dropCount = 0
+  val dropCount = 0
 
   val metropolisHastings = GeneralMetropolisHastings(
     LikelihoodModel(logLikelihoodFunction), proposal.underlyingDist,
-    processed_prior.sample.run(), burnIn, dropCount)
+    initialState, burnIn, dropCount)
 
   val base_draw = DataPipe(() => metropolisHastings.draw())
 
@@ -46,7 +48,8 @@ object HyperParameterMCMC {
   Model <: GloballyOptimizable,
   Distr <: ContinuousDistr[Double]](
     system: Model, hyper_prior: Map[String, Distr],
-    proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]])
-  : HyperParameterMCMC[Model, Distr] = new HyperParameterMCMC(system, hyper_prior, proposal)
+    proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]],
+    burnIn: Long): HyperParameterMCMC[Model, Distr] =
+    new HyperParameterMCMC(system, hyper_prior, proposal, burnIn)
 
 }
