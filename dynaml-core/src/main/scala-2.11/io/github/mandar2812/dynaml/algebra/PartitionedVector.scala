@@ -18,11 +18,12 @@ import scala.collection.immutable.NumericRange
   * @author mandar2812 date 13/10/2016.
   *
   * */
-private[dynaml] class PartitionedVector(data: Stream[(Long, DenseVector[Double])],
-                                        num_rows: Long = -1L,
-                                        num_row_blocks: Long = -1L)
-  extends AbstractPartitionedVector[DenseVector[Double]](data, num_row_blocks)
-    with NumericOps[PartitionedVector] {
+class PartitionedVector(
+  data: Stream[(Long, DenseVector[Double])],
+  num_rows: Long = -1L,
+  num_row_blocks: Long = -1L) extends
+  AbstractPartitionedVector[DenseVector[Double]](data, num_row_blocks) with
+  NumericOps[PartitionedVector] {
 
   self =>
 

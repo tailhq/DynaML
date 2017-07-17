@@ -4,15 +4,17 @@ import breeze.linalg.{DenseVector, NumericOps, Transpose}
 import org.apache.spark.rdd.RDD
 
 /**
-  * @author mandar2812 date 13/10/2016.
   * A distributed row vector that is stored in blocks.
   * @param data The underlying [[RDD]] which should consist of
   *             block indices and a row vector containing
   *             all the elements in the said block.
-  */
-private[dynaml] class PartitionedDualVector(data: Stream[(Long, Transpose[DenseVector[Double]])],
-                                            num_cols: Long = -1L,
-                                            num_col_blocks: Long = -1L)
+  *
+  * @author mandar2812 date 13/10/2016.
+  *
+  * */
+class PartitionedDualVector(
+  data: Stream[(Long, Transpose[DenseVector[Double]])],
+  num_cols: Long = -1L, num_col_blocks: Long = -1L)
   extends NumericOps[PartitionedDualVector] {
 
   lazy val colBlocks = if(num_col_blocks == -1L) data.map(_._1).max else num_col_blocks
