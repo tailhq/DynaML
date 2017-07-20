@@ -107,7 +107,7 @@ package object utils {
       case x :: rest =>
         val mnew = m + (x - m)/(i+1).toDouble
         getStatsRec(rest, mnew,
-          s + (m:*m) - (mnew:*mnew) + ((x:*x) - s - (m:*m))/(i+1).toDouble,
+          s + (m*:*m) - (mnew*:*mnew) + ((x*:*x) - s - (m*:*m))/(i+1).toDouble,
           i + 1)
 
     }
