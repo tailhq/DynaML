@@ -72,18 +72,18 @@ import scala.annotation.tailrec
   *                    gets sent miscellaneous info messages that aren't strictly
   *                    part of the REPL or script's output
   */
-case class DynaML(predefCode: String = "",
-                predefFile: Option[Path] = None,
-                defaultPredef: Boolean = true,
-                storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
-                wd: Path = ammonite.ops.pwd,
-                welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
-                inputStream: InputStream = System.in,
-                outputStream: OutputStream = System.out,
-                errorStream: OutputStream = System.err,
-                verboseOutput: Boolean = true,
-                remoteLogging: Boolean = true,
-                colors: Colors = Colors.Default){
+case class DynaML(
+  predefCode: String = "", predefFile: Option[Path] = None,
+  defaultPredef: Boolean = true,
+  storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
+  wd: Path = ammonite.ops.pwd,
+  welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
+  inputStream: InputStream = System.in,
+  outputStream: OutputStream = System.out,
+  errorStream: OutputStream = System.err,
+  verboseOutput: Boolean = true,
+  remoteLogging: Boolean = true,
+  colors: Colors = Colors.Default){
 
   def loadedPredefFile = predefFile match{
     case Some(path) =>
