@@ -79,7 +79,8 @@ object HyperParameterMCMC {
 class AdaptiveHyperParameterMCMC[
 Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
   val system: Model, val hyper_prior: Map[String, Distr],
-  val burnIn: Long) extends RandomVariable[Map[String, Double]] {
+  val burnIn: Long, algoName: String = "Adaptive MCMC") extends
+  RandomVariable[Map[String, Double]] {
 
   val logger = Logger.getLogger(this.getClass)
 
@@ -87,15 +88,16 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
 
   val initialState = encoder(system._current_state)
 
-  private val dimensions = hyper_prior.size
+  protected val dimensions: Int = hyper_prior.size
 
-  implicit private val vector_field = VectorField(dimensions)
+  implicit protected val vector_field = VectorField(dimensions)
 
-  private val processed_prior = EncodedContDistrRV(getPriorMapDistr(hyper_prior), encoder)
+  protected val processed_prior = EncodedContDistrRV(getPriorMapDistr(hyper_prior), encoder)
 
-  private val logLikelihood = (candidate: DenseVector[Double]) => {
-    processed_prior.underlyingDist.logPdf(candidate) - system.energy(encoder.i(candidate))
-  }
+  protected val logLikelihood: (DenseVector[Double]) => Double =
+    (candidate: DenseVector[Double]) => {
+      processed_prior.underlyingDist.logPdf(candidate) - system.energy(encoder.i(candidate))
+    }
 
   val candidateDistributionPipe = DataPipe2(
     (mean: DenseVector[Double], covariance: DenseMatrix[Double]) => MultGaussianRV(mean, covariance)
@@ -103,23 +105,19 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
 
   protected val beta = 0.05
 
-  private var count: Long = 1L
+  protected var count: Long = 1L
 
-  private var sigma: DenseMatrix[Double] = initialState * initialState.t
+  protected var sigma: DenseMatrix[Double] = initialState * initialState.t
 
-  private var acceptedSamples: Long = 0L
+  protected var acceptedSamples: Long = 0L
 
-  private var mean: DenseVector[Double] = initialState
+  protected var mean: DenseVector[Double] = initialState
 
-  private var previous_sample: DenseVector[Double] = initialState
+  protected var previous_sample: DenseVector[Double] = initialState
 
-  private var previous_log_likelihood = logLikelihood(initialState)
+  protected var previous_log_likelihood = logLikelihood(initialState)
 
-  private val eye = DenseMatrix.eye[Double](dimensions)
-
-  cfor(0)(i => i< burnIn, i => i+1)(i => {
-    getNext()
-  })
+  protected val eye = DenseMatrix.eye[Double](dimensions)
 
   def _previous_sample = encoder.i(previous_sample)
 
@@ -129,22 +127,32 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
 
   def _count = count
 
-  logger.info("--------------------------------------")
-  logger.info("\tAdaptive MCMC")
-  logger.info("Initial Sample: \n")
-  pprint.pprintln(_previous_sample)
-  logger.info("Energy = "+previous_log_likelihood)
-  logger.info("--------------------------------------")
+  protected def initMessage(): Unit = {
+    logger.info("--------------------------------------")
+    logger.info("\t"+algoName)
+    logger.info("Initial Sample: \n")
+    pprint.pprintln(_previous_sample)
+    logger.info("Energy = "+previous_log_likelihood)
+    logger.info("--------------------------------------")
+  }
+
+  initMessage()
+
+  cfor(0)(i => i< burnIn, i => i+1)(i => {
+    getNext()
+  })
+
+  protected def getExplorationVar: DenseMatrix[Double] = {
+    val adj = count.toDouble/(count-1)
+    if(count <= 2*dimensions) eye*0.01/dimensions.toDouble
+    else (sigma*math.pow((1-beta)*2.38, 2)*adj/dimensions.toDouble) + (eye*math.pow(0.1*beta, 2)/dimensions.toDouble)
+  }
 
   protected def getNext(): DenseVector[Double] = {
 
-    val adj = count.toDouble/(count-1)
-    val explorationCov =
-      if(count <= 2*dimensions) eye*0.01/dimensions.toDouble
-      else (sigma*math.pow((1-beta)*2.38, 2)*adj/dimensions.toDouble) + (eye*math.pow(0.1*beta, 2)/dimensions.toDouble)
+    val explorationCov = getExplorationVar
 
     count += 1
-
 
     val candidate = candidateDistributionPipe(encoder(_previous_sample), explorationCov).draw
 
@@ -173,6 +181,13 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
       previous_sample
     }
 
+    updateMoments(x)
+
+    x
+  }
+
+  protected def updateMoments(x: DenseVector[Double]): Unit = {
+
     val m = mean
     val s = sigma
     val mnew = m + (x - m)/(count+1).toDouble
@@ -180,8 +195,6 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
 
     mean = mnew
     sigma = snew
-
-    x
   }
 
   /**
@@ -190,4 +203,21 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
     *
     **/
   override val sample = DataPipe(getNext _) > encoder.i
+}
+
+class HyperParameterSCAM[Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
+  override val system: Model,
+  override val hyper_prior: Map[String, Distr],
+  override val burnIn: Long) extends
+  AdaptiveHyperParameterMCMC[Model, Distr](
+    system, hyper_prior, burnIn, "Hyper-Parameter SCAM") {
+
+  override protected def getExplorationVar: DenseMatrix[Double] = {
+    val adj = count.toDouble/(count-1)
+    if(count <= 10) eye*25d
+    else sigma.mapPairs((k, v) => {
+      val (i,j) = k
+      if(i == j) (v*adj + 0.05)*2.4*2.4 else 0d
+    })
+  }
 }
