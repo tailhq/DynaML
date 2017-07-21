@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.probability.mcmc
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.analysis.VectorField
-import io.github.mandar2812.dynaml.optimization.{GlobalOptimizer, GloballyOptimizable}
+import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.utils.{ConfigEncoding, getPriorMapDistr}
@@ -31,6 +31,16 @@ import spire.implicits.cfor
 import scala.util.Random
 
 /**
+  * Implementation of the classic Markov Chain Monte Carlo algorithm,
+  * equipped with reversible Metropolis Hastings updates.
+  *
+  * @tparam Model Any type which implements the [[GloballyOptimizable]] trait
+  *               i.e. the [[GloballyOptimizable.energy()]] method.
+  * @tparam Distr A breeze distribution type for hyper-parameter priors.
+  * @param system The model whose hyper-parameters are to be sampled.
+  * @param hyper_prior A mean field prior measure over the [[system]] hyper-parameters.
+  *                    Represented as a [[Map]].
+  * @param proposal A distribution which is used to propose hyper-parameter updates.
   * @author mandar2812 date 24/05/2017.
   * */
 class HyperParameterMCMC[
@@ -76,6 +86,21 @@ object HyperParameterMCMC {
 
 }
 
+/**
+  * Adaptive Markov Chain Monte Carlo algorithm,
+  * equipped with reversible Metropolis Hastings updates.
+  *
+  * The proposal distribution is a multivariate gaussian whose
+  * variance is adjusted every iteration.
+  *
+  * @tparam Model Any type which implements the [[GloballyOptimizable]] trait
+  *               i.e. the [[GloballyOptimizable.energy()]] method.
+  * @tparam Distr A breeze distribution type for hyper-parameter priors.
+  * @param system The model whose hyper-parameters are to be sampled.
+  * @param hyper_prior A mean field prior measure over the [[system]] hyper-parameters.
+  *                    Represented as a [[Map]].
+  * @author mandar2812 date 19/07/2017.
+  * */
 class AdaptiveHyperParameterMCMC[
 Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
   val system: Model, val hyper_prior: Map[String, Distr],
@@ -205,6 +230,18 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
   override val sample = DataPipe(getNext _) > encoder.i
 }
 
+
+/**
+  * Implementation of the <i>Single Component Adaptive Metropolis</i> (SCAM) Algorithm
+  *
+  * @tparam Model Any type which implements the [[GloballyOptimizable]] trait
+  *               i.e. the [[GloballyOptimizable.energy()]] method.
+  * @tparam Distr A breeze distribution type for hyper-parameter priors.
+  * @param system The model whose hyper-parameters are to be sampled.
+  * @param hyper_prior A mean field prior measure over the [[system]] hyper-parameters.
+  *                    Represented as a [[Map]].
+  * @author mandar2812 date 20/05/2017.
+  * */
 class HyperParameterSCAM[Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
   override val system: Model,
   override val hyper_prior: Map[String, Distr],
