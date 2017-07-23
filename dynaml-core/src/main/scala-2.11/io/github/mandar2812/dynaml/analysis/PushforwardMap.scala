@@ -38,7 +38,7 @@ abstract class PushforwardMap[
 
   /**
     * Represents the decoding/inverse operation.
-    */
+    * */
   override val i: DifferentiableMap[Destination, Source, Jacobian]
 
   def ->[Distr1 <: ContinuousDistr[Source]](r: ContinuousRVWithDistr[Source, Distr1])

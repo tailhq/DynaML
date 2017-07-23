@@ -26,8 +26,31 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import scala.reflect.ClassTag
 
 /**
+  * <h3>GP Pipes</h3>
+  *
+  * A data pipe which can spawn a Gaussian Process regression model
+  * from a provided training data set.
+  *
+  * @tparam IndexSet Type of features of each data pattern
+  * @tparam Source Input data type
+  * @param pre A function which converts the input data
+  *            into a scala [[Seq]] of [[IndexSet]]
+  *            and [[Double]] pairs.
+  * @param cov The covariance function of the resultant GP,
+  *            as an instance of [[LocalScalarKernel]] defined on
+  *            the [[IndexSet]] type.
+  * @param n The measurement noise of the output signal/data, also
+  *          as in instance of [[LocalScalarKernel]]
+  * @param order Size of the auto-regressive time lag of the output signal
+  *              that is used to create the training data. Ignore if not working
+  *              with GP-NAR or GP-NARX models.
+  * @param ex Size of the auto-regressive time lag of the exogenous inputs
+  *           that is used to create the training data. Ignore if not working
+  *           with GP-NARX models.
+  * @param meanFunc The trend function of the resulting GP model, as an instance
+  *                 of [[DataPipe]].
   * @author mandar2812 on 15/6/16.
-  */
+  * */
 class GPRegressionPipe[Source, IndexSet: ClassTag](
   pre: (Source) => Seq[(IndexSet, Double)],
   cov: LocalScalarKernel[IndexSet],
@@ -49,6 +72,10 @@ class GPRegressionPipe[Source, IndexSet: ClassTag](
 
 
 object GPRegressionPipe {
+
+  /**
+    * Convenience method for creating [[GPRegressionPipe]] instances
+    * */
   def apply[Source, IndexSet: ClassTag](
     pre: (Source) => Seq[(IndexSet, Double)],
     cov: LocalScalarKernel[IndexSet], n: LocalScalarKernel[IndexSet],
@@ -57,6 +84,19 @@ object GPRegressionPipe {
     new GPRegressionPipe[Source, IndexSet](pre, cov, n, order, ex, meanFunc)
 }
 
+/**
+  * <h3>GP Pipes: Alternate</h3>
+  * A [[DataPipe2]] which takes a data set,
+  * a trend and outputs a GP Regression model.
+  *
+  * @tparam IndexSet Type of features of each data pattern
+  * @param cov The covariance function of the resultant GP,
+  *            as an instance of [[LocalScalarKernel]] defined on
+  *            the [[IndexSet]] type.
+  * @param n The measurement noise of the output signal/data, also
+  *          as in instance of [[LocalScalarKernel]]
+  *
+  * */
 class GPRegressionPipe2[IndexSet: ClassTag](
   cov: LocalScalarKernel[IndexSet],
   n: LocalScalarKernel[IndexSet]) extends DataPipe2[
@@ -65,12 +105,16 @@ class GPRegressionPipe2[IndexSet: ClassTag](
 
   implicit val transform = identityPipe[Seq[(IndexSet, Double)]]
 
-  override def run(data1: Seq[(IndexSet, Double)], data2: DataPipe[IndexSet, Double]) =
-    AbstractGPRegressionModel(cov, n, data2)(data1, data1.length)
+  override def run(data: Seq[(IndexSet, Double)], trend: DataPipe[IndexSet, Double]) =
+    AbstractGPRegressionModel(cov, n, trend)(data, data.length)
 }
+
 
 object GPRegressionPipe2 {
 
+  /**
+    * Convenience method for creating [[GPRegressionPipe2]] instances
+    * */
   def apply[IndexSet: ClassTag](
     cov: LocalScalarKernel[IndexSet],
     n: LocalScalarKernel[IndexSet]): GPRegressionPipe2[IndexSet] =
