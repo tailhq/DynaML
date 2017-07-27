@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.{DenseMatrix, det, diag}
+import io.github.mandar2812.dynaml.DynaMLPipe.identityPipe
 import io.github.mandar2812.dynaml.algebra.{PartitionedMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.analysis.{DifferentiableMap, PartitionedVectorField, PushforwardMap}
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
@@ -28,6 +29,8 @@ import io.github.mandar2812.dynaml.probability.distributions.BlockedMultiVariate
 import io.github.mandar2812.dynaml.probability.{E, MeasurableDistrRV}
 import io.github.mandar2812.dynaml.utils
 import org.apache.spark.annotation.Experimental
+import spire.algebra.Field
+import spire.implicits._
 
 import scala.reflect.ClassTag
 
@@ -39,8 +42,9 @@ import scala.reflect.ClassTag
   *
   * */
 @Experimental
-class WarpedGPModel[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
-  warpingFunc: PushforwardMap[Double, Double, Double])(
+class WarpedGPModel[T, I:ClassTag](
+  val p: AbstractGPRegressionModel[T, I])(
+  val warpingFunc: PushforwardMap[Double, Double, Double])(
   implicit pf: PartitionedVectorField,
   transform: Encoder[T, Seq[(I, Double)]])
   extends ContinuousProcessModel[
@@ -166,3 +170,22 @@ class WarpedGPModel[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
     **/
   override def predict(point: I) = warpingFunc(underlyingProcess.predictionWithErrorBars(Seq(point), 1).head._2)
 }
+
+/**
+  * <h3>Log Gaussian Processes</h3>
+  *
+  * A stochastic process whose logarithm is a gaussian process.
+  *
+  * @author mandar2812 date 27/07/17
+  * */
+class LogGaussianProcess[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
+  implicit pf: PartitionedVectorField,
+  transform: Encoder[T, Seq[(I, Double)]]) extends
+  WarpedGPModel[T, I](p)(
+    PushforwardMap(
+      DataPipe((x: Double) => math.exp(x)),
+      DifferentiableMap(
+        (x: Double) => math.log(x),
+        (x: Double) => 1.0/x))(
+      identityPipe[Double], Field[Double])
+  )
