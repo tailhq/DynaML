@@ -20,9 +20,6 @@ release.properties
 data/results*
 data/dst_*.txt
 _site
-data/MagicGamma.csv
-data/Adult.csv
-data/ForestCover.csv
 data/*Res.csv
 Gemfile.lock
 index-*.html
