@@ -43,7 +43,7 @@ import scala.reflect.ClassTag
   * */
 @Experimental
 class WarpedGPModel[T, I:ClassTag](
-  val p: AbstractGPRegressionModel[T, I])(
+  p: AbstractGPRegressionModel[T, I])(
   val warpingFunc: PushforwardMap[Double, Double, Double])(
   implicit pf: PartitionedVectorField,
   transform: Encoder[T, Seq[(I, Double)]])
