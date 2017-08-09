@@ -61,9 +61,7 @@ val proposal = MultGaussianRV(
 
 val mcmc = HyperParameterMCMC[model.type, ContinuousDistr[Double]](
   model, model._hyper_parameters.map(h => (h, new Gamma(1.0, 2.0))).toMap,
-  proposal)
-
-mcmc.burnIn = 50
+  proposal, 75)
 
 val samples = mcmc.iid(1000).draw
 
