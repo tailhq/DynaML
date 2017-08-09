@@ -18,9 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.modelpipe
 
+import breeze.linalg._
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
-import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
+import io.github.mandar2812.dynaml.probability.MultGaussianRV
+import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GPBasisFuncRegressionModel}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 
 import scala.reflect.ClassTag
@@ -70,6 +72,55 @@ class GPRegressionPipe[Source, IndexSet: ClassTag](
 
 }
 
+/**
+  * <h3>GP Basis Function Pipe</h3>
+  *
+  * A data pipe which can spawn a Gaussian Process Basis Function
+  * regression model from a provided training data set.
+  *
+  * @tparam IndexSet Type of features of each data pattern
+  * @tparam Source Input data type
+  * @param pre A function which converts the input data
+  *            into a scala [[Seq]] of [[IndexSet]]
+  *            and [[Double]] pairs.
+  * @param cov The covariance function of the resultant GP,
+  *            as an instance of [[LocalScalarKernel]] defined on
+  *            the [[IndexSet]] type.
+  * @param n The measurement noise of the output signal/data, also
+  *          as in instance of [[LocalScalarKernel]]
+  * @param order Size of the auto-regressive time lag of the output signal
+  *              that is used to create the training data. Ignore if not working
+  *              with GP-NAR or GP-NARX models.
+  * @param ex Size of the auto-regressive time lag of the exogenous inputs
+  *           that is used to create the training data. Ignore if not working
+  *           with GP-NARX models.
+  * 
+  * @param basisFunc A basis function representation for the input features,
+  *                  represented as a [[DataPipe]].
+  *
+  * @param basis_param_prior A Gaussian prior on the basis function trend coefficients.
+  *
+  * @author mandar2812 date 2017/08/09
+  * */
+class GPBasisFuncRegressionPipe[Source, IndexSet: ClassTag](
+  pre: (Source) => Seq[(IndexSet, Double)],
+  cov: LocalScalarKernel[IndexSet],
+  n: LocalScalarKernel[IndexSet],
+  basisFunc: DataPipe[IndexSet, DenseVector[Double]],
+  basis_param_prior: MultGaussianRV)
+  extends ModelPipe[
+    Source, Seq[(IndexSet, Double)], IndexSet, Double,
+    GPBasisFuncRegressionModel[Seq[(IndexSet, Double)], IndexSet]] {
+
+  override val preProcess: (Source) => Seq[(IndexSet, Double)] = pre
+
+  implicit val transform = identityPipe[Seq[(IndexSet, Double)]]
+
+  override def run(data: Source): GPBasisFuncRegressionModel[Seq[(IndexSet, Double)], IndexSet] =
+    AbstractGPRegressionModel(cov, n, basisFunc, basis_param_prior)(preProcess(data), 0)
+
+}
+
 
 object GPRegressionPipe {
 
@@ -83,6 +134,7 @@ object GPRegressionPipe {
     meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0)) =
     new GPRegressionPipe[Source, IndexSet](pre, cov, n, order, ex, meanFunc)
 }
+
 
 /**
   * <h3>GP Pipes: Alternate</h3>

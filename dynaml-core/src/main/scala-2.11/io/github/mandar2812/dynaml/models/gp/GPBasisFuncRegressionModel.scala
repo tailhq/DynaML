@@ -69,7 +69,8 @@ import scala.reflect.ClassTag
   *                  represented as a [[DataPipe]].
   *
   * @param basis_param_prior A Gaussian prior on the basis function trend coefficients.
-  * 
+  *
+  * @author mandar2812 date 2017/08/09
   * */
 abstract class GPBasisFuncRegressionModel[T, I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],

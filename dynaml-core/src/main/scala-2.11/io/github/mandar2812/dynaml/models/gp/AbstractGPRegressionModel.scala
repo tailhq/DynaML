@@ -29,7 +29,7 @@ import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
-import io.github.mandar2812.dynaml.probability.MultGaussianPRV
+import io.github.mandar2812.dynaml.probability.{MultGaussianPRV, MultGaussianRV}
 import org.apache.log4j.Logger
 
 import scala.reflect.ClassTag
@@ -510,6 +510,43 @@ object AbstractGPRegressionModel {
     }
 
   }
+
+  /**
+    * Create an instance of [[GPBasisFuncRegressionModel]] for a
+    * particular data type [[T]]
+    *
+    * @tparam T The type of the training data
+    * @tparam I The type of the input patterns in the data set of type [[T]]
+    *
+    * @param cov The covariance function
+    * @param noise The noise covariance function
+    * @param basisFunc A [[DataPipe]] transforming the input features to basis function components.
+    * @param basis_param_prior A [[MultGaussianRV]] which is the prior
+    *                          distribution on basis function coefficients
+    * @param trainingdata The actual data set of type [[T]]
+    * @param transform An implicit conversion from [[T]] to [[Seq]] represented as a [[DataPipe]]
+    * */
+  def apply[T, I: ClassTag](
+    cov: LocalScalarKernel[I],
+    noise: LocalScalarKernel[I],
+    basisFunc: DataPipe[I, DenseVector[Double]],
+    basis_param_prior: MultGaussianRV)(
+    trainingdata: T, num: Int)(
+    implicit transform: DataPipe[T, Seq[(I, Double)]]) = {
+
+    val num_points = if(num > 0) num else transform(trainingdata).length
+
+    new GPBasisFuncRegressionModel[T, I](cov, noise, trainingdata, num_points, basisFunc, basis_param_prior) {
+      /**
+        * Convert from the underlying data structure to
+        * Seq[(I, Y)] where I is the index set of the GP
+        * and Y is the value/label type.
+        **/
+      override def dataAsSeq(data: T) = transform(data)
+    }
+
+  }
+
 
 }
 
