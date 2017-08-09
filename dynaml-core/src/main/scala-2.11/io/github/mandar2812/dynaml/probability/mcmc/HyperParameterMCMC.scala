@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.probability.mcmc
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.analysis.VectorField
-import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
+import io.github.mandar2812.dynaml.optimization.{GloballyOptimizable, GloballyOptWithGrad}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.utils.{ConfigEncoding, getPriorMapDistr}
@@ -85,6 +85,33 @@ object HyperParameterMCMC {
     new HyperParameterMCMC(system, hyper_prior, proposal, burnIn)
 
 }
+
+
+/**
+  * Hamiltonian Markov Chain Monte Carlo algorithm,
+  * equipped with reversible Metropolis Hastings updates.
+  *
+  * @tparam Model Any type which implements the [[GloballyOptimizable]] trait
+  *               i.e. the [[GloballyOptimizable.energy()]] method.
+  * @tparam Distr A breeze distribution type for hyper-parameter priors.
+  * @param system The model whose hyper-parameters are to be sampled.
+  * @param hyper_prior A mean field prior measure over the [[system]] hyper-parameters.
+  *                    Represented as a [[Map]].
+  * @author mandar2812 date 31/07/2017.
+  * */
+abstract class HyperParameterHMC[
+  Model <: GloballyOptWithGrad,
+  Distr <: ContinuousDistr[Double]](
+  system: Model, hyper_prior: Map[String, Distr],
+  proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]],
+  val burnIn: Long) extends RandomVariable[Map[String, Double]] {
+
+
+
+
+}
+
+
 
 /**
   * Adaptive Markov Chain Monte Carlo algorithm,

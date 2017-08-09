@@ -52,6 +52,17 @@ import scala.reflect.ClassTag
   *             <li>I = DenseVector when implementing GP regression</li>
   *           <ul>
   *
+  * @param cov The covariance function/kernel of the GP model,
+  *            expressed as a [[LocalScalarKernel]] instance
+  *
+  * @param n Measurement noise covariance of the GP model.
+  *
+  * @param data Training data set of generic type [[T]]
+  *
+  * @param num The number of training data instances.
+  *
+  * @param meanFunc The mean/trend function of the GP model expressed as
+  *                 a [[DataPipe]] instance.
   * */
 abstract class AbstractGPRegressionModel[T, I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],

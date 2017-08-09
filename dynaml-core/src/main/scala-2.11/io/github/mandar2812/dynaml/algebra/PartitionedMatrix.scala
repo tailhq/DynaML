@@ -99,13 +99,13 @@ object PartitionedMatrix {
 
   /**
     * Construct a partitioned matrix from a stream of matrix blocks.
-    */
+    * */
   def apply(d: Stream[((Long, Long), DenseMatrix[Double])], numrows: Long, numcols: Long): PartitionedMatrix =
     new PartitionedMatrix(d, num_rows = numrows, num_cols = numcols)
 
   /**
     * Construct a partitioned matrix using a tabulation function.
-    */
+    * */
   def apply(nRows: Long, nCols: Long,
             numElementsPerRBlock: Int, numElementsPerCBlock: Int,
             tabFunc: (Long, Long) => Double) = {
@@ -144,7 +144,7 @@ object PartitionedMatrix {
 
   /**
     * Vertically concatenate partitioned matrices
-    */
+    * */
   def vertcat(vectors: PartitionedMatrix*): PartitionedMatrix = {
     //sanity check
     require(vectors.map(_.colBlocks).distinct.length == 1,
@@ -158,13 +158,28 @@ object PartitionedMatrix {
   }
 
 
+ /**
+   * Horizontally concatenate a collection of breeze [[DenseVector]] instances
+   * to form a [[PartitionedMatrix]]
+   *
+   * */
+  def horzcat(nC: Int)(vectors: DenseVector[Double]*): PartitionedMatrix = {
+
+    val num_rows = vectors.head.length.toLong
+    val num_cols = vectors.length.toLong
+    apply(
+      vectors.grouped(nC).zipWithIndex.map(c => ((0L, c._2.toLong), DenseMatrix.horzcat(c._1.map(_.toDenseMatrix):_*))).toStream,
+      num_rows, num_cols)
+  }
+
+
 }
 
 /**
-  * @author mandar2812 date: 18/10/2016
-  *
   * A partitioned lower triangular matrix.
-  */
+  *
+  * @author mandar2812 date: 18/10/2016
+  * */
 private[dynaml] class LowerTriPartitionedMatrix(
   underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
   num_rows: Long = -1L, num_cols: Long = -1L,
@@ -193,10 +208,10 @@ private[dynaml] class LowerTriPartitionedMatrix(
 }
 
 /**
-  * @author mandar2812 date: 18/10/2016
-  *
   * A partitioned upper triangular matrix.
-  */
+  *
+  * @author mandar2812 date: 18/10/2016
+  * */
 private[dynaml] class UpperTriPartitionedMatrix(
   underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
   num_rows: Long = -1L, num_cols: Long = -1L,
@@ -225,10 +240,10 @@ private[dynaml] class UpperTriPartitionedMatrix(
 }
 
 /**
-  * @author mandar2812 date: 18/10/2016
-  *
   * A partitioned positive semi-definite matrix.
-  */
+  *
+  * @author mandar2812 date: 18/10/2016
+  * */
 private[dynaml] class PartitionedPSDMatrix(
   underlyingdata: Stream[((Long, Long), DenseMatrix[Double])],
   num_rows: Long = -1L, num_cols: Long = -1L,
