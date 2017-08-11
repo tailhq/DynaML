@@ -33,10 +33,15 @@
  - `GridSearch` and `CoupledSimulatedAnnealing` now extend `AbstractGridSearch` and `AbstractCSA` respectively.
  - Added `ProbGPMixtureMachine`: constructs a mixture model after a CSA or grid search routine by calculating the mixture probabilities of members of the final hyper-parameter ensemble.
 
+### Stochastic Mixture Models
+
 **Package** `dynaml.models`
 
  - Added `StochasticProcessMixtureModel`as top level class for stochastic mixture models.
- - Added `GaussianProcessMixture`: implementation of gaussian process mixture models.
+ - Added `GaussianProcessMixture`: implementation of gaussian process
+   mixture models.
+ - Added `MVTMixture`: implementation of mixture model over
+   multioutput matrix T processes.
 
 ### Kulback-Leibler Divergence
 
