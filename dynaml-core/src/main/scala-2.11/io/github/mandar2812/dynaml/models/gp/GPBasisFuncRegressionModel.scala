@@ -49,13 +49,7 @@ import scala.reflect.ClassTag
   *
   * @tparam I The index set over which the Gaussian Process
   *           is defined.
-  *           e.g:
-  *
-  *           <ul>
-  *             <li>I = Double when implementing GP time series</li>
-  *             <li>I = DenseVector when implementing GP regression</li>
-  *           <ul>
-  *
+  *           
   * @param cov The covariance function/kernel of the GP model,
   *            expressed as a [[LocalScalarKernel]] instance
   *

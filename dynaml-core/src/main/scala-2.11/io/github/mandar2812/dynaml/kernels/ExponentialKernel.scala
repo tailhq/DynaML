@@ -5,7 +5,7 @@ import breeze.linalg.{DenseMatrix, norm, DenseVector}
 /**
  * Implementation of the Normalized Exponential Kernel
  *
- * K(x,y) = exp(beta*(x.y))
+ * K(x,y) = exp(&beta;*(x.y))
  */
 class ExponentialKernel(be: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]

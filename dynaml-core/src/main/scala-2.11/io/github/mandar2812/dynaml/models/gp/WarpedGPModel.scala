@@ -178,7 +178,7 @@ class WarpedGPModel[T, I:ClassTag](
   *
   * @author mandar2812 date 27/07/17
   * */
-class LogGaussianProcess[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
+class LogGaussianProcessModel[T, I:ClassTag](p: AbstractGPRegressionModel[T, I])(
   implicit pf: PartitionedVectorField,
   transform: Encoder[T, Seq[(I, Double)]]) extends
   WarpedGPModel[T, I](p)(

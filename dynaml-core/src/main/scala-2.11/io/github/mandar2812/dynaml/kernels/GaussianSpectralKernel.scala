@@ -29,6 +29,9 @@ import io.github.mandar2812.dynaml.pipes.Encoder
   * The kernel is defined as the inverse fourier transform
   * of a gaussian spectral density as is shown by Bochner's theorem.
   *
+  * K(<b>d</b>) = exp(-2&pi;<sup>2</sup> <b>d</b><sup>T</sup>&Sigma;<sup>-1<sup><b>d</b>) &times;
+  * cos(2&pi;<b>&mu;</b><sup>T</sup><b>d</b>) 
+  *
   * @tparam T The domain over which the kernel is defined
   * @param center The center of the spectral power distribution.
   * @param scale The std deviation of the spectral power distribution.

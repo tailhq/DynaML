@@ -5,7 +5,7 @@ import spire.algebra.Field
 
 /**
  * Cauchy Kernel given by the expression
- * K(x,y) = 1/(1 + ||x-y||<sup>2</sup>/sigma<sup>2</sup>)
+ * K(x,y) = 1/(1 + ||x-y||<sup>2</sup>/&sigma;<sup>2</sup>)
  */
 class CauchyKernel(si: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
   extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]

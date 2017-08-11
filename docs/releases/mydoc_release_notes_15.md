@@ -1,5 +1,7 @@
 !!! summary ""
-    Version 1.5 of DynaML, released August 11, 2017. Updates, improvements and new features.
+    Version 1.5 of DynaML, released August 11, 2017. Updates to global
+    optimization api, improvements and new features in the gaussian
+    process and stochastic process api.
    
 
 ## Additions
@@ -36,6 +38,7 @@
  - Added `StochasticProcessMixtureModel`as top level class for stochastic mixture models.
  - Added `GaussianProcessMixture`: implementation of gaussian process mixture models.
 
+### Kulback-Leibler Divergence
 
 **Package** `dynaml.probability`
   
@@ -44,13 +47,25 @@
     variables backed by breeze distributions. 
 	
 	
+
+### Adaptive Metropolis Algorithms.
+
+ - [AdaptiveHyperParameterMCMC](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.probability.mcmc.AdaptiveHyperParameterMCMC) which
+   adapts the exploration covariance with each sample.
+   
+ - [HyperParameterSCAM](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.probability.mcmc.HyperParameterSCAM) adapts
+   the exploration covariance for each hyper-parameter independently.
+
+
 ### Splines and B-Spline Generators
 
 **Package** `dynaml.analysis`
 
  - [B-Spline generators](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.BSplineGenerator)
- -  [Bernstein](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.BernsteinSplineGenerator$) and [Cardinal](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.CardinalBSplineGenerator$) b-spline generators.
+ - [Bernstein](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.BernsteinSplineGenerator$) and [Cardinal](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.CardinalBSplineGenerator$) b-spline generators.
  - Arbitrary spline functions can be created using the [`SplineGenerator`](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.SplineGenerator) class.
+
+### Cubic Spline Interpolation Kernels
 
 **Package** `dynaml.kernels`
 
@@ -69,6 +84,23 @@ Based on a legacy ICML 2003 paper by [Graepel](https://www.aaai.org/Papers/ICML/
  - [`LinearPDEKernel`](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.kernels.LinearPDEKernel): The core kernel primitive accepted by the `GPOperatorModel` class.
 
  - [`GenExpSpaceTimeKernel`](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.GenExpSpaceTimeKernel): a kernel of the exponential family which can serve as a handy base kernel for `LinearPDEKernel` class.
+
+
+### Basis Function Gaussian Processes
+
+DynaML now supports GP models with explicitly incorporated basis
+functions as linear mean/trend functions.
+
+**Package** `dynaml.models.gp`
+ 
+ - [`GPBasisFuncRegressionModel`](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.models.gp.GPBasisFuncRegressionModel) can
+   be used to create GP models with trends incorporated as a linear
+   combination of basis functions.
+   
+### Log Gaussian Processes
+
+ - [LogGaussianProcessModel](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.models.gp.LogGaussianProcessModel) represents
+   a stochastic process whose natural logarithm follows a gaussian process.
 
 
 ## Improvements
