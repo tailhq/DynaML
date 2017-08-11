@@ -121,6 +121,66 @@
             "title": "Libraries Used"
         },
         {
+            "location": "/releases/mydoc_release_notes_15/",
+            "text": "Version 1.5 of DynaML, released August 11, 2017. Updates to global\noptimization api, improvements and new features in the gaussian\nprocess and stochastic process api.\n\n\n\n\nAdditions\n\u00b6\n\n\nPackage\n \ndynaml.algebra\n\n\n\n\nAdded support for \ndual numbers\n.\n\n\n\n\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n//Zero Dual\n\n\nval\n \nzero\n \n=\n \nDualNumber\n.\nzero\n[\nDouble\n]\n  \n\n\nval\n \ndnum\n \n=\n \nDualNumber\n(\n1.5\n,\n \n-\n1.0\n)\n \n\nval\n \ndnum1\n \n=\n \nDualNumber\n(-\n1.5\n,\n \n1.0\n)\n \n\n\n//Algebraic operations: multiplication and addition/subtraction\n\n\ndnum1\n*\ndnum2\n\n\ndnum1\n \n-\n \ndnum\n\n\ndnum\n*\nzero\n \n\n\n\n\n\n\nPackage\n \ndynaml.probability\n\n\n\n\nAdded support for mixture distributions and mixture random variables. \nMixtureRV\n, \nContinuousDistrMixture\n for random variables and \nMixtureDistribution\n for constructing mixtures of breeze distributions.\n\n\n\n\nPackage\n \ndynaml.optimization\n\n\n\n\nAdded \nModelTuner[T, T1]\n trait as a super trait to \nGlobalOptimizer[T]\n\n\nGridSearch\n and \nCoupledSimulatedAnnealing\n now extend \nAbstractGridSearch\n and \nAbstractCSA\n respectively.\n\n\nAdded \nProbGPMixtureMachine\n: constructs a mixture model after a CSA or grid search routine by calculating the mixture probabilities of members of the final hyper-parameter ensemble.\n\n\n\n\nStochastic Mixture Models\n\u00b6\n\n\nPackage\n \ndynaml.models\n\n\n\n\nAdded \nStochasticProcessMixtureModel\nas top level class for stochastic mixture models.\n\n\nAdded \nGaussianProcessMixture\n: implementation of gaussian process\n   mixture models.\n\n\nAdded \nMVTMixture\n: implementation of mixture model over\n   multioutput matrix T processes.\n\n\n\n\nKulback-Leibler Divergence\n\u00b6\n\n\nPackage\n \ndynaml.probability\n\n\n\n\nAdded method \nKL()\n to \nprobability\n package object, to calculate\n    the Kulback Leibler divergence between two continuous random\n    variables backed by breeze distributions. \n\n\n\n\nAdaptive Metropolis Algorithms.\n\u00b6\n\n\n\n\n\n\nAdaptiveHyperParameterMCMC\n which\n   adapts the exploration covariance with each sample.\n\n\n\n\n\n\nHyperParameterSCAM\n adapts\n   the exploration covariance for each hyper-parameter independently.\n\n\n\n\n\n\nSplines and B-Spline Generators\n\u00b6\n\n\nPackage\n \ndynaml.analysis\n\n\n\n\nB-Spline generators\n\n\nBernstein\n b-spline generators.\n\n\nArbitrary spline functions can be created using the \nSplineGenerator\n class.\n\n\n\n\nCubic Spline Interpolation Kernels\n\u00b6\n\n\nPackage\n \ndynaml.kernels\n\n\n\n\nAdded cubic spline interpolation kernel \nCubicSplineKernel\n and its ARD analogue \nCubicSplineARDKernel\n \n\n\n\n\nGaussian Process Models for Linear Partial Differential Equations\n\u00b6\n\n\nBased on a legacy ICML 2003 paper by \nGraepel\n. DynaML now ships with capability of performing PDE forward and inverse inference using the Gaussian Process API.\n\n\nPackage\n \ndynaml.models.gp\n\n\n\n\nGPOperatorModel\n: models a quantity of interest which is governed by a linear PDE in space and time.\n\n\n\n\nPackage\n \ndynaml.kernels\n\n\n\n\n\n\nLinearPDEKernel\n: The core kernel primitive accepted by the \nGPOperatorModel\n class.\n\n\n\n\n\n\nGenExpSpaceTimeKernel\n: a kernel of the exponential family which can serve as a handy base kernel for \nLinearPDEKernel\n class.\n\n\n\n\n\n\nBasis Function Gaussian Processes\n\u00b6\n\n\nDynaML now supports GP models with explicitly incorporated basis\nfunctions as linear mean/trend functions.\n\n\nPackage\n \ndynaml.models.gp\n\n\n\n\nGPBasisFuncRegressionModel\n can\n   be used to create GP models with trends incorporated as a linear\n   combination of basis functions.\n\n\n\n\nLog Gaussian Processes\n\u00b6\n\n\n\n\nLogGaussianProcessModel\n represents\n   a stochastic process whose natural logarithm follows a gaussian process.\n\n\n\n\nImprovements\n\u00b6\n\n\nPackage\n \ndynaml.probability\n\n\n\n\nChanges to \nRandomVarWithDistr\n: made type parameter \nDist\n covariant.\n\n\nReform to \nIIDRandomVar\n hierarchy.\n\n\n\n\nPackage\n \ndynaml.probability.mcmc\n\n\n\n\nBug-fixes to the \nHyperParameterMCMC\n class. \n\n\n\n\nGeneral\n\n\n\n\nDynaML now ships with Ammonite \nv1.0.0\n.\n\n\n\n\nFixes\n\u00b6\n\n\nPackage\n \ndynaml.optimization\n\n\n\n\nCorrected energy calculation in \nCoupledSimulatedAnnealing\n; added\n   log likelihood due to hyper-prior. \n\n\n\n\nPackage\n \ndynaml.optimization\n\n\n\n\nCorrected energy calculation in \nCoupledSimulatedAnnealing\n; added\n   log likelihood due to hyper-prior.",
+            "title": "v1.5"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#additions",
+            "text": "Package   dynaml.algebra   Added support for  dual numbers .    1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10 //Zero Dual  val   zero   =   DualNumber . zero [ Double ]    val   dnum   =   DualNumber ( 1.5 ,   - 1.0 )   val   dnum1   =   DualNumber (- 1.5 ,   1.0 )   //Algebraic operations: multiplication and addition/subtraction  dnum1 * dnum2  dnum1   -   dnum  dnum * zero     Package   dynaml.probability   Added support for mixture distributions and mixture random variables.  MixtureRV ,  ContinuousDistrMixture  for random variables and  MixtureDistribution  for constructing mixtures of breeze distributions.   Package   dynaml.optimization   Added  ModelTuner[T, T1]  trait as a super trait to  GlobalOptimizer[T]  GridSearch  and  CoupledSimulatedAnnealing  now extend  AbstractGridSearch  and  AbstractCSA  respectively.  Added  ProbGPMixtureMachine : constructs a mixture model after a CSA or grid search routine by calculating the mixture probabilities of members of the final hyper-parameter ensemble.",
+            "title": "Additions"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#stochastic-mixture-models",
+            "text": "Package   dynaml.models   Added  StochasticProcessMixtureModel as top level class for stochastic mixture models.  Added  GaussianProcessMixture : implementation of gaussian process\n   mixture models.  Added  MVTMixture : implementation of mixture model over\n   multioutput matrix T processes.",
+            "title": "Stochastic Mixture Models"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#kulback-leibler-divergence",
+            "text": "Package   dynaml.probability   Added method  KL()  to  probability  package object, to calculate\n    the Kulback Leibler divergence between two continuous random\n    variables backed by breeze distributions.",
+            "title": "Kulback-Leibler Divergence"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#adaptive-metropolis-algorithms",
+            "text": "AdaptiveHyperParameterMCMC  which\n   adapts the exploration covariance with each sample.    HyperParameterSCAM  adapts\n   the exploration covariance for each hyper-parameter independently.",
+            "title": "Adaptive Metropolis Algorithms."
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#splines-and-b-spline-generators",
+            "text": "Package   dynaml.analysis   B-Spline generators  Bernstein  b-spline generators.  Arbitrary spline functions can be created using the  SplineGenerator  class.",
+            "title": "Splines and B-Spline Generators"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#cubic-spline-interpolation-kernels",
+            "text": "Package   dynaml.kernels   Added cubic spline interpolation kernel  CubicSplineKernel  and its ARD analogue  CubicSplineARDKernel",
+            "title": "Cubic Spline Interpolation Kernels"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#gaussian-process-models-for-linear-partial-differential-equations",
+            "text": "Based on a legacy ICML 2003 paper by  Graepel . DynaML now ships with capability of performing PDE forward and inverse inference using the Gaussian Process API.  Package   dynaml.models.gp   GPOperatorModel : models a quantity of interest which is governed by a linear PDE in space and time.   Package   dynaml.kernels    LinearPDEKernel : The core kernel primitive accepted by the  GPOperatorModel  class.    GenExpSpaceTimeKernel : a kernel of the exponential family which can serve as a handy base kernel for  LinearPDEKernel  class.",
+            "title": "Gaussian Process Models for Linear Partial Differential Equations"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#basis-function-gaussian-processes",
+            "text": "DynaML now supports GP models with explicitly incorporated basis\nfunctions as linear mean/trend functions.  Package   dynaml.models.gp   GPBasisFuncRegressionModel  can\n   be used to create GP models with trends incorporated as a linear\n   combination of basis functions.",
+            "title": "Basis Function Gaussian Processes"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#log-gaussian-processes",
+            "text": "LogGaussianProcessModel  represents\n   a stochastic process whose natural logarithm follows a gaussian process.",
+            "title": "Log Gaussian Processes"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#improvements",
+            "text": "Package   dynaml.probability   Changes to  RandomVarWithDistr : made type parameter  Dist  covariant.  Reform to  IIDRandomVar  hierarchy.   Package   dynaml.probability.mcmc   Bug-fixes to the  HyperParameterMCMC  class.    General   DynaML now ships with Ammonite  v1.0.0 .",
+            "title": "Improvements"
+        },
+        {
+            "location": "/releases/mydoc_release_notes_15/#fixes",
+            "text": "Package   dynaml.optimization   Corrected energy calculation in  CoupledSimulatedAnnealing ; added\n   log likelihood due to hyper-prior.    Package   dynaml.optimization   Corrected energy calculation in  CoupledSimulatedAnnealing ; added\n   log likelihood due to hyper-prior.",
+            "title": "Fixes"
+        },
+        {
             "location": "/releases/mydoc_release_notes_143/",
             "text": "Version 1.4.3 of DynaML, released June 13, 2017. Updates, improvements and new features.\n\n\n\n\nDynaML REPL\n\u00b6\n\n\nAdditions\n\u00b6\n\n\nModule\n \nscripts\n\n\n\n\nAdded \ngp_mcmc_santafe.sc\n worksheet to try new MCMC feature on GP models; applied on the Santa Fe laser data set. \n\n\n\n\nGeneral\n\n\n\n\nUpdated Ammonite version to \n0.9.9\n\n\n\n\nPipes API\n\u00b6\n\n\nAdditions\n\u00b6\n\n\nPackage\n \ndynaml.pipes\n\n\n\n\nAdded \n._1\n and \n._2\n members in \nParallelPipe\n \n\n\n\n\nCore API\n\u00b6\n\n\nAdditions\n\u00b6\n\n\nPackage\n \ndynaml.models.neuralnets\n\n\n\n\nAdded \nSELU\n activation function proposed by \nHochreiter et. al\n\n\n\n\nPackage\n \ndynaml.models.bayes\n\n\n\n\nAdded \n*\n method to \nCoRegGPPrior\n which scales it with to a \nParallelPipe\n\n\n\n\nPackage\n \ndynaml.probability.mcmc\n\n\n\n\nAdded \nHyperParameterMCMC\n for performing MCMC sampling for models extending \nGloballyOptimizable\n.\n\n\n\n\nPackage\n \ndynaml.utils\n\n\n\n\n\n\nAdded trait \nHyperParameters\n outlining methods that must be implemented by entities having hyper-parameters\n\n\n\n\n\n\nAdded \nMeanScaler\n, \nPCAScaler\n to perform mean centering and PCA on data sets. Also added to \nDynaMLPipe\n pipe library.\n\n\n\n\n\n\nAdded tail recursive computation of the \nChebyshev\n polynomials of the first and second kind in \nutils\n.\nchebyshev\n. \n\n\n\n\n\n\nImprovements\n\u00b6\n\n\nPackage\n \ndynaml.models.bayes\n\n\n\n\nAdded \ntrendParamsEncoder\n which converts the trend/mean parameters into a scala \nMap\n[\nString\n, \nDouble\n]\n making them \n     consistent with covariance parameters. Added to \nGaussianProcessPrior\n and \nESGPPrior\n families.",
             "title": "v1.4.3"
@@ -244,6 +304,21 @@
             "location": "/releases/mydoc_release_notes_14/#pipes",
             "text": "Added  Scaler  and  ReversibleScaler  traits to represent transformations which input and output into the same domain set, these traits are extensions of  DataPipe .    Added  Discrete Wavelet Transform  based on the  Haar  wavelet.",
             "title": "Pipes"
+        },
+        {
+            "location": "/scaladoc/v1.5/core/",
+            "text": "",
+            "title": "dynaml-core"
+        },
+        {
+            "location": "/scaladoc/v1.5/pipes/",
+            "text": "",
+            "title": "dynaml-pipes"
+        },
+        {
+            "location": "/scaladoc/v1.5/examples/",
+            "text": "",
+            "title": "dynaml-examples"
         },
         {
             "location": "/scaladoc/v1.4.3/core/",

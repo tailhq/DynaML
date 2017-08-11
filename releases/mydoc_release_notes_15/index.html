@@ -9,28 +9,28 @@
         <meta name="description" content="User guide and documentation for the DynaML machine learning library and API">
       
       
-        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/scaladoc/v1.4.1/examples/">
+        <link rel="canonical" href="https://transcendent-ai-labs.github.io/DynaML/releases/mydoc_release_notes_15/">
       
       
         <meta name="author" content="Mandar Chandorkar">
       
       
-        <link rel="shortcut icon" href="../../../images/dynaml_logo3.png">
+        <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
       
       <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.0">
     
     
       
-        <title>dynaml-examples - DynaML User Guide</title>
+        <title>v1.5 - DynaML User Guide</title>
       
     
     
-      <script src="../../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/application-c147e0d28f.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application-c147e0d28f.css">
       
-        <link rel="stylesheet" href="../../../assets/stylesheets/application-8817cfa535.palette.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-8817cfa535.palette.css">
       
     
     
@@ -70,7 +70,7 @@
       <div class="md-flex__cell md-flex__cell--shrink">
         
           <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-logo md-header-nav__button">
-            <img src="../../../images/dynaml_logo3_small.png" width="24" height="24">
+            <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
           </a>
         
       </div>
@@ -83,15 +83,11 @@
             
               
                 <span class="md-header-nav__parent">
-                  Scaladoc
-                </span>
-              
-                <span class="md-header-nav__parent">
-                  v1.4.1
+                  Releases
                 </span>
               
             
-            dynaml-examples
+            v1.5
           
         </span>
       </div>
@@ -164,7 +160,7 @@
   <label class="md-nav__title md-nav__title--site" for="drawer">
     
       <i class="md-logo md-nav__button">
-        <img src="../../../images/dynaml_logo3_small.png">
+        <img src="../../images/dynaml_logo3_small.png">
       </i>
     
     DynaML User Guide
@@ -200,7 +196,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../.." title="DynaML" class="md-nav__link">
+    <a href="../.." title="DynaML" class="md-nav__link">
       DynaML
     </a>
   </li>
@@ -231,7 +227,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../installation/installation/" title="Installation" class="md-nav__link">
+    <a href="../../installation/installation/" title="Installation" class="md-nav__link">
       Installation
     </a>
   </li>
@@ -243,7 +239,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../installation/include/" title="Import" class="md-nav__link">
+    <a href="../../installation/include/" title="Import" class="md-nav__link">
       Import
     </a>
   </li>
@@ -260,7 +256,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../supported_features/" title="Supported Features" class="md-nav__link">
+    <a href="../../supported_features/" title="Supported Features" class="md-nav__link">
       Supported Features
     </a>
   </li>
@@ -272,7 +268,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../structure/" title="Structure" class="md-nav__link">
+    <a href="../../structure/" title="Structure" class="md-nav__link">
       Structure
     </a>
   </li>
@@ -282,10 +278,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
     
     <label class="md-nav__link" for="nav-5">
       Releases
@@ -301,11 +299,125 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../../releases/mydoc_release_notes_15/" title="v1.5" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        v1.5
+      </label>
+    
+    <a href="./" title="v1.5" class="md-nav__link md-nav__link--active">
       v1.5
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#additions" title="Additions" class="md-nav__link">
+    Additions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stochastic-mixture-models" title="Stochastic Mixture Models" class="md-nav__link">
+    Stochastic Mixture Models
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kulback-leibler-divergence" title="Kulback-Leibler Divergence" class="md-nav__link">
+    Kulback-Leibler Divergence
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-metropolis-algorithms" title="Adaptive Metropolis Algorithms." class="md-nav__link">
+    Adaptive Metropolis Algorithms.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#splines-and-b-spline-generators" title="Splines and B-Spline Generators" class="md-nav__link">
+    Splines and B-Spline Generators
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cubic-spline-interpolation-kernels" title="Cubic Spline Interpolation Kernels" class="md-nav__link">
+    Cubic Spline Interpolation Kernels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gaussian-process-models-for-linear-partial-differential-equations" title="Gaussian Process Models for Linear Partial Differential Equations" class="md-nav__link">
+    Gaussian Process Models for Linear Partial Differential Equations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basis-function-gaussian-processes" title="Basis Function Gaussian Processes" class="md-nav__link">
+    Basis Function Gaussian Processes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-gaussian-processes" title="Log Gaussian Processes" class="md-nav__link">
+    Log Gaussian Processes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#improvements" title="Improvements" class="md-nav__link">
+    Improvements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixes" title="Fixes" class="md-nav__link">
+    Fixes
+  </a>
+  
+</li>
+      
+      
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -315,7 +427,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../releases/mydoc_release_notes_143/" title="v1.4.3" class="md-nav__link">
+    <a href="../mydoc_release_notes_143/" title="v1.4.3" class="md-nav__link">
       v1.4.3
     </a>
   </li>
@@ -327,7 +439,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../releases/mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
+    <a href="../mydoc_release_notes_142/" title="v1.4.2" class="md-nav__link">
       v1.4.2
     </a>
   </li>
@@ -339,7 +451,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../releases/mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
+    <a href="../mydoc_release_notes_141/" title="v1.4.1" class="md-nav__link">
       v1.4.1
     </a>
   </li>
@@ -351,7 +463,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../releases/mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
+    <a href="../mydoc_release_notes_14/" title="v1.4" class="md-nav__link">
       v1.4
     </a>
   </li>
@@ -366,12 +478,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
     <label class="md-nav__link" for="nav-6">
       Scaladoc
@@ -408,7 +518,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.5/core/" title="dynaml-core" class="md-nav__link">
+    <a href="../../scaladoc/v1.5/core/" title="dynaml-core" class="md-nav__link">
       dynaml-core
     </a>
   </li>
@@ -420,7 +530,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.5/pipes/" title="dynaml-pipes" class="md-nav__link">
+    <a href="../../scaladoc/v1.5/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
     </a>
   </li>
@@ -432,7 +542,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.5/examples/" title="dynaml-examples" class="md-nav__link">
+    <a href="../../scaladoc/v1.5/examples/" title="dynaml-examples" class="md-nav__link">
       dynaml-examples
     </a>
   </li>
@@ -468,7 +578,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4.3/core/" title="dynaml-core" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.3/core/" title="dynaml-core" class="md-nav__link">
       dynaml-core
     </a>
   </li>
@@ -480,7 +590,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4.3/pipes/" title="dynaml-pipes" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.3/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
     </a>
   </li>
@@ -492,7 +602,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4.3/examples/" title="dynaml-examples" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.3/examples/" title="dynaml-examples" class="md-nav__link">
       dynaml-examples
     </a>
   </li>
@@ -528,7 +638,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4.2/core/" title="dynaml-core" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.2/core/" title="dynaml-core" class="md-nav__link">
       dynaml-core
     </a>
   </li>
@@ -540,7 +650,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4.2/pipes/" title="dynaml-pipes" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.2/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
     </a>
   </li>
@@ -552,7 +662,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4.2/examples/" title="dynaml-examples" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.2/examples/" title="dynaml-examples" class="md-nav__link">
       dynaml-examples
     </a>
   </li>
@@ -567,12 +677,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-4" type="checkbox" id="nav-6-4" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-4" type="checkbox" id="nav-6-4">
     
     <label class="md-nav__link" for="nav-6-4">
       v1.4.1
@@ -590,7 +698,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../core/" title="dynaml-core" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.1/core/" title="dynaml-core" class="md-nav__link">
       dynaml-core
     </a>
   </li>
@@ -602,7 +710,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../pipes/" title="dynaml-pipes" class="md-nav__link">
+    <a href="../../scaladoc/v1.4.1/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
     </a>
   </li>
@@ -612,18 +720,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-    
-    <a href="./" title="dynaml-examples" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../scaladoc/v1.4.1/examples/" title="dynaml-examples" class="md-nav__link">
       dynaml-examples
     </a>
-    
   </li>
 
         
@@ -657,7 +758,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4/core/" title="dynaml-core" class="md-nav__link">
+    <a href="../../scaladoc/v1.4/core/" title="dynaml-core" class="md-nav__link">
       dynaml-core
     </a>
   </li>
@@ -669,7 +770,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4/pipes/" title="dynaml-pipes" class="md-nav__link">
+    <a href="../../scaladoc/v1.4/pipes/" title="dynaml-pipes" class="md-nav__link">
       dynaml-pipes
     </a>
   </li>
@@ -681,7 +782,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../v1.4/examples/" title="dynaml-examples" class="md-nav__link">
+    <a href="../../scaladoc/v1.4/examples/" title="dynaml-examples" class="md-nav__link">
       dynaml-examples
     </a>
   </li>
@@ -760,7 +861,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_model_hierarchy/" title="Model Hierarchy" class="md-nav__link">
+    <a href="../../core/core_model_hierarchy/" title="Model Hierarchy" class="md-nav__link">
       Model Hierarchy
     </a>
   </li>
@@ -791,7 +892,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_glm/" title="Generalized Linear Models" class="md-nav__link">
+    <a href="../../core/core_glm/" title="Generalized Linear Models" class="md-nav__link">
       Generalized Linear Models
     </a>
   </li>
@@ -803,7 +904,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_gls/" title="Generalized Least Squares" class="md-nav__link">
+    <a href="../../core/core_gls/" title="Generalized Least Squares" class="md-nav__link">
       Generalized Least Squares
     </a>
   </li>
@@ -839,7 +940,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_gp/" title="Gaussian Processes" class="md-nav__link">
+    <a href="../../core/core_gp/" title="Gaussian Processes" class="md-nav__link">
       Gaussian Processes
     </a>
   </li>
@@ -851,7 +952,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_esgp/" title="Extended Skew Gaussian Processes" class="md-nav__link">
+    <a href="../../core/core_esgp/" title="Extended Skew Gaussian Processes" class="md-nav__link">
       Extended Skew Gaussian Processes
     </a>
   </li>
@@ -863,7 +964,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_stp/" title="Students T Processes" class="md-nav__link">
+    <a href="../../core/core_stp/" title="Students T Processes" class="md-nav__link">
       Students T Processes
     </a>
   </li>
@@ -875,7 +976,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_multi_output_t/" title="Multi-output Matrix T Process" class="md-nav__link">
+    <a href="../../core/core_multi_output_t/" title="Multi-output Matrix T Process" class="md-nav__link">
       Multi-output Matrix T Process
     </a>
   </li>
@@ -911,7 +1012,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
+    <a href="../../core/core_ffn_new/" title="Feed Forward Networks" class="md-nav__link">
       Feed Forward Networks
     </a>
   </li>
@@ -923,7 +1024,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_ann_new/" title="Neural Stack API" class="md-nav__link">
+    <a href="../../core/core_ann_new/" title="Neural Stack API" class="md-nav__link">
       Neural Stack API
     </a>
   </li>
@@ -935,7 +1036,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_ann/" title="Old Neural Net API" class="md-nav__link">
+    <a href="../../core/core_ann/" title="Old Neural Net API" class="md-nav__link">
       Old Neural Net API
     </a>
   </li>
@@ -952,7 +1053,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_lssvm/" title="Least Squares SVM" class="md-nav__link">
+    <a href="../../core/core_lssvm/" title="Least Squares SVM" class="md-nav__link">
       Least Squares SVM
     </a>
   </li>
@@ -988,7 +1089,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_kernels/" title="Kernel API" class="md-nav__link">
+    <a href="../../core/core_kernels/" title="Kernel API" class="md-nav__link">
       Kernel API
     </a>
   </li>
@@ -1000,7 +1101,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
+    <a href="../../core/core_kernel_stat/" title="Stationary Kernels" class="md-nav__link">
       Stationary Kernels
     </a>
   </li>
@@ -1012,7 +1113,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
+    <a href="../../core/core_kernel_nonstat/" title="Non Stationary Kernels" class="md-nav__link">
       Non Stationary Kernels
     </a>
   </li>
@@ -1024,7 +1125,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
+    <a href="../../core/core_kernel_nystrom/" title="Automatic Feature Extraction" class="md-nav__link">
       Automatic Feature Extraction
     </a>
   </li>
@@ -1060,7 +1161,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/partitioned_objects/" title="Blocked Algebraic Objects" class="md-nav__link">
+    <a href="../../core/partitioned_objects/" title="Blocked Algebraic Objects" class="md-nav__link">
       Blocked Algebraic Objects
     </a>
   </li>
@@ -1072,7 +1173,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/partitioned_vectors/" title="Block Vectors" class="md-nav__link">
+    <a href="../../core/partitioned_vectors/" title="Block Vectors" class="md-nav__link">
       Block Vectors
     </a>
   </li>
@@ -1084,7 +1185,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/partitioned_matrices/" title="Block Matrices" class="md-nav__link">
+    <a href="../../core/partitioned_matrices/" title="Block Matrices" class="md-nav__link">
       Block Matrices
     </a>
   </li>
@@ -1096,7 +1197,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/partitioned_alg_utils/" title="Block Algebra Utilities" class="md-nav__link">
+    <a href="../../core/partitioned_alg_utils/" title="Block Algebra Utilities" class="md-nav__link">
       Block Algebra Utilities
     </a>
   </li>
@@ -1132,7 +1233,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_prob_randomvar/" title="Random Variables" class="md-nav__link">
+    <a href="../../core/core_prob_randomvar/" title="Random Variables" class="md-nav__link">
       Random Variables
     </a>
   </li>
@@ -1144,7 +1245,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
+    <a href="../../core/core_prob_operations/" title="Operations on Random Variables" class="md-nav__link">
       Operations on Random Variables
     </a>
   </li>
@@ -1156,7 +1257,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_prob_dist/" title="Probability Distributions" class="md-nav__link">
+    <a href="../../core/core_prob_dist/" title="Probability Distributions" class="md-nav__link">
       Probability Distributions
     </a>
   </li>
@@ -1192,7 +1293,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_opt_convex/" title="Convex" class="md-nav__link">
+    <a href="../../core/core_opt_convex/" title="Convex" class="md-nav__link">
       Convex
     </a>
   </li>
@@ -1204,7 +1305,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_opt_global/" title="Global" class="md-nav__link">
+    <a href="../../core/core_opt_global/" title="Global" class="md-nav__link">
       Global
     </a>
   </li>
@@ -1221,7 +1322,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../core/core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
+    <a href="../../core/core_model_evaluation/" title="Performance Evaluation" class="md-nav__link">
       Performance Evaluation
     </a>
   </li>
@@ -1257,7 +1358,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/pipes/" title="DynaML Pipes" class="md-nav__link">
+    <a href="../../pipes/pipes/" title="DynaML Pipes" class="md-nav__link">
       DynaML Pipes
     </a>
   </li>
@@ -1269,7 +1370,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/pipes_api/" title="Pipes API" class="md-nav__link">
+    <a href="../../pipes/pipes_api/" title="Pipes API" class="md-nav__link">
       Pipes API
     </a>
   </li>
@@ -1281,7 +1382,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
+    <a href="../../pipes/pipes_scalers_encoders/" title="Scalers & Encoders" class="md-nav__link">
       Scalers & Encoders
     </a>
   </li>
@@ -1293,7 +1394,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/model_pipes/" title="Model Pipes" class="md-nav__link">
+    <a href="../../pipes/model_pipes/" title="Model Pipes" class="md-nav__link">
       Model Pipes
     </a>
   </li>
@@ -1324,7 +1425,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/file_processing/" title="String & File Processing" class="md-nav__link">
+    <a href="../../pipes/file_processing/" title="String & File Processing" class="md-nav__link">
       String & File Processing
     </a>
   </li>
@@ -1336,7 +1437,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/feature_processing/" title="Feature Processing" class="md-nav__link">
+    <a href="../../pipes/feature_processing/" title="Feature Processing" class="md-nav__link">
       Feature Processing
     </a>
   </li>
@@ -1348,7 +1449,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/pipes_time_series/" title="Time Series" class="md-nav__link">
+    <a href="../../pipes/pipes_time_series/" title="Time Series" class="md-nav__link">
       Time Series
     </a>
   </li>
@@ -1360,7 +1461,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
+    <a href="../../pipes/pipes_models/" title="Workflows on Models" class="md-nav__link">
       Workflows on Models
     </a>
   </li>
@@ -1372,7 +1473,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/pipes_misc/" title="Miscellaneuos" class="md-nav__link">
+    <a href="../../pipes/pipes_misc/" title="Miscellaneuos" class="md-nav__link">
       Miscellaneuos
     </a>
   </li>
@@ -1389,7 +1490,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../pipes/pipes_library/" title="Pipes Example" class="md-nav__link">
+    <a href="../../pipes/pipes_library/" title="Pipes Example" class="md-nav__link">
       Pipes Example
     </a>
   </li>
@@ -1425,7 +1526,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../repl-examples/p2_examples/" title="Examples Module" class="md-nav__link">
+    <a href="../../repl-examples/p2_examples/" title="Examples Module" class="md-nav__link">
       Examples Module
     </a>
   </li>
@@ -1437,7 +1538,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../repl-examples/p2_boston_housing/" title="Boston Housing" class="md-nav__link">
+    <a href="../../repl-examples/p2_boston_housing/" title="Boston Housing" class="md-nav__link">
       Boston Housing
     </a>
   </li>
@@ -1449,7 +1550,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../repl-examples/p2_winequality_logistic/" title="Wine Quality" class="md-nav__link">
+    <a href="../../repl-examples/p2_winequality_logistic/" title="Wine Quality" class="md-nav__link">
       Wine Quality
     </a>
   </li>
@@ -1461,7 +1562,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../repl-examples/p2_lssvm_powerplant/" title="Pont-sur-Sambre Power Plant" class="md-nav__link">
+    <a href="../../repl-examples/p2_lssvm_powerplant/" title="Pont-sur-Sambre Power Plant" class="md-nav__link">
       Pont-sur-Sambre Power Plant
     </a>
   </li>
@@ -1497,7 +1598,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../utils/utils_data_transforms/" title="Data Transforms" class="md-nav__link">
+    <a href="../../utils/utils_data_transforms/" title="Data Transforms" class="md-nav__link">
       Data Transforms
     </a>
   </li>
@@ -1509,7 +1610,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../utils/package/" title="`utils` object" class="md-nav__link">
+    <a href="../../utils/package/" title="`utils` object" class="md-nav__link">
       `utils` object
     </a>
   </li>
@@ -1531,7 +1632,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../license/" title="License" class="md-nav__link">
+    <a href="../../license/" title="License" class="md-nav__link">
       License
     </a>
   </li>
@@ -1543,7 +1644,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../about/" title="About Us" class="md-nav__link">
+    <a href="../../about/" title="About Us" class="md-nav__link">
       About Us
     </a>
   </li>
@@ -1574,7 +1675,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../blog/2016-12-11-dynaml-new-features/" title="State of DynaML 2016" class="md-nav__link">
+    <a href="../../blog/2016-12-11-dynaml-new-features/" title="State of DynaML 2016" class="md-nav__link">
       State of DynaML 2016
     </a>
   </li>
@@ -1586,7 +1687,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../blog/2016-12-08-getting-started-ml/" title="Resources for Beginners" class="md-nav__link">
+    <a href="../../blog/2016-12-08-getting-started-ml/" title="Resources for Beginners" class="md-nav__link">
       Resources for Beginners
     </a>
   </li>
@@ -1612,6 +1713,102 @@
   
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#additions" title="Additions" class="md-nav__link">
+    Additions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stochastic-mixture-models" title="Stochastic Mixture Models" class="md-nav__link">
+    Stochastic Mixture Models
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kulback-leibler-divergence" title="Kulback-Leibler Divergence" class="md-nav__link">
+    Kulback-Leibler Divergence
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-metropolis-algorithms" title="Adaptive Metropolis Algorithms." class="md-nav__link">
+    Adaptive Metropolis Algorithms.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#splines-and-b-spline-generators" title="Splines and B-Spline Generators" class="md-nav__link">
+    Splines and B-Spline Generators
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cubic-spline-interpolation-kernels" title="Cubic Spline Interpolation Kernels" class="md-nav__link">
+    Cubic Spline Interpolation Kernels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gaussian-process-models-for-linear-partial-differential-equations" title="Gaussian Process Models for Linear Partial Differential Equations" class="md-nav__link">
+    Gaussian Process Models for Linear Partial Differential Equations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basis-function-gaussian-processes" title="Basis Function Gaussian Processes" class="md-nav__link">
+    Basis Function Gaussian Processes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-gaussian-processes" title="Log Gaussian Processes" class="md-nav__link">
+    Log Gaussian Processes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#improvements" title="Improvements" class="md-nav__link">
+    Improvements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixes" title="Fixes" class="md-nav__link">
+    Fixes
+  </a>
+  
+</li>
+      
+      
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1623,9 +1820,143 @@
               
                 
                 
-                  <h1>dynaml-examples</h1>
+                  <h1>v1.5</h1>
                 
-                <p><meta http-equiv="REFRESH" content="0;url=https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.4.1/dynaml-examples/"></HEAD></p>
+                <div class="admonition summary">
+<p>Version 1.5 of DynaML, released August 11, 2017. Updates to global
+optimization api, improvements and new features in the gaussian
+process and stochastic process api.</p>
+</div>
+<h2 id="additions">Additions<a class="headerlink" href="#additions" title="Permanent link">&para;</a></h2>
+<p><strong>Package</strong> <code>dynaml.algebra</code></p>
+<ul>
+<li>Added support for <a href="https://en.wikipedia.org/wiki/Dual_number">dual numbers</a>.</li>
+</ul>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Zero Dual</span>
+<span class="k">val</span> <span class="n">zero</span> <span class="k">=</span> <span class="nc">DualNumber</span><span class="o">.</span><span class="n">zero</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>  
+
+<span class="k">val</span> <span class="n">dnum</span> <span class="k">=</span> <span class="nc">DualNumber</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="o">)</span> 
+<span class="k">val</span> <span class="n">dnum1</span> <span class="k">=</span> <span class="nc">DualNumber</span><span class="o">(-</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">)</span> 
+
+<span class="c1">//Algebraic operations: multiplication and addition/subtraction</span>
+<span class="n">dnum1</span><span class="o">*</span><span class="n">dnum2</span>
+<span class="n">dnum1</span> <span class="o">-</span> <span class="n">dnum</span>
+<span class="n">dnum</span><span class="o">*</span><span class="n">zero</span> 
+</pre></div>
+</td></tr></table>
+
+<p><strong>Package</strong> <code>dynaml.probability</code></p>
+<ul>
+<li>Added support for mixture distributions and mixture random variables. <code>MixtureRV</code>, <code>ContinuousDistrMixture</code> for random variables and <code>MixtureDistribution</code> for constructing mixtures of breeze distributions.</li>
+</ul>
+<p><strong>Package</strong> <code>dynaml.optimization</code></p>
+<ul>
+<li>Added <code>ModelTuner[T, T1]</code> trait as a super trait to <code>GlobalOptimizer[T]</code></li>
+<li><code>GridSearch</code> and <code>CoupledSimulatedAnnealing</code> now extend <code>AbstractGridSearch</code> and <code>AbstractCSA</code> respectively.</li>
+<li>Added <code>ProbGPMixtureMachine</code>: constructs a mixture model after a CSA or grid search routine by calculating the mixture probabilities of members of the final hyper-parameter ensemble.</li>
+</ul>
+<h3 id="stochastic-mixture-models">Stochastic Mixture Models<a class="headerlink" href="#stochastic-mixture-models" title="Permanent link">&para;</a></h3>
+<p><strong>Package</strong> <code>dynaml.models</code></p>
+<ul>
+<li>Added <code>StochasticProcessMixtureModel</code>as top level class for stochastic mixture models.</li>
+<li>Added <code>GaussianProcessMixture</code>: implementation of gaussian process
+   mixture models.</li>
+<li>Added <code>MVTMixture</code>: implementation of mixture model over
+   multioutput matrix T processes.</li>
+</ul>
+<h3 id="kulback-leibler-divergence">Kulback-Leibler Divergence<a class="headerlink" href="#kulback-leibler-divergence" title="Permanent link">&para;</a></h3>
+<p><strong>Package</strong> <code>dynaml.probability</code></p>
+<ul>
+<li>Added method <code>KL()</code> to <code>probability</code> package object, to calculate
+    the Kulback Leibler divergence between two continuous random
+    variables backed by breeze distributions. </li>
+</ul>
+<h3 id="adaptive-metropolis-algorithms">Adaptive Metropolis Algorithms.<a class="headerlink" href="#adaptive-metropolis-algorithms" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.probability.mcmc.AdaptiveHyperParameterMCMC">AdaptiveHyperParameterMCMC</a> which
+   adapts the exploration covariance with each sample.</p>
+</li>
+<li>
+<p><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.probability.mcmc.HyperParameterSCAM">HyperParameterSCAM</a> adapts
+   the exploration covariance for each hyper-parameter independently.</p>
+</li>
+</ul>
+<h3 id="splines-and-b-spline-generators">Splines and B-Spline Generators<a class="headerlink" href="#splines-and-b-spline-generators" title="Permanent link">&para;</a></h3>
+<p><strong>Package</strong> <code>dynaml.analysis</code></p>
+<ul>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.BSplineGenerator">B-Spline generators</a></li>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.BernsteinSplineGenerator\() and [Cardinal](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.CardinalBSplineGenerator\)">Bernstein</a> b-spline generators.</li>
+<li>Arbitrary spline functions can be created using the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.analysis.SplineGenerator"><code>SplineGenerator</code></a> class.</li>
+</ul>
+<h3 id="cubic-spline-interpolation-kernels">Cubic Spline Interpolation Kernels<a class="headerlink" href="#cubic-spline-interpolation-kernels" title="Permanent link">&para;</a></h3>
+<p><strong>Package</strong> <code>dynaml.kernels</code></p>
+<ul>
+<li>Added cubic spline interpolation kernel <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.kernels.CubicSplineKernel"><code>CubicSplineKernel</code></a> and its ARD analogue <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.kernels.CubicSplineARDKernel"><code>CubicSplineARDKernel</code></a> </li>
+</ul>
+<h3 id="gaussian-process-models-for-linear-partial-differential-equations">Gaussian Process Models for Linear Partial Differential Equations<a class="headerlink" href="#gaussian-process-models-for-linear-partial-differential-equations" title="Permanent link">&para;</a></h3>
+<p>Based on a legacy ICML 2003 paper by <a href="https://www.aaai.org/Papers/ICML/2003/ICML03-033.pdf">Graepel</a>. DynaML now ships with capability of performing PDE forward and inverse inference using the Gaussian Process API.</p>
+<p><strong>Package</strong> <code>dynaml.models.gp</code></p>
+<ul>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.models.gp.GPOperatorModel"><code>GPOperatorModel</code></a>: models a quantity of interest which is governed by a linear PDE in space and time.</li>
+</ul>
+<p><strong>Package</strong> <code>dynaml.kernels</code></p>
+<ul>
+<li>
+<p><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.kernels.LinearPDEKernel"><code>LinearPDEKernel</code></a>: The core kernel primitive accepted by the <code>GPOperatorModel</code> class.</p>
+</li>
+<li>
+<p><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.GenExpSpaceTimeKernel"><code>GenExpSpaceTimeKernel</code></a>: a kernel of the exponential family which can serve as a handy base kernel for <code>LinearPDEKernel</code> class.</p>
+</li>
+</ul>
+<h3 id="basis-function-gaussian-processes">Basis Function Gaussian Processes<a class="headerlink" href="#basis-function-gaussian-processes" title="Permanent link">&para;</a></h3>
+<p>DynaML now supports GP models with explicitly incorporated basis
+functions as linear mean/trend functions.</p>
+<p><strong>Package</strong> <code>dynaml.models.gp</code></p>
+<ul>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.models.gp.GPBasisFuncRegressionModel"><code>GPBasisFuncRegressionModel</code></a> can
+   be used to create GP models with trends incorporated as a linear
+   combination of basis functions.</li>
+</ul>
+<h3 id="log-gaussian-processes">Log Gaussian Processes<a class="headerlink" href="#log-gaussian-processes" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5/dynaml-core/#io.github.mandar2812.dynaml.models.gp.LogGaussianProcessModel">LogGaussianProcessModel</a> represents
+   a stochastic process whose natural logarithm follows a gaussian process.</li>
+</ul>
+<h2 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">&para;</a></h2>
+<p><strong>Package</strong> <code>dynaml.probability</code></p>
+<ul>
+<li>Changes to <code>RandomVarWithDistr</code>: made type parameter <code>Dist</code> covariant.</li>
+<li>Reform to <code>IIDRandomVar</code> hierarchy.</li>
+</ul>
+<p><strong>Package</strong> <code>dynaml.probability.mcmc</code></p>
+<ul>
+<li>Bug-fixes to the <code>HyperParameterMCMC</code> class. </li>
+</ul>
+<p><strong>General</strong></p>
+<ul>
+<li>DynaML now ships with Ammonite <code>v1.0.0</code>.</li>
+</ul>
+<h2 id="fixes">Fixes<a class="headerlink" href="#fixes" title="Permanent link">&para;</a></h2>
+<p><strong>Package</strong> <code>dynaml.optimization</code></p>
+<ul>
+<li>Corrected energy calculation in <code>CoupledSimulatedAnnealing</code>; added
+   log likelihood due to hyper-prior. </li>
+</ul>
+<p><strong>Package</strong> <code>dynaml.optimization</code></p>
+<ul>
+<li>Corrected energy calculation in <code>CoupledSimulatedAnnealing</code>; added
+   log likelihood due to hyper-prior. </li>
+</ul>
                 
                   
                 
@@ -1636,9 +1967,9 @@
                   <div id="disqus_thread"></div>
 <script>
   var disqus_config = function () {
-    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/scaladoc/v1.4.1/examples/";
+    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/releases/mydoc_release_notes_15/";
     this.page.identifier =
-      "/scaladoc/v1.4.1/examples/";
+      "/releases/mydoc_release_notes_15/";
   };
   (function() {
     var d = document, s = d.createElement("script");
@@ -1660,7 +1991,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../pipes/" title="dynaml-pipes" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../structure/" title="Structure" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1669,19 +2000,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                dynaml-pipes
+                Structure
               </span>
             </div>
           </a>
         
         
-          <a href="../../v1.4/core/" title="dynaml-core" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../mydoc_release_notes_143/" title="v1.4.3" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                dynaml-core
+                v1.4.3
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -1725,10 +2056,10 @@
       
     </div>
     
-      <script src="../../../assets/javascripts/application-e3caa82af6.js"></script>
+      <script src="../../assets/javascripts/application-e3caa82af6.js"></script>
       
       
-      <script>app.initialize({url:{base:"../../.."}})</script>
+      <script>app.initialize({url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
       
