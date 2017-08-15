@@ -43,8 +43,8 @@ class RegularizedGLM(data: Stream[(DenseVector[Double], Double)],
   override val task = "regression"
 
   override protected val optimizer: RegularizedOptimizer[DenseVector[Double],
-    DenseVector[Double], Double,
-    (DenseMatrix[Double], DenseVector[Double])] = new RegularizedLSSolver
+    DenseVector[Double], Double, (DenseMatrix[Double], DenseVector[Double])] =
+    new RegularizedLSSolver
 
 
   override def prepareData(d: Stream[(DenseVector[Double], Double)]) = {
