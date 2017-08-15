@@ -283,9 +283,6 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
       trainingData.length.toLong, _blockSize
     )
 
-    val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
-    effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
-
     val smoothingMat = if(!caching) {
       logger.info("---------------------------------------------------------------")
       logger.info("Calculating covariance matrix for training points")
