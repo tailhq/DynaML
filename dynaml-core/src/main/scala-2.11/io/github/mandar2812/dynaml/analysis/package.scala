@@ -21,7 +21,6 @@ package io.github.mandar2812.dynaml
 import breeze.linalg._
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils._
-import io.github.mandar2812.dynaml.analysis._
 
 
 /**
