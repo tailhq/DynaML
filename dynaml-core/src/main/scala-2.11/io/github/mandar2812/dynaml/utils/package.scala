@@ -292,21 +292,6 @@ package object utils {
 
   }
 
-  //TODO: Complete tail recursive implementation of b-spline
-  /*
-  def bspline(control: Seq[(Double, Double)])(x: Double): Double = {
-    val (knots, control_points) = control.unzip
-
-    val knot_pairs: Map[Int, (Double, Double)] = knots
-      .sliding(2).toSeq
-      .zipWithIndex
-      .map(p => (p._2, (p._1.head, p._1.last)))
-      .toMap
-
-    def bsplineRec(i: Int, k: Int): Double = 0d
-
-    0.0
-  }*/
 
   /**
     * Calculates the Chebyshev polynomials of the first and second kind,
