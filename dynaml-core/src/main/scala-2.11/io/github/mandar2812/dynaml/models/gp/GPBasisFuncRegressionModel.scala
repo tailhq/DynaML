@@ -69,8 +69,8 @@ import scala.reflect.ClassTag
 abstract class GPBasisFuncRegressionModel[T, I: ClassTag](
   cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
   data: T, num: Int, basisFunc: DataPipe[I, DenseVector[Double]],
-  basis_param_prior: MultGaussianRV)
-  extends AbstractGPRegressionModel[T, I](cov, n, data, num) {
+  basis_param_prior: MultGaussianRV) extends AbstractGPRegressionModel[T, I](
+  cov, n, data, num) {
 
   val MultGaussianRV(b, covB) = basis_param_prior
 
@@ -86,6 +86,27 @@ abstract class GPBasisFuncRegressionModel[T, I: ClassTag](
 
   private val basisFeatureMap: DataPipe[I, DenseVector[Double]] = basisFunc > DataPipe((x: DenseVector[Double]) => lowB*x)
 
-  override val covariance = cov + CovarianceFunction(basisFeatureMap)
+  val feature_map_cov = CovarianceFunction(basisFunc > DataPipe((x: DenseVector[Double]) => lowB*x))
+
+  override protected def getTrainKernelMatrix[U <: Seq[I]] = {
+    SVMKernel.buildPartitionedKernelMatrix(trainingData,
+      trainingData.length, _blockSize, _blockSize,
+      (x: I, y: I) => {covariance.evaluate(x, y) + feature_map_cov.evaluate(x, y) + noiseModel.evaluate(x, y)}
+    )
+  }
+
+  override protected def getCrossKernelMatrix[U <: Seq[I]](test: U) =
+    SVMKernel.crossPartitonedKernelMatrix(
+      trainingData, test, _blockSize, _blockSize,
+      (x: I, y: I) => {covariance.evaluate(x, y) + feature_map_cov.evaluate(x, y)}
+    )
+
+  override protected def getTestKernelMatrix[U <: Seq[I]](test: U) =
+    SVMKernel.buildPartitionedKernelMatrix(
+      test, test.length.toLong,
+      _blockSize, _blockSize,
+      (x: I, y: I) => {covariance.evaluate(x, y) + feature_map_cov.evaluate(x, y)}
+    )
+
 
 }

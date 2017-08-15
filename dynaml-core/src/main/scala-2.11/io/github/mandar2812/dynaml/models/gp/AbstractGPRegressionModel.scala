@@ -148,12 +148,11 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
         training.length.toLong, _blockSize
       )
 
-      val effectiveTrainingKernel: LocalScalarKernel[I] = this.covariance + this.noiseModel
+      //val effectiveTrainingKernel: LocalScalarKernel[I] = this.covariance + this.noiseModel
 
-      effectiveTrainingKernel.setBlockSizes((_blockSize, _blockSize))
+      //effectiveTrainingKernel.setBlockSizes((_blockSize, _blockSize))
 
-      val kernelTraining: PartitionedPSDMatrix =
-        effectiveTrainingKernel.buildBlockedKernelMatrix(training, training.length)
+      val kernelTraining: PartitionedPSDMatrix = getTrainKernelMatrix
 
       AbstractGPRegressionModel.logLikelihood(trainingLabels - trainingMean, kernelTraining)
     })
@@ -240,6 +239,12 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     calculateGradEnergyPipe(h)(trainingData, trainingDataLabels)
 
 
+  protected def getTrainKernelMatrix[U <: Seq[I]] = {
+    SVMKernel.buildPartitionedKernelMatrix(trainingData,
+        trainingData.length, _blockSize, _blockSize,
+        (x: I, y: I) => {covariance.evaluate(x, y) + noiseModel.evaluate(x, y)})
+  }
+
   protected def getCrossKernelMatrix[U <: Seq[I]](test: U) =
     SVMKernel.crossPartitonedKernelMatrix(
       trainingData, test,
@@ -284,9 +289,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     val smoothingMat = if(!caching) {
       logger.info("---------------------------------------------------------------")
       logger.info("Calculating covariance matrix for training points")
-      SVMKernel.buildPartitionedKernelMatrix(trainingData,
-        trainingData.length, _blockSize, _blockSize,
-        effectiveTrainingKernel.evaluate)
+      getTrainKernelMatrix
     } else {
       logger.info("** Using cached training matrix **")
       partitionedKernelMatrixCache
