@@ -1652,16 +1652,21 @@
                 
                   <h1>DynaML</h1>
                 
-                <p><a href="https://gitter.im/DynaML/Lobby?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img alt="Join the chat at https://gitter.im/DynaML/Lobby" src="https://badges.gitter.im/DynaML/Lobby.svg" /></a>
+                <p><img align="right" src="images/dynaml_logo3.png" alt="DynaML Logo"
+height="200px" style="padding-left: 20px" alt="DynaML Logo"
+style="width: 256px;"/></p>
+<p><a href="https://gitter.im/DynaML/Lobby?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img alt="Join the chat at https://gitter.im/DynaML/Lobby" src="https://badges.gitter.im/DynaML/Lobby.svg" /></a>
 <a href="https://travis-ci.org/transcendent-ai-labs/DynaML"><img alt="Build Status" src="https://travis-ci.org/transcendent-ai-labs/DynaML.svg?branch=master" /></a>
 <a href="https://jitpack.io/#transcendent-ai-labs/DynaML"><img alt="" src="https://jitpack.io/v/transcendent-ai-labs/DynaML.svg" /></a></p>
-<p><br/></p>
-<p><img src="images/dynaml_logo3.png" alt="DynaML Logo" style="width: 256px;"/></p>
-<p><br/></p>
 <p>DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows.</p>
-<p><img alt="dynaml" src="./images/screenshot.png" /></p>
+<p><br/>
+<br/></p>
 <h2 id="hello-world">Hello World<a class="headerlink" href="#hello-world" title="Permanent link">&para;</a></h2>
-<p>Refer to the <a href="installation/installation/">installation</a> guide for getting up and running. The <code>data/</code> directory contains data sets, which are used by the programs in the <code>dynaml-examples/</code> module. Lets run a Gaussian Process (GP) regression model on the synthetic 'delve' data set.</p>
+<p>Refer to the <a href="installation/installation/">installation</a> guide for
+getting up and running. Start the DynaML shell.</p>
+<p><br/></p>
+<p><img alt="dynaml" src="./images/screenshot.png" /></p>
+<p>The <code>data/</code> directory contains data sets, which are used by the programs in the <code>dynaml-examples/</code> module. Lets run a Gaussian Process (GP) regression model on the synthetic 'delve' data set.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">TestGPDelve</span><span class="o">(</span><span class="s">&quot;RBF&quot;</span><span class="o">,</span> <span class="mf">2.0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
