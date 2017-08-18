@@ -86,14 +86,43 @@ package object analysis {
   }
 
   /**
+    * Generate a basis of Bernstein Polynomials
+    * */
+  object BernsteinSplineSeriesGenerator extends MetaPipe[Seq[Int], Double, DenseVector[Double]] {
+
+    override def run(knotIndices: Seq[Int]): DataPipe[Double, DenseVector[Double]] =
+      DataPipe((x: Double) => DenseVector(Array(1d) ++ knotIndices.toArray.map(k => BernsteinSplineGenerator(k, 3)(x))))
+  }
+
+  /**
     * Generate a basis of Chebyshev functions
     * */
   object ChebyshevSeriesGenerator extends MetaPipe21[Int, Int, Double, DenseVector[Double]] {
 
     override def run(maxdegree: Int, kind: Int): DataPipe[Double, DenseVector[Double]] = {
       require(kind == 1 || kind == 2, "Chebyshev functions are either of the first or second kind")
-      DataPipe((x: Double) => DenseVector((0 to maxdegree).map(d => if(d == 0) 1d else chebyshev(d,x,kind)).toArray))
+      DataPipe(
+        (x: Double) =>
+        DenseVector(
+          (0 to maxdegree).map(d => if(d == 0) 1d else chebyshev(d,x,kind)).toArray
+        )
+      )
     }
+  }
+
+  /**
+    * Generate a hermite polynomial basis.
+    *
+    * */
+  object HermiteSeriesGenerator extends MetaPipe[Int, Double, DenseVector[Double]] {
+
+    override def run(maxdegree: Int): DataPipe[Double, DenseVector[Double]] =
+      DataPipe(
+        (x: Double) =>
+        DenseVector(
+          (0 to maxdegree).map(d => if(d == 0) 1d else hermite(d, x)).toArray
+        )
+      )
   }
 
 }
