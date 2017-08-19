@@ -33,10 +33,9 @@ package object analysis {
   /**
     * Generates a fourier series feature mapping.
     * */
-  object FourierBasisGenerator extends MetaPipe21[Double, Int, Double, DenseVector[Double]] {
+  object FourierBasisGenerator extends DataPipe2[Double, Int, Basis[Double]] {
 
-    override def run(omega: Double, components: Int): DataPipe[Double, DenseVector[Double]] = {
-
+    override def run(omega: Double, components: Int): Basis[Double] =
       Basis((x: Double) => {
         if(components % 2 == 0) {
           DenseVector(
@@ -60,48 +59,47 @@ package object analysis {
           )
         }
       })
-    }
 
   }
 
   /**
     * Generates a polynomial feature mapping upto a specified degree.
     * */
-  object PolynomialBasisGenerator extends MetaPipe[Int, Double, DenseVector[Double]] {
+  object PolynomialBasisGenerator extends DataPipe[Int, Basis[Double]] {
 
-    override def run(degree: Int): DataPipe[Double, DenseVector[Double]] = {
+    override def run(degree: Int): Basis[Double] = {
 
-      DataPipe((x: Double) => DenseVector((0 to degree).map(d => math.pow(x, d)).toArray))
+      Basis((x: Double) => DenseVector((0 to degree).map(d => math.pow(x, d)).toArray))
     }
   }
 
   /**
     * Generate a basis of Cardinal Cubic B-Splines 
     * */
-  object CubicSplineGenerator extends MetaPipe[Seq[Int], Double, DenseVector[Double]] {
+  object CubicSplineGenerator extends DataPipe[Seq[Int], Basis[Double]] {
 
-    override def run(knotIndices: Seq[Int]): DataPipe[Double, DenseVector[Double]] =
-      DataPipe((x: Double) => DenseVector(Array(1d) ++ knotIndices.toArray.map(k => CardinalBSplineGenerator(k, 3)(x))))
+    override def run(knotIndices: Seq[Int]): Basis[Double] =
+      Basis((x: Double) => DenseVector(Array(1d) ++ knotIndices.toArray.map(k => CardinalBSplineGenerator(k, 3)(x))))
 
   }
 
   /**
     * Generate a basis of Bernstein Polynomials
     * */
-  object BernsteinSplineSeriesGenerator extends MetaPipe[Seq[Int], Double, DenseVector[Double]] {
+  object BernsteinSplineSeriesGenerator extends DataPipe[Seq[Int], Basis[Double]] {
 
-    override def run(knotIndices: Seq[Int]): DataPipe[Double, DenseVector[Double]] =
-      DataPipe((x: Double) => DenseVector(Array(1d) ++ knotIndices.toArray.map(k => BernsteinSplineGenerator(k, 3)(x))))
+    override def run(knotIndices: Seq[Int]): Basis[Double] =
+      Basis((x: Double) => DenseVector(Array(1d) ++ knotIndices.toArray.map(k => BernsteinSplineGenerator(k, 3)(x))))
   }
 
   /**
     * Generate a basis of Chebyshev functions
     * */
-  object ChebyshevBasisGenerator extends MetaPipe21[Int, Int, Double, DenseVector[Double]] {
+  object ChebyshevBasisGenerator extends DataPipe2[Int, Int, Basis[Double]] {
 
-    override def run(maxdegree: Int, kind: Int): DataPipe[Double, DenseVector[Double]] = {
+    override def run(maxdegree: Int, kind: Int): Basis[Double] = {
       require(kind == 1 || kind == 2, "Chebyshev functions are either of the first or second kind")
-      DataPipe(
+      Basis(
         (x: Double) =>
         DenseVector(
           (0 to maxdegree).map(d => if(d == 0) 1d else chebyshev(d,x,kind)).toArray
@@ -114,10 +112,10 @@ package object analysis {
     * Generate a hermite polynomial basis.
     *
     * */
-  object HermiteBasisGenerator extends MetaPipe[Int, Double, DenseVector[Double]] {
+  object HermiteBasisGenerator extends DataPipe[Int, Basis[Double]] {
 
-    override def run(maxdegree: Int): DataPipe[Double, DenseVector[Double]] =
-      DataPipe(
+    override def run(maxdegree: Int): Basis[Double] =
+      Basis(
         (x: Double) =>
         DenseVector(
           (0 to maxdegree).map(d => if(d == 0) 1d else hermite(d, x)).toArray
