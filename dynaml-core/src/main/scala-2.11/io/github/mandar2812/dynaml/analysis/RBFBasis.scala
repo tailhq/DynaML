@@ -29,7 +29,7 @@ import io.github.mandar2812.dynaml.utils._
   *
   * @author mandar2812 date 2017/08/15
   * */
-class RBFGenerator[I](
+class RBFBasis[I](
   activation: DataPipe[Double, Double])(
   centers: Seq[I], lengthScales: Seq[Double])(
   implicit f: InnerProductSpace[I, Double])
@@ -50,7 +50,7 @@ class RBFGenerator[I](
 
 }
 
-object RBFGenerator {
+object RBFBasis {
 
   val gaussianActivation = DataPipe((x: Double) => math.exp(-0.5*x*x))
 
@@ -61,17 +61,17 @@ object RBFGenerator {
   def gaussianBasis[I](
     centers: Seq[I], lengthScales: Seq[Double])(
     implicit f: InnerProductSpace[I, Double]) =
-    new RBFGenerator[I](gaussianActivation)(centers, lengthScales)
+    new RBFBasis[I](gaussianActivation)(centers, lengthScales)
 
   def multiquadricBasis[I](
     centers: Seq[I], lengthScales: Seq[Double])(
     implicit f: Field[I] with InnerProductSpace[I, Double]) =
-    new RBFGenerator[I](multiquadricActivation)(centers, lengthScales)
+    new RBFBasis[I](multiquadricActivation)(centers, lengthScales)
 
 
   def invMultiquadricBasis[I](
     centers: Seq[I], lengthScales: Seq[Double])(
     implicit f: InnerProductSpace[I, Double]) =
-    new RBFGenerator[I](invMultiQuadricActivation)(centers, lengthScales)
+    new RBFBasis[I](invMultiQuadricActivation)(centers, lengthScales)
 
 }

@@ -33,11 +33,11 @@ package object analysis {
   /**
     * Generates a fourier series feature mapping.
     * */
-  object FourierSeriesGenerator extends MetaPipe21[Double, Int, Double, DenseVector[Double]] {
+  object FourierBasisGenerator extends MetaPipe21[Double, Int, Double, DenseVector[Double]] {
 
     override def run(omega: Double, components: Int): DataPipe[Double, DenseVector[Double]] = {
 
-      DataPipe((x: Double) => {
+      Basis((x: Double) => {
         if(components % 2 == 0) {
           DenseVector(
             (Seq(1d) ++
@@ -67,7 +67,7 @@ package object analysis {
   /**
     * Generates a polynomial feature mapping upto a specified degree.
     * */
-  object PolynomialSeriesGenerator extends MetaPipe[Int, Double, DenseVector[Double]] {
+  object PolynomialBasisGenerator extends MetaPipe[Int, Double, DenseVector[Double]] {
 
     override def run(degree: Int): DataPipe[Double, DenseVector[Double]] = {
 
@@ -97,7 +97,7 @@ package object analysis {
   /**
     * Generate a basis of Chebyshev functions
     * */
-  object ChebyshevSeriesGenerator extends MetaPipe21[Int, Int, Double, DenseVector[Double]] {
+  object ChebyshevBasisGenerator extends MetaPipe21[Int, Int, Double, DenseVector[Double]] {
 
     override def run(maxdegree: Int, kind: Int): DataPipe[Double, DenseVector[Double]] = {
       require(kind == 1 || kind == 2, "Chebyshev functions are either of the first or second kind")
@@ -114,7 +114,7 @@ package object analysis {
     * Generate a hermite polynomial basis.
     *
     * */
-  object HermiteSeriesGenerator extends MetaPipe[Int, Double, DenseVector[Double]] {
+  object HermiteBasisGenerator extends MetaPipe[Int, Double, DenseVector[Double]] {
 
     override def run(maxdegree: Int): DataPipe[Double, DenseVector[Double]] =
       DataPipe(
