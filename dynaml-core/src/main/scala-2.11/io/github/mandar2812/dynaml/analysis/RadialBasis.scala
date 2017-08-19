@@ -29,19 +29,18 @@ import io.github.mandar2812.dynaml.utils._
   *
   * @author mandar2812 date 2017/08/15
   * */
-class RBFBasis[I](
+class RadialBasis[I](
   activation: DataPipe[Double, Double])(
   centers: Seq[I], lengthScales: Seq[Double])(
-  implicit f: InnerProductSpace[I, Double])
-    extends DataPipe[I, DenseVector[Double]] {
+  implicit field: InnerProductSpace[I, Double]) extends Basis[I] {
 
 
-  override def run(x: I): DenseVector[Double] = DenseVector(
+  override protected val f = (x: I) => DenseVector(
     (
       Seq(1d) ++
       centers.zip(lengthScales).map(cs => {
-        val d = f.minus(x, cs._1)
-        val r = math.sqrt(f.dot(d, d))/cs._2
+        val d = field.minus(x, cs._1)
+        val r = math.sqrt(field.dot(d, d))/cs._2
 
         activation(r)
       })
@@ -50,7 +49,7 @@ class RBFBasis[I](
 
 }
 
-object RBFBasis {
+object Radial {
 
   val gaussianActivation = DataPipe((x: Double) => math.exp(-0.5*x*x))
 
@@ -61,17 +60,17 @@ object RBFBasis {
   def gaussianBasis[I](
     centers: Seq[I], lengthScales: Seq[Double])(
     implicit f: InnerProductSpace[I, Double]) =
-    new RBFBasis[I](gaussianActivation)(centers, lengthScales)
+    new RadialBasis[I](gaussianActivation)(centers, lengthScales)
 
   def multiquadricBasis[I](
     centers: Seq[I], lengthScales: Seq[Double])(
     implicit f: Field[I] with InnerProductSpace[I, Double]) =
-    new RBFBasis[I](multiquadricActivation)(centers, lengthScales)
+    new RadialBasis[I](multiquadricActivation)(centers, lengthScales)
 
 
   def invMultiquadricBasis[I](
     centers: Seq[I], lengthScales: Seq[Double])(
     implicit f: InnerProductSpace[I, Double]) =
-    new RBFBasis[I](invMultiQuadricActivation)(centers, lengthScales)
+    new RadialBasis[I](invMultiQuadricActivation)(centers, lengthScales)
 
 }
