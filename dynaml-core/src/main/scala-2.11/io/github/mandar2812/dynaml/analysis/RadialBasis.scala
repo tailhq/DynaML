@@ -49,7 +49,7 @@ class RadialBasis[I](
 
 }
 
-object Radial {
+object RadialBasis {
 
   val gaussianActivation = DataPipe((x: Double) => math.exp(-0.5*x*x))
 
