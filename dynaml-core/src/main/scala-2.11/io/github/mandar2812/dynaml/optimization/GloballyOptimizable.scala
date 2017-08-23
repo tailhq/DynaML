@@ -18,6 +18,9 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
+import io.github.mandar2812.dynaml.pipes._
+import io.github.mandar2812.dynaml.models._
+
 /**
   * A common binding characteristic between all "globally optimizable"
   * models i.e. models where hyper-parameters can
@@ -58,6 +61,32 @@ trait GloballyOptimizable {
              options: Map[String, String] = Map()): Double
 
   def persist(state: Map[String, Double]): Unit = {}
+
+}
+
+object GloballyOptimizable {
+
+  /**
+    * Instantiate a custom implementation of systems/models with
+    * hyper-parameters and associated fitness/energy.
+    * 
+    * */
+  def apply[T, M <: Model[T, _, _]](
+    system: M, hyp_params: List[String],
+    starting_state: Map[String, Double],
+    energyFunction: DataPipe2[M, Map[String, Double], Double]): GloballyOptimizable =
+    new GloballyOptimizable {
+
+      override protected var  hyper_parameters = hyp_params
+
+      override protected var current_state = starting_state
+
+      override def energy(
+        h: Map[String, Double],
+        options: Map[String, String] = Map()) = energyFunction(system, h)
+
+
+    }
 
 }
 
