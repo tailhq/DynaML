@@ -31,20 +31,17 @@ import io.github.mandar2812.dynaml.utils._
   * */
 class RadialBasis[I](
   activation: DataPipe[Double, Double])(
-  centers: Seq[I], lengthScales: Seq[Double])(
+  val centers: Seq[I], val lengthScales: Seq[Double])(
   implicit field: InnerProductSpace[I, Double]) extends Basis[I] {
 
 
-  override protected val f = (x: I) => DenseVector(
-    (
-      Seq(1d) ++
-      centers.zip(lengthScales).map(cs => {
-        val d = field.minus(x, cs._1)
-        val r = math.sqrt(field.dot(d, d))/cs._2
+  override protected val f: (I) => DenseVector[Double] = (x: I) => DenseVector(
+    centers.zip(lengthScales).map(cs => {
+      val d = field.minus(x, cs._1)
+      val r = math.sqrt(field.dot(d, d))/cs._2
 
-        activation(r)
-      })
-    ).toArray
+      activation(r)
+    }).toArray
   )
 
 }
