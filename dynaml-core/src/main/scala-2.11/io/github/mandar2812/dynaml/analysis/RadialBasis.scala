@@ -30,18 +30,31 @@ import io.github.mandar2812.dynaml.utils._
   * @author mandar2812 date 2017/08/15
   * */
 class RadialBasis[I](
-  activation: DataPipe[Double, Double])(
+  activation: DataPipe[Double, Double],
+  bias: Boolean = true)(
   val centers: Seq[I], val lengthScales: Seq[Double])(
   implicit field: InnerProductSpace[I, Double]) extends Basis[I] {
 
 
   override protected val f: (I) => DenseVector[Double] = (x: I) => DenseVector(
-    centers.zip(lengthScales).map(cs => {
-      val d = field.minus(x, cs._1)
-      val r = math.sqrt(field.dot(d, d))/cs._2
+    if(bias) {
+      (
+        Seq(1d) ++
+          centers.zip(lengthScales).map(cs => {
+            val d = field.minus(x, cs._1)
+            val r = math.sqrt(field.dot(d, d))/cs._2
 
-      activation(r)
-    }).toArray
+            activation(r)
+          })
+        ).toArray
+    } else {
+      centers.zip(lengthScales).map(cs => {
+        val d = field.minus(x, cs._1)
+        val r = math.sqrt(field.dot(d, d))/cs._2
+
+        activation(r)
+      }).toArray
+    }
   )
 
 }
@@ -55,19 +68,25 @@ object RadialBasis {
   val invMultiQuadricActivation = DataPipe((x: Double) => 1d/math.sqrt(1d + x*x))
 
   def gaussianBasis[I](
-    centers: Seq[I], lengthScales: Seq[Double])(
+    centers: Seq[I],
+    lengthScales: Seq[Double],
+    bias: Boolean = true)(
     implicit f: InnerProductSpace[I, Double]) =
-    new RadialBasis[I](gaussianActivation)(centers, lengthScales)
+    new RadialBasis[I](gaussianActivation, bias)(centers, lengthScales)
 
   def multiquadricBasis[I](
-    centers: Seq[I], lengthScales: Seq[Double])(
-    implicit f: Field[I] with InnerProductSpace[I, Double]) =
-    new RadialBasis[I](multiquadricActivation)(centers, lengthScales)
+    centers: Seq[I],
+    lengthScales: Seq[Double],
+    bias: Boolean = true)(
+    implicit f: InnerProductSpace[I, Double]) =
+    new RadialBasis[I](multiquadricActivation, bias)(centers, lengthScales)
 
 
   def invMultiquadricBasis[I](
-    centers: Seq[I], lengthScales: Seq[Double])(
+    centers: Seq[I],
+    lengthScales: Seq[Double],
+    bias: Boolean = true)(
     implicit f: InnerProductSpace[I, Double]) =
-    new RadialBasis[I](invMultiQuadricActivation)(centers, lengthScales)
+    new RadialBasis[I](invMultiQuadricActivation, bias)(centers, lengthScales)
 
 }
