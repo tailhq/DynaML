@@ -63,6 +63,8 @@ object RadialBasis {
 
   val gaussianActivation = DataPipe((x: Double) => math.exp(-0.5*x*x))
 
+  val laplacianActivation = DataPipe((x: Double) => math.exp(-0.5*math.abs(x)))
+
   val multiquadricActivation = DataPipe((x: Double) => math.sqrt(1d + x*x))
 
   val invMultiQuadricActivation = DataPipe((x: Double) => 1d/math.sqrt(1d + x*x))
@@ -73,6 +75,13 @@ object RadialBasis {
     bias: Boolean = true)(
     implicit f: InnerProductSpace[I, Double]) =
     new RadialBasis[I](gaussianActivation, bias)(centers, lengthScales)
+
+  def laplacianBasis[I](
+    centers: Seq[I],
+    lengthScales: Seq[Double],
+    bias: Boolean = true)(
+    implicit f: InnerProductSpace[I, Double]) =
+    new RadialBasis[I](laplacianActivation, bias)(centers, lengthScales)
 
   def multiquadricBasis[I](
     centers: Seq[I],
