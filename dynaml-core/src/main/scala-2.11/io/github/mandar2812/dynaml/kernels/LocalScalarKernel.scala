@@ -179,7 +179,9 @@ abstract class CompositeCovariance[T] extends LocalSVMKernel[T]
 
 object CompositeCovariance {
 
-  val truncateHyperParams = (kv: (String, Double)) => (kv._1.split("/").tail.mkString("/"), kv._2)
+  val truncateState = (kv: (String, Double)) => (kv._1.split("/").tail.mkString("/"), kv._2)
+
+  val truncateHyp = (k: String) => k.split("/").tail.mkString("/")
 }
 
 /**

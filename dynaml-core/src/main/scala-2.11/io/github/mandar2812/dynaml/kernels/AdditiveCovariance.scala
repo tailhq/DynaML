@@ -18,8 +18,13 @@ class AdditiveCovariance[Index](
       otherKernel.hyper_parameters.map(h => sID+"/"+h)
 
   private def getKernelConfigs(config: Map[String, Double]) = (
-    config.filter(_._1.contains(fID)).map(CompositeCovariance.truncateHyperParams),
-    config.filter(_._1.contains(sID)).map(CompositeCovariance.truncateHyperParams)
+    config.filter(_._1.contains(fID)).map(CompositeCovariance.truncateState),
+    config.filter(_._1.contains(sID)).map(CompositeCovariance.truncateState)
+  )
+
+  protected def getKernelHyp(s: Seq[String]) = (
+    s.filter(_.contains(fID)).map(CompositeCovariance.truncateHyp),
+    s.filter(_.contains(sID)).map(CompositeCovariance.truncateHyp)
   )
 
   override def evaluateAt(config: Map[String, Double])(x: Index, y: Index) = {
@@ -42,6 +47,14 @@ class AdditiveCovariance[Index](
     firstKernel.setHyperParameters(firstKernelConfig)
     otherKernel.setHyperParameters(secondKernelConfig)
     super.setHyperParameters(h)
+  }
+
+  override def block(h: String*) = {
+
+    val (firstKernelHyp, secondKernelHyp) = getKernelHyp(h)
+    firstKernel.block(firstKernelHyp:_*)
+    otherKernel.block(secondKernelHyp:_*)
+    super.block(h:_*)
   }
 
   override def gradientAt(config: Map[String, Double])(x: Index, y: Index): Map[String, Double] = {

@@ -42,7 +42,7 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
       val kEvalFunc = k._2.evaluateAt(
         config
           .filterKeys(_.contains(k._1))
-          .map(CompositeCovariance.truncateHyperParams)) _
+          .map(CompositeCovariance.truncateState)) _
 
       kEvalFunc
     })

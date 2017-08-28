@@ -28,8 +28,13 @@ class TensorCombinationKernel[R, S](
     firstK.state.map(h => (fID+"/"+h._1, h._2)) ++ secondK.state.map(h => (sID+"/"+h._1, h._2))
 
   private def getKernelConfigs(config: Map[String, Double]) = (
-    config.filter(_._1.contains(fID)).map(CompositeCovariance.truncateHyperParams),
-    config.filter(_._1.contains(sID)).map(CompositeCovariance.truncateHyperParams)
+    config.filter(_._1.contains(fID)).map(CompositeCovariance.truncateState),
+    config.filter(_._1.contains(sID)).map(CompositeCovariance.truncateState)
+  )
+
+  protected def getKernelHyp(s: Seq[String]) = (
+    s.filter(_.contains(fID)).map(CompositeCovariance.truncateHyp),
+    s.filter(_.contains(sID)).map(CompositeCovariance.truncateHyp)
   )
 
   override def evaluateAt(config: Map[String, Double])(x: (R, S), y: (R, S)): Double = {
@@ -58,6 +63,14 @@ class TensorCombinationKernel[R, S](
       if(kid == fID) firstK.setHyperParameters(hyper_params) else secondK.setHyperParameters(hyper_params)
     })
     super.setHyperParameters(h)
+  }
+
+  override def block(h: String*) = {
+
+    val (firstKernelHyp, secondKernelHyp) = getKernelHyp(h)
+    firstK.block(firstKernelHyp:_*)
+    secondK.block(secondKernelHyp:_*)
+    super.block(h:_*)
   }
 
   override def gradientAt(config: Map[String, Double])(x: (R, S), y: (R, S)): Map[String, Double] = {
