@@ -19,8 +19,7 @@
 package io.github.mandar2812.dynaml.analysis
 
 import breeze.linalg._
-import spire.algebra.{Field, InnerProductSpace, NRoot}
-import spire.implicits._
+import spire.algebra.InnerProductSpace
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils._
 
@@ -61,41 +60,63 @@ class RadialBasis[I](
 
 object RadialBasis {
 
-  val gaussianActivation = DataPipe((x: Double) => math.exp(-0.5*x*x))
+  val gaussian = DataPipe((x: Double) => math.exp(-0.5*x*x))
 
-  val laplacianActivation = DataPipe((x: Double) => math.exp(-0.5*math.abs(x)))
+  val laplacian = DataPipe((x: Double) => math.exp(-0.5*math.abs(x)))
 
-  val multiquadricActivation = DataPipe((x: Double) => math.sqrt(1d + x*x))
+  val multiquadric = DataPipe((x: Double) => math.sqrt(1d + x*x))
 
-  val invMultiQuadricActivation = DataPipe((x: Double) => 1d/math.sqrt(1d + x*x))
+  val invMultiQuadric = DataPipe((x: Double) => 1d/math.sqrt(1d + x*x))
+
+  val maternHalfInteger = MetaPipe((p: Int) => (x: Double) => {
+    //Calculate the matern half integer expression
+
+    //Constants
+    val n = factorial(p).toDouble/factorial(2*p)
+    val adj_nu = math.sqrt(2*p+1d)
+    //Exponential Component
+    val ex = math.exp(-1d*adj_nu*x)
+    //Polynomial Component
+    val poly = (0 to p).map(i => {
+      math.pow(adj_nu*2*x, p-i)*factorial(p+i)/(factorial(i)*factorial(p-i))
+    }).sum
+
+    poly*ex*n
+  })
 
   def gaussianBasis[I](
     centers: Seq[I],
     lengthScales: Seq[Double],
     bias: Boolean = true)(
     implicit f: InnerProductSpace[I, Double]) =
-    new RadialBasis[I](gaussianActivation, bias)(centers, lengthScales)
+    new RadialBasis[I](gaussian, bias)(centers, lengthScales)
 
   def laplacianBasis[I](
     centers: Seq[I],
     lengthScales: Seq[Double],
     bias: Boolean = true)(
     implicit f: InnerProductSpace[I, Double]) =
-    new RadialBasis[I](laplacianActivation, bias)(centers, lengthScales)
+    new RadialBasis[I](laplacian, bias)(centers, lengthScales)
 
   def multiquadricBasis[I](
     centers: Seq[I],
     lengthScales: Seq[Double],
     bias: Boolean = true)(
     implicit f: InnerProductSpace[I, Double]) =
-    new RadialBasis[I](multiquadricActivation, bias)(centers, lengthScales)
-
+    new RadialBasis[I](multiquadric, bias)(centers, lengthScales)
 
   def invMultiquadricBasis[I](
     centers: Seq[I],
     lengthScales: Seq[Double],
     bias: Boolean = true)(
     implicit f: InnerProductSpace[I, Double]) =
-    new RadialBasis[I](invMultiQuadricActivation, bias)(centers, lengthScales)
+    new RadialBasis[I](invMultiQuadric, bias)(centers, lengthScales)
+
+  def maternHalfIntegerBasis[I](p: Int)(
+    centers: Seq[I], lengthScales: Seq[Double],
+    bias: Boolean = true)(
+    implicit f: InnerProductSpace[I, Double]) =
+    new RadialBasis[I](maternHalfInteger(p), bias)(centers, lengthScales)
+
 
 }
