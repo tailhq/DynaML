@@ -16,18 +16,16 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.analysis
+package io.github.mandar2812.dynaml.pipes
 
 import breeze.linalg._
-import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.utils._
 
 /**
   * Defines an abstract type for a basis expansion/mapping.
   * 
   * @author mandar2812 date 2017/08/18
   * */
-abstract class Basis[I] extends DataPipe[I, DenseVector[Double]] {
+abstract class Basis[-I] extends DataPipe[I, DenseVector[Double]] {
 
   self =>
 

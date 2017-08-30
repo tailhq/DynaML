@@ -35,7 +35,7 @@ trait DataPipe[-Source, +Destination] extends Serializable {
 
   def apply(data: Source): Destination = run(data)
 
-  def apply[T <: Traversable[Source]](data: T) =
+  def apply[T <: Traversable[Source]](data: T): T =
     optimize { data.map(run).asInstanceOf[T] }
 
   /**
@@ -52,6 +52,19 @@ trait DataPipe[-Source, +Destination] extends Serializable {
     val runFunc = (d: Source) => that.run(self.run(d))
     DataPipe(runFunc)
   }
+
+  /**
+    * Represents the composition of two
+    * pipes, one a vanilla data pipe and
+    * the other a basis expansion,
+    * resulting in a third pipe
+    * Schematically represented as:
+    *
+    * [[Source]] -> [[Destination]] :: [[Destination]] -> [[breeze.linalg.DenseVector]] ==
+    * [[Source]] -> [[breeze.linalg.DenseVector]]
+    *
+    * */
+  def %>(that: Basis[Destination]): Basis[Source] = Basis((d: Source) => that.run(self.run(d)))
 
   def *[OtherSource, OtherDestination](that: DataPipe[OtherSource, OtherDestination])
   :ParallelPipe[Source, Destination, OtherSource, OtherDestination] = ParallelPipe(self.run, that.run)
@@ -108,7 +121,7 @@ object ParallelPipe {
   ParallelPipe[S1, D1, S2, D2] = {
     new ParallelPipe[S1, D1, S2, D2] {
 
-      def run(data: (S1, S2)) = (func1(data._1), func2(data._2))
+      def run(data: (S1, S2)): (D1, D2) = (func1(data._1), func2(data._2))
 
       override val _1 = DataPipe(func1)
 
