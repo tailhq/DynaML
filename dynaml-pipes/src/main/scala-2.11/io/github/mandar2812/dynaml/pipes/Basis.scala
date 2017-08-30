@@ -46,7 +46,7 @@ object Basis {
     * */
   def apply[I](func: (I) => DenseVector[Double]): Basis[I] = new Basis[I] {
 
-    val f = func
+    val f: (I) => DenseVector[Double] = func
   }
 
 }
