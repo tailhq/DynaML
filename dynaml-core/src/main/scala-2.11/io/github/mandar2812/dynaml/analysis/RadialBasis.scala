@@ -66,7 +66,7 @@ object RadialBasis {
 
   val multiquadric = DataPipe((x: Double) => math.sqrt(1d + x*x))
 
-  val invMultiQuadric = DataPipe((x: Double) => 1d/math.sqrt(1d + x*x))
+  val invMultiQuadric = MetaPipe((beta: Double) => (x: Double) => 1d/math.pow(1d + x*x, 0.5*beta))
 
   val maternHalfInteger = MetaPipe((p: Int) => (x: Double) => {
     //Calculate the matern half integer expression
@@ -105,12 +105,14 @@ object RadialBasis {
     implicit f: InnerProductSpace[I, Double]) =
     new RadialBasis[I](multiquadric, bias)(centers, lengthScales)
 
-  def invMultiquadricBasis[I](
+  def invMultiquadricBasis[I](beta: Double)(
     centers: Seq[I],
     lengthScales: Seq[Double],
     bias: Boolean = true)(
-    implicit f: InnerProductSpace[I, Double]) =
-    new RadialBasis[I](invMultiQuadric, bias)(centers, lengthScales)
+    implicit f: InnerProductSpace[I, Double]): RadialBasis[I] = {
+    require(beta > 0, "Beta in an Inverse Multi-Quadric Basis must be positive")
+    new RadialBasis[I](invMultiQuadric(beta), bias)(centers, lengthScales)
+  }
 
   def maternHalfIntegerBasis[I](p: Int)(
     centers: Seq[I], lengthScales: Seq[Double],
