@@ -330,6 +330,20 @@ package object utils {
     hermiteHelper(n, x, 1, x)
   }
 
+
+  /**
+    * Calculates the Harmonic number function
+    * for positive real arguments.
+    * */
+  def H(x: Double): Double = {
+    assert(x >= 0, "Harmonic number function in DynaML takes only non-negative arguments")
+    def hRec(arg: Double, acc: Double): Double = math.floor(arg) match {
+      case 0 => acc
+      case n => hRec(arg-1, acc + (1d/n))
+    }
+    hRec(x, 0d)
+  }
+
   @tailrec
   def factorial(n: Int, accumulator: Long = 1): Long = {
     if(n == 0) accumulator else factorial(n - 1, accumulator*n)
