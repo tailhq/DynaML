@@ -1,10 +1,7 @@
 
-<img align="right" src="docs/images/dynaml_logo3_small.png" height="200px" style="padding-left: 20px" alt="DynaML Logo"/>
-
-
-
 # DynaML
 
+<img align="right" src="docs/images/dynaml_logo3_small.png" height="200px" style="padding-left: 20px" alt="DynaML Logo"/>
 
 [![Join the chat at https://gitter.im/DynaML/Lobby](https://badges.gitter.im/DynaML/Lobby.svg)](https://gitter.im/DynaML/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/transcendent-ai-labs/DynaML.svg?branch=master)](https://travis-ci.org/transcendent-ai-labs/DynaML) [![](https://jitpack.io/v/transcendent-ai-labs/DynaML.svg)](https://jitpack.io/#transcendent-ai-labs/DynaML)
 
