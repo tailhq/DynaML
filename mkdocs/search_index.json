@@ -321,6 +321,21 @@
             "title": "Pipes"
         },
         {
+            "location": "/scaladoc/v1.5.1/core/",
+            "text": "",
+            "title": "dynaml-core"
+        },
+        {
+            "location": "/scaladoc/v1.5.1/pipes/",
+            "text": "",
+            "title": "dynaml-pipes"
+        },
+        {
+            "location": "/scaladoc/v1.5.1/examples/",
+            "text": "",
+            "title": "dynaml-examples"
+        },
+        {
             "location": "/scaladoc/v1.5/core/",
             "text": "",
             "title": "dynaml-core"
