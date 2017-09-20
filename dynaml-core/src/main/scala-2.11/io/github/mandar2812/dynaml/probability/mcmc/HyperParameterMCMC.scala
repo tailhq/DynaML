@@ -114,6 +114,8 @@ abstract class HyperParameterHMC[
 
 
 /**
+  * <h3>Adaptive Metropolis Sampler</h3>
+  *
   * Adaptive Markov Chain Monte Carlo algorithm,
   * equipped with reversible Metropolis Hastings updates.
   *
