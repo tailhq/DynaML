@@ -55,7 +55,7 @@ case class BlockedMultivariateStudentsT(
     // determinant of the cholesky decomp is the sqrt of the determinant of the cov matrix
     // this is the log det of the cholesky decomp
     val det = bsum(blog(bdiag(root)))
-    ((mean.rows/2) * (log(mu - 2.0) + log(Pi))) + det + lgamma(mu/2.0) - lgamma((mu+mean.rows)/2.0)
+    ((mean.rows/2) * (log(mu - 2.0) + log(Pi))) + 0.5*det + lgamma(mu/2.0) - lgamma((mu+mean.rows)/2.0)
   }
 
   def variance = new PartitionedPSDMatrix(

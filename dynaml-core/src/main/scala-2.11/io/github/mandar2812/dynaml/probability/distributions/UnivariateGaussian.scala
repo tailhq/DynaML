@@ -55,7 +55,7 @@ class MVGaussian(
     // determinant of the cholesky decomp is the sqrt of the determinant of the cov matrix
     // this is the log det of the cholesky decomp
     val det = sum(log(diag(root)))
-    mean.length/2.0 *  log(2 * math.Pi) + det
+    mean.length/2.0 *  log(2 * math.Pi) + 0.5*det
   }
 
   override def draw() = {

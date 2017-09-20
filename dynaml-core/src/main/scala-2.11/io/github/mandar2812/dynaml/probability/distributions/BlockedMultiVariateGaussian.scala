@@ -46,7 +46,7 @@ case class BlockedMultiVariateGaussian(
     // determinant of the cholesky decomp is the sqrt of the determinant of the cov matrix
     // this is the log det of the cholesky decomp
     val det = bsum(blog(bdiag(root)))
-    mean.rows.toDouble/2 *  log(2 * Pi) + det
+    mean.rows.toDouble/2 *  log(2 * Pi) + 0.5*det
   }
 
   def variance = covariance
