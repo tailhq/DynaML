@@ -19,21 +19,25 @@ under the License.
 package io.github.mandar2812.dynaml.probability
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import breeze.stats.distributions.{ContinuousDistr, Gaussian, Moments, MultivariateGaussian}
+import breeze.stats.distributions.{ContinuousDistr, Moments}
 import io.github.mandar2812.dynaml.algebra.{PartitionedPSDMatrix, PartitionedVector}
 import io.github.mandar2812.dynaml.analysis.{PartitionedVectorField, VectorField}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.distributions._
-import spire.implicits._
 import spire.algebra.Field
 
-abstract class AbstractGaussianRV[T, V, Distr <: ContinuousDistr[T] with Moments[T, V] with HasErrorBars[T]]
-  extends ContinuousRVWithDistr[T, Distr] {
+/**
+  * <h3>Gaussian Random Variable</h3>
+  * */
+abstract class AbstractGaussianRV[
+T, V, Distr <: ContinuousDistr[T] with Moments[T, V] with HasErrorBars[T]] extends
+  ContinuousRVWithDistr[T, Distr] {
 
   override val sample = DataPipe(() => underlyingDist.sample())
 }
 
 /**
+  * Univariate gaussian random variable
   * @author mandar2812 on 26/7/16.
   * */
 case class GaussianRV(mu: Double, sigma: Double) extends
@@ -41,6 +45,10 @@ case class GaussianRV(mu: Double, sigma: Double) extends
   override val underlyingDist = new UnivariateGaussian(mu, sigma)
 }
 
+/**
+  * Multivariate gaussian random variable
+  * @author mandar2812
+  * */
 case class MultGaussianRV(
   mu: DenseVector[Double], covariance: DenseMatrix[Double])(
   implicit ev: Field[DenseVector[Double]])
@@ -63,6 +71,10 @@ object MultGaussianRV {
   }
 }
 
+/**
+  * Multivariate blocked gaussian random variable
+  * @author mandar2812
+  * */
 case class MultGaussianPRV(
   mu: PartitionedVector,
   covariance: PartitionedPSDMatrix)(
@@ -87,10 +99,23 @@ object MultGaussianPRV {
 
 }
 
+/**
+  * Matrix gaussian random variable
+  * */
 case class MatrixNormalRV(
   m: DenseMatrix[Double], u: DenseMatrix[Double],
   v: DenseMatrix[Double]) extends AbstractGaussianRV[
   DenseMatrix[Double], (DenseMatrix[Double], DenseMatrix[Double]), MatrixNormal] {
 
   override val underlyingDist = MatrixNormal(m, u, v)
+}
+
+object MatrixNormalRV {
+
+  def apply(
+    m: DenseMatrix[Double],
+    u: DenseMatrix[Double],
+    v: DenseMatrix[Double]): MatrixNormalRV =
+    new MatrixNormalRV(m, u, v)
+
 }
