@@ -122,12 +122,12 @@
         },
         {
             "location": "/releases/mydoc_release_notes_151/",
-            "text": "Version 1.5.1 of DynaML, released September 20, 2017, introduces bug fixes and some useful new features\n\n\n\n\nAdditions\n\u00b6\n\n\nPackage\n \ndynaml.probability.distributions\n\n\n\n\nAdded \nKumaraswamy\n distribution, an alternative to the Beta distribution.\n\n\nAdded \nErlang\n distribution, a special case of the Gamma distribution.\n\n\n\n\nBug Fixes\n\u00b6\n\n\nPackage\n \ndynaml.kernels\n\n\n\n\nFixed bug concerning hyper-parameter blocking in \nCompositeCovariance\n and its children.\n\n\n\n\nPackage\n \ndynaml.probability.distributions\n\n\n\n\nFixed calculation error for normalisation constant of multivariate T and Gaussian family.",
+            "text": "Version 1.5.1 of DynaML, released September 20, 2017, introduces bug fixes and some useful new features\n\n\n\n\nAdditions\n\u00b6\n\n\nPackage\n \ndynaml.probability.distributions\n\n\n\n\nAdded \nKumaraswamy\n distribution, an alternative to the Beta distribution.\n\n\nAdded \nErlang\n distribution, a special case of the Gamma distribution.\n\n\n\n\nPackage\n \ndynaml.analysis\n\n\n\n\n\n\nAdded Radial Basis Function generators.\n\n\n\n\nGaussian \n\n\nInverse Multi-Quadric\n\n\nMulti-Quadric\n\n\nMatern Half-Integer\n\n\n\n\n\n\n\n\nAdded an inner product space implementation for \nTuple2\n\n\n\n\n\n\nBug Fixes\n\u00b6\n\n\nPackage\n \ndynaml.kernels\n\n\n\n\nFixed bug concerning hyper-parameter blocking in \nCompositeCovariance\n and its children.\n\n\n\n\nPackage\n \ndynaml.probability.distributions\n\n\n\n\nFixed calculation error for normalisation constant of multivariate T and Gaussian family.",
             "title": "v1.5.1"
         },
         {
             "location": "/releases/mydoc_release_notes_151/#additions",
-            "text": "Package   dynaml.probability.distributions   Added  Kumaraswamy  distribution, an alternative to the Beta distribution.  Added  Erlang  distribution, a special case of the Gamma distribution.",
+            "text": "Package   dynaml.probability.distributions   Added  Kumaraswamy  distribution, an alternative to the Beta distribution.  Added  Erlang  distribution, a special case of the Gamma distribution.   Package   dynaml.analysis    Added Radial Basis Function generators.   Gaussian   Inverse Multi-Quadric  Multi-Quadric  Matern Half-Integer     Added an inner product space implementation for  Tuple2",
             "title": "Additions"
         },
         {
