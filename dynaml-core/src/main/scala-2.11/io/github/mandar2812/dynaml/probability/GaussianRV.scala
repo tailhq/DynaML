@@ -109,13 +109,3 @@ case class MatrixNormalRV(
 
   override val underlyingDist = MatrixNormal(m, u, v)
 }
-
-object MatrixNormalRV {
-
-  def apply(
-    m: DenseMatrix[Double],
-    u: DenseMatrix[Double],
-    v: DenseMatrix[Double]): MatrixNormalRV =
-    new MatrixNormalRV(m, u, v)
-
-}
