@@ -8,6 +8,16 @@
  - Added [Kumaraswamy](https://en.wikipedia.org/wiki/Kumaraswamy_distribution) distribution, an alternative to the Beta distribution.
  - Added [Erlang](https://en.wikipedia.org/wiki/Erlang_distribution) distribution, a special case of the Gamma distribution.
 
+**Package** `dynaml.analysis`
+
+ - Added Radial Basis Function generators.
+    * Gaussian 
+    * Inverse Multi-Quadric
+    * Multi-Quadric
+    * Matern Half-Integer
+
+ - Added an inner product space implementation for `Tuple2`
+
 ## Bug Fixes
 
 **Package** `dynaml.kernels`
