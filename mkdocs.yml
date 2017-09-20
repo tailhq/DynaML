@@ -22,6 +22,10 @@ pages:
         - 'v1.4': 'releases/mydoc_release_notes_14.md'
     - Scaladoc:
       - v1.5.x:
+        - v1.5.1:
+            - dynaml-core: 'scaladoc/v1.5.1/core.md'
+            - dynaml-pipes: 'scaladoc/v1.5.1/pipes.md'
+            - dynaml-examples: 'scaladoc/v1.5.1/examples.md'
         - v1.5:
             - dynaml-core: 'scaladoc/v1.5/core.md'
             - dynaml-pipes: 'scaladoc/v1.5/pipes.md'
