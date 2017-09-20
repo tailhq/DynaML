@@ -12,11 +12,14 @@ pages:
     - 'Supported Features': supported_features.md
     - 'Structure': structure.md
     - Releases:
-      - 'v1.5': 'releases/mydoc_release_notes_15.md'
-      - 'v1.4.3': 'releases/mydoc_release_notes_143.md'
-      - 'v1.4.2': 'releases/mydoc_release_notes_142.md'
-      - 'v1.4.1': 'releases/mydoc_release_notes_141.md'
-      - 'v1.4': 'releases/mydoc_release_notes_14.md'
+      - 'v1.5.x':
+        - 'v1.5.1': 'releases/mydoc_release_notes_151.md'
+        - 'v1.5': 'releases/mydoc_release_notes_15.md'
+      - 'v1.4.x':
+        - 'v1.4.3': 'releases/mydoc_release_notes_143.md'
+        - 'v1.4.2': 'releases/mydoc_release_notes_142.md'
+        - 'v1.4.1': 'releases/mydoc_release_notes_141.md'
+        - 'v1.4': 'releases/mydoc_release_notes_14.md'
     - Scaladoc:
       - v1.5.x:
         - v1.5:
