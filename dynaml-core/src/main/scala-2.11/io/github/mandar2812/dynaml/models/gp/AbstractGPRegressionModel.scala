@@ -372,6 +372,8 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
 object AbstractGPRegressionModel {
 
+  private val logger = Logger.getLogger(this.getClass)
+
   /**
     * Calculate the parameters of the posterior predictive distribution
     * for a multivariate gaussian model.
@@ -429,8 +431,14 @@ object AbstractGPRegressionModel {
         trace(log(Lmat)) +
         trainingData.length*math.log(2*math.Pi))
     } catch {
-      case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
-      case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
+      case _: breeze.linalg.NotConvergedException => {
+        logger.warn("Cholesky decomposition of kernel matrix not converged ... Returning +Inf")
+        Double.PositiveInfinity
+      }
+      case _: breeze.linalg.MatrixNotSymmetricException => {
+        logger.warn("Kernel matrix not symmetric ... Returning NaN")
+        Double.NaN
+      }
     }
   }
 
