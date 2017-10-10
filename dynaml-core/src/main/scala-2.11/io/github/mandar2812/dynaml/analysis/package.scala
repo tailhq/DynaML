@@ -102,7 +102,7 @@ package object analysis {
       Basis(
         (x: Double) =>
         DenseVector(
-          (0 to maxdegree).map(d => if(d == 0) 1d else chebyshev(d,x,kind)).toArray
+          (0 to maxdegree).map(d => chebyshev(d,x,kind)).toArray
         )
       )
     }
@@ -118,8 +118,21 @@ package object analysis {
       Basis(
         (x: Double) =>
         DenseVector(
-          (0 to maxdegree).map(d => if(d == 0) 1d else hermite(d, x)).toArray
+          (0 to maxdegree).map(d => hermite(d, x)).toArray
         )
+      )
+  }
+
+  /**
+    * Generate a legendre polynomial basis
+    * */
+  object LegendreBasisGenerator extends DataPipe[Int, Basis[Double]] {
+    override def run(maxdegree: Int): Basis[Double] =
+      Basis(
+        (x: Double) =>
+          DenseVector(
+            (0 to maxdegree).map(d => legendre(d, x)).toArray
+          )
       )
   }
 

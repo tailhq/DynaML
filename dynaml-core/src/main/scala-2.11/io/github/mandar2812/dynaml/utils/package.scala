@@ -330,6 +330,22 @@ package object utils {
     hermiteHelper(n, x, 1, x)
   }
 
+  /**
+    * Calculate the value of the Legendre polynomials
+    * tail recursively.
+    * */
+  def legendre(n: Int, x: Double): Double = {
+    @tailrec
+    def legendreHelper(k: Int, x: Double, a: Double, b: Double): Double =
+      k match {
+        case 0 => a
+        case 1 => b
+        case _ => legendreHelper(k-1, x, b, ((2*k - 1)*x*b - (k-1)*a)/k)
+      }
+
+    legendreHelper(n, x, 1, x)
+  }
+
 
   /**
     * Calculates the Harmonic number function
