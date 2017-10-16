@@ -188,6 +188,9 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
     pprint.pprintln(_previous_sample)
     logger.info("Energy = "+previous_log_likelihood)
     logger.info("--------------------------------------")
+    logger.info("\n\n************************************")
+    logger.info("\nCommencing burn in period for "+burnIn+" epochs")
+    logger.info("\n************************************")
   }
 
   initMessage()
@@ -195,6 +198,10 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
   cfor(0)(i => i< burnIn, i => i+1)(i => {
     getNext()
   })
+
+  logger.info("\n\n************************************")
+  logger.info("\nBurn in period complete")
+  logger.info("\n************************************")
 
   protected def getExplorationVar: DenseMatrix[Double] = {
     val adj = count.toDouble/(count-1)
