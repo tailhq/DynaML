@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.analysis
 
-import spire.algebra.{Field, InnerProductSpace}
+import spire.algebra.{Field, InnerProductSpace, NRoot}
 
 /**
   * @author mandar2812 date: 21/02/2017.
@@ -35,6 +35,26 @@ object implicits {
     override def zero: (Double, Double) = (0d, 0d)
 
     override def plus(x: (Double, Double), y: (Double, Double)): (Double, Double) = (x._1+y._1, x._2+y._2)
+  }
+
+  implicit object fieldTuple2 extends Field[(Double, Double)] {
+    override def quot(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1/b._1, a._2/b._2)
+
+    override def mod(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1%b._1, a._2%b._2)
+
+    override def gcd(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1%b._1, a._2%b._2)
+
+    override def div(x: (Double, Double), y: (Double, Double)): (Double, Double) = (x._1/y._1, x._2/y._2)
+
+    override def times(x: (Double, Double), y: (Double, Double)): (Double, Double) = (x._1*y._1, x._2*y._2)
+
+    override def negate(x: (Double, Double)): (Double, Double) = (-x._1, -x._2)
+
+    override def zero: (Double, Double) = (0d, 0d)
+
+    override def plus(x: (Double, Double), y: (Double, Double)): (Double, Double) = (x._1+y._1, x._2+y._2)
+
+    override def one: (Double, Double) = (1d, 1d)
   }
 
 }

@@ -52,7 +52,7 @@ class CubicSplineKernel[I](theta: Double)(
   state = Map("theta" -> theta)
 
   override def gradientAt(config: Map[String, Double])(x: I, y: I) = {
-    val d = n.norm(f.minus(x,y))
+    val d = n.norm(n.minus(x,y))
     val th = config("theta")
     val dth = d/th
 
@@ -80,9 +80,9 @@ class CubicSplineKernel[I](theta: Double)(
   * @param n Implicitly specified [[NormedVectorSpace]] over the type [[I]],
   *          enables calculation of norms.
   * */
-abstract class CubicSplineARDKernel[I](
+class CubicSplineARDKernel[I](
   theta: I, enc: Encoder[Map[String, Double], I])(
-  implicit f: Field[I] with NRoot[I], n: NormedVectorSpace[I, Double]) extends
+  implicit f: Field[I], n: NormedVectorSpace[I, Double]) extends
   StationaryKernel[I, Double, DenseMatrix[Double]] with
   LocalScalarKernel[I] {
 
@@ -95,9 +95,7 @@ abstract class CubicSplineARDKernel[I](
   override def evalAt(config: Map[String, Double])(x: I) = {
     val th = parameter_encoder(config)
 
-    val sqrt_th = f.sqrt(th)
-
-    val r = n.norm(f.div(x, sqrt_th))
+    val r = n.norm(f.div(x, th))
 
     if(r < 0.5) 1 - 6d*r*r + 6d*r*r*r
     else if(r >= 0.5 && r < 1d) 2d*math.pow(1d - r, 3d)
@@ -108,9 +106,7 @@ abstract class CubicSplineARDKernel[I](
     val d = f.minus(x,y)
     val th = parameter_encoder(config)
 
-    val sqrt_th = f.sqrt(th)
-
-    val r = n.norm(f.div(d, sqrt_th))
+    val r = n.norm(f.div(d, th))
 
     val d_map = parameter_encoder.i(d)
 
