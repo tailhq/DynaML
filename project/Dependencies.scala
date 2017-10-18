@@ -4,7 +4,7 @@ object Dependencies {
 
   val scala = "2.11.8"
 
-  val platform = {
+  val platform: String = {
     // Determine platform name using code similar to javacpp
     // com.googlecode.javacpp.Loader.java line 60-84
     val jvmName = System.getProperty("java.vm.name").toLowerCase
@@ -35,6 +35,20 @@ object Dependencies {
     platformName
   }
 
+  val gpuFlag: Boolean = false
+
+  val tensorflow_classifier: String = {
+    val platform_splits = platform.split("-")
+    val (os, arch) = (platform_splits.head, platform_splits.last)
+
+    val tf_c =
+      if (os.contains("macosx")) "darwin-cpu-"+arch
+      else if(os.contains("linux")) {
+        if(gpuFlag) "linux-gpu-"+arch else "linux-cpu-"+arch
+      } else ""
+    println("Tensorflow-Scala Classifier: "+tf_c)
+    tf_c
+  }
 
   val baseDependencies = Seq(
     "org.scala-lang" % "scala-compiler" % scala % "compile",
@@ -120,5 +134,9 @@ object Dependencies {
   val dataFormatDependencies = Seq(
     "info.folone" % "poi-scala_2.11" % "0.18",
     "com.diffplug.matsim" % "matfilerw" % "3.0.0"
+  )
+
+  val tensorflowDependency = Seq(
+    "org.platanios" % "tensorflow_2.11" % "0.1.0-SNAPSHOT" classifier tensorflow_classifier
   )
 }
