@@ -20,7 +20,8 @@ val baseSettings = Seq(
     "jzy3d-releases" at "http://maven.jzy3d.org/releases",
     "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
     "BeDataDriven" at "https://nexus.bedatadriven.com/content/groups/public",
-    Resolver.sonatypeRepo("public"))
+    Resolver.sonatypeRepo("public"),
+    Resolver.sonatypeRepo("snapshots"))
 )
 
 lazy val commonSettings = Seq(
@@ -31,7 +32,8 @@ lazy val commonSettings = Seq(
       tinkerpopDependency ++ notebookInterfaceDependency ++
       openMLDependency ++ rejinDependency ++
       rPackages ++ cppCompatDependencies ++
-      imageDependencies ++ dataFormatDependencies),
+      imageDependencies ++ dataFormatDependencies /*++
+      tensorflowDependency*/),
 
   scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
 )
