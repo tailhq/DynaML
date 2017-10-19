@@ -136,7 +136,7 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
   val burnIn: Long, algoName: String = "Adaptive MCMC") extends
   RandomVariable[Map[String, Double]] {
 
-  val logger = Logger.getLogger(this.getClass)
+  val logger: Logger = Logger.getLogger(this.getClass)
 
   val encoder: ConfigEncoding = ConfigEncoding(hyper_prior.keys.toList)
 
@@ -144,7 +144,7 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
 
   protected val dimensions: Int = hyper_prior.size
 
-  implicit protected val vector_field = VectorField(dimensions)
+  implicit protected val vector_field: VectorField = VectorField(dimensions)
 
   protected val processed_prior = EncodedContDistrRV(getPriorMapDistr(hyper_prior), encoder)
 
@@ -171,7 +171,7 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
 
   protected var previous_log_likelihood = logLikelihood(initialState)
 
-  protected val eye = DenseMatrix.eye[Double](dimensions)
+  protected val eye: DenseMatrix[Double] = DenseMatrix.eye[Double](dimensions)
 
   def _previous_sample = encoder.i(previous_sample)
 
@@ -196,7 +196,7 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
   initMessage()
 
   cfor(0)(i => i< burnIn, i => i+1)(i => {
-    getNext()
+    next()
   })
 
   logger.info("\n\n************************************")
@@ -209,42 +209,50 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
     else (sigma*math.pow((1-beta)*2.38, 2)*adj/dimensions.toDouble) + (eye*math.pow(0.1*beta, 2)/dimensions.toDouble)
   }
 
-  protected def getNext(): DenseVector[Double] = {
+  protected def next(): DenseVector[Double] = {
 
     val explorationCov = getExplorationVar
+    var isAccepted: Boolean = false
 
-    count += 1
+    var acceptedSample = previous_sample
 
-    val candidate = candidateDistributionPipe(encoder(_previous_sample), explorationCov).draw
+    while (!isAccepted) {
+      count += 1
+      val candidate = candidateDistributionPipe(encoder(_previous_sample), explorationCov).draw
 
-    val likelihood = logLikelihood(candidate)
+      val likelihood = logLikelihood(candidate)
 
-    logger.info("Candidate: \n")
-    pprint.pprintln(encoder.i(candidate))
-    logger.info("Log-Likelihood = "+likelihood)
+      logger.info("Candidate: \n")
+      pprint.pprintln(encoder.i(candidate))
+      logger.info("Log-Likelihood = "+likelihood)
 
-    val acceptanceRatio = likelihood - previous_log_likelihood
+      val acceptanceRatio = likelihood - previous_log_likelihood
 
-    val x = if(acceptanceRatio > 0.0) {
-      previous_sample = candidate
-      previous_log_likelihood = likelihood
-      logger.info("Status: Accepted\n")
-      acceptedSamples += 1
-      candidate
-    } else if(Random.nextDouble() < math.exp(acceptanceRatio)) {
-      previous_sample = candidate
-      previous_log_likelihood = likelihood
-      logger.info("Status: Accepted\n")
-      acceptedSamples += 1
-      candidate
-    } else {
-      logger.info("Status: Rejected\n")
-      previous_sample
+      val x = if(acceptanceRatio > 0.0) {
+        previous_sample = candidate
+        previous_log_likelihood = likelihood
+        logger.info("Status: Accepted\n")
+        acceptedSamples += 1
+        acceptedSample = candidate
+        isAccepted = true
+        candidate
+      } else if(Random.nextDouble() < math.exp(acceptanceRatio)) {
+        previous_sample = candidate
+        previous_log_likelihood = likelihood
+        logger.info("Status: Accepted\n")
+        acceptedSamples += 1
+        acceptedSample = candidate
+        isAccepted = true
+        candidate
+      } else {
+        logger.info("Status: Rejected\n")
+        previous_sample
+      }
+
+      updateMoments(x)
     }
 
-    updateMoments(x)
-
-    x
+    acceptedSample
   }
 
   protected def updateMoments(x: DenseVector[Double]): Unit = {
@@ -263,7 +271,7 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
     * the random variable
     *
     **/
-  override val sample = DataPipe(getNext _) > encoder.i
+  override val sample: DataPipe[Unit, Map[String, Double]] = DataPipe(next _) > encoder.i
 }
 
 
