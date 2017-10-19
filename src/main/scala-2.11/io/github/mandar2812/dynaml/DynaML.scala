@@ -251,14 +251,19 @@ object DynaML {
     * delegating to [[DynaML.run]]
     */
   def main(args0: Array[String]): Unit = {
-    // set proxy properties from env
-    // Not in `main0`, since `main0` should be able to be run as part of the
-    // test suite without mangling the global properties of the JVM process
-    ProxyFromEnv.setPropProxyFromEnv()
 
-    val success = main0(args0.toList, System.in, System.out, System.err)
-    if (success) sys.exit(0)
-    else sys.exit(1)
+    if(args0.head.contains("--server")) {
+      DynaServe.main(Array.empty[String])
+    } else {
+      // set proxy properties from env
+      // Not in `main0`, since `main0` should be able to be run as part of the
+      // test suite without mangling the global properties of the JVM process
+      ProxyFromEnv.setPropProxyFromEnv()
+
+      val success = main0(args0.toList, System.in, System.out, System.err)
+      if (success) sys.exit(0)
+      else sys.exit(1)
+    }
   }
 
   /**
