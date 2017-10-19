@@ -34,7 +34,7 @@ lazy val commonSettings = Seq(
       rPackages ++ cppCompatDependencies ++
       imageDependencies ++ dataFormatDependencies /*++
       tensorflowDependency*/),
-
+  ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
   scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
 )
 
