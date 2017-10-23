@@ -33,11 +33,9 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import java.io.IOException
-import java.security.PublicKey
 
 import ammonite.sshd._
 import org.apache.sshd.server.auth.password.StaticPasswordAuthenticator
-import org.apache.sshd.server.auth.pubkey._
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.math._

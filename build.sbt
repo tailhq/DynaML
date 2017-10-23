@@ -32,8 +32,8 @@ lazy val commonSettings = Seq(
       tinkerpopDependency ++ notebookInterfaceDependency ++
       openMLDependency ++ rejinDependency ++
       rPackages ++ cppCompatDependencies ++
-      imageDependencies ++ dataFormatDependencies /*++
-      tensorflowDependency*/),
+      imageDependencies ++ dataFormatDependencies ++
+      tensorflowDependency),
   ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
   scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
 )

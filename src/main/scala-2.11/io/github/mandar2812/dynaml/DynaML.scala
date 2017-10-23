@@ -252,7 +252,7 @@ object DynaML {
     */
   def main(args0: Array[String]): Unit = {
 
-    if(args0.head.contains("--server")) {
+    if(!args0.isEmpty && args0.head.contains("--server")) {
       DynaServe.main(Array.empty[String])
     } else {
       // set proxy properties from env
