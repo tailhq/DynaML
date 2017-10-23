@@ -220,10 +220,10 @@ object SparkPSDMatrix {
     * @tparam T The type of input features of the data
     *
     */
-  def apply[T](data: RDD[(Long, T)])(kernel: Kernel[T, Double]) = {
+  def apply[T](data: RDD[(Long, T)])(kernel: (T, T) => Double) = {
     new SparkPSDMatrix(
       data.cartesian(data)
-        .map(c => ((c._1._1, c._2._1), kernel.evaluate(c._1._2, c._2._2)))
+        .map(c => ((c._1._1, c._2._1), kernel(c._1._2, c._2._2)))
         .filter(e => e._1._1 >= e._1._2),
       sanityChecks = false
     )
@@ -233,11 +233,11 @@ object SparkPSDMatrix {
     * Populate a positive semi-definite matrix defined as M(i,j) = ev(i,j)
     *
     */
-  def apply(data: RDD[Long])(ev: (Long, Long) => Double) =
+  /*def apply(data: RDD[Long])(ev: (Long, Long) => Double) =
     new SparkPSDMatrix(data.cartesian(data)
       .map(c => (c, ev(c._1, c._2)))
       .filter(e => e._1._1 >= e._1._2),
-      sanityChecks = false)
+      sanityChecks = false)*/
 
 
 }

@@ -8,7 +8,7 @@ import org.apache.spark.rdd.RDD
   */
 trait DistributedKernel[T] extends Kernel[T, Double] {
 
-  def buildKernelMatrix(data: RDD[(Long, T)]) = SparkPSDMatrix(data)(this)
+  def buildKernelMatrix(data: RDD[(Long, T)]) = SparkPSDMatrix(data)(this.evaluate)
 
   def buildCrossKernelMatrix(data1: RDD[(Long, T)], data2: RDD[(Long, T)]) = SparkMatrix(data1, data2)(this)
 

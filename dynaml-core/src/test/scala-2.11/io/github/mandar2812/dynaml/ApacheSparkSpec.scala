@@ -105,7 +105,7 @@ class ApacheSparkSpec extends FlatSpec
 
     val list = sc.parallelize(0L until length).map(l => (l, DenseVector.tabulate(nFeat)(_ => Random.nextGaussian())))
 
-    val mat = SparkPSDMatrix(list)(k)
+    val mat = SparkPSDMatrix(list)(k.evaluate)
 
     assert(vec.rows == length.toLong && vec.cols == 1L, "A vector should have consistent dimensions")
 
@@ -129,8 +129,8 @@ class ApacheSparkSpec extends FlatSpec
 
     val list = sc.parallelize(0L until length).map(l => (l, DenseVector.tabulate(nFeat)(_ => Random.nextGaussian())))
 
-    val mat1 = SparkPSDMatrix(list)(k1)
-    val mat2 = SparkPSDMatrix(list)(k2)
+    val mat1 = SparkPSDMatrix(list)(k1.evaluate)
+    val mat2 = SparkPSDMatrix(list)(k2.evaluate)
 
     val res1 = SparkMatrix.vertcat(mat1, mat2)
     val res2 = SparkMatrix.horzcat(mat1, mat2)
@@ -169,7 +169,7 @@ class ApacheSparkSpec extends FlatSpec
 
   }
 
-  /*"Distributed Conjugate Gradient "*/ ignore should "be able to solve linear systems "+
+  /*"Distributed Conjugate Gradient " ignore should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
     val length = 10
@@ -188,7 +188,7 @@ class ApacheSparkSpec extends FlatSpec
       epsilon, 3)
 
     assert(normDist(xnew-x, 1.0) <= epsilon)
-  }
+  }*/
 
 
   /*"Blocked CG " should "be able to solve linear systems "+
