@@ -142,19 +142,19 @@ abstract class MVStudentsTModel[T, I: ClassTag](
   override def predictiveDistribution[U <: Seq[I]](test: U) = {
 
     val (kMat, bGLS, sigmaGLS, resGLS, hAh) = if(caching) {
-      logger.info("** Using cached training matrix **")
+      println("** Using cached training matrix **")
       (kernelMatrixCache, bGLSCache, sigmaGLSCache, residualGLSCache, hAhCache)
     } else MVStudentsTModel.inferencePrimitives(covariance, noiseModel, trainingData, H, D)
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix for test points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix for test points")
     val kernelTest = SVMKernel.buildSVMKernelMatrix(
       test, test.length,
       covariance.evaluate)
       .getKernelMatrix()
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix between training and test points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix between training and test points")
     val crossKernel = SVMKernel.crossKernelMatrix(
       trainingData, test,
       covariance.evaluate)
@@ -193,7 +193,7 @@ abstract class MVStudentsTModel[T, I: ClassTag](
     val upperErrorBars = testData.indices.toStream.map(index => upper(index,::).t)
 
 
-    logger.info("Generating error bars")
+    println("Generating error bars")
 
     val preds = mean.zip(lowerErrorBars.zip(upperErrorBars)).map(t => (t._1, t._2._1, t._2._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
@@ -290,8 +290,8 @@ object MVStudentsTModel {
     val (npoints, num_latent_features) = (trainingData.length, H.cols)
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix for training points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix for training points")
     val A = SVMKernel.buildSVMKernelMatrix(
       trainingData, trainingData.length,
       effectiveTrainingKernel.evaluate)
