@@ -266,8 +266,8 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
    * */
   override def predictiveDistribution[U <: Seq[I]](test: U):
   MultGaussianPRV = {
-
-    logger.info("Calculating posterior predictive distribution")
+    println("\nGaussian Process Regression")
+    println("Calculating posterior predictive distribution")
     //Calculate the kernel matrix on the training data
 
 
@@ -284,20 +284,20 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     )
 
     val smoothingMat = if(!caching) {
-      logger.info("---------------------------------------------------------------")
-      logger.info("Calculating covariance matrix for training points")
+      println("---------------------------------------------------------------")
+      println("Calculating covariance matrix for training points")
       getTrainKernelMatrix
     } else {
-      logger.info("** Using cached training matrix **")
+      println("** Using cached training matrix **")
       partitionedKernelMatrixCache
     }
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix for test points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix for test points")
     val kernelTest = getTestKernelMatrix(test)
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix between training and test points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix between training and test points")
     val crossKernel = getCrossKernelMatrix(test)
 
     //Calculate the predictive mean and co-variance
@@ -333,7 +333,7 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     val lowerErrorBars = lower.toStream
     val upperErrorBars = upper.toStream
 
-    logger.info("Generating error bars")
+    println("Generating error bars")
 
     val preds = mean.zip(lowerErrorBars.zip(upperErrorBars)).map(t => (t._1, t._2._1, t._2._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))

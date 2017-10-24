@@ -122,38 +122,44 @@ class ProbGPCommMachine[T, I: ClassTag](
       new DecomposableCovariance[I](noiseModels:_*),
       DataPipe((x: I) => meanFuncs.map(_(x)).sum))
 
-    logger.info("===============================================")
-    logger.info("Constructing Probabilistic GP Committee")
+    println("\n===============================================")
+    println("Constructing Probabilistic GP Committee")
     //Create the GP committee with the calculated specifications
     val committeeGP: AbstractGPRegressionModel[T, I] =
       AbstractGPRegressionModel(
         netKernel, netNoiseModel, netMeanFunc)(
         system.data, system.npoints)
 
-    logger.info("Number of model instances = "+weights.length)
-    logger.info("--------------------------------------")
-    logger.info(
-      "Calculated model probabilities/weights are \n"+
-        weights.map(wc =>
-          "\nConfiguration: \n"+
-            GlobalOptimizer.prettyPrint(wc._2)+
-            "\nProbability = "+wc._1+"\n"
-        ).reduceLeft((a, b) => a++b)
-    )
-    logger.info("--------------------------------------")
+    print("Number of model instances = ")
+    pprint.pprintln(weights.length)
+
+    println("--------------------------------------")
+    println(
+      "Calculated model probabilities/weights are \n")
+    weights.foreach(wc => {
+      println("\nConfiguration: ")
+      pprint.pprintln(wc._2)
+      print("\nProbability = ")
+      pprint.pprintln(wc._1)
+    })
 
 
-    logger.info(
-      "State of new model:- Covariance: \n" +
-        GlobalOptimizer.prettyPrint(committeeGP.covariance.state))
-    logger.info(
-      "State of new model:- Noise \n" +
-        GlobalOptimizer.prettyPrint(committeeGP.noiseModel.state))
+    println("--------------------------------------")
 
-    logger.info("===============================================")
+
+    println(
+      "State of new model:- Covariance: ")
+    pprint.pprintln(committeeGP.covariance.state)
+
+
+    println(
+      "State of new model:- Noise ")
+    pprint.pprintln(committeeGP.noiseModel.state)
+
+    println("===============================================")
 
     if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1")) {
-      logger.info("Persisting model state")
+      println("Persisting model state")
       committeeGP.persist(committeeGP._current_state)
     }
 

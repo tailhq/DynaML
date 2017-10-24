@@ -30,6 +30,6 @@ object GlobalOptimizer {
 
   def prettyPrint(configuration: Map[String, Double]): String =
     configuration.foldLeft("""""")(
-      (str, mapping) => str+""" """+mapping._1+""" = """+"%4f".format(mapping._2).toString+"\n"
+      (str, mapping) => str+""" """+mapping._1+""" = """+"%4f".format(mapping._2).toString
     )
 }

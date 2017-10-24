@@ -126,7 +126,8 @@ abstract class AbstractSTPRegressionModel[T, I](
     *             storing the values of the input patters.
     **/
   override def predictiveDistribution[U <: Seq[I]](test: U): MultStudentsTPRV = {
-    logger.info("Calculating posterior predictive distribution")
+    println("\nStudents' T Process Regression")
+    println("Calculating posterior predictive distribution")
     //Calculate the kernel matrix on the training data
     val training = dataAsIndexSeq(g)
     val trainingLabels = PartitionedVector(
@@ -150,24 +151,24 @@ abstract class AbstractSTPRegressionModel[T, I](
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
     val smoothingMat = if(!caching) {
-      logger.info("---------------------------------------------------------------")
-      logger.info("Calculating covariance matrix for training points")
+      println("---------------------------------------------------------------")
+      println("Calculating covariance matrix for training points")
       SVMKernel.buildPartitionedKernelMatrix(training,
         training.length, _blockSize, _blockSize,
         effectiveTrainingKernel.evaluate)
     } else {
-      logger.info("** Using cached training matrix **")
+      println("** Using cached training matrix **")
       partitionedKernelMatrixCache
     }
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix for test points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix for test points")
     val kernelTest = SVMKernel.buildPartitionedKernelMatrix(
       test, test.length.toLong,
       _blockSize, _blockSize, covariance.evaluate)
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix between training and test points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix between training and test points")
     val crossKernel = SVMKernel.crossPartitonedKernelMatrix(
       training, test,
       _blockSize, _blockSize,
@@ -227,7 +228,7 @@ abstract class AbstractSTPRegressionModel[T, I](
     val upperErrorBars = upper.toStream
 
 
-    logger.info("Generating error bars")
+    println("Generating error bars")
 
     val preds = mean.zip(lowerErrorBars.zip(upperErrorBars)).map(t => (t._1, t._2._1, t._2._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))

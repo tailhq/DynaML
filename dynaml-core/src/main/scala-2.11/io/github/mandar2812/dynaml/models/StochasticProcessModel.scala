@@ -133,7 +133,7 @@ abstract class ContinuousProcessModel[T, I, Y, W <: ContinuousRandomVariable[_]]
     * (Index, Actual Value, Prediction, Lower Bar, Higher Bar)
     * */
   def test(testData: T): Seq[(I, Y, Y, Y, Y)] = {
-    logger.info("Generating predictions for test set")
+    println("Generating predictions for test set")
     //Calculate the posterior predictive distribution for the test points.
     val predictionWithError = predictionWithErrorBars(dataAsIndexSeq(testData), errorSigma)
     //Collate the test data with the predictions and error bars
@@ -284,7 +284,7 @@ BaseProcesses <: ContinuousProcessModel[T, I, Y, W1]](
     val lowerErrorBars = toStream(lower)
     val upperErrorBars = toStream(upper)
 
-    logger.info("Generating error bars")
+    println("Generating error bars")
 
     val preds = mean.zip(lowerErrorBars.zip(upperErrorBars)).map(t => (t._1, t._2._1, t._2._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))

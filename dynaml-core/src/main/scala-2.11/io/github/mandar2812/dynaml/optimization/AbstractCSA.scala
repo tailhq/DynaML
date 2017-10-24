@@ -72,7 +72,8 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
 
   protected val mutate: (Map[String, Double], Double) => Map[String, Double] =
     (config: Map[String, Double], temperature: Double) => {
-      logger.info("Mutating configuration: \n"+GlobalOptimizer.prettyPrint(config)+"\n")
+      println("Mutating configuration: ")
+      pprint.pprintln(config)
 
       config.map((param) => {
         val dist = new CauchyDistribution(0.0, temperature)
@@ -91,9 +92,10 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
     initialConfig: Map[String, Double],
     options: Map[String, String] = Map()): List[(Double, Map[String, Double])] = {
 
-    logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
-    logger.info("Coupled Simulated Annealing (CSA): "+AbstractCSA.algorithm(variant))
-    logger.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    println("Coupled Simulated Annealing (CSA): "+AbstractCSA.algorithm(variant))
+    println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    println()
 
     var accTemp = iTemp
     var mutTemp = iTemp
@@ -117,8 +119,10 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
       it match {
         case 0 => eLandscape
         case _ =>
-          logger.info("**************************")
-          logger.info("CSA Iteration: "+(MAX_ITERATIONS-it+1))
+          println("**************************")
+          print("CSA Iteration: ")
+          pprint.pprintln(MAX_ITERATIONS-it+1)
+          println()
           //mutate each element of the grid with
           //the generating distribution
           //and accept using the acceptance distribution
@@ -153,8 +157,10 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
 
             val new_energy = system.energy(new_config, options) + priorEnergy
 
-            logger.info("New Configuration: \n"+GlobalOptimizer.prettyPrint(new_config))
-            logger.info("Energy = "+new_energy)
+            println("\nNew Configuration: ")
+            pprint.pprintln(new_config)
+            print("Energy = ")
+            pprint.pprintln(new_energy)
 
             //Calculate the acceptance probability
             val acceptanceProbability =
@@ -164,16 +170,16 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
 
             val ans = if(new_energy < config._1) {
 
-              logger.info("Status: Accepted\n")
+              println("Status: Accepted\n")
               ((new_energy, new_config), acceptanceProbability)
 
             } else {
 
               if(Random.nextDouble <= acceptanceProbability) {
-                logger.info("Status: Accepted\n")
+                println("Status: Accepted\n")
                 ((new_energy, new_config), acceptanceProbability)
               } else {
-                logger.info("Status: Rejected\n")
+                println("Status: Rejected\n")
                 (config, acceptanceProbability)
               }
             }

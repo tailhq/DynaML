@@ -134,7 +134,8 @@ abstract class ESGPModel[T, I: ClassTag](
     *             storing the values of the input patters.
     **/
   override def predictiveDistribution[U <: Seq[I]](test: U) = {
-    logger.info("Calculating posterior predictive distribution")
+    println("\nExtended Skew Gaussian Process Regression")
+    println("Calculating posterior predictive distribution")
 
     //Calculate the prior distribution parameters
     //Skewness and cutoff
@@ -166,24 +167,24 @@ abstract class ESGPModel[T, I: ClassTag](
 
     //Calculate the kernel + noise matrix on the training data
     val smoothingMat = if(!caching) {
-      logger.info("---------------------------------------------------------------")
-      logger.info("Calculating covariance matrix for training points")
+      println("---------------------------------------------------------------")
+      println("Calculating covariance matrix for training points")
       SVMKernel.buildPartitionedKernelMatrix(trainingData,
         trainingData.length, _blockSize, _blockSize,
         effectiveTrainingKernel.evaluate)
     } else {
-      logger.info("** Using cached training matrix **")
+      println("** Using cached training matrix **")
       partitionedKernelMatrixCache
     }
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix for test points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix for test points")
     val kernelTest = SVMKernel.buildPartitionedKernelMatrix(
       test, test.length.toLong,
       _blockSize, _blockSize, covariance.evaluate)
 
-    logger.info("---------------------------------------------------------------")
-    logger.info("Calculating covariance matrix between training and test points")
+    println("---------------------------------------------------------------")
+    println("Calculating covariance matrix between training and test points")
     val crossKernel = SVMKernel.crossPartitonedKernelMatrix(
       trainingData, test,
       _blockSize, _blockSize,
@@ -212,7 +213,9 @@ abstract class ESGPModel[T, I: ClassTag](
     //Calculate the confidence interval alpha, corresponding to the value of sigma
     val alpha = 1.0 - (stdG.cdf(sigma.toDouble) - stdG.cdf(-1.0*sigma.toDouble))
 
-    logger.info("Calculated confidence bound: alpha = "+alpha)
+    print("Calculated confidence bound: "+0x03B1.toChar+" = ")
+    pprint.pprintln(alpha)
+
     val BlockedMESNRV(pTau, pLambda, postmean, postcov) = predictiveDistribution(testData)
 
     val varD: PartitionedVector = bdiag(postcov)
@@ -221,7 +224,7 @@ abstract class ESGPModel[T, I: ClassTag](
     val mean = postmean._data.map(_._2.toArray)
     val lambda = pLambda._data.map(_._2.toArray)
 
-    logger.info("Generating (marginal) error bars using a buffered approach")
+    println("Generating (marginal) error bars using a buffered approach")
 
     val zippedBufferedParams = mean.zip(stdDev).zip(lambda).map(c => (c._1._1, c._1._2, c._2))
 

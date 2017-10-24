@@ -36,9 +36,10 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M) extends
     val landscape = performCSA(initialConfig, options).toMap
     val optimum = landscape.keys.min
 
-    logger.info(
-      "Optimum value of energy is: "+optimum+
-      " at: \n"+GlobalOptimizer.prettyPrint(landscape(optimum)))
+    print("Optimum value of energy is: ")
+    pprint.pprintln(optimum)
+    println("Configuration: ")
+    pprint.pprintln(landscape(optimum))
 
     //Persist the current configuration to the model memory
     if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))

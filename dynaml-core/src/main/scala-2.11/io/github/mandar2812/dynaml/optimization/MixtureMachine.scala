@@ -103,20 +103,23 @@ BaseProcess <: ContinuousProcessModel[T, I, Y, W1]
 
     val configsAndWeights = modelProbabilities(energyLandscape).map(c => (c._1, c._2 ++ blockedState))
 
-    logger.info("===============================================")
-    logger.info("Constructing Gaussian Process Mixture")
+    println("\n===============================================")
+    println("Constructing Gaussian Process Mixture")
 
-    logger.info("Number of model instances = "+weights.length)
-    logger.info("--------------------------------------")
-    logger.info(
-      "Calculated model probabilities/weights are \n"+
-        configsAndWeights.map(wc =>
-          "\nConfiguration: \n"+
-            GlobalOptimizer.prettyPrint(wc._2)+
-            "\nProbability = "+wc._1+"\n"
-        ).reduceLeft((a, b) => a++b)
-    )
-    logger.info("--------------------------------------")
+    print("Number of model instances = ")
+    pprint.pprintln(weights.length)
+
+    println("--------------------------------------")
+    println(
+      "Calculated model probabilities/weights are \n")
+    configsAndWeights.foreach(wc => {
+      println("\nConfiguration: ")
+      pprint.pprintln(wc._2)
+      print("\nProbability = ")
+      pprint.pprintln(wc._1)
+    })
+
+    println("--------------------------------------")
 
 
 

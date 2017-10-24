@@ -113,7 +113,8 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
 
     grid.map((config) => {
       val configMap = config //List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
-      logger.info("""Evaluating Configuration: """+"\n"+GlobalOptimizer.prettyPrint(configMap))
+      println("\nEvaluating Configuration: ")
+      pprint.pprintln(configMap)
 
       val configEnergy = system.energy(configMap, options)
 
@@ -125,11 +126,14 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
 
       val netEnergy = priorEnergy + configEnergy
 
-      logger.info("Energy = "+configEnergy+"\n")
+      print("Energy = ")
+      pprint.pprintln(configEnergy)
 
       if(usePriorFlag) {
-        logger.info("Energy due to Prior = "+priorEnergy+"\n")
-        logger.info("Net Energy = "+netEnergy+"\n")
+        print("Energy due to Prior = ")
+        pprint.pprintln(priorEnergy)
+        print("Net Energy = ")
+        pprint.pprintln(netEnergy)
       }
 
       (netEnergy, configMap)
