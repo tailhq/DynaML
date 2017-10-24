@@ -47,31 +47,20 @@ class HyperParameterMCMC[
 Model <: GloballyOptimizable,
 Distr <: ContinuousDistr[Double]](
   system: Model, hyper_prior: Map[String, Distr],
-  proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]],
-  val burnIn: Long) extends
-  RandomVariable[Map[String, Double]] {
+  val proposal: ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]],
+  burnIn: Long) extends
+  AdaptiveHyperParameterMCMC[Model, Distr](
+    system, hyper_prior,
+    burnIn, "Vanilla MCMC") {
 
-  val encoder: ConfigEncoding = ConfigEncoding(hyper_prior.keys.toList)
 
-  val initialState = encoder(system._current_state)
+  override def candidateDistribution(mean: DenseVector[Double], covariance: DenseMatrix[Double]) = proposal
 
-  implicit private val vector_field = VectorField(hyper_prior.size)
-
-  private val processed_prior = EncodedContDistrRV(getPriorMapDistr(hyper_prior), encoder)
-
-  private val logLikelihoodFunction = (candidate: DenseVector[Double]) => {
-    processed_prior.underlyingDist.logPdf(candidate) - system.energy(encoder.i(candidate))
+  override protected def getExplorationVar: DenseMatrix[Double] = {
+    sigma
   }
 
-  val dropCount = 0
-
-  val metropolisHastings = GeneralMetropolisHastings(
-    LikelihoodModel(logLikelihoodFunction), proposal.underlyingDist,
-    initialState, burnIn, dropCount)
-
-  val base_draw = DataPipe(() => metropolisHastings.draw())
-
-  override val sample = base_draw > encoder.i
+  override protected def updateMoments(x: DenseVector[Double]): Unit = {}
 }
 
 object HyperParameterMCMC {
@@ -153,9 +142,10 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
       processed_prior.underlyingDist.logPdf(candidate) - system.energy(encoder.i(candidate))
     }
 
-  val candidateDistributionPipe = DataPipe2(
-    (mean: DenseVector[Double], covariance: DenseMatrix[Double]) => MultGaussianRV(mean, covariance)
-  )
+  def candidateDistribution(
+    mean: DenseVector[Double],
+    covariance: DenseMatrix[Double]): ContinuousRVWithDistr[DenseVector[Double], ContinuousDistr[DenseVector[Double]]] =
+    MultGaussianRV(mean, covariance)
 
   protected val beta = 0.05
 
@@ -182,15 +172,18 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
   def _count = count
 
   protected def initMessage(): Unit = {
-    logger.info("--------------------------------------")
-    logger.info("\t"+algoName)
-    logger.info("Initial Sample: \n")
+    println("--------------------------------------")
+    println("\t"+algoName)
+    println("--------------------------------------")
+
+    println("Initial Sample: \n")
     pprint.pprintln(_previous_sample)
-    logger.info("Energy = "+previous_log_likelihood)
-    logger.info("--------------------------------------")
-    logger.info("\n\n************************************")
-    logger.info("\nCommencing burn in period for "+burnIn+" epochs")
-    logger.info("\n************************************")
+    print("Energy = ")
+    pprint.pprintln(previous_log_likelihood)
+    println("--------------------------------------")
+    println("\n\n************************************")
+    println("\nCommencing burn in period for "+burnIn+" epochs")
+    println("\n************************************")
   }
 
   initMessage()
@@ -199,9 +192,9 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
     next()
   })
 
-  logger.info("\n\n************************************")
-  logger.info("\nBurn in period complete")
-  logger.info("\n************************************")
+  println("\n\n************************************")
+  println("\nBurn in period complete")
+  println("\n************************************")
 
   protected def getExplorationVar: DenseMatrix[Double] = {
     val adj = count.toDouble/(count-1)
@@ -218,20 +211,21 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
 
     while (!isAccepted) {
       count += 1
-      val candidate = candidateDistributionPipe(encoder(_previous_sample), explorationCov).draw
+      val candidate = candidateDistribution(encoder(_previous_sample), explorationCov).draw
 
       val likelihood = logLikelihood(candidate)
 
-      logger.info("Candidate: \n")
+      println("Candidate: \n")
       pprint.pprintln(encoder.i(candidate))
-      logger.info("Log-Likelihood = "+likelihood)
+      print("Log-Likelihood = ")
+      pprint.pprintln(likelihood)
 
       val acceptanceRatio = likelihood - previous_log_likelihood
 
       val x = if(acceptanceRatio > 0.0) {
         previous_sample = candidate
         previous_log_likelihood = likelihood
-        logger.info("Status: Accepted\n")
+        println("Status: Accepted\n")
         acceptedSamples += 1
         acceptedSample = candidate
         isAccepted = true
@@ -239,13 +233,13 @@ Model <: GloballyOptimizable, Distr <: ContinuousDistr[Double]](
       } else if(Random.nextDouble() < math.exp(acceptanceRatio)) {
         previous_sample = candidate
         previous_log_likelihood = likelihood
-        logger.info("Status: Accepted\n")
+        println("Status: Accepted\n")
         acceptedSamples += 1
         acceptedSample = candidate
         isAccepted = true
         candidate
       } else {
-        logger.info("Status: Rejected\n")
+        println("Status: Rejected\n")
         previous_sample
       }
 
