@@ -78,7 +78,7 @@ object Dependencies {
   )
 
   val apacheSparkDependency = Seq(
-    "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
+    "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test" exclude("org.slf4j", "slf4j-log4j12"),
     "org.apache.spark" % "spark-core_2.11" % "2.1.2" % "compile" exclude("org.slf4j", "slf4j-log4j12"),
     "org.apache.spark" % "spark-mllib_2.11" % "2.1.2" % "compile" exclude("org.slf4j", "slf4j-log4j12")
   )
