@@ -2,9 +2,12 @@
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.api.tf.learn._
   import org.platanios.tensorflow.data.loaders.MNISTLoader
+  import ammonite.ops._
+
+  val tempdir = home/"tmp"
 
   // Load and batch data using pre-fetching.
-  val dataSet = MNISTLoader.load(java.nio.file.Paths.get("/tmp"))
+  val dataSet = MNISTLoader.load(java.nio.file.Paths.get(tempdir.toString()))
   val trainImages = DatasetFromSlices(dataSet.trainImages)
   val trainLabels = DatasetFromSlices(dataSet.trainLabels)
   val trainData =
@@ -28,7 +31,7 @@
   val model = Model(input, layer, trainInput, trainingInputLayer, loss, optimizer)
 
   loss = loss >> tf.learn.ScalarSummary("Loss")                  // Collect loss summaries for plotting
-  val summariesDir = java.nio.file.Paths.get("/tmp/summaries")                 // Directory in which to save summaries and checkpoints
+  val summariesDir = java.nio.file.Paths.get((tempdir/"summaries").toString())                 // Directory in which to save summaries and checkpoints
   val estimator = Estimator(model, Configuration(Some(summariesDir)))
   estimator.train(
     trainData, StopCriteria(maxSteps = Some(17000)),
