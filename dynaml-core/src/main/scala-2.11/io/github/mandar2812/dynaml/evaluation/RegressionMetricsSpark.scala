@@ -50,12 +50,31 @@ class RegressionMetricsSpark(protected val scores: RDD[(Double, Double)],
   def scores_and_labels() = this.scoresAndLabels
 
   override def print(): Unit = {
-    logger.log(Priority.INFO, "Regression Model Performance")
-    logger.log(Priority.INFO, "============================")
-    logger.log(Priority.INFO, "MAE: " + mae)
-    logger.log(Priority.INFO, "RMSE: " + rmse)
-    logger.log(Priority.INFO, "RMSLE: " + rmsle)
-    logger.log(Priority.INFO, "R^2: " + rsq)
+    println("Regression Model Performance: "+name)
+    println("============================")
+
+    scala.Predef.print("MAE = ")
+    pprint.pprintln(mae)
+
+    scala.Predef.print("RMSE = ")
+    pprint.pprintln(rmse)
+
+    scala.Predef.print("RMSLE = ")
+    pprint.pprintln(rmsle)
+
+/*
+    scala.Predef.print("R^2 = ")
+    pprint.pprintln(Rsq)
+
+    scala.Predef.print("Corr. Coefficient = ")
+    pprint.pprintln(corr)
+
+    scala.Predef.print("Model Yield = ")
+    pprint.pprintln(modelYield)
+
+    scala.Predef.print("Std Dev of Residuals = ")
+    pprint.pprintln(sigma)
+*/
   }
 
   override def kpi() = DenseVector(mae, rmse, rsq)
@@ -64,7 +83,7 @@ class RegressionMetricsSpark(protected val scores: RDD[(Double, Double)],
     implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
     val residuals = this.residuals().map(_._1).collect().toList
 
-    logger.log(Priority.INFO, "Generating Plot of Residuals")
+    println("Generating Plot of Residuals")
     /*val chart1 = XYBarChart(roccurve,
       title = "Residuals", legend = true)
 

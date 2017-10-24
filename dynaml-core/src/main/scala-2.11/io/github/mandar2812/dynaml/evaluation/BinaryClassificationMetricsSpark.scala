@@ -191,18 +191,18 @@ class BinaryClassificationMetricsSpark(
     val prcurve = this.pr()
     val fm = this.fMeasureByThreshold()
     implicit val theme = org.jfree.chart.StandardChartTheme.createDarknessTheme
-    logger.log(Priority.INFO, "Generating ROC Plot")
+    scala.Predef.print("Generating ROC Plot")
     /*val chart1 = XYAreaChart(roccurve,
       title = "Receiver Operating Characteristic", legend = true)
 
     chart1.show()
 
-    logger.log(Priority.INFO, "Generating PR Plot")
+    scala.Predef.print( "Generating PR Plot")
     val chart2 = XYAreaChart(prcurve,
       title = "Precision Recall Curve", legend = true)
     chart2.show()
 
-    logger.log(Priority.INFO, "Generating F1 measure Plot")
+    scala.Predef.print( "Generating F1 measure Plot")
     val chart3 = XYLineChart(fm,
       title = "F1 measure by threshold beta = 1", legend = true)
     chart3.show()*/
@@ -213,10 +213,14 @@ class BinaryClassificationMetricsSpark(
   }
 
   override def print(): Unit = {
-    logger.log(Priority.INFO, "Classification Model Performance")
-    logger.log(Priority.INFO, "============================")
-    logger.log(Priority.INFO, "Accuracy: " + accuracyByThreshold().map((c) => c._2).max)
-    logger.log(Priority.INFO, "Area under ROC: " + areaUnderROC())
+    println("Classification Model Performance: "+name)
+    println("============================")
+
+    scala.Predef.print("Accuracy = ")
+    pprint.pprintln(accuracyByThreshold().map((c) => c._2).max)
+
+    scala.Predef.print("Area under ROC = ")
+    pprint.pprintln(areaUnderROC())
 
   }
 

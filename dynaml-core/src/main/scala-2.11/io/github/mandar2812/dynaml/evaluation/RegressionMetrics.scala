@@ -67,27 +67,41 @@ class RegressionMetrics(
   def scores_and_labels() = this.scoresAndLabels
 
   override def print(): Unit = {
-    logger.info("Regression Model Performance: "+name)
-    logger.info("============================")
-    logger.info("MAE: " + mae)
-    logger.info("RMSE: " + rmse)
-    logger.info("RMSLE: " + rmsle)
-    logger.info("R^2: " + Rsq)
-    logger.info("Corr. Coefficient: " + corr)
-    logger.info("Model Yield: "+modelYield)
-    logger.info("Std Dev of Residuals: " + sigma)
+    println("Regression Model Performance: "+name)
+    println("============================")
+
+    scala.Predef.print("MAE = ")
+    pprint.pprintln(mae)
+
+    scala.Predef.print("RMSE = ")
+    pprint.pprintln(rmse)
+
+    scala.Predef.print("RMSLE = ")
+    pprint.pprintln(rmsle)
+
+    scala.Predef.print("R^2 = ")
+    pprint.pprintln(Rsq)
+
+    scala.Predef.print("Corr. Coefficient = ")
+    pprint.pprintln(corr)
+
+    scala.Predef.print("Model Yield = ")
+    pprint.pprintln(modelYield)
+
+    scala.Predef.print("Std Dev of Residuals = ")
+    pprint.pprintln(sigma)
   }
 
   override def kpi() = DenseVector(mae, rmse, Rsq, corr)
 
   override def generatePlots(): Unit = {
-    logger.info("Generating Plot of Residuals")
+    println("Generating Plot of Residuals")
     generateResidualPlot()
     generateFitPlot()
   }
 
   def generateFitPlot(): Unit = {
-    logger.info("Generating plot of goodness of fit")
+    println("Generating plot of goodness of fit")
     regression(scoresAndLabels)
     title("Goodness of fit: "+name)
     xAxis("Predicted "+name)
@@ -96,7 +110,7 @@ class RegressionMetrics(
 
   def generateResidualPlot(): Unit = {
     val roccurve = this.residuals()
-    logger.info("Generating plot of residuals vs labels")
+    println("Generating plot of residuals vs labels")
     scatter(roccurve.map(i => (i._2, i._1)))
     title("Scatter Plot of Residuals: "+name)
     xAxis("Predicted "+name)
@@ -183,21 +197,35 @@ class MultiRegressionMetrics(override protected val scoresAndLabels: List[(Dense
   def scores_and_labels() = this.scoresAndLabels
 
   override def print(): Unit = {
-    logger.info("Regression Model Performance: "+name)
-    logger.info("============================")
-    logger.info("MAE: \n" + mae)
-    logger.info("RMSE: \n" + rmse)
-    logger.info("RMSLE: \n" + rmsle)
-    logger.info("R^2: \n" + Rsq)
-    logger.info("Corr. Coefficient: \n" + corr)
-    logger.info("Model Yield: \n"+modelYield)
-    logger.info("Std Dev of Residuals: \n" + sigma)
+    println("Regression Model Performance: "+name)
+    println("============================")
+
+    scala.Predef.print("MAE = ")
+    pprint.pprintln(mae)
+
+    scala.Predef.print("RMSE = ")
+    pprint.pprintln(rmse)
+
+    scala.Predef.print("RMSLE = ")
+    pprint.pprintln(rmsle)
+
+    scala.Predef.print("R^2 = ")
+    pprint.pprintln(Rsq)
+
+    scala.Predef.print("Corr. Coefficient = ")
+    pprint.pprintln(corr)
+
+    scala.Predef.print("Model Yield = ")
+    pprint.pprintln(modelYield)
+
+    scala.Predef.print("Std Dev of Residuals = ")
+    pprint.pprintln(sigma)
   }
 
   override def kpi() = DenseVector(mae, rmse, Rsq, corr)
 
   override def generatePlots(): Unit = {
-    logger.info("Generating Plot of Fit for each target")
+    println("Generating Plot of Fit for each target")
     (0 until num_outputs).foreach(output => {
       regression(scoresAndLabels.map(couple => (couple._1(output), couple._2(output))))
     })

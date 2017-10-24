@@ -192,19 +192,19 @@ class BinaryClassificationMetrics(
     val fm = this.fMeasureByThreshold()
     val mtt = matthewsCCByThreshold
 
-    logger.info("Generating Matthew's correlation coefficient plot by thresholding value")
+    println("Generating Matthew's correlation coefficient plot by thresholding value")
     spline(mtt.map(_._1), mtt.map(_._2))
     title("MCC vs Threshold Cutoff: "+name)
     xAxis("Threshold")
     yAxis("F Measure")
 
-    logger.info("Generating F1-measure plot by thresholding value")
+    println("Generating F1-measure plot by thresholding value")
     spline(fm.map(_._1), fm.map(_._2))
     title("F Measure vs Threshold Cutoff: "+name)
     xAxis("Threshold")
     yAxis("F Measure")
 
-    logger.info("Generating ROC Plot")
+    println("Generating ROC Plot")
     areaspline(roccurve.map(_._1), roccurve.map(_._2))
     title("Receiver Operating Characteristic: "+name+
       ", Area under curve: "+areaUnderCurve(roccurve))
@@ -213,12 +213,20 @@ class BinaryClassificationMetrics(
   }
 
   override def print(): Unit = {
-    logger.info("Classification Model Performance: "+name)
-    logger.info("============================")
-    logger.info("Accuracy: " + accuracyByThreshold().map((c) => c._2).max)
-    logger.info("Area under ROC: " + areaUnderROC())
-    logger.info("Maximum F Measure: " + fMeasureByThreshold().map(_._2).max)
-    logger.info("Maximum Matthew's Correlation Coefficient: " + matthewsCCByThreshold.map(_._2).max)
+    println("Classification Model Performance: "+name)
+    println("============================")
+    scala.Predef.print("Accuracy = ")
+    pprint.pprintln(accuracyByThreshold().map((c) => c._2).max)
+
+
+    scala.Predef.print("Area under ROC = ")
+    pprint.pprintln(areaUnderROC())
+
+    scala.Predef.print("Maximum F Measure = ")
+    pprint.pprintln(fMeasureByThreshold().map(_._2).max)
+
+    scala.Predef.print("Maximum Matthew's Correlation Coefficient = ")
+    pprint.pprintln(matthewsCCByThreshold.map(_._2).max)
   }
 
   override def kpi() = DenseVector(accuracyByThreshold().map((c) => c._2).max,
