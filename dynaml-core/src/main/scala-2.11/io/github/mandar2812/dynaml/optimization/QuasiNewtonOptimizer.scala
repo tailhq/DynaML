@@ -79,6 +79,7 @@ object QuasiNewtonOptimizer {
     var regInvHessian = inv(hessian + DenseMatrix.eye[Double](initial.length)*regParam)
     var oldCumGradient = DenseVector.zeros[Double](initial.length)
 
+    println("Performing Quasi-Newton Optimization")
     cfor(1)(iter => iter < numIterations, iter => iter + 1)( iter => {
       val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
       var cumLoss: Double = 0.0
@@ -88,7 +89,11 @@ object QuasiNewtonOptimizer {
         cumLoss += gradient.compute(x, y, oldW, cumGradient)
       })
 
-      logger.info("Average Loss; Iteration "+iter+": "+cumLoss/nPoints.toDouble)
+      print("\nIteration: ")
+      pprint.pprintln(iter)
+      print("Average Loss = ")
+      pprint.pprintln(cumLoss/nPoints.toDouble)
+
       //Find the search direction p = inv(H)*grad(J)
       //perform update x_new = x + step*p
       val searchDirection = regInvHessian*cumGradient*(-1.0)

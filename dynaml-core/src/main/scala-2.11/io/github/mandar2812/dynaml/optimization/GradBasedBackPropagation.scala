@@ -99,22 +99,33 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
     //Initialize a working solution to the loss function optimization problem
     var (workingStack, previousUpdate) = (initialStack, initialStack.layerParameters)
 
-    logger.info("------------ Starting back-propagation procedure ------------")
-    logger.info(" Configuration ")
-    logger.info("---------------")
-    logger.info(" Mini Batch Fraction : "+miniBatchFraction)
-    logger.info(" Max Iterations : "+numIterations)
-    logger.info(" Learning Rate : "+stepSize)
-    logger.info(" Regularization : "+regParam)
-    logger.info(" Momentum: "+momentum)
+    println("------------ Starting back-propagation procedure ------------")
+    println(" Configuration ")
+    println("---------------")
+
+    print(" Mini Batch Fraction = ")
+    pprint.pprintln(miniBatchFraction)
+
+    print(" Max Iterations = ")
+    pprint.pprintln(numIterations)
+
+    print(" Learning Rate = ")
+    pprint.pprintln(stepSize)
+
+    print(" Regularization = ")
+    pprint.pprintln(regParam)
+
+    print(" Momentum = ")
+    pprint.pprintln(momentum)
 
     cfor(1)(count => count < numIterations, count => count + 1)( count => {
 
       val (patterns, targets): (Stream[I], Stream[I]) =
         data.filter(_ => Random.nextDouble() <= miniBatchFraction).unzip
 
-      logger.info("\n------------ Epoch "+count+" ------------")
-
+      println("\n--------------------------")
+      print("Epoch: ")
+      pprint.pprintln(count)
       /*
       * In each epoch conduct three stages:
       *   1. Forward propagation of fields and activations
@@ -125,7 +136,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 1
       * */
-      logger.info("\tForward propagation")
+      println("\tForward propagation")
       val layers = workingStack._layers
 
       /*
@@ -162,8 +173,10 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
 
       val avg_loss: Double = outputLosses.sum/outputLosses.length
 
-      logger.info("\tAverage Loss = "+avg_loss)
-      logger.info("\tBack propagation")
+      print("\tAverage Loss = ")
+      pprint.pprintln(avg_loss)
+
+      println("\tBack propagation")
       /*
       * Calculate the deltas for each layer
       * and discard the delta value produced
@@ -179,7 +192,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
           }
         ).tail
 
-      logger.info("\tCalculating gradients")
+      println("\tCalculating gradients")
       /*
       * Calculate the gradients for each layer
       * grad_i needs delta_i, a_[i-1]
@@ -195,7 +208,7 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
         stepSize, momentum, count, regParam)
 
       //Spawn the updated network.
-      logger.info("\tUpdating Network Parameters")
+      println("\tUpdating Network Parameters")
       workingStack = stackFactory(new_layer_params)
       previousUpdate = currentUpdate
     })

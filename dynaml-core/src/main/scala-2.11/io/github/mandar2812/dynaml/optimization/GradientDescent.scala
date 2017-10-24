@@ -117,8 +117,9 @@ object GradientDescent {
     var oldW: DenseVector[Double] = initial
     var newW = oldW
 
-    logger.info("Training model using SGD")
+    println("Performing SGD")
     cfor(1)(count => count < numIterations, count => count + 1)( count => {
+
       val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
       var cumLoss: Double = 0.0
       transform.run(POutEdges).foreach((ed) => {
@@ -126,7 +127,12 @@ object GradientDescent {
         val y = ed._2
         cumLoss += gradient.compute(x, y, oldW, cumGradient)
       })
-      logger.info("Average Loss; Iteration "+count+": "+cumLoss/nPoints.toDouble)
+
+      print("\nIteration: ")
+      pprint.pprintln(count)
+      print("Average Loss = ")
+      pprint.pprintln(cumLoss/nPoints.toDouble)
+
       newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
         stepSize, count, regParam)._1
       oldW = newW
@@ -149,7 +155,7 @@ object GradientDescent {
 
     var oldW: DenseVector[Double] = initial
     var newW = oldW
-    logger.info("Training model using SGD")
+    println("Performing batch SGD")
 
     cfor(1)(count => count < numIterations, count => count + 1)( count => {
       val cumGradient: DenseVector[Double] = DenseVector.zeros(initial.length)
@@ -161,7 +167,12 @@ object GradientDescent {
           cumLoss += gradient.compute(x, y, oldW, cumGradient)
         }
       })
-      logger.info("Average Loss; Iteration "+count+": "+cumLoss/nPoints.toDouble)
+
+      print("\nIteration: ")
+      pprint.pprintln(count)
+      print("Average Loss = ")
+      pprint.pprintln(cumLoss/nPoints.toDouble)
+
       newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
         stepSize, count, regParam)._1
       oldW = newW
