@@ -112,7 +112,7 @@ object Dependencies {
   )
 
   val rejinDependency = Seq(
-    "org.renjin" % "renjin-script-engine" % "0.8.2440"
+    "org.renjin" % "renjin-script-engine" % "0.8.2514"
   )
 
   val rPackages = Seq(
