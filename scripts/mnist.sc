@@ -32,11 +32,16 @@
 
   loss = loss >> tf.learn.ScalarSummary("Loss")                  // Collect loss summaries for plotting
   val summariesDir = java.nio.file.Paths.get((tempdir/"summaries").toString())                 // Directory in which to save summaries and checkpoints
-  val estimator = Estimator(model, Configuration(Some(summariesDir)))
-  estimator.train(
-    trainData, StopCriteria(maxSteps = Some(17000)),
-    Seq(
+
+  val estimator = FileBasedEstimator(
+    supervisedTrainableModelToModelFunction(model),
+    Configuration(Some(summariesDir)),
+    StopCriteria(maxSteps = Some(17000)),
+    Set(
       SummarySaverHook(summariesDir, StepHookTrigger(100)),      // Save summaries every 1000 steps
       CheckpointSaverHook(summariesDir, StepHookTrigger(1000))), // Save checkpoint every 1000 steps
     tensorBoardConfig = TensorBoardConfig(summariesDir))         // Launch TensorBoard server in the background
+
+  estimator.train(trainData)
+
 }
