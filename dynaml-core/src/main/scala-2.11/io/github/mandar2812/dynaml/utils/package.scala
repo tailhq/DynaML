@@ -22,8 +22,8 @@ import java.io.{BufferedWriter, File, FileWriter}
 
 import breeze.linalg.{DenseMatrix, DenseVector, Matrix, MatrixNotSquareException, MatrixNotSymmetricException, kron}
 import com.github.tototoshi.csv.{CSVReader, DefaultCSVFormat, QUOTE_NONNUMERIC}
-import org.apache.spark.mllib.regression.LabeledPoint
-import org.apache.spark.rdd.RDD
+//import org.apache.spark.mllib.regression.LabeledPoint
+//import org.apache.spark.rdd.RDD
 
 import scala.io.Source
 import scala.reflect.runtime.{universe => ru}
@@ -34,10 +34,10 @@ import java.net.URL
 
 import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrix
-import org.apache.spark.annotation.Experimental
+//import org.apache.spark.annotation.Experimental
 
 import scalaxy.streams.optimize
-import spire.algebra.Field
+import spire.algebra.{Eq, Field}
 
 import scala.util.Random
 
@@ -166,7 +166,7 @@ package object utils {
     (mean, biasedSigmaSq*adjustment)
   }
 
-  @Experimental
+  /*@Experimental
   def getStatsRDD(data: RDD[LabeledPoint]):
   (Double, Double,
     DenseVector[Double],
@@ -186,7 +186,7 @@ package object utils {
     val featuresCov = s - m*m.t
 
     (labelMean, labelVar, m, featuresCov)
-  }
+  }*/
 
   def getMinMax(data: List[DenseVector[Double]]):
   (DenseVector[Double], DenseVector[Double]) = {
@@ -453,10 +453,17 @@ package object utils {
     haarMatrixAcc(2, hMat)
   }
 
-  def productField[Domain, Domain1](implicit ev: Field[Domain], ev1: Field[Domain1]): Field[(Domain, Domain1)] =
+  def productField[Domain, Domain1](ev: Field[Domain], ev1: Field[Domain1])(
+    implicit eqq: Eq[Domain], eqq1: Eq[Domain1]): Field[(Domain, Domain1)] =
     new Field[(Domain, Domain1)] {
-      override def gcd(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
+      /*override def gcd(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
+        (ev.gcd(a._1, b._1), ev1.gcd(a._2, b._2))*/
+
+      override def gcd(a: (Domain, Domain1), b: (Domain, Domain1))(implicit eqq3: Eq[(Domain, Domain1)]) =
         (ev.gcd(a._1, b._1), ev1.gcd(a._2, b._2))
+
+      override def lcm(a: (Domain, Domain1), b: (Domain, Domain1))(implicit eqq3: Eq[(Domain, Domain1)]) =
+        (ev.lcm(a._1, b._1), ev1.lcm(a._2, b._2))
 
       override def quot(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
         (ev.quot(a._1, b._1), ev1.quot(a._2, b._2))

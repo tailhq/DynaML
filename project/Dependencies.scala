@@ -78,18 +78,21 @@ object Dependencies {
   )
 
   val apacheSparkDependency = Seq(
-    "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test" exclude("org.slf4j", "slf4j-log4j12"),
-    "org.apache.spark" % "spark-core_2.11" % "2.1.2" % "compile" exclude("org.slf4j", "slf4j-log4j12"),
-    "org.apache.spark" % "spark-mllib_2.11" % "2.1.2" % "compile" exclude("org.slf4j", "slf4j-log4j12")
-  )
+    "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
+    "org.apache.spark" % "spark-core_2.11" % "2.2.0" % "compile",
+    "org.apache.spark" % "spark-mllib_2.11" % "2.2.0" % "compile")
+    .map(_.exclude("org.slf4j", "slf4j-log4j12"))
+    .map(_.exclude("org.scalanlp", "breeze_2.11"))
 
   val loggingDependency = Seq("log4j" % "log4j" % "1.2.17" % "compile")
 
   val linearAlgebraDependencies = Seq(
-    "org.scalanlp" % "breeze_2.11" % "0.13.1" % "compile",
-    "org.scalanlp" % "breeze-natives_2.11" % "0.13.1" % "compile",
+    "org.typelevel" % "spire_2.11" % "0.14.1",
+    "org.scalanlp" % "breeze_2.11" % "0.13.2" % "compile",
+    "org.scalanlp" % "breeze-natives_2.11" % "0.13.2" % "compile",
     "org.la4j" % "la4j" % "0.6.0" % "compile",
     "com.github.vagmcs" % "optimus_2.11" % "2.0.0")
+    .map(_.exclude("org.spire-math", "spire_2.11"))
 
   val chartsDependencies = Seq(
     "com.github.wookietreiber" % "scala-chart_2.11" % "0.4.2" % "compile",
@@ -144,5 +147,5 @@ object Dependencies {
   val tensorflowDependency = Seq(
     "org.platanios" % "tensorflow_2.11" % "0.1.0-SNAPSHOT" classifier tensorflow_classifier,
     "org.platanios" % "tensorflow-data_2.11" % "0.1.0-SNAPSHOT"
-  )
+  ).map(_.exclude("org.typelevel", "spire_2.11"))
 }

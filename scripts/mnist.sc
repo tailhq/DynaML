@@ -42,6 +42,6 @@
       CheckpointSaverHook(summariesDir, StepHookTrigger(1000))), // Save checkpoint every 1000 steps
     tensorBoardConfig = TensorBoardConfig(summariesDir))         // Launch TensorBoard server in the background
 
-  estimator.train(trainData)
+  estimator.train(trainData, stopCriteria = StopCriteria(maxSteps = Some(10000)))
 
 }

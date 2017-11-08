@@ -1,8 +1,9 @@
 package io.github.mandar2812.dynaml.analysis
 
 import breeze.linalg.DenseVector
-import spire.algebra.{Field, InnerProductSpace, NRoot}
+import spire.algebra.{Eq, Field, InnerProductSpace, NRoot}
 import spire.implicits._
+import io.github.mandar2812.dynaml.analysis.implicits._
 
 /**
   * Created by mandar on 18/7/16.
@@ -15,8 +16,10 @@ class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
                     b: DenseVector[Double]): DenseVector[Double] =
     div(a, b) - mod(a, b)
 
-  override def gcd(a: DenseVector[Double],
-                   b: DenseVector[Double]): DenseVector[Double] =
+  override def gcd(a: DenseVector[Double], b: DenseVector[Double])(implicit ev: Eq[DenseVector[Double]]) =
+    DenseVector((a.toArray zip b.toArray).map(couple => couple._1 % couple._2))
+
+  override def lcm(a: DenseVector[Double], b: DenseVector[Double])(implicit ev: Eq[DenseVector[Double]]) =
     DenseVector((a.toArray zip b.toArray).map(couple => couple._1 % couple._2))
 
   override def mod(a: DenseVector[Double],

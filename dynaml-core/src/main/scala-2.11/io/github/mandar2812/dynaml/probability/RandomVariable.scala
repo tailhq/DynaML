@@ -22,7 +22,7 @@ import breeze.stats.distributions.{ContinuousDistr, Density, DiscreteDistr, Rand
 import breeze.stats.mcmc.ThreadedBufferedRand
 import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe}
 import io.github.mandar2812.dynaml.probability.distributions.GenericDistribution
-import spire.algebra.Field
+import spire.algebra.{Eq, Field}
 import io.github.mandar2812.dynaml.utils._
 
 
@@ -309,7 +309,9 @@ trait ContinuousDistrRV[Domain] extends
   ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]] { self =>
 
 
-  def :*[Domain1](other: ContinuousDistrRV[Domain1])(implicit ev: Field[Domain], ev1: Field[Domain1])
+  def :*[Domain1](other: ContinuousDistrRV[Domain1])(
+    implicit ev: Field[Domain], ev1: Field[Domain1],
+    eq: Eq[Domain], eq1: Eq[Domain1])
   : ContinuousDistrRV[(Domain, Domain1)] = {
     implicit val ev3: Field[(Domain, Domain1)] = productField(ev, ev1)
 

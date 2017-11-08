@@ -2,7 +2,8 @@ package io.github.mandar2812.dynaml.analysis
 
 import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
-import spire.algebra.{Field, InnerProductSpace}
+import spire.algebra.{Eq, Field, InnerProductSpace}
+import io.github.mandar2812.dynaml.analysis.implicits._
 
 /**
   * Created by mandar on 19/10/2016.
@@ -19,7 +20,9 @@ class PartitionedVectorField(
 
   override def mod(a: PartitionedVector, b: PartitionedVector): PartitionedVector = a %:% b
 
-  override def gcd(a: PartitionedVector, b: PartitionedVector): PartitionedVector = a %:% b
+  override def gcd(a: PartitionedVector, b: PartitionedVector)(implicit ev: Eq[PartitionedVector]) = a %:% b
+
+  override def lcm(a: PartitionedVector, b: PartitionedVector)(implicit ev: Eq[PartitionedVector]) = a %:% b
 
   override def one: PartitionedVector = PartitionedVector.ones(num_dim, num_elements_per_block)
 

@@ -1,6 +1,8 @@
 package io.github.mandar2812.dynaml.analysis
 
-import spire.algebra.{Field, InnerProductSpace, NRoot}
+import breeze.linalg.DenseVector
+import io.github.mandar2812.dynaml.algebra.PartitionedVector
+import spire.algebra.{Eq, Field, InnerProductSpace, NRoot}
 
 /**
   * @author mandar2812 date: 21/02/2017.
@@ -42,7 +44,11 @@ object implicits {
 
     override def mod(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1%b._1, a._2%b._2)
 
-    override def gcd(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1%b._1, a._2%b._2)
+    override def gcd(a: (Double, Double), b: (Double, Double))(implicit ev: Eq[(Double, Double)]): (Double, Double) =
+      (a._1%b._1, a._2%b._2)
+
+    override def lcm(a: (Double, Double), b: (Double, Double))(implicit ev: Eq[(Double, Double)]): (Double, Double) =
+      (a._1%b._1, a._2%b._2)
 
     override def div(x: (Double, Double), y: (Double, Double)): (Double, Double) = (x._1/y._1, x._2/y._2)
 
@@ -55,6 +61,16 @@ object implicits {
     override def plus(x: (Double, Double), y: (Double, Double)): (Double, Double) = (x._1+y._1, x._2+y._2)
 
     override def one: (Double, Double) = (1d, 1d)
+  }
+
+  implicit object eqVector extends Eq[DenseVector[Double]] {
+    override def eqv(x: DenseVector[Double], y: DenseVector[Double]): Boolean =
+      x.toArray.zip(y.toArray).forall(p => p._1 == p._2)
+  }
+
+  implicit object eqPartitinedVector extends Eq[PartitionedVector] {
+    override def eqv(x: PartitionedVector, y: PartitionedVector): Boolean =
+      x._data.map(_._2).zip(y._data.map(_._2)).forall(p => eqVector.eqv(p._1, p._2))
   }
 
 }
