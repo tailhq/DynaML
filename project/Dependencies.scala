@@ -72,9 +72,7 @@ object Dependencies {
     "com.typesafe.akka" % "akka-http-testkit_2.11" % "10.0.9",
     "com.github.scopt" % "scopt_2.11" % "3.5.0",
     "com.nativelibs4java" % "scalaxy-streams_2.11" % "0.3.4" % "provided",
-    "org.scalameta" % "scalameta_2.11" % "2.0.1",
-    "com.signalcollect" % "signal-collect_2.11" % "8.0.6",
-    "com.signalcollect" % "triplerush_2.11" % "9.0.0"
+    "org.scalameta" % "scalameta_2.11" % "2.0.1"
   )
 
   val apacheSparkDependency = Seq(
