@@ -5,7 +5,7 @@
 import ammonite.ops._
 import ammonite.ops.ImplicitWd._
 //Import breeze for linear algebra
-import breeze.linalg._
+import breeze.linalg.{DenseVector, DenseMatrix, diag}
 import breeze.stats.distributions._
 //Apache Spark for big data support
 import org.apache.spark.SparkContext
