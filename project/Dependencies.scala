@@ -113,13 +113,13 @@ object Dependencies {
   )
 
   val rejinDependency = Seq(
-    "org.renjin" % "renjin-script-engine" % "0.8.2514"
+    "org.renjin" % "renjin-script-engine" % "0.8.2523"
   )
 
   val rPackages = Seq(
-    "org.renjin.cran" % "plyr" % "1.8.3-renjin-10",
-    "org.renjin.cran" % "abc" % "2.1-b274",
-    "org.renjin.cran" % "ggplot2" % "2.2.1-b80"
+    "org.renjin.cran" % "plyr" % "1.8.4-b66",
+    "org.renjin.cran" % "abc" % "2.1-b288",
+    "org.renjin.cran" % "ggplot2" % "2.2.1-b96"
   )
 
   val cppCompatDependencies = Seq(

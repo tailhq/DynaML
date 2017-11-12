@@ -53,4 +53,4 @@ import org.renjin.sexp._
 val r_engine_factory = new RenjinScriptEngineFactory()
 implicit val renjin = r_engine_factory.getScriptEngine()
 val r: String => SEXP = (s: String) => renjin.eval(s).asInstanceOf[SEXP]
-val R: java.io.File => SEXP = (f: java.io.File) => renjin.eval(f).asInstanceOf[SEXP]
+val R: java.io.File => Unit = (f: java.io.File) => renjin.eval(f)
