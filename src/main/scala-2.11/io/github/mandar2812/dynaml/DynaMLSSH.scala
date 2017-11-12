@@ -88,7 +88,9 @@ object DynaMLSSH {
           defaultPredef = defaultPredef,
           storageBackend = new Storage.Folder(homePath),
           wd = wd,
-          inputStream = in, outputStream = out, errorStream = out,
+          inputStream = in,
+          outputStream = out,
+          errorStream = out,
           verboseOutput = false,
           remoteLogging = false,
           colors = Colors.Default
