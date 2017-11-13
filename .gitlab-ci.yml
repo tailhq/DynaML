@@ -11,6 +11,8 @@ before_script:
   # Add keyserver for SBT
   - echo "deb http://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
   - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+  # Install bc
+  - apt-get install bc
   # Install SBT
   - apt-get update -yqq
   - apt-get install sbt -yqq
