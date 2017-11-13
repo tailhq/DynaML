@@ -101,8 +101,8 @@ object Dependencies {
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" % "ammonite-repl_2.11.8" % "1.0.2",
-    "com.lihaoyi" % "ammonite-sshd_2.11.8" % "1.0.2"
+    "com.lihaoyi" % "ammonite-repl_2.11.8" % "1.0.3",
+    "com.lihaoyi" % "ammonite-sshd_2.11.8" % "1.0.3"
   )
 
   val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")

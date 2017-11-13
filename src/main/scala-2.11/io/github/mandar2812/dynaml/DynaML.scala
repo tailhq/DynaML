@@ -34,7 +34,7 @@ import scala.annotation.tailrec
 
 
 /**
-  * Contains the various entry points to the Ammonite REPL.
+  * Contains the various entry points to the DynaML/Ammonite REPL.
   *
   * Configuration of the basic REPL is done by passing in arguments when
   * constructing the [[DynaML]] instance, and the various entrypoints such
@@ -141,9 +141,12 @@ case class DynaML(
 
   def instantiateInterpreter() = {
     loadedPredefFile.right.flatMap { predefFileInfoOpt =>
-      val augmentedPredef = DynaML.maybeDefaultPredef(defaultPredef, Defaults.predefString)
+      val augmentedPredef = DynaML.maybeDefaultPredef(
+        defaultPredef,
+        Defaults.predefString + DynaML.extraPredefString
+      )
 
-      val (colorsRef, _, _, printer) = Interpreter.initPrinters(
+      val (colorsRef, printer) = Interpreter.initPrinters(
         colors,
         outputStream,
         errorStream,
@@ -190,7 +193,7 @@ case class DynaML(
 
     remoteLogger.foreach(_.apply("Boot"))
 
-    instantiateRepl(replArgs.toIndexedSeq, remoteLogger) match {
+    instantiateRepl(replArgs.toIndexedSeq, remoteLogger) match{
       case Left(missingPredefInfo) => missingPredefInfo
       case Right(repl) =>
         repl.initializePredef().getOrElse{
@@ -329,6 +332,11 @@ object DynaML {
     * https://stackoverflow.com/a/1403817/871202
     */
   def isInteractive() = System.console() != null
+
+  val extraPredefString = s"""
+                             |import ammonite.main.Router.{doc, main}
+                             |import ammonite.main.Scripts.pathScoptRead
+                             |""".stripMargin
 
 }
 
