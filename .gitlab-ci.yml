@@ -2,7 +2,7 @@
 # Official Java image. Look for the different tagged releases at
 # https://hub.docker.com/r/library/java/tags/ . A Java image is not required
 # but an image with a JVM speeds up the build a bit.
-image: java:7
+image: java:8
 
 before_script:
   # Enable the usage of sources over https
