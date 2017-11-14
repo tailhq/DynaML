@@ -22,4 +22,4 @@ before_script:
 test:
   script:
     # Execute your project's tests
-    - sbt clean test
+    - sbt clean stage
