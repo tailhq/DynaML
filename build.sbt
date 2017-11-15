@@ -34,7 +34,7 @@ lazy val commonSettings = Seq(
       rPackages ++ cppCompatDependencies ++
       imageDependencies ++ dataFormatDependencies ++
       tensorflowDependency),
-  ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
+  //ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
   scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
 )
 
@@ -88,8 +88,8 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-J-Xms64m"
     ),
     dataDirectory := new File("data/"),
-    initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())""",
-    credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")
+    initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())"""/*,
+    credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")*/
   ).aggregate(core, pipes, examples).settings(
     aggregate in publishM2 := true)
 
