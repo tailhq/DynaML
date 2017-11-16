@@ -34,3 +34,4 @@ project/target
 site
 local-repo
 notebook
+conf/interpreter.json

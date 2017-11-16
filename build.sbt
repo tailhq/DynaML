@@ -29,7 +29,7 @@ lazy val commonSettings = Seq(
     baseDependencies ++ apacheSparkDependency ++
       replDependency ++ loggingDependency ++
       linearAlgebraDependencies ++ chartsDependencies ++
-      tinkerpopDependency ++ notebookInterfaceDependency ++
+      tinkerpopDependency ++
       openMLDependency ++ rejinDependency ++
       rPackages ++ cppCompatDependencies ++
       imageDependencies ++ dataFormatDependencies ++
@@ -81,6 +81,12 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     }, {
       val banner = (resourceDirectory in Compile).value / "dynamlBanner.txt"
       banner -> "conf/banner.txt"
+    }, {
+      val zeppelin_env = (resourceDirectory in Compile).value / "zeppelin-site.xml"
+      zeppelin_env -> "conf/zeppelin-site.xml"
+    }, {
+      val zeppelinConf = (resourceDirectory in Compile).value / "interpreter-setting.json"
+      zeppelinConf -> "interpreter/dynaml-zeppelin/interpreter-setting.json"
     }),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
@@ -88,6 +94,7 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-J-Xms64m"
     ),
     dataDirectory := new File("data/"),
+    libraryDependencies ++= notebookInterfaceDependency,
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())"""/*,
     credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")*/
   ).aggregate(core, pipes, examples).settings(

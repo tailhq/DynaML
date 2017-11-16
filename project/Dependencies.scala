@@ -129,7 +129,11 @@ object Dependencies {
     "org.bytedeco.javacpp-presets" % "tensorflow" % "0.11.0-1.3"
   )
 
-  val notebookInterfaceDependency = Seq()
+  val notebookInterfaceDependency = Seq(
+    "org.apache.zeppelin" % "zeppelin-interpreter" % "0.7.3" % "provided",
+    "org.apache.zeppelin" % "zeppelin-server" % "0.7.3",
+    "org.apache.zeppelin" % "zeppelin-web" % "0.7.3")
+    .map(_.exclude("org.slf4j", "slf4j-log4j12"))
 
   val imageDependencies = Seq(
     "com.sksamuel.scrimage" % "scrimage-core_2.11" % "2.1.7",
