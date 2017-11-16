@@ -17,7 +17,7 @@ before_script:
   - apt-get update -yqq
   - apt-get install sbt -yqq
   # Log the sbt version
-  - sbt sbt-version
+  #- sbt sbt-version
 
 test:
   script:

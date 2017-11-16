@@ -32,3 +32,5 @@ project/target
 .ensime
 .ensime_cache
 site
+local-repo
+notebook
