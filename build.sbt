@@ -85,8 +85,11 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       val zeppelin_env = (resourceDirectory in Compile).value / "zeppelin-site.xml"
       zeppelin_env -> "conf/zeppelin-site.xml"
     }, {
+      val zeppelin_shiro = (resourceDirectory in Compile).value / "shiro.ini.template"
+      zeppelin_shiro -> "conf/shiro.ini"
+    }, {
       val zeppelinConf = (resourceDirectory in Compile).value / "interpreter-setting.json"
-      zeppelinConf -> "interpreter/dynaml-zeppelin/interpreter-setting.json"
+      zeppelinConf -> "lib/interpreter-setting.json"
     }),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
@@ -98,5 +101,6 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())"""/*,
     credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")*/
   ).aggregate(core, pipes, examples).settings(
-    aggregate in publishM2 := true)
+    aggregate in publishM2 := true,
+    aggregate in update := false)
 

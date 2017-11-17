@@ -34,4 +34,8 @@ project/target
 site
 local-repo
 notebook
+notebook/*
 conf/interpreter.json
+tmp
+interpreter
+interpreter/*

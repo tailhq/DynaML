@@ -72,7 +72,8 @@ object Dependencies {
     "com.typesafe.akka" % "akka-http-testkit_2.11" % "10.0.9",
     "com.github.scopt" % "scopt_2.11" % "3.5.0",
     "com.nativelibs4java" % "scalaxy-streams_2.11" % "0.3.4" % "provided",
-    "org.scalameta" % "scalameta_2.11" % "2.0.1"
+    "org.scalameta" % "scalameta_2.11" % "2.0.1",
+    "javax.ws.rs" % "javax.ws.rs-api" % "2.0-m10"
   )
 
   val apacheSparkDependency = Seq(
@@ -81,6 +82,7 @@ object Dependencies {
     "org.apache.spark" % "spark-mllib_2.11" % "2.2.0" % "compile")
     .map(_.exclude("org.slf4j", "slf4j-log4j12"))
     .map(_.exclude("org.scalanlp", "breeze_2.11"))
+    .map(_.exclude("javax.ws.rs" , "javax.ws.rs-api"))
 
   val loggingDependency = Seq("log4j" % "log4j" % "1.2.17" % "compile")
 
@@ -134,6 +136,7 @@ object Dependencies {
     "org.apache.zeppelin" % "zeppelin-server" % "0.7.3",
     "org.apache.zeppelin" % "zeppelin-web" % "0.7.3")
     .map(_.exclude("org.slf4j", "slf4j-log4j12"))
+    .map(_.exclude("javax.ws.rs" , "javax.ws.rs-api"))
 
   val imageDependencies = Seq(
     "com.sksamuel.scrimage" % "scrimage-core_2.11" % "2.1.7",

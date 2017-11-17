@@ -21,7 +21,7 @@
 
     <property>
         <name>zeppelin.server.addr</name>
-        <value>0.0.0.0</value>
+        <value>127.0.0.1</value>
         <description>Server address</description>
     </property>
 
@@ -32,14 +32,29 @@
     </property>
 
     <property>
+        <name>zeppelin.home</name>
+        <value>./</value>
+    </property>
+
+    <property>
         <name>zeppelin.notebook.dir</name>
-        <value>~/tmp/notebook</value>
+        <value>notebook</value>
         <description>path or URI for notebook persist</description>
     </property>
 
     <property>
         <name>zeppelin.server.context.path</name>
-        <value>~/tmp/</value>
+        <value>/</value>
+    </property>
+
+    <property>
+        <name>zeppelin.war</name>
+        <value>lib/zeppelin-web-0.7.3.war</value>
+    </property>
+
+    <property>
+        <name>zeppelin.war.tempdir</name>
+        <value>webapps</value>
     </property>
 
     <property>
@@ -84,7 +99,7 @@
 
     <property>
         <name>zeppelin.interpreter.dir</name>
-        <value>interpreter</value>
+        <value>lib/</value>
         <description>Interpreter implementation base directory</description>
     </property>
 
@@ -102,36 +117,37 @@
     </property>
 
     <property>
+        <name>zeppelin.anonymous.allowed</name>
+        <value>false</value>
+        <description>Anonymous access allowed?</description>
+    </property>
+
+
+    <property>
         <name>zeppelin.ssl.client.auth</name>
         <value>false</value>
         <description>Should client authentication be used for SSL connections?</description>
     </property>
-
-    <property>
-        <name>zeppelin.ssl.keystore.path</name>
-        <value>keystore</value>
-        <description>Path to keystore relative to Zeppelin configuration directory</description>
-    </property>
-
-    <property>
-        <name>zeppelin.ssl.keystore.type</name>
-        <value>JKS</value>
-        <description>The format of the given keystore (e.g. JKS or PKCS12)</description>
-    </property>
-
-    <property>
-        <name>zeppelin.ssl.keystore.password</name>
-        <value>change me</value>
-        <description>Keystore password. Can be obfuscated by the Jetty Password tool</description>
-    </property>
-
     <!--
-    <property>
-      <name>zeppelin.ssl.key.manager.password</name>
-      <value>change me</value>
-      <description>Key Manager password. Defaults to keystore password. Can be obfuscated.</description>
-    </property>
-    -->
+        <property>
+            <name>zeppelin.ssl.keystore.path</name>
+            <value>keystore</value>
+            <description>Path to keystore relative to Zeppelin configuration directory</description>
+        </property>
+
+        <property>
+            <name>zeppelin.ssl.keystore.type</name>
+            <value>JKS</value>
+            <description>The format of the given keystore (e.g. JKS or PKCS12)</description>
+        </property>
+
+
+        <property>
+          <name>zeppelin.ssl.key.manager.password</name>
+          <value>change me</value>
+          <description>Key Manager password. Defaults to keystore password. Can be obfuscated.</description>
+        </property>
+
 
     <property>
         <name>zeppelin.ssl.truststore.path</name>
@@ -144,7 +160,7 @@
         <value>JKS</value>
         <description>The format of the given truststore (e.g. JKS or PKCS12). Defaults to the same type as the keystore type</description>
     </property>
-    <!--
+
     <property>
         <name>zeppelin.server.allowed.origins</name>
         <value>http://onehost:8080,http://otherhost.com,</value>

@@ -1,7 +1,7 @@
 [
   {
-    "group": "io.github.transcendent-ai-labs",
-    "name": "DynaML",
+    "group": "io.github.mandar2812",
+    "name": "dynaml-v1.5.2-beta.2",
     "className": "io.github.mandar2812.dynaml.zeppelin.DynaMLZeppelinInterpreter",
     "properties": {
       "properties1": {
