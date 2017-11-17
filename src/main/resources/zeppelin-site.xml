@@ -99,7 +99,7 @@
 
     <property>
         <name>zeppelin.interpreter.dir</name>
-        <value>lib/</value>
+        <value>lib</value>
         <description>Interpreter implementation base directory</description>
     </property>
 
@@ -109,6 +109,10 @@
         <description>Interpreter process connect timeout in msec.</description>
     </property>
 
+    <property>
+        <name>zeppelin.interpreters</name>
+        <value>org.apache.zeppelin.spark.SparkInterpreter,org.apache.zeppelin.spark.PySparkInterpreter,org.apache.zeppelin.spark.SparkSqlInterpreter,org.apache.zeppelin.spark.DepInterpreter,io.github.mandar2812.dynaml.zeppelin.DynaMLZeppelinInterpreter</value>
+    </property>
 
     <property>
         <name>zeppelin.ssl</name>
