@@ -111,7 +111,7 @@
 
     <property>
         <name>zeppelin.interpreters</name>
-        <value>org.apache.zeppelin.spark.SparkInterpreter,org.apache.zeppelin.spark.PySparkInterpreter,org.apache.zeppelin.spark.SparkSqlInterpreter,org.apache.zeppelin.spark.DepInterpreter,io.github.mandar2812.dynaml.zeppelin.DynaMLZeppelinInterpreter</value>
+        <value>org.apache.zeppelin.spark.SparkInterpreter,io.github.mandar2812.dynaml.zeppelin.DynaMLZeppelinInterpreter</value>
     </property>
 
     <property>
