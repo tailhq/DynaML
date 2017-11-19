@@ -48,7 +48,7 @@ val model = {
   val loss = tf.learn.SequenceLoss(averageAcrossTimeSteps = false, averageAcrossBatch = true) >>
     tf.learn.Sum() >>
     tf.learn.ScalarSummary("Loss")
-  val optimizer = tf.learn.GradientDescent(1.0)
+  val optimizer = tf.train.GradientDescent(1.0)
   tf.learn.Model(input, layer, trainInput, loss, optimizer)
 }
 
@@ -58,7 +58,7 @@ val trainDataset =
     .repeat()
     .prefetch(prefetchSize)
 
-val summariesDir = java.nio.file.Paths.get((tempdir/"rnn-ptb"/"summaries").toString())
+val summariesDir = Paths.get("temp/rnn-ptb")
 val estimator = tf.learn.InMemoryEstimator(
   model,
   tf.learn.Configuration(Some(summariesDir)),
@@ -68,4 +68,4 @@ val estimator = tf.learn.InMemoryEstimator(
     tf.learn.SummarySaverHook(summariesDir, tf.learn.StepHookTrigger(10)),
     tf.learn.CheckpointSaverHook(summariesDir, tf.learn.StepHookTrigger(1000))),
   tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 1))
-estimator.train(trainDataset, tf.learn.StopCriteria(maxSteps = Some(1000)))
+estimator.train(() => trainDataset, tf.learn.StopCriteria(maxSteps = Some(10000)))
