@@ -3,21 +3,22 @@
 
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.api.ops.NN.SamePadding
-  import org.platanios.tensorflow.data.loaders.CIFARLoader
+  import org.platanios.tensorflow.data.image.CIFARLoader
   import java.nio.file.Paths
 
 
   val tempdir = home/"tmp"
 
   val dataSet = CIFARLoader.load(Paths.get(tempdir.toString()), CIFARLoader.CIFAR_10)
-  val trainImages = tf.learn.DatasetFromSlices(dataSet.trainImages)
-  val trainLabels = tf.learn.DatasetFromSlices(dataSet.trainLabels)
+  val trainImages = tf.data.TensorSlicesDataset(dataSet.trainImages)
+  val trainLabels = tf.data.TensorSlicesDataset(dataSet.trainLabels)
   val trainData =
     trainImages.zip(trainLabels)
       .repeat()
       .shuffle(10000)
       .batch(64)
       .prefetch(10)
+
 
   println("Building the logistic regression model.")
   val input = tf.learn.Input(UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2), dataSet.trainImages.shape(3)))
@@ -36,7 +37,7 @@
     tf.learn.Linear(10, name = "OutputLayer")
   val trainingInputLayer = tf.learn.Cast(INT64)
   val loss = tf.learn.SparseSoftmaxCrossEntropy() >> tf.learn.Mean() >> tf.learn.ScalarSummary("Loss")
-  val optimizer = tf.learn.AdaGrad(0.1)
+  val optimizer = tf.train.AdaGrad(0.1)
   val model = tf.learn.Model(input, layer, trainInput, trainingInputLayer, loss, optimizer)
 
   println("Training the linear regression model.")
@@ -50,10 +51,10 @@
       // tf.learn.SummarySaverHook(summariesDir, tf.learn.StepHookTrigger(100)),
       tf.learn.CheckpointSaverHook(summariesDir, tf.learn.StepHookTrigger(1000))),
     tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 1))
-  estimator.train(trainData, tf.learn.StopCriteria(maxSteps = Some(1000)))
+  estimator.train(() => trainData, tf.learn.StopCriteria(maxSteps = Some(1000)))
 
   def accuracy(images: Tensor, labels: Tensor): Float = {
-    val predictions = estimator.infer(images)
+    val predictions = estimator.infer(() => images)
     predictions.argmax(1).cast(UINT8).equal(labels).cast(FLOAT32).mean().scalar.asInstanceOf[Float]
   }
 

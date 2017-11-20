@@ -90,6 +90,12 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     }, {
       val zeppelinConf = (resourceDirectory in Compile).value / "interpreter-setting.json"
       zeppelinConf -> "lib/interpreter-setting.json"
+    }, {
+      val common = (resourceDirectory in Compile).value / "common.sh"
+      common -> "bin/common.sh"
+    }, {
+      val intp = (resourceDirectory in Compile).value / "interpreter.sh"
+      intp -> "bin/interpreter.sh"
     }),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
