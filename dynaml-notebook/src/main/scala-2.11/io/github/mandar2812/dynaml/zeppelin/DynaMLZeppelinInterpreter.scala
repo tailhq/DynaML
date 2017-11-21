@@ -8,7 +8,7 @@ import ammonite.runtime.{History, Storage}
 import ammonite.util.{Name, Res}
 import ammonite.util.Util.CodeSource
 import fastparse.core.Parsed
-import io.github.mandar2812.dynaml.DynaML
+import io.github.mandar2812.dynaml.DynaZeppelin
 import io.github.mandar2812.dynaml.repl.{Defaults, DynaMLInterpreter}
 import org.apache.zeppelin.interpreter.thrift.InterpreterCompletion
 import org.apache.zeppelin.interpreter.{Interpreter, InterpreterContext, InterpreterResult}
@@ -16,10 +16,9 @@ import org.apache.zeppelin.interpreter.{Interpreter, InterpreterContext, Interpr
 import scala.collection.JavaConversions._
 
 
-class DynaMLZeppelinInterpreter(properties: Properties)
-  extends Interpreter(properties) {
+class DynaMLZeppelinInterpreter(properties: Properties) extends Interpreter(properties) {
 
-  protected val dynaml_instance = new DynaML()
+  protected val dynaml_instance = new DynaZeppelin()
 
   protected var CURRENT_LINE : Int = 0
 
