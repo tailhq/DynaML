@@ -21,21 +21,25 @@ val baseSettings = Seq(
     "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
     "BeDataDriven" at "https://nexus.bedatadriven.com/content/groups/public",
     Resolver.sonatypeRepo("public"),
-    Resolver.sonatypeRepo("snapshots"))
+    Resolver.sonatypeRepo("snapshots")),
+  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
 )
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= (
-    baseDependencies ++ apacheSparkDependency ++
-      replDependency ++ loggingDependency ++
-      linearAlgebraDependencies ++ chartsDependencies ++
+    linearAlgebraDependencies ++ baseDependencies ++
+      loggingDependency ++ apacheSparkDependency)
+  //ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
+)
+
+lazy val settingsCore = Seq(
+  libraryDependencies ++= (
+      chartsDependencies ++
       tinkerpopDependency ++
       openMLDependency ++ rejinDependency ++
       rPackages ++ cppCompatDependencies ++
       imageDependencies ++ dataFormatDependencies ++
-      tensorflowDependency),
-  //ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
-  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
+      tensorflowDependency ++ replDependency)
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
@@ -47,6 +51,7 @@ lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
 
 lazy val core = (project in file("dynaml-core")).settings(baseSettings)
   .settings(commonSettings:_*)
+  .settings(settingsCore:_*)
   .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .dependsOn(pipes)
   .settings(
@@ -62,9 +67,55 @@ lazy val examples = (project in file("dynaml-examples"))
     version := mainVersion
   ).dependsOn(pipes, core)
 
+
+lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin)
+  .settings(baseSettings:_*)
+  .settings(
+    name := "dynaml-repl",
+    version := mainVersion,
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "io.github.mandar2812.dynaml.repl",
+    buildInfoUsePackageAsPath := true,
+    libraryDependencies ++= (baseDependencies ++ replDependency)
+  )
+
+lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(JavaServerAppPackaging)
+  .settings(baseSettings:_*)
+  .settings(
+    name := "dynaml-notebook",
+    version := mainVersion,
+    libraryDependencies ++= notebookInterfaceDependency
+  ).dependsOn(core, examples, pipes, repl)
+  .settings(
+    mappings in Universal ++= Seq({
+      // we are using the reference.conf as default application.conf
+      // the user can override settings here
+      val init = (resourceDirectory in Compile).value / "DynaMLInit.scala"
+      init -> "conf/DynaMLInit.scala"
+    }, {
+      val banner = (resourceDirectory in Compile).value / "dynamlBanner.txt"
+      banner -> "conf/banner.txt"
+    }, {
+      val zeppelin_env = (resourceDirectory in Compile).value / "zeppelin-site.xml"
+      zeppelin_env -> "conf/zeppelin-site.xml"
+    }, {
+      val zeppelin_shiro = (resourceDirectory in Compile).value / "shiro.ini.template"
+      zeppelin_shiro -> "conf/shiro.ini"
+    }, {
+      val zeppelinConf = (resourceDirectory in Compile).value / "interpreter-setting.json"
+      zeppelinConf -> "lib/interpreter-setting.json"
+    }, {
+      val common = (resourceDirectory in Compile).value / "common.sh"
+      common -> "bin/common.sh"
+    }, {
+      val intp = (resourceDirectory in Compile).value / "interpreter.sh"
+      intp -> "bin/interpreter.sh"
+    })
+  )
+
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .settings(baseSettings:_*)
-  .dependsOn(core, examples, pipes)
+  .dependsOn(core, examples, pipes, repl)
   .settings(
     name := "DynaML",
     version := mainVersion,
@@ -103,7 +154,6 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-J-Xms64m"
     ),
     dataDirectory := new File("data/"),
-    libraryDependencies ++= notebookInterfaceDependency,
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())"""/*,
     credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")*/
   ).aggregate(core, pipes, examples).settings(

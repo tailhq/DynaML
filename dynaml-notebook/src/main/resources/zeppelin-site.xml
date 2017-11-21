@@ -99,7 +99,7 @@
 
     <property>
         <name>zeppelin.interpreter.dir</name>
-        <value>lib</value>
+        <value>interpreter</value>
         <description>Interpreter implementation base directory</description>
     </property>
 

@@ -1,43 +1,22 @@
-/*
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
-* */
 package io.github.mandar2812.dynaml
 
-import java.io.{InputStream, OutputStream, PrintStream}
+import java.io.{InputStream, OutputStream}
 import java.nio.file.NoSuchFileException
 
 import ammonite.interp.Interpreter
-import ammonite.ops._
-import ammonite.runtime.{Frame, Storage}
+import ammonite.ops.{Path, read}
 import ammonite.repl.{RemoteLogger, Repl}
+import ammonite.runtime.{Frame, Storage}
 import ammonite.util.Util.newLine
 import ammonite.util._
-import io.github.mandar2812.dynaml.repl._
-
-import scala.annotation.tailrec
-
-
+import io.github.mandar2812.dynaml.repl.{Defaults, DynaMLInterpreter, DynaMLRepl, Scripts}
+import org.apache.zeppelin.server.ZeppelinServer
 
 /**
   * Contains the various entry points to the DynaML/Ammonite REPL.
   *
   * Configuration of the basic REPL is done by passing in arguments when
-  * constructing the [[DynaML]] instance, and the various entrypoints such
+  * constructing the [[DynaZeppelin]] instance, and the various entrypoints such
   * as [[run]] [[runScript]] and so on are methods on that instance.
   *
   * It is more or less equivalent to the [[ammonite.repl.Repl]] object itself, and has
@@ -72,18 +51,18 @@ import scala.annotation.tailrec
   *                    gets sent miscellaneous info messages that aren't strictly
   *                    part of the REPL or script's output
   */
-case class DynaML(
-  predefCode: String = "", predefFile: Option[Path] = None,
-  defaultPredef: Boolean = true,
-  storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
-  wd: Path = ammonite.ops.pwd,
-  welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
-  inputStream: InputStream = System.in,
-  outputStream: OutputStream = System.out,
-  errorStream: OutputStream = System.err,
-  verboseOutput: Boolean = true,
-  remoteLogging: Boolean = true,
-  colors: Colors = Colors.Default){
+case class DynaZeppelin(
+                   predefCode: String = "", predefFile: Option[Path] = None,
+                   defaultPredef: Boolean = true,
+                   storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
+                   wd: Path = ammonite.ops.pwd,
+                   welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
+                   inputStream: InputStream = System.in,
+                   outputStream: OutputStream = System.out,
+                   errorStream: OutputStream = System.err,
+                   verboseOutput: Boolean = true,
+                   remoteLogging: Boolean = true,
+                   colors: Colors = Colors.Default){
 
   def loadedPredefFile = predefFile match{
     case Some(path) =>
@@ -101,7 +80,7 @@ case class DynaML(
 
 
     loadedPredefFile.right.map{ predefFileInfoOpt =>
-      val augmentedPredef = DynaML.maybeDefaultPredef(
+      val augmentedPredef = DynaZeppelin.maybeDefaultPredef(
         defaultPredef,
         Defaults.replPredef + Defaults.predefString + Defaults.dynaMlPredef
       )
@@ -141,9 +120,9 @@ case class DynaML(
 
   def instantiateInterpreter() = {
     loadedPredefFile.right.flatMap { predefFileInfoOpt =>
-      val augmentedPredef = DynaML.maybeDefaultPredef(
+      val augmentedPredef = DynaZeppelin.maybeDefaultPredef(
         defaultPredef,
-        Defaults.predefString + DynaML.extraPredefString
+        Defaults.predefString + DynaZeppelin.extraPredefString
       )
 
       val (colorsRef, printer) = Interpreter.initPrinters(
@@ -179,9 +158,9 @@ case class DynaML(
 
   def instantiateDynaZepplinInterpreter() = {
     loadedPredefFile.right.flatMap { predefFileInfoOpt =>
-      val augmentedPredef = DynaML.maybeDefaultPredef(
+      val augmentedPredef = DynaZeppelin.maybeDefaultPredef(
         defaultPredef,
-        Defaults.predefString + DynaML.extraPredefString
+        Defaults.predefString + DynaZeppelin.extraPredefString
       )
 
       val (colorsRef, printer) = Interpreter.initPrinters(
@@ -285,78 +264,9 @@ case class DynaML(
   }
 }
 
-object DynaML {
+object DynaZeppelin extends App {
+  ZeppelinServer.main(this.args)
 
-  /**
-    * The command-line entry point, which does all the argument parsing before
-    * delegating to [[DynaML.run]]
-    */
-  def main(args0: Array[String]): Unit = {
-
-    if(!args0.isEmpty && args0.head.contains("--server")) {
-      DynaServe.main(Array.empty[String])
-    } else {
-      // set proxy properties from env
-      // Not in `main0`, since `main0` should be able to be run as part of the
-      // test suite without mangling the global properties of the JVM process
-      ProxyFromEnv.setPropProxyFromEnv()
-
-      val success = main0(args0.toList, System.in, System.out, System.err)
-      if (success) sys.exit(0)
-      else sys.exit(1)
-    }
-  }
-
-  /**
-    * The logic of [[main]], in a form that doesn't call `sys.exit` and thus
-    * can be unit tested without spinning up lots of separate, expensive
-    * processes
-    */
-  def main0(args: List[String],
-            stdIn: InputStream,
-            stdOut: OutputStream,
-            stdErr: OutputStream): Boolean = {
-    val printErr = new PrintStream(stdErr)
-    val printOut = new PrintStream(stdOut)
-    // We have to use explicit flatmaps instead of a for-comprehension here
-    // because for-comprehensions fail to compile complaining about needing
-    // withFilter
-    Cli.groupArgs(args, Cli.ammoniteArgSignature, Cli.Config()) match{
-      case Left(msg) =>
-        printErr.println(msg)
-        false
-      case Right((cliConfig, leftoverArgs)) =>
-        if (cliConfig.help) {
-          printOut.println(Cli.ammoniteHelp)
-          true
-        }else{
-
-          val runner = new MainRunner(cliConfig, printOut, printErr, stdIn, stdOut, stdErr)
-          (cliConfig.code, leftoverArgs) match{
-            case (Some(code), Nil) =>
-              runner.runCode(code)
-
-            case (None, Nil) =>
-              runner.printInfo("Loading...")
-              runner.runRepl()
-              true
-
-            case (None, head :: rest) if head.startsWith("-") =>
-
-              val failureMsg =
-                "Unknown Ammonite option: " + head + Util.newLine +
-                  "Use --help to list possible options"
-
-              runner.printError(failureMsg)
-              false
-
-            case (None, head :: rest) =>
-              val success = runner.runScript(Path(head, pwd), rest)
-              success
-          }
-        }
-    }
-  }
 
   def maybeDefaultPredef(enabled: Boolean, predef: String) =
     if (enabled) predef else ""
@@ -376,105 +286,4 @@ object DynaML {
                              |import ammonite.main.Scripts.pathScoptRead
                              |""".stripMargin
 
-}
-
-/**
-  * Bundles together:
-  *
-  * - All the code relying on [[cliConfig]]
-  * - Handling for the common input/output streams and print-streams
-  * - Logic around the watch-and-rerun flag
-  */
-class MainRunner(cliConfig: Cli.Config,
-                 outprintStream: PrintStream,
-                 errPrintStream: PrintStream,
-                 stdIn: InputStream,
-                 stdOut: OutputStream,
-                 stdErr: OutputStream){
-
-  val colors =
-    if(cliConfig.colored.getOrElse(DynaML.isInteractive())) Colors.Default
-    else Colors.BlackWhite
-
-  def printInfo(s: String) = errPrintStream.println(colors.info()(s))
-  def printError(s: String) = errPrintStream.println(colors.error()(s))
-
-  @tailrec final def watchLoop[T](isRepl: Boolean,
-                                  printing: Boolean,
-                                  run: DynaML => (Res[T], Seq[(Path, Long)])): Boolean = {
-    val (result, watched) = run(initMain(isRepl))
-
-    val success = handleWatchRes(result, printing)
-    if (!cliConfig.watch) success
-    else{
-      watchAndWait(watched)
-      watchLoop(isRepl, printing, run)
-    }
-  }
-
-  def runScript(scriptPath: Path, scriptArgs: List[String]) =
-    watchLoop(
-      isRepl = false,
-      printing = true,
-      _.runScript(scriptPath, Scripts.groupArgs(scriptArgs))
-    )
-
-  def runCode(code: String) = watchLoop(isRepl = false, printing = false, _.runCode(code))
-
-  def runRepl(): Unit = watchLoop(isRepl = true, printing = false, _.run())
-
-  def watchAndWait(watched: Seq[(Path, Long)]) = {
-    printInfo(s"Watching for changes to ${watched.length} files... (Ctrl-C to exit)")
-    def statAll() = watched.forall{ case (file, lastMTime) =>
-      Interpreter.pathSignature(file) == lastMTime
-    }
-
-    while(statAll()) Thread.sleep(100)
-  }
-
-  def handleWatchRes[T](res: Res[T], printing: Boolean) = {
-    val success = res match {
-      case Res.Failure(msg) =>
-        printError(msg)
-        false
-      case Res.Exception(ex, s) =>
-        errPrintStream.println(
-          Repl.showException(ex, colors.error(), fansi.Attr.Reset, colors.literal())
-        )
-        false
-
-      case Res.Success(value) =>
-        if (printing && value != ()) outprintStream.println(pprint.PPrinter.BlackWhite(value))
-        true
-
-      case Res.Skip   => true // do nothing on success, everything's already happened
-    }
-    success
-  }
-
-
-  def initMain(isRepl: Boolean) = {
-    val storage = if (!cliConfig.homePredef) {
-      new Storage.Folder(cliConfig.home, isRepl) {
-        override def loadPredef = None
-      }
-    }else{
-      new Storage.Folder(cliConfig.home, isRepl)
-    }
-
-    DynaML(
-      cliConfig.predefCode,
-      cliConfig.predefFile,
-      cliConfig.defaultPredef,
-      storage,
-      inputStream = stdIn,
-      outputStream = stdOut,
-      errorStream = stdErr,
-      welcomeBanner = cliConfig.welcomeBanner,
-      verboseOutput = cliConfig.verboseOutput,
-      remoteLogging = cliConfig.remoteLogging,
-      colors = colors
-    )
-
-  }
 }

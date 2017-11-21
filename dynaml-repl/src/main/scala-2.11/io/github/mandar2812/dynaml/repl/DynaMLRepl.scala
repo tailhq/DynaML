@@ -21,22 +21,20 @@ package io.github.mandar2812.dynaml.repl
 import java.io.{InputStream, OutputStream}
 import java.nio.file.NoSuchFileException
 
-import ammonite.util._
-import ammonite.ops.Path
-import ammonite.repl.{RemoteLogger, Repl}
-import ammonite.runtime.Storage
-
-import scala.io.Source
-import ammonite.ops._
-
+import ammonite.ops.{Path, _}
+import ammonite.repl.{RemoteLogger, Repl, ReplApiImpl, ReplLoad}
 import ammonite.runtime.Evaluator.AmmoniteExit
+import ammonite.runtime.Storage
 import ammonite.util.Name.backtickWrap
-import ammonite.util.Util.CodeSource
+import ammonite.util.Util.{CodeSource, normalizeNewlines}
+import ammonite.util._
+import fastparse.utils.Compat.Context
 import fastparse.utils.Utils._
 import io.github.mandar2812.dynaml.repl.Router.{ArgSig, EntryPoint}
 
 import scala.annotation.{StaticAnnotation, tailrec}
 import scala.collection.mutable
+import scala.io.Source
 import scala.language.experimental.macros
 import fastparse.utils.Compat.Context
 
@@ -55,9 +53,59 @@ class DynaMLRepl(
   extends Repl(
     input, output, error, storage,
     basePredefs, customPredefs, wd, welcomeBanner,
-    replArgs, initialColors, remoteLogger) {
+    replArgs, initialColors, remoteLogger) { repl =>
 
   override val prompt = Ref("DynaML>")
+
+  override val interp: DynaMLInterpreter = new DynaMLInterpreter(
+    printer,
+    storage,
+    basePredefs,
+    customPredefs,
+    Seq((
+      "ammonite.repl.ReplBridge",
+      "repl",
+      new ReplApiImpl {
+        def replArgs0 = repl.replArgs
+        def printer = repl.printer
+        val colors = repl.colors
+        def sess = repl.sess0
+        val prompt = repl.prompt
+        val frontEnd = repl.frontEnd
+
+        def lastException = repl.lastException
+        def fullHistory = storage.fullHistory()
+        def history = repl.history
+        def newCompiler() = interp.compilerManager.init(force = true)
+        def compiler = interp.compilerManager.compiler.compiler
+        def fullImports = repl.fullImports
+        def imports = repl.imports
+        def width = frontEnd().width
+        def height = frontEnd().height
+
+        object load extends ReplLoad with (String => Unit){
+
+          def apply(line: String) = {
+            interp.processExec(line, currentLine, () => currentLine += 1) match{
+              case Res.Failure(s) => throw new CompilationError(s)
+              case Res.Exception(t, s) => throw t
+              case _ =>
+            }
+          }
+
+          def exec(file: Path): Unit = {
+            interp.watch(file)
+            apply(normalizeNewlines(read(file)))
+          }
+        }
+      }
+    )),
+    wd,
+    colors,
+    verboseOutput = true,
+    getFrame = () => frames().head
+  )
+
 
 }
 

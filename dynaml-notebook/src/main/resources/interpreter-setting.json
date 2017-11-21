@@ -1,7 +1,7 @@
 [
   {
-    "group": "io.github.mandar2812",
-    "name": "dynaml-v1.5.2-beta.2",
+    "group": "dynaml",
+    "name": "dynaml-base",
     "className": "io.github.mandar2812.dynaml.zeppelin.DynaMLZeppelinInterpreter",
     "properties": {
       "properties1": {

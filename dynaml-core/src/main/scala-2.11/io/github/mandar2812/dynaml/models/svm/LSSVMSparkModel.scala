@@ -2,13 +2,16 @@ package io.github.mandar2812.dynaml.models.svm
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.sqrt
+import com.github.tototoshi.csv.CSVReader
+import com.tinkerpop.frames.FramedGraphFactory
 import io.github.mandar2812.dynaml.utils.MinMaxAccumulator
 import org.apache.spark.{Accumulator, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
-import io.github.mandar2812.dynaml.evaluation.{MetricsSpark, Metrics}
+import io.github.mandar2812.dynaml.evaluation.{Metrics, MetricsSpark}
 import io.github.mandar2812.dynaml.optimization._
+import org.apache.log4j.Logger
 import org.apache.spark.mllib.linalg.Vector
 
 import scala.util.Random
@@ -313,5 +316,78 @@ object LSSVMSparkModel {
   }
 
 
+
+}
+
+object LSSVMModel {
+  val manager: FramedGraphFactory = new FramedGraphFactory
+  val logger = Logger.getLogger(this.getClass)
+
+  /**
+    * Factory function to rescale attributes
+    * given a vector of means and the Cholesky
+    * factorization of the inverse variance matrix
+    *
+    * */
+  def scaleAttributes(mean: DenseVector[Double],
+                      sigmaInverse: DenseMatrix[Double])(x: DenseVector[Double])
+  : DenseVector[Double] = sigmaInverse * (x - mean)
+
+  /**
+    * Factory method to create the appropriate
+    * optimization object required for the Gaussian
+    * model
+    * */
+  def getOptimizer(task: String): ConjugateGradient = new ConjugateGradient
+
+  def readCSV(reader: CSVReader, head: Boolean):
+  (Iterable[(DenseVector[Double], Double)], Int) = {
+    val stream = reader.toStream().toIterable
+    val dim = stream.head.length
+
+    def lines = if(head) {
+      stream.drop(1)
+    } else {
+      stream
+    }
+
+    (lines.map{parseLine}, dim)
+  }
+
+  def parseLine = {line : List[String] =>
+    //Parse line and extract features
+    val yv = line.apply(line.length - 1).toDouble
+    val xv: DenseVector[Double] =
+      DenseVector(line.slice(0, line.length - 1).map{x => x.toDouble}.toArray)
+
+    (xv, yv)
+  }
+
+  def readConfig(config: Map[String, String]): (String, Char, Boolean, String) = {
+
+    assert(config.isDefinedAt("file"), "File name must be Defined!")
+    val file: String = config("file")
+
+    val delim: Char = if(config.isDefinedAt("delim")) {
+      config("delim").toCharArray()(0)
+    } else {
+      ','
+    }
+
+    val head: Boolean = if(config.isDefinedAt("head")) {
+      config("head") match {
+        case "true" => true
+        case "True" => true
+        case "false" => false
+        case "False" => false
+      }
+    } else {
+      true
+    }
+
+    val task: String = if(config.isDefinedAt("task")) config("task") else ""
+
+    (file, delim, head, task)
+  }
 
 }
