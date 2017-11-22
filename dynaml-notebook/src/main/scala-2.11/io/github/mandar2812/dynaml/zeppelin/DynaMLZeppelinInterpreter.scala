@@ -1,5 +1,6 @@
 package io.github.mandar2812.dynaml.zeppelin
 
+import java.nio.charset.Charset
 import java.util.Properties
 
 import ammonite.interp.{Parsers, Preprocessor}
@@ -10,6 +11,7 @@ import ammonite.util.Util.CodeSource
 import fastparse.core.Parsed
 import io.github.mandar2812.dynaml.DynaZeppelin
 import io.github.mandar2812.dynaml.repl.{Defaults, DynaMLInterpreter}
+import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.zeppelin.interpreter.thrift.InterpreterCompletion
 import org.apache.zeppelin.interpreter.{Interpreter, InterpreterContext, InterpreterResult}
 
@@ -18,7 +20,9 @@ import scala.collection.JavaConversions._
 
 class DynaMLZeppelinInterpreter(properties: Properties) extends Interpreter(properties) {
 
-  protected val dynaml_instance = new DynaZeppelin()
+  protected val outputBuffer = new ByteArrayOutputStream()
+
+  protected val dynaml_instance = new DynaZeppelin(outputStream = outputBuffer)
 
   protected var CURRENT_LINE : Int = 0
 
@@ -40,6 +44,10 @@ class DynaMLZeppelinInterpreter(properties: Properties) extends Interpreter(prop
 
   override def getProgress(interpreterContext: InterpreterContext) = 0
 
+  override def open() = {
+    if (maybe_interp.isRight) dynaml_interp = maybe_interp.right.get
+  }
+
   override def close() = {
 
   }
@@ -58,33 +66,27 @@ class DynaMLZeppelinInterpreter(properties: Properties) extends Interpreter(prop
   override def interpret(s: String, interpreterContext: InterpreterContext) = {
     addHistory(s)
 
-/*
-    val res = dynaml_interp.processExec(s, CURRENT_LINE, () => CURRENT_LINE += 1)
-
-    if (res.isSuccess) {
-      new InterpreterResult(InterpreterResult.Code.SUCCESS, res.toString)
-    } else new InterpreterResult(InterpreterResult.Code.ERROR, res.toString)
-*/
-
     val wrapperName = Name("cmd" + CURRENT_LINE)
     val fileName = wrapperName.encoded + ".sc"
     val result = for {
       blocks <- Preprocessor.splitScript(ammonite.interp.Interpreter.skipSheBangLine(s), fileName)
 
+      codeSource = CodeSource(
+        wrapperName,
+        Seq(),
+        Seq(Name("ammonite"), Name("$sess")),
+        Some(dynaml_interp.wd/"(console)")
+      )
+
       metadata <- dynaml_interp.processAllScriptBlocks(
         blocks.map(_ => None),
         Res.Success(blocks),
         dynaml_interp.predefImports ++ dynaml_interp.frameImports,
-        CodeSource(
-          wrapperName,
-          Seq(),
-          Seq(Name("ammonite"), Name("$sess")),
-          Some(dynaml_interp.wd/"(console)")
-        ),
+        codeSource,
         (processed, indexedWrapperName) =>
           dynaml_interp.evaluateLine(
             processed, dynaml_interp.printer, fileName,
-            indexedWrapperName, false, () => CURRENT_LINE += 1),
+            indexedWrapperName, silent = false, () => CURRENT_LINE += 1),
         autoImport = true,
         ""
       )
@@ -94,37 +96,63 @@ class DynaMLZeppelinInterpreter(properties: Properties) extends Interpreter(prop
 
     if(result.isSuccess) {
 
-      /*val processedResult = result.flatMap(d => {
-        Res(Some(d._2.mkString("\n")), "")
-      })
+      val output = outputBuffer.toString(Charset.defaultCharset())
 
-      val Res.Success(resStr) = processedResult*/
-
+      outputBuffer.reset()
       val resStr = result.flatMap(d => {
         Res(Some(d.blockInfo.map(blockm => blockm.finalImports.value.map(d => d.fromName.raw).mkString("\n")).mkString("\n")), "")
       })
 
-      new InterpreterResult(InterpreterResult.Code.SUCCESS, resStr.toString)
+      new InterpreterResult(InterpreterResult.Code.SUCCESS, output)
     } else  {
       new InterpreterResult(InterpreterResult.Code.ERROR, result.toString)
     }
-
-    /*Parsers.CompilationUnit.parse(s) match {
-      case Parsed.Success(value, idx) =>
-        val res = dynaml_interp.processLine(value._1, value._2, CURRENT_LINE, false, () => CURRENT_LINE += 1)
-        Repl.handleOutput(dynaml_interp, res)
-        if (res.isSuccess) new InterpreterResult(InterpreterResult.Code.SUCCESS, res.toString)
-        else new InterpreterResult(InterpreterResult.Code.ERROR, res.toString)
-
-      case Parsed.Failure(_, index, extra) =>
-        new InterpreterResult(
-          InterpreterResult.Code.ERROR,
-          fastparse.core.ParseError.msg(extra.input, extra.traced.expected, index)
-        )
-    }*/
   }
 
-  override def open() = {
-    if (maybe_interp.isRight) dynaml_interp = maybe_interp.right.get
+  def evaluate(s: String) = {
+    addHistory(s)
+
+    val wrapperName = Name("cmd" + CURRENT_LINE)
+    val fileName = wrapperName.encoded + ".sc"
+    val result = for {
+      blocks <- Preprocessor.splitScript(ammonite.interp.Interpreter.skipSheBangLine(s), fileName)
+
+      codeSource = CodeSource(
+        wrapperName,
+        Seq(),
+        Seq(Name("ammonite"), Name("$sess")),
+        Some(dynaml_interp.wd/"(console)")
+      )
+
+      metadata <- dynaml_interp.processAllScriptBlocks(
+        blocks.map(_ => None),
+        Res.Success(blocks),
+        dynaml_interp.predefImports ++ dynaml_interp.frameImports,
+        codeSource,
+        (processed, indexedWrapperName) =>
+          dynaml_interp.evaluateLine(
+            processed, dynaml_interp.printer, fileName,
+            indexedWrapperName, silent = false, () => CURRENT_LINE += 1),
+        autoImport = true,
+        ""
+      )
+    } yield {
+      metadata
+    }
+
+    if(result.isSuccess) {
+
+      val output = outputBuffer.toString(Charset.defaultCharset())
+
+      outputBuffer.reset()
+      val resStr = result.flatMap(d => {
+        Res(Some(d.blockInfo.map(blockm => blockm.finalImports.value.map(d => d.fromName.raw).mkString("\n")).mkString("\n")), "")
+      })
+
+      output
+    } else  {
+      result.toString
+    }
   }
+
 }

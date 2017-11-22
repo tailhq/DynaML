@@ -1,15 +1,18 @@
 package io.github.mandar2812.dynaml.repl
 
+import java.io.{OutputStream, PrintStream}
+
 import ammonite.interp.{Interpreter, Preprocessor}
 import ammonite.ops.Path
 import ammonite.runtime.{Evaluator, Frame, Storage}
 import ammonite.util.Util.{CodeSource, VersionedWrapperId}
 import ammonite.util._
+import org.apache.commons.io.output.ByteArrayOutputStream
 
 import scala.annotation.tailrec
 
 class DynaMLInterpreter(
-  printer: Printer, storage: Storage,
+  override val printer: Printer, storage: Storage,
   basePredefs: Seq[PredefInfo], customPredefs: Seq[PredefInfo],
   // Allows you to set up additional "bridges" between the REPL
   // world and the outside world, by passing in the full name
@@ -150,14 +153,16 @@ class DynaMLInterpreter(
         }
       */
 
-        val res =
-          for{
-            allSplittedChunks <- splittedScript
-            (leadingSpaces, stmts) = allSplittedChunks(wrapperIndex - 1)
-            (hookStmts, importTrees) = parseImportHooks(codeSource, stmts)
-            hookInfo <- resolveImportHooks(importTrees, hookStmts, codeSource)
-            compile_res <- compileRunBlock(leadingSpaces, hookInfo)
-          } yield compile_res
+        val res = for {
+
+          allSplittedChunks <- splittedScript
+
+          (leadingSpaces, stmts) = allSplittedChunks(wrapperIndex - 1)
+          (hookStmts, importTrees) = parseImportHooks(codeSource, stmts)
+
+          hookInfo <- resolveImportHooks(importTrees, hookStmts, codeSource)
+          compile_res <- compileRunBlock(leadingSpaces, hookInfo)
+        } yield compile_res
 
         res match {
           case Res.Success(((blockMetadata, it), t)) =>
@@ -202,7 +207,8 @@ class DynaMLInterpreter(
                    fileName: String,
                    indexedWrapperName: Name,
                    silent: Boolean = false,
-                   incrementLine: () => Unit): Res[((Iterator[String], Evaluated), Tag)] = synchronized {
+                   incrementLine: () => Unit,
+                   outputStream: ByteArrayOutputStream): Res[(Evaluated, Tag)] = synchronized {
     for{
       _ <- Catching{ case e: ThreadDeath => Evaluator.interrupted(e) }
       (classFiles, newImports) <- compilerManager.compileClass(
@@ -214,7 +220,7 @@ class DynaMLInterpreter(
       res <- eval.processCell(
         classFiles,
         newImports,
-        printer,
+        outputStream,
         indexedWrapperName,
         silent,
         evalClassloader
@@ -222,4 +228,31 @@ class DynaMLInterpreter(
     } yield (res, Tag("", ""))
   }
 
+}
+
+object DynaMLInterpreter {
+
+  def initPrinters(colors0: Colors,
+                   output: ByteArrayOutputStream,
+                   error: OutputStream,
+                   verboseOutput: Boolean,
+                   autoFlush: Boolean = true) = {
+    val colors = Ref[Colors](colors0)
+    val printStream = new PrintStream(output, autoFlush)
+    val errorPrintStream = new PrintStream(error, true)
+
+    def printlnWithColor(stream: PrintStream, color: fansi.Attrs, s: String) = {
+      stream.println(color(s).render)
+    }
+
+    val printer = Printer(
+      printStream,
+      errorPrintStream,
+      printStream,
+      printlnWithColor(errorPrintStream, colors().warning(), _),
+      printlnWithColor(errorPrintStream, colors().error(), _),
+      s => if (verboseOutput) printlnWithColor(errorPrintStream, colors().info(), s)
+    )
+    (colors, printer)
+  }
 }

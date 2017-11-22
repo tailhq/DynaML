@@ -1,19 +1,22 @@
 package io.github.mandar2812.dynaml.repl
 
+import java.nio.charset.Charset
+
 import ammonite.runtime.Evaluator.{evaluatorRunPrinter, userCodeExceptionHandler}
 import ammonite.runtime.{Evaluator, Frame}
 import ammonite.util.Util.ClassFiles
 import ammonite.util._
+import org.apache.commons.io.output.ByteArrayOutputStream
 
 import scala.util.Try
 
 abstract class DynaMLEvaluator extends Evaluator {
   def processCell(classFiles: Util.ClassFiles,
                   newImports: Imports,
-                  printer: Printer,
+                  printer: ByteArrayOutputStream,
                   indexedWrapperName: Name,
                   silent: Boolean,
-                  contextClassLoader: ClassLoader): Res[(Iterator[String], Evaluated)]
+                  contextClassLoader: ClassLoader): Res[Evaluated]
 }
 
 object DynaMLEvaluator {
@@ -63,7 +66,7 @@ object DynaMLEvaluator {
 
     def processCell(classFiles: Util.ClassFiles,
                     newImports: Imports,
-                    printer: Printer,
+                    printer: ByteArrayOutputStream,
                     indexedWrapperName: Name,
                     silent: Boolean,
                     contextClassLoader: ClassLoader) = {
@@ -74,12 +77,17 @@ object DynaMLEvaluator {
         // Exhaust the printer iterator now, before exiting the `Catching`
         // block, so any exceptions thrown get properly caught and handled
         val iter = evalMain(cls, contextClassLoader).asInstanceOf[Iterator[String]]
+        var offset: Int = 0
 
-        if (!silent) evaluatorRunPrinter(iter.foreach(printer.resultStream.print))
-        else evaluatorRunPrinter(iter.foreach(_ => ()))
+        if (!silent) iter.foreach(s => {
+          val bytes = s.getBytes(Charset.defaultCharset())
+          val len = bytes.length
+          printer.write(bytes, 0, len)
+          offset += len
+        })
 
         // "" Empty string as cache tag of repl code
-        (iter, evaluationResult(Seq(Name("ammonite"), Name("$sess"), indexedWrapperName), newImports))
+        evaluationResult(Seq(Name("ammonite"), Name("$sess"), indexedWrapperName), newImports)
       }
     }
 

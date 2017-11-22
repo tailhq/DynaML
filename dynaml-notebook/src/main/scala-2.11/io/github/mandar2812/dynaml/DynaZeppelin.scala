@@ -10,6 +10,7 @@ import ammonite.runtime.{Frame, Storage}
 import ammonite.util.Util.newLine
 import ammonite.util._
 import io.github.mandar2812.dynaml.repl.{Defaults, DynaMLInterpreter, DynaMLRepl, Scripts}
+import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.zeppelin.server.ZeppelinServer
 
 /**
@@ -52,17 +53,17 @@ import org.apache.zeppelin.server.ZeppelinServer
   *                    part of the REPL or script's output
   */
 case class DynaZeppelin(
-                   predefCode: String = "", predefFile: Option[Path] = None,
-                   defaultPredef: Boolean = true,
-                   storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
-                   wd: Path = ammonite.ops.pwd,
-                   welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
-                   inputStream: InputStream = System.in,
-                   outputStream: OutputStream = System.out,
-                   errorStream: OutputStream = System.err,
-                   verboseOutput: Boolean = true,
-                   remoteLogging: Boolean = true,
-                   colors: Colors = Colors.Default){
+  predefCode: String = "", predefFile: Option[Path] = None,
+  defaultPredef: Boolean = true,
+  storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
+  wd: Path = ammonite.ops.pwd,
+  welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
+  inputStream: InputStream = System.in,
+  outputStream: ByteArrayOutputStream = new ByteArrayOutputStream(),
+  errorStream: OutputStream = System.err,
+  verboseOutput: Boolean = true,
+  remoteLogging: Boolean = true,
+  colors: Colors = Colors.Default){
 
   def loadedPredefFile = predefFile match{
     case Some(path) =>
@@ -163,11 +164,12 @@ case class DynaZeppelin(
         Defaults.predefString + DynaZeppelin.extraPredefString
       )
 
-      val (colorsRef, printer) = Interpreter.initPrinters(
+      val (colorsRef, printer) = DynaMLInterpreter.initPrinters(
         colors,
         outputStream,
         errorStream,
-        verboseOutput
+        verboseOutput,
+        autoFlush = false
       )
       val frame = Frame.createInitial()
 

@@ -107,6 +107,8 @@ object Dependencies {
     "com.lihaoyi" % "ammonite-sshd_2.11.8" % "1.0.3"
   )
 
+  val commons_io = Seq("commons-io" % "commons-io" % "2.6")
+
   val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")
 
   val tinkerpopDependency = Seq(

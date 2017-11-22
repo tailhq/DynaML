@@ -76,7 +76,7 @@ lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin)
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
     buildInfoUsePackageAsPath := true,
-    libraryDependencies ++= (baseDependencies ++ replDependency)
+    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io)
   )
 
 lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(JavaServerAppPackaging)

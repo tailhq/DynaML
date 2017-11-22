@@ -41,3 +41,5 @@ conf/interpreter.json
 tmp
 interpreter
 interpreter/*
+temp
+temp/*
