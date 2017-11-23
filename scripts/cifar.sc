@@ -47,11 +47,11 @@
     tf.learn.Configuration(Some(summariesDir)),
     tf.learn.StopCriteria(maxSteps = Some(100000)),
     Set(
-      tf.learn.StepRateHook(log = false, summaryDirectory = summariesDir, trigger = tf.learn.StepHookTrigger(100)),
+      tf.learn.StepRateHook(log = false, summaryDir = summariesDir, trigger = tf.learn.StepHookTrigger(100)),
       // tf.learn.SummarySaverHook(summariesDir, tf.learn.StepHookTrigger(100)),
       tf.learn.CheckpointSaverHook(summariesDir, tf.learn.StepHookTrigger(1000))),
     tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 1))
-  estimator.train(() => trainData, tf.learn.StopCriteria(maxSteps = Some(10)))
+  estimator.train(() => trainData, tf.learn.StopCriteria(maxSteps = Some(1000)))
 
   def accuracy(images: Tensor, labels: Tensor): Float = {
     val predictions = estimator.infer(() => images)
