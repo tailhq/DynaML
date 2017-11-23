@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml
 
+import io.github.mandar2812.dynaml.probability._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.tensors.{Context, Tensor, TensorConvertible}
 import org.platanios.tensorflow.api.types.DataType
@@ -75,6 +76,12 @@ package object tensorflow {
     def unstack(input: Tensor, number: Int = -1, axis: Int = 0) = tfi.unstack(input, number, axis)
 
     def concatenate(inputs: Seq[Tensor], axis: Tensor = 0): Tensor = tfi.concatenate(inputs, axis)
+
+    def random[T](dtype: DataType.Aux[T], shape: Int*)(rv: RandomVariable[T])(implicit ev: TensorConvertible[T])
+    : Tensor = {
+      val buffer = rv.iid(shape.product).draw
+      Tensor(dtype, buffer.head, buffer.tail:_*).reshape(Shape(shape:_*))
+    }
 
   }
 
