@@ -3,7 +3,6 @@
 * */
 //Ammonite imports
 import ammonite.ops._
-import ammonite.ops.ImplicitWd._
 //Import breeze for linear algebra
 import breeze.linalg.{DenseVector, DenseMatrix, diag}
 import breeze.stats.distributions._
@@ -47,6 +46,8 @@ import io.github.mandar2812.dynaml.wavelets._
 import io.github.mandar2812.dynaml.openml.OpenML
 //Spark support
 import io.github.mandar2812.dynaml.DynaMLSpark._
+//Tensorflow support
+import io.github.mandar2812.dynaml.tensorflow._
 //Renjin imports
 import javax.script._
 import org.renjin.script._
