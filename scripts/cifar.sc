@@ -51,7 +51,7 @@
       // tf.learn.SummarySaverHook(summariesDir, tf.learn.StepHookTrigger(100)),
       tf.learn.CheckpointSaverHook(summariesDir, tf.learn.StepHookTrigger(1000))),
     tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 1))
-  estimator.train(() => trainData, tf.learn.StopCriteria(maxSteps = Some(1000)))
+  estimator.train(() => trainData, tf.learn.StopCriteria(maxSteps = Some(10)))
 
   def accuracy(images: Tensor, labels: Tensor): Float = {
     val predictions = estimator.infer(() => images)
