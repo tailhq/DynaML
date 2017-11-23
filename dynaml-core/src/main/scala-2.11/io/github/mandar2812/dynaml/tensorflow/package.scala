@@ -20,7 +20,7 @@ package io.github.mandar2812.dynaml
 
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.tensors.{Context, Tensor, TensorConvertible}
-import org.platanios.tensorflow.api.types._
+import org.platanios.tensorflow.api.types.DataType
 
 import scala.util.DynamicVariable
 
