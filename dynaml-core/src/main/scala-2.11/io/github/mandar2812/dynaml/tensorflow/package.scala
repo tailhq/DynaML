@@ -74,6 +74,8 @@ package object tensorflow {
 
     def unstack(input: Tensor, number: Int = -1, axis: Int = 0) = tfi.unstack(input, number, axis)
 
+    def concatenate(inputs: Seq[Tensor], axis: Tensor = 0): Tensor = tfi.concatenate(inputs, axis)
+
   }
 
 
