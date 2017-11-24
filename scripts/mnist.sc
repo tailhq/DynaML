@@ -30,7 +30,8 @@
   val optimizer = tf.train.AdaGrad(0.1)
   val model = tf.learn.Model(input, layer, trainInput, trainingInputLayer, loss, optimizer)
 
-  val summariesDir = java.nio.file.Paths.get((tempdir/"summaries").toString())                 // Directory in which to save summaries and checkpoints
+  // Directory in which to save summaries and checkpoints
+  val summariesDir = java.nio.file.Paths.get((tempdir/"mnist_summaries").toString())
 
   val estimator = tf.learn.InMemoryEstimator(
     model,
@@ -48,6 +49,14 @@
     predictions.argmax(1).cast(UINT8).equal(labels).cast(FLOAT32).mean().scalar.asInstanceOf[Float]
   }
 
-  println(s"Train accuracy = ${accuracy(dataSet.trainImages, dataSet.trainLabels)}")
-  println(s"Test accuracy = ${accuracy(dataSet.testImages, dataSet.testLabels)}")
+
+  val (trainAccuracy, testAccuracy) = (
+    accuracy(dataSet.trainImages, dataSet.trainLabels),
+    accuracy(dataSet.testImages, dataSet.testLabels))
+
+  print("Train accuracy = ")
+  pprint.pprintln(trainAccuracy)
+
+  print("Test accuracy = ")
+  pprint.pprintln(testAccuracy)
 }
