@@ -61,7 +61,7 @@
       tf.learn.StepRateHook(log = false, summaryDir = summariesDir, trigger = tf.learn.StepHookTrigger(100)),
       tf.learn.SummarySaverHook(summariesDir, tf.learn.StepHookTrigger(100)),
       tf.learn.CheckpointSaverHook(summariesDir, tf.learn.StepHookTrigger(100))),
-    tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 100, host = "127.0.0.1", port = 8080))
+    tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 100, host = "0.0.0.0", port = 6006))
   estimator.train(() => trainData, tf.learn.StopCriteria(maxSteps = Some(500)))
 
   def accuracy(images: Tensor, labels: Tensor): Float = {
