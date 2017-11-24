@@ -141,9 +141,9 @@ object Dependencies {
     .map(_.exclude("javax.ws.rs" , "javax.ws.rs-api"))
 
   val imageDependencies = Seq(
-    "com.sksamuel.scrimage" % "scrimage-core_2.11" % "2.1.7",
-    "com.sksamuel.scrimage" % "scrimage-io-extra_2.11" % "2.1.7",
-    "com.sksamuel.scrimage" % "scrimage-filters_2.11" % "2.1.7"
+    "com.sksamuel.scrimage" % "scrimage-core_2.11" % "2.1.8",
+    "com.sksamuel.scrimage" % "scrimage-io-extra_2.11" % "2.1.8",
+    "com.sksamuel.scrimage" % "scrimage-filters_2.11" % "2.1.8"
   )
 
   val dataFormatDependencies = Seq(
