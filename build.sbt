@@ -156,7 +156,7 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     dataDirectory := new File("data/"),
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())"""/*,
     credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")*/
-  ).aggregate(core, pipes, examples).settings(
+  ).aggregate(core, pipes, examples, repl).settings(
     aggregate in publishM2 := true,
     aggregate in update := false)
 
