@@ -78,7 +78,7 @@
       tf.learn.StepRateLogger(log = false, summaryDir = summariesDir, trigger = tf.learn.StepHookTrigger(100)),
       tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(100)),
       tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(100))),
-    tensorBoardConfig = tf.learn.TensorBoardConfig(logDir = summariesDir, reloadInterval = 100, host = "127.0.0.1", port = 5555))
+    tensorBoardConfig = tf.learn.TensorBoardConfig(logDir = summariesDir, reloadInterval = 100))
 
   estimator.train(() => trainDataset, tf.learn.StopCriteria(maxSteps = Some(500)))
 }
