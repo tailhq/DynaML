@@ -53,7 +53,7 @@
 
   println("Training the linear regression model.")
   val summariesDir = java.nio.file.Paths.get((tempdir/"cifar_summaries").toString())
-  val estimator = tf.learn.InMemoryEstimator(
+  val estimator = tf.learn.FileBasedEstimator(
     model,
     tf.learn.Configuration(Some(summariesDir)),
     tf.learn.StopCriteria(maxSteps = Some(100000)),

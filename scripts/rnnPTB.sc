@@ -1,10 +1,10 @@
 {
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.api.learn.layers.rnn.RNN
-  import org.platanios.tensorflow.api.learn.layers.rnn.cell.{BasicLSTMCell, LSTMTuple}
-  import java.nio.file.Paths
-
+  import org.platanios.tensorflow.api.learn.layers.rnn.cell.{BasicLSTMCell, DropoutRNNCell, LSTMTuple}
   import org.platanios.tensorflow.data.text.PTBLoader
+
+  import java.nio.file.Paths
 
   import ammonite.ops.home
 
@@ -24,7 +24,6 @@
     override val layerType: String = "RNNOutputLayer"
 
     override def forward(input: LSTMTuple, mode: tf.learn.Mode): tf.learn.LayerInstance[LSTMTuple, Output] = {
-
       val weights = variable("OutputWeights", dataType, Shape(numHidden, vocabularySize))
       val bias = variable("OutputBias", dataType, Shape(vocabularySize))
       val output = tf.linear(tf.reshape(input.output, Shape(-1, numHidden)), weights.value, bias.value)
@@ -35,16 +34,13 @@
   }
 
   val model = {
-
-    val input = tf.learn.Input(INT32, Shape(batchSize, numSteps))
-    val trainInput = tf.learn.Input(INT32, Shape(batchSize, numSteps))
+    val input = tf.learn.Input(INT32, Shape(-1, -1))
+    val trainInput = tf.learn.Input(INT32, Shape(-1, -1))
 
     // Slightly better results can be obtained with forget gate biases initialized to 1 but the hyper-parameters of the
     // model would need to be different than those reported in the paper.
+    val rnnCell = DropoutRNNCell(BasicLSTMCell(numHidden, FLOAT32, Shape(-1, numHidden), forgetBias = 0.0f), 0.00001f)
 
-    val rnnCell = BasicLSTMCell(numHidden, FLOAT32, Shape(-1, numHidden), forgetBias = 0.0f)
-
-    // TODO: Add dropout wrapper.
     // TODO: Add multi-RNN cell.
     val rnn = RNN(rnnCell, timeMajor = false)
 
@@ -70,7 +66,7 @@
 
   val summariesDir = Paths.get((tempdir/"rnn-ptb").toString())
 
-  val estimator = tf.learn.InMemoryEstimator(
+  val estimator = tf.learn.FileBasedEstimator(
     model,
     tf.learn.Configuration(Some(summariesDir)),
     tf.learn.StopCriteria(maxSteps = Some(100000)),

@@ -33,7 +33,7 @@
   // Directory in which to save summaries and checkpoints
   val summariesDir = java.nio.file.Paths.get((tempdir/"mnist_summaries").toString())
 
-  val estimator = tf.learn.InMemoryEstimator(
+  val estimator = tf.learn.FileBasedEstimator(
     model,
     tf.learn.Configuration(Some(summariesDir)),
     tf.learn.StopCriteria(maxSteps = Some(100000)),
