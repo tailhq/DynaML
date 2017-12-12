@@ -18,6 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml
 
+import java.nio.ByteBuffer
+
 import io.github.mandar2812.dynaml.probability._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.Shape
@@ -90,6 +92,56 @@ package object tensorflow {
     def tensor_from[T](dtype: String, shape: Int*)(buffer: Seq[T])(implicit ev: TensorConvertible[T]): Tensor = {
       Tensor(DataType.fromName(dtype), buffer.head, buffer.tail:_*).reshape(Shape(shape:_*))
     }
+
+    /**
+      * Construct a tensor from a array of bytes.
+      *
+      * @tparam T The type of the elements
+      *
+      * @param dtype The tensorflow data type of the elements,
+      *              as a string i.e. "FLOAT64", "INT32" etc
+      *
+      * @param shape The shape of the tensor given as any number
+      *              of integer arguments.
+      *
+      * @param buffer The elements as a contiguous array of bytes
+      *
+      * @return A tensorflow [[Tensor]] of the appropriate data type
+      *         and shape.
+      *
+      * <b>Usage</b> dtf.tensor_from_buffer(FLOAT32, 1, 1)((1 to 4).toArray.map(_.toByte))
+      *
+      * */
+    def tensor_from_buffer[T](
+      dtype: DataType.Aux[T], shape: Shape)(
+      buffer: Array[Byte]): Tensor = {
+      Tensor.fromBuffer(dtype, shape, buffer.length.toLong, ByteBuffer.wrap(buffer))
+    }
+
+    /**
+      * Construct a tensor from a array of bytes.
+      *
+      * @param dtype The tensorflow data type of the elements,
+      *              as a string i.e. "FLOAT64", "INT32" etc
+      *
+      * @param shape The shape of the tensor given as any number
+      *              of integer arguments.
+      *
+      * @param buffer The elements as a contiguous array of bytes
+      *
+      * @return A tensorflow [[Tensor]] of the appropriate data type
+      *         and shape.
+      *
+      * <b>Usage</b> dtf.tensor_from_buffer("FLOAT32", 1, 1)((1 to 4).toArray.map(_.toByte))
+      *
+      * */
+    def tensor_from_buffer(
+      dtype: String, shape: Int*)(
+      buffer: Array[Byte]): Tensor =
+      Tensor.fromBuffer(
+        DataType.fromName(dtype), Shape(shape:_*),
+        buffer.length.toLong, ByteBuffer.wrap(buffer))
+
 
     /**
       * Construct an 16 bit integer tensor from a list of elements.
