@@ -18,16 +18,28 @@
 
   // Create the MLP model.
   val input = tf.learn.Input(UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2)))
+
   val trainInput = tf.learn.Input(UINT8, Shape(-1))
-  val layer = tf.learn.Flatten() >>
-    tf.learn.Cast(FLOAT32) >>
-    tf.learn.Linear(128, name = "Layer_0") >> tf.learn.ReLU(0.1f) >>
-    tf.learn.Linear(64, name = "Layer_1") >> tf.learn.ReLU(0.1f) >>
-    tf.learn.Linear(32, name = "Layer_2") >> tf.learn.ReLU(0.1f) >>
-    tf.learn.Linear(10, name = "OutputLayer")
-  val trainingInputLayer = tf.learn.Cast(INT64)
-  val loss = tf.learn.SparseSoftmaxCrossEntropy() >> tf.learn.Mean() >> tf.learn.ScalarSummary("Loss")
+
+  val layer = tf.learn.Flatten("Input/Flatten") >>
+    tf.learn.Cast("Input/Cast", FLOAT32) >>
+    tf.learn.Linear("Layer_0/Linear", 128) >>
+    tf.learn.ReLU("Layer_0/ReLU", 0.1f) >>
+    tf.learn.Linear("Layer_1/Linear", 64) >>
+    tf.learn.ReLU("Layer_1/ReLU", 0.1f) >>
+    tf.learn.Linear("Layer_2/Linear", 32) >>
+    tf.learn.ReLU("Layer_2/ReLU", 0.1f) >>
+    tf.learn.Linear("OutputLayer/Linear", 10)
+
+  val trainingInputLayer = tf.learn.Cast("TrainInput/Cast", INT64)
+
+  val loss =
+    tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
+    tf.learn.Mean("Loss/Mean") >>
+    tf.learn.ScalarSummary("Loss/Summary", "Loss")
+
   val optimizer = tf.train.AdaGrad(0.1)
+
   val model = tf.learn.Model(input, layer, trainInput, trainingInputLayer, loss, optimizer)
 
   // Directory in which to save summaries and checkpoints
@@ -42,6 +54,7 @@
       tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(100)),
       tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(100))),
     tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 1))
+
   estimator.train(() => trainData, tf.learn.StopCriteria(maxSteps = Some(1000)))
 
   def accuracy(images: Tensor, labels: Tensor): Float = {
