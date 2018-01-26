@@ -152,7 +152,7 @@ object Dependencies {
   )
 
   val tensorflowDependency = Seq(
-    "org.platanios" % "tensorflow_2.11" % "0.1.0-SNAPSHOT" classifier tensorflow_classifier,
-    "org.platanios" % "tensorflow-data_2.11" % "0.1.0-SNAPSHOT"
+    "org.platanios" % "tensorflow_2.11" % "0.1.1-SNAPSHOT" classifier tensorflow_classifier,
+    "org.platanios" % "tensorflow-data_2.11" % "0.1.1-SNAPSHOT"
   ).map(_.exclude("org.typelevel", "spire_2.11"))
 }
