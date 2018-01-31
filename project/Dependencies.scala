@@ -35,7 +35,13 @@ object Dependencies {
     platformName
   }
 
+  val tfscala_version = "0.1.1"
+
+  //Set to true if, building with Nvidia GPU support.
   val gpuFlag: Boolean = false
+
+  //Set to false if using self compiled tensorflow library
+  val packagedTFFlag: Boolean = true
 
   val tensorflow_classifier: String = {
     val platform_splits = platform.split("-")
@@ -152,7 +158,7 @@ object Dependencies {
   )
 
   val tensorflowDependency = Seq(
-    "org.platanios" % "tensorflow_2.11" % "0.1.1-SNAPSHOT" classifier tensorflow_classifier,
-    "org.platanios" % "tensorflow-data_2.11" % "0.1.1-SNAPSHOT"
+    "org.platanios" % "tensorflow_2.11" % tfscala_version classifier tensorflow_classifier,
+    "org.platanios" % "tensorflow-data_2.11" % tfscala_version
   ).map(_.exclude("org.typelevel", "spire_2.11"))
 }
