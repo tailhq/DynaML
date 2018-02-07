@@ -689,7 +689,7 @@ class Router [C <: Context](val c: C) {
         case Some(s) => q"scala.Some($s)"
       }
       val argSig = q"""
-        ammonite.main.Router.ArgSig(
+        io.github.mandar2812.dynaml.repl.Router.ArgSig(
           ${arg.name.toString},
           ${docUnwrappedType.toString + (if(vararg) "*" else "")},
           $docTree,
@@ -699,13 +699,13 @@ class Router [C <: Context](val c: C) {
 
       val reader =
         if(vararg) q"""
-          ammonite.main.Router.readVarargs[$docUnwrappedType](
+          io.github.mandar2812.dynaml.repl.Router.readVarargs[$docUnwrappedType](
             $argSig,
             $extrasSymbol,
             implicitly[scopt.Read[$docUnwrappedType]].reads(_)
           )
         """ else q"""
-        ammonite.main.Router.read[$docUnwrappedType](
+        io.github.mandar2812.dynaml.repl.Router.read[$docUnwrappedType](
           $argListSymbol,
           $default,
           $argSig,
@@ -727,7 +727,7 @@ class Router [C <: Context](val c: C) {
     }.unzip
 
     q"""
-    ammonite.main.Router.EntryPoint(
+    io.github.mandar2812.dynaml.repl.Router.EntryPoint(
       ${meth.name.toString},
       scala.Seq(..$argSigs),
       ${methodDoc match{
@@ -736,9 +736,9 @@ class Router [C <: Context](val c: C) {
     }},
       ${varargs.contains(true)},
       ($argListSymbol: Map[String, String], $extrasSymbol: Seq[String]) =>
-        ammonite.main.Router.validate(Seq(..$readArgs)) match{
-          case ammonite.main.Router.Result.Success(List(..$argNames)) =>
-            ammonite.main.Router.Result.Success($target.${meth.name.toTermName}(..$argNameCasts))
+        io.github.mandar2812.dynaml.repl.Router.validate(Seq(..$readArgs)) match{
+          case io.github.mandar2812.dynaml.repl.Router.Result.Success(List(..$argNames)) =>
+            io.github.mandar2812.dynaml.repl.Router.Result.Success($target.${meth.name.toTermName}(..$argNameCasts))
           case x => x
         }
     )
@@ -795,8 +795,8 @@ object Scripts {
         extraCode = Util.normalizeNewlines(
           s"""
              |val $$routesOuter = this
-             |object $$routes extends scala.Function0[scala.Seq[ammonite.main.Router.EntryPoint]]{
-             |  def apply() = ammonite.main.Router.generateRoutes[$$routesOuter.type]($$routesOuter)
+             |object $$routes extends scala.Function0[scala.Seq[io.github.mandar2812.dynaml.repl.Router.EntryPoint]]{
+             |  def apply() = io.github.mandar2812.dynaml.repl.Router.generateRoutes[$$routesOuter.type]($$routesOuter)
              |}
           """.stripMargin
         ),
