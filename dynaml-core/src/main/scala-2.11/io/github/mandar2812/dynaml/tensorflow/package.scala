@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml
 import java.nio.ByteBuffer
 
 import io.github.mandar2812.dynaml.probability._
-import org.platanios.tensorflow.api.{Shape, _}
+import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.Shape
 import org.platanios.tensorflow.api.ops.NN.SamePadding
 import org.platanios.tensorflow.api.tensors.{Tensor, TensorConvertible}
