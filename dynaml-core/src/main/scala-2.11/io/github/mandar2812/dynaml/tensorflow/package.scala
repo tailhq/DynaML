@@ -21,8 +21,9 @@ package io.github.mandar2812.dynaml
 import java.nio.ByteBuffer
 
 import io.github.mandar2812.dynaml.probability._
-import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.{Shape, _}
 import org.platanios.tensorflow.api.core.Shape
+import org.platanios.tensorflow.api.ops.NN.SamePadding
 import org.platanios.tensorflow.api.tensors.{Tensor, TensorConvertible}
 import org.platanios.tensorflow.api.types.{DataType, SupportedType}
 
@@ -290,6 +291,32 @@ package object tensorflow {
 
   }
 
+  /**
+    *
+    *
+    * */
+  object dtflearn {
 
+    /**
+      * Constructs a convolutional layer activated by a ReLU, with
+      * an option of appending a dropout layer.
+      *
+      * */
+    def conv2d_unit(
+      shape: Shape, stride: (Int, Int) = (1, 1),
+      relu_param: Float = 0.1f, dropout: Boolean = true,
+      keep_prob: Float = 0.6f)(i: Int) =
+      if(dropout) {
+        tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SamePadding) >>
+          tf.learn.AddBias(name = "Bias_"+i) >>
+          tf.learn.ReLU("ReLU_"+i, relu_param) >>
+          tf.learn.Dropout("Dropout_"+i, keep_prob)
+      } else {
+        tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SamePadding) >>
+          tf.learn.AddBias(name = "Bias_"+i) >>
+          tf.learn.ReLU("ReLU_"+i, relu_param)
+      }
+
+  }
 
 }
