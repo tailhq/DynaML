@@ -246,11 +246,6 @@ package object tensorflow {
     def tensor_f64(shape: Int*)(buffer: Double*)(implicit ev: TensorConvertible[Double]) =
       Tensor(FLOAT64, buffer.head, buffer.tail:_*).reshape(shape)
 
-    /*def tensor_c64(shape: Int*)(buffer: Double*)(implicit ev: TensorConvertible[Double]) =
-      Tensor(COMPLEX64, buffer.head, buffer.tail:_*).reshape(shape)
-
-    def tensor_c128(shape: Int*)(buffer: Double*)(implicit ev: TensorConvertible[Double]) =
-      Tensor(COMPLEX128, buffer.head, buffer.tail:_*).reshape(shape)*/
 
     /**
       * Stack a list of tensors, the use must ensure that

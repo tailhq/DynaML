@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.evaluation
 
 import io.github.mandar2812.dynaml.tensorflow.dtf
-import org.platanios.tensorflow.api.{Tensor, ::}
+import org.platanios.tensorflow.api.{Tensor, ::, ---}
 
 
 /**
@@ -50,7 +50,7 @@ abstract class MetricsTF(names: Seq[String], preds: Tensor, targets: Tensor) {
 
     names.zipWithIndex.foreach(n => {
 
-      val value: Tensor = results(n._2, ::)
+      val value: Tensor = results(n._2, ---)
 
       val metric = n._1
 
