@@ -22,6 +22,8 @@ import java.io.{BufferedWriter, File, FileWriter}
 
 import breeze.linalg.{DenseMatrix, DenseVector, Matrix, MatrixNotSquareException, MatrixNotSymmetricException, kron}
 import com.github.tototoshi.csv.{CSVReader, DefaultCSVFormat, QUOTE_NONNUMERIC}
+import org.renjin.script.{RenjinScriptEngine, RenjinScriptEngineFactory}
+import org.renjin.sexp.SEXP
 //import org.apache.spark.mllib.regression.LabeledPoint
 //import org.apache.spark.rdd.RDD
 
@@ -502,6 +504,21 @@ package object utils {
           throw new MatrixNotSymmetricException
     }
   }
+
+  /**
+    * Encapsulates renjin script engine and its capabilities.
+    * */
+  object Renjin {
+
+    private val r_engine_factory = new RenjinScriptEngineFactory()
+
+    val renjin: RenjinScriptEngine = r_engine_factory.getScriptEngine()
+
+    val r: String => SEXP = (s: String) => renjin.eval(s).asInstanceOf[SEXP]
+
+    val R: java.io.File => Unit = (f: java.io.File) => renjin.eval(f)
+  }
+
 
 }
 

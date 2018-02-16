@@ -18,8 +18,9 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.evaluation
 
+import com.quantifind.charts.Highcharts.{regression, title, xAxis, yAxis}
 import io.github.mandar2812.dynaml.tensorflow.dtf
-import org.platanios.tensorflow.api.{Tensor, ::, ---}
+import org.platanios.tensorflow.api.{---, ::, Tensor}
 
 
 /**
@@ -29,7 +30,7 @@ import org.platanios.tensorflow.api.{Tensor, ::, ---}
   *
   * @param targets The actual output values.
   * */
-abstract class MetricsTF(names: Seq[String], preds: Tensor, targets: Tensor) {
+abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets: Tensor) {
 
   protected val scoresAndLabels: (Tensor, Tensor) = (preds, targets)
 
@@ -37,14 +38,14 @@ abstract class MetricsTF(names: Seq[String], preds: Tensor, targets: Tensor) {
 
   lazy val results: Tensor = run()
 
-  def _target_quantity = name
+  def _target_quantity: String = name
 
   def target_quantity_(n: String): Unit = {
     name = n
   }
 
   def print(): Unit = {
-    println("Model Performance: "+name)
+    println("\nModel Performance: "+name)
     println("============================")
     println()
 
@@ -76,13 +77,42 @@ abstract class MetricsTF(names: Seq[String], preds: Tensor, targets: Tensor) {
 /**
   * Implements a common use for Regression Task Evaluators.
   * */
-class RegressionMetricsTF(preds: Tensor, targets: Tensor, num_partitions: Int = 4)
-  extends MetricsTF(Seq("RMSE", "MAE", "Corr"), preds, targets) {
+class RegressionMetricsTF(preds: Tensor, targets: Tensor)
+  extends MetricsTF(Seq("RMSE", "MAE", "Coefficient of Corr.", "Yield"), preds, targets) {
 
+  private val num_outputs = if (preds.shape.toTensor().size == 1) 1 else preds.shape(1)
 
-  private lazy val (_ , rmse , mae, corr) = RegressionMetricsTF.calculate(preds, targets, num_partitions)
+  private lazy val (_ , rmse , mae, corr) = RegressionMetricsTF.calculate(preds, targets)
 
-  override protected def run(): Tensor = dtf.stack(Seq(rmse, mae, corr))
+  private lazy val modelyield =
+    (preds.max(axes = 0) - preds.min(axes = 0)).divide(targets.max(axes = 0) - targets.min(axes = 0))
+
+  override protected def run(): Tensor = dtf.stack(Seq(rmse, mae, corr, modelyield))
+
+  override def generatePlots(): Unit = {
+    println("Generating Plot of Fit for each target")
+
+    if(num_outputs == 1) {
+      val (pr, tar) = (
+        scoresAndLabels._1.entriesIterator.map(_.asInstanceOf[Double]),
+        scoresAndLabels._2.entriesIterator.map(_.asInstanceOf[Double]))
+
+      regression(pr.zip(tar).toSeq)
+
+      title("Goodness of fit: "+name)
+      xAxis("Predicted "+name)
+      yAxis("Actual "+name)
+
+    } else {
+      (0 until num_outputs).foreach(output => {
+        val (pr, tar) = (
+          scoresAndLabels._1(::, output).entriesIterator.map(_.asInstanceOf[Double]),
+          scoresAndLabels._2(::, output).entriesIterator.map(_.asInstanceOf[Double]))
+
+        regression(pr.zip(tar).toSeq)
+      })
+    }
+  }
 }
 
 /**
@@ -90,10 +120,10 @@ class RegressionMetricsTF(preds: Tensor, targets: Tensor, num_partitions: Int = 
   * */
 object RegressionMetricsTF {
 
-  protected def calculate(preds: Tensor, targets: Tensor, num_partitions: Int) = {
+  protected def calculate(preds: Tensor, targets: Tensor): (Tensor, Tensor, Tensor, Tensor) = {
     val error = targets.subtract(preds)
 
-    println("Shape of error tensor: "+error.shape.toString())
+    println("Shape of error tensor: "+error.shape.toString()+"\n")
     
     val num_instances = error.shape(0)
     val rmse = error.square.mean(axes = 0).sqrt
@@ -110,7 +140,9 @@ object RegressionMetricsTF {
 
       val targets_c = targets.subtract(dtf.stack(Seq.fill(num_instances)(mean_targets)))
 
-      preds_c.multiply(targets_c).mean(axes = 0).divide(preds_c.square.mean().sqrt).divide(targets_c.square.mean().sqrt)
+      val (sigma_t, sigma_p) = (targets_c.square.mean().sqrt, preds_c.square.mean().sqrt)
+
+      preds_c.multiply(targets_c).mean(axes = 0).divide(sigma_t.multiply(sigma_p))
     }
 
     (error, rmse, mae, corr)

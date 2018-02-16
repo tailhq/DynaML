@@ -52,7 +52,4 @@ import io.github.mandar2812.dynaml.tensorflow._
 import javax.script._
 import org.renjin.script._
 import org.renjin.sexp._
-val r_engine_factory = new RenjinScriptEngineFactory()
-implicit val renjin = r_engine_factory.getScriptEngine()
-val r: String => SEXP = (s: String) => renjin.eval(s).asInstanceOf[SEXP]
-val R: java.io.File => Unit = (f: java.io.File) => renjin.eval(f)
+import utils.Renjin._
