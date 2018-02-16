@@ -93,6 +93,8 @@ object RegressionMetricsTF {
   protected def calculate(preds: Tensor, targets: Tensor, num_partitions: Int) = {
     val error = targets.subtract(preds)
 
+    println("Shape of error tensor: "+error.shape.toString())
+    
     val num_instances = error.shape(0)
     val rmse = error.square.mean(axes = 0).sqrt
 
