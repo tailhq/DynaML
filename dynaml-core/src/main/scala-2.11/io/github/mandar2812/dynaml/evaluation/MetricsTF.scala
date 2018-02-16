@@ -76,28 +76,41 @@ abstract class MetricsTF(names: Seq[String], preds: Tensor, targets: Tensor) {
 /**
   * Implements a common use for Regression Task Evaluators.
   * */
-class RegressionMetricsTF(preds: Tensor, targets: Tensor)
+class RegressionMetricsTF(preds: Tensor, targets: Tensor, num_partitions: Int = 4)
   extends MetricsTF(Seq("RMSE", "MAE", "Corr"), preds, targets) {
 
 
-  private lazy val error = targets.subtract(preds)
-
-  private lazy val rmse = error.square.mean(axes = 0).sqrt
-
-  private lazy val mae = error.abs.mean(axes = 0)
-
-  private lazy val corr = {
-
-    val mean_preds = preds.mean(axes = 0, keepDims = true)
-
-    val mean_targets = targets.mean(axes = 0, keepDims = true)
-
-    val preds_c = preds.subtract(mean_preds)
-
-    val targets_c = targets.subtract(mean_targets)
-
-    preds_c.multiply(targets_c).mean(axes = 0).divide(preds_c.square.mean().sqrt).divide(targets_c.square.mean().sqrt)
-  }
+  private lazy val (_ , rmse , mae, corr) = RegressionMetricsTF.calculate(preds, targets, num_partitions)
 
   override protected def run(): Tensor = dtf.stack(Seq(rmse, mae, corr))
+}
+
+/**
+  * Implements core logic of [[RegressionMetricsTF]]
+  * */
+object RegressionMetricsTF {
+
+  protected def calculate(preds: Tensor, targets: Tensor, num_partitions: Int) = {
+    val error = targets.subtract(preds)
+
+    val num_instances = error.shape(0)
+    val rmse = error.square.mean(axes = 0).sqrt
+
+    val mae = error.abs.mean(axes = 0)
+
+    val corr = {
+
+      val mean_preds = preds.mean(axes = 0)
+
+      val mean_targets = targets.mean(axes = 0)
+
+      val preds_c = preds.subtract(dtf.stack(Seq.fill(num_instances)(mean_preds)))
+
+      val targets_c = targets.subtract(dtf.stack(Seq.fill(num_instances)(mean_targets)))
+
+      preds_c.multiply(targets_c).mean(axes = 0).divide(preds_c.square.mean().sqrt).divide(targets_c.square.mean().sqrt)
+    }
+
+    (error, rmse, mae, corr)
+  }
 }
