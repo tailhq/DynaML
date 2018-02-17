@@ -293,6 +293,24 @@ package object tensorflow {
   object dtflearn {
 
     /**
+      * Constructs a symmetric (square) convolutional layer from the provided dimensions.
+      *
+      * [[org.platanios.tensorflow.api.ops.NN.SamePadding]] is used as the padding mode.
+      *
+      * @param size The size of each square filter e.g. 2*2, 3*3 etc
+      * @param num_channels The number of channels in the input
+      * @param num_filters The number of channels in the layer output
+      * @param strides A [[Tuple2]] with strides, for each direction i.e. breadth and height.
+      * @param index The layer id or index, helps in creating a unique layer name
+      * */
+    def conv2d(size: Int, num_channels: Int, num_filters: Int, strides: (Int, Int))(index: Int) =
+      tf.learn.Conv2D(
+        "Conv2D_"+index,
+        Shape(size, size, num_channels, num_filters),
+        strides._1, strides._2,
+        SamePadding)
+
+    /**
       * Constructs a convolutional layer activated by a ReLU, with
       * an option of appending a dropout layer.
       *
