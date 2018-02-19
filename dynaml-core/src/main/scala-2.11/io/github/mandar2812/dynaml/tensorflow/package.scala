@@ -293,20 +293,29 @@ package object tensorflow {
   object dtflearn {
 
     /**
+      * Constructs a feed-forward layer.
+      *
+      * @param num_units The number of neurons in the layer
+      * @param id A unique integer id for constructing the layer name.
+      *
+      * */
+    def feedforward(num_units: Int)(id: Int) = tf.learn.Linear("Linear_"+id, num_units)
+
+    /**
       * Constructs a symmetric (square) convolutional layer from the provided dimensions.
       *
       * [[org.platanios.tensorflow.api.ops.NN.SamePadding]] is used as the padding mode.
       *
       * @param size The size of each square filter e.g. 2*2, 3*3 etc
-      * @param num_channels The number of channels in the input
+      * @param num_channels_input The number of channels in the input
       * @param num_filters The number of channels in the layer output
       * @param strides A [[Tuple2]] with strides, for each direction i.e. breadth and height.
       * @param index The layer id or index, helps in creating a unique layer name
       * */
-    def conv2d(size: Int, num_channels: Int, num_filters: Int, strides: (Int, Int))(index: Int) =
+    def conv2d(size: Int, num_channels_input: Int, num_filters: Int, strides: (Int, Int))(index: Int) =
       tf.learn.Conv2D(
         "Conv2D_"+index,
-        Shape(size, size, num_channels, num_filters),
+        Shape(size, size, num_channels_input, num_filters),
         strides._1, strides._2,
         SamePadding)
 
@@ -329,6 +338,60 @@ package object tensorflow {
           tf.learn.AddBias(name = "Bias_"+i) >>
           tf.learn.ReLU("ReLU_"+i, relu_param)
       }
+
+    /**
+      * Constructs an inverted convolutional pyramid, consisting of
+      * stacked versions of [Conv2d --> ReLU --> Dropout] layers.
+      *
+      * The number of filters learned in each Conv2d layer are
+      * arranged in decreasing exponents of 2. They are costructed
+      * using calls to [[conv2d_unit()]]
+      *
+      * ... Conv_unit(128) --> Conv_unit(64) --> Conv_unit(32) --> Conv_unit(16) ...
+      *
+      * @param size The size of the square convolutional filter to be applied
+      *             in each segment.
+      * @param num_channels_input The number of channels in the input.
+      * @param start_num_bits The exponent of 2 which determines size/depth of the starting layer
+      *                       e.g. set to 4 for a depth of 16.
+      *
+      * @param end_num_bits The exponent of 2 which determines the size/depth of the end layer.
+      *
+      * @param relu_param The activation barrier of the ReLU activation.
+      *
+      * @param dropout Set to true, if dropout units should be placed in each unit.
+      *
+      * @param keep_prob If dropout is enabled, then this determines the retain probability.
+      * */
+    def conv2d_pyramid(
+      size: Int, num_channels_input: Int)(
+      start_num_bits: Int, end_num_bits: Int)(
+      relu_param: Float = 0.1f, dropout: Boolean = true,
+      keep_prob: Float = 0.6f) = {
+
+      require(
+        start_num_bits > end_num_bits,
+        "To construct a 2d-convolutional pyramid, you need to start_num_bits > end_num_bits")
+
+      //Create the first layer segment.
+      val head_segment = conv2d_unit(
+        Shape(size, size, num_channels_input, math.pow(2, start_num_bits).toInt),
+        stride = (1, 1), relu_param, dropout, keep_prob)(0)
+
+      //Create the rest of the pyramid
+      val tail_segments = (end_num_bits until start_num_bits).reverse.zipWithIndex.map(bitsAndIndices => {
+        val (bits, index) = bitsAndIndices
+
+        conv2d_unit(
+          Shape(size, size, math.pow(2, bits+1).toInt, math.pow(2, bits).toInt),
+          stride = (math.pow(2, index+1).toInt, math.pow(2, index+1).toInt),
+          relu_param, dropout, keep_prob)(index+1)
+
+      }).reduceLeft((a,b) => a >> b)
+
+      //Join head to tail.
+      head_segment >> tail_segments
+    }
 
   }
 
