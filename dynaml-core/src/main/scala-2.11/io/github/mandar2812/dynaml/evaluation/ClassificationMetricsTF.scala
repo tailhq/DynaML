@@ -52,6 +52,6 @@ class ClassificationMetricsTF(num_classes: Int, preds: Tensor, targets: Tensor) 
     println()
 
     scala.Predef.print("Class Prediction Fidelity Score: ")
-    pprint.pprintln(class_score.scalar.asInstanceOf[Double])
+    pprint.pprintln(class_score.scalar.asInstanceOf[Float])
   }
 }
