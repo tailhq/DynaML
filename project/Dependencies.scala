@@ -105,7 +105,7 @@ object Dependencies {
     "org.jzy3d" % "jzy3d-api" % "0.9.1" % "compile",
     "com.quantifind" % "wisp_2.11" % "0.0.4" % "compile",
     "co.theasi" % "plotly_2.11" % "0.1",
-    "org.vegas-viz" % "vegas_2.11" % "0.3.6"
+    ("org.vegas-viz" % "vegas_2.11" % "0.3.11").exclude("io.circe", "circe-parser")
   )
 
   val replDependency = Seq(
