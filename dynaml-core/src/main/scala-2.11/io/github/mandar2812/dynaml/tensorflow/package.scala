@@ -292,6 +292,8 @@ package object tensorflow {
     * */
   object dtflearn {
 
+    val Tanh: layers.Tanh.type  = layers.Tanh
+
     /**
       * Constructs a feed-forward layer.
       *
