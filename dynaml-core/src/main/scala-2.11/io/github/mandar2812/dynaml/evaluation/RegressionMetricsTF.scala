@@ -42,8 +42,8 @@ class RegressionMetricsTF(preds: Tensor, targets: Tensor)
 
     if(num_outputs == 1) {
       val (pr, tar) = (
-        scoresAndLabels._1.entriesIterator.map(_.asInstanceOf[Double]),
-        scoresAndLabels._2.entriesIterator.map(_.asInstanceOf[Double]))
+        scoresAndLabels._1.entriesIterator.map(_.asInstanceOf[Float]),
+        scoresAndLabels._2.entriesIterator.map(_.asInstanceOf[Float]))
 
       regression(pr.zip(tar).toSeq)
 
@@ -54,8 +54,8 @@ class RegressionMetricsTF(preds: Tensor, targets: Tensor)
     } else {
       (0 until num_outputs).foreach(output => {
         val (pr, tar) = (
-          scoresAndLabels._1(::, output).entriesIterator.map(_.asInstanceOf[Double]),
-          scoresAndLabels._2(::, output).entriesIterator.map(_.asInstanceOf[Double]))
+          scoresAndLabels._1(::, output).entriesIterator.map(_.asInstanceOf[Float]),
+          scoresAndLabels._2(::, output).entriesIterator.map(_.asInstanceOf[Float]))
 
         regression(pr.zip(tar).toSeq)
       })
