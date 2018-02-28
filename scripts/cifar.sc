@@ -1,6 +1,7 @@
 {
   import ammonite.ops._
 
+  import io.github.mandar2812.dynaml.tensorflow._
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.api.ops.NN.SamePadding
   import org.platanios.tensorflow.data.image.CIFARLoader
@@ -21,20 +22,20 @@
 
 
   println("Building the logistic regression model.")
-  val input = tf.learn.Input(UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2), dataSet.trainImages.shape(3)))
+  val input = tf.learn.Input(
+    UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2), dataSet.trainImages.shape(3))
+  )
+
   val trainInput = tf.learn.Input(UINT8, Shape(-1))
+
   val layer = tf.learn.Cast("Input/Cast", FLOAT32) >>
-    tf.learn.Conv2D("Layer_0/Conv2D", Shape(2, 2, 3, 16), 1, 1, SamePadding) >>
-    tf.learn.AddBias("Layer_0/Bias") >>
-    tf.learn.ReLU("Layer_0/ReLU", 0.1f) >>
-    tf.learn.MaxPool("Layer_0/MaxPool", Seq(1, 2, 2, 1), 1, 1, SamePadding) >>
-    tf.learn.Conv2D("Layer_1/Conv2D", Shape(2, 2, 16, 32), 1, 1, SamePadding) >>
-    tf.learn.AddBias("Bias_1") >>
-    tf.learn.ReLU("Layer_1/ReLU", 0.1f) >>
-    tf.learn.MaxPool("Layer_1/MaxPool", Seq(1, 2, 2, 1), 1, 1, SamePadding) >>
-    tf.learn.Flatten("Layer_2/Flatten") >>
-    tf.learn.Linear("Layer_2/Linear", 256) >> tf.learn.ReLU("Layer_2/ReLU", 0.1f) >>
-    tf.learn.Linear("OutputLayer/Linear", 10)
+    dtflearn.conv2d_pyramid(2, 3)(4, 2)(0.1f, true, 0.6F) >>
+    tf.learn.MaxPool("Layer_3/MaxPool", Seq(1, 2, 2, 1), 1, 1, SamePadding) >>
+    tf.learn.Flatten("Layer_3/Flatten") >>
+    dtflearn.feedforward(256)(id = 4) >>
+    tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>
+    dtflearn.feedforward(10)(id = 5)
+
   val trainingInputLayer = tf.learn.Cast("TrainInput/Cast", INT64)
 
   val loss = tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
