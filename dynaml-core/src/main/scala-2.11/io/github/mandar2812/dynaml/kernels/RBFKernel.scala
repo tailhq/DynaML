@@ -63,7 +63,6 @@ class RBFKernel(private var bandwidth: Double = 1.0)(
   with SVMKernel[DenseMatrix[Double]]
   with Serializable { self =>
 
-  //override def evalAt(config: Map[String, Double])(x: DenseVector[Double]) = super.evalAt(config)(x)
 }
 
 /**
