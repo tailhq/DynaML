@@ -23,7 +23,9 @@ package io.github.mandar2812.dynaml.pipes
   *
   * Data Pipes representing functions of 4 arguments
   */
-trait DataPipe4[-Source1, -Source2, -Source3, -Source4, +Result] extends Serializable {
+trait DataPipe4[-Source1, -Source2, -Source3, -Source4, +Result] extends
+  DataPipeConvertible[(Source1, Source2, Source3, Source4), Result] with
+  Serializable {
   self =>
 
   def run(data1: Source1, data2: Source2, data3: Source3, data4: Source4): Result
@@ -32,6 +34,9 @@ trait DataPipe4[-Source1, -Source2, -Source3, -Source4, +Result] extends Seriali
 
   def >[Result2](otherPipe: DataPipe[Result, Result2]): DataPipe4[Source1, Source2, Source3, Source4, Result2] =
     DataPipe4((d1: Source1, d2:Source2, d3: Source3, d4: Source4) => otherPipe.run(self.run(d1, d2, d3, d4)))
+
+  override def toPipe: ((Source1, Source2, Source3, Source4)) => Result =
+    (x: (Source1, Source2, Source3, Source4)) => self.run(x._1, x._2, x._3, x._4)
 
 }
 

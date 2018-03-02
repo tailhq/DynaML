@@ -20,6 +20,11 @@ package io.github.mandar2812.dynaml.pipes
 
 import scalaxy.streams.optimize
 
+trait DataPipeConvertible[-Source, +Destination] {
+  def toPipe: (Source) => Destination
+}
+
+
 /**
   * Top level trait representing an
   * abstract pipe that defines a transformation
@@ -27,7 +32,7 @@ import scalaxy.streams.optimize
   * @author mandar2812 on 18/11/15.
   *
   * */
-trait DataPipe[-Source, +Destination] extends Serializable {
+trait DataPipe[-Source, +Destination] extends DataPipeConvertible[Source, Destination] with Serializable {
 
   self =>
 
@@ -47,11 +52,11 @@ trait DataPipe[-Source, +Destination] extends Serializable {
     * [[Source]] -> [[Further]]
     *
     * */
-  def >[Further](that: DataPipe[Destination, Further]):
-  DataPipe[Source, Further] = {
-    val runFunc = (d: Source) => that.run(self.run(d))
-    DataPipe(runFunc)
-  }
+  def >[Further](that: DataPipeConvertible[Destination, Further]) =
+    DataPipe((d: Source) => that.toPipe(self.run(d)))
+
+  /*def >[Result1, Result2](that: BifurcationPipe[Destination, Result1, Result2])
+  : BifurcationPipe[Source, Result1, Result2] = DataPipe((x: Source) => that.run(self.run(x)))*/
 
   /**
     * Represents the composition of two
@@ -72,6 +77,8 @@ trait DataPipe[-Source, +Destination] extends Serializable {
   def >-<[OtherSource, OtherDestination](that: DataPipe[OtherSource, OtherDestination])
   :DataPipe2[Source, OtherSource, (Destination, OtherDestination)] =
     DataPipe2((d1: Source, d2: OtherSource) => (self(d1), that(d2)))
+
+  override def toPipe: Source => Destination = self.run _
 }
 
 object DataPipe {
@@ -87,8 +94,7 @@ object DataPipe {
     }
   }
 
-  def apply[S1, D1, S2, D2](pipe1: DataPipe[S1, D1],
-                            pipe2: DataPipe[S2, D2]): ParallelPipe[S1, D1, S2, D2] =
+  def apply[S1, D1, S2, D2](pipe1: DataPipe[S1, D1], pipe2: DataPipe[S2, D2]): ParallelPipe[S1, D1, S2, D2] =
     ParallelPipe(pipe1.run, pipe2.run)
 
   def apply[S, D1, D2](func: (S) => (D1, D2)):
@@ -105,8 +111,6 @@ object DataPipe {
     }
   }
 }
-
-
 
 trait ParallelPipe[-Source1, +Result1, -Source2, +Result2]
   extends DataPipe[(Source1, Source2), (Result1, Result2)] {
@@ -133,6 +137,14 @@ object ParallelPipe {
 trait BifurcationPipe[-Source, +Result1, +Result2]
   extends DataPipe[Source, (Result1, Result2)] {
 
+  self =>
+
+  def >[FinalResult](other: DataPipe2[Result1, Result2, FinalResult]): DataPipe[Source, FinalResult] =
+    DataPipe((input: Source) => {
+      val (x, y) = self.run(input)
+      other.run(x, y)
+    })
+
 }
 
 trait SideEffectPipe[I] extends DataPipe[I, Unit] {
@@ -141,12 +153,12 @@ trait SideEffectPipe[I] extends DataPipe[I, Unit] {
 
 object BifurcationPipe {
 
-  def apply[Source,
-  Destination1,
-  Destination2](pipe1: DataPipe[Source, Destination1],
-                pipe2: DataPipe[Source, Destination2]):
-  BifurcationPipe[Source, Destination1, Destination2] = {
+  def apply[Source, Destination1, Destination2](f: (Source) => (Destination1, Destination2)) = DataPipe(f)
 
+  def apply[Source, Destination1, Destination2](
+    pipe1: DataPipe[Source, Destination1],
+    pipe2: DataPipe[Source, Destination2]):
+  BifurcationPipe[Source, Destination1, Destination2] = {
     DataPipe((x: Source) => (pipe1.run(x), pipe2.run(x)))
   }
 }
