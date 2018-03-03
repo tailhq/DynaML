@@ -13,6 +13,7 @@ pages:
     - 'Structure': structure.md
     - Releases:
       - 'v1.5.x':
+        - 'v1.5.2': 'releases/mydoc_release_notes_152.md'
         - 'v1.5.1': 'releases/mydoc_release_notes_151.md'
         - 'v1.5': 'releases/mydoc_release_notes_15.md'
       - 'v1.4.x':

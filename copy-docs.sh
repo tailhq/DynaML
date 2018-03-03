@@ -11,4 +11,5 @@ sbt stage
 cp -R dynaml-core/target/scala-2.11/api/* ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-core/
 cp -R dynaml-pipes/target/scala-2.11/api/* ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-pipes/
 cp -R dynaml-examples/target/scala-2.11/api/* ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-examples/
+cp -R dynaml-repl/target/scala-2.11/api/* ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-repl/
 cp -R target/scala-2.11/api/* ../transcendent-ai-labs.github.io/api_docs/DynaML/$1/dynaml-repl/
