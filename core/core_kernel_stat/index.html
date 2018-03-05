@@ -1,10 +1,14 @@
 
+
+
+
 <!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
       
         <meta name="description" content="User guide and documentation for the DynaML machine learning library and API">
       
@@ -15,9 +19,26 @@
         <meta name="author" content="Mandar Chandorkar">
       
       
-        <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.0">
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.6.6">
     
     
       
@@ -25,19 +46,17 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
-    
-    
-      <link rel="stylesheet" href="../../assets/stylesheets/application-c147e0d28f.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.78aab2dc.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-8817cfa535.palette.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.6079476c.css">
       
     
     
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
       
-        
-        
-        
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
@@ -47,16 +66,32 @@
     
   </head>
   
-  
-  
-  
-    <body data-md-color-primary="teal" data-md-color-accent="green">
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="green">
   
     <svg class="md-svg">
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
         
       </defs>
     </svg>
@@ -64,53 +99,57 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
+      <a href="#radial-basis-function-kernel" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        
-          <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-logo md-header-nav__button">
+        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-header-nav__button md-logo">
+          
             <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
-          </a>
-        
+          
+        </a>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
-                <span class="md-header-nav__parent">
-                  Core
-                </span>
-              
-                <span class="md-header-nav__parent">
-                  Kernels
-                </span>
-              
+              <span class="md-header-nav__topic">
+                DynaML User Guide
+              </span>
+              <span class="md-header-nav__topic">
+                Stationary Kernels
+              </span>
             
-            Stationary Kernels
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
-          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
-<div class="md-search" data-md-component="search">
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
-  <div class="md-search__inner">
+  <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
-          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
             Type to start searching
           </div>
           <ol class="md-search-result__list"></ol>
@@ -119,18 +158,19 @@
     </div>
   </div>
 </div>
+          
         
       </div>
-      <div class="md-flex__cell md-flex__cell--shrink">
-        <div class="md-header-nav__source">
-          
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
             
 
 
   
 
 
-  <a href="https://github.com/transcendent-ai-labs/DynaML" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -143,14 +183,16 @@
     </div>
   </a>
 
-          
+          </div>
         </div>
-      </div>
+      
     </div>
   </nav>
 </header>
     
     <div class="md-container">
+      
+        
       
       
       <main class="md-main">
@@ -162,11 +204,11 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="drawer">
-    
-      <i class="md-logo md-nav__button">
-        <img src="../../images/dynaml_logo3_small.png">
-      </i>
-    
+    <span class="md-nav__button md-logo">
+      
+        <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
+      
+    </span>
     DynaML User Guide
   </label>
   
@@ -177,7 +219,7 @@
   
 
 
-  <a href="https://github.com/transcendent-ai-labs/DynaML" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -322,6 +364,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../releases/mydoc_release_notes_152/" title="v1.5.2" class="md-nav__link">
+      v1.5.2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../releases/mydoc_release_notes_151/" title="v1.5.1" class="md-nav__link">
       v1.5.1
     </a>
@@ -357,7 +411,7 @@
     <label class="md-nav__link" for="nav-5-2">
       v1.4.x
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-5-2">
         v1.4.x
       </label>
@@ -470,10 +524,82 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
     
     <label class="md-nav__link" for="nav-6-1-1">
-      v1.5.1
+      v1.5.2
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-6-1-1">
+        v1.5.2
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scaladoc/v1.5.2/core/" title="dynaml-core" class="md-nav__link">
+      dynaml-core
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scaladoc/v1.5.2/pipes/" title="dynaml-pipes" class="md-nav__link">
+      dynaml-pipes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scaladoc/v1.5.2/repl/" title="dynaml-repl" class="md-nav__link">
+      dynaml-repl
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scaladoc/v1.5.2/examples/" title="dynaml-examples" class="md-nav__link">
+      dynaml-examples
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-2" type="checkbox" id="nav-6-1-2">
+    
+    <label class="md-nav__link" for="nav-6-1-2">
+      v1.5.1
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-2">
         v1.5.1
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -527,13 +653,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-2" type="checkbox" id="nav-6-1-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-1-3" type="checkbox" id="nav-6-1-3">
     
-    <label class="md-nav__link" for="nav-6-1-2">
+    <label class="md-nav__link" for="nav-6-1-3">
       v1.5
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
-      <label class="md-nav__title" for="nav-6-1-2">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-3">
         v1.5
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -597,7 +723,7 @@
     <label class="md-nav__link" for="nav-6-2">
       v1.4.x
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-6-2">
         v1.4.x
       </label>
@@ -616,7 +742,7 @@
     <label class="md-nav__link" for="nav-6-2-1">
       v1.4.3
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-6-2-1">
         v1.4.3
       </label>
@@ -676,7 +802,7 @@
     <label class="md-nav__link" for="nav-6-2-2">
       v1.4.2
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-6-2-2">
         v1.4.2
       </label>
@@ -736,7 +862,7 @@
     <label class="md-nav__link" for="nav-6-2-3">
       v1.4.1
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="6">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-6-2-3">
         v1.4.1
       </label>
@@ -796,7 +922,7 @@
     <label class="md-nav__link" for="nav-6-2-4">
       v1.4
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-6-2-4">
         v1.4
       </label>
@@ -939,7 +1065,7 @@
     <label class="md-nav__link" for="nav-7-1-1-2">
       Linear Models
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
       <label class="md-nav__title" for="nav-7-1-1-2">
         Linear Models
       </label>
@@ -987,7 +1113,7 @@
     <label class="md-nav__link" for="nav-7-1-1-3">
       Stochastic Processes
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="6">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
       <label class="md-nav__title" for="nav-7-1-1-3">
         Stochastic Processes
       </label>
@@ -1059,7 +1185,7 @@
     <label class="md-nav__link" for="nav-7-1-1-4">
       Neural Networks
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
       <label class="md-nav__title" for="nav-7-1-1-4">
         Neural Networks
       </label>
@@ -1138,7 +1264,7 @@
     <label class="md-nav__link" for="nav-7-1-2">
       Kernels
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-7-1-2">
         Kernels
       </label>
@@ -1277,6 +1403,8 @@
       
       
       
+      
+      
         <li class="md-nav__item">
           <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
             Comments
@@ -1331,7 +1459,7 @@
     <label class="md-nav__link" for="nav-7-1-3">
       Algebra
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-7-1-3">
         Algebra
       </label>
@@ -1403,7 +1531,7 @@
     <label class="md-nav__link" for="nav-7-1-4">
       Probability
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="6">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-7-1-4">
         Probability
       </label>
@@ -1463,7 +1591,7 @@
     <label class="md-nav__link" for="nav-7-1-5">
       Optimizers & Solvers
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="7">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-7-1-5">
         Optimizers & Solvers
       </label>
@@ -1528,7 +1656,7 @@
     <label class="md-nav__link" for="nav-7-2">
       Pipes
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-7-2">
         Pipes
       </label>
@@ -1595,7 +1723,7 @@
     <label class="md-nav__link" for="nav-7-2-5">
       DynaML Pipes Library
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="8">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-7-2-5">
         DynaML Pipes Library
       </label>
@@ -1696,7 +1824,7 @@
     <label class="md-nav__link" for="nav-7-3">
       REPL Examples
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-7-3">
         REPL Examples
       </label>
@@ -1768,7 +1896,7 @@
     <label class="md-nav__link" for="nav-7-4">
       Misc. Utilities
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="5">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-7-4">
         Misc. Utilities
       </label>
@@ -1991,6 +2119,8 @@
       
       
       
+      
+      
         <li class="md-nav__item">
           <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
             Comments
@@ -2009,13 +2139,21 @@
             <article class="md-content__inner md-typeset">
               
                 
+                  <a href="https://github.com/transcendent-ai-labs/DynaML/edit/master/docs/core/core_kernel_stat.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
                 
                   <h1>Stationary Kernels</h1>
                 
                 <p>Stationary kernels can be expressed as a function of the difference between their inputs.</p>
-<span>\[
+<div>
+<div class="MathJax_Preview">
     C(\mathbf{x}, \mathbf{y}) = K(||\mathbf{x} - \mathbf{y}||_{p})
-\]</span><p>Note that any norm may be used to quantify the distance between the two vectors <span>\(\mathbf{x} \ \&amp; \ \mathbf{y}\)</span>. The values <span>\(p = 1\)</span> and <span>\(p = 2\)</span> represent the <em>Manhattan distance</em> and <em>Euclidean distance</em> respectively.</p>
+</div>
+<script type="math/tex; mode=display">
+    C(\mathbf{x}, \mathbf{y}) = K(||\mathbf{x} - \mathbf{y}||_{p})
+</script>
+</div>
+<p>Note that any norm may be used to quantify the distance between the two vectors <span><span class="MathJax_Preview">\mathbf{x} \ \&amp; \ \mathbf{y}</span><script type="math/tex">\mathbf{x} \ \& \ \mathbf{y}</script></span>. The values <span><span class="MathJax_Preview">p = 1</span><script type="math/tex">p = 1</script></span> and <span><span class="MathJax_Preview">p = 2</span><script type="math/tex">p = 2</script></span> represent the <em>Manhattan distance</em> and <em>Euclidean distance</em> respectively.</p>
 <div class="admonition note">
 <p class="admonition-title">Instantiating Stationary Kernels<p>Stationary kernels are implemented as a subset of the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.StationaryKernel"><code>StationaryKernel[T, V, M]</code></a> class which requires a <code>Field[T]</code> implicit object (an algebraic field which has definitions for addition, subtraction, multiplication and division of its elements much like the number system). You may also import <code>spire.implicits._</code> in order to load the default field implementations for basic data types like <code>Int</code>, <code>Double</code> and so on. Before instantiating any child class of <code>StationaryKernel</code> one needs to enter the following code.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
@@ -2036,27 +2174,45 @@
 </div>
 <h2 id="radial-basis-function-kernel">Radial Basis Function Kernel<a class="headerlink" href="#radial-basis-function-kernel" title="Permanent link">&para;</a></h2>
 <p><img alt="kernel" src="../../images/gaussiankernel.jpg" /></p>
-<span>\[
+<div>
+<div class="MathJax_Preview">
 C(\mathbf{x},\mathbf{y}) = exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2\sigma^2}\right)
-\]</span><p>The RBF kernel is the most popular kernel function applied in machine learning, it represents an inner product space which is spanned by the <em>Hermite</em> polynomials and as such is suitable to model smooth functions. The RBF kernel is also called a <em>universal</em> kernel for the reason that any smooth function can be represented with a high degree of accuracy assuming we can find a suitable value of the bandwidth.</p>
+</div>
+<script type="math/tex; mode=display">
+C(\mathbf{x},\mathbf{y}) = exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2\sigma^2}\right)
+</script>
+</div>
+<p>The RBF kernel is the most popular kernel function applied in machine learning, it represents an inner product space which is spanned by the <em>Hermite</em> polynomials and as such is suitable to model smooth functions. The RBF kernel is also called a <em>universal</em> kernel for the reason that any smooth function can be represented with a high degree of accuracy assuming we can find a suitable value of the bandwidth.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">rbf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RBFKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <h3 id="squared-exponential-kernel">Squared Exponential Kernel<a class="headerlink" href="#squared-exponential-kernel" title="Permanent link">&para;</a></h3>
 <p>A generalization of the RBF Kernel is the Squared Exponential Kernel</p>
-<span>\[
+<div>
+<div class="MathJax_Preview">
     C(\mathbf{x},\mathbf{y}) = h \ exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2l^2}\right)
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">rbf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SEKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">,</span> <span class="mf">2.0</span><span class="o">)</span>
+</div>
+<script type="math/tex; mode=display">
+    C(\mathbf{x},\mathbf{y}) = h \ exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2l^2}\right)
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">rbf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SEKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">,</span> <span class="mf">2.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <h3 id="mahalanobis-kernel">Mahalanobis Kernel<a class="headerlink" href="#mahalanobis-kernel" title="Permanent link">&para;</a></h3>
 <p>This kernel is a further generalization of the SE kernel. It uses the <a href="https://en.wikipedia.org/wiki/Mahalanobis_distance">Mahalanobis distance</a> instead of the Euclidean distance between the inputs.</p>
-<span>\[
+<div>
+<div class="MathJax_Preview">
     C(\mathbf{x},\mathbf{y}) = h \ exp\left(-\frac{1}{2}(\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})\right)
-\]</span><p>The Mahalanobis distance <span>\((\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})\)</span> is characterized by a symmetric positive definite matrix <span>\(\Sigma\)</span>. This distance metric reduces to the Euclidean distance if <span>\(\Sigma\)</span> is the <em>identity matrix</em>. Further, if <span>\(\Sigma\)</span> is diagonal, the <em>Mahalanobis kernel</em> becomes the <em>Automatic Relevance Determination</em> version of the SE kernel (SE-ARD).</p>
-<p>In DynaML the class <code class="codehilite"><span class="nc">MahalanobisKernel</span></code> implements the SE-ARD kernel with diagonal <span>\(\Sigma\)</span>.</p>
+</div>
+<script type="math/tex; mode=display">
+    C(\mathbf{x},\mathbf{y}) = h \ exp\left(-\frac{1}{2}(\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})\right)
+</script>
+</div>
+<p>The Mahalanobis distance <span><span class="MathJax_Preview">(\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})</span><script type="math/tex">(\mathbf{x}-\mathbf{y})^\intercal \Sigma^{-1} (\mathbf{x}-\mathbf{y})</script></span> is characterized by a symmetric positive definite matrix <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span>. This distance metric reduces to the Euclidean distance if <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span> is the <em>identity matrix</em>. Further, if <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span> is diagonal, the <em>Mahalanobis kernel</em> becomes the <em>Automatic Relevance Determination</em> version of the SE kernel (SE-ARD).</p>
+<p>In DynaML the class <code class="codehilite"><span class="nc">MahalanobisKernel</span></code> implements the SE-ARD kernel with diagonal <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span>.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
@@ -2068,30 +2224,54 @@ C(\mathbf{x},\mathbf{y}) = exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2\sigma^
 </td></tr></table>
 
 <h2 id="student-t-kernel">Student T Kernel<a class="headerlink" href="#student-t-kernel" title="Permanent link">&para;</a></h2>
-<span>\[
+<div>
+<div class="MathJax_Preview">
     C(\mathbf{x},\mathbf{y}) = \frac{1}{1 + ||\mathbf{x}-\mathbf{y}||^d}
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">tstud</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">TStudentKernel</span><span class="o">(</span><span class="mf">2.0</span><span class="o">)</span>
+</div>
+<script type="math/tex; mode=display">
+    C(\mathbf{x},\mathbf{y}) = \frac{1}{1 + ||\mathbf{x}-\mathbf{y}||^d}
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">tstud</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">TStudentKernel</span><span class="o">(</span><span class="mf">2.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <h2 id="rational-quadratic-kernel">Rational Quadratic Kernel<a class="headerlink" href="#rational-quadratic-kernel" title="Permanent link">&para;</a></h2>
-<span>\[
+<div>
+<div class="MathJax_Preview">
     C(\mathbf{x},\mathbf{y}) = \left( 1 + \frac{||\mathbf{x}-\mathbf{y}||^2}{2 \mu \ell^2} \right)^{-\frac{1}{2}  (dim(\mathbf{x})+\mu)}
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">rat</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RationalQuadraticKernel</span><span class="o">(</span><span class="n">shape</span> <span class="k">=</span> <span class="mf">1.5</span><span class="o">,</span> <span class="n">l</span> <span class="k">=</span> <span class="mf">1.5</span><span class="o">)</span>
+</div>
+<script type="math/tex; mode=display">
+    C(\mathbf{x},\mathbf{y}) = \left( 1 + \frac{||\mathbf{x}-\mathbf{y}||^2}{2 \mu \ell^2} \right)^{-\frac{1}{2}  (dim(\mathbf{x})+\mu)}
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">rat</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RationalQuadraticKernel</span><span class="o">(</span><span class="n">shape</span> <span class="k">=</span> <span class="mf">1.5</span><span class="o">,</span> <span class="n">l</span> <span class="k">=</span> <span class="mf">1.5</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <h2 id="cauchy-kernel">Cauchy Kernel<a class="headerlink" href="#cauchy-kernel" title="Permanent link">&para;</a></h2>
-<span>\[
+<div>
+<div class="MathJax_Preview">
     C(\mathbf{x},\mathbf{y}) = \frac{1}{1 + \frac{||\mathbf{x}-\mathbf{y}||^2}{\sigma^2}}
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">cau</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">CauchyKernel</span><span class="o">(</span><span class="mf">2.5</span><span class="o">)</span>
+</div>
+<script type="math/tex; mode=display">
+    C(\mathbf{x},\mathbf{y}) = \frac{1}{1 + \frac{||\mathbf{x}-\mathbf{y}||^2}{\sigma^2}}
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">cau</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">CauchyKernel</span><span class="o">(</span><span class="mf">2.5</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <h2 id="gaussian-spectral-kernel">Gaussian Spectral Kernel<a class="headerlink" href="#gaussian-spectral-kernel" title="Permanent link">&para;</a></h2>
-<span>\[
+<div>
+<div class="MathJax_Preview">
 C(\mathbf{x},\mathbf{y}) = cos(2\pi \mu ||\mathbf{x}-\mathbf{y}||) \ exp(-2\pi^{2} \sigma^{2} ||\mathbf{x}-\mathbf{y}||^{2} )
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+</div>
+<script type="math/tex; mode=display">
+C(\mathbf{x},\mathbf{y}) = cos(2\pi \mu ||\mathbf{x}-\mathbf{y}||) \ exp(-2\pi^{2} \sigma^{2} ||\mathbf{x}-\mathbf{y}||^{2} )
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
@@ -2106,14 +2286,26 @@ C(\mathbf{x},\mathbf{y}) = cos(2\pi \mu ||\mathbf{x}-\mathbf{y}||) \ exp(-2\pi^{
 </td></tr></table>
 
 <h2 id="matern-half-integer">Matern Half Integer<a class="headerlink" href="#matern-half-integer" title="Permanent link">&para;</a></h2>
-<p>The Matern kernel is an important family of covariance functions. Matern covariances are parameterized via two quantities i.e. order <span>\(\nu\)</span> and <span>\(\rho\)</span> the characteristic length scale. The general matern covariance is defined in terms of modified <em>Bessel</em> functions.</p>
-<span>\[
+<p>The Matern kernel is an important family of covariance functions. Matern covariances are parameterized via two quantities i.e. order <span><span class="MathJax_Preview">\nu</span><script type="math/tex">\nu</script></span> and <span><span class="MathJax_Preview">\rho</span><script type="math/tex">\rho</script></span> the characteristic length scale. The general matern covariance is defined in terms of modified <em>Bessel</em> functions.</p>
+<div>
+<div class="MathJax_Preview">
 C_{\nu}(\mathbf{x},\mathbf{y}) = \frac{2^{1-\nu}}{\Gamma(\nu)} \left(\sqrt{2\nu}\frac{d}{\rho}\right)^{\nu} K_{\nu}\left(\sqrt{2\nu}\frac{d}{\rho}\right)
-\]</span><p>Where <span>\(d = ||\mathbf{x} - \mathbf{y}||\)</span> is the Euclidean (<span>\(L_2\)</span>) distance between points.</p>
-<p>For the case <span>\(\nu = p + \frac{1}{2}, p \in \mathbb{N}\)</span> the expression becomes.</p>
-<span>\[
+</div>
+<script type="math/tex; mode=display">
+C_{\nu}(\mathbf{x},\mathbf{y}) = \frac{2^{1-\nu}}{\Gamma(\nu)} \left(\sqrt{2\nu}\frac{d}{\rho}\right)^{\nu} K_{\nu}\left(\sqrt{2\nu}\frac{d}{\rho}\right)
+</script>
+</div>
+<p>Where <span><span class="MathJax_Preview">d = ||\mathbf{x} - \mathbf{y}||</span><script type="math/tex">d = ||\mathbf{x} - \mathbf{y}||</script></span> is the Euclidean (<span><span class="MathJax_Preview">L_2</span><script type="math/tex">L_2</script></span>) distance between points.</p>
+<p>For the case <span><span class="MathJax_Preview">\nu = p + \frac{1}{2}, p \in \mathbb{N}</span><script type="math/tex">\nu = p + \frac{1}{2}, p \in \mathbb{N}</script></span> the expression becomes.</p>
+<div>
+<div class="MathJax_Preview">
 C_{\nu}(\mathbf{x},\mathbf{y}) =  exp\left(-\sqrt{2\nu}\frac{d}{\rho}\right) \frac{\Gamma(p+1)}{\Gamma(2p+1)} \sum_{i = 0}^{p}{\frac{(p+1)!}{i!(p-i)!}\left(\sqrt{8\nu}\frac{d}{\rho}\right)^{p-i}}
-\]</span><p>Currently there is only support for matern half integer kernels.</p>
+</div>
+<script type="math/tex; mode=display">
+C_{\nu}(\mathbf{x},\mathbf{y}) =  exp\left(-\sqrt{2\nu}\frac{d}{\rho}\right) \frac{\Gamma(p+1)}{\Gamma(2p+1)} \sum_{i = 0}^{p}{\frac{(p+1)!}{i!(p-i)!}\left(\sqrt{8\nu}\frac{d}{\rho}\right)^{p-i}}
+</script>
+</div>
+<p>Currently there is only support for matern half integer kernels.</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">implicit</span> <span class="n">ev</span> <span class="k">=</span> <span class="nc">VectorField</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">matKern</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">GenericMaternKernel</span><span class="o">(</span><span class="mf">1.5</span><span class="o">,</span> <span class="n">p</span> <span class="k">=</span> <span class="mi">1</span><span class="o">)</span>
@@ -2122,37 +2314,69 @@ C_{\nu}(\mathbf{x},\mathbf{y}) =  exp\left(-\sqrt{2\nu}\frac{d}{\rho}\right) \fr
 
 <h2 id="wavelet-kernel">Wavelet Kernel<a class="headerlink" href="#wavelet-kernel" title="Permanent link">&para;</a></h2>
 <p>The Wavelet kernel (<a href="http://dx.doi.org/10.1109/TSMCB.2003.811113">Zhang et al, 2004</a>) comes from Wavelet theory and is given as</p>
-<span>\[
+<div>
+<div class="MathJax_Preview">
     C(\mathbf{x},\mathbf{y}) = \prod_{i = 1}^{d} h\left(\frac{x_i-y_i}{a}\right)
-\]</span><p>Where the function <code>h</code> is known as the mother wavelet function, Zhang et. al suggest the following expression for the mother wavelet function.</p>
-<span>\[
+</div>
+<script type="math/tex; mode=display">
+    C(\mathbf{x},\mathbf{y}) = \prod_{i = 1}^{d} h\left(\frac{x_i-y_i}{a}\right)
+</script>
+</div>
+<p>Where the function <code>h</code> is known as the mother wavelet function, Zhang et. al suggest the following expression for the mother wavelet function.</p>
+<div>
+<div class="MathJax_Preview">
     h(x) = cos(1.75x)exp(-\frac{1}{2}x^2)
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">wv</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">WaveletKernel</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="o">(</span><span class="mf">1.75</span><span class="o">*</span><span class="n">x</span><span class="o">)*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="o">(-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="o">))(</span><span class="mf">1.5</span><span class="o">)</span>
+</div>
+<script type="math/tex; mode=display">
+    h(x) = cos(1.75x)exp(-\frac{1}{2}x^2)
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">wv</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">WaveletKernel</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="o">(</span><span class="mf">1.75</span><span class="o">*</span><span class="n">x</span><span class="o">)*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="o">(-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="o">))(</span><span class="mf">1.5</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <h2 id="periodic-kernel">Periodic Kernel<a class="headerlink" href="#periodic-kernel" title="Permanent link">&para;</a></h2>
 <p>The periodic kernel has <em>Fourier</em> series as its orthogonal eigenfunctions. It is used when constructing predictive models over quantities which are known to have some periodic behavior.</p>
-<span>\[
+<div>
+<div class="MathJax_Preview">
 C(\mathbf{x},\mathbf{y}) = exp\left(-2 \ sin^{2}\left(\frac{\pi \omega ||\mathbf{x}-\mathbf{y}||}{l^2}\right)\right)
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">periodic_kernel</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">PeriodicKernel</span><span class="o">(</span><span class="n">lengthscale</span> <span class="k">=</span> <span class="mf">1.5</span><span class="o">,</span> <span class="n">freq</span> <span class="k">=</span> <span class="mf">2.5</span><span class="o">)</span>
+</div>
+<script type="math/tex; mode=display">
+C(\mathbf{x},\mathbf{y}) = exp\left(-2 \ sin^{2}\left(\frac{\pi \omega ||\mathbf{x}-\mathbf{y}||}{l^2}\right)\right)
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">periodic_kernel</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">PeriodicKernel</span><span class="o">(</span><span class="n">lengthscale</span> <span class="k">=</span> <span class="mf">1.5</span><span class="o">,</span> <span class="n">freq</span> <span class="k">=</span> <span class="mf">2.5</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <h2 id="wave-kernel">Wave Kernel<a class="headerlink" href="#wave-kernel" title="Permanent link">&para;</a></h2>
-<span>\[
+<div>
+<div class="MathJax_Preview">
 C(\mathbf{x},\mathbf{y}) = \frac{\theta}{||\mathbf{x} - \mathbf{y}||^2} \times sin(\frac{||\mathbf{x} - \mathbf{y}||^2}{\theta})
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">wv_kernel</span> <span class="k">=</span> <span class="nc">WaveKernel</span><span class="o">(</span><span class="n">th</span> <span class="k">=</span> <span class="mf">1.0</span><span class="o">)</span>
+</div>
+<script type="math/tex; mode=display">
+C(\mathbf{x},\mathbf{y}) = \frac{\theta}{||\mathbf{x} - \mathbf{y}||^2} \times sin(\frac{||\mathbf{x} - \mathbf{y}||^2}{\theta})
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">wv_kernel</span> <span class="k">=</span> <span class="nc">WaveKernel</span><span class="o">(</span><span class="n">th</span> <span class="k">=</span> <span class="mf">1.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
 <h2 id="laplacian-kernel">Laplacian Kernel<a class="headerlink" href="#laplacian-kernel" title="Permanent link">&para;</a></h2>
 <p>The Laplacian kernel is the covariance function of the well known <a href="https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process">Ornstein Ulhenbeck process</a>, samples drawn from this process are continuous and only once differentiable.</p>
-<span>\[
+<div>
+<div class="MathJax_Preview">
 \begin{equation}
 C(\mathbf{x},\mathbf{y}) = exp \left(-\frac{||\mathbf{x}-\mathbf{y}||_{1}}{2\beta}\right)
 \end{equation}
-\]</span><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">lap</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">LaplacianKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">)</span>
+</div>
+<script type="math/tex; mode=display">
+\begin{equation}
+C(\mathbf{x},\mathbf{y}) = exp \left(-\frac{||\mathbf{x}-\mathbf{y}||_{1}}{2\beta}\right)
+\end{equation}
+</script>
+</div>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">lap</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">LaplacianKernel</span><span class="o">(</span><span class="mf">4.0</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
                 
@@ -2161,21 +2385,25 @@ C(\mathbf{x},\mathbf{y}) = exp \left(-\frac{||\mathbf{x}-\mathbf{y}||_{1}}{2\bet
               
               
                 
-                  <h2 id="__comments">Comments</h2>
-                  <div id="disqus_thread"></div>
-<script>
-  var disqus_config = function () {
-    this.page.url = "https://transcendent-ai-labs.github.io/DynaML/core/core_kernel_stat/";
-    this.page.identifier =
-      "/core/core_kernel_stat/";
-  };
-  (function() {
-    var d = document, s = d.createElement("script");
-    s.src = "//dynaml.disqus.com/embed.js";
-    s.setAttribute("data-timestamp", +new Date());
-    (d.head || d.body).appendChild(s);
-  })();
-</script>
+                  
+
+
+  <h2 id="__comments">Comments</h2>
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://transcendent-ai-labs.github.io/DynaML/core/core_kernel_stat/";
+      this.page.identifier =
+        "/core/core_kernel_stat/";
+    };
+    (function() {
+      var d = document, s = d.createElement("script");
+      s.src = "//dynaml.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+
                 
               
             </article>
@@ -2230,9 +2458,9 @@ C(\mathbf{x},\mathbf{y}) = exp \left(-\frac{||\mathbf{x}-\mathbf{y}||_{1}}{2\bet
           </div>
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -2254,17 +2482,16 @@ C(\mathbf{x},\mathbf{y}) = exp \left(-\frac{||\mathbf{x}-\mathbf{y}||_{1}}{2\bet
       
     </div>
     
-      <script src="../../assets/javascripts/application-e3caa82af6.js"></script>
+      <script src="../../assets/javascripts/application.02434462.js"></script>
       
-      
-      <script>app.initialize({url:{base:"../.."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
       
     
     
       
-      <script>!function(e,t,a,n,o,c,i){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,c=t.createElement(a),i=t.getElementsByTagName(a)[0],c.async=1,c.src=n,i.parentNode.insertBefore(c,i)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-59996358-2","transcendent-ai-labs.github.io/DynaML/"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var t=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",t,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-59996358-2","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>
