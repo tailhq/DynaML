@@ -2087,7 +2087,7 @@
                   <h1>v1.5.2</h1>
                 
                 <div class="admonition summary">
-<p>Version 1.5.2 of DynaML, released March 2, 2017, introduces functionality through improvement in the pipes API and increased integration with Tensorflow.</p>
+<p>Version 1.5.2 of DynaML, released March 5, 2017, introduces functionality through improvement in the pipes API and increased integration with Tensorflow.</p>
 </div>
 <h2 id="additions">Additions<a class="headerlink" href="#additions" title="Permanent link">&para;</a></h2>
 <h3 id="tensorflow-integration">Tensorflow Integration<a class="headerlink" href="#tensorflow-integration" title="Permanent link">&para;</a></h3>
@@ -2100,20 +2100,88 @@
 </ul>
 <p><strong>Package</strong> <code>dynaml.tensorflow</code></p>
 <ul>
-<li>The <code>dtf</code> package object houses utility functions related to tensorflow primitives. Currently supports creation of tensors from arrays.</li>
-<li>The <code>dtflearn</code> package object deals with basic neural network building blocks which are often needed while constructing prediction architectures.</li>
+<li>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5.2/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package$dtfdtf"><code>dtf</code></a> package object houses utility functions related to tensorflow primitives. Currently supports creation of tensors from arrays.</li>
 </ul>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.tensorflow._</span>
+<span class="k">import</span> <span class="nn">org.platanios.tensorflow.api._</span>
+<span class="c1">//Create a FLOAT32 Tensor of shape (2, 2), i.e. a square matrix</span>
+<span class="k">val</span> <span class="n">mat</span> <span class="k">=</span> <span class="n">dtf</span><span class="o">.</span><span class="n">tensor_f32</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">)(</span><span class="mi">1</span><span class="n">d</span><span class="o">,</span> <span class="mi">2</span><span class="n">d</span><span class="o">,</span> <span class="mi">3</span><span class="n">d</span><span class="o">,</span> <span class="mi">4</span><span class="n">d</span><span class="o">)</span>
+
+<span class="c1">//Create a random 2 * 3 matrix with independent standard normal entries</span>
+<span class="k">val</span> <span class="n">rand_mat</span> <span class="k">=</span> <span class="n">dtf</span><span class="o">.</span><span class="n">random</span><span class="o">(</span><span class="nc">FLOAT32</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)(</span>
+  <span class="nc">GaussianRV</span><span class="o">(</span><span class="mi">0</span><span class="n">d</span><span class="o">,</span> <span class="mi">1</span><span class="n">d</span><span class="o">)</span> <span class="o">&gt;</span> <span class="nc">DataPipe</span><span class="o">((</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">toFloat</span><span class="o">)</span>
+<span class="o">)</span>
+
+<span class="c1">//Multiply matrices</span>
+<span class="k">val</span> <span class="n">prod</span> <span class="k">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">matmul</span><span class="o">(</span><span class="n">rand_mat</span><span class="o">)</span>
+<span class="n">println</span><span class="o">(</span><span class="n">prod</span><span class="o">.</span><span class="n">summarize</span><span class="o">())</span>
+
+<span class="k">val</span> <span class="n">another_rand_mat</span> <span class="k">=</span> <span class="n">dtf</span><span class="o">.</span><span class="n">random</span><span class="o">(</span><span class="nc">FLOAT32</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)(</span>
+  <span class="nc">GaussianRV</span><span class="o">(</span><span class="mi">0</span><span class="n">d</span><span class="o">,</span> <span class="mi">1</span><span class="n">d</span><span class="o">)</span> <span class="o">&gt;</span> <span class="nc">DataPipe</span><span class="o">((</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">toFloat</span><span class="o">)</span>
+<span class="o">)</span>
+
+<span class="c1">//Stack tensors vertically, i.e. row wise</span>
+<span class="k">val</span> <span class="n">vert_tensor</span> <span class="k">=</span> <span class="n">dtf</span><span class="o">.</span><span class="n">stack</span><span class="o">(</span><span class="nc">Seq</span><span class="o">(</span><span class="n">rand_mat</span><span class="o">,</span> <span class="n">another_rand_mat</span><span class="o">),</span> <span class="n">axis</span> <span class="k">=</span> <span class="mi">0</span><span class="o">)</span>
+<span class="c1">//Stack vectors horizontally, i.e. column wise</span>
+<span class="k">val</span> <span class="n">horz_tensor</span> <span class="k">=</span> <span class="n">dtf</span><span class="o">.</span><span class="n">stack</span><span class="o">(</span><span class="nc">Seq</span><span class="o">(</span><span class="n">rand_mat</span><span class="o">,</span> <span class="n">another_rand_mat</span><span class="o">),</span> <span class="n">axis</span> <span class="k">=</span> <span class="mi">1</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5.2/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package$dtflearndtflearn"><code>dtflearn</code></a> package object deals with basic neural network building blocks which are often needed while constructing prediction architectures.</li>
+</ul>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Create a simple neural architecture with one convolutional layer </span>
+<span class="c1">//followed by a max pool and feedforward layer  </span>
+<span class="k">val</span> <span class="n">net</span> <span class="k">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">Cast</span><span class="o">(</span><span class="s">&quot;Input/Cast&quot;</span><span class="o">,</span> <span class="nc">FLOAT32</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
+  <span class="n">dtflearn</span><span class="o">.</span><span class="n">conv2d_pyramid</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">2</span><span class="o">)(</span><span class="mf">0.1f</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mf">0.6F</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
+  <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">MaxPool</span><span class="o">(</span><span class="s">&quot;Layer_3/MaxPool&quot;</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">),</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="nc">SamePadding</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
+  <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">Flatten</span><span class="o">(</span><span class="s">&quot;Layer_3/Flatten&quot;</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
+  <span class="n">dtflearn</span><span class="o">.</span><span class="n">feedforward</span><span class="o">(</span><span class="mi">256</span><span class="o">)(</span><span class="n">id</span> <span class="k">=</span> <span class="mi">4</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
+  <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">ReLU</span><span class="o">(</span><span class="s">&quot;Layer_4/ReLU&quot;</span><span class="o">,</span> <span class="mf">0.1f</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
+  <span class="n">dtflearn</span><span class="o">.</span><span class="n">feedforward</span><span class="o">(</span><span class="mi">10</span><span class="o">)(</span><span class="n">id</span> <span class="k">=</span> <span class="mi">5</span><span class="o">)</span>
+</pre></div>
+</td></tr></table>
+
 <h3 id="library-organisation">Library Organisation<a class="headerlink" href="#library-organisation" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added <code>dynaml-repl</code> and <code>dynaml-notebook</code> modules to repository.</li>
 </ul>
 <h3 id="dynaml-server">DynaML Server<a class="headerlink" href="#dynaml-server" title="Permanent link">&para;</a></h3>
 <ul>
-<li>DynaML ssh server now available 
+<li>DynaML ssh server now available (only in Local mode)
    <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>$ ./target/universal/stage/bin/dynaml --server
 </pre></div>
 </td></tr></table>
-   To login to the server open a separate shell and type
+   To login to the server open a separate shell and type, (when prompted for password, just press ENTER)
    <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>$ ssh repl@localhost -p22222
 </pre></div>
 </td></tr></table></li>
