@@ -23,6 +23,11 @@ pages:
         - 'v1.4': 'releases/mydoc_release_notes_14.md'
     - Scaladoc:
       - v1.5.x:
+        - v1.5.2:
+            - dynaml-core: 'scaladoc/v1.5.2/core.md'
+            - dynaml-pipes: 'scaladoc/v1.5.2/pipes.md'
+            - dynaml-repl: 'scaladoc/v1.5.2/repl.md'
+            - dynaml-examples: 'scaladoc/v1.5.2/examples.md'
         - v1.5.1:
             - dynaml-core: 'scaladoc/v1.5.1/core.md'
             - dynaml-pipes: 'scaladoc/v1.5.1/pipes.md'
@@ -109,6 +114,13 @@ pages:
         - State of DynaML 2016: 'blog/2016-12-11-dynaml-new-features.md'
         - Resources for Beginners: 'blog/2016-12-08-getting-started-ml.md'
 theme: material
+theme:
+  name: 'material'
+  logo: 'images/dynaml_logo3_small.png'
+  favicon: 'images/dynaml_logo3.png'
+  palette:
+    primary: 'teal'
+    accent: 'green'
 markdown_extensions:
   - admonition
   - codehilite(guess_lang=false, linenums=true)
@@ -131,16 +143,14 @@ repo_name: 'transcendent-ai-labs/DynaML'
 repo_url: 'https://github.com/transcendent-ai-labs/DynaML'
 extra_javascript:
   - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
-google_analytics: ['UA-59996358-2', 'https://transcendent-ai-labs.github.io/DynaML/']
+google_analytics:
+  - 'UA-59996358-2'
+  - 'auto'
 extra:
-  logo: 'images/dynaml_logo3_small.png'
   disqus: 'dynaml'
-  palette:
-    primary: 'teal'
-    accent: 'green'
   social:
     - type: 'github'
       link: 'https://github.com/transcendent-ai-labs'
     - type: 'twitter'
       link: 'https://twitter.com/dyna_ml'
-site_favicon: 'images/dynaml_logo3.png'
+

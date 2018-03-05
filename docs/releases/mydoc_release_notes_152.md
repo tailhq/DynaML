@@ -1,12 +1,10 @@
 !!! summary ""
-    Version 1.5.2 of DynaML, released March 2, 2017, 
-    introduces functionality through improvement in the pipes API and 
-    increased integration with Tensorflow.
+    Version 1.5.2 of DynaML, released March 2, 2017, introduces functionality through improvement in the pipes API and increased integration with Tensorflow.
 
 
 ## Additions
 
- ### Tensorflow Integration
+### Tensorflow Integration
  
  - Tensorflow (beta) support now live, thanks to the [tensorflow_scala](https://github.com/eaplatanios/tensorflow_scala) project! Try it out in:
      * [CIFAR-10](https://github.com/transcendent-ai-labs/DynaML/blob/master/scripts/cifar.sc) example script
@@ -18,11 +16,11 @@
  - The `dtflearn` package object deals with basic neural network building blocks which are often needed while constructing prediction architectures.
  
 
- ### Library Organisation
+### Library Organisation
  
  - Added `dynaml-repl` and `dynaml-notebook` modules to repository.
  
- ### DynaML Server
+### DynaML Server
  
  - DynaML ssh server now available 
    ```bash
@@ -33,7 +31,7 @@
    $ ssh repl@localhost -p22222
    ```
 
- ### Basis Generators
+### Basis Generators
  - Legrendre polynomial basis generators
   
 ## Bugfixes
