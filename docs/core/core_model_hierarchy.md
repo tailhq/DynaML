@@ -22,7 +22,7 @@ Many predictive models calculate predictions by formulating an expression which 
 
 Linear models; represented by the [`#!scala LinearModel[T, P, Q , R, S]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.LinearModel) trait are extensions of `#!scala ParameterizedLearner`, this top level trait is extended to yield many useful linear prediction models.
 
-[_Generalized Linear Models_](core_glm.md) which are linear in parameters expression for the predictions $$y$$ given a vector of processed features $\phi(x)$ or basis functions.
+[_Generalized Linear Models_](core_glm.md) which are linear in parameters expression for the predictions $y$ given a vector of processed features $\phi(x)$ or basis functions.
 
 $$
 	\begin{equation}
