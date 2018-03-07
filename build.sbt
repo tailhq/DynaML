@@ -9,7 +9,7 @@ packageSummary := "Scala Library/REPL for Machine Learning Research"
 
 packageDescription := "DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows. It can also be used as an educational/research tool for data analysis."
 
-val mainVersion = "v1.5.2"
+val mainVersion = "v1.5.3-beta.1"
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 

@@ -21,6 +21,8 @@ package io.github.mandar2812.dynaml
 import java.nio.ByteBuffer
 
 import io.github.mandar2812.dynaml.probability._
+import io.github.mandar2812.dynaml.pipes._
+import io.github.mandar2812.dynaml.tensorflow.utils._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.Shape
 import org.platanios.tensorflow.api.ops.NN.SamePadding
@@ -287,8 +289,11 @@ package object tensorflow {
   }
 
   /**
+    * <h4>DynaML Neural Net Building Blocks</h4>
     *
-    *
+    * The [[dtflearn]] object contains components
+    * that can be used to create custom neural architectures,
+    * from basic building blocks.
     * */
   object dtflearn {
 
@@ -394,6 +399,64 @@ package object tensorflow {
       //Join head to tail.
       head_segment >> tail_segments
     }
+
+  }
+
+  /**
+    * <h4>DynaML Tensorflow Pipes</h4>
+    *
+    * The [[dtfpipe]] contains workflows/pipelines to simplify working
+    * with tensorflow data sets and models.
+    * */
+  object dtfpipe {
+
+    val gaussian_standardization: DataPipe2[Tensor, Tensor, ((Tensor, Tensor), (GaussianScalerTF, GaussianScalerTF))] =
+      DataPipe2((features: Tensor, labels: Tensor) => {
+
+        val (features_mean, labels_mean) = (features.mean(axes = 0), labels.mean(axes = 0))
+
+        val n_data = features.shape(0).scalar.asInstanceOf[Int].toDouble
+
+        val (features_sd, labels_sd) = (
+          features.subtract(features_mean).square.mean(axes = 0).multiply(n_data/(n_data - 1d)).sqrt,
+          labels.subtract(labels_mean).square.mean(axes = 0).multiply(n_data/(n_data - 1d)).sqrt
+        )
+
+        val (features_scaler, labels_scaler) = (
+          GaussianScalerTF(features_mean, features_sd),
+          GaussianScalerTF(labels_mean, labels_sd)
+        )
+
+        val (features_scaled, labels_scaled) = (
+          features_scaler(features),
+          labels_scaler(labels)
+        )
+
+        ((features_scaled, labels_scaled), (features_scaler, labels_scaler))
+      })
+
+    val minmax_standardization: DataPipe2[Tensor, Tensor, ((Tensor, Tensor), (MinMaxScalerTF, MinMaxScalerTF))] =
+      DataPipe2((features: Tensor, labels: Tensor) => {
+
+        val (features_min, labels_min) = (features.min(axes = 0), labels.min(axes = 0))
+
+        val (features_max, labels_max) = (
+          features.max(axes = 0),
+          labels.max(axes = 0)
+        )
+
+        val (features_scaler, labels_scaler) = (
+          MinMaxScalerTF(features_min, features_max),
+          MinMaxScalerTF(labels_min, labels_max)
+        )
+
+        val (features_scaled, labels_scaled) = (
+          features_scaler(features),
+          labels_scaler(labels)
+        )
+
+        ((features_scaled, labels_scaled), (features_scaler, labels_scaler))
+      })
 
   }
 
