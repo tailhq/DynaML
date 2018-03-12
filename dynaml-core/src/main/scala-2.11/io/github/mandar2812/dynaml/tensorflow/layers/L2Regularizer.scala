@@ -21,6 +21,6 @@ package io.github.mandar2812.dynaml.tensorflow.layers
 import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.ops.variables.Regularizer
 
-class L2Regularizer extends Regularizer {
-  override def apply(value: Output): Output = value.square.multiply(0.5).sum()
+case class L2Regularizer(regConst: Double = 0.001) extends Regularizer {
+  override def apply(value: Output): Output = value.square.multiply(0.5).sum().multiply(regConst)
 }
