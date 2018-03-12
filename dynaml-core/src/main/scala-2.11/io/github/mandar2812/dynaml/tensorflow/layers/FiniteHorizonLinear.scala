@@ -18,56 +18,42 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
-import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, Regularizer}
+import org.platanios.tensorflow.api.{---, Output, Shape, tf}
 
 /**
-  * Represents a Continuous Time Recurrent Neural Network (CTRNN)
-  * The layer simulates the discretized dynamics of the CTRNN for
-  * a fixed number of time steps.
+  * Projection of a finite horizon multivariate
+  * time series onto an observation space.
   *
-  * @author mandar2812 date: 2018/03/06
+  * @param units The degrees of freedom or dimensionality of the dynamical system
+  * @param observables The dimensionality of the observations at each time epoch.
+  * @author mandar2812 date 11/03/2018
   * */
-case class FiniteHorizonCTRNN(
-  override val name: String, units: Int,
-  horizon: Int, timestep: Double,
+case class FiniteHorizonLinear(
+  override val name: String,
+  units: Int, observables: Int, horizon: Int,
   weightsInitializer: Initializer = RandomNormalInitializer(),
   biasInitializer: Initializer = RandomNormalInitializer(),
-  gainInitializer: Initializer = RandomNormalInitializer(),
-  timeConstantInitializer: Initializer = RandomNormalInitializer(),
   regularization: Regularizer = new L2Regularizer) extends
   Layer[Output, Output](name) {
 
-  override val layerType: String = "FHCTRNN"
+  override val layerType: String = "FHLinear"
 
   override protected def _forward(input: Output, mode: Mode): Output = {
-
     val weights      = tf.variable(
-      "Weights", input.dataType, Shape(units, units),
+      "Weights", input.dataType, Shape(observables, units),
       weightsInitializer, regularizer = regularization)
 
-    val timeconstant = tf.variable(
-      "TimeConstant", input.dataType, Shape(units, units),
-      timeConstantInitializer, regularizer = regularization)
-
-    val gain         = tf.variable(
-      "Gain", input.dataType, Shape(units, units),
-      timeConstantInitializer, regularizer = regularization)
-
     val bias         = tf.variable(
-      "Bias", input.dataType, Shape(units),
+      "Bias", input.dataType, Shape(observables),
       biasInitializer, regularizer = regularization)
 
     tf.stack(
-      (1 to horizon).scanLeft(input)((x, _) => {
-        val decay = x.tensorDot(timeconstant.multiply(-1d), Seq(1), Seq(0))
-        val interaction = x.tensorDot(gain, Seq(1), Seq(0)).add(bias).tanh.tensorDot(weights, Seq(1), Seq(0))
-
-        x.add(decay.multiply(timestep)).add(interaction.multiply(timestep))
-      }).tail,
+      (0 until horizon).map(i => {
+        input(---, i).tensorDot(weights, Seq(1), Seq(1)).add(bias)
+      }),
       axis = -1)
-
   }
 }
