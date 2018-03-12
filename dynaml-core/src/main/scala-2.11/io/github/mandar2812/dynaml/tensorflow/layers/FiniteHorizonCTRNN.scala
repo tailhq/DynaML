@@ -37,7 +37,7 @@ case class FiniteHorizonCTRNN(
   biasInitializer: Initializer = RandomNormalInitializer(),
   gainInitializer: Initializer = RandomNormalInitializer(),
   timeConstantInitializer: Initializer = RandomNormalInitializer(),
-  regularization: Regularizer = new L2Regularizer) extends
+  regularization: Regularizer = L2Regularizer()) extends
   Layer[Output, Output](name) {
 
   override val layerType: String = "FHCTRNN"
@@ -50,7 +50,7 @@ case class FiniteHorizonCTRNN(
 
     val timeconstant = tf.variable(
       "TimeConstant", input.dataType, Shape(units, units),
-      timeConstantInitializer, regularizer = regularization)
+      timeConstantInitializer)
 
     val gain         = tf.variable(
       "Gain", input.dataType, Shape(units, units),
@@ -58,7 +58,7 @@ case class FiniteHorizonCTRNN(
 
     val bias         = tf.variable(
       "Bias", input.dataType, Shape(units),
-      biasInitializer, regularizer = regularization)
+      biasInitializer)
 
     tf.stack(
       (1 to horizon).scanLeft(input)((x, _) => {

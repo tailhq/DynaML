@@ -36,7 +36,7 @@ case class FiniteHorizonLinear(
   units: Int, observables: Int, horizon: Int,
   weightsInitializer: Initializer = RandomNormalInitializer(),
   biasInitializer: Initializer = RandomNormalInitializer(),
-  regularization: Regularizer = new L2Regularizer) extends
+  regularization: Regularizer = L2Regularizer()) extends
   Layer[Output, Output](name) {
 
   override val layerType: String = "FHLinear"
@@ -48,7 +48,7 @@ case class FiniteHorizonLinear(
 
     val bias         = tf.variable(
       "Bias", input.dataType, Shape(observables),
-      biasInitializer, regularizer = regularization)
+      biasInitializer)
 
     tf.stack(
       (0 until horizon).map(i => {
