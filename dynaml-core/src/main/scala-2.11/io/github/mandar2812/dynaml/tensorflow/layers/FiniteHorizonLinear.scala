@@ -39,15 +39,15 @@ case class FiniteHorizonLinear(
   regularization: Regularizer = L2Regularizer()) extends
   Layer[Output, Output](name) {
 
-  override val layerType: String = "FHLinear"
+  override val layerType: String = s"FHLinear[states:$units, horizon:$horizon, observables:$observables]"
 
   override protected def _forward(input: Output, mode: Mode): Output = {
     val weights      = tf.variable(
-      "Weights", input.dataType, Shape(observables, units),
+      s"$name/Weights", input.dataType, Shape(observables, units),
       weightsInitializer, regularizer = regularization)
 
     val bias         = tf.variable(
-      "Bias", input.dataType, Shape(observables),
+      s"$name/Bias", input.dataType, Shape(observables),
       biasInitializer)
 
     tf.stack(

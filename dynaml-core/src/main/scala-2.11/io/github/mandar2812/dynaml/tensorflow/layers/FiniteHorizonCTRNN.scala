@@ -40,24 +40,24 @@ case class FiniteHorizonCTRNN(
   regularization: Regularizer = L2Regularizer()) extends
   Layer[Output, Output](name) {
 
-  override val layerType: String = "FHCTRNN"
+  override val layerType: String = s"CTRNN[states:$units, horizon:$horizon, deltaT:$timestep]"
 
   override protected def _forward(input: Output, mode: Mode): Output = {
 
     val weights      = tf.variable(
-      "Weights", input.dataType, Shape(units, units),
+      s"$name/Weights", input.dataType, Shape(units, units),
       weightsInitializer, regularizer = regularization)
 
     val timeconstant = tf.variable(
-      "TimeConstant", input.dataType, Shape(units, units),
+      s"$name/TimeConstant", input.dataType, Shape(units, units),
       timeConstantInitializer)
 
     val gain         = tf.variable(
-      "Gain", input.dataType, Shape(units, units),
+      s"$name/Gain", input.dataType, Shape(units, units),
       timeConstantInitializer, regularizer = regularization)
 
     val bias         = tf.variable(
-      "Bias", input.dataType, Shape(units),
+      s"$name/Bias", input.dataType, Shape(units),
       biasInitializer)
 
     tf.stack(
