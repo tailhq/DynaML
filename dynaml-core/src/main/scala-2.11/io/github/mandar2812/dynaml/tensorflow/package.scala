@@ -23,6 +23,7 @@ import java.nio.ByteBuffer
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.tensorflow.utils._
+import io.github.mandar2812.dynaml.tensorflow.layers._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.Shape
 import org.platanios.tensorflow.api.ops.NN.SamePadding
@@ -399,6 +400,22 @@ package object tensorflow {
       //Join head to tail.
       head_segment >> tail_segments
     }
+
+    /**
+      * Constructs a Continuous Time Recurrent Neural Network (CTRNN) Layer, consisting
+      * of some latent states, compsed with a linear projection into the space of observables.
+      *
+      * @param states The number of states in the CTRNN
+      * @param observables The dimensionality of the output space.
+      * @param timestep The integration time step.
+      * @param horizon The number of steps in time to simulate the dynamical system
+      * @param index The layer index, should be unique.
+      * */
+    def ctrnn_block(
+      states: Int, observables: Int,
+      horizon: Int, timestep: Double)(index: Int) =
+      FiniteHorizonCTRNN(s"fhctrnn_$index", states, horizon, timestep) >>
+        FiniteHorizonLinear(s"fhlinear_$index", states, observables, horizon)
 
   }
 
