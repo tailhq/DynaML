@@ -298,7 +298,13 @@ package object tensorflow {
     * */
   object dtflearn {
 
-    val Tanh: layers.Tanh.type  = layers.Tanh
+    val Tanh: layers.Tanh.type                = layers.Tanh
+
+    val ctrnn: layers.FiniteHorizonCTRNN.type = layers.FiniteHorizonCTRNN
+
+    val dctrnn: layers.DynamicTimeStepCTRNN.type  = layers.DynamicTimeStepCTRNN
+
+    val ts_linear: layers.FiniteHorizonLinear.type  = layers.FiniteHorizonLinear
 
     /**
       * Constructs a feed-forward layer.
@@ -403,19 +409,25 @@ package object tensorflow {
 
     /**
       * Constructs a Continuous Time Recurrent Neural Network (CTRNN) Layer, consisting
-      * of some latent states, compsed with a linear projection into the space of observables.
+      * of some latent states, composed with a linear projection into the space of observables.
       *
       * @param states The number of states in the CTRNN
       * @param observables The dimensionality of the output space.
-      * @param timestep The integration time step.
+      * @param timestep The integration time step, if set to 0 or a negative
+      *                 value, create a [[DynamicTimeStepCTRNN]].
       * @param horizon The number of steps in time to simulate the dynamical system
       * @param index The layer index, should be unique.
       * */
     def ctrnn_block(
       states: Int, observables: Int,
-      horizon: Int, timestep: Double)(index: Int) =
-      FiniteHorizonCTRNN(s"fhctrnn_$index", states, horizon, timestep) >>
-        FiniteHorizonLinear(s"fhlinear_$index", states, observables, horizon)
+      horizon: Int, timestep: Double = -1d)(index: Int) =
+      if (timestep <= 0d) {
+        DynamicTimeStepCTRNN(s"FHctrnn_$index", states, horizon) >>
+          FiniteHorizonLinear(s"FHlinear_$index", states, observables, horizon)
+      } else {
+        FiniteHorizonCTRNN(s"FHctrnn_$index", states, horizon, timestep) >>
+          FiniteHorizonLinear(s"FHlinear_$index", states, observables, horizon)
+      }
 
   }
 

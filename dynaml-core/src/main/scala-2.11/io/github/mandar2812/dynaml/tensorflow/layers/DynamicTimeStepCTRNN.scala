@@ -18,33 +18,43 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
+
+import io.github.mandar2812.dynaml.tensorflow.layers.L2Regularizer
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
-import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, Regularizer}
+import org.platanios.tensorflow.api.ops.variables._
+
 
 /**
   * <h3>Continuous Time Recurrent Neural Network</h3>
+  * <br/>
+  * <h4>With with time step inference.</h4>
   *
   * Represents a Continuous Time Recurrent Neural Network (CTRNN)
   * The layer simulates the discretized dynamics of the CTRNN for
   * a fixed number of time steps.
   *
+  * A variant of [[FiniteHorizonCTRNN]], here the integration time-step
+  * is inferred during training.
+  *
   * @author mandar2812 date: 2018/03/06
   * */
-case class FiniteHorizonCTRNN(
-  override val name: String, units: Int,
-  horizon: Int, timestep: Double,
+case class DynamicTimeStepCTRNN(
+  override val name: String,
+  units: Int, horizon: Int,
   weightsInitializer: Initializer = RandomNormalInitializer(),
   biasInitializer: Initializer = RandomNormalInitializer(),
   gainInitializer: Initializer = RandomNormalInitializer(),
   timeConstantInitializer: Initializer = RandomNormalInitializer(),
-  regularization: Regularizer = L2Regularizer()) extends
+  regularization: Regularizer = new L2Regularizer) extends
   Layer[Output, Output](name) {
 
-  override val layerType: String = s"CTRNN[states:$units, horizon:$horizon, deltaT:$timestep]"
+  override val layerType: String = s"CTRNN[states:$units, horizon:$horizon]"
 
   override protected def _forward(input: Output, mode: Mode): Output = {
+
+    val timestep    = tf.variable(s"$name/time_step", input.dataType, Shape(), new RandomUniformInitializer)
 
     val weights      = tf.variable(
       s"$name/Weights", input.dataType, Shape(units, units),
@@ -52,7 +62,7 @@ case class FiniteHorizonCTRNN(
 
     val timeconstant = tf.variable(
       s"$name/TimeConstant", input.dataType, Shape(units, units),
-      timeConstantInitializer)
+      timeConstantInitializer, regularizer = regularization)
 
     val gain         = tf.variable(
       s"$name/Gain", input.dataType, Shape(units, units),
@@ -60,7 +70,7 @@ case class FiniteHorizonCTRNN(
 
     val bias         = tf.variable(
       s"$name/Bias", input.dataType, Shape(units),
-      biasInitializer)
+      biasInitializer, regularizer = regularization)
 
     tf.stack(
       (1 to horizon).scanLeft(input)((x, _) => {
