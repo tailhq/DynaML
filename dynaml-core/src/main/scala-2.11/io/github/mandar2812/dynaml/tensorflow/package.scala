@@ -298,11 +298,11 @@ package object tensorflow {
     * */
   object dtflearn {
 
-    val Tanh: layers.Tanh.type                = layers.Tanh
+    val Tanh: layers.Tanh.type                      = layers.Tanh
 
-    val ctrnn: layers.FiniteHorizonCTRNN.type = layers.FiniteHorizonCTRNN
+    val ctrnn: layers.FiniteHorizonCTRNN.type       = layers.FiniteHorizonCTRNN
 
-    val dctrnn: layers.DynamicTimeStepCTRNN.type  = layers.DynamicTimeStepCTRNN
+    val dctrnn: layers.DynamicTimeStepCTRNN.type    = layers.DynamicTimeStepCTRNN
 
     val ts_linear: layers.FiniteHorizonLinear.type  = layers.FiniteHorizonLinear
 

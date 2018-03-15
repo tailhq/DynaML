@@ -38,4 +38,7 @@ case class MinMaxScalerTF(min: Tensor, max: Tensor) extends TFScaler {
 
   override def run(data: Tensor): Tensor = data.subtract(min).divide(delta)
 
+  def apply(indexers: Indexer*): MinMaxScalerTF = this.copy(min(indexers:_*), max(indexers:_*))
+
+
 }

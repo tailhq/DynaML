@@ -36,4 +36,7 @@ case class GaussianScalerTF(mean: Tensor, sigma: Tensor) extends TFScaler {
   override val i: Scaler[Tensor] = Scaler((xc: Tensor) => xc.multiply(sigma).add(mean))
 
   override def run(data: Tensor): Tensor = data.subtract(mean).divide(sigma)
+
+  def apply(indexers: Indexer*): GaussianScalerTF = this.copy(mean(indexers:_*), sigma(indexers:_*))
+
 }
