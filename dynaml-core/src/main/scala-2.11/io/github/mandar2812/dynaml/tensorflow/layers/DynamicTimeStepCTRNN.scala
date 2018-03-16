@@ -54,22 +54,22 @@ case class DynamicTimeStepCTRNN(
 
   override protected def _forward(input: Output, mode: Mode): Output = {
 
-    val timestep    = tf.variable(s"$name/time_step", input.dataType, Shape(), new RandomUniformInitializer)
+    val timestep    = tf.variable("time_step", input.dataType, Shape(), new RandomUniformInitializer)
 
     val weights      = tf.variable(
-      s"$name/Weights", input.dataType, Shape(units, units),
+      "Weights", input.dataType, Shape(units, units),
       weightsInitializer, regularizer = regularization)
 
     val timeconstant = tf.variable(
-      s"$name/TimeConstant", input.dataType, Shape(units, units),
+      "TimeConstant", input.dataType, Shape(units, units),
       timeConstantInitializer, regularizer = regularization)
 
     val gain         = tf.variable(
-      s"$name/Gain", input.dataType, Shape(units, units),
+      "Gain", input.dataType, Shape(units, units),
       timeConstantInitializer, regularizer = regularization)
 
     val bias         = tf.variable(
-      s"$name/Bias", input.dataType, Shape(units),
+      "Bias", input.dataType, Shape(units),
       biasInitializer, regularizer = regularization)
 
     tf.stack(

@@ -43,11 +43,11 @@ case class FiniteHorizonLinear(
 
   override protected def _forward(input: Output, mode: Mode): Output = {
     val weights      = tf.variable(
-      s"$name/Weights", input.dataType, Shape(observables, units),
+      "Weights", input.dataType, Shape(observables, units),
       weightsInitializer, regularizer = regularization)
 
     val bias         = tf.variable(
-      s"$name/Bias", input.dataType, Shape(observables),
+      "Bias", input.dataType, Shape(observables),
       biasInitializer)
 
     tf.stack(
