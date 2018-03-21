@@ -313,7 +313,8 @@ package object tensorflow {
       * @param id A unique integer id for constructing the layer name.
       *
       * */
-    def feedforward(num_units: Int)(id: Int) = tf.learn.Linear("Linear_"+id, num_units)
+    def feedforward(num_units: Int, useBias: Boolean = true)(id: Int) =
+      tf.learn.Linear("Linear_"+id, num_units, useBias)
 
     /**
       * Constructs a symmetric (square) convolutional layer from the provided dimensions.
