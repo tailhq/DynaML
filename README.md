@@ -31,6 +31,7 @@ Currently DynaML supports.
 * Model validation metrics (RMSE, Area under ROC)
 * Entropy based data subset selection
 * Data Pipes for configurable workflows
+* Tensorflow Integration
 
 Include
 --------
