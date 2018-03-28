@@ -7,7 +7,7 @@ jdk:
    - oraclejdk7
 
 script:
-   - sbt clean test
+   - sbt clean stage
 
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)

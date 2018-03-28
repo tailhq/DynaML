@@ -22,14 +22,11 @@ val baseSettings = Seq(
     "BeDataDriven" at "https://nexus.bedatadriven.com/content/groups/public",
     Resolver.sonatypeRepo("public"),
     Resolver.sonatypeRepo("snapshots")),
-  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline")
+  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline", "-target:jvm-1.8")
 )
 
 lazy val commonSettings = Seq(
-  libraryDependencies ++= (
-    linearAlgebraDependencies ++ baseDependencies ++
-      loggingDependency ++ apacheSparkDependency)
-  //ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
+  libraryDependencies ++= (linearAlgebraDependencies ++ baseDependencies ++ loggingDependency ++ apacheSparkDependency)
 )
 
 lazy val settingsCore = Seq(
