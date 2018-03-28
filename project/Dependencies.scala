@@ -102,7 +102,7 @@ object Dependencies {
 
   val chartsDependencies = Seq(
     "com.github.wookietreiber" % "scala-chart_2.11" % "0.4.2" % "compile",
-    "org.jzy3d" % "jzy3d-api" % "0.9.1" % "compile",
+    "org.jzy3d" % "jzy3d-api" % "1.0.0" % "compile",
     "com.quantifind" % "wisp_2.11" % "0.0.4" % "compile",
     "co.theasi" % "plotly_2.11" % "0.1",
     ("org.vegas-viz" % "vegas_2.11" % "0.3.11").exclude("io.circe", "circe-parser")
