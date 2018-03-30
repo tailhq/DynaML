@@ -40,27 +40,23 @@ case class RBFLayer(
   num_units: Int,
   centers_initializer: Initializer = tf.RandomNormalInitializer(),
   scales_initializer: Initializer  = tf.OnesInitializer,
-  weights_initializer: Initializer = tf.RandomNormalInitializer()) extends Layer[Output, Output](name) {
+  weights_initializer: Initializer = tf.RandomNormalInitializer()) extends
+    Layer[Output, Seq[Output]](name) {
 
   override val layerType: String = s"RBFLayer[num_units:$num_units]"
 
-  override def _forward(input: Output, mode: Mode): Output = {
+  override def _forward(input: Output, mode: Mode): Seq[Output] = {
 
-    val node_centers    = tf.variable("node_centers", input.dataType, Shape(input.shape(-1), num_units), centers_initializer)
+    val node_centers    = (0 until num_units).map(
+      i => tf.variable("node_"+i, input.dataType, Shape(input.shape(-1)), centers_initializer)
+    )
 
-    val scales          = tf.variable("scales", input.dataType, Shape(input.shape(-1), num_units), scales_initializer)
+    val scales          = (0 until num_units).map(
+      i => tf.variable("scale_"+i, input.dataType, Shape(input.shape(-1)), scales_initializer)
+    )
 
-    val weights         = tf.variable("weights", input.dataType, Shape(num_units), weights_initializer)
-
-    val repeated_inputs = tf.stack(Seq.fill(num_units)(input), axis = -1)
-
-    repeated_inputs
-      .subtract(node_centers)
-      .square
-      .multiply(-1.0)
-      .divide(scales.square.add(1E-6))
-      .sum(axes = 1)
-      .exp
-      .multiply(weights)
+    node_centers.zip(scales).toSeq.map(cs => {
+      input.subtract(cs._1).square.divide(cs._2.square.add(1E-6)).multiply(-0.5).sum(axes = 1).exp
+    })
   }
 }
