@@ -488,6 +488,31 @@ package object tensorflow {
         ((features_scaled, labels_scaled), (features_scaler, labels_scaler))
       })
 
+    val gauss_minmax_standardization: DataPipe2[Tensor, Tensor, ((Tensor, Tensor), (GaussianScalerTF, MinMaxScalerTF))] =
+      DataPipe2((features: Tensor, labels: Tensor) => {
+
+        val features_mean = features.mean(axes = 0)
+
+        val (labels_min, labels_max) = (labels.min(axes = 0), labels.max(axes = 0))
+
+        val n_data = features.shape(0).scalar.asInstanceOf[Int].toDouble
+
+        val features_sd = 
+          features.subtract(features_mean).square.mean(axes = 0).multiply(n_data/(n_data - 1d)).sqrt
+
+        val (features_scaler, labels_scaler) = (
+          GaussianScalerTF(features_mean, features_sd),
+          MinMaxScalerTF(labels_min, labels_max)
+        )
+
+        val (features_scaled, labels_scaled) = (
+          features_scaler(features),
+          labels_scaler(labels)
+        )
+
+        ((features_scaled, labels_scaled), (features_scaler, labels_scaler))
+      })
+
   }
 
 }
