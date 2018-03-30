@@ -20,13 +20,15 @@ package io.github.mandar2812.dynaml.evaluation
 
 import com.quantifind.charts.Highcharts.{regression, title, xAxis, yAxis}
 import io.github.mandar2812.dynaml.tensorflow.dtf
+import io.github.mandar2812.dynaml.tensorflow.{utils => dtfutils}
 import org.platanios.tensorflow.api.{::, Tensor}
 
 /**
   * Implements a common use for Regression Task Evaluators.
   * */
-class RegressionMetricsTF(preds: Tensor, targets: Tensor)
-  extends MetricsTF(Seq("RMSE", "MAE", "Coefficient of Corr.", "Yield"), preds, targets) {
+class RegressionMetricsTF(preds: Tensor, targets: Tensor) extends MetricsTF(
+  Seq("RMSE", "MAE", "Coefficient of Corr.", "Yield"),
+  preds, targets) {
 
   private val num_outputs = if (preds.shape.toTensor().size == 1) 1 else preds.shape(1)
 
@@ -41,9 +43,10 @@ class RegressionMetricsTF(preds: Tensor, targets: Tensor)
     println("Generating Plot of Fit for each target")
 
     if(num_outputs == 1) {
+
       val (pr, tar) = (
-        scoresAndLabels._1.entriesIterator.map(_.asInstanceOf[Float]),
-        scoresAndLabels._2.entriesIterator.map(_.asInstanceOf[Float]))
+        dtfutils.toDoubleSeq(scoresAndLabels._1),
+        dtfutils.toDoubleSeq(scoresAndLabels._2))
 
       regression(pr.zip(tar).toSeq)
 
@@ -54,8 +57,8 @@ class RegressionMetricsTF(preds: Tensor, targets: Tensor)
     } else {
       (0 until num_outputs).foreach(output => {
         val (pr, tar) = (
-          scoresAndLabels._1(::, output).entriesIterator.map(_.asInstanceOf[Float]),
-          scoresAndLabels._2(::, output).entriesIterator.map(_.asInstanceOf[Float]))
+          dtfutils.toDoubleSeq(scoresAndLabels._1(::, output)),
+          dtfutils.toDoubleSeq(scoresAndLabels._2(::, output)))
 
         regression(pr.zip(tar).toSeq)
       })
