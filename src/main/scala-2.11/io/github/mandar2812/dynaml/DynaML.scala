@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml
 import java.io.{InputStream, OutputStream, PrintStream}
 import java.nio.file.NoSuchFileException
 
-import ammonite.interp.Interpreter
+import ammonite.interp.{Interpreter, Preprocessor}
 import ammonite.ops._
 import ammonite.runtime.{Frame, Storage}
 import ammonite.repl.{RemoteLogger, Repl}
@@ -73,7 +73,8 @@ import scala.annotation.tailrec
   *                    part of the REPL or script's output
   */
 case class DynaML(
-  predefCode: String = "", predefFile: Option[Path] = None,
+  predefCode: String = "",
+  predefFile: Option[Path] = None,
   defaultPredef: Boolean = true,
   storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
   wd: Path = ammonite.ops.pwd,
@@ -83,7 +84,9 @@ case class DynaML(
   errorStream: OutputStream = System.err,
   verboseOutput: Boolean = true,
   remoteLogging: Boolean = true,
-  colors: Colors = Colors.Default){
+  colors: Colors = Colors.Default,
+  replCodeWrapper: Preprocessor.CodeWrapper = Preprocessor.CodeWrapper,
+  scriptCodeWrapper: Preprocessor.CodeWrapper = Preprocessor.CodeWrapper){
 
   def loadedPredefFile = predefFile match{
     case Some(path) =>
@@ -127,13 +130,15 @@ case class DynaML(
           PredefInfo(Name("ArgsPredef"), argString, false, None)
         ),
         customPredefs = predefFileInfoOpt.toSeq ++ Seq(
-          PredefInfo(Name("CodePredef"), predefCode, false, None)
+          PredefInfo(Name("CodePredef"), predefCode, false, Some(wd/"(console)"))
         ),
         wd = wd,
         welcomeBanner = welcomeBanner,
         replArgs = replArgs,
         remoteLogger = remoteLogger,
-        initialColors = colors
+        initialColors = colors,
+        replCodeWrapper = replCodeWrapper,
+        scriptCodeWrapper = scriptCodeWrapper
       )
     }
 
@@ -146,7 +151,7 @@ case class DynaML(
         Defaults.predefString + DynaML.extraPredefString
       )
 
-      val (colorsRef, printer) = Interpreter.initPrinters(
+      val (colorsRef, printer) = DynaMLInterpreter.initPrinters(
         colors,
         outputStream,
         errorStream,
@@ -154,7 +159,7 @@ case class DynaML(
       )
       val frame = Frame.createInitial()
 
-      val interp: Interpreter = new Interpreter(
+      val interp: Interpreter = new DynaMLInterpreter(
         printer,
         storageBackend,
         basePredefs = Seq(
@@ -167,7 +172,10 @@ case class DynaML(
         wd,
         colorsRef,
         verboseOutput,
-        () => frame
+        () => frame,
+        () => throw new Exception("session loading / saving not possible here"),
+        replCodeWrapper,
+        scriptCodeWrapper
       )
       interp.initializePredef() match{
         case None => Right(interp)
@@ -184,7 +192,7 @@ case class DynaML(
         Defaults.predefString + DynaML.extraPredefString
       )
 
-      val (colorsRef, printer) = Interpreter.initPrinters(
+      val (colorsRef, printer) = DynaMLInterpreter.initPrinters(
         colors,
         outputStream,
         errorStream,
@@ -205,7 +213,10 @@ case class DynaML(
         wd,
         colorsRef,
         verboseOutput,
-        () => frame
+        () => frame,
+        () => throw new Exception("session loading / saving not possible here"),
+        replCodeWrapper,
+        scriptCodeWrapper
       )
       interp.initializePredef() match{
         case None => Right(interp)
@@ -467,6 +478,7 @@ class MainRunner(cliConfig: Cli.Config,
       cliConfig.predefFile,
       cliConfig.defaultPredef,
       storage,
+      wd = cliConfig.wd,
       inputStream = stdIn,
       outputStream = stdOut,
       errorStream = stdErr,

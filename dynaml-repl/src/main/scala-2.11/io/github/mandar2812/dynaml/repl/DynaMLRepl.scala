@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.repl
 import java.io.{InputStream, OutputStream}
 import java.nio.file.NoSuchFileException
 
+import ammonite.interp.Preprocessor
 import ammonite.ops.{Path, _}
 import ammonite.repl.{RemoteLogger, Repl, ReplApiImpl, ReplLoad}
 import ammonite.runtime.Evaluator.AmmoniteExit
@@ -49,15 +50,18 @@ class DynaMLRepl(
   wd: ammonite.ops.Path, welcomeBanner: Option[String],
   replArgs: IndexedSeq[Bind[_]] = Vector.empty,
   initialColors: Colors = Colors.Default,
-  remoteLogger: Option[RemoteLogger])
+  remoteLogger: Option[RemoteLogger],
+  replCodeWrapper: Preprocessor.CodeWrapper,
+  scriptCodeWrapper: Preprocessor.CodeWrapper)
   extends Repl(
     input, output, error, storage,
     basePredefs, customPredefs, wd, welcomeBanner,
-    replArgs, initialColors, remoteLogger) { repl =>
+    replArgs, initialColors, remoteLogger,
+    replCodeWrapper, scriptCodeWrapper) { repl =>
 
   override val prompt = Ref("DynaML>")
 
-  override val interp: DynaMLInterpreter = new DynaMLInterpreter(
+  /*override val interp: DynaMLInterpreter = new DynaMLInterpreter(
     printer,
     storage,
     basePredefs,
@@ -80,6 +84,7 @@ class DynaMLRepl(
         def compiler = interp.compilerManager.compiler.compiler
         def fullImports = repl.fullImports
         def imports = repl.imports
+        def usedEarlierDefinitions = repl.usedEarlierDefinitions
         def width = frontEnd().width
         def height = frontEnd().height
 
@@ -103,8 +108,11 @@ class DynaMLRepl(
     wd,
     colors,
     verboseOutput = true,
-    getFrame = () => frames().head
-  )
+    getFrame = () => frames().head,
+    createFrame = () => { val f = sess0.childFrame(frames().head); frames() = f :: frames(); f },
+    replCodeWrapper = replCodeWrapper,
+    scriptCodeWrapper = scriptCodeWrapper
+  )*/
 
 
 }

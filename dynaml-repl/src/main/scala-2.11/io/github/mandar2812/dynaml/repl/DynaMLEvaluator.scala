@@ -11,16 +11,50 @@ import org.apache.commons.io.output.ByteArrayOutputStream
 import scala.util.Try
 
 abstract class DynaMLEvaluator extends Evaluator {
-  def processCell(classFiles: Util.ClassFiles,
+  def processCell(classFiles: ClassFiles,
                   newImports: Imports,
-                  printer: ByteArrayOutputStream,
+                  usedEarlierDefinitions: Seq[String],
+                  printer: Printer,
                   indexedWrapperName: Name,
+                  wrapperPath: Seq[Name],
                   silent: Boolean,
                   contextClassLoader: ClassLoader): Res[Evaluated]
 }
 
 object DynaMLEvaluator {
   def apply(headFrame: => Frame): DynaMLEvaluator = new DynaMLEvaluator { eval =>
+
+
+    def processCell(classFiles: ClassFiles,
+                    newImports: Imports,
+                    usedEarlierDefinitions: Seq[String],
+                    printer: Printer,
+                    indexedWrapperName: Name,
+                    wrapperPath: Seq[Name],
+                    silent: Boolean,
+                    contextClassLoader: ClassLoader) = {
+      for {
+        cls <- loadClass("ammonite.$sess." + indexedWrapperName.backticked, classFiles)
+        _ <- Catching{userCodeExceptionHandler}
+      } yield {
+        headFrame.usedEarlierDefinitions = usedEarlierDefinitions
+
+        // Exhaust the printer iterator now, before exiting the `Catching`
+        // block, so any exceptions thrown get properly caught and handled
+        val iter = evalMain(cls, contextClassLoader).asInstanceOf[Iterator[String]]
+
+        if (!silent) evaluatorRunPrinter(iter.foreach(printer.resultStream.print))
+        else evaluatorRunPrinter(iter.foreach(_ => ()))
+
+        // "" Empty string as cache tag of repl code
+        evaluationResult(
+          Seq(Name("ammonite"), Name("$sess"), indexedWrapperName),
+          wrapperPath,
+          newImports
+        )
+      }
+    }
+
 
 
     def loadClass(fullName: String, classFiles: ClassFiles): Res[Class[_]] = {
@@ -39,19 +73,40 @@ object DynaMLEvaluator {
 
     def evalMain(cls: Class[_], contextClassloader: ClassLoader) =
       Util.withContextClassloader(contextClassloader){
-        cls.getDeclaredMethod("$main").invoke(null)
+
+        val (method, instance) =
+          try {
+            (cls.getDeclaredMethod("$main"), null)
+          } catch {
+            case e: NoSuchMethodException =>
+              // Wrapper with very long names seem to require this
+              try {
+                val cls0 = contextClassloader.loadClass(cls.getName + "$")
+                val inst = cls0.getDeclaredField("MODULE$").get(null)
+                (cls0.getDeclaredMethod("$main"), inst)
+              } catch {
+                case _: ClassNotFoundException | _: NoSuchMethodException =>
+                  throw e
+              }
+          }
+
+        method.invoke(instance)
       }
 
     def processLine(classFiles: Util.ClassFiles,
                     newImports: Imports,
+                    usedEarlierDefinitions: Seq[String],
                     printer: Printer,
                     indexedWrapperName: Name,
+                    wrapperPath: Seq[Name],
                     silent: Boolean,
                     contextClassLoader: ClassLoader) = {
       for {
         cls <- loadClass("ammonite.$sess." + indexedWrapperName.backticked, classFiles)
         _ <- Catching{userCodeExceptionHandler}
       } yield {
+        headFrame.usedEarlierDefinitions = usedEarlierDefinitions
+
         // Exhaust the printer iterator now, before exiting the `Catching`
         // block, so any exceptions thrown get properly caught and handled
         val iter = evalMain(cls, contextClassLoader).asInstanceOf[Iterator[String]]
@@ -60,72 +115,66 @@ object DynaMLEvaluator {
         else evaluatorRunPrinter(iter.foreach(_ => ()))
 
         // "" Empty string as cache tag of repl code
-        evaluationResult(Seq(Name("ammonite"), Name("$sess"), indexedWrapperName), newImports)
+        evaluationResult(
+          Seq(Name("ammonite"), Name("$sess"), indexedWrapperName),
+          wrapperPath,
+          newImports
+        )
       }
     }
-
-    def processCell(classFiles: Util.ClassFiles,
-                    newImports: Imports,
-                    printer: ByteArrayOutputStream,
-                    indexedWrapperName: Name,
-                    silent: Boolean,
-                    contextClassLoader: ClassLoader) = {
-      for {
-        cls <- loadClass("ammonite.$sess." + indexedWrapperName.backticked, classFiles)
-        _ <- Catching{userCodeExceptionHandler}
-      } yield {
-        // Exhaust the printer iterator now, before exiting the `Catching`
-        // block, so any exceptions thrown get properly caught and handled
-        val iter = evalMain(cls, contextClassLoader).asInstanceOf[Iterator[String]]
-        var offset: Int = 0
-
-        if (!silent) iter.foreach(s => {
-          val bytes = s.getBytes(Charset.defaultCharset())
-          val len = bytes.length
-          printer.write(bytes, 0, len)
-          offset += len
-        })
-
-        // "" Empty string as cache tag of repl code
-        evaluationResult(Seq(Name("ammonite"), Name("$sess"), indexedWrapperName), newImports)
-      }
-    }
-
 
 
     def processScriptBlock(cls: Class[_],
                            newImports: Imports,
+                           usedEarlierDefinitions: Seq[String],
                            wrapperName: Name,
+                           wrapperPath: Seq[Name],
                            pkgName: Seq[Name],
                            contextClassLoader: ClassLoader) = {
       for {
         _ <- Catching{userCodeExceptionHandler}
       } yield {
+        headFrame.usedEarlierDefinitions = usedEarlierDefinitions
         evalMain(cls, contextClassLoader)
-        val res = evaluationResult(pkgName :+ wrapperName, newImports)
+        val res = evaluationResult(pkgName :+ wrapperName, wrapperPath, newImports)
         res
       }
     }
 
     def evaluationResult(wrapperName: Seq[Name],
+                         internalWrapperPath: Seq[Name],
                          imports: Imports) = {
       Evaluated(
         wrapperName,
         Imports(
           for(id <- imports.value) yield {
             val filledPrefix =
-              if (id.prefix.isEmpty) {
-                // For some reason, for things not-in-packages you can't access
-                // them off of `_root_`
-                wrapperName
-              } else {
-                id.prefix
-              }
-            val rootedPrefix: Seq[Name] =
-              if (filledPrefix.headOption.exists(_.backticked == "_root_")) filledPrefix
-              else Seq(Name("_root_")) ++ filledPrefix
+              if (internalWrapperPath.isEmpty) {
+                val filledPrefix =
+                  if (id.prefix.isEmpty) {
+                    // For some reason, for things not-in-packages you can't access
+                    // them off of `_root_`
+                    wrapperName
+                  } else {
+                    id.prefix
+                  }
 
-            id.copy(prefix = rootedPrefix)
+                if (filledPrefix.headOption.exists(_.backticked == "_root_")) filledPrefix
+                else Seq(Name("_root_")) ++ filledPrefix
+              } else if (id.prefix.isEmpty)
+              // For some reason, for things not-in-packages you can't access
+              // them off of `_root_`
+                Seq(Name("_root_")) ++ wrapperName ++ internalWrapperPath
+              else if (id.prefix.startsWith(wrapperName))
+                Seq(Name("_root_")) ++ wrapperName.init ++
+                  Seq(id.prefix.apply(wrapperName.length)) ++ internalWrapperPath ++
+                  id.prefix.drop(wrapperName.length + 1)
+              else if (id.prefix.headOption.exists(_.backticked == "_root_"))
+                id.prefix
+              else
+                Seq(Name("_root_")) ++ id.prefix
+
+            id.copy(prefix = filledPrefix)
           }
         )
       )
