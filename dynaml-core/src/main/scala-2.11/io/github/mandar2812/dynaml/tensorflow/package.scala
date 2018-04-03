@@ -24,8 +24,9 @@ import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.tensorflow.utils._
 import io.github.mandar2812.dynaml.tensorflow.layers._
-import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.{DataType, _}
 import org.platanios.tensorflow.api.core.Shape
+import org.platanios.tensorflow.api.learn.layers.{Activation, Layer}
 import org.platanios.tensorflow.api.ops.NN.SamePadding
 import org.platanios.tensorflow.api.tensors.{Tensor, TensorConvertible}
 import org.platanios.tensorflow.api.types.{DataType, SupportedType}
@@ -315,6 +316,37 @@ package object tensorflow {
       * */
     def feedforward(num_units: Int, useBias: Boolean = true)(id: Int) =
       tf.learn.Linear("Linear_"+id, num_units, useBias)
+
+    /**
+      * Constructs a simple feed-forward stack of layers.
+      *
+      * @param get_act A function which given a layer index number,
+      *                returns an activation function.
+      *
+      * @param dataType The data type of the layer weights/biases.
+      *
+      * @param layer_sizes A Sequence of layer sizes/dimensions/neuron counts.
+      * */
+    def feedforward_stack(get_act: (Int) => Activation, dataType: DataType)(layer_sizes: Seq[Int]) = {
+
+      def stack_ff_layers_rec(
+        ls: Seq[Int],
+        layer_acc: Layer[Output, Output],
+        layer_index: Int): Layer[Output, Output] = ls match {
+
+        case Seq() => layer_acc
+
+        case Seq(num_output_units) => layer_acc >> dtflearn.feedforward(num_output_units)(layer_index)
+
+        case _ => stack_ff_layers_rec(
+          ls.tail,
+          layer_acc >> dtflearn.feedforward(ls.head)(layer_index) >> get_act(layer_index),
+          layer_index + 1)
+      }
+
+      stack_ff_layers_rec(layer_sizes, tf.learn.Cast("Input/Cast", dataType), 1)
+
+    }
 
     /**
       * Constructs a symmetric (square) convolutional layer from the provided dimensions.
