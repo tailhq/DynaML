@@ -19,8 +19,6 @@ under the License.
 
 package io.github.mandar2812.dynaml.tensorflow
 
-import io.github.mandar2812.dynaml.tensorflow.utils._
-import io.github.mandar2812.dynaml.tensorflow.layers._
 import org.platanios.tensorflow.api._
 
 /**
