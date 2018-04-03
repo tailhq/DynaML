@@ -327,7 +327,10 @@ package object tensorflow {
       *
       * @param layer_sizes A Sequence of layer sizes/dimensions/neuron counts.
       * */
-    def feedforward_stack(get_act: (Int) => Activation, dataType: DataType)(layer_sizes: Seq[Int]) = {
+    def feedforward_stack(
+      get_act: (Int) => Activation,
+      dataType: DataType)(
+      layer_sizes: Seq[Int]): Layer[Output, Output] = {
 
       def stack_ff_layers_rec(
         ls: Seq[Int],
