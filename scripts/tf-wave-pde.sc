@@ -1,6 +1,7 @@
 import scala.util.Random
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.tensorflow._
+import _root_.io.github.mandar2812.dynaml.repl.Router.main
 import org.platanios.tensorflow.api.ops.NN.SamePadding
 import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
 
@@ -25,54 +26,66 @@ def laplace(x: Output): Output = {
   simple_conv(x, laplace_k)
 }
 
-val sess = Session()
+@main
+def main(size: Int = 500, num_iterations: Int = 1000) = {
 
-val size = 500
+  //Start Tensorflow session
+  val sess = Session()
 
-//Initial Conditions -- some rain drops hit a pond
-val (u_init, ut_init) = (
-  Seq.tabulate[Double](size*size)(_ => if(Random.nextDouble() <= 0.95) 0d else Random.nextDouble()),
-  Seq.fill[Double](size*size)(0d)
-)
+  //Initial Conditions -- some rain drops hit a pond
+  val (u_init, ut_init) = (
+    Seq.tabulate[Double](size*size)(_ => if(Random.nextDouble() <= 0.95) 0d else Random.nextDouble()),
+    Seq.fill[Double](size*size)(0d)
+  )
 
-/*
-* Parameters:
-*
-* eps     -- time resolution
-* damping -- wave damping
-* */
-val eps     = tf.placeholder(FLOAT32, Shape(), name = "dt")
-val damping = tf.placeholder(FLOAT32, Shape(), name = "damping")
+  /*
+  * Parameters:
+  *
+  * eps     -- time resolution
+  * damping -- wave damping
+  * */
+  val eps     = tf.placeholder(FLOAT32, Shape(), name = "dt")
+  val damping = tf.placeholder(FLOAT32, Shape(), name = "damping")
 
-//Create variables for simulation state
-val U  = tf.variable(
-  name = "u", FLOAT32,
-  initializer = ConstantInitializer(dtf.tensor_f32(size, size)(u_init:_*)))
+  //Create variables for simulation state
+  val U  = tf.variable(
+    name = "u", FLOAT32,
+    initializer = ConstantInitializer(dtf.tensor_f32(size, size)(u_init:_*)))
 
-val Ut = tf.variable(
-  name = "ut", FLOAT32,
-  initializer = ConstantInitializer(dtf.tensor_f32(size, size)(ut_init:_*)))
+  val Ut = tf.variable(
+    name = "ut", FLOAT32,
+    initializer = ConstantInitializer(dtf.tensor_f32(size, size)(ut_init:_*)))
 
-//Discretized PDE update rules
-val U_ = U + eps * Ut
-val Ut_ = Ut + eps * (laplace(U) - damping * Ut)
+  //Discretized PDE update rules
+  val U_ = U + eps * Ut
+  val Ut_ = Ut + eps * (laplace(U) - damping * Ut)
 
-//Operation to update the state
-val step = tf.group(
-  Set(U.assign(U_), Ut.assign(Ut_))
-)
+  //Operation to update the state
+  val step = tf.group(
+    Set(U.assign(U_), Ut.assign(Ut_))
+  )
 
-sess.run(targets = tf.globalVariablesInitializer())
+  sess.run(targets = tf.globalVariablesInitializer())
 
-//Run 1000 steps of PDE
-val solution = (1 to 1000).map(i => {
-  print("Iteration ")
-  pprint.pprintln(i)
-  println()
+  //Run 1000 steps of PDE
+  (1 to num_iterations).map(i => {
+    print("Iteration ")
+    pprint.pprintln(i)
 
-  sess.run(
-    feeds = Map(eps -> Tensor(0.03f), damping -> Tensor(0.04f)),
-    fetches = (U_, Ut_),
-    targets = step)
-})
+    val step_output: (Tensor, Tensor) = sess.run(
+      feeds = Map(eps -> Tensor(0.03f), damping -> Tensor(0.04f)),
+      fetches = (U_, Ut_),
+      targets = step)
+
+    print("Maximum Wave Displacement = ")
+    pprint.pprintln(step_output._1.max().scalar.asInstanceOf[Float])
+    println()
+
+    print("Maximum Wave Velocity = ")
+    pprint.pprintln(step_output._2.max().scalar.asInstanceOf[Float])
+    println()
+
+    step_output
+  })
+}
 
