@@ -299,6 +299,8 @@ package object tensorflow {
     * */
   object dtflearn {
 
+    val Phi: layers.Phi.type                        = layers.Phi
+
     val Tanh: layers.Tanh.type                      = layers.Tanh
 
     val ctrnn: layers.FiniteHorizonCTRNN.type       = layers.FiniteHorizonCTRNN
