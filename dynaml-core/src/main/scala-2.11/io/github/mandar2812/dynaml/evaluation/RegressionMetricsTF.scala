@@ -91,7 +91,7 @@ object RegressionMetricsTF {
 
       val targets_c = targets.subtract(dtf.stack(Seq.fill(num_instances)(mean_targets)))
 
-      val (sigma_t, sigma_p) = (targets_c.square.mean().sqrt, preds_c.square.mean().sqrt)
+      val (sigma_t, sigma_p) = (targets_c.square.mean(axes = 0).sqrt, preds_c.square.mean(axes = 0).sqrt)
 
       preds_c.multiply(targets_c).mean(axes = 0).divide(sigma_t.multiply(sigma_p))
     }
