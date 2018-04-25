@@ -24,11 +24,13 @@ import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.tensorflow.utils._
 import io.github.mandar2812.dynaml.tensorflow.layers._
-import org.platanios.tensorflow.api.{DataType, _}
+import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.Shape
-import org.platanios.tensorflow.api.learn.layers.{Activation, Layer}
+import org.platanios.tensorflow.api.learn.layers.{Activation, Input, Layer}
 import org.platanios.tensorflow.api.ops.NN.SamePadding
-import org.platanios.tensorflow.api.tensors.{Tensor, TensorConvertible}
+import org.platanios.tensorflow.api.ops.io.data.Dataset
+import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
+import org.platanios.tensorflow.api.tensors.TensorConvertible
 import org.platanios.tensorflow.api.types.{DataType, SupportedType}
 
 /**
@@ -299,6 +301,8 @@ package object tensorflow {
     * */
   object dtflearn {
 
+    type TFDATA = Dataset[(Tensor, Tensor), (Output, Output), (DataType, DataType), (Shape, Shape)]
+
     val Phi: layers.Phi.type                        = layers.Phi
 
     val Tanh: layers.Tanh.type                      = layers.Tanh
@@ -466,6 +470,64 @@ package object tensorflow {
         FiniteHorizonCTRNN(s"FHctrnn_$index", states, horizon, timestep) >>
           FiniteHorizonLinear(s"FHlinear_$index", states, observables, horizon)
       }
+
+    /**
+      * Trains a tensorflow model/estimator
+      *
+      * @param architecture The network architechture
+      * @param input The input meta data.
+      * @param trainInput The output label meta data
+      * @param trainingInputLayer A computation layer which converts
+      *                           the original input into a format usable
+      *                           by the Estimator API
+      * @param loss The loss function to be optimized during training.
+      * @param optimizer The optimization algorithm implementation.
+      * @param summariesDir A filesystem path of type [[java.nio.file.Path]], which
+      *                     determines where the intermediate model parameters/checkpoints
+      *                     will be written.
+      * @param iterations The maximum number of iterations.
+      * @param training_data A training data set, as an instance of [[Dataset]].
+      *
+      * @return A [[Tuple2]] containing the model and estimator.
+      * */
+    def build_tf_model[T](
+      architecture: Layer[Output, Output],
+      input: Input[Tensor, Output, DataType.Aux[T], DataType, Shape],
+      trainInput: Input[Tensor, Output, DataType.Aux[T], DataType, Shape],
+      trainingInputLayer: Layer[Output, Output],
+      loss: Layer[(Output, Output), Output],
+      optimizer: Optimizer,
+      summariesDir: java.nio.file.Path,
+      iterations: Int)(
+      training_data: TFDATA) = {
+
+      val (model, estimator) = tf.createWith(graph = Graph()) {
+        val model = tf.learn.Model(
+          input, architecture,
+          trainInput, trainingInputLayer,
+          loss, optimizer)
+
+        println("\nTraining the regression model.\n")
+
+        val estimator = tf.learn.FileBasedEstimator(
+          model,
+          tf.learn.Configuration(Some(summariesDir)),
+          tf.learn.StopCriteria(maxSteps = Some(iterations)),
+          Set(
+            tf.learn.StepRateLogger(
+              log = false, summaryDir = summariesDir,
+              trigger = tf.learn.StepHookTrigger(5000)),
+            tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(5000)),
+            tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(5000))),
+          tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 5000))
+
+        estimator.train(() => training_data, tf.learn.StopCriteria(maxSteps = Some(iterations)))
+
+        (model, estimator)
+      }
+
+      (model, estimator)
+    }
 
   }
 
