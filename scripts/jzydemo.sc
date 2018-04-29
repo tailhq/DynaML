@@ -14,17 +14,17 @@ import org.jzy3d.plot3d.builder.concrete.WaterfallTessellator
 import _root_.io.github.mandar2812.dynaml.repl.Router.main
 
 @main
-def main(arg: String) = arg match {
-  case "surface"   => AnalysisLauncher.open(new SurfaceDemo)
-  case "waterfall" => AnalysisLauncher.open(new WaterfallDemo)
-  case _           => AnalysisLauncher.open(new SurfaceDemo)
+def main(func: (Double, Double) => Double, chart_type: String) = chart_type match {
+  case "surface"   => AnalysisLauncher.open(new SurfaceDemo(func))
+  case "waterfall" => AnalysisLauncher.open(new WaterfallDemo(func))
+  case _           => AnalysisLauncher.open(new SurfaceDemo(func))
 }
 
 
-class SurfaceDemo extends AbstractAnalysis {
+class SurfaceDemo(function: (Double, Double) => Double) extends AbstractAnalysis {
   override def init(): Unit = { // Define a function to plot
     val mapper = new Mapper() {
-      def f(x: Double, y: Double) = x * Math.sin(x * y)
+      def f(x: Double, y: Double) = function(x, y)
     }
     // Define range and precision for the function to plot
     val range = new maths.Range(-3, 3)
@@ -51,7 +51,7 @@ class SurfaceDemo extends AbstractAnalysis {
   }
 }
 
-class WaterfallDemo extends AbstractAnalysis {
+class WaterfallDemo(function: (Double, Double) => Double) extends AbstractAnalysis {
   override def init(): Unit = {
     val x = new Array[Float](80)
 
@@ -115,6 +115,6 @@ class WaterfallDemo extends AbstractAnalysis {
     z
   }
 
-  private def f(x: Double, y: Double) = x * Math.sin(x * y)
+  private def f(x: Double, y: Double) = function(x, y)
 }
 
