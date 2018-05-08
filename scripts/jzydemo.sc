@@ -14,14 +14,14 @@ import org.jzy3d.plot3d.builder.concrete.WaterfallTessellator
 import _root_.io.github.mandar2812.dynaml.repl.Router.main
 
 @main
-def main(func: (Double, Double) => Double, chart_type: String) = chart_type match {
-  case "surface"   => AnalysisLauncher.open(new SurfaceDemo(func))
+def main(func: (Double, Double) => Double, chart_type: String, wireFrame: Boolean = true) = chart_type match {
+  case "surface"   => AnalysisLauncher.open(new SurfaceDemo(func, wireFrame))
   case "waterfall" => AnalysisLauncher.open(new WaterfallDemo(func))
-  case _           => AnalysisLauncher.open(new SurfaceDemo(func))
+  case _           => AnalysisLauncher.open(new SurfaceDemo(func, wireFrame))
 }
 
 
-class SurfaceDemo(function: (Double, Double) => Double) extends AbstractAnalysis {
+class SurfaceDemo(function: (Double, Double) => Double, displayWireFrame: Boolean = true) extends AbstractAnalysis {
   override def init(): Unit = { // Define a function to plot
     val mapper = new Mapper() {
       def f(x: Double, y: Double) = function(x, y)
@@ -44,7 +44,7 @@ class SurfaceDemo(function: (Double, Double) => Double) extends AbstractAnalysis
     )
 
     surface.setFaceDisplayed(true)
-    surface.setWireframeDisplayed(false)
+    surface.setWireframeDisplayed(displayWireFrame)
     // Create a chart
     chart = AWTChartComponentFactory.chart(Quality.Advanced, getCanvasType)
     chart.getScene.getGraph.add(surface)
