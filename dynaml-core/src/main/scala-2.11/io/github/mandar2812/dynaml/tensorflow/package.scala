@@ -474,7 +474,9 @@ package object tensorflow {
     /**
       * Trains a tensorflow model/estimator
       *
-      * @param architecture The network architechture
+      * @tparam I The underlying data type of the input.
+      * @tparam O The underlying data type of the output label.
+      * @param architecture The network architecture
       * @param input The input meta data.
       * @param trainInput The output label meta data
       * @param trainingInputLayer A computation layer which converts
@@ -490,10 +492,10 @@ package object tensorflow {
       *
       * @return A [[Tuple2]] containing the model and estimator.
       * */
-    def build_tf_model[T](
+    def build_tf_model[I, O](
       architecture: Layer[Output, Output],
-      input: Input[Tensor, Output, DataType.Aux[T], DataType, Shape],
-      trainInput: Input[Tensor, Output, DataType.Aux[T], DataType, Shape],
+      input: Input[Tensor, Output, DataType.Aux[I], DataType, Shape],
+      trainInput: Input[Tensor, Output, DataType.Aux[O], DataType, Shape],
       trainingInputLayer: Layer[Output, Output],
       loss: Layer[(Output, Output), Output],
       optimizer: Optimizer,
