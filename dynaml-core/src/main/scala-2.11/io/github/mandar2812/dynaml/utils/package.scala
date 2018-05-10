@@ -24,6 +24,7 @@ import breeze.linalg.{DenseMatrix, DenseVector, Matrix, MatrixNotSquareException
 import com.github.tototoshi.csv.{CSVReader, DefaultCSVFormat, QUOTE_NONNUMERIC}
 import org.renjin.script.{RenjinScriptEngine, RenjinScriptEngineFactory}
 import org.renjin.sexp.SEXP
+import spire.algebra.InnerProductSpace
 //import org.apache.spark.mllib.regression.LabeledPoint
 //import org.apache.spark.rdd.RDD
 
@@ -376,6 +377,10 @@ package object utils {
       }
     }
 
+  def range[I](min: I, max: I, steps: Int)(implicit field: InnerProductSpace[I, Double]): Stream[I] = {
+    val step_size = field.divr(field.minus(max, min), steps)
+    (0 until steps).toStream.map(i => field.plus(min, field.timesr(step_size, i)))
+  }
 
   def downloadURL(url: String, saveAs: String): Unit =
     new URL(url) #> new File(saveAs) !!

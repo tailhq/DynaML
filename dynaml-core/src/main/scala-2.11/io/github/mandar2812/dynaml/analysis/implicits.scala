@@ -3,6 +3,7 @@ package io.github.mandar2812.dynaml.analysis
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.algebra.PartitionedVector
 import spire.algebra.{Eq, Field, InnerProductSpace, NRoot}
+import spire.implicits._
 
 /**
   * @author mandar2812 date: 21/02/2017.

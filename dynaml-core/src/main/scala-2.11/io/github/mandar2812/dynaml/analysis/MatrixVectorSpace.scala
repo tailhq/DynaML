@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.analysis
 
 import breeze.linalg.{DenseMatrix, trace}
 import spire.algebra.{Field, InnerProductSpace}
+import spire.implicits._
 
 /**
   * Defines an inner product space over m &times; n matrices.
