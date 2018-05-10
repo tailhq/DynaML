@@ -332,11 +332,15 @@ package object tensorflow {
       * @param dataType The data type of the layer weights/biases.
       *
       * @param layer_sizes A Sequence of layer sizes/dimensions/neuron counts.
+      *
+      * @param starting_index Specify which layer number should the indexing of
+      *                       the layers start with, defaults to 1.
       * */
     def feedforward_stack(
       get_act: (Int) => Activation,
       dataType: DataType)(
-      layer_sizes: Seq[Int]): Layer[Output, Output] = {
+      layer_sizes: Seq[Int],
+      starting_index: Int = 1): Layer[Output, Output] = {
 
       def stack_ff_layers_rec(
         ls: Seq[Int],
@@ -353,7 +357,9 @@ package object tensorflow {
           layer_index + 1)
       }
 
-      stack_ff_layers_rec(layer_sizes, tf.learn.Cast("Input/Cast", dataType), 1)
+      stack_ff_layers_rec(
+        layer_sizes, tf.learn.Cast("Input/Cast", dataType),
+        starting_index)
 
     }
 

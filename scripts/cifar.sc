@@ -1,7 +1,7 @@
 {
   import ammonite.ops._
 
-  import io.github.mandar2812.dynaml.tensorflow._
+  import io.github.mandar2812.dynaml.tensorflow.dtflearn
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.api.ops.NN.SamePadding
   import org.platanios.tensorflow.data.image.CIFARLoader
@@ -28,7 +28,7 @@
 
   val trainInput = tf.learn.Input(UINT8, Shape(-1))
 
-  val layer = tf.learn.Cast("Input/Cast", FLOAT32) >>
+  val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
     dtflearn.conv2d_pyramid(2, 3)(4, 2)(0.1f, true, 0.6F) >>
     tf.learn.MaxPool("Layer_3/MaxPool", Seq(1, 2, 2, 1), 1, 1, SamePadding) >>
     tf.learn.Flatten("Layer_3/Flatten") >>
@@ -42,22 +42,13 @@
     tf.learn.Mean("Loss/Mean") >> tf.learn.ScalarSummary("Loss/Summary", "Loss")
 
   val optimizer = tf.train.AdaGrad(0.1)
-  val model = tf.learn.Model(input, layer, trainInput, trainingInputLayer, loss, optimizer)
 
   println("Training the linear regression model.")
   val summariesDir = java.nio.file.Paths.get((tempdir/"cifar_summaries").toString())
 
-  val estimator = tf.learn.FileBasedEstimator(
-    model,
-    tf.learn.Configuration(Some(summariesDir)),
-    tf.learn.StopCriteria(maxSteps = Some(100000)),
-    Set(
-      tf.learn.StepRateLogger(log = false, summaryDir = summariesDir, trigger = tf.learn.StepHookTrigger(100)),
-      tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(100)),
-      tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(100))),
-    tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 100))
-
-  estimator.train(() => trainData, tf.learn.StopCriteria(maxSteps = Some(500)))
+  val (model, estimator) = dtflearn.build_tf_model(
+    architecture, input, trainInput, trainingInputLayer,
+    loss, optimizer, summariesDir, 1000)(trainData)
 
   def accuracy(images: Tensor, labels: Tensor): Float = {
     val predictions = estimator.infer(() => images)
