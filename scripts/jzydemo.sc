@@ -15,9 +15,10 @@ import _root_.io.github.mandar2812.dynaml.repl.Router.main
 
 @main
 def main(func: (Double, Double) => Double, chart_type: String, wireFrame: Boolean = true) = chart_type match {
-  case "surface"   => AnalysisLauncher.open(new SurfaceDemo(func, wireFrame))
-  case "waterfall" => AnalysisLauncher.open(new WaterfallDemo(func))
-  case _           => AnalysisLauncher.open(new SurfaceDemo(func, wireFrame))
+  case "surface"      => AnalysisLauncher.open(new SurfaceDemo(func, wireFrame))
+  case "waterfall"    => AnalysisLauncher.open(new WaterfallDemo(func))
+  case "tessellation" => AnalysisLauncher.open(new DelauneyDemo(func))
+  case _              => AnalysisLauncher.open(new SurfaceDemo(func, wireFrame))
 }
 
 
@@ -50,6 +51,37 @@ class SurfaceDemo(function: (Double, Double) => Double, displayWireFrame: Boolea
     chart.getScene.getGraph.add(surface)
   }
 }
+
+class DelauneyDemo(function: (Double, Double) => Double) extends AbstractAnalysis {
+  override def init(): Unit = { // Define a function to plot
+    val mapper = new Mapper() {
+      def f(x: Double, y: Double) = function(x, y)
+    }
+    // Define range and precision for the function to plot
+    val range = new maths.Range(-3, 3)
+    val steps = 80
+
+    val grid = new OrthonormalGrid(range, steps, range, steps)
+
+    // Create the object to represent the function over the given range.
+    val surface: Shape = Builder.buildDelaunay(grid.apply(mapper))
+
+    surface.setColorMapper(
+      new ColorMapper(
+        new ColorMapRainbow,
+        surface.getBounds.getZmin,
+        surface.getBounds.getZmax,
+        new Color(1, 1, 1, .5f))
+    )
+
+    surface.setFaceDisplayed(true)
+
+    // Create a chart
+    chart = AWTChartComponentFactory.chart(Quality.Advanced, getCanvasType)
+    chart.getScene.getGraph.add(surface)
+  }
+}
+
 
 class WaterfallDemo(function: (Double, Double) => Double) extends AbstractAnalysis {
   override def init(): Unit = {
