@@ -40,6 +40,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality
   *                         showing the grid cells.
   * @param colorMap A colour mapping which dictates how colours are varied
   *                 from lower to higher values of the plotted function.
+  * @author mandar2812 date: 2018/05/11
   * */
 class Surface(
   function: (Double, Double) => Double,
