@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.graphics
 
-import org.jzy3d.analysis.{AbstractAnalysis, AnalysisLauncher, IAnalysis}
+import org.jzy3d.analysis.{AnalysisLauncher, IAnalysis}
 import org.jzy3d.colors.colormaps.{ColorMapRainbow, IColorMap}
 
 /**
@@ -26,9 +26,20 @@ import org.jzy3d.colors.colormaps.{ColorMapRainbow, IColorMap}
   *
   * Contains the user API for rendering 3d surface plots
   * in a convenient fashion.
+  *
+  * The [[plot3d.draw()]] methods provide for generating
+  * 3d surfaces.
+  *
+  * To render the image on the system GUI, call the
+  * [[plot3d.show()]] method using the result returned by [[plot3d.draw()]]
+  *
+  * @author mandar2812 date: 2018/05/11
   * */
 package object plot3d {
 
+  /**
+    * Generate a 3 dimensional surface from a function.
+    * */
   def draw(
     function: (Double, Double) => Double,
     xAxisLimits: (Float, Float)   = (-3.0f, 3.0f),
@@ -42,6 +53,23 @@ package object plot3d {
       xAxisBins, yAxisBins, displayWireFrame,
       colorMap)
 
+  /**
+    * Generated a tessellated surface from a [[Stream]]
+    * of x, y & z coordinates.
+    * */
+  def draw(
+    points: Traversable[((Double, Double), Double)],
+    colorMap: IColorMap): DelauneySurface =
+    new DelauneySurface(
+      points.map(p => ((p._1._1.toFloat, p._1._2.toFloat), p._2.toFloat)),
+      colorMap)
+
+  def draw(points: Traversable[((Double, Double), Double)]): DelauneySurface =
+    new DelauneySurface(points.map(p => ((p._1._1.toFloat, p._1._2.toFloat), p._2.toFloat)))
+
+  /**
+    * Render a 3d surface on the system GUI.
+    * */
   def show(chart: IAnalysis): Unit = AnalysisLauncher.open(chart)
 
 }

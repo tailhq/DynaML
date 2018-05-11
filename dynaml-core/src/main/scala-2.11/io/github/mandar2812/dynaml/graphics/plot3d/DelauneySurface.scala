@@ -21,30 +21,37 @@ package io.github.mandar2812.dynaml.graphics.plot3d
 import org.jzy3d.analysis.AbstractAnalysis
 import org.jzy3d.chart.factories.AWTChartComponentFactory
 import org.jzy3d.colors.{Color, ColorMapper}
-import org.jzy3d.colors.colormaps.ColorMapRainbow
-import org.jzy3d.maths
-import org.jzy3d.plot3d.builder.{Builder, Mapper}
-import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid
+import org.jzy3d.colors.colormaps.{ColorMapRainbow, IColorMap}
+import org.jzy3d.maths.Coord3d
+import org.jzy3d.plot3d.builder.Builder
 import org.jzy3d.plot3d.primitives.Shape
 import org.jzy3d.plot3d.rendering.canvas.Quality
 
-class DelauneySurface(function: (Double, Double) => Double) extends AbstractAnalysis {
-  override def init(): Unit = { // Define a function to plot
-    val mapper = new Mapper() {
-      def f(x: Double, y: Double) = function(x, y)
-    }
-    // Define range and precision for the function to plot
-    val range = new maths.Range(-3, 3)
-    val steps = 80
+import scala.collection.JavaConverters._
 
-    val grid = new OrthonormalGrid(range, steps, range, steps)
+/**
+  * A surface described by a list of x,y & z coordinates.
+  *
+  * @param points A scala [[Stream]] of the data points.
+  * @param colorMap A colour mapping which dictates how colours are varied
+  *                 from lower to higher values of the plotted function.
+  * @author mandar2812 date: 2018/05/11
+  * */
+class DelauneySurface(
+  points: Traversable[((Float, Float), Float)],
+  colorMap: IColorMap = new ColorMapRainbow) extends
+  AbstractAnalysis {
 
-    // Create the object to represent the function over the given range.
-    val surface: Shape = Builder.buildDelaunay(grid.apply(mapper))
+  override def init(): Unit = {
+
+    // Create the tessellated object.
+    val surface: Shape = Builder.buildDelaunay(
+      points.map(p => new Coord3d(p._1._1, p._1._2, p._2)).toList.asJava
+    )
 
     surface.setColorMapper(
       new ColorMapper(
-        new ColorMapRainbow,
+        colorMap,
         surface.getBounds.getZmin,
         surface.getBounds.getZmax,
         new Color(1, 1, 1, .5f))
@@ -56,4 +63,5 @@ class DelauneySurface(function: (Double, Double) => Double) extends AbstractAnal
     chart = AWTChartComponentFactory.chart(Quality.Advanced, getCanvasType)
     chart.getScene.getGraph.add(surface)
   }
+
 }
