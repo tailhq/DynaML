@@ -21,6 +21,8 @@ import spire.implicits._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.analysis.implicits._
 import io.github.mandar2812.dynaml.algebra._
+//Load 3d graphics capabilities
+import io.github.mandar2812.dynaml.graphics.plot3d
 //The pipes API
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.DynaMLPipe
