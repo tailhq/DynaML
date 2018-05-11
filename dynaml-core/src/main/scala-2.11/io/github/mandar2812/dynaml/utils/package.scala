@@ -25,8 +25,6 @@ import com.github.tototoshi.csv.{CSVReader, DefaultCSVFormat, QUOTE_NONNUMERIC}
 import org.renjin.script.{RenjinScriptEngine, RenjinScriptEngineFactory}
 import org.renjin.sexp.SEXP
 import spire.algebra.InnerProductSpace
-//import org.apache.spark.mllib.regression.LabeledPoint
-//import org.apache.spark.rdd.RDD
 
 import scala.io.Source
 import scala.reflect.runtime.{universe => ru}
@@ -37,7 +35,6 @@ import java.net.URL
 
 import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrix
-//import org.apache.spark.annotation.Experimental
 
 import scalaxy.streams.optimize
 import spire.algebra.{Eq, Field}
@@ -168,28 +165,6 @@ package object utils {
 
     (mean, biasedSigmaSq*adjustment)
   }
-
-  /*@Experimental
-  def getStatsRDD(data: RDD[LabeledPoint]):
-  (Double, Double,
-    DenseVector[Double],
-    DenseMatrix[Double]) = {
-    val (lm, ls, m, s) = data.map((p) => {
-      val label = p.label
-      val features = DenseVector(p.features.toArray)
-      (label, label*label, features, features*features.t)
-    }).reduce((a,b) => {
-      (a._1 + b._1, a._2 + b._2, a._3 + b._3, a._4 + b._4)
-    })
-    val count = data.count().toDouble
-    val labelMean = lm/count
-    val labelVar = (ls/count) - labelMean*labelMean
-    m :/= count
-    s :/= count
-    val featuresCov = s - m*m.t
-
-    (labelMean, labelVar, m, featuresCov)
-  }*/
 
   def getMinMax(data: List[DenseVector[Double]]):
   (DenseVector[Double], DenseVector[Double]) = {
