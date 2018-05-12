@@ -1,6 +1,9 @@
 import scala.util.Random
 import org.platanios.tensorflow.api._
-import _root_.io.github.mandar2812.dynaml.tensorflow._
+import _root_.io.github.mandar2812.dynaml.utils
+import _root_.io.github.mandar2812.dynaml.graphics.plot3d
+import _root_.io.github.mandar2812.dynaml.graphics.plot3d.DelauneySurface
+import _root_.io.github.mandar2812.dynaml.tensorflow.dtf
 import _root_.io.github.mandar2812.dynaml.repl.Router.main
 import org.platanios.tensorflow.api.ops.NN.SamePadding
 import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
@@ -26,8 +29,56 @@ def laplace(x: Output): Output = {
   simple_conv(x, laplace_k)
 }
 
+//Plot a snapshot of the solution as a 3d plot.
+def plot_field_snapshot(
+  t: Tensor,
+  xDomain: (Double, Double),
+  yDomain: (Double, Double)): DelauneySurface = {
+
+  val (rows, cols) = (t.shape(0), t.shape(1))
+
+  val stencil_y = utils.range(min = xDomain._1, max = xDomain._2, rows)
+  val stencil_x = utils.range(min = yDomain._1, max = yDomain._2, cols)
+
+  val data = t.entriesIterator
+    .map(_.asInstanceOf[Float].toDouble)
+    .toSeq.grouped(cols).zipWithIndex
+    .flatMap(rowI => {
+      val (row, row_index) = rowI
+
+      val y = stencil_y(row_index)
+
+      row.zipWithIndex.map(nI => {
+        val (num, index) = nI
+        val x = stencil_x(index)
+        ((x, y), num)
+      })
+    }).toStream
+
+  plot3d.draw(data)
+}
+
+def plot_field(
+  solution: Seq[(Tensor, Tensor)])(
+  num_snapshots: Int,
+  quantity: String = "displacement",
+  xDomain: (Double, Double) = (-5.0, 5.0),
+  yDomain: (Double, Double) = (-5.0, 5.0)): Seq[DelauneySurface] = {
+
+  val indices = utils.range(1.0, solution.length.toDouble, num_snapshots).map(_.toInt).filter(_ < 1000)
+
+  indices.map(i => plot_field_snapshot(
+    if(quantity == "displacement") solution(i)._1 else solution(i)._2,
+    xDomain, yDomain)
+  )
+}
+
 @main
-def main(size: Int = 500, num_iterations: Int = 1000) = {
+def main(
+  size: Int = 500,
+  num_iterations: Int = 1000,
+  eps: Float = 0.001f,
+  damping: Float = 0.04f): Seq[(Tensor, Tensor)] = {
 
   //Start Tensorflow session
   val sess = Session()
@@ -57,7 +108,7 @@ def main(size: Int = 500, num_iterations: Int = 1000) = {
     initializer = ConstantInitializer(dtf.tensor_f32(size, size)(ut_init:_*)))
 
   //Discretized PDE update rules
-  val U_ = U + eps * Ut
+  val U_  = U + eps * Ut
   val Ut_ = Ut + eps * (laplace(U) - damping * Ut)
 
   //Operation to update the state
@@ -73,7 +124,7 @@ def main(size: Int = 500, num_iterations: Int = 1000) = {
     pprint.pprintln(i)
 
     val step_output: (Tensor, Tensor) = sess.run(
-      feeds = Map(eps -> Tensor(0.03f), damping -> Tensor(0.04f)),
+      feeds = Map(eps -> Tensor(0.001f), damping -> Tensor(0.04f)),
       fetches = (U_, Ut_),
       targets = step)
 
