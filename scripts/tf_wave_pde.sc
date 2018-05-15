@@ -1,6 +1,6 @@
-import scala.util.Random
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.utils
+import _root_.io.github.mandar2812.dynaml.pipes.TupleIntegerEncoder
 import _root_.io.github.mandar2812.dynaml.graphics.plot3d
 import _root_.io.github.mandar2812.dynaml.graphics.plot3d.DelauneySurface
 import _root_.io.github.mandar2812.dynaml.tensorflow.dtf
@@ -27,6 +27,15 @@ def laplace(x: Output): Output = {
     Seq(Seq(0.5, 1.0, 0.5), Seq(1.0, -6.0, 1.0), Seq(0.5, 1.0, 0.5)),
     "laplacian_op")
   simple_conv(x, laplace_k)
+}
+
+//The mexican hat wavelet function
+val mexican  = (sigma: Double) => (x: Double, y: Double) => {
+  (1.0/sigma*sigma*math.Pi)*(1.0 - 0.5*(x*x + y*y)/(sigma*sigma))*math.exp(-0.5*(x*x + y*y)/(sigma*sigma))
+}
+
+val gaussian = (sigma: Double) => (x: Double, y: Double) => {
+  (1.0/sigma*math.sqrt(2*math.Pi))*math.exp(-0.5*(x*x + y*y)/(sigma*sigma))
 }
 
 //Plot a snapshot of the solution as a 3d plot.
@@ -65,7 +74,7 @@ def plot_field(
   xDomain: (Double, Double) = (-5.0, 5.0),
   yDomain: (Double, Double) = (-5.0, 5.0)): Seq[DelauneySurface] = {
 
-  val indices = utils.range(1.0, solution.length.toDouble, num_snapshots).map(_.toInt).filter(_ < 1000)
+  val indices = utils.range(1.0, solution.length.toDouble, num_snapshots).map(_.toInt)
 
   indices.map(i => plot_field_snapshot(
     if(quantity == "displacement") solution(i)._1 else solution(i)._2,
@@ -78,14 +87,29 @@ def main(
   size: Int = 500,
   num_iterations: Int = 1000,
   eps: Float = 0.001f,
-  damping: Float = 0.04f): Seq[(Tensor, Tensor)] = {
+  damping: Float = 0.04f,
+  xDomain: (Double, Double) = (-5.0, 5.0),
+  yDomain: (Double, Double) = (-5.0, 5.0),
+  u_0: (Double, Double) => Double = mexican(1.0)): Seq[(Tensor, Tensor)] = {
 
   //Start Tensorflow session
   val sess = Session()
 
+  val (x_grid, y_grid) = (
+    utils.range(xDomain._1, xDomain._2, size),
+    utils.range(yDomain._1, yDomain._2, size))
+
+  val encoder = TupleIntegerEncoder(List(size, size))
+
   //Initial Conditions -- some rain drops hit a pond
   val (u_init, ut_init) = (
-    Seq.tabulate[Double](size*size)(_ => if(Random.nextDouble() <= 0.95) 0d else Random.nextDouble()),
+    Seq.tabulate[Double](size*size)(k => {
+      val List(i, j) = encoder.i(k)
+
+      val (x, y) = (x_grid(i), y_grid(j))
+
+      u_0(x, y)
+    }),
     Seq.fill[Double](size*size)(0d)
   )
 
