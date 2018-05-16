@@ -83,7 +83,7 @@ def plot_field(
 }
 
 @main
-def main(
+def apply(
   size: Int = 500,
   num_iterations: Int = 1000,
   eps: Float = 0.001f,
