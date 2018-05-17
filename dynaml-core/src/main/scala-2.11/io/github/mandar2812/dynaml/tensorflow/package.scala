@@ -26,6 +26,7 @@ import io.github.mandar2812.dynaml.tensorflow.utils._
 import io.github.mandar2812.dynaml.tensorflow.layers._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.Shape
+import org.platanios.tensorflow.api.learn.StopCriteria
 import org.platanios.tensorflow.api.learn.layers.{Activation, Input, Layer}
 import org.platanios.tensorflow.api.ops.NN.SamePadding
 import org.platanios.tensorflow.api.ops.io.data.Dataset
@@ -303,15 +304,27 @@ package object tensorflow {
 
     type TFDATA = Dataset[(Tensor, Tensor), (Output, Output), (DataType, DataType), (Shape, Shape)]
 
-    val Phi: layers.Phi.type                        = layers.Phi
+    val Phi: layers.Phi.type                          = layers.Phi
+    val Tanh: layers.Tanh.type                        = layers.Tanh
 
-    val Tanh: layers.Tanh.type                      = layers.Tanh
+    val ctrnn: layers.FiniteHorizonCTRNN.type         = layers.FiniteHorizonCTRNN
+    val dctrnn: layers.DynamicTimeStepCTRNN.type      = layers.DynamicTimeStepCTRNN
+    val ts_linear: layers.FiniteHorizonLinear.type    = layers.FiniteHorizonLinear
 
-    val ctrnn: layers.FiniteHorizonCTRNN.type       = layers.FiniteHorizonCTRNN
+    /**
+      * Stop after a specified maximum number of iterations has been reached.
+      * */
+    val max_iter_stop: Long => StopCriteria           = (n: Long) => tf.learn.StopCriteria(maxSteps = Some(n))
 
-    val dctrnn: layers.DynamicTimeStepCTRNN.type    = layers.DynamicTimeStepCTRNN
+    /**
+      * Stop after the change in the loss function falls below a specified threshold.
+      * */
+    val abs_loss_change_stop: Double => StopCriteria  = (d: Double) => tf.learn.StopCriteria(absLossChangeTol = Some(d))
 
-    val ts_linear: layers.FiniteHorizonLinear.type  = layers.FiniteHorizonLinear
+    /**
+      * Stop after the relative change in the loss function falls below a specified threshold.
+      * */
+    val rel_loss_change_stop: Double => StopCriteria  = (d: Double) => tf.learn.StopCriteria(relLossChangeTol = Some(d))
 
     /**
       * Constructs a feed-forward layer.
@@ -493,7 +506,12 @@ package object tensorflow {
       * @param summariesDir A filesystem path of type [[java.nio.file.Path]], which
       *                     determines where the intermediate model parameters/checkpoints
       *                     will be written.
-      * @param iterations The maximum number of iterations.
+      * @param stopCriteria The stopping criteria for training, for examples see
+      *                     [[max_iter_stop]], [[abs_loss_change_stop]] and [[rel_loss_change_stop]]
+      *
+      * @param stepRateFreq The frequency at which to log the step rate (expressed as number of iterations/sec).
+      * @param summarySaveFreq The frequency at which to log the loss summary.
+      * @param checkPointFreq The frequency at which to log the model parameters.
       * @param training_data A training data set, as an instance of [[Dataset]].
       *
       * @return A [[Tuple2]] containing the model and estimator.
@@ -506,7 +524,10 @@ package object tensorflow {
       loss: Layer[(Output, Output), Output],
       optimizer: Optimizer,
       summariesDir: java.nio.file.Path,
-      iterations: Int)(
+      stopCriteria: StopCriteria,
+      stepRateFreq: Int = 5000,
+      summarySaveFreq: Int = 5000,
+      checkPointFreq: Int = 5000)(
       training_data: TFDATA) = {
 
       val (model, estimator) = tf.createWith(graph = Graph()) {
@@ -520,16 +541,16 @@ package object tensorflow {
         val estimator = tf.learn.FileBasedEstimator(
           model,
           tf.learn.Configuration(Some(summariesDir)),
-          tf.learn.StopCriteria(maxSteps = Some(iterations)),
+          stopCriteria,
           Set(
             tf.learn.StepRateLogger(
               log = false, summaryDir = summariesDir,
-              trigger = tf.learn.StepHookTrigger(5000)),
-            tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(5000)),
-            tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(5000))),
-          tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = 5000))
+              trigger = tf.learn.StepHookTrigger(stepRateFreq)),
+            tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
+            tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
+          tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
 
-        estimator.train(() => training_data, tf.learn.StopCriteria(maxSteps = Some(iterations)))
+        estimator.train(() => training_data)
 
         (model, estimator)
       }

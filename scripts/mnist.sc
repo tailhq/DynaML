@@ -47,7 +47,8 @@
 
   val (model, estimator) = dtflearn.build_tf_model(
     architecture, input, trainInput, trainingInputLayer,
-    loss, optimizer, summariesDir, 1000)(trainData)
+    loss, optimizer, summariesDir, dtflearn.max_iter_stop(1000),
+    100, 100, 100)(trainData)
 
   def accuracy(images: Tensor, labels: Tensor): Float = {
     val predictions = estimator.infer(() => images)
