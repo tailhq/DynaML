@@ -495,6 +495,7 @@ package object tensorflow {
       *
       * @tparam I The underlying data type of the input.
       * @tparam O The underlying data type of the output label.
+      * @tparam AO The type of the result computed by the architecture.
       * @param architecture The network architecture
       * @param input The input meta data.
       * @param trainInput The output label meta data
@@ -516,12 +517,12 @@ package object tensorflow {
       *
       * @return A [[Tuple2]] containing the model and estimator.
       * */
-    def build_tf_model[I, O](
-      architecture: Layer[Output, Output],
+    def build_tf_model[I, O, AO](
+      architecture: Layer[Output, AO],
       input: Input[Tensor, Output, DataType.Aux[I], DataType, Shape],
       trainInput: Input[Tensor, Output, DataType.Aux[O], DataType, Shape],
       trainingInputLayer: Layer[Output, Output],
-      loss: Layer[(Output, Output), Output],
+      loss: Layer[(AO, Output), Output],
       optimizer: Optimizer,
       summariesDir: java.nio.file.Path,
       stopCriteria: StopCriteria,
