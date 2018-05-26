@@ -434,7 +434,7 @@ package object tensorflow {
       *
       * @param relu_param The activation barrier of the ReLU activation.
       *
-      * @param dropout Set to true, if dropout units should be placed in each unit.
+      * @param dropout Set to true, if dropout layers should be placed in each convolutional unit.
       *
       * @param keep_prob If dropout is enabled, then this determines the retain probability.
       * */
@@ -564,7 +564,7 @@ package object tensorflow {
   /**
     * <h4>DynaML Tensorflow Pipes</h4>
     *
-    * The [[dtfpipe]] contains workflows/pipelines to simplify working
+    * The [[dtfpipe]] contains work flows/pipelines to simplify working
     * with tensorflow data sets and models.
     * */
   object dtfpipe {
