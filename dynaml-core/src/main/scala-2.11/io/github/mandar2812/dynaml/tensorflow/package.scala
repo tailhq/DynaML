@@ -306,10 +306,13 @@ package object tensorflow {
 
     val Phi: layers.Phi.type                          = layers.Phi
     val Tanh: layers.Tanh.type                        = layers.Tanh
+    val GeneralizedLogistic
+    : layers.GeneralizedLogistic.type                 = layers.GeneralizedLogistic
 
     val ctrnn: layers.FiniteHorizonCTRNN.type         = layers.FiniteHorizonCTRNN
     val dctrnn: layers.DynamicTimeStepCTRNN.type      = layers.DynamicTimeStepCTRNN
     val ts_linear: layers.FiniteHorizonLinear.type    = layers.FiniteHorizonLinear
+    val rbf_layer: layers.RBFLayer.type               = layers.RBFLayer
 
     /**
       * Stop after a specified maximum number of iterations has been reached.
