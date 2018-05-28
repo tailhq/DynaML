@@ -27,17 +27,17 @@ import org.platanios.tensorflow.api.{::, Tensor}
   * Implements a common use for Regression Task Evaluators.
   * */
 class RegressionMetricsTF(preds: Tensor, targets: Tensor) extends MetricsTF(
-  Seq("RMSE", "MAE", "Coefficient of Corr.", "Yield"),
+  Seq("RMSE", "MAE", "Pearson Corr.", "Spearman Corr.", "Yield"),
   preds, targets) {
 
   private val num_outputs = if (preds.shape.toTensor().size == 1) 1 else preds.shape(1)
 
-  private lazy val (_ , rmse , mae, corr) = RegressionMetricsTF.calculate(preds, targets)
+  private lazy val (_ , rmse , mae, corr, spearman_corr) = RegressionMetricsTF.calculate(preds, targets)
 
   private lazy val modelyield =
     (preds.max(axes = 0) - preds.min(axes = 0)).divide(targets.max(axes = 0) - targets.min(axes = 0))
 
-  override protected def run(): Tensor = dtf.stack(Seq(rmse, mae, corr, modelyield))
+  override protected def run(): Tensor = dtf.stack(Seq(rmse, mae, corr, spearman_corr, modelyield))
 
   override def generatePlots(): Unit = {
     println("Generating Plot of Fit for each target")
@@ -71,7 +71,7 @@ class RegressionMetricsTF(preds: Tensor, targets: Tensor) extends MetricsTF(
   * */
 object RegressionMetricsTF {
 
-  protected def calculate(preds: Tensor, targets: Tensor): (Tensor, Tensor, Tensor, Tensor) = {
+  protected def calculate(preds: Tensor, targets: Tensor): (Tensor, Tensor, Tensor, Tensor, Tensor) = {
     val error = targets.subtract(preds)
 
     println("Shape of error tensor: "+error.shape.toString()+"\n")
@@ -96,6 +96,25 @@ object RegressionMetricsTF {
       preds_c.multiply(targets_c).mean(axes = 0).divide(sigma_t.multiply(sigma_p))
     }
 
-    (error, rmse, mae, corr)
+    val sp_corr = {
+
+      val (ranks_preds, ranks_targets) = (
+        preds.topK(num_instances)._2.cast(preds.dataType),
+        targets.topK(num_instances)._2.cast(targets.dataType))
+
+      val mean_rank_preds = ranks_preds.mean(axes = 0)
+
+      val mean_rank_targets = ranks_targets.mean(axes = 0)
+
+      val rank_preds_c = preds.subtract(dtf.stack(Seq.fill(num_instances)(mean_rank_preds)))
+
+      val rank_targets_c = targets.subtract(dtf.stack(Seq.fill(num_instances)(mean_rank_targets)))
+
+      val (sigma_t, sigma_p) = (rank_targets_c.square.mean(axes = 0).sqrt, rank_preds_c.square.mean(axes = 0).sqrt)
+
+      rank_preds_c.multiply(rank_targets_c).mean(axes = 0).divide(sigma_t.multiply(sigma_p))
+    }
+
+    (error, rmse, mae, corr, sp_corr)
   }
 }
