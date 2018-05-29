@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.graphics
 
 import org.jzy3d.analysis.{AnalysisLauncher, IAnalysis}
 import org.jzy3d.colors.colormaps.{ColorMapRainbow, IColorMap}
+import org.jzy3d.maths.Coord2d
 
 /**
   * <h3>DynaML 3d Plotting API</h3>
@@ -66,6 +67,9 @@ package object plot3d {
 
   def draw(points: Traversable[((Double, Double), Double)]): DelauneySurface =
     new DelauneySurface(points.map(p => ((p._1._1.toFloat, p._1._2.toFloat), p._2.toFloat)))
+
+  def draw(data: Traversable[(Double, Double)], numBins: Int): Histogram3D =
+    new Histogram3D(data.map(d => new Coord2d(d._1.toFloat, d._2.toFloat)).toIterable, numBins)
 
   /**
     * Render a 3d surface on the system GUI.
