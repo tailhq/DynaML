@@ -110,7 +110,7 @@ lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(JavaServe
     })
   )
 
-lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin, DockerPlugin)
+lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin)
   .settings(baseSettings:_*)
   .dependsOn(core, examples, pipes, repl)
   .settings(
@@ -151,8 +151,17 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-J-Xms64m"
     ),
     dataDirectory := new File("data/"),
-    initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())"""/*,
-    credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")*/
+    initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())""",
+    dockerfile in docker := {
+      val appDir: File = stage.value
+      val targetDir = "/app"
+
+      new Dockerfile {
+        from("openjdk:8-jre")
+        entryPoint(s"$targetDir/bin/${executableScriptName.value}")
+        copy(appDir, targetDir, chown = "daemon:daemon")
+      }
+    }
   ).aggregate(core, pipes, examples, repl).settings(
     aggregate in publishM2 := true,
     aggregate in update := false)
