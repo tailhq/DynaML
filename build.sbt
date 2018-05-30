@@ -49,7 +49,7 @@ lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
 lazy val core = (project in file("dynaml-core")).settings(baseSettings)
   .settings(commonSettings:_*)
   .settings(settingsCore:_*)
-  .enablePlugins(JavaAppPackaging, BuildInfoPlugin, DockerPlugin)
+  .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .dependsOn(pipes)
   .settings(
     name := "dynaml-core",
@@ -65,7 +65,7 @@ lazy val examples = (project in file("dynaml-examples"))
   ).dependsOn(pipes, core)
 
 
-lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin, DockerPlugin)
+lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin)
   .settings(baseSettings:_*)
   .settings(
     name := "dynaml-repl",
@@ -76,7 +76,7 @@ lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin, 
     libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io)
   )
 
-lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(JavaServerAppPackaging, DockerPlugin)
+lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(JavaServerAppPackaging)
   .settings(baseSettings:_*)
   .settings(
     name := "dynaml-notebook",
