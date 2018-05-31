@@ -46,14 +46,12 @@ val float_seq = Seq(1f, 2f, 3f, 4f)
 val double_seq = Seq(1.0, 2.0, 3.0, 4.0)
 
 //Specify data type as a string, and enumerate the shape
-val tensor_float = dtf.tensor_from[Float](
-  "FLOAT32", 2, 2)(float_seq)
+val tensor_float = dtf.tensor_from[Float]("FLOAT32", 2, 2)(float_seq)
 
 //Prints out a summary of the values in tensor1
 tensor_float.summarize()
 
-val tensor_double = dtf.tensor_from[Double](
-  "FLOAT64", 2, 2)(double_seq)
+val tensor_double = dtf.tensor_from[Double]("FLOAT64", 2, 2)(double_seq)
 
 tensor_double.summarize()
 ```
