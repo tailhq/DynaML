@@ -16,8 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-
-package io.github.mandar2812.dynaml.tensorflow
+package io.github.mandar2812.dynaml.tensorflow.utils
 
 import org.platanios.tensorflow.api._
 
@@ -28,7 +27,7 @@ import org.platanios.tensorflow.api._
   * tensorflow handle/package.
   *
   * */
-package object utils {
+object dtfutils {
 
   /**
     * Convert a float tensor to a Sequence.
@@ -39,6 +38,20 @@ package object utils {
       if(datatype == "FLOAT64") x.asInstanceOf[Double]
       else x.asInstanceOf[Float].toDouble)
   }
+
+
+  def get_ffstack_properties(
+    neuron_counts: Seq[Int],
+    ff_index: Int): (Seq[Shape], Seq[String], Seq[String]) = {
+
+    val layer_parameter_names = (ff_index until ff_index + neuron_counts.length - 1).map(i => "Linear_"+i+"/Weights")
+    val layer_shapes          = neuron_counts.sliding(2).toSeq.map(c => Shape(c.head, c.last))
+    val layer_datatypes       = Seq.fill(layer_shapes.length)("FLOAT64")
+
+
+    (layer_shapes, layer_parameter_names, layer_datatypes)
+  }
+
 
 }
 

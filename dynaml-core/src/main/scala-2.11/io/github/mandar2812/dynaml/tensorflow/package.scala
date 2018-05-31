@@ -354,7 +354,7 @@ package object tensorflow {
       *                       the layers start with, defaults to 1.
       * */
     def feedforward_stack(
-      get_act: (Int) => Activation,
+      get_act: Int => Activation,
       dataType: DataType)(
       layer_sizes: Seq[Int],
       starting_index: Int = 1): Layer[Output, Output] = {
@@ -495,15 +495,51 @@ package object tensorflow {
       }
 
     /**
-      * Trains a tensorflow model/estimator
+      * Trains a tensorflow model/estimator.
       *
-      * @tparam I The underlying data type of the input.
-      * @param architecture The network architecture
+      * @tparam IT The type representing input tensors,
+      *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
+      *
+      * @tparam IO The type representing symbolic tensors of the input patterns,
+      *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
+      *
+      * @tparam IDA The underlying (scalar) data types of the input,
+      *             e.g. `DataType.Aux[Double]`, `(DataType.Aux[Double], DataType.Aux[Double])` etc.
+      *
+      * @tparam ID The input pattern's tensorflow data type,
+      *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
+      *
+      * @tparam IS The type of the input pattern's shape,
+      *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
+      *
+      * @tparam I The type of the symbolic tensor returned by the neural architecture,
+      *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
+      *
+      * @tparam TT The type representing target/label tensors,
+      *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
+      * @tparam TO The type representing symbolic tensors of the target patterns,
+      *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
+      * @tparam TDA The underlying (scalar) data types of the targets,
+      *             e.g. `DataType.Aux[Double]`, `(DataType.Aux[Double], DataType.Aux[Double])` etc.
+      *
+      * @tparam TD The target pattern's tensorflow data type,
+      *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
+      *
+      * @tparam TS The type of the target pattern's shape,
+      *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
+      *
+      * @tparam T The type of the symbolic tensor of the processed targets, this is the type
+      *           of the tensorflow symbol which is used to compute the loss.
+      *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
+      *
+      * @param architecture The network architecture,
+      *                     takes a value of type [[IO]] and returns
+      *                     a value of type [[I]].
       * @param input The input meta data.
-      * @param trainInput The output label meta data
-      * @param trainingInputLayer A computation layer which converts
-      *                           the original input into a format usable
-      *                           by the Estimator API
+      * @param target The output label meta data
+      * @param processTarget A computation layer which converts
+      *                      the original target of type [[TO]]
+      *                      into a type [[T]], usable by the Estimator API
       * @param loss The loss function to be optimized during training.
       * @param optimizer The optimization algorithm implementation.
       * @param summariesDir A filesystem path of type [[java.nio.file.Path]], which
@@ -518,12 +554,16 @@ package object tensorflow {
       * @param training_data A training data set, as an instance of [[Dataset]].
       *
       * @return A [[Tuple2]] containing the model and estimator.
+      *
+      * @author mandar2812
       * */
-    def build_tf_model[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T](
+    def build_tf_model[
+    IT, IO, IDA, ID, IS, I,
+    TT, TO, TDA, TD, TS, T](
       architecture: Layer[IO, I],
       input: Input[IT, IO, IDA, ID, IS],
-      trainInput: Input[TT, TO, TDA, TD, TS],
-      trainingInputLayer: Layer[TO, T],
+      target: Input[TT, TO, TDA, TD, TS],
+      processTarget: Layer[TO, T],
       loss: Layer[(I, T), Output],
       optimizer: Optimizer,
       summariesDir: java.nio.file.Path,
@@ -531,12 +571,15 @@ package object tensorflow {
       stepRateFreq: Int = 5000,
       summarySaveFreq: Int = 5000,
       checkPointFreq: Int = 5000)(
-      training_data: Dataset[(IT, TT), (IO, TO), (ID, TD), (IS, TS)]) = {
+      training_data: Dataset[
+        (IT, TT), (IO, TO),
+        (ID, TD), (IS, TS)]
+    ) = {
 
       val (model, estimator) = tf.createWith(graph = Graph()) {
         val model = tf.learn.Model(
           input, architecture,
-          trainInput, trainingInputLayer,
+          target, processTarget,
           loss, optimizer)
 
         println("\nTraining the regression model.\n")
