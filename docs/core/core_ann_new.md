@@ -1,3 +1,6 @@
+!!! warning
+		This API is deprecated since v1.5.2, users are advised to use the new [Tensorflow API](/core/core_dynaml_tf.md).
+
 !!! summary
     In v1.4.2, the neural stack API was introduced. It defines some primitives for modular
     construction of neural networks. The main idioms will be computational layers & stacks.  

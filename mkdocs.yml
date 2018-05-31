@@ -70,6 +70,11 @@ pages:
             - Neural Stack API: 'core/core_ann_new.md'
             - Old Neural Net API: 'core/core_ann.md'
           - Least Squares SVM: 'core/core_lssvm.md'
+        - Tensorflow:
+          - Introduction: 'core/core_dynaml_tf.md'
+          - Tensorflow Pointer: 'core/core_dtf.md'
+          - Architecture Building Blocks: 'core/core_dtflearn.md'
+          - Utilities: 'core/core_tf_misc.md'
         - Kernels:
           - Kernel API: 'core/core_kernels.md'
           - Stationary Kernels: 'core/core_kernel_stat.md'
