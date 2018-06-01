@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.utils
 
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.ops.Output
 
 /**
   * <h3>DynaML Tensorflow Utilities Package</h3>
@@ -51,6 +52,50 @@ object dtfutils {
 
     (layer_shapes, layer_parameter_names, layer_datatypes)
   }
+
+  /**
+    * Calculate the Kullback Leibler divergence of
+    * a probability density from a prior density.
+    * */
+  def kl(prior: Output, p: Output): Output =
+    prior.divide(p).log.multiply(prior).sum(axes = 1).mean()
+
+  def kl(prior: Tensor, p: Tensor): Output =
+    prior.divide(p).log.multiply(prior).sum(axes = 1).mean()
+
+  /**
+    * Calculate the Jensen Shannon divergence
+    * between a probability and a target probility.
+    * */
+  def js(target_prob: Output, prob: Output) = {
+    val m = target_prob.add(prob).divide(2.0)
+    kl(target_prob, m).add(kl(prob, m)).multiply(0.5)
+  }
+
+  def js(target_prob: Tensor, prob: Tensor) = {
+    val m = target_prob.add(prob).divide(2.0)
+    kl(target_prob, m).add(kl(prob, m)).multiply(0.5)
+  }
+
+  /**
+    * Calculate the Hellinger distance between two
+    * probability distributions.
+    * */
+  def hellinger(target_prob: Output, prob: Output) =
+    target_prob.sqrt.subtract(prob.sqrt).square.sum().sqrt.divide(math.sqrt(2.0))
+
+  def hellinger(target_prob: Tensor, prob: Tensor) =
+    target_prob.sqrt.subtract(prob.sqrt).square.sum().sqrt.divide(math.sqrt(2.0))
+
+  def cross_entropy(target_prob: Output, prob: Output) =
+    target_prob.multiply(prob.log).sum(axes = 1).multiply(-1.0).mean()
+
+  /**
+    * Calculate the cross-entropy of two
+    * probability distributions.
+    * */
+  def cross_entropy(target_prob: Tensor, prob: Tensor) =
+    target_prob.multiply(prob.log).sum(axes = 1).multiply(-1.0).mean()
 
 
 }

@@ -36,7 +36,7 @@ import org.platanios.tensorflow.api.tensors.TensorConvertible
 import org.platanios.tensorflow.api.types.{DataType, SupportedType}
 
 /**
-  * <h3>DynaML Tensorflow Utilities</h3>
+  * <h3>DynaML Tensorflow Package</h3>
   *
   * A collection of functions, transformations and
   * miscellaneous objects to help working with tensorflow
