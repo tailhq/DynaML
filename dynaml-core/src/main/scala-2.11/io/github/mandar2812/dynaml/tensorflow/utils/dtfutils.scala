@@ -65,7 +65,7 @@ object dtfutils {
 
   /**
     * Calculate the Jensen Shannon divergence
-    * between a probability and a target probility.
+    * between a probability and a target probability.
     * */
   def js(target_prob: Output, prob: Output) = {
     val m = target_prob.add(prob).divide(2.0)

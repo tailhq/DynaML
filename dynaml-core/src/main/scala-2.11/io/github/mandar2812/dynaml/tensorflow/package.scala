@@ -289,7 +289,7 @@ package object tensorflow {
     /**
       * Fill a tensor with a fixed value.
       * */
-    def fill[T](dataType: DataType, shape: Int*)(value: T)(implicit ev: SupportedType[T]): Tensor =
+    def fill[T](dataType: DataType.Aux[T], shape: Int*)(value: T)(implicit ev: SupportedType[T]): Tensor =
       Tensor.fill(dataType, Shape(shape:_*))(value)
 
   }
@@ -314,6 +314,13 @@ package object tensorflow {
     val dctrnn: layers.DynamicTimeStepCTRNN.type      = layers.DynamicTimeStepCTRNN
     val ts_linear: layers.FiniteHorizonLinear.type    = layers.FiniteHorizonLinear
     val rbf_layer: layers.RBFLayer.type               = layers.RBFLayer
+    val stack_outputs: layers.StackOutputs.type       = layers.StackOutputs
+    val stack_layers: layers.StackLayers.type         = layers.StackLayers
+    val unstack: layers.Unstack.type                  = layers.Unstack
+    val identity: layers.IdentityLayer.type           = layers.IdentityLayer
+    val tuple2_layer: layers.Tuple2Layer.type         = layers.Tuple2Layer
+    val stack_tuple2: layers.StackTuple2.type         = layers.StackTuple2
+    val concat_tuple2: layers.ConcatenateTuple2.type  = layers.ConcatenateTuple2
 
     /**
       * Stop after a specified maximum number of iterations has been reached.
