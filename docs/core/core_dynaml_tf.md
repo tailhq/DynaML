@@ -49,7 +49,7 @@ DynaML interfaces with the tensorflow scala API and provides a number of conveni
 
  * The tensorflow pointer [`dtf`](/core/core_dtf)
  * Neural network building blocks [`dtflearn`](/core/core_dtflearn)
- * [Supporting utilities](/core/core_tf_misc)
+ * Supporting utilities
     - Data pipes acting on tensorflow based data, `dtfpipe`
     - The `dynaml.tensorflow.utils` package.
     - Miscellaneous utilities, `dtfutils`.
