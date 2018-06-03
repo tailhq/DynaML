@@ -1,5 +1,5 @@
 !!! summary
-    The [`dynaml.tensorflow.dtf`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package) 
+    The [`dtf`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package) 
     object can be used to create and transform tensors.
     
 To use DynaML's tensorflow API, import it in your code/script/DynaML shell session.
@@ -11,7 +11,7 @@ import org.platanios.tensorflow.api._
 
 ## Creating Tensors.
 
-Creating tensors using the [`dtf`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package$$dtf$) 
+Creating tensors using the [`dtf`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package) 
 object is easy, the user needs to provide a scala collection containing the
 the data, the shape and data-type of the tensor. 
 
