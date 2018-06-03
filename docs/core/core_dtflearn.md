@@ -1,5 +1,5 @@
 !!! summary
-    The [`dtflearn`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package$$dtflearn$) 
+    The [`dtflearn`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package) 
     object makes it easy to create and train neural networks of 
     varying complexity.
 
