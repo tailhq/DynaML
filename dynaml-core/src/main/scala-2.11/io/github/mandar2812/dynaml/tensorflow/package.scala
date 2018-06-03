@@ -305,22 +305,23 @@ package object tensorflow {
 
     type TFDATA = Dataset[(Tensor, Tensor), (Output, Output), (DataType, DataType), (Shape, Shape)]
 
-    val Phi: layers.Phi.type                          = layers.Phi
-    val Tanh: layers.Tanh.type                        = layers.Tanh
+    val Phi: layers.Phi.type                           = layers.Phi
+    val Tanh: layers.Tanh.type                         = layers.Tanh
     val GeneralizedLogistic
-    : layers.GeneralizedLogistic.type                 = layers.GeneralizedLogistic
+    : layers.GeneralizedLogistic.type                  = layers.GeneralizedLogistic
 
-    val ctrnn: layers.FiniteHorizonCTRNN.type         = layers.FiniteHorizonCTRNN
-    val dctrnn: layers.DynamicTimeStepCTRNN.type      = layers.DynamicTimeStepCTRNN
-    val ts_linear: layers.FiniteHorizonLinear.type    = layers.FiniteHorizonLinear
-    val rbf_layer: layers.RBFLayer.type               = layers.RBFLayer
-    val stack_outputs: layers.StackOutputs.type       = layers.StackOutputs
-    val stack_layers: layers.StackLayers.type         = layers.StackLayers
-    val unstack: layers.Unstack.type                  = layers.Unstack
-    val identity: layers.IdentityLayer.type           = layers.IdentityLayer
-    val tuple2_layer: layers.Tuple2Layer.type         = layers.Tuple2Layer
-    val stack_tuple2: layers.StackTuple2.type         = layers.StackTuple2
-    val concat_tuple2: layers.ConcatenateTuple2.type  = layers.ConcatenateTuple2
+    val ctrnn: layers.FiniteHorizonCTRNN.type          = layers.FiniteHorizonCTRNN
+    val dctrnn: layers.DynamicTimeStepCTRNN.type       = layers.DynamicTimeStepCTRNN
+    val ts_linear: layers.FiniteHorizonLinear.type     = layers.FiniteHorizonLinear
+    val rbf_layer: layers.RBFLayer.type                = layers.RBFLayer
+    val stack_outputs: layers.StackOutputs.type        = layers.StackOutputs
+    val concat_outputs: layers.ConcatenateOutputs.type = layers.ConcatenateOutputs
+    val stack_layers: layers.StackLayers.type          = layers.StackLayers
+    val unstack: layers.Unstack.type                   = layers.Unstack
+    val identity: layers.IdentityLayer.type            = layers.IdentityLayer
+    val tuple2_layer: layers.Tuple2Layer.type          = layers.Tuple2Layer
+    val stack_tuple2: layers.StackTuple2.type          = layers.StackTuple2
+    val concat_tuple2: layers.ConcatenateTuple2.type   = layers.ConcatenateTuple2
 
     /**
       * Stop after a specified maximum number of iterations has been reached.

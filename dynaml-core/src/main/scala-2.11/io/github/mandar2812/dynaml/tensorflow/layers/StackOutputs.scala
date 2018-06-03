@@ -38,18 +38,44 @@ case class StackOutputs(override val name: String, axis: Int = -1) extends Layer
 
 }
 
-case class StackLayers[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[Seq[T], Seq[R]](name) {
-  override val layerType: String = s"LayerStack[${layers.map(_.name).mkString(",")}]"
-
-  override protected def _forward(input: Seq[T], mode: Mode): Seq[R] =
-    layers.zip(input).map(c => c._1.forward(c._2, mode))
-}
 
 case class Unstack(override val name: String, axis: Int = -1) extends Layer[Output, Seq[Output]](name) {
 
   override val layerType: String = s"Unstack[axis:$axis]"
 
   override protected def _forward(input: Output, mode: Mode): Seq[Output] = tf.unstack(input, axis)
+}
+
+
+/**
+  * Stacks output produced by a tensorflow concatenation layer
+  *
+  * @param axis The axis over which the tensors should be concatenated,
+  *             defaults to -1
+  *
+  * @author mandar2812 date 2018/06/03
+  * */
+case class ConcatenateOutputs(override val name: String, axis: Int = -1) extends Layer[Seq[Output], Output](name) {
+
+  override val layerType: String = s"Concatenate[axis:$axis]"
+
+  override protected def _forward(input: Seq[Output], mode: Mode): Output = tf.concatenate(input, axis)
+
+}
+
+/**
+  * Combine a collection of layers into a layer which accepts
+  * sequences of symbolic tensors.
+  *
+  * @param layers The layers to be joined.
+  *
+  * @author mandar2812 date 2018/03/16
+  * */
+case class StackLayers[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[Seq[T], Seq[R]](name) {
+  override val layerType: String = s"LayerStack[${layers.map(_.name).mkString(",")}]"
+
+  override protected def _forward(input: Seq[T], mode: Mode): Seq[R] =
+    layers.zip(input).map(c => c._1.forward(c._2, mode))
 }
 
 
