@@ -31,8 +31,7 @@ val mexican_hat =
 
 val mexican_hat_chart = plot3d.draw(mexican_hat)
 
-
-
+plot3d.show(mexican_hat_chart)
 ```
 
 ![mexican](/images/plot3d.jpeg)
