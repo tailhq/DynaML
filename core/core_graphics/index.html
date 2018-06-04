@@ -2143,14 +2143,16 @@ and use <code>plot3d.show()</code> to display it in a GUI.</p>
 <p>The most common usage of <code>plot3d</code> is to visualise 3 dimensional surfaces, this can be done in two ways.</p>
 <h4 id="from-defined-functions">From defined functions<a class="headerlink" href="#from-defined-functions" title="Permanent link">&para;</a></h4>
 <p>If the user can express the surface as a function of two arguments.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6
-7
-8</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.graphics._</span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.graphics._</span>
 
 <span class="k">val</span> <span class="n">mexican_hat</span> <span class="k">=</span> 
   <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> 
@@ -2158,6 +2160,8 @@ and use <code>plot3d.show()</code> to display it in a GUI.</p>
 
 
 <span class="k">val</span> <span class="n">mexican_hat_chart</span> <span class="k">=</span> <span class="n">plot3d</span><span class="o">.</span><span class="n">draw</span><span class="o">(</span><span class="n">mexican_hat</span><span class="o">)</span>
+
+<span class="n">plot3d</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">mexican_hat_chart</span><span class="o">)</span>
 </pre></div>
 </td></tr></table>
 
