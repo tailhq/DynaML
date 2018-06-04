@@ -3,4 +3,3 @@
     provides some miscellaneous computational functions.
 
 
-## Tensor to Scala Collections
