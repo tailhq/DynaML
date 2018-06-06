@@ -292,6 +292,8 @@ package object tensorflow {
     def fill[T](dataType: DataType.Aux[T], shape: Int*)(value: T)(implicit ev: SupportedType[T]): Tensor =
       Tensor.fill(dataType, Shape(shape:_*))(value)
 
+    def fill[T](dataType: DataType.Aux[T], shape: Shape)(value: T)(implicit ev: SupportedType[T]): Tensor =
+      Tensor.fill(dataType, shape)(value)
   }
 
   /**
@@ -424,7 +426,8 @@ package object tensorflow {
       } else {
         tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SamePadding) >>
           batch_norm(name = "BatchNorm_"+i) >>
-          tf.learn.ReLU("ReLU_"+i, relu_param)
+          tf.learn.ReLU("ReLU_"+i, relu_param) >>
+          tf.learn.Cast("Cast_"+i, FLOAT32)
       }
 
     /**
