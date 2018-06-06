@@ -34,7 +34,7 @@ case class StackOutputs(override val name: String, axis: Int = -1) extends Layer
 
   override val layerType: String = s"Stack[axis:$axis]"
 
-  override protected def _forward(input: Seq[Output], mode: Mode): Output = tf.stack(input, axis)
+  override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output = tf.stack(input, axis)
 
 }
 
@@ -43,7 +43,7 @@ case class Unstack(override val name: String, axis: Int = -1) extends Layer[Outp
 
   override val layerType: String = s"Unstack[axis:$axis]"
 
-  override protected def _forward(input: Output, mode: Mode): Seq[Output] = tf.unstack(input, axis)
+  override protected def _forward(input: Output)(implicit mode: Mode): Seq[Output] = tf.unstack(input, axis)
 }
 
 
@@ -59,7 +59,7 @@ case class ConcatenateOutputs(override val name: String, axis: Int = -1) extends
 
   override val layerType: String = s"Concatenate[axis:$axis]"
 
-  override protected def _forward(input: Seq[Output], mode: Mode): Output = tf.concatenate(input, axis)
+  override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output = tf.concatenate(input, axis)
 
 }
 
@@ -74,8 +74,8 @@ case class ConcatenateOutputs(override val name: String, axis: Int = -1) extends
 case class StackLayers[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[Seq[T], Seq[R]](name) {
   override val layerType: String = s"LayerStack[${layers.map(_.name).mkString(",")}]"
 
-  override protected def _forward(input: Seq[T], mode: Mode): Seq[R] =
-    layers.zip(input).map(c => c._1.forward(c._2, mode))
+  override protected def _forward(input: Seq[T])(implicit mode: Mode): Seq[R] =
+    layers.zip(input).map(c => c._1.forward(c._2)(mode))
 }
 
 
@@ -83,7 +83,7 @@ case class IdentityLayer[I](override val name: String) extends Layer[I, I](name)
 
   override val layerType: String = s"Identity"
 
-  override protected def _forward(input: I, mode: Mode): I = input
+  override protected def _forward(input: I)(implicit mode: Mode): I = input
 
 }
 

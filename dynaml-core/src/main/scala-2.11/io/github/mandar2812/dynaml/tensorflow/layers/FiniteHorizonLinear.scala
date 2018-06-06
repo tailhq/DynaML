@@ -41,7 +41,7 @@ case class FiniteHorizonLinear(
 
   override val layerType: String = s"FHLinear[states:$units, horizon:$horizon, observables:$observables]"
 
-  override protected def _forward(input: Output, mode: Mode): Output = {
+  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
     val weights      = tf.variable(
       "Weights", input.dataType, Shape(observables, units),
       weightsInitializer, regularizer = regularization)
