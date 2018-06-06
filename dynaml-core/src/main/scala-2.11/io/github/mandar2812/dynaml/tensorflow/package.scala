@@ -28,7 +28,7 @@ import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.Shape
 import org.platanios.tensorflow.api.learn.StopCriteria
 import org.platanios.tensorflow.api.learn.layers.{Activation, Input, Layer}
-import org.platanios.tensorflow.api.ops.NN.SamePadding
+import org.platanios.tensorflow.api.ops.NN.SameConvPadding
 import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.ops.io.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
@@ -398,7 +398,7 @@ package object tensorflow {
     /**
       * Constructs a symmetric (square) convolutional layer from the provided dimensions.
       *
-      * [[org.platanios.tensorflow.api.ops.NN.SamePadding]] is used as the padding mode.
+      * [[org.platanios.tensorflow.api.ops.NN.SameConvPadding]] is used as the padding mode.
       *
       * @param size The size of each square filter e.g. 2*2, 3*3 etc
       * @param num_channels_input The number of channels in the input
@@ -411,7 +411,7 @@ package object tensorflow {
         "Conv2D_"+index,
         Shape(size, size, num_channels_input, num_filters),
         strides._1, strides._2,
-        SamePadding)
+        SameConvPadding)
 
     /**
       * Constructs a convolutional layer activated by a ReLU, with
@@ -423,12 +423,12 @@ package object tensorflow {
       relu_param: Float = 0.1f, dropout: Boolean = true,
       keep_prob: Float = 0.6f)(i: Int) =
       if(dropout) {
-        tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SamePadding) >>
+        tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SameConvPadding) >>
           tf.learn.AddBias(name = "Bias_"+i) >>
           tf.learn.ReLU("ReLU_"+i, relu_param) >>
           tf.learn.Dropout("Dropout_"+i, keep_prob)
       } else {
-        tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SamePadding) >>
+        tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SameConvPadding) >>
           batch_norm(name = "BatchNorm_"+i) >>
           tf.learn.ReLU("ReLU_"+i, relu_param) >>
           tf.learn.Cast("Cast_"+i, FLOAT32)
@@ -596,7 +596,7 @@ package object tensorflow {
     ) = {
 
       val (model, estimator) = tf.createWith(graph = Graph()) {
-        val model = tf.learn.Model(
+        val model = tf.learn.Model.supervised(
           input, architecture,
           target, processTarget,
           loss, optimizer)

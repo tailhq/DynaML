@@ -34,7 +34,7 @@ case class GeneralizedLogistic(override val name: String) extends Activation(nam
 
   override val layerType: String = "GeneralizedLogistic"
 
-  override protected def _forward(input: Output, mode: Mode): Output = {
+  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
 
     val alpha: tf.Variable = tf.variable("alpha", input.dataType, Shape(input.shape(-1)), tf.RandomUniformInitializer())
     val nu:    tf.Variable = tf.variable("nu",    input.dataType, Shape(input.shape(-1)), tf.OnesInitializer)
