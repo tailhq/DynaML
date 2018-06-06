@@ -27,7 +27,7 @@ case class Tanh(override val name: String)
   extends Activation(name) {
   override val layerType: String = "Sigmoid"
 
-  override protected def _forward(input: Output, mode: Mode): Output = {
+  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
     ops.Math.tanh(input)
   }
 }

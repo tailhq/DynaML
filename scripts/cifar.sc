@@ -3,7 +3,7 @@
 
   import io.github.mandar2812.dynaml.tensorflow.dtflearn
   import org.platanios.tensorflow.api._
-  import org.platanios.tensorflow.api.ops.NN.SamePadding
+  import org.platanios.tensorflow.api.ops.NN.SameConvPadding
   import org.platanios.tensorflow.data.image.CIFARLoader
   import java.nio.file.Paths
 
@@ -30,7 +30,7 @@
 
   val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
     dtflearn.conv2d_pyramid(2, 3)(4, 2)(0.1f, false, 0.6F) >>
-    tf.learn.MaxPool("Layer_3/MaxPool", Seq(1, 2, 2, 1), 1, 1, SamePadding) >>
+    tf.learn.MaxPool("Layer_3/MaxPool", Seq(1, 2, 2, 1), 1, 1, SameConvPadding) >>
     tf.learn.Flatten("Layer_3/Flatten") >>
     dtflearn.feedforward(256)(id = 4) >>
     tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>
@@ -41,14 +41,14 @@
   val loss = tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
     tf.learn.Mean("Loss/Mean") >> tf.learn.ScalarSummary("Loss/Summary", "Loss")
 
-  val optimizer = tf.train.AdaGrad(0.1)
+  val optimizer = tf.train.Adam(0.1)
 
   println("Training the linear regression model.")
   val summariesDir = java.nio.file.Paths.get((tempdir/"cifar_summaries").toString())
 
   val (model, estimator) = dtflearn.build_tf_model(
     architecture, input, trainInput, trainingInputLayer,
-    loss, optimizer, summariesDir, dtflearn.max_iter_stop(1000),
+    loss, optimizer, summariesDir, dtflearn.max_iter_stop(500),
     100, 100, 100)(trainData)
 
   def accuracy(images: Tensor, labels: Tensor): Float = {

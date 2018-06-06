@@ -44,7 +44,7 @@ case class FiniteHorizonCTRNN(
 
   override val layerType: String = s"CTRNN[states:$units, horizon:$horizon, deltaT:$timestep]"
 
-  override protected def _forward(input: Output, mode: Mode): Output = {
+  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
 
     val weights      = tf.variable(
       "Weights", input.dataType, Shape(units, units),
