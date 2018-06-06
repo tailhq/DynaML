@@ -310,6 +310,7 @@ package object tensorflow {
     val GeneralizedLogistic
     : layers.GeneralizedLogistic.type                  = layers.GeneralizedLogistic
 
+    val batch_norm: layers.BatchNormalisation.type     = layers.BatchNormalisation
     val ctrnn: layers.FiniteHorizonCTRNN.type          = layers.FiniteHorizonCTRNN
     val dctrnn: layers.DynamicTimeStepCTRNN.type       = layers.DynamicTimeStepCTRNN
     val ts_linear: layers.FiniteHorizonLinear.type     = layers.FiniteHorizonLinear
@@ -422,7 +423,7 @@ package object tensorflow {
           tf.learn.Dropout("Dropout_"+i, keep_prob)
       } else {
         tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SamePadding) >>
-          tf.learn.AddBias(name = "Bias_"+i) >>
+          batch_norm(name = "BatchNorm_"+i) >>
           tf.learn.ReLU("ReLU_"+i, relu_param)
       }
 
@@ -447,6 +448,7 @@ package object tensorflow {
       * @param relu_param The activation barrier of the ReLU activation.
       *
       * @param dropout Set to true, if dropout layers should be placed in each convolutional unit.
+      *                Set to false, and batch normalisation layers shall be placed after each convolutional unit.
       *
       * @param keep_prob If dropout is enabled, then this determines the retain probability.
       * */
