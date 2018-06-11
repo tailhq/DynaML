@@ -565,6 +565,7 @@ package object tensorflow {
       * @param summarySaveFreq The frequency at which to log the loss summary.
       * @param checkPointFreq The frequency at which to log the model parameters.
       * @param training_data A training data set, as an instance of [[Dataset]].
+      * @param inMemory Set to true if the estimator should be in-memory.
       *
       * @return A [[Tuple2]] containing the model and estimator.
       *
@@ -586,7 +587,8 @@ package object tensorflow {
       checkPointFreq: Int = 5000)(
       training_data: Dataset[
         (IT, TT), (IO, TO),
-        (ID, TD), (IS, TS)]
+        (ID, TD), (IS, TS)],
+      inMemory: Boolean = false
     ) = {
 
       val (model, estimator) = tf.createWith(graph = Graph()) {
@@ -597,17 +599,31 @@ package object tensorflow {
 
         println("\nTraining the regression model.\n")
 
-        val estimator = tf.learn.FileBasedEstimator(
-          model,
-          tf.learn.Configuration(Some(summariesDir)),
-          stopCriteria,
-          Set(
-            tf.learn.StepRateLogger(
-              log = false, summaryDir = summariesDir,
-              trigger = tf.learn.StepHookTrigger(stepRateFreq)),
-            tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
-            tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
-          tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+        val estimator = if(inMemory) {
+          tf.learn.InMemoryEstimator(
+            model,
+            tf.learn.Configuration(Some(summariesDir)),
+            stopCriteria,
+            Set(
+              tf.learn.StepRateLogger(
+                log = false, summaryDir = summariesDir,
+                trigger = tf.learn.StepHookTrigger(stepRateFreq)),
+              tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
+              tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
+            tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+        } else {
+          tf.learn.FileBasedEstimator(
+            model,
+            tf.learn.Configuration(Some(summariesDir)),
+            stopCriteria,
+            Set(
+              tf.learn.StepRateLogger(
+                log = false, summaryDir = summariesDir,
+                trigger = tf.learn.StepHookTrigger(stepRateFreq)),
+              tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
+              tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
+            tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+        }
 
         estimator.train(() => training_data)
 
