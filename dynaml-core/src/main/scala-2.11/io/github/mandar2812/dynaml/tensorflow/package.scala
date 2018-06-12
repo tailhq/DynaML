@@ -334,14 +334,14 @@ package object tensorflow {
     /**
       * Stop after the change in the loss function falls below a specified threshold.
       * */
-    val abs_loss_change_stop: Double => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
+    val abs_loss_change_stop: (Double, Long) => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
       absLossChangeTol = Some(d),
       maxSteps = Some(max_iter))
 
     /**
       * Stop after the relative change in the loss function falls below a specified threshold.
       * */
-    val rel_loss_change_stop: Double => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
+    val rel_loss_change_stop: (Double, Long) => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
       relLossChangeTol = Some(d),
       maxSteps = Some(max_iter))
 
