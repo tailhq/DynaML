@@ -334,12 +334,16 @@ package object tensorflow {
     /**
       * Stop after the change in the loss function falls below a specified threshold.
       * */
-    val abs_loss_change_stop: Double => StopCriteria  = (d: Double) => tf.learn.StopCriteria(absLossChangeTol = Some(d))
+    val abs_loss_change_stop: Double => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
+      absLossChangeTol = Some(d),
+      maxSteps = Some(max_iter))
 
     /**
       * Stop after the relative change in the loss function falls below a specified threshold.
       * */
-    val rel_loss_change_stop: Double => StopCriteria  = (d: Double) => tf.learn.StopCriteria(relLossChangeTol = Some(d))
+    val rel_loss_change_stop: Double => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
+      relLossChangeTol = Some(d),
+      maxSteps = Some(max_iter))
 
     /**
       * Constructs a feed-forward layer.
