@@ -166,7 +166,7 @@ package object tensorflow {
       * <b>Usage</b> dtf.tensor_i16(1, 2, 3)(1, 2, 3, 4, 5, 6)
       *
       * */
-    def tensor_i16(shape: Int*)(buffer: Int*)(implicit ev: TensorConvertible[Double]) =
+    def tensor_i16(shape: Int*)(buffer: Int*)(implicit ev: TensorConvertible[Int]) =
       Tensor(INT16, buffer.head, buffer.tail:_*).reshape(shape)
 
     /**
@@ -183,7 +183,7 @@ package object tensorflow {
       * <b>Usage</b> dtf.tensor_i32(1, 2, 3)(1, 2, 3, 4, 5, 6)
       *
       * */
-    def tensor_i32(shape: Int*)(buffer: Int*)(implicit ev: TensorConvertible[Double]) =
+    def tensor_i32(shape: Int*)(buffer: Int*)(implicit ev: TensorConvertible[Int]) =
       Tensor(INT32, buffer.head, buffer.tail:_*).reshape(shape)
 
     /**
@@ -200,7 +200,7 @@ package object tensorflow {
       * <b>Usage</b> dtf.tensor_i64(1, 2, 3)(1, 2, 3, 4, 5, 6)
       *
       * */
-    def tensor_i64(shape: Int*)(buffer: Int*)(implicit ev: TensorConvertible[Double]) =
+    def tensor_i64(shape: Int*)(buffer: Int*)(implicit ev: TensorConvertible[Int]) =
       Tensor(INT64, buffer.head, buffer.tail:_*).reshape(shape)
 
     /**
@@ -266,12 +266,12 @@ package object tensorflow {
       *
       * @return The larger stacked tensor.
       * */
-    def stack(inputs: Seq[Tensor], axis: Int = 0) = tfi.stack(inputs, axis)
+    def stack(inputs: Seq[Tensor], axis: Int = 0): Tensor = tfi.stack(inputs, axis)
 
     /**
       * Split a tensor into a list of tensors.
       * */
-    def unstack(input: Tensor, number: Int = -1, axis: Int = 0) = tfi.unstack(input, number, axis)
+    def unstack(input: Tensor, number: Int = -1, axis: Int = 0): Seq[Tensor] = tfi.unstack(input, number, axis)
 
     def concatenate(inputs: Seq[Tensor], axis: Tensor = 0): Tensor = tfi.concatenate(inputs, axis)
 
