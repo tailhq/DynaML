@@ -5,7 +5,7 @@ import _root_.io.github.mandar2812.dynaml.graphics.plot3d
 import _root_.io.github.mandar2812.dynaml.graphics.plot3d.DelauneySurface
 import _root_.io.github.mandar2812.dynaml.tensorflow.dtf
 import _root_.io.github.mandar2812.dynaml.repl.Router.main
-import org.platanios.tensorflow.api.ops.NN.SamePadding
+import org.platanios.tensorflow.api.tf.SameConvPadding
 import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
 
 //Transform a 2d sequence into a tensor.
@@ -18,7 +18,7 @@ def generate_kernel(k: Seq[Seq[Double]], id: String): Output = {
 //A simplified 2D convolution operation
 def simple_conv(x: Output, kernel: Output): Output = {
   val expanded_x = tf.expandDims(tf.expandDims(x, 0), -1)
-  tf.conv2D(expanded_x, kernel, 1, 1, SamePadding)(0, ::, ::, 0)
+  tf.conv2D(expanded_x, kernel, 1, 1, SameConvPadding)(0, ::, ::, 0)
 }
 
 //Compute the 2D laplacian of an array

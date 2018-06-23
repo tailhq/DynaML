@@ -20,7 +20,7 @@ package io.github.mandar2812.dynaml.tensorflow.layers
 
 import io.github.mandar2812.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.learn.Mode
+import org.platanios.tensorflow.api.learn.{Mode, TRAINING}
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.ops.variables._
@@ -35,19 +35,102 @@ case class BatchNormalisation(override val name: String)
 
   private val EPSILON = 1E-5f
 
-  override protected def _forward(input: Output, mode: Mode): Output = {
-
+  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
     val gamma      = tf.variable(
-      "scaling", input.dataType,
+      "scaling", FLOAT32,
       input.shape(1::), OnesInitializer)
 
     val beta       = tf.variable(
-      "offset",  input.dataType,
+      "offset",  FLOAT32,
       input.shape(1::), ZerosInitializer)
+
+    /*val running_mean      = tf.variable(
+      "popmean", FLOAT32,
+      input.shape(1::), ZerosInitializer)
+
+    val running_var       = tf.variable(
+      "popvar",  FLOAT32,
+      input.shape(1::), ZerosInitializer)
+
+    val sample_count      = tf.variable(
+      "samplecount",  INT32,
+      Shape(), ZerosInitializer)*/
 
     val batch_mean = input.mean(axes = 0)
     val batch_var  = input.subtract(batch_mean).square.mean(axes = 0)
 
+    //running_mean.assignAdd(batch_mean)
+    //running_var.assignAdd(batch_var)
+    //sample_count.assignAdd(1)
+
     input.subtract(batch_mean).divide(batch_var.add(EPSILON).sqrt).multiply(gamma).add(beta)
   }
+
+  /*mode match {
+
+    case TRAINING => {
+      val gamma      = tf.variable(
+        "scaling", FLOAT32,
+        input.shape(1::), RandomUniformInitializer())
+
+      val beta       = tf.variable(
+        "offset",  FLOAT32,
+        input.shape(1::), RandomUniformInitializer())
+
+      val running_mean      = tf.variable(
+        "popmean", FLOAT32,
+        input.shape(1::), ZerosInitializer)
+
+      val running_var       = tf.variable(
+        "popvar",  FLOAT32,
+        input.shape(1::), ZerosInitializer)
+
+      val sample_count      = tf.variable(
+        "samplecount",  INT32,
+        Shape(), ZerosInitializer)
+
+      val batch_mean = input.mean(axes = 0)
+      val batch_var  = input.subtract(batch_mean).square.mean(axes = 0)
+
+      running_mean.assignAdd(batch_mean)
+      running_var.assignAdd(batch_var)
+      sample_count.assignAdd(1)
+
+
+
+      input.subtract(batch_mean).divide(batch_var.add(EPSILON).sqrt).multiply(gamma).add(beta)
+    }
+
+    case _ => {
+      val gamma      = tf.variable(
+        "scaling", FLOAT32,
+        input.shape(1::), RandomUniformInitializer(),
+        reuse = ReuseExistingOnly)
+
+      val beta       = tf.variable(
+        "offset",  FLOAT32,
+        input.shape(1::), RandomUniformInitializer(),
+        reuse = ReuseExistingOnly)
+
+      val running_mean      = tf.variable(
+        "popmean", FLOAT32,
+        input.shape(1::), ZerosInitializer,
+        reuse = ReuseExistingOnly)
+
+      val running_var       = tf.variable(
+        "popvar",  FLOAT32,
+        input.shape(1::), ZerosInitializer,
+        reuse = ReuseExistingOnly)
+
+      val sample_count      = tf.variable(
+        "samplecount",  INT32,
+        Shape(), ZerosInitializer,
+        reuse = ReuseExistingOnly)
+
+      val (mean, variance): (Output, Output) =
+        (running_mean.divide(sample_count), running_var.divide(sample_count))
+
+      input.subtract(mean).divide(variance.add(EPSILON).sqrt).multiply(gamma).add(beta)
+    }
+  }*/
 }

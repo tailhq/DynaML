@@ -35,7 +35,7 @@ object Dependencies {
     platformName
   }
 
-  val tfscala_version = "0.1.1"
+  val tfscala_version = "0.2.0"
 
   //Set to true if, building with Nvidia GPU support.
   val gpuFlag: Boolean = false
