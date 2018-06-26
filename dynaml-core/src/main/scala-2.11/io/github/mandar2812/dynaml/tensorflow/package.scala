@@ -604,6 +604,7 @@ package object tensorflow {
         println("\nTraining the regression model.\n")
 
         val estimator = if(inMemory) {
+
           tf.learn.InMemoryEstimator(
             model,
             tf.learn.Configuration(Some(summariesDir)),
@@ -615,7 +616,9 @@ package object tensorflow {
               tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
               tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
             tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+
         } else {
+
           tf.learn.FileBasedEstimator(
             model,
             tf.learn.Configuration(Some(summariesDir)),
@@ -627,6 +630,7 @@ package object tensorflow {
               tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
               tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
             tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+
         }
 
         estimator.train(() => training_data)
