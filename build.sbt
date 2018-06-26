@@ -32,11 +32,13 @@ lazy val commonSettings = Seq(
 lazy val settingsCore = Seq(
   libraryDependencies ++= (
       chartsDependencies ++
-      tinkerpopDependency ++
-      openMLDependency ++ rejinDependency ++
-      rPackages ++ cppCompatDependencies ++
-      imageDependencies ++ dataFormatDependencies ++
-      tensorflowDependency ++ replDependency)
+        tinkerpopDependency ++
+        openMLDependency ++
+        rejinDependency ++ rPackages ++
+        imageDependencies ++
+        dataFormatDependencies ++
+        tensorflowDependency ++
+        replDependency)
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
