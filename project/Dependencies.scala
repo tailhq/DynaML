@@ -132,13 +132,6 @@ object Dependencies {
     "org.renjin.cran" % "ggplot2" % "2.2.1-b112"
   )
 
-  val cppCompatDependencies = Seq(
-    "com.nativelibs4java" % "jnaerator" % "0.12",
-    "com.nativelibs4java" % "bridj" % "0.7.0",
-    "org.bytedeco" % "javacpp" % "1.3",
-    "org.bytedeco.javacpp-presets" % "tensorflow" % "0.11.0-1.3"
-  )
-
   val notebookInterfaceDependency = Seq(
     "org.apache.zeppelin" % "zeppelin-interpreter" % "0.7.3" % "provided",
     "org.apache.zeppelin" % "zeppelin-server" % "0.7.3",
