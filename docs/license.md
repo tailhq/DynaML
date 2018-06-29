@@ -65,7 +65,7 @@ Apache | [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0) | org.
 Apache | [Apache License](http://www.apache.org/licenses/LICENSE-2.0) | commons-httpclient # commons-httpclient # 3.1 | <notextile></notextile>
 Apache | [Apache License](http://opensource.org/licenses/Apache-2.0) | info.folone # poi-scala_2.11 # 0.18 | <notextile></notextile>
 Apache | [Apache License](LICENSE.txt) | org.apache.httpcomponents # httpmime # 4.2.5 | <notextile></notextile>
-Apache | [Apache License (== 2.0) | file LICENSE](null) | org.renjin.cran # utf8 # 1.1.3-b8 | <notextile></notextile>
+Apache | [Apache License 2.0](LICENSE.txt) | org.renjin.cran # utf8 # 1.1.3-b8 | <notextile></notextile>
 Apache | [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) | com.ning # compress-lzf # 1.0.3 | <notextile></notextile>
 Apache | [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) | io.dropwizard.metrics # metrics-core # 3.1.2 | <notextile></notextile>
 Apache | [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) | io.dropwizard.metrics # metrics-graphite # 3.1.2 | <notextile></notextile>
