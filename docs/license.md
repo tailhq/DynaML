@@ -14,8 +14,8 @@ Copyright 2015 Mandar Chandorkar (mandar2812@gmail.com)
 
 ## Dependency Licenses
 
-The various components of DynaML which are enabled using dependencies are potentially
-subject to the license requirements that they are distributed. The following table lists
+The various components of DynaML which are enabled using dependencies are
+subject to their license requirements. The following table lists
 all the component licences used by DynaML's dependencies.
 
 
