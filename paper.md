@@ -99,7 +99,7 @@ or imported as a managed dependency into JVM projects via [jitpack](https://jitp
 The [user guide](https://transcendent-ai-labs.github.io/DynaML/) contains information regarding installation, usage, 
 API documentation (Scaladoc) as well as usage examples.
 
-![Example figure.](docs/images/plot3d.jpeg).
+![Example figure.](docs/images/plot3d.jpeg)
 
 # Acknowledgements
 
