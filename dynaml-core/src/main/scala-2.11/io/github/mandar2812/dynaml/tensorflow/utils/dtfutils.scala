@@ -18,7 +18,12 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.utils
 
+import io.github.mandar2812.dynaml.tensorflow._
+import io.github.mandar2812.dynaml.pipes._
+
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.client.Fetchable
+import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.ops.Output
 
 /**
@@ -97,6 +102,95 @@ object dtfutils {
   def cross_entropy(target_prob: Tensor, prob: Tensor) =
     target_prob.multiply(prob.log).sum(axes = 1).multiply(-1.0).mean()
 
+  /**
+    * Create a tensor from a collection of image data,
+    * in a buffered manner.
+    *
+    * @param buff_size The size of the buffer (in number of images to load at once)
+    * @param image_height The height, in pixels, of the image.
+    * @param image_width The width, in pixels, of the image.
+    * @param num_channels The number of channels in the image data.
+    * @param coll The collection which holds the data for each image.
+    * @param size The number of elements in the collection
+    * */
+  def create_image_tensor_buffered(buff_size: Int)(
+    image_height: Int, image_width: Int, num_channels: Int)(
+    coll: Iterable[Array[Byte]], size: Int): Tensor = {
+
+    println()
+    val tensor_splits = coll.grouped(buff_size).toIterable.zipWithIndex.map(splitAndIndex => {
+
+      val split_seq = splitAndIndex._1.toSeq
+
+      val progress = splitAndIndex._2*buff_size*100.0/size
+
+      print("Progress %:\t")
+      pprint.pprintln(progress)
+
+      dtf.tensor_from(
+        dtype = "UINT8", split_seq.length,
+        image_height, image_width, num_channels)(
+        split_seq.toArray.flatten[Byte])
+
+    })
+
+    dtf.concatenate(tensor_splits.toSeq, axis = 0)
+  }
+
+
+  def buffered_preds_helper[
+  IT, IO, ID, IS, I,
+  TT, TO, TD, TS, EI,
+  InferInput, InferOutput,
+  ModelInferenceOutput](
+    predictiveModel: Estimator[IT, IO, ID, IS, I, TT, TO, TD, TS, EI],
+    workingData: InferInput,
+    buffer: Int, dataSize: Int)(
+    implicit getSplitByIndex: MetaPipe12[InferInput, Int, Int, InferInput],
+    concatenateSplits: DataPipe[Iterable[InferOutput], InferOutput],
+    evFetchableIO: Fetchable.Aux[IO, IT],
+    evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
+    ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]
+  ): Some[InferOutput] = {
+
+    val get_data_split = getSplitByIndex(workingData)
+
+    val preds_splits: Iterable[InferOutput] = (0 until dataSize)
+      .grouped(buffer)
+      .map(indices =>
+        predictiveModel.infer[InferInput, InferOutput, ModelInferenceOutput](
+          () => get_data_split(indices.head, indices.last)))
+      .toIterable
+
+    Some(concatenateSplits(preds_splits))
+  }
+
+ def buffered_preds[
+ IT, IO, ID, IS, I,
+ TT, TO, TD, TS, EI](
+   predictiveModel: Estimator[IT, IO, ID, IS, I, TT, TO, TD, TS, EI])(
+   data: AbstractDataSet[IT, IO, ID, IS, TT, TO, TD, TS],
+   pred_flags: (Boolean, Boolean) = (false, true),
+   buff_size: Int = 400)(
+   implicit getSplitByIndex: MetaPipe12[IT, Int, Int, IT],
+   concatenateSplits: DataPipe[Iterable[I], I],
+   evFetchableIO: Fetchable.Aux[IO, IT],
+   evFetchableI: Fetchable.Aux[I, IT],
+   evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
+   ev: Estimator.SupportedInferInput[IT, I, IT, IO, ID, IS, IT]
+ ): (Option[I], Option[I]) = {
+
+    val train_preds =
+      if (pred_flags._1) buffered_preds_helper(predictiveModel, data.trainData, buff_size, data.nTrain)
+      else None
+
+    val test_preds =
+      if (pred_flags._2) buffered_preds_helper(predictiveModel, data.testData, buff_size, data.nTest)
+      else None
+
+    (train_preds, test_preds)
+  }
 
 }
 

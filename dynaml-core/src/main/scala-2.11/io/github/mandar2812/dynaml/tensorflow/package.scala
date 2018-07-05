@@ -25,7 +25,6 @@ import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.tensorflow.utils._
 import io.github.mandar2812.dynaml.tensorflow.layers._
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.core.Shape
 import org.platanios.tensorflow.api.learn.StopCriteria
 import org.platanios.tensorflow.api.learn.layers.{Activation, Input, Layer}
 import org.platanios.tensorflow.api.ops.NN.SameConvPadding
@@ -650,6 +649,35 @@ package object tensorflow {
     * with tensorflow data sets and models.
     * */
   object dtfpipe {
+
+    def gauss_std(ax: Int = 0): DataPipe[Tensor, (Tensor, GaussianScalerTF)] =
+      DataPipe((labels: Tensor) => {
+
+        val labels_mean = labels.mean(axes = ax)
+
+        val n_data = labels.shape(0).scalar.asInstanceOf[Int].toDouble
+
+        val labels_sd = labels.subtract(labels_mean).square.mean(axes = ax).multiply(n_data/(n_data - 1d)).sqrt
+
+        val labels_scaler = GaussianScalerTF(labels_mean, labels_sd)
+
+        val labels_scaled = labels_scaler(labels)
+
+        (labels_scaled, labels_scaler)
+      })
+
+    def minmax_std(ax: Int = 0): DataPipe[Tensor, (Tensor, MinMaxScalerTF)] =
+      DataPipe((labels: Tensor) => {
+
+        val labels_min = labels.min(axes = ax)
+        val labels_max = labels.max(axes = ax)
+
+        val labels_scaler = MinMaxScalerTF(labels_min, labels_max)
+
+        val labels_scaled = labels_scaler(labels)
+
+        (labels_scaled, labels_scaler)
+      })
 
     val gaussian_standardization: DataPipe2[Tensor, Tensor, ((Tensor, Tensor), (GaussianScalerTF, GaussianScalerTF))] =
       DataPipe2((features: Tensor, labels: Tensor) => {
