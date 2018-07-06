@@ -124,7 +124,7 @@ object Utils {
     concatenateSplits: DataPipe[Iterable[InferOutput], InferOutput],
     evFetchableIO: Fetchable.Aux[IO, IT],
     evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
-    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
     ev: Estimator.SupportedInferInput[IT, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]
   ): (Option[InferOutput], Option[InferOutput]) = {
 
