@@ -1,7 +1,9 @@
 {
   import ammonite.ops._
 
-  import io.github.mandar2812.dynaml.tensorflow.dtflearn
+  import io.github.mandar2812.dynaml.tensorflow.utils.AbstractDataSet
+  import io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils}
+  import io.github.mandar2812.dynaml.tensorflow.implicits._
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.api.ops.NN.SameConvPadding
   import org.platanios.tensorflow.data.image.CIFARLoader
@@ -11,10 +13,12 @@
   val tempdir = home/"tmp"
 
   val dataSet = CIFARLoader.load(Paths.get(tempdir.toString()), CIFARLoader.CIFAR_10)
-  val trainImages = tf.data.TensorSlicesDataset(dataSet.trainImages)
-  val trainLabels = tf.data.TensorSlicesDataset(dataSet.trainLabels)
+  val tf_dataset = AbstractDataSet(
+    dataSet.trainImages, dataSet.trainLabels, dataSet.trainLabels.shape(0),
+    dataSet.testImages, dataSet.testLabels, dataSet.testLabels.shape(0))
+
   val trainData =
-    trainImages.zip(trainLabels)
+    tf_dataset.training_data
       .repeat()
       .shuffle(10000)
       .batch(128)
@@ -52,14 +56,24 @@
     100, 100, 100)(
     trainData, true)
 
-  def accuracy(images: Tensor, labels: Tensor): Float = {
-    val predictions = estimator.infer(() => images)
+  def accuracy(predictions: Tensor, labels: Tensor): Float = {
+    //val predictions = estimator.infer(() => images)
     predictions.argmax(1).cast(UINT8).equal(labels).cast(FLOAT32).mean().scalar.asInstanceOf[Float]
   }
 
+  val (trainingPreds, testPreds): (Option[Tensor], Option[Tensor]) =
+    dtfutils.predict_data[
+      Tensor, Output, DataType, Shape, Output,
+      Tensor, Output, DataType, Shape, Output,
+      Tensor, Tensor](
+      estimator,
+      data = tf_dataset,
+      pred_flags = (true, true),
+      buff_size = 20000)
+
   val (trainAccuracy, testAccuracy) = (
-    accuracy(dataSet.trainImages, dataSet.trainLabels),
-    accuracy(dataSet.testImages, dataSet.testLabels))
+    accuracy(trainingPreds.get, dataSet.trainLabels),
+    accuracy(testPreds.get, dataSet.testLabels))
 
   print("Train accuracy = ")
   pprint.pprintln(trainAccuracy)

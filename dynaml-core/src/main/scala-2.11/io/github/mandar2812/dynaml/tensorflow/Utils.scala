@@ -81,7 +81,7 @@ object Utils {
   TT, TO, TD, TS, EI,
   InferInput, InferOutput,
   ModelInferenceOutput](
-    predictiveModel: Estimator[IT, IO, ID, IS, I, TT, TO, TD, TS, EI],
+    predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
     workingData: InferInput,
     buffer: Int, dataSize: Int)(
     implicit getSplitByIndex: MetaPipe12[InferInput, Int, Int, InferInput],
@@ -90,42 +90,80 @@ object Utils {
     evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
     evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
     ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]
-  ): Some[InferOutput] = {
+  ): InferOutput = {
 
     val get_data_split = getSplitByIndex(workingData)
 
     val preds_splits: Iterable[InferOutput] = (0 until dataSize)
       .grouped(buffer)
-      .map(indices =>
+      .map(indices => {
+
+        val progress = indices.head*buffer*100.0/dataSize
+
+        print("Progress %:\t")
+        pprint.pprintln(progress)
+
         predictiveModel.infer[InferInput, InferOutput, ModelInferenceOutput](
-          () => get_data_split(indices.head, indices.last)))
+          () => get_data_split(indices.head, indices.last))
+      })
       .toIterable
 
-    Some(concatenateSplits(preds_splits))
+    concatenateSplits(preds_splits)
   }
 
-  def buffered_preds[
+  def predict_data[
   IT, IO, ID, IS, I,
-  TT, TO, TD, TS, EI](
-    predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), EI])(
-    data: AbstractDataSet[IT, IO, ID, IS, TT, TO, TD, TS],
+  TT, TO, TD, TS, EI,
+  InferOutput,
+  ModelInferenceOutput](
+    predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
+    data: AbstractDataSet[IT, TT],
     pred_flags: (Boolean, Boolean) = (false, true),
     buff_size: Int = 400)(
     implicit getSplitByIndex: MetaPipe12[IT, Int, Int, IT],
-    concatenateSplits: DataPipe[Iterable[I], I],
+    concatenateSplits: DataPipe[Iterable[InferOutput], InferOutput],
     evFetchableIO: Fetchable.Aux[IO, IT],
-    evFetchableI: Fetchable.Aux[I, IT],
+    evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
     evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
-    ev: Estimator.SupportedInferInput[IT, I, IT, IO, ID, IS, IT]
-  ): (Option[I], Option[I]) = {
+    ev: Estimator.SupportedInferInput[IT, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]
+  ): (Option[InferOutput], Option[InferOutput]) = {
 
-    val train_preds =
-      if (pred_flags._1) buffered_preds(predictiveModel, data.trainData, buff_size, data.nTrain)
-      else None
+    val train_preds: Option[InferOutput] =
+      if (pred_flags._1) {
 
-    val test_preds =
-      if (pred_flags._2) buffered_preds(predictiveModel, data.testData, buff_size, data.nTest)
-      else None
+        println("\nGenerating predictions for training data.\n")
+
+        val predictions = buffered_preds[
+          IT, IO, ID, IS, I,
+          TT, TO, TD, TS, EI,
+          IT, InferOutput,
+          ModelInferenceOutput](
+          predictiveModel,
+          data.trainData,
+          buff_size,
+          data.nTrain)
+
+        Some(predictions)
+
+      } else None
+
+    val test_preds: Option[InferOutput] =
+      if (pred_flags._2) {
+
+        println("\nGenerating predictions for test data.\n")
+
+        val predictions = buffered_preds[
+          IT, IO, ID, IS, I,
+          TT, TO, TD, TS, EI,
+          IT, InferOutput,
+          ModelInferenceOutput](
+          predictiveModel,
+          data.testData,
+          buff_size,
+          data.nTest)
+
+        Some(predictions)
+      } else None
 
     (train_preds, test_preds)
   }

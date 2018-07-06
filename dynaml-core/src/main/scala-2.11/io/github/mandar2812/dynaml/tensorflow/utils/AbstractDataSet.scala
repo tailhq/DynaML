@@ -23,11 +23,11 @@ import org.platanios.tensorflow.api.implicits.helpers.OutputToTensor
 import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
 
-case class AbstractDataSet[TI, OI, DI, SI, TT, OT, DT, ST](
+case class AbstractDataSet[TI, TT](
   trainData: TI, trainLabels: TT, nTrain: Int,
   testData: TI, testLabels: TT, nTest: Int) {
 
-  def training_data(
+  def training_data[OI, DI, SI, OT, DT, ST](
     implicit evData1: Data.Aux[TI,OI,DI,SI],
     evData2: Data.Aux[TT,OT,DT,ST],
     evOToT1: OutputToTensor.Aux[OI, TI],
@@ -39,7 +39,7 @@ case class AbstractDataSet[TI, OI, DI, SI, TT, OT, DT, ST](
       tf.data.TensorSlicesDataset[TT, OT, DT, ST](trainLabels)
     )
 
-  def test_data(
+  def test_data[OI, DI, SI, OT, DT, ST](
     implicit evData1: Data.Aux[TI,OI,DI,SI],
     evData2: Data.Aux[TT,OT,DT,ST],
     evOToT1: OutputToTensor.Aux[OI, TI],

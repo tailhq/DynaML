@@ -43,4 +43,12 @@ package object implicits {
 
     })
 
+  implicit val tensorSplit: MetaPipe12[Tensor, Int, Int, Tensor] = MetaPipe12(
+    (workingData: Tensor) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)
+  )
+
+  implicit val concatTensorSplits: DataPipe[Iterable[Tensor], Tensor] =
+    DataPipe((ds: Iterable[Tensor]) => tfi.concatenate(ds.toSeq, axis = 0))
+
+
 }
