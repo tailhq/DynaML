@@ -19,6 +19,6 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.utils
 
 import io.github.mandar2812.dynaml.pipes.ReversibleScaler
-import org.platanios.tensorflow.api.Tensor
+import org.platanios.tensorflow.api.{Output, Tensor}
 
 abstract class TFScaler extends ReversibleScaler[Tensor]
