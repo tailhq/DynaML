@@ -34,7 +34,7 @@ package object tensorflow {
     * The [[dtf]] object is the entry point
     * for tensor related operations.
     * */
-  val dtf     = Api
+  val dtf      = Api
 
   /**
     * <h4>DynaML Neural Net Building Blocks</h4>
