@@ -18,25 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml
 
-import java.nio.ByteBuffer
-
-import ammonite.ops.Path
-import com.sksamuel.scrimage.Image
-import io.github.mandar2812.dynaml.probability._
-import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.tensorflow.utils._
-import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.core.client.Fetchable
-import org.platanios.tensorflow.api.learn.StopCriteria
-import org.platanios.tensorflow.api.learn.estimators.Estimator
-import org.platanios.tensorflow.api.learn.layers.{Activation, Input, Layer}
-import org.platanios.tensorflow.api.ops.NN.SameConvPadding
-import org.platanios.tensorflow.api.ops.Output
-import org.platanios.tensorflow.api.ops.io.data.Dataset
-import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
-import org.platanios.tensorflow.api.tensors.TensorConvertible
-import org.platanios.tensorflow.api.types.{DataType, SupportedType}
-
 /**
   * <h3>DynaML Tensorflow Package</h3>
   *
