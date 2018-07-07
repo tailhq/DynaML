@@ -98,7 +98,7 @@ object Utils {
       .grouped(buffer)
       .map(indices => {
 
-        val progress = indices.head*buffer*100.0/dataSize
+        val progress = math.round(10*indices.head*buffer*100.0/dataSize)/10d
 
         print("Progress %:\t")
         pprint.pprintln(progress)

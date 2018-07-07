@@ -31,7 +31,7 @@ private[tensorflow] object Data {
 
       val split_seq = splitAndIndex._1.toStream
 
-      val progress = splitAndIndex._2*buff_size*100.0/size
+      val progress = math.round(10*splitAndIndex._2*buff_size*100.0/size)/10d
 
       print("Progress %:\t")
       pprint.pprintln(progress)
@@ -77,7 +77,7 @@ private[tensorflow] object Data {
 
       val split_seq = splitAndIndex._1.toStream
 
-      val progress = splitAndIndex._2*buff_size*100.0/size
+      val progress = math.round(10*splitAndIndex._2*buff_size*100.0/size)/10
 
       print("Progress %:\t")
       pprint.pprintln(progress)
