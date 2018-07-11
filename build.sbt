@@ -163,7 +163,18 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
         entryPoint(s"$targetDir/bin/${executableScriptName.value}")
         copy(appDir, targetDir, chown = "daemon:daemon")
       }
-    }
+    },
+    imageNames in docker := Seq(
+      // Sets the latest tag
+      ImageName(s"${organization.value}/${name.value.toLowerCase}:latest"),
+
+      // Sets a name with a tag that contains the project version
+      ImageName(
+        namespace = Some(organization.value),
+        repository = name.value.toLowerCase,
+        tag = Some(version.value)
+      )
+    )
   ).aggregate(core, pipes, examples, repl).settings(
     aggregate in publishM2 := true,
     aggregate in update := false)
