@@ -170,7 +170,7 @@ private[tensorflow] object Learn {
     size: Int, num_channels_input: Int)(
     start_num_bits: Int, end_num_bits: Int)(
     relu_param: Float = 0.1f, dropout: Boolean = true,
-    keep_prob: Float = 0.6f) = {
+    keep_prob: Float = 0.6f, starting_index: Int = 0) = {
 
     require(
       start_num_bits > end_num_bits,
@@ -179,7 +179,7 @@ private[tensorflow] object Learn {
     //Create the first layer segment.
     val head_segment = conv2d_unit(
       Shape(size, size, num_channels_input, math.pow(2, start_num_bits).toInt),
-      stride = (1, 1), relu_param, dropout, keep_prob)(0)
+      stride = (1, 1), relu_param, dropout, keep_prob)(starting_index)
 
     //Create the rest of the pyramid
     val tail_segments = (end_num_bits until start_num_bits).reverse.zipWithIndex.map(bitsAndIndices => {
@@ -188,7 +188,7 @@ private[tensorflow] object Learn {
       conv2d_unit(
         Shape(size, size, math.pow(2, bits+1).toInt, math.pow(2, bits).toInt),
         stride = (math.pow(2, index+1).toInt, math.pow(2, index+1).toInt),
-        relu_param, dropout, keep_prob)(index+1)
+        relu_param, dropout, keep_prob)(index+1+starting_index)
 
     }).reduceLeft((a,b) => a >> b)
 
@@ -308,7 +308,7 @@ private[tensorflow] object Learn {
         target, processTarget,
         loss, optimizer)
 
-      println("\nTraining the regression model.\n")
+      println("\nTraining model.\n")
 
       val estimator = if(inMemory) {
 
