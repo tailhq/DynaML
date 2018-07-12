@@ -23,7 +23,7 @@ import breeze.stats.distributions._
 import io.github.mandar2812.dynaml.utils._
 
 /**
-  * <h3><a href="https://en.wikipedia.org/wiki/Kumaraswamy_distribution">Kumaraswamy Distribution</a><h3>
+  * <h3><a href="https://en.wikipedia.org/wiki/Kumaraswamy_distribution">Kumaraswamy Distribution</a></h3>
   *
   * A probability distribution for a univariate random variable
   * which takes values in the interval [0, 1]. The Kumaraswamy distribution
