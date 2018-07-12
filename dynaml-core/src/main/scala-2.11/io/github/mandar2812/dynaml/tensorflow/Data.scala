@@ -3,9 +3,20 @@ package io.github.mandar2812.dynaml.tensorflow
 import ammonite.ops.Path
 import com.sksamuel.scrimage.Image
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
-import org.platanios.tensorflow.api.Tensor
+import io.github.mandar2812.dynaml.tensorflow.utils.{SupervisedDataSet, DataSet}
+import org.platanios.tensorflow.api._
 
 private[tensorflow] object Data {
+
+  type SUPDATA = SupervisedDataSet[Tensor, Output, DataType, Shape, Tensor, Output, DataType, Shape]
+
+  type UNSUPDATA = DataSet[Tensor, Output, DataType, Shape]
+
+  val dataset: Tensor => UNSUPDATA =
+    (d: Tensor) => DataSet(tf.data.TensorSlicesDataset(d), d.shape(0))
+
+  val supervised_data: (Tensor, Tensor) => SUPDATA =
+    (d: Tensor, t: Tensor) => SupervisedDataSet(dataset(d), dataset(t), d.shape(0))
 
   /**
     * Create a tensor from a collection of image data,

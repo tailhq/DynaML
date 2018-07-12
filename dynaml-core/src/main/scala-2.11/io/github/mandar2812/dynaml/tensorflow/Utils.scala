@@ -1,11 +1,12 @@
 package io.github.mandar2812.dynaml.tensorflow
 
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe12}
-import io.github.mandar2812.dynaml.tensorflow.utils.AbstractDataSet
+import io.github.mandar2812.dynaml.tensorflow.utils.{AbstractDataSet, DataSet, TFDataSet}
 import org.platanios.tensorflow.api.{Shape, Tensor}
 import org.platanios.tensorflow.api.core.client.Fetchable
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.ops.Output
+import org.platanios.tensorflow.api.ops.io.data.Dataset
 
 object Utils {
 
@@ -105,8 +106,7 @@ object Utils {
 
         predictiveModel.infer[InferInput, InferOutput, ModelInferenceOutput](
           () => get_data_split(indices.head, indices.last))
-      })
-      .toIterable
+      }).toIterable
 
     concatenateSplits(preds_splits)
   }
@@ -114,8 +114,7 @@ object Utils {
   def predict_data[
   IT, IO, ID, IS, I,
   TT, TO, TD, TS, EI,
-  InferOutput,
-  ModelInferenceOutput](
+  InferOutput, ModelInferenceOutput](
     predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
     data: AbstractDataSet[IT, TT],
     pred_flags: (Boolean, Boolean) = (false, true),
@@ -167,5 +166,19 @@ object Utils {
 
     (train_preds, test_preds)
   }
+
+  def predict[
+  IT, IO, ID, IS, I,
+  TT, TO, TD, TS, EI,
+  ModelInferenceOutput](
+    predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
+    data: DataSet[IT, IO, ID, IS])(
+    implicit evFetchableIO: Fetchable.Aux[IO, IT],
+    evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
+    ev: Estimator.SupportedInferInput[
+      Dataset[IT,IO,ID,IS], Iterator[(IT, ModelInferenceOutput)],
+      IT, IO, ID, IS, ModelInferenceOutput]
+  ): Iterator[(IT, ModelInferenceOutput)] = predictiveModel.infer(() => data.get)
 
 }

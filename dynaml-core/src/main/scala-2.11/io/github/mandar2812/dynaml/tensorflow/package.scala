@@ -54,7 +54,7 @@ package object tensorflow {
   val dtfpipe  = Pipe
 
 
-  val data     = Data
+  val dtfdata  = Data
 
   /**
     * <h3>DynaML Tensorflow Utilities Package</h3>
