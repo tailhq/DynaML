@@ -41,8 +41,7 @@ import org.platanios.tensorflow.api.ops.variables._
   * @author mandar2812 date: 2018/03/06
   * */
 case class DynamicTimeStepCTRNN(
-  override val name: String,
-  units: Int, horizon: Int,
+  override val name: String, horizon: Int,
   weightsInitializer: Initializer = RandomNormalInitializer(),
   biasInitializer: Initializer = RandomNormalInitializer(),
   gainInitializer: Initializer = RandomNormalInitializer(),
@@ -50,11 +49,14 @@ case class DynamicTimeStepCTRNN(
   regularization: Regularizer = new L2Regularizer) extends
   Layer[Output, Output](name) {
 
-  override val layerType: String = s"CTRNN[states:$units, horizon:$horizon]"
+  override val layerType: String = s"CTRNN[horizon:$horizon]"
 
   override protected def _forward(input: Output)(implicit mode: Mode): Output = {
 
-    val timestep    = tf.variable("time_step", input.dataType, Shape(), new RandomUniformInitializer)
+    val timestep     = tf.variable("time_step", input.dataType, Shape(), new RandomUniformInitializer)
+
+    val units        = input.shape(-1)
+
 
     val weights      = tf.variable(
       "Weights", input.dataType, Shape(units, units),

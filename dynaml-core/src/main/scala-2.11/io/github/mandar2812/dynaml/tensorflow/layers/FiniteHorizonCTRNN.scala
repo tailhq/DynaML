@@ -33,7 +33,7 @@ import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInit
   * @author mandar2812 date: 2018/03/06
   * */
 case class FiniteHorizonCTRNN(
-  override val name: String, units: Int,
+  override val name: String,
   horizon: Int, timestep: Double,
   weightsInitializer: Initializer = RandomNormalInitializer(),
   biasInitializer: Initializer = RandomNormalInitializer(),
@@ -42,9 +42,11 @@ case class FiniteHorizonCTRNN(
   regularization: Regularizer = L2Regularizer()) extends
   Layer[Output, Output](name) {
 
-  override val layerType: String = s"CTRNN[states:$units, horizon:$horizon, deltaT:$timestep]"
+  override val layerType: String = s"CTRNN[horizon:$horizon, deltaT:$timestep]"
 
   override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+
+    val units        = input.shape(-1)
 
     val weights      = tf.variable(
       "Weights", input.dataType, Shape(units, units),

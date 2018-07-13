@@ -200,7 +200,6 @@ private[tensorflow] object Learn {
     * Constructs a Continuous Time Recurrent Neural Network (CTRNN) Layer, consisting
     * of some latent states, composed with a linear projection into the space of observables.
     *
-    * @param states The number of states in the CTRNN
     * @param observables The dimensionality of the output space.
     * @param timestep The integration time step, if set to 0 or a negative
     *                 value, create a [[DynamicTimeStepCTRNN]].
@@ -208,14 +207,14 @@ private[tensorflow] object Learn {
     * @param index The layer index, should be unique.
     * */
   def ctrnn_block(
-    states: Int, observables: Int,
+    observables: Int,
     horizon: Int, timestep: Double = -1d)(index: Int) =
     if (timestep <= 0d) {
-      DynamicTimeStepCTRNN(s"FHctrnn_$index", states, horizon) >>
-        FiniteHorizonLinear(s"FHlinear_$index", states, observables, horizon)
+      DynamicTimeStepCTRNN(s"FHctrnn_$index", horizon) >>
+        FiniteHorizonLinear(s"FHlinear_$index", observables)
     } else {
-      FiniteHorizonCTRNN(s"FHctrnn_$index", states, horizon, timestep) >>
-        FiniteHorizonLinear(s"FHlinear_$index", states, observables, horizon)
+      FiniteHorizonCTRNN(s"FHctrnn_$index", horizon, timestep) >>
+        FiniteHorizonLinear(s"FHlinear_$index", observables)
     }
 
   /**

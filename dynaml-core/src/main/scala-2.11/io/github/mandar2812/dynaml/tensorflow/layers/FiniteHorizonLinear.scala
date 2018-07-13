@@ -27,21 +27,24 @@ import org.platanios.tensorflow.api.{---, Output, Shape, tf}
   * Projection of a finite horizon multivariate
   * time series onto an observation space.
   *
-  * @param units The degrees of freedom or dimensionality of the dynamical system
   * @param observables The dimensionality of the observations at each time epoch.
   * @author mandar2812 date 11/03/2018
   * */
 case class FiniteHorizonLinear(
-  override val name: String,
-  units: Int, observables: Int, horizon: Int,
+  override val name: String, observables: Int,
   weightsInitializer: Initializer = RandomNormalInitializer(),
   biasInitializer: Initializer = RandomNormalInitializer(),
   regularization: Regularizer = L2Regularizer()) extends
   Layer[Output, Output](name) {
 
-  override val layerType: String = s"FHLinear[states:$units, horizon:$horizon, observables:$observables]"
+  override val layerType: String = s"FHLinear[observables:$observables]"
 
   override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+
+    val units        = input.shape(-2)
+
+    val horizon      = input.shape(-1)
+
     val weights      = tf.variable(
       "Weights", input.dataType, Shape(observables, units),
       weightsInitializer, regularizer = regularization)
