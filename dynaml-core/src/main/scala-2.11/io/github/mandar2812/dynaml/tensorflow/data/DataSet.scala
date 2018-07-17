@@ -43,6 +43,11 @@ class DataSet[X](val data: Iterable[X]) {
     TFDataSet(new DataSet(data_split._1), new DataSet(data_split._2))
   }
 
+  def to_supervised[Y, Z](f: DataPipe[X, (Y, Z)]): SupervisedDataSet[Y, Z] = {
+    val data_split = data.map(f(_)).unzip
+    SupervisedDataSet[Y, Z](new DataSet[Y](data_split._1), new DataSet[Z](data_split._2))
+  }
+
   def build[T, O, DA, D, S](
     transform: Either[DataPipe[X, T], DataPipe[X, O]],
     dataType: DA, shape: S = null)(
