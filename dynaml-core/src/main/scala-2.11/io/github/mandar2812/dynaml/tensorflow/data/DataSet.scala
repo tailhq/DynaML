@@ -27,6 +27,8 @@ import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
 class DataSet[X](val data: Iterable[X]) {
   self =>
 
+  lazy val size: Int = data.toSeq.length
+
   def map[Y](pipe: DataPipe[X, Y]): DataSet[Y] = new DataSet[Y](data.map(pipe(_)))
 
   def flatMap[Y](pipe: DataPipe[X, Iterable[Y]]): DataSet[Y] = new DataSet[Y](data.flatMap(pipe(_)))
@@ -34,6 +36,12 @@ class DataSet[X](val data: Iterable[X]) {
   def zip[Y](other: DataSet[Y]): ZipDataSet[X, Y] = new ZipDataSet[X, Y](self, other)
 
   def concatenate(other: DataSet[X]): DataSet[X] = new DataSet[X](self.data ++ other.data)
+
+  def partition(f: DataPipe[X, Boolean]): TFDataSet[X] = {
+    val data_split = data.partition(f(_))
+
+    TFDataSet(new DataSet(data_split._1), new DataSet(data_split._2))
+  }
 
   def build[T, O, DA, D, S](
     transform: Either[DataPipe[X, T], DataPipe[X, O]],
@@ -73,13 +81,7 @@ class ZipDataSet[X, Y](
 case class SupervisedDataSet[X, Y](
   features: DataSet[X],
   targets: DataSet[Y]) extends
-  ZipDataSet[X, Y](features, targets) {
-
-  self =>
-
-
-
-}
+  ZipDataSet[X, Y](features, targets)
 
 
 
@@ -88,5 +90,5 @@ case class SupervisedDataSet[X, Y](
   *
   * */
 case class TFDataSet[T](
-  training_data: DataSet[T],
-  test_data: DataSet[T])
+  training_dataset: DataSet[T],
+  test_dataset: DataSet[T])
