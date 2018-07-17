@@ -4,25 +4,17 @@ import ammonite.ops.Path
 import com.sksamuel.scrimage.Image
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import io.github.mandar2812.dynaml.tensorflow.api.Api
-import org.platanios.tensorflow.api.ops.io.data.Dataset
-import org.platanios.tensorflow.api.implicits.helpers.DataTypeAuxToDataType.Aux
-import org.platanios.tensorflow.api.implicits.helpers.OutputToTensor.Aux
-import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, OutputToTensor}
-import org.platanios.tensorflow.api.ops.io.data.Data.Aux
-import org.platanios.tensorflow.api.ops.Function
-import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
 import org.platanios.tensorflow.api._
 
 
 private[tensorflow] object DataApi {
 
-  def dataset[X](d: Iterable[X]) = new DataSet[X](d)
+  val dataset: DataSet.type = DataSet
 
   def supervised_dataset[X, Y](inputs: Iterable[X], outputs: Iterable[Y]): SupervisedDataSet[X, Y] =
     new SupervisedDataSet[X, Y](new DataSet[X](inputs), new DataSet[Y](outputs))
 
-  def supervised_dataset[X, Y](inputs: DataSet[X], outputs: DataSet[Y]): SupervisedDataSet[X, Y] =
-    new SupervisedDataSet[X, Y](inputs, outputs)
+  val supervised_dataset: SupervisedDataSet.type = SupervisedDataSet
 
   /**
     * Create a tensor from a collection of image data,
