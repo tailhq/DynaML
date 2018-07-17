@@ -1,7 +1,6 @@
 {
   import ammonite.ops._
-
-  import io.github.mandar2812.dynaml.tensorflow.utils.AbstractDataSet
+  import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
   import io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils}
   import io.github.mandar2812.dynaml.tensorflow.implicits._
   import org.platanios.tensorflow.api._
