@@ -18,6 +18,10 @@ under the License.
 * */
 package io.github.mandar2812.dynaml
 
+import io.github.mandar2812.dynaml.tensorflow.api.Api
+import io.github.mandar2812.dynaml.tensorflow.data.DataApi
+import io.github.mandar2812.dynaml.tensorflow.utils.Utils
+
 /**
   * <h3>DynaML Tensorflow Package</h3>
   *
@@ -54,7 +58,7 @@ package object tensorflow {
   val dtfpipe  = Pipe
 
 
-  val dtfdata  = Data
+  val dtfdata  = DataApi
 
   /**
     * <h3>DynaML Tensorflow Utilities Package</h3>

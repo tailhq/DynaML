@@ -1,4 +1,4 @@
-package io.github.mandar2812.dynaml.tensorflow
+package io.github.mandar2812.dynaml.tensorflow.api
 
 import java.nio.ByteBuffer
 

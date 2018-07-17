@@ -1,22 +1,28 @@
-package io.github.mandar2812.dynaml.tensorflow
+package io.github.mandar2812.dynaml.tensorflow.data
 
 import ammonite.ops.Path
 import com.sksamuel.scrimage.Image
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
-import io.github.mandar2812.dynaml.tensorflow.utils.{SupervisedDataSet, DataSet}
+import io.github.mandar2812.dynaml.tensorflow.api.Api
+import org.platanios.tensorflow.api.ops.io.data.Dataset
+import org.platanios.tensorflow.api.implicits.helpers.DataTypeAuxToDataType.Aux
+import org.platanios.tensorflow.api.implicits.helpers.OutputToTensor.Aux
+import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, OutputToTensor}
+import org.platanios.tensorflow.api.ops.io.data.Data.Aux
+import org.platanios.tensorflow.api.ops.Function
+import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
 import org.platanios.tensorflow.api._
 
-private[tensorflow] object Data {
 
-  type SUPDATA = SupervisedDataSet[Tensor, Output, DataType, Shape, Tensor, Output, DataType, Shape]
+private[tensorflow] object DataApi {
 
-  type UNSUPDATA = DataSet[Tensor, Output, DataType, Shape]
+  def dataset[X](d: Iterable[X]) = new DataSet[X](d)
 
-  val dataset: Tensor => UNSUPDATA =
-    (d: Tensor) => DataSet(tf.data.TensorSlicesDataset(d), d.shape(0))
+  def supervised_dataset[X, Y](inputs: Iterable[X], outputs: Iterable[Y]): SupervisedDataSet[X, Y] =
+    new SupervisedDataSet[X, Y](new DataSet[X](inputs), new DataSet[Y](outputs))
 
-  val supervised_data: (Tensor, Tensor) => SUPDATA =
-    (d: Tensor, t: Tensor) => SupervisedDataSet(dataset(d), dataset(t), d.shape(0))
+  def supervised_dataset[X, Y](inputs: DataSet[X], outputs: DataSet[Y]): SupervisedDataSet[X, Y] =
+    new SupervisedDataSet[X, Y](inputs, outputs)
 
   /**
     * Create a tensor from a collection of image data,
@@ -47,13 +53,13 @@ private[tensorflow] object Data {
       print("Progress %:\t")
       pprint.pprintln(progress)
 
-      dtf.tensor_from_buffer(
+      Api.tensor_from_buffer(
         dtype = "UINT8", split_seq.length,
         image_height, image_width, num_channels)(load_image(split_seq).flatten.toArray)
 
     })
 
-    dtf.concatenate(tensor_splits.toSeq, axis = 0)
+    Api.concatenate(tensor_splits.toSeq, axis = 0)
   }
 
   /**
@@ -93,14 +99,14 @@ private[tensorflow] object Data {
       print("Progress %:\t")
       pprint.pprintln(progress)
 
-      dtf.tensor_from_buffer(
+      Api.tensor_from_buffer(
         dtype = "UINT8", split_seq.length,
         image_height, image_width, num_channels)(
         load_image(split_seq).flatten.toArray)
 
     })
 
-    dtf.concatenate(tensor_splits.toSeq, axis = 0)
+    Api.concatenate(tensor_splits.toSeq, axis = 0)
   }
 
 }

@@ -1,12 +1,12 @@
-package io.github.mandar2812.dynaml.tensorflow
+package io.github.mandar2812.dynaml.tensorflow.utils
 
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe12}
-import io.github.mandar2812.dynaml.tensorflow.utils.{AbstractDataSet, DataSet, TFDataSet}
-import org.platanios.tensorflow.api.{Shape, Tensor}
+import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
 import org.platanios.tensorflow.api.core.client.Fetchable
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.ops.io.data.Dataset
+import org.platanios.tensorflow.api.{Shape, Tensor}
 
 object Utils {
 
@@ -115,10 +115,10 @@ object Utils {
   IT, IO, ID, IS, I,
   TT, TO, TD, TS, EI,
   InferOutput, ModelInferenceOutput](
-    predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
-    data: AbstractDataSet[IT, TT],
-    pred_flags: (Boolean, Boolean) = (false, true),
-    buff_size: Int = 400)(
+                                      predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
+                                      data: AbstractDataSet[IT, TT],
+                                      pred_flags: (Boolean, Boolean) = (false, true),
+                                      buff_size: Int = 400)(
     implicit getSplitByIndex: MetaPipe12[IT, Int, Int, IT],
     concatenateSplits: DataPipe[Iterable[InferOutput], InferOutput],
     evFetchableIO: Fetchable.Aux[IO, IT],
@@ -167,7 +167,7 @@ object Utils {
     (train_preds, test_preds)
   }
 
-  def predict[
+  /*def predict[
   IT, IO, ID, IS, I,
   TT, TO, TD, TS, EI,
   ModelInferenceOutput](
@@ -179,6 +179,6 @@ object Utils {
     ev: Estimator.SupportedInferInput[
       Dataset[IT,IO,ID,IS], Iterator[(IT, ModelInferenceOutput)],
       IT, IO, ID, IS, ModelInferenceOutput]
-  ): Iterator[(IT, ModelInferenceOutput)] = predictiveModel.infer(() => data.get)
+  ): Iterator[(IT, ModelInferenceOutput)] = predictiveModel.infer(() => data.get)*/
 
 }

@@ -134,6 +134,8 @@ object DynaMLPipe {
     * */
   val trimLines = StreamDataPipe((s: String) => s.trim())
 
+  val splitLine = StreamDataPipe((s: String) => s.split(","))
+
   /**
     * Generate a numeric range by dividing an interval into bins.
     * */
