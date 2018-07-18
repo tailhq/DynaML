@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.tensorflow
 
 import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
+import _root_.io.github.mandar2812.dynaml.DynaMLPipe
 
 
 package object implicits {
@@ -42,6 +43,31 @@ package object implicits {
       )
 
     })
+
+  implicit val concatOutputTup2Splits: DataPipe[Iterable[(Output, Output)], (Output, Output)] = DataPipe(
+    (ds: Iterable[(Output, Output)]) => {
+
+      val separated_splits = ds.unzip
+
+      (
+        tf.concatenate(separated_splits._1.toSeq).toOutput,
+        tf.concatenate(separated_splits._2.toSeq).toOutput
+      )
+
+    })
+
+  implicit val convOutputToOutput: DataPipe[Output, Output] = DynaMLPipe.identityPipe[Output]
+
+  implicit val convTensorToOutput: DataPipe[Tensor, Output] = DataPipe((t: Tensor) => t.toOutput)
+
+  implicit val convOutputTensorToOutputTup: DataPipe[(Output, Tensor), (Output, Output)] =
+    convOutputToOutput * convTensorToOutput
+
+  implicit val convTensorOutputToOutputTup: DataPipe[(Tensor, Output), (Output, Output)] =
+    convTensorToOutput * convOutputToOutput
+
+  implicit val convTensorTupToOutputTup: DataPipe[(Tensor, Tensor), (Output, Output)] =
+    convTensorToOutput * convTensorToOutput
 
   implicit val tensorSplit: MetaPipe12[Tensor, Int, Int, Tensor] = MetaPipe12(
     (workingData: Tensor) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)

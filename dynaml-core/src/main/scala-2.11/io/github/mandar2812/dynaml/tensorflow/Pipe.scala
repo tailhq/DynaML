@@ -1,10 +1,47 @@
 package io.github.mandar2812.dynaml.tensorflow
 
+import ammonite.ops.Path
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.tensorflow.utils.{GaussianScalerTF, MinMaxScalerTF}
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.tf.image.DCTMethod
 
 private[tensorflow] object Pipe {
+
+  def read_image(
+  num_channels: Int = 0,
+  ratio: Int = 1,
+  fancyUpscaling: Boolean = true,
+  tryRecoverTruncated: Boolean = false,
+  acceptableFraction: Float = 1,
+  dctMethod: DCTMethod = DCTMethod.SystemDefault,
+  name: String = "DecodeJpeg"): DataPipe[Path, Output] =
+    DataPipe((image: Path) => tf.data.readFile(image.toString())) >
+      DataPipe((content: Output) => tf.image.decodeJpeg(
+        content, num_channels, ratio, fancyUpscaling,
+        tryRecoverTruncated, acceptableFraction, dctMethod,
+        name))
+
+  def resize_image(
+    size: (Int, Int),
+    alignCorners: Boolean = false,
+    name: String = "ResizeArea"): DataPipe[Output, Output] =
+    DataPipe((image_content: Output) => tf.image.resizeArea(
+      image_content,
+      Array(size._1, size._2),
+      alignCorners, name)
+    )
+
+  def extract_image_patch(
+    heightRange: Range,
+    widthRange: Range): DataPipe[Output, Output] =
+    DataPipe((image: Output) =>
+      image(
+        ---,
+        heightRange.min :: heightRange.max + 1,
+        widthRange.min :: widthRange.max + 1,
+        ::)
+    )
 
   def gauss_std(ax: Int = 0): DataPipe[Tensor, (Tensor, GaussianScalerTF)] =
     DataPipe((labels: Tensor) => {

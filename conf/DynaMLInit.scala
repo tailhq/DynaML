@@ -51,6 +51,9 @@ import io.github.mandar2812.dynaml.openml.OpenML
 import io.github.mandar2812.dynaml.DynaMLSpark._
 //Renjin imports
 import javax.script._
+//TensorFlow imports
+import _root_.io.github.mandar2812.dynaml.tensorflow._
+import _root_.io.github.mandar2812.dynaml.tensorflow.implicits._
 import org.renjin.script._
 import org.renjin.sexp._
 val r_engine_factory = new RenjinScriptEngineFactory()
