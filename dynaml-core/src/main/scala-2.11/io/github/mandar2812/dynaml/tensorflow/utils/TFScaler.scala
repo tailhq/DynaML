@@ -22,3 +22,5 @@ import io.github.mandar2812.dynaml.pipes.ReversibleScaler
 import org.platanios.tensorflow.api.{Output, Tensor}
 
 abstract class TFScaler extends ReversibleScaler[Tensor]
+
+abstract class TOScaler extends ReversibleScaler[Output]

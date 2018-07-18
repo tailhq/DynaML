@@ -42,3 +42,15 @@ case class MinMaxScalerTF(min: Tensor, max: Tensor) extends TFScaler {
 
 
 }
+
+case class MinMaxScalerTO(min: Output, max: Output) extends TOScaler {
+
+  val delta: Output = max.subtract(min)
+
+  override val i: Scaler[Output] = Scaler((xc: Output) => xc.multiply(delta).add(min))
+
+  override def run(data: Output): Output = data.subtract(min).divide(delta)
+
+  def apply(indexers: Indexer*): MinMaxScalerTO = this.copy(min(indexers:_*), max(indexers:_*))
+
+}
