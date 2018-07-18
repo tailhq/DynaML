@@ -226,8 +226,38 @@ class ZipDataSet[X, Y](
   val dataset2: DataSet[Y]) extends
   DataSet[(X, Y)](dataset1.data.zip(dataset2.data)) {
 
+  self =>
+
   def unzip: (DataSet[X], DataSet[Y]) = (dataset1, dataset2)
 
+  def join[Z](other: ZipDataSet[X, Z]): ZipDataSet[X, (Y, Z)] = {
+
+    val otherMap = other.data.toMap
+
+    val joined_data = self.data.map(pattern => {
+      (pattern._1, (pattern._2, otherMap.get(pattern._1)))
+    }).filter(_._2._2.isDefined)
+      .map(p => (p._1, (p._2._1, p._2._2.get))).unzip
+
+    ZipDataSet(joined_data._1, joined_data._2)
+  }
+
+}
+
+object ZipDataSet {
+
+  def apply[X, Y](
+    dataset1: DataSet[X],
+    dataset2: DataSet[Y]): ZipDataSet[X, Y] =
+    new ZipDataSet(dataset1, dataset2)
+
+  def apply[X, Y](
+    dataset1: Iterable[X],
+    dataset2: Iterable[Y]): ZipDataSet[X, Y] =
+    new ZipDataSet(
+      DataSet(dataset1),
+      DataSet(dataset2)
+    )
 }
 
 /**
