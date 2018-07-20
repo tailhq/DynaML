@@ -115,10 +115,10 @@ object Utils {
   IT, IO, ID, IS, I,
   TT, TO, TD, TS, EI,
   InferOutput, ModelInferenceOutput](
-                                      predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
-                                      data: AbstractDataSet[IT, TT],
-                                      pred_flags: (Boolean, Boolean) = (false, true),
-                                      buff_size: Int = 400)(
+    predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
+    data: AbstractDataSet[IT, TT],
+    pred_flags: (Boolean, Boolean) = (false, true),
+    buff_size: Int = 400)(
     implicit getSplitByIndex: MetaPipe12[IT, Int, Int, IT],
     concatenateSplits: DataPipe[Iterable[InferOutput], InferOutput],
     evFetchableIO: Fetchable.Aux[IO, IT],

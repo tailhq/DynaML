@@ -21,9 +21,27 @@ package io.github.mandar2812.dynaml.tensorflow
 import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.DynaMLPipe
+import org.platanios.tensorflow.api.implicits.helpers.OutputToTensor
+import org.platanios.tensorflow.api.learn.estimators.Estimator.SupportedInferInput
+import org.platanios.tensorflow.api.ops.Function
+import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
 
 
 package object implicits {
+
+  implicit def singleOutputInferInput[T, O, D, S, I](
+    implicit
+    evOToT: OutputToTensor.Aux[O, T],
+    ev: Data.Aux[T, O, D, S],
+    evFunctionInput: Function.ArgType[O]): SupportedInferInput[O, I, T, O, D, S, I] =
+    new SupportedInferInput[O, I, T, O, D, S, I] {
+      override def toDataset(value: O): Dataset[T, O, D, S] = tf.data.OutputDataset[T, O, D, S](value)
+      override def convertFetched(iterator: Iterator[(T, I)]): I = iterator.next()._2
+    }
+
+  implicit val tensorSplit: MetaPipe12[Tensor, Int, Int, Tensor] = MetaPipe12(
+    (workingData: Tensor) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)
+  )
 
   implicit val tensorTup2Split: MetaPipe12[(Tensor, Tensor), Int, Int, (Tensor, Tensor)] = MetaPipe12(
     (workingData: (Tensor, Tensor)) => (index_start: Int, index_end: Int) => (
@@ -31,6 +49,13 @@ package object implicits {
       workingData._2(index_start::index_end + 1, ---)
     )
   )
+
+  implicit val outputSplit: MetaPipe12[Output, Int, Int, Output] = MetaPipe12(
+    (workingData: Output) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)
+  )
+
+  implicit val concatTensorSplits: DataPipe[Iterable[Tensor], Tensor] =
+    DataPipe((ds: Iterable[Tensor]) => tfi.concatenate(ds.toSeq, axis = 0))
 
   implicit val concatTensorTup2Splits: DataPipe[Iterable[(Tensor, Tensor)], (Tensor, Tensor)] = DataPipe(
     (ds: Iterable[(Tensor, Tensor)]) => {
@@ -69,12 +94,10 @@ package object implicits {
   implicit val convTensorTupToOutputTup: DataPipe[(Tensor, Tensor), (Output, Output)] =
     convTensorToOutput * convTensorToOutput
 
-  implicit val tensorSplit: MetaPipe12[Tensor, Int, Int, Tensor] = MetaPipe12(
-    (workingData: Tensor) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)
-  )
+  implicit val convOutputTupToOutputTup: DataPipe[(Output, Output), (Output, Output)] =
+    convOutputToOutput * convOutputToOutput
 
-  implicit val concatTensorSplits: DataPipe[Iterable[Tensor], Tensor] =
-    DataPipe((ds: Iterable[Tensor]) => tfi.concatenate(ds.toSeq, axis = 0))
+
 
 
 }

@@ -160,38 +160,38 @@ class DataSet[X](val data: Iterable[X]) {
   }
 
   def build[T, O, DA, D, S](
-    transformation: DataPipe[Iterable[X], Iterable[Iterable[O]]],
+    transformation: DataPipe[Iterable[X], Iterable[O]],
     dataType: DA, shape: S)(
     implicit
-    concatOp: DataPipe[Iterable[O], O],
     evDAToD: DataTypeAuxToDataType.Aux[DA, D],
     evData: Data.Aux[T, O, D, S],
     evOToT: OutputToTensor.Aux[O, T],
     evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] =
     self
       .transform(transformation)
-      .map(concatOp)
       .map(DataPipe((batch: O) => tf.data.OutputSlicesDataset[T, O, D, S](batch)))
       .reduceLeft(DataPipe2((l: Dataset[T, O, D, S], r: OutputSlicesDataset[T, O, D, S]) => l.concatenate(r)))
 
 
   def build[T, O, DA, D, S](
     buffer_size: Int,
+    stackOp: DataPipe[Iterable[O], O],
     dataType: DA,
     shape: S = null)(
     implicit
     convertToOutput: DataPipe[X, O],
-    concatOp: DataPipe[Iterable[O], O],
     evDAToD: DataTypeAuxToDataType.Aux[DA, D],
     evData: Data.Aux[T, O, D, S],
     evOToT: OutputToTensor.Aux[O, T],
     evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] = {
 
-    val buffer_and_concat =
+    val buffer_and_stack =
       DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
-        IterableDataPipe(IterableDataPipe(convertToOutput))
+        IterableDataPipe(IterableDataPipe(convertToOutput)) >
+        IterableDataPipe(stackOp)
 
-    build(buffer_and_concat, dataType, shape)
+
+    build(buffer_and_stack, dataType, shape)
   }
 
 }
@@ -205,9 +205,7 @@ case class OutputDataSet(override val data: Iterable[Output]) extends
 
   self =>
 
-  def build[T, DA, D, S](
-    transform: DataPipe[Output, Output],
-    dataType: DA, shape: S)(
+  def build[T, DA, D, S](dataType: DA, shape: S)(
     implicit
     evDAToD: DataTypeAuxToDataType.Aux[DA, D],
     evData: Data.Aux[T, Output, D, S],
