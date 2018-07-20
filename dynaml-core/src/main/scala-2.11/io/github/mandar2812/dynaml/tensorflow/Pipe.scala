@@ -8,6 +8,9 @@ import org.platanios.tensorflow.api.tf.image.DCTMethod
 
 private[tensorflow] object Pipe {
 
+  /**
+    * Read a file into a String Tensor
+    * */
   def read_image(
   num_channels: Int = 0,
   ratio: Int = 1,
