@@ -66,16 +66,30 @@ class DataSet[X](val data: Iterable[X]) {
   /**
     * Creates a new data set of type [[Y]]
     * */
-  def map[Y](pipe: DataPipe[X, Y]): DataSet[Y] = DataSet[Y](data.map(pipe(_)))
+  def map[Y](func: X => Y): DataSet[Y] = DataSet[Y](data.map(func))
 
-  def map(pipe: DataPipe[X, Output]): OutputDataSet = OutputDataSet(data.map(pipe(_)))
+  /**
+    * Creates a new data set of type [[Y]]
+    * */
+  def map[Y](pipe: DataPipe[X, Y]): DataSet[Y] = map(pipe.run _)
+
+  def map(func: X => Output): OutputDataSet = OutputDataSet(data.map(func))
+
+  def map(pipe: DataPipe[X, Output]): OutputDataSet = OutputDataSet(data.map(pipe.run))
 
   /**
     * Maps each element into a collection of elements of type [[Y]],
     * and then concatenates each resulting collection into a single
     * data set.
     * */
-  def flatMap[Y](pipe: DataPipe[X, Iterable[Y]]): DataSet[Y] = DataSet[Y](data.flatMap(pipe(_)))
+  def flatMap[Y](func: X => Iterable[Y]): DataSet[Y] = DataSet[Y](data.flatMap(func))
+
+  /**
+    * Maps each element into a collection of elements of type [[Y]],
+    * and then concatenates each resulting collection into a single
+    * data set.
+    * */
+  def flatMap[Y](pipe: DataPipe[X, Iterable[Y]]): DataSet[Y] = flatMap(pipe.run _)
 
   /**
     * Create a data set consisting of ([[X]], [[Y]]) pairs.
