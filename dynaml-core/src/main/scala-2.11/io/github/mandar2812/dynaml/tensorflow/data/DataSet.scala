@@ -187,7 +187,7 @@ class DataSet[X](val data: Iterable[X]) {
       .reduceLeft(DataPipe2((l: Dataset[T, O, D, S], r: OutputSlicesDataset[T, O, D, S]) => l.concatenate(r)))
 
 
-  def build[T, O, DA, D, S](
+  def build_buffered[T, O, DA, D, S](
     buffer_size: Int,
     stackOp: DataPipe[Iterable[O], O],
     dataType: DA,
