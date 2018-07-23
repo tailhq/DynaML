@@ -173,7 +173,7 @@ class DataSet[X](val data: Iterable[X]) {
     )
   }
 
-  def build[T, O, DA, D, S](
+  protected def build[T, O, DA, D, S](
     transformation: DataPipe[Iterable[X], Iterable[O]],
     dataType: DA, shape: S)(
     implicit
