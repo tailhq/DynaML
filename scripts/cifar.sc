@@ -32,8 +32,8 @@
   val trainInput = tf.learn.Input(UINT8, Shape(-1))
 
   val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
-    dtflearn.conv2d_pyramid(2, 3)(4, 2)(0.1f, false, 0.6F) >>
-    tf.learn.MaxPool("Layer_3/MaxPool", Seq(1, 2, 2, 1), 1, 1, SameConvPadding) >>
+    dtflearn.inception_unit(num_channels = 3)(1) >>
+    dtflearn.inception_unit(num_channels = 4)(2) >>
     tf.learn.Flatten("Layer_3/Flatten") >>
     dtflearn.feedforward(256)(id = 4) >>
     tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>

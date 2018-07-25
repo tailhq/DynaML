@@ -26,7 +26,8 @@ private[tensorflow] object Learn {
   val rbf_layer: layers.RBFLayer.type                = layers.RBFLayer
   val stack_outputs: layers.StackOutputs.type        = layers.StackOutputs
   val concat_outputs: layers.ConcatenateOutputs.type = layers.ConcatenateOutputs
-  val stack_layers: layers.StackLayers.type          = layers.StackLayers
+  val seq_layer: layers.SeqLayer.type                = layers.SeqLayer
+  val combined_layer: layers.CombinedLayer.type      = layers.CombinedLayer
   val unstack: layers.Unstack.type                   = layers.Unstack
   val identity: layers.IdentityLayer.type            = layers.IdentityLayer
   val tuple2_layer: layers.Tuple2Layer.type          = layers.Tuple2Layer
@@ -194,6 +195,34 @@ private[tensorflow] object Learn {
 
     //Join head to tail.
     head_segment >> tail_segments
+  }
+
+  /**
+    * Constructs an Inception v2 architecture
+    * computational unit.
+    * */
+  def inception_unit(num_channels: Int)(layer_index: Int): Layer[Output, Output] = {
+
+    val name = s"Inception_$layer_index"
+
+    val branch1 = tf.learn.Conv2D(s"$name/B1/Conv2D_1x1", Shape(1, 1, num_channels, 1), 1, 1, SameConvPadding)
+
+    val branch2 = tf.learn.Conv2D(s"$name/B2/Conv2D_1x1", Shape(1, 1, num_channels, 1), 1, 1, SameConvPadding) >>
+      tf.learn.Conv2D(s"$name/B2/Conv2D_3x3", Shape(3, 3, 1, 1), 1, 1, SameConvPadding)
+
+    val branch3 = tf.learn.Conv2D(s"$name/B3/Conv2D_1x1", Shape(1, 1, num_channels, 1), 1, 1, SameConvPadding) >>
+      tf.learn.Conv2D(s"$name/B3/Conv2D_3x3_1", Shape(3, 3, 1, 1), 1, 1, SameConvPadding) >>
+      tf.learn.Conv2D(s"$name/B3/Conv2D_3x3_2", Shape(3, 3, 1, 1), 1, 1, SameConvPadding)
+
+    val branch4 = tf.learn.MaxPool(s"$name/B4/MaxPool", Seq(1, 3, 3, 1), 1, 1, SameConvPadding) >>
+      tf.learn.Conv2D(s"$name/B4/Conv2D_1x1", Shape(1, 1, num_channels, 1), 1, 1, SameConvPadding)
+
+    val layers = Seq(
+      branch1, branch2, branch3, branch4
+    )
+
+    combined_layer(name, layers) >> concat_outputs(name+"/DepthConcat", -1)
+
   }
 
   /**

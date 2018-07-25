@@ -71,11 +71,27 @@ case class ConcatenateOutputs(override val name: String, axis: Int = -1) extends
   *
   * @author mandar2812 date 2018/03/16
   * */
-case class StackLayers[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[Seq[T], Seq[R]](name) {
-  override val layerType: String = s"LayerStack[${layers.map(_.name).mkString(",")}]"
+case class SeqLayer[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[Seq[T], Seq[R]](name) {
+  override val layerType: String = s"SeqLayer[${layers.map(_.layerType).mkString(",")}]"
 
   override protected def _forward(input: Seq[T])(implicit mode: Mode): Seq[R] =
     layers.zip(input).map(c => c._1.forward(c._2)(mode))
+}
+
+
+/**
+  * Combine a collection of layers into a layer which maps
+  * its input through each layer in the sequence.
+  *
+  * @param layers The layers to be joined.
+  *
+  * @author mandar2812 date 2018/03/16
+  * */
+case class CombinedLayer[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[T, Seq[R]](name) {
+  override val layerType: String = s"CombinedLayer[${layers.map(_.layerType).mkString(",")}]"
+
+  override protected def _forward(input: T)(implicit mode: Mode): Seq[R] =
+    layers.map(_.forward(input)(mode))
 }
 
 
