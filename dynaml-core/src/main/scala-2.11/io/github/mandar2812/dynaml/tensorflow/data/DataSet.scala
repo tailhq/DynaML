@@ -94,7 +94,7 @@ class DataSet[X](val data: Iterable[X]) {
   /**
     * Create a data set consisting of ([[X]], [[Y]]) pairs.
     * */
-  def zip[Y](other: DataSet[Y]): ZipDataSet[X, Y] = new ZipDataSet[X, Y](self, other)
+  def zip[Y](other: DataSet[Y]): ZipDataSet[X, Y] = ZipDataSet[X, Y](self, other)
 
   /**
     * Join the current data collection with another collection
