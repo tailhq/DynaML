@@ -116,6 +116,10 @@ class DataSet[X](val data: Iterable[X]) {
 
   def reduceLeft[Y >: X](reducePipe: DataPipe2[Y, X, Y]): Y = data.reduceLeft[Y](reducePipe(_, _))
 
+  def scanLeft[Y](z: Y)(scanPipe: DataPipe2[Y, X, Y]): DataSet[Y] = DataSet(data.scanLeft(z)(scanPipe(_, _)))
+
+  def scan[Y >: X](z: Y)(scanPipe: DataPipe2[Y, Y, Y]): DataSet[Y] = DataSet(data.scan(z)(scanPipe(_, _)))
+
   /**
     * Split the data collection into a train-test split.
     *
@@ -126,6 +130,11 @@ class DataSet[X](val data: Iterable[X]) {
     val data_split = data.partition(f(_))
 
     TFDataSet(DataSet(data_split._1), DataSet(data_split._2))
+  }
+
+  def to_zip[Y, Z](f: DataPipe[X, (Y, Z)]): ZipDataSet[Y, Z] = {
+    val data_split = data.map(f(_)).unzip
+    ZipDataSet[Y, Z](DataSet[Y](data_split._1), DataSet[Z](data_split._2))
   }
 
   /**
