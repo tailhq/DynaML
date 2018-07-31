@@ -24,7 +24,7 @@
       .prefetch(10)
 
 
-  println("Building the logistic regression model.")
+  println("Building the model.")
   val input = tf.learn.Input(
     UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2), dataSet.trainImages.shape(3))
   )
@@ -32,8 +32,8 @@
   val trainInput = tf.learn.Input(UINT8, Shape(-1))
 
   val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
-    dtflearn.inception_unit(num_channels = 3)(1) >>
-    dtflearn.inception_unit(num_channels = 4)(2) >>
+    dtflearn.inception_unit(channels = 3, Seq.fill(4)(10))(1) >>
+    dtflearn.inception_unit(channels = 40, Seq.fill(4)(5))(2) >>
     tf.learn.Flatten("Layer_3/Flatten") >>
     dtflearn.feedforward(256)(id = 4) >>
     tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>
@@ -46,7 +46,6 @@
 
   val optimizer = tf.train.Adam(0.1)
 
-  println("Training the linear regression model.")
   val summariesDir = java.nio.file.Paths.get((tempdir/"cifar_summaries").toString())
 
   val (model, estimator) = dtflearn.build_tf_model(
