@@ -36,7 +36,8 @@ package object tensorflow {
   /**
     * <h4>DynaML Tensorflow Pointer</h4>
     * The [[dtf]] object is the entry point
-    * for tensor related operations.
+    * for tensor related operations,
+    * for more details see [[Api]].
     * */
   val dtf      = Api
 
@@ -45,26 +46,33 @@ package object tensorflow {
     *
     * The [[dtflearn]] object contains components
     * that can be used to create custom neural architectures,
-    * from basic building blocks.
+    * from basic building blocks, for more details see [[Learn]].
     * */
   val dtflearn = Learn
 
   /**
     * <h4>DynaML Tensorflow Pipes</h4>
     *
-    * The [[dtfpipe]] contains work flows/pipelines to simplify working
-    * with tensorflow data sets and models.
+    * The [[dtfpipe]] object contains work flows/pipelines to simplify working
+    * with tensorflow data sets and models, for more details see [[Pipe]].
     * */
   val dtfpipe  = Pipe
 
 
+  /**
+    * <h4>DynaML Data Set API</h4>
+    *
+    * The [[dtfdata]] object contains functions for creating
+    * and working with Data Sets. See [[DataApi]] for more
+    * docs.
+    * */
   val dtfdata  = DataApi
 
   /**
     * <h3>DynaML Tensorflow Utilities Package</h3>
     *
     * Contains miscellaneous utility functions for DynaML's
-    * tensorflow handle/package.
+    * tensorflow handle/package. See [[Utils]] for more details.
     *
     * */
   val dtfutils = Utils
