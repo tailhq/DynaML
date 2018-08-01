@@ -310,7 +310,9 @@ private[tensorflow] object Learn {
     }
 
   /**
-    * Trains a tensorflow model/estimator.
+    * <h4>Supervised Learning</h4>
+    *
+    * Trains a supervised tensorflow model/estimator.
     *
     * @tparam IT The type representing input tensors,
     *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
@@ -437,6 +439,110 @@ private[tensorflow] object Learn {
     }
 
     (model, estimator)
+  }
+
+  /**
+    * <h4>Unsupervised Learning</h4>
+    *
+    * Trains an unsupervised tensorflow model/estimator.
+    *
+    * @tparam IT The type representing input tensors,
+    *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
+    *
+    * @tparam IO The type representing symbolic tensors of the input patterns,
+    *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
+    *
+    * @tparam IDA The underlying (scalar) data types of the input,
+    *             e.g. `DataType.Aux[Double]`, `(DataType.Aux[Double], DataType.Aux[Double])` etc.
+    *
+    * @tparam ID The input pattern's tensorflow data type,
+    *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
+    *
+    * @tparam IS The type of the input pattern's shape,
+    *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
+    *
+    * @tparam I The type of the symbolic tensor returned by the neural architecture,
+    *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
+    *
+    * @param architecture The network architecture,
+    *                     takes a value of type [[IO]] and returns
+    *                     a value of type [[I]].
+    * @param input The input meta data.
+    * @param loss The loss function to be optimized during training.
+    * @param optimizer The optimization algorithm implementation.
+    * @param summariesDir A filesystem path of type [[java.nio.file.Path]], which
+    *                     determines where the intermediate model parameters/checkpoints
+    *                     will be written.
+    * @param stopCriteria The stopping criteria for training, for examples see
+    *                     [[max_iter_stop]], [[abs_loss_change_stop]] and [[rel_loss_change_stop]]
+    *
+    * @param stepRateFreq The frequency at which to log the step rate (expressed as number of iterations/sec).
+    * @param summarySaveFreq The frequency at which to log the loss summary.
+    * @param checkPointFreq The frequency at which to log the model parameters.
+    * @param training_data A training data set, as an instance of [[Dataset]].
+    * @param inMemory Set to true if the estimator should be in-memory.
+    *
+    * @return A [[Tuple2]] containing the model and estimator.
+    *
+    * @author mandar2812
+    * */
+  def build_tf_model[IT, IO, IDA, ID, IS, I](
+    architecture: Layer[IO, I],
+    input: Input[IT, IO, IDA, ID, IS],
+    loss: Layer[(IO, I), Output],
+    optimizer: Optimizer,
+    summariesDir: java.nio.file.Path,
+    stopCriteria: StopCriteria,
+    stepRateFreq: Int,
+    summarySaveFreq: Int,
+    checkPointFreq: Int)(
+    training_data: Dataset[IT, IO, ID, IS],
+    inMemory: Boolean
+  ) = {
+
+    val (model, estimator) = tf.createWith(graph = Graph()) {
+
+      val model = tf.learn.Model.unsupervised(input, architecture, loss, optimizer)
+
+      println("\nTraining model.\n")
+
+      val estimator = if(inMemory) {
+
+        tf.learn.InMemoryEstimator(
+          model,
+          tf.learn.Configuration(Some(summariesDir)),
+          stopCriteria,
+          Set(
+            tf.learn.StepRateLogger(
+              log = false, summaryDir = summariesDir,
+              trigger = tf.learn.StepHookTrigger(stepRateFreq)),
+            tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
+            tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
+          tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+
+      } else {
+
+        tf.learn.FileBasedEstimator(
+          model,
+          tf.learn.Configuration(Some(summariesDir)),
+          stopCriteria,
+          Set(
+            tf.learn.StepRateLogger(
+              log = false, summaryDir = summariesDir,
+              trigger = tf.learn.StepHookTrigger(stepRateFreq)),
+            tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
+            tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
+          tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+
+      }
+
+      estimator.train(() => training_data)
+
+      (model, estimator)
+    }
+
+    (model, estimator)
+
   }
 
 }
