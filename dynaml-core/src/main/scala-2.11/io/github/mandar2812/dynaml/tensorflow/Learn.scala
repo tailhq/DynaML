@@ -204,7 +204,8 @@ private[tensorflow] object Learn {
   def inception_unit(
     channels: Int,
     num_filters: Seq[Int],
-    relu_param: Float = 0.01f)(
+    relu_param: Float = 0.01f,
+    use_batch_norm: Boolean = true)(
     layer_index: Int): Layer[Output, Output] = {
 
     require(num_filters.length == 4,
@@ -213,32 +214,40 @@ private[tensorflow] object Learn {
 
     val name = s"Inception_$layer_index"
 
+    def get_post_conv_layer(b_index: Int, l_index: Int) =
+      if(use_batch_norm) {
+        batch_norm (s"$name/B$b_index/BatchNorm_$l_index") >>
+          tf.learn.ReLU(s"$name/B$b_index/ReLU_$l_index", relu_param)
+      } else {
+        tf.learn.ReLU(s"$name/B$b_index/ReLU_$l_index", relu_param)
+      }
+
     val branch1 =
       tf.learn.Conv2D(
         s"$name/B1/Conv2D_1x1",
         Shape(1, 1, channels, num_filters.head),
         1, 1, SameConvPadding) >>
-        tf.learn.ReLU(s"$name/B1/ReLU_1", relu_param)
+        get_post_conv_layer(1, 1)
 
     val branch2 =
       tf.learn.Conv2D(s"$name/B2/Conv2D_1x1", Shape(1, 1, channels, num_filters(1)), 1, 1, SameConvPadding) >>
-        tf.learn.ReLU(s"$name/B2/ReLU_1", relu_param) >>
+        get_post_conv_layer(2, 1) >>
         tf.learn.Conv2D(s"$name/B2/Conv2D_1x3", Shape(1, 3, num_filters(1), num_filters(1)), 1, 1, SameConvPadding) >>
         tf.learn.Conv2D(s"$name/B2/Conv2D_3x1", Shape(3, 1, num_filters(1), num_filters(1)), 1, 1, SameConvPadding) >>
-        tf.learn.ReLU(s"$name/B2/ReLU_2", relu_param)
+        get_post_conv_layer(2, 2)
 
     val branch3 =
       tf.learn.Conv2D(s"$name/B3/Conv2D_1x1", Shape(1, 1, channels, num_filters(2)), 1, 1, SameConvPadding) >>
-      tf.learn.ReLU(s"$name/B3/ReLU_1", relu_param) >>
+      get_post_conv_layer(3, 1) >>
       tf.learn.Conv2D(s"$name/B3/Conv2D_1x3_1", Shape(1, 3, num_filters(2), num_filters(2)), 1, 1, SameConvPadding) >>
       tf.learn.Conv2D(s"$name/B3/Conv2D_3x1_1", Shape(3, 1, num_filters(2), num_filters(2)), 1, 1, SameConvPadding) >>
       tf.learn.Conv2D(s"$name/B3/Conv2D_1x3_2", Shape(1, 3, num_filters(2), num_filters(2)), 1, 1, SameConvPadding) >>
       tf.learn.Conv2D(s"$name/B3/Conv2D_3x1_2", Shape(3, 1, num_filters(2), num_filters(2)), 1, 1, SameConvPadding) >>
-      tf.learn.ReLU(s"$name/B3/ReLU_2", relu_param)
+      get_post_conv_layer(3, 2)
 
     val branch4 = tf.learn.MaxPool(s"$name/B4/MaxPool", Seq(1, 3, 3, 1), 1, 1, SameConvPadding) >>
       tf.learn.Conv2D(s"$name/B4/Conv2D_1x1", Shape(1, 1, channels, num_filters(3)), 1, 1, SameConvPadding) >>
-      tf.learn.ReLU(s"$name/B4/ReLU_1", relu_param)
+      get_post_conv_layer(4, 1)
 
     val layers = Seq(
       branch1, branch2, branch3, branch4
