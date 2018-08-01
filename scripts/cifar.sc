@@ -54,10 +54,14 @@
     100, 100, 100)(
     trainData, true)
 
-  def accuracy(predictions: Tensor, labels: Tensor): Float = {
-    //val predictions = estimator.infer(() => images)
-    predictions.argmax(1).cast(UINT8).equal(labels).cast(FLOAT32).mean().scalar.asInstanceOf[Float]
-  }
+  def accuracy(predictions: Tensor, labels: Tensor): Float =
+    predictions.argmax(1)
+      .cast(UINT8)
+      .equal(labels)
+      .cast(FLOAT32)
+      .mean()
+      .scalar
+      .asInstanceOf[Float]
 
   val (trainingPreds, testPreds): (Option[Tensor], Option[Tensor]) =
     dtfutils.predict_data[

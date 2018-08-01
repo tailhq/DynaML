@@ -198,8 +198,39 @@ private[tensorflow] object Learn {
   }
 
   /**
-    * Constructs an Inception v2 architecture
-    * computational unit.
+    * <h4>Inception Module</h4>
+    *
+    * Constructs an Inception v2 computational unit,
+    * optionally with batch normalisation.
+    *
+    * Assumes input to be of shape Shape(?, height, width, channels)
+    *
+    * <b>Architecture Details</b>
+    *
+    * An Inception module consists of the following branches.
+    *
+    * <ol>
+    *   <li>Convolution (1 &times; 1)</li>
+    *   <li>Convolution (1 &times; 1) -> Convolution (3 &times; 3)</li>
+    *   <li>Convolution (1 &times; 1) -> Convolution (5 &times; 5)</li>
+    *   <li>Max Pooling (1 &times; 1) -> Convolution (1 &times; 1)</li>
+    * </ol>
+    *
+    * After performing the operations above, the module performs depth-wise
+    * concatenation of the results.
+    *
+    * <b>Implementation Notes</b>
+    *
+    * Each convolution is followed by a batch normalisation layer (if applicable)
+    * followed by a Rectified Linear activation.
+    *
+    *
+    * @param channels The depth of the input.
+    * @param num_filters The number of filters to learn in each branch of
+    *                    the module, supplied as a sequence of integers.
+    * @param use_batch_norm If true, apply batch normalisation at the end
+    *                       of each convolution.
+    * @param relu_param The parameter to be fed to each ReLU activation.
     * */
   def inception_unit(
     channels: Int,
