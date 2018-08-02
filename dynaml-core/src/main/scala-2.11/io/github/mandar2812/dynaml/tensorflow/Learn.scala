@@ -98,7 +98,7 @@ private[tensorflow] object Learn {
     }
 
     stack_ff_layers_rec(
-      layer_sizes, tf.learn.Cast("Input/Cast", dataType),
+      layer_sizes, tf.learn.Cast(s"Cast_$starting_index", dataType),
       starting_index)
 
   }
