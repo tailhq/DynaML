@@ -23,11 +23,12 @@ object Utils {
 
   def get_ffstack_properties(
     neuron_counts: Seq[Int],
-    ff_index: Int): (Seq[Shape], Seq[String], Seq[String]) = {
+    ff_index: Int,
+    data_type: String = "FLOAT64"): (Seq[Shape], Seq[String], Seq[String]) = {
 
     val layer_parameter_names = (ff_index until ff_index + neuron_counts.length - 1).map(i => "Linear_"+i+"/Weights")
     val layer_shapes          = neuron_counts.sliding(2).toSeq.map(c => Shape(c.head, c.last))
-    val layer_datatypes       = Seq.fill(layer_shapes.length)("FLOAT64")
+    val layer_datatypes       = Seq.fill(layer_shapes.length)(data_type)
 
 
     (layer_shapes, layer_parameter_names, layer_datatypes)
