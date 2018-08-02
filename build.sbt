@@ -166,11 +166,11 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     },
     imageNames in docker := Seq(
       // Sets the latest tag
-      ImageName(s"${organization.value}/${name.value.toLowerCase}:latest"),
+      ImageName(s"mandar2812/${name.value.toLowerCase}:latest"),
 
       // Sets a name with a tag that contains the project version
       ImageName(
-        namespace = Some(organization.value),
+        namespace = Some("mandar2812"),
         repository = name.value.toLowerCase,
         tag = Some(version.value)
       )
