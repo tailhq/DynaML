@@ -9,6 +9,7 @@ import org.platanios.tensorflow.api.ops.io.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api.types.DataType
 import org.platanios.tensorflow.api.{FLOAT32, Graph, Shape, Tensor, tf, _}
+import _root_.io.github.mandar2812.dynaml.pipes._
 
 private[tensorflow] object Learn {
 
@@ -241,7 +242,7 @@ private[tensorflow] object Learn {
 
     require(num_filters.length == 4,
       s"Inception module has only 4 branches, but ${num_filters.length}" +
-        s" were assumed while setting num_filters variable")
+        s" were assigned while setting num_filters variable")
 
     val name = s"Inception_$layer_index"
 
@@ -286,6 +287,32 @@ private[tensorflow] object Learn {
 
     combined_layer(name, layers) >> concat_outputs(name+"/DepthConcat", -1)
 
+  }
+
+  /**
+    * Create a stack of Inception modules (See [[inception_unit()]] for more details).
+    *
+    * @param num_channels_image The depth, or number of colour channels in the image.
+    * @param num_filters Specifies the number of filters for each branch of every inception module.
+    * @param starting_index The starting index of the stack. The stack is named in a consecutive manner,
+    *                       i.e. Inception_i, Inception_i+1, ...
+    * */
+  def inception_stack(
+    num_channels_image: Int,
+    num_filters: Seq[Seq[Int]])(
+    starting_index: Int): Layer[Output, Output] = {
+
+    val head = inception_unit(num_channels_image, num_filters.head)(starting_index)
+
+    val tail = num_filters.sliding(2)
+      .map(pair => inception_unit(pair.head.sum, pair.last) _)
+      .zipWithIndex
+      .map(layer_fn_index_pair => {
+        val (create_inception_layer, index) = layer_fn_index_pair
+        create_inception_layer(index + starting_index + 1)
+      }).reduceLeft((l1, l2) => l1 >> l2)
+
+    head >> tail
   }
 
   /**
