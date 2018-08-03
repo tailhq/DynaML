@@ -9,7 +9,6 @@ import org.platanios.tensorflow.api.ops.io.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api.types.DataType
 import org.platanios.tensorflow.api.{FLOAT32, Graph, Shape, Tensor, tf, _}
-import _root_.io.github.mandar2812.dynaml.pipes._
 
 private[tensorflow] object Learn {
 
