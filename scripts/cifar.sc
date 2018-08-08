@@ -1,9 +1,11 @@
 {
   import ammonite.ops._
+  import io.github.mandar2812.dynaml.pipes.DataPipe
   import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
   import io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils}
   import io.github.mandar2812.dynaml.tensorflow.implicits._
   import org.platanios.tensorflow.api._
+  import org.platanios.tensorflow.api.learn.layers.Layer
   import org.platanios.tensorflow.api.ops.NN.SameConvPadding
   import org.platanios.tensorflow.data.image.CIFARLoader
   import java.nio.file.Paths
@@ -31,9 +33,11 @@
 
   val trainInput = tf.learn.Input(UINT8, Shape(-1))
 
+  val relu_act = DataPipe[String, Layer[Output, Output]](tf.learn.ReLU(_))
+
   val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
-    dtflearn.inception_unit(channels = 3, Seq.fill(4)(10))(1) >>
-    dtflearn.inception_unit(channels = 40, Seq.fill(4)(5))(2) >>
+    dtflearn.inception_unit(channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>
+    dtflearn.inception_unit(channels = 40, Seq.fill(4)(5),  relu_act)(layer_index = 2) >>
     tf.learn.Flatten("Layer_3/Flatten") >>
     dtflearn.feedforward(256)(id = 4) >>
     tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>

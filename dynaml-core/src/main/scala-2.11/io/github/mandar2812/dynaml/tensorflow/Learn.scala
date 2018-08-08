@@ -9,6 +9,7 @@ import org.platanios.tensorflow.api.ops.io.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api.types.DataType
 import org.platanios.tensorflow.api.{FLOAT32, Graph, Shape, Tensor, tf, _}
+import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
 
 private[tensorflow] object Learn {
 
@@ -235,7 +236,7 @@ private[tensorflow] object Learn {
   def inception_unit(
     channels: Int,
     num_filters: Seq[Int],
-    relu_param: Float = 0.01f,
+    activation_generator: DataPipe[String, Layer[Output, Output]],
     use_batch_norm: Boolean = true)(
     layer_index: Int): Layer[Output, Output] = {
 
@@ -248,9 +249,9 @@ private[tensorflow] object Learn {
     def get_post_conv_layer(b_index: Int, l_index: Int) =
       if(use_batch_norm) {
         batch_norm (s"$name/B$b_index/BatchNorm_$l_index") >>
-          tf.learn.ReLU(s"$name/B$b_index/ReLU_$l_index", relu_param)
+          activation_generator(s"$name/B$b_index/ReLU_$l_index")
       } else {
-        tf.learn.ReLU(s"$name/B$b_index/ReLU_$l_index", relu_param)
+        activation_generator(s"$name/B$b_index/ReLU_$l_index")
       }
 
     val branch1 =
@@ -298,13 +299,14 @@ private[tensorflow] object Learn {
     * */
   def inception_stack(
     num_channels_image: Int,
-    num_filters: Seq[Seq[Int]])(
+    num_filters: Seq[Seq[Int]],
+    activation_generator: DataPipe[String, Layer[Output, Output]])(
     starting_index: Int): Layer[Output, Output] = {
 
-    val head = inception_unit(num_channels_image, num_filters.head)(starting_index)
+    val head = inception_unit(num_channels_image, num_filters.head, activation_generator)(starting_index)
 
     val tail = num_filters.sliding(2)
-      .map(pair => inception_unit(pair.head.sum, pair.last) _)
+      .map(pair => inception_unit(pair.head.sum, pair.last, activation_generator) _)
       .zipWithIndex
       .map(layer_fn_index_pair => {
         val (create_inception_layer, index) = layer_fn_index_pair
