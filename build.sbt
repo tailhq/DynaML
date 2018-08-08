@@ -116,6 +116,7 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
   .settings(baseSettings:_*)
   .dependsOn(core, examples, pipes, repl)
   .settings(
+    libraryDependencies ++= dynaServeDependencies,
     name := "DynaML",
     version := mainVersion,
     fork in run := true,

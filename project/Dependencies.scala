@@ -70,12 +70,6 @@ object Dependencies {
     "org.scalactic" % "scalactic_2.11" % "2.2.6",
     "org.scala-graph" %% "graph-core" % "1.11.3",
     "org.scalatest" % "scalatest_2.11" % "3.0.1" % "test",
-    "com.typesafe.akka" % "akka-actor_2.11" % "2.5.3",
-    "com.typesafe.akka" % "akka-stream_2.11" % "2.5.3",
-    "com.typesafe.akka" % "akka-testkit_2.11" % "2.5.3",
-    "com.typesafe.akka" % "akka-http_2.11" % "10.0.9",
-    "com.typesafe.akka" % "akka-http-spray-json_2.11" % "10.0.9",
-    "com.typesafe.akka" % "akka-http-testkit_2.11" % "10.0.9",
     "com.github.scopt" % "scopt_2.11" % "3.5.0",
     "com.nativelibs4java" % "scalaxy-streams_2.11" % "0.3.4" % "provided",
     "org.scalameta" % "scalameta_2.11" % "2.0.1",
@@ -130,6 +124,15 @@ object Dependencies {
     "org.renjin.cran" % "plyr" % "1.8.4-b82",
     "org.renjin.cran" % "abc" % "2.1-b294",
     "org.renjin.cran" % "ggplot2" % "2.2.1-b112"
+  )
+
+  val dynaServeDependencies = Seq(
+    "com.typesafe.akka" % "akka-actor_2.11" % "2.5.3",
+    "com.typesafe.akka" % "akka-stream_2.11" % "2.5.3",
+    "com.typesafe.akka" % "akka-testkit_2.11" % "2.5.3",
+    "com.typesafe.akka" % "akka-http_2.11" % "10.0.9",
+    "com.typesafe.akka" % "akka-http-spray-json_2.11" % "10.0.9",
+    "com.typesafe.akka" % "akka-http-testkit_2.11" % "10.0.9"
   )
 
   val notebookInterfaceDependency = Seq(
