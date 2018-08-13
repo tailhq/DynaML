@@ -135,13 +135,6 @@ object Dependencies {
     "com.typesafe.akka" % "akka-http-testkit_2.11" % "10.0.9"
   )
 
-  val notebookInterfaceDependency = Seq(
-    "org.apache.zeppelin" % "zeppelin-interpreter" % "0.7.3" % "provided",
-    "org.apache.zeppelin" % "zeppelin-server" % "0.7.3",
-    "org.apache.zeppelin" % "zeppelin-web" % "0.7.3")
-    .map(_.exclude("org.slf4j", "slf4j-log4j12"))
-    .map(_.exclude("javax.ws.rs" , "javax.ws.rs-api"))
-
   val imageDependencies = Seq(
     "com.sksamuel.scrimage" % "scrimage-core_2.11" % "2.1.8",
     "com.sksamuel.scrimage" % "scrimage-io-extra_2.11" % "2.1.8",

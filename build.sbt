@@ -78,40 +78,6 @@ lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin)
     libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io)
   )
 
-lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(JavaServerAppPackaging)
-  .settings(baseSettings:_*)
-  .settings(
-    name := "dynaml-notebook",
-    version := mainVersion,
-    libraryDependencies ++= notebookInterfaceDependency
-  ).dependsOn(core, examples, pipes, repl)
-  .settings(
-    mappings in Universal ++= Seq({
-      // we are using the reference.conf as default application.conf
-      // the user can override settings here
-      val init = (resourceDirectory in Compile).value / "DynaMLInit.scala"
-      init -> "conf/DynaMLInit.scala"
-    }, {
-      val banner = (resourceDirectory in Compile).value / "dynamlBanner.txt"
-      banner -> "conf/banner.txt"
-    }, {
-      val zeppelin_env = (resourceDirectory in Compile).value / "zeppelin-site.xml"
-      zeppelin_env -> "conf/zeppelin-site.xml"
-    }, {
-      val zeppelin_shiro = (resourceDirectory in Compile).value / "shiro.ini.template"
-      zeppelin_shiro -> "conf/shiro.ini"
-    }, {
-      val zeppelinConf = (resourceDirectory in Compile).value / "interpreter-setting.json"
-      zeppelinConf -> "lib/interpreter-setting.json"
-    }, {
-      val common = (resourceDirectory in Compile).value / "common.sh"
-      common -> "bin/common.sh"
-    }, {
-      val intp = (resourceDirectory in Compile).value / "interpreter.sh"
-      intp -> "bin/interpreter.sh"
-    })
-  )
-
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin)
   .settings(baseSettings:_*)
   .dependsOn(core, examples, pipes, repl)
