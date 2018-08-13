@@ -4,7 +4,35 @@
 
 ## Additions
 
+### Data Set API
 
+ The `DataSet` family of classes helps the user to create and transform potentially large number of data instances.
+ Users can create and perform complex transformations on data sets, using the `DataPipe` API or simple Scala functions.
+ 
+ ```scala
+ import _root_.io.github.mandar2812.dynaml.probability._
+ import _root_.io.github.mandar2812.dynaml.pipes._
+ import io.github.mandar2812.dynaml.tensorflow._
+ 
+ 
+ val random_numbers = GaussianRV(0.0, 1.0) :* GaussianRV(1.0, 2.0) 
+ 
+ //Create a data set.
+ val dataset1 = dtfdata.dataset(random_numbers.iid(10000).draw) 
+ 
+ val filter_gr_zero = DataPipe[(Double, Double), Boolean](c => c._1 > 0d && c._2 > 0d)
+ 
+ //Filter elements
+ val data_gr_zero = dataset1.filter(filter_gr_zero)
+ 
+ val abs_func: (Double, Double) => (Double, Double) = (c: (Double, Double)) => (math.abs(c._1), math.abs(c._2))
+ 
+ //Map elements
+ val data_abs     = dataset1.map(abs_func)
+ 
+ ```
+ 
+ Find out more about the `DataSet` API and its capabilities in the scala [docs]().
 
 ### Tensorflow Integration
  
@@ -68,6 +96,9 @@
  ![inception](https://github.com/transcendent-ai-labs/DynaML/blob/master/docs/images/conv-fact2.png)
 
  #### Dynamical Systems: Continuous Time RNN
+ 
+ Continuous time recurrent neural networks (CTRNN) are an important class of recurrent neural networks. They enable
+ the modelling of non-linear and potentially complex dynamical systems of multiple variables, with feedback.
  
   - Added CTRNN layer: `dtflearn.ctrnn`
   

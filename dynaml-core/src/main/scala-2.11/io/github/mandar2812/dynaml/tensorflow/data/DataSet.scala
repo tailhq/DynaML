@@ -51,17 +51,23 @@ class DataSet[X](val data: Iterable[X]) {
 
   lazy val size: Int = data.toSeq.length
 
+
+  def filter(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filter(filterFn))
+
   /**
     * Filter elements of this data set which satisfy
     * a predicate.
     * */
-  def filter(pipe: DataPipe[X, Boolean]): DataSet[X] = DataSet[X](self.data.filter(pipe(_)))
+  def filter(pipe: DataPipe[X, Boolean]): DataSet[X] = filter(pipe.run _)
+
+
+  def filterNot(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filterNot(filterFn))
 
   /**
     * Filter elements of this data set which does not
     * satisfy a predicate.
     * */
-  def filterNot(pipe: DataPipe[X, Boolean]): DataSet[X] = DataSet[X](self.data.filterNot(pipe(_)))
+  def filterNot(pipe: DataPipe[X, Boolean]): DataSet[X] = filterNot(pipe.run _)
 
   /**
     * Creates a new data set of type [[Y]]
@@ -100,6 +106,9 @@ class DataSet[X](val data: Iterable[X]) {
     * Join the current data collection with another collection
     * */
   def concatenate(other: DataSet[X]): DataSet[X] = DataSet[X](self.data ++ other.data)
+
+
+  def transform[Y](transformation: Iterable[X] => Iterable[Y]): DataSet[Y] = DataSet[Y](transformation(data))
 
   /**
     * Transform the underlying collection in a way that uses potentially all of its elements.
