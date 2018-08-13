@@ -170,7 +170,13 @@ Create 3d plots of surfaces, for a use case, see the `jzydemo.sc` and `tf_wave_p
  
  - Removed the `dynaml-notebook` module.
  
-## Bugfixes
+## Bug Fixes
+
+ - Fixed bug related to `scalar` method of `VectorField`, `innerProdDouble` and other inner product implementations.
+
+## Improvements and Upgrades
+
+ - Bumped up Ammonite version to 1.1.0
 
  
 ## Changes
