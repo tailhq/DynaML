@@ -33,7 +33,7 @@
 
   val trainInput = tf.learn.Input(UINT8, Shape(-1))
 
-  val relu_act = DataPipe[String, Layer[Output, Output]](tf.learn.ReLU(_))
+  val relu_act = DataPipe(tf.learn.ReLU(_))
 
   val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
     dtflearn.inception_unit(channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>

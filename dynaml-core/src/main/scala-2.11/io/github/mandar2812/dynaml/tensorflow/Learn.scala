@@ -249,9 +249,9 @@ private[tensorflow] object Learn {
     def get_post_conv_layer(b_index: Int, l_index: Int) =
       if(use_batch_norm) {
         batch_norm (s"$name/B$b_index/BatchNorm_$l_index") >>
-          activation_generator(s"$name/B$b_index/ReLU_$l_index")
+          activation_generator(s"$name/B$b_index/Act_$l_index")
       } else {
-        activation_generator(s"$name/B$b_index/ReLU_$l_index")
+        activation_generator(s"$name/B$b_index/Act_$l_index")
       }
 
     val branch1 =
@@ -300,20 +300,21 @@ private[tensorflow] object Learn {
   def inception_stack(
     num_channels_image: Int,
     num_filters: Seq[Seq[Int]],
-    activation_generator: DataPipe[String, Layer[Output, Output]])(
+    activation_generator: DataPipe[String, Layer[Output, Output]],
+    use_batch_norm: Boolean)(
     starting_index: Int): Layer[Output, Output] = {
 
     val head = inception_unit(num_channels_image, num_filters.head, activation_generator)(starting_index)
 
-    val tail = num_filters.sliding(2)
-      .map(pair => inception_unit(pair.head.sum, pair.last, activation_generator) _)
+    val tail_section = num_filters.sliding(2)
+      .map(pair => inception_unit(pair.head.sum, pair.last, activation_generator, use_batch_norm) _)
       .zipWithIndex
       .map(layer_fn_index_pair => {
         val (create_inception_layer, index) = layer_fn_index_pair
         create_inception_layer(index + starting_index + 1)
       }).reduceLeft((l1, l2) => l1 >> l2)
 
-    head >> tail
+    head >> tail_section
   }
 
   /**
