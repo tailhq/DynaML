@@ -4,102 +4,11 @@
 
 ## Additions
 
+
+
 ### Tensorflow Integration
  
- **Package** `dynaml.tensorflow`
- 
- **Training Stopping Criteria**
- 
- Create common and simple training stop criteria such as.
- 
-  - Stop after fixed number of iterations `dtflearn.max_iter_stop(100000)`
-  - Stop after change in value of loss goes below a threshold. `dtflearn.abs_loss_change_stop(0.0001)`
-  - Stop after change in relative value of loss goes below a threshold. `dtflearn.rel_loss_change_stop(0.001)`
-
-
- **Neural Network Building Blocks** 
-  
-  - Added helper method ```dtlearn.build_tf_model()``` for training tensorflow models/estimators.
-
- **Usage**
-
- ```scala
- 
- import io.github.mandar2812.dynaml.tensorflow._
- import org.platanios.tensorflow.api._
- import org.platanios.tensorflow.data.image.MNISTLoader
- import ammonite.ops._
- 
- val tempdir = home/"tmp"
- 
- val dataSet = MNISTLoader.load(java.nio.file.Paths.get(tempdir.toString()))
- val trainImages = tf.data.TensorSlicesDataset(dataSet.trainImages)
- val trainLabels = tf.data.TensorSlicesDataset(dataSet.trainLabels)
- val trainData =
-   trainImages.zip(trainLabels)
-     .repeat()
-     .shuffle(10000)
-     .batch(256)
-     .prefetch(10)
-
- // Create the MLP model.
- val input = tf.learn.Input(UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2)))
-
- val trainInput = tf.learn.Input(UINT8, Shape(-1))
-
- val architecture = tf.learn.Flatten("Input/Flatten") >> 
-   tf.learn.Cast("Input/Cast", FLOAT32) >>
-   tf.learn.Linear("Layer_0/Linear", 128) >>  
-   tf.learn.ReLU("Layer_0/ReLU", 0.1f) >>
-   tf.learn.Linear("Layer_1/Linear", 64) >>
-   tf.learn.ReLU("Layer_1/ReLU", 0.1f) >>
-   tf.learn.Linear("Layer_2/Linear", 32) >>
-   tf.learn.ReLU("Layer_2/ReLU", 0.1f) >>
-   tf.learn.Linear("OutputLayer/Linear", 10)
-
-  val trainingInputLayer = tf.learn.Cast("TrainInput/Cast", INT64)
-
-  val loss =
-    tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
-    tf.learn.Mean("Loss/Mean") >>
-    tf.learn.ScalarSummary("Loss/Summary", "Loss")
-
-  val optimizer = tf.train.AdaGrad(0.1)
-
-  // Directory in which to save summaries and checkpoints
-  val summariesDir = java.nio.file.Paths.get((tempdir/"mnist_summaries").toString())
-
-
-  val (model, estimator) = dtflearn.build_tf_model(
-    architecture, input, trainInput, trainingInputLayer,
-    loss, optimizer, summariesDir, dtflearn.max_iter_stop(1000),
-    100, 100, 100)(trainData)
-
-```
-
- - Build feedforward layers and feedforward layer stacks easier.
-
-**Usage**
-
- ```scala
-
- import io.github.mandar2812.dynaml.tensorflow._
- import org.platanios.tensorflow.api._
- //Create a single feedforward layer
-
- val layer = dtflearn.feedforward(num_units = 10, useBias = true)(id = 1)
-
- //Create a stack of feedforward layers
-
-
- val net_layer_sizes = Seq(10, 5, 3)
- 
- val stack = dtflearn.feedforward_stack(
-   (i: Int) => dtflearn.Phi("Act_"+i), FLOAT64)(
-   net_layer_sizes)
-
- ```
- 
+ **Package** `dynaml.tensorflow` 
  
  #### Batch Normalisation
  
@@ -157,6 +66,115 @@
  Similarly the `5 x 5` convolutions can be expressed a combination of two `3 x 3` convolutions
  
  ![inception](https://github.com/transcendent-ai-labs/DynaML/blob/master/docs/images/conv-fact2.png)
+
+ #### Dynamical Systems: Continuous Time RNN
+ 
+  - Added CTRNN layer: `dtflearn.ctrnn`
+  
+  - Added CTRNN layer with inferable time step: `dtflearn.dctrnn`.
+  
+  - Added a projection layer for CTRNN based models `dtflearn.ts_linear`.
+ 
+  
+
+ **Training Stopping Criteria**
+ 
+ Create common and simple training stop criteria such as.
+ 
+  - Stop after fixed number of iterations `dtflearn.max_iter_stop(100000)`
+  - Stop after change in value of loss goes below a threshold. `dtflearn.abs_loss_change_stop(0.0001)`
+  - Stop after change in relative value of loss goes below a threshold. `dtflearn.rel_loss_change_stop(0.001)`
+
+
+ **Neural Network Building Blocks** 
+  
+  - Added helper method ```dtlearn.build_tf_model()``` for training tensorflow models/estimators.
+
+ **Usage**
+
+ ```scala
+ 
+ import io.github.mandar2812.dynaml.tensorflow._
+ import org.platanios.tensorflow.api._
+ import org.platanios.tensorflow.data.image.MNISTLoader
+ import ammonite.ops._
+ 
+ val tempdir = home/"tmp"
+ 
+ val dataSet = MNISTLoader.load(java.nio.file.Paths.get(tempdir.toString()))
+ val trainImages = tf.data.TensorSlicesDataset(dataSet.trainImages)
+ val trainLabels = tf.data.TensorSlicesDataset(dataSet.trainLabels)
+ val trainData =
+   trainImages.zip(trainLabels)
+     .repeat()
+     .shuffle(10000)
+     .batch(256)
+     .prefetch(10)
+
+ // Create the MLP model.
+ val input = tf.learn.Input(
+   UINT8, 
+   Shape(
+     -1, 
+     dataSet.trainImages.shape(1), 
+     dataSet.trainImages.shape(2))
+ )
+
+ val trainInput = tf.learn.Input(UINT8, Shape(-1))
+
+ val architecture = tf.learn.Flatten("Input/Flatten") >> 
+   tf.learn.Cast("Input/Cast", FLOAT32) >>
+   tf.learn.Linear("Layer_0/Linear", 128) >>  
+   tf.learn.ReLU("Layer_0/ReLU", 0.1f) >>
+   tf.learn.Linear("Layer_1/Linear", 64) >>
+   tf.learn.ReLU("Layer_1/ReLU", 0.1f) >>
+   tf.learn.Linear("Layer_2/Linear", 32) >>
+   tf.learn.ReLU("Layer_2/ReLU", 0.1f) >>
+   tf.learn.Linear("OutputLayer/Linear", 10)
+
+  val trainingInputLayer = tf.learn.Cast("TrainInput/Cast", INT64)
+
+  val loss =
+    tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
+    tf.learn.Mean("Loss/Mean") >>
+    tf.learn.ScalarSummary("Loss/Summary", "Loss")
+
+  val optimizer = tf.train.AdaGrad(0.1)
+
+  // Directory in which to save summaries and checkpoints
+  val summariesDir = java.nio.file.Paths.get((tempdir/"mnist_summaries").toString())
+
+
+  val (model, estimator) = dtflearn.build_tf_model(
+    architecture, input, trainInput, trainingInputLayer,
+    loss, optimizer, summariesDir, dtflearn.max_iter_stop(1000),
+    100, 100, 100)(trainData)
+
+```
+
+ - Build feedforward layers and feedforward layer stacks easier.
+
+**Usage**
+
+ ```scala
+
+ import io.github.mandar2812.dynaml.tensorflow._
+ import org.platanios.tensorflow.api._
+ //Create a single feedforward layer
+
+ val layer = dtflearn.feedforward(num_units = 10, useBias = true)(id = 1)
+
+ //Create a stack of feedforward layers
+
+
+ val net_layer_sizes = Seq(10, 5, 3)
+ 
+ val stack = dtflearn.feedforward_stack(
+   (i: Int) => dtflearn.Phi("Act_"+i), FLOAT64)(
+   net_layer_sizes)
+
+ ```
+
 
 
 ### 3D Graphics 
