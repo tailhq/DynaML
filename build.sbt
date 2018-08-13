@@ -90,30 +90,17 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
     buildInfoUsePackageAsPath := true,
-    mappings in Universal ++= Seq({
-      // we are using the reference.conf as default application.conf
-      // the user can override settings here
-      val init = (resourceDirectory in Compile).value / "DynaMLInit.scala"
-      init -> "conf/DynaMLInit.scala"
-    }, {
-      val banner = (resourceDirectory in Compile).value / "dynamlBanner.txt"
-      banner -> "conf/banner.txt"
-    }, {
-      val zeppelin_env = (resourceDirectory in Compile).value / "zeppelin-site.xml"
-      zeppelin_env -> "conf/zeppelin-site.xml"
-    }, {
-      val zeppelin_shiro = (resourceDirectory in Compile).value / "shiro.ini.template"
-      zeppelin_shiro -> "conf/shiro.ini"
-    }, {
-      val zeppelinConf = (resourceDirectory in Compile).value / "interpreter-setting.json"
-      zeppelinConf -> "lib/interpreter-setting.json"
-    }, {
-      val common = (resourceDirectory in Compile).value / "common.sh"
-      common -> "bin/common.sh"
-    }, {
-      val intp = (resourceDirectory in Compile).value / "interpreter.sh"
-      intp -> "bin/interpreter.sh"
-    }),
+    mappings in Universal ++= Seq(
+      {
+        //Initialization script for the DynaML REPL
+        val init = (resourceDirectory in Compile).value / "DynaMLInit.scala"
+        init -> "conf/DynaMLInit.scala"
+      },
+      {
+        val banner = (resourceDirectory in Compile).value / "dynamlBanner.txt"
+        banner -> "conf/banner.txt"
+      }
+    ),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
       "-J-Xmx2048m",

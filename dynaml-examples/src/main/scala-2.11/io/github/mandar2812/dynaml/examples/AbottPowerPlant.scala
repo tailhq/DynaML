@@ -23,9 +23,9 @@ import com.quantifind.charts.Highcharts._
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.evaluation.{MultiRegressionMetrics, RegressionMetrics}
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
-import io.github.mandar2812.dynaml.models.gp.GPNarXModel
+import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GPNarXModel, GPRegression}
 import io.github.mandar2812.dynaml.models.stp.MVStudentsTModel
-import io.github.mandar2812.dynaml.optimization.{GradBasedGlobalOptimizer, GridSearch, ProbGPCommMachine}
+import io.github.mandar2812.dynaml.optimization.{GlobalOptimizer, GradBasedGlobalOptimizer, GridSearch, ProbGPCommMachine}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import io.github.mandar2812.dynaml.utils.GaussianScaler
 
@@ -39,6 +39,7 @@ object AbottPowerPlant {
   type Features = DenseVector[Double]
   type Kernel = LocalScalarKernel[Features]
   type Scales = (GaussianScaler, GaussianScaler)
+  type GPModel = AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)], DenseVector[Double]]
 
   type Data = Stream[(Features, Features)]
 
@@ -172,20 +173,18 @@ object AbottPowerPlant {
     //create RegressionMetrics instance and produce plots
 
     val modelTrainTest =
-      (trainTest: ((Stream[(Features, Double)],
-        Stream[(Features, Double)]),
-        (Features, Features))) => {
+      (trainTest: ((Stream[(Features, Double)], Stream[(Features, Double)]), (Features, Features))) => {
 
         val model = new GPNarXModel(deltaT, 4, kernel,
           noise, trainTest._1._1)
 
-        val gs = opt("globalOpt") match {
-          case "GS" => new GridSearch[model.type](model)
+        val gs: GlobalOptimizer[GPModel] = opt("globalOpt") match {
+          case "GS" => new GridSearch[GPModel](model)
             .setGridSize(opt("grid").toInt)
             .setStepSize(opt("step").toDouble)
             .setLogScale(false)
 
-          case "ML" => new GradBasedGlobalOptimizer[model.type](model)
+          case "ML" => new GradBasedGlobalOptimizer(model)
 
           case "GPC" => new ProbGPCommMachine(model)
             .setPolicy(opt("policy"))
@@ -198,7 +197,7 @@ object AbottPowerPlant {
 
         val startConf = kernel.effective_state ++ noise.effective_state
 
-        val (optModel, _) = gs.optimize(startConf, opt)
+        val (optModel, _): (GPModel, Map[String, Double]) = gs.optimize(startConf, opt)
 
         val res = optModel.test(trainTest._1._2)
 
@@ -209,13 +208,16 @@ object AbottPowerPlant {
             l._4*trainTest._2._2(-1) + trainTest._2._1(-1))})
 
         val scoresAndLabelsPipe =
-          DataPipe(
-            (res: Seq[(Features, Double, Double, Double, Double)]) =>
-              res.map(i => (i._3, i._2, i._4, i._5)).toList) > deNormalize
+          DataPipe[
+            Seq[(Features, Double, Double, Double, Double)],
+            List[(Double, Double, Double, Double)]](
+            _.map(i => (i._3, i._2, i._4, i._5)).toList) >
+            deNormalize
 
         val scoresAndLabels = scoresAndLabelsPipe.run(res.toList)
 
-        val metrics = new RegressionMetrics(scoresAndLabels.map(i => (i._1, i._2)),
+        val metrics = new RegressionMetrics(
+          scoresAndLabels.map(i => (i._1, i._2)),
           scoresAndLabels.length)
 
         val (name, name1) =

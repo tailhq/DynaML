@@ -34,9 +34,7 @@ import io.github.mandar2812.dynaml.algebra.square
 
 class RegressionMetrics(
     override protected val scoresAndLabels: List[(Double, Double)],
-    val len: Int)
-  extends Metrics[Double] {
-  private val logger = Logger.getLogger(this.getClass)
+    val len: Int) extends Metrics[Double] {
 
   val length: Int = len
 
@@ -53,6 +51,8 @@ class RegressionMetrics(
   val Rsq: Double = RegressionMetrics.computeRsq(scoresAndLabels, length)
 
   val corr: Double = RegressionMetrics.computeCorr(scoresAndLabels, length)
+
+  val sp_corr: Double = RegressionMetrics.computeSpearmanCorr(scoresAndLabels, length)
 
   val predictionEfficiency = scoresAndLabels.map((p) =>
     math.pow(p._1 - p._2, 2)/length).sum
@@ -85,6 +85,9 @@ class RegressionMetrics(
     scala.Predef.print("Corr. Coefficient = ")
     pprint.pprintln(corr)
 
+    scala.Predef.print("Spearman Corr. Coefficient = ")
+    pprint.pprintln(sp_corr)
+
     scala.Predef.print("Model Yield = ")
     pprint.pprintln(modelYield)
 
@@ -92,7 +95,7 @@ class RegressionMetrics(
     pprint.pprintln(sigma)
   }
 
-  override def kpi() = DenseVector(mae, rmse, Rsq, corr)
+  override def kpi() = DenseVector(mae, rmse, Rsq, corr, sp_corr)
 
   override def generatePlots(): Unit = {
     println("Generating Plot of Residuals")
@@ -130,7 +133,7 @@ object RegressionMetrics {
     val mean: Double = scoresAndLabels.map{coup => coup._2}.sum/size
     var SSres = 0.0
     var SStot = 0.0
-    scoresAndLabels.foreach((couple) => {
+    scoresAndLabels.foreach(couple => {
       SSres += math.pow(couple._2 - couple._1, 2)
       SStot += math.pow(couple._2 - mean, 2)
     })
@@ -144,7 +147,7 @@ object RegressionMetrics {
     var SSLabel = 0.0
     var SSPred = 0.0
     var SSLabelPred = 0.0
-    scoresAndLabels.foreach((couple) => {
+    scoresAndLabels.foreach(couple => {
       SSLabel += math.pow(couple._2 - meanLabel, 2)
       SSPred += math.pow(couple._1 - meanScore, 2)
       SSLabelPred += (couple._1 - meanScore)*(couple._2 - meanLabel)
@@ -153,16 +156,39 @@ object RegressionMetrics {
     SSLabelPred/(math.sqrt(SSPred)*math.sqrt(SSLabel))
   }
 
+  def computeSpearmanCorr(scoresAndLabels: Iterable[(Double, Double)], size: Int): Double = {
+
+    val (predictions, targets) = scoresAndLabels.toSeq.unzip
+
+    val addOneToIndex = (p: (Double, Int)) => (p._1, p._2 + 1)
+
+    def sort_with_ranks(seq: Seq[Double]) =
+      seq.sorted
+        .zipWithIndex
+        .map(addOneToIndex)
+        .groupBy(_._1)
+        .map(coll => (coll._1, coll._2.map(_._2)))
+        .mapValues(values => values.sum.toDouble/values.length)
+
+    val preds_rank_map   = sort_with_ranks(predictions)
+    val targets_rank_map = sort_with_ranks(targets)
+
+    val ranks_preds      = predictions.map(preds_rank_map(_))
+    val ranks_targets    = targets.map(targets_rank_map(_))
+
+    computeCorr(ranks_preds.zip(ranks_targets), size)
+  }
+
   def computeYield(scoresAndLabels: Iterable[(Double, Double)], size: Int): Double =
     (scoresAndLabels.map(_._1).max - scoresAndLabels.map(_._1).min)/
       (scoresAndLabels.map(_._2).max - scoresAndLabels.map(_._2).min)
 
 }
 
-class MultiRegressionMetrics(override protected val scoresAndLabels: List[(DenseVector[Double], DenseVector[Double])],
-                             val len: Int)
-  extends Metrics[DenseVector[Double]] {
-  private val logger = Logger.getLogger(this.getClass)
+class MultiRegressionMetrics(
+  override protected val scoresAndLabels: List[(DenseVector[Double], DenseVector[Double])],
+  val len: Int) extends Metrics[DenseVector[Double]] {
+
 
   val num_outputs: Int = scoresAndLabels.head._2.length
 

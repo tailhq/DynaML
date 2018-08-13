@@ -35,12 +35,13 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
   * f(x) ~ GP(0, cov(X,X))
   * e|f(x) ~ N(0, noise(X,X))
   */
-class GPNarXModel(order: Int,
-                  ex: Int,
-                  cov: LocalScalarKernel[DenseVector[Double]],
-                  nL: LocalScalarKernel[DenseVector[Double]],
-                  trainingdata: Seq[(DenseVector[Double], Double)],
-                  meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)) extends
+class GPNarXModel(
+  order: Int,
+  ex: Int,
+  cov: LocalScalarKernel[DenseVector[Double]],
+  nL: LocalScalarKernel[DenseVector[Double]],
+  trainingdata: Seq[(DenseVector[Double], Double)],
+  meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)) extends
 GPRegression(cov, nL, trainingdata, meanFunc) {
 
   val modelOrder = order
