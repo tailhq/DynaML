@@ -13,6 +13,7 @@ pages:
     - 'Structure': structure.md
     - Releases:
       - 'v1.5.x':
+        - 'v1.5.3': 'releases/mydoc_release_notes_153.md'
         - 'v1.5.2': 'releases/mydoc_release_notes_152.md'
         - 'v1.5.1': 'releases/mydoc_release_notes_151.md'
         - 'v1.5': 'releases/mydoc_release_notes_15.md'
@@ -23,6 +24,11 @@ pages:
         - 'v1.4': 'releases/mydoc_release_notes_14.md'
     - Scaladoc:
       - v1.5.x:
+        - v1.5.3:
+          - dynaml-core: 'scaladoc/v1.5.3/core.md'
+          - dynaml-pipes: 'scaladoc/v1.5.3/pipes.md'
+          - dynaml-repl: 'scaladoc/v1.5.3/repl.md'
+          - dynaml-examples: 'scaladoc/v1.5.3/examples.md'
         - v1.5.2:
             - dynaml-core: 'scaladoc/v1.5.2/core.md'
             - dynaml-pipes: 'scaladoc/v1.5.2/pipes.md'
@@ -74,6 +80,7 @@ pages:
           - Introduction: 'core/core_dynaml_tf.md'
           - Tensorflow Pointer: 'core/core_dtf.md'
           - Building Blocks: 'core/core_dtflearn.md'
+          - Data Set API: 'core/core_dtfdata.md'
           #- Utilities: 'core/core_tf_misc.md'
         - Kernels:
           - Kernel API: 'core/core_kernels.md'

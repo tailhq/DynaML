@@ -127,6 +127,8 @@ class DataSet[X](val data: Iterable[X]) {
 
   def scanLeft[Y](z: Y)(scanPipe: DataPipe2[Y, X, Y]): DataSet[Y] = DataSet(data.scanLeft(z)(scanPipe(_, _)))
 
+  def scanRight[Y](z: Y)(scanPipe: DataPipe2[X, Y, Y]): DataSet[Y] = DataSet(data.scanRight(z)(scanPipe(_, _)))
+
   def scan[Y >: X](z: Y)(scanPipe: DataPipe2[Y, Y, Y]): DataSet[Y] = DataSet(data.scan(z)(scanPipe(_, _)))
 
   /**
@@ -260,6 +262,11 @@ class ZipDataSet[X, Y](
 
   def unzip: (DataSet[X], DataSet[Y]) = (dataset1, dataset2)
 
+  /**
+    * Join the current data set to another key value data set.
+    * Join operation is carried out over keys of type [[X]].
+    *
+    * */
   def join[Z](other: ZipDataSet[X, Z]): ZipDataSet[X, (Y, Z)] = {
 
     val otherMap = other.data.toMap
@@ -305,6 +312,9 @@ case class SupervisedDataSet[X, Y](
 
   self  =>
 
+  /**
+    * Split into training and test sets.
+    * */
   override def partition(f: DataPipe[(X, Y), Boolean]): TFDataSet[(X, Y)] = {
     val data_split = data.partition(f(_))
 
