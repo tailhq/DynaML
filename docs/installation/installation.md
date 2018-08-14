@@ -12,10 +12,45 @@ Currently DynaML installs and runs on \*nix platforms, though it is possible to 
     "org.scalanlp" % "breeze-natives_2.11" % "0.11.2" % "compile",
   ```
 
+!!! note
+    
+    **TensorFlow Nvidia GPU support**
+    
+    If you want to use Nvidia GPU acceleration when DynaML calls TensorFlow, you must
+    build DynaML with a small modification to `project/Dependencies.scala`
+    
+    ```scala
+    val gpuFlag: Boolean = true
+    ```
+    
+    The rest of the procedure for installation remains the same as shown below. But
+    in order for your GPU to be actually utilised, you must take care to confirm that.
+    
+     * Your Nvidia GPU is [compliant](https://www.geforce.com/hardware/technology/cuda/supported-gpus), 
+       i.e. has a compute capability of atleast 4.1
+     * Cuda v9.0 is installed on your system and its installation location 
+       is added to `LD_LIBRARY_PATH` bash variable.
+     * cuDNN v7 is installed on your system and is appended to `LD_LIBRARY_PATH`
+     
+     **Using user compiled TensorFlow**
+     
+     By default, DynaML uses the Tensorflow dynamic library bundled with TensorFlow Scala distribution,
+     but it is possible for the user to build Tensorflow from source for their platform. In this 
+     situation, you can make another modification to `project/Dependencies.scala`.
+     
+     
+     ```scala
+     val packagedTFFlag: Boolean = false
+     ```
+     
+     In most applications, the bundled TensorFlow is adequate for user requirements, and since building it
+     from source is a time consuming affair, its advisable for users to start with the bundled TensorFlow
+     library and compile it themselves only if absolutely necessary.
+
 ## Steps
 
-* Clone this repository
-* Run the following.
+1. Clone this repository
+2. Run the following.
 
 
     ```shell
@@ -30,14 +65,14 @@ Currently DynaML installs and runs on \*nix platforms, though it is possible to 
     >
     ```
 
-* Build the source
+3. Build the source
 
 
     ```shell
     stage
     ```
 
-* After the project builds, exit from the sbt console and execute the DynaML start script from the bash shell. Make sure you have execute permissions on the DynaML start script.
+4. After the project builds, exit from the sbt console and execute the DynaML start script from the bash shell. Make sure you have execute permissions on the DynaML start script.
 
 
     ```
@@ -51,4 +86,17 @@ Currently DynaML installs and runs on \*nix platforms, though it is possible to 
     Interactive Scala shell for Machine Learning Research
     (Scala 2.11.8 Java 1.8.0_101)
     DynaML>
+    ```
+
+!!! tip
+    **Using the install script**
+    
+    If you have already installed the [pre-requisites](/installation/installation/#pre-requisites), 
+    you can use the `install.sh` to build DynaML. It will add the a symlink to the`dynaml` 
+    executable in the `/usr/local/bin` directory. 
+    
+    You will need _sudo_ access for `install.sh` to run correctly.
+    
+    ```shell
+    ./install.sh
     ```
