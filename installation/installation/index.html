@@ -2194,8 +2194,38 @@
 </pre></div>
 </td></tr></table>
 
-<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>TensorFlow Nvidia GPU support</strong></p>
+<p>If you want to use Nvidia GPU acceleration when DynaML calls TensorFlow, you must
+build DynaML with a small modification to <code>project/Dependencies.scala</code></p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">gpuFlag</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
+</pre></div>
+</td></tr></table>
+
+<p>The rest of the procedure for installation remains the same as shown below. But
+in order for your GPU to be actually utilised, you must take care to confirm that.</p>
 <ul>
+<li>Your Nvidia GPU is <a href="https://www.geforce.com/hardware/technology/cuda/supported-gpus">compliant</a>, 
+   i.e. has a compute capability of atleast 4.1</li>
+<li>Cuda v9.0 is installed on your system and its installation location 
+   is added to <code>LD_LIBRARY_PATH</code> bash variable.</li>
+<li>cuDNN v7 is installed on your system and is appended to <code>LD_LIBRARY_PATH</code></li>
+</ul>
+<p><strong>Using user compiled TensorFlow</strong></p>
+<p>By default, DynaML uses the Tensorflow dynamic library bundled with TensorFlow Scala distribution,
+ but it is possible for the user to build Tensorflow from source for their platform. In this 
+ situation, you can make another modification to <code>project/Dependencies.scala</code>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">packagedTFFlag</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
+</pre></div>
+</td></tr></table>
+
+<p>In most applications, the bundled TensorFlow is adequate for user requirements, and since building it
+ from source is a time consuming affair, its advisable for users to start with the bundled TensorFlow
+ library and compile it themselves only if absolutely necessary.</p>
+</div>
+<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
+<ol>
 <li>Clone this repository</li>
 <li>
 <p>Run the following.</p>
@@ -2238,7 +2268,19 @@
 </td></tr></table>
 
 </li>
-</ul>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>Using the install script</strong></p>
+<p>If you have already installed the <a href="../../installation/installation/#pre-requisites">pre-requisites</a>, 
+you can use the <code>install.sh</code> to build DynaML. It will add the a symlink to the<code>dynaml</code> 
+executable in the <code>/usr/local/bin</code> directory. </p>
+<p>You will need <em>sudo</em> access for <code>install.sh</code> to run correctly.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>./install.sh
+</pre></div>
+</td></tr></table>
+
+</div>
                 
                   
                 
