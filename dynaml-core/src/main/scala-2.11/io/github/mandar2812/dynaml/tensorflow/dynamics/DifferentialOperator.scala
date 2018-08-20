@@ -36,71 +36,72 @@ abstract class DifferentialOperator[I, J](val name: String) extends DataPipe[Lay
 
   def -(other: DifferentialOperator[I, J]): DifferentialOperator[I, J]
 
-  def *(const: I): DifferentialOperator[I, J]
+  def *(const: J): DifferentialOperator[I, J]
 
-  def *(layer: Layer[Output, Output]): DifferentialOperator[Output, Output]
+  def *(layer: Layer[I, J]): DifferentialOperator[I, Output]
 
   def apply(op: DifferentialOperator[I, J]): DifferentialOperator[I, J]
 
 }
 
-abstract class TensorOperator(override val name: String) extends DifferentialOperator[Output, Output](name) {
+abstract class TensorOperator[I](override val name: String) extends DifferentialOperator[I, Output](name) {
 
   self =>
 
-  override def +(other: DifferentialOperator[Output, Output]): TensorOperator =
+  override def +(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
     AddTensorOperator(self, other)
 
 
-  override def -(other: DifferentialOperator[Output, Output]): TensorOperator = AddTensorOperator(
+  override def -(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] = AddTensorOperator(
     self,
     ConstMultTensorOperator(
       -1.0,
       other)
   )
 
-  override def *(const: Output): DifferentialOperator[Output, Output] = ConstMultTensorOperator(const, self)
+  def *(const: Output): DifferentialOperator[I, Output] = ConstMultTensorOperator(const, self)
 
-  override def *(layer: Layer[Output, Output]): DifferentialOperator[Output, Output] = MultTensorOperator(layer, self)
+  override def *(layer: Layer[I, Output]): DifferentialOperator[I, Output] = MultTensorOperator(layer, self)
 
-  override def apply(other: DifferentialOperator[Output, Output]): DifferentialOperator[Output, Output] =
+  override def apply(other: DifferentialOperator[I, Output]): TensorOperator[I] =
     ComposedOperator(self, other)
 }
 
-case class ComposedOperator(
-  operator1: DifferentialOperator[Output, Output],
-  operator2: DifferentialOperator[Output, Output]) extends
-  TensorOperator(s"${operator1.name}[${operator2.name}]") {
+case class ComposedOperator[I](
+  operator1: DifferentialOperator[I, Output],
+  operator2: DifferentialOperator[I, Output]) extends
+  TensorOperator[I](s"${operator1.name}[${operator2.name}]") {
 
-  override def run(data: Layer[Output, Output]): Layer[Output, Output] = operator1.run(operator2.run(data))
+  override def run(data: Layer[I, Output]): Layer[I, Output] = operator1.run(operator2.run(data))
 }
 
-case class ConstMultTensorOperator(const: Output, operator: DifferentialOperator[Output, Output]) extends
-  TensorOperator(s"ScalarMult[${const.toString()}, ${operator.name}]") {
+case class ConstMultTensorOperator[I](const: Output, operator: DifferentialOperator[I, Output]) extends
+  TensorOperator[I](s"ScalarMult[${const.toString()}, ${operator.name}]") {
 
-  override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
+  override def run(data: Layer[I, Output]): Layer[I, Output] = {
     val layer = operator(data)
     layer >> Learn.multiply_const(const, s"${layer.name}")
   }
 }
 
-case class MultTensorOperator(
-  function: Layer[Output, Output],
-  operator: DifferentialOperator[Output, Output]) extends
-  TensorOperator(s"Mult[${function.name}, ${operator.name}]") {
+case class MultTensorOperator[I](
+  function: Layer[I, Output],
+  operator: DifferentialOperator[I, Output]) extends
+  TensorOperator[I](s"Mult[${function.name}, ${operator.name}]") {
 
-  override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
+  override def run(data: Layer[I, Output]): Layer[I, Output] = {
     val layer = operator(data)
     Learn.combined_layer(s"Combine[${function.name}, ${layer.name}]", Seq(function, layer)) >>
       Learn.mult_seq(s"Multiply[${function.name}, ${layer.name}]")
   }
 }
 
-case class AddTensorOperator(
-  operator1: DifferentialOperator[Output, Output], operator2: DifferentialOperator[Output, Output]) extends
-  TensorOperator(s"OperatorAdd[${operator1.name}, ${operator2.name}]") {
+case class AddTensorOperator[I](
+  operator1: DifferentialOperator[I, Output],
+  operator2: DifferentialOperator[I, Output]) extends
+  TensorOperator[I](s"OperatorAdd[${operator1.name}, ${operator2.name}]") {
 
-  override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
+  override def run(data: Layer[I, Output]): Layer[I, Output] = {
 
     val layer1 = operator1(data)
 
@@ -112,7 +113,7 @@ case class AddTensorOperator(
 
 }
 
-private[dynamics] object Gradient extends TensorOperator(s"Grad") {
+private[dynamics] object Gradient extends TensorOperator[Output](s"Grad") {
 
   override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
 
