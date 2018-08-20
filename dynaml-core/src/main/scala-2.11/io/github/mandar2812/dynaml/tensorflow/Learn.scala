@@ -34,6 +34,10 @@ private[tensorflow] object Learn {
   val tuple2_layer: layers.Tuple2Layer.type          = layers.Tuple2Layer
   val stack_tuple2: layers.StackTuple2.type          = layers.StackTuple2
   val concat_tuple2: layers.ConcatenateTuple2.type   = layers.ConcatenateTuple2
+  val sum_tuple: layers.SumTuple.type                = layers.SumTuple
+  val sum_seq: layers.SumSeq.type                    = layers.SumSeq
+  val mult_seq: layers.MultSeq.type                  = layers.MultSeq
+  val multiply_const: layers.MultConstant.type       = layers.MultConstant
 
   /**
     * Stop after a specified maximum number of iterations has been reached.

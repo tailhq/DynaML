@@ -63,6 +63,28 @@ case class ConcatenateOutputs(override val name: String, axis: Int = -1) extends
 
 }
 
+case class SumSeq(override val name: String) extends Layer[Seq[Output], Output](name) {
+
+  override val layerType: String = s"SumSeq"
+
+  override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output = input.reduceLeft(_.add(_))
+}
+
+case class MultSeq(override val name: String) extends Layer[Seq[Output], Output](name) {
+
+  override val layerType: String = s"MultSeq"
+
+  override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output = input.reduceLeft(_.multiply(_))
+}
+
+
+case class SumTuple(override val name: String) extends Layer[(Output, Output), Output](name) {
+
+  override val layerType: String = s"Sum"
+
+  override protected def _forward(input: (Output, Output))(implicit mode: Mode): Output = input._1.add(input._2)
+}
+
 /**
   * Combine a collection of layers into a layer which accepts
   * sequences of symbolic tensors.
@@ -103,4 +125,10 @@ case class IdentityLayer[I](override val name: String) extends Layer[I, I](name)
 
 }
 
+
+case class MultConstant(const: Output, override val name: String) extends Layer[Output, Output](name) {
+  override val layerType: String = s"MultConst"
+
+  override protected def _forward(input: Output)(implicit mode: Mode): Output = input.multiply(const)
+}
 
