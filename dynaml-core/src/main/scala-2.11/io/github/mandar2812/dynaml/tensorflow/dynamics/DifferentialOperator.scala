@@ -129,15 +129,14 @@ private[dynamics] object Gradient extends TensorOperator[Output](s"Grad") {
         def gradTRec(y: Seq[Output], x: Output, rank: Int): Output = rank match {
           case 1 =>
             tf.stack(
-              y.map(
-                o => tf.gradients.gradients(Seq(o), Seq(x)).head.toOutput
-              ), -1)
+              y.map(o => tf.gradients.gradients(Seq(o), Seq(x)).head.toOutput),
+              axis = -1)
           case _ =>
             gradTRec(y.flatMap(_.unstack(-1, -1)), x, rank - 1)
 
         }
 
-        gradTRec(Seq(output), input, output.rank).reshape(output.shape ++ input.shape(1::))
+        gradTRec(Seq(output), input, output.rank).reshape(input.shape ++ output.shape(1::))
 
       }
     }
