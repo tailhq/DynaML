@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow
 
-import org.platanios.tensorflow.api.Output
+import org.platanios.tensorflow.api._
 
 /**
   * <h3>Differential Operators & PDEs</h3>
@@ -33,6 +33,8 @@ package object dynamics {
 
   val jacobian: Gradient.type         = Gradient
 
-  val hessian: TensorOperator[Output] = jacobian(jacobian)
+  val ∇ : Gradient.type               = Gradient
+
+  val hessian: TensorOperator[Output] = ∇(∇)
 
 }
