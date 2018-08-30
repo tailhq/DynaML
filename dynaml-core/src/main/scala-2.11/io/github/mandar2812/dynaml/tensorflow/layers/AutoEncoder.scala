@@ -29,8 +29,8 @@ import org.platanios.tensorflow.api.learn.layers.Layer
   * */
 case class AutoEncoder[I, J](
   override val name: String,
-  val encoder: Layer[I, J],
-  val decoder: Layer[J, I]) extends
+  encoder: Layer[I, J],
+  decoder: Layer[J, I]) extends
   Layer[I, (J, I)](name) {
 
   self =>
