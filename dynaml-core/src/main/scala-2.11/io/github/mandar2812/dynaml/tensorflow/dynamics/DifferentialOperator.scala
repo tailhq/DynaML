@@ -44,6 +44,9 @@ abstract class DifferentialOperator[I, J](val name: String) extends DataPipe[Lay
 
 }
 
+/**
+  *
+  * */
 abstract class TensorOperator[I](override val name: String) extends DifferentialOperator[I, Output](name) {
 
   self =>
@@ -67,6 +70,9 @@ abstract class TensorOperator[I](override val name: String) extends Differential
     ComposedOperator(self, other)
 }
 
+/**
+  *
+  * */
 case class ComposedOperator[I](
   operator1: DifferentialOperator[I, Output],
   operator2: DifferentialOperator[I, Output]) extends
@@ -84,6 +90,9 @@ case class ConstMultTensorOperator[I](const: Output, operator: DifferentialOpera
   }
 }
 
+/**
+  *
+  * */
 case class MultTensorOperator[I](
   function: Layer[I, Output],
   operator: DifferentialOperator[I, Output]) extends
@@ -96,6 +105,9 @@ case class MultTensorOperator[I](
   }
 }
 
+/**
+  *
+  * */
 case class AddTensorOperator[I](
   operator1: DifferentialOperator[I, Output],
   operator2: DifferentialOperator[I, Output]) extends
@@ -113,6 +125,9 @@ case class AddTensorOperator[I](
 
 }
 
+/**
+  *
+  * */
 private[dynamics] object Gradient extends TensorOperator[Output](s"Grad") {
 
   override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
