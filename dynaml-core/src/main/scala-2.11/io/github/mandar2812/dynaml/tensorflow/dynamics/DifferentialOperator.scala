@@ -25,9 +25,20 @@ import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 
 /**
+  * <h3>Differential Operator</h3>
+  *
   * An abstract idea of a differential operator, it is
   * expressed as a [[DataPipe]] which takes a function/tensorflow layer
   * and returns another function/tensorflow layer.
+  *
+  * Differential operators are applied on some space of functions,
+  * in DynaML (and TensorFlow), differentiable functions are
+  * represented as computational layers.
+  *
+  * @tparam I Input domain of the underlying function space.
+  * @tparam J Output domain of the underlying function space.
+  * @param name A string identifier for the operator.
+  * @author mandar2812
   *
   * */
 abstract class DifferentialOperator[I, J](val name: String) extends DataPipe[Layer[I, J], Layer[I, J]] {
@@ -45,9 +56,14 @@ abstract class DifferentialOperator[I, J](val name: String) extends DataPipe[Lay
 }
 
 /**
+  * A differential operator which operates on tensor valued functions.
   *
+  * @tparam I Input domain of the underlying function space
+  * @param name String identifier for the operator
+  * @author mandar2812
   * */
-abstract class TensorOperator[I](override val name: String) extends DifferentialOperator[I, Output](name) {
+abstract class TensorOperator[I](override val name: String) extends
+  DifferentialOperator[I, Output](name) {
 
   self =>
 
@@ -71,7 +87,7 @@ abstract class TensorOperator[I](override val name: String) extends Differential
 }
 
 /**
-  *
+  * Composition of two operators.
   * */
 case class ComposedOperator[I](
   operator1: DifferentialOperator[I, Output],
@@ -81,6 +97,13 @@ case class ComposedOperator[I](
   override def run(data: Layer[I, Output]): Layer[I, Output] = operator1.run(operator2.run(data))
 }
 
+/**
+  * A constant (tensor) multiplied to an operator.
+  *
+  * &alpha; &times; T[.]
+  *
+  * @tparam I Input domain of the underlying function space
+  * */
 case class ConstMultTensorOperator[I](const: Output, operator: DifferentialOperator[I, Output]) extends
   TensorOperator[I](s"ScalarMult[${const.toString()}, ${operator.name}]") {
 
@@ -91,7 +114,11 @@ case class ConstMultTensorOperator[I](const: Output, operator: DifferentialOpera
 }
 
 /**
+  * A function (computational layer) multiplied to an operator.
   *
+  * g(x) &times; T[.]
+  *
+  * @tparam I Input domain of the underlying function space
   * */
 case class MultTensorOperator[I](
   function: Layer[I, Output],
@@ -106,7 +133,11 @@ case class MultTensorOperator[I](
 }
 
 /**
+  * An operator which is the sum of two operators.
   *
+  * T[.] = U[.] + V[.]
+  *
+  * @tparam I Input domain of the underlying function space
   * */
 case class AddTensorOperator[I](
   operator1: DifferentialOperator[I, Output],
@@ -126,7 +157,9 @@ case class AddTensorOperator[I](
 }
 
 /**
-  *
+  * Implementation of the gradient operator (∇), see
+  * [[_root_.io.github.mandar2812.dynaml.tensorflow.dynamics]],
+  * for more details.
   * */
 private[dynamics] object Gradient extends TensorOperator[Output](s"Grad") {
 
