@@ -7,10 +7,10 @@ jdk:
    - oraclejdk7
 
 script:
-   - sbt clean stage
+   - sbt clean coverage test coverageReport
 
-#after_success:
-#  - bash <(curl -s https://codecov.io/bash)
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   webhooks:

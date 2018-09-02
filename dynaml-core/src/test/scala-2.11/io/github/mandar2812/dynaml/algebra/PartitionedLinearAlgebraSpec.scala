@@ -12,8 +12,8 @@ class PartitionedLinearAlgebraSpec extends FlatSpec with Matchers {
 
 
   "Blocked Cholesky" should "be able to factorize P.S.D matrices" in {
-    val length = 4000L
-    val numRowsPerBlock = 1000
+    val length = 1000L
+    val numRowsPerBlock = 200
     val epsilon = 1E-6
 
     val A: PartitionedMatrix = PartitionedMatrix(

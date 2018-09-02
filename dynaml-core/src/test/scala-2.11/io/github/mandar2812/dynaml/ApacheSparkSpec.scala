@@ -92,7 +92,7 @@ class ApacheSparkSpec extends FlatSpec
 
   }
 
-  /*"A distributed kernel matrix "*/ ignore should "must be a quadratic form" in {
+  "A distributed kernel matrix " should "must be a quadratic form" in {
 
 
     val length = 100
@@ -116,7 +116,7 @@ class ApacheSparkSpec extends FlatSpec
 
   }
 
-  /*"Distributed matrices "*/ ignore should " concatenate in a consistent manner" in {
+  "Distributed matrices " should " concatenate in a consistent manner" in {
 
     val length = 100
 
