@@ -42,7 +42,8 @@ class QuadraticOptimizationSpec extends FlatSpec with Matchers {
     val wApprox = GradientDescent.runSGD(
       numPoints.toLong, 0.0, 1000,
       new SquaredL2Updater, new LeastSquaresGradient,
-      1.0, DenseVector(0.0, 0.0, 0.0), data, transform)
+      1.0, DenseVector(0.0, 0.0, 0.0), data,
+      transform, true, 500)
 
     //println("Learned W: "+wApprox)
     assert(norm(wApprox - wAug) <= epsilon)
@@ -75,7 +76,8 @@ class QuadraticOptimizationSpec extends FlatSpec with Matchers {
     val wApprox = QuasiNewtonOptimizer.run(
       numPoints.toLong, 0.0, 500,
       new SimpleBFGSUpdater, new LeastSquaresGradient,
-      1.0, DenseVector(0.0, 0.0, 0.0), data, transform)
+      1.0, DenseVector(0.0, 0.0, 0.0), data, transform,
+      true, 200)
 
     //println("Learned W: "+wApprox)
     assert(norm(wApprox - wAug) <= epsilon)
@@ -165,10 +167,11 @@ class QuadraticOptimizationSpec extends FlatSpec with Matchers {
     val initial_net = stackfactory(Seq((DenseMatrix((uniH.draw(), uniH.draw())), DenseVector(uniH.draw()))))
 
     val backprop = new FFBackProp(stackfactory)
-      .setNumIterations(1000)
+      .setNumIterations(1500)
       .setStepSize(0.01)
       .momentum_(0.1)
       .setRegParam(0.0)
+      .logging_rate_(500)
 
     val new_net = backprop.optimize(numPoints, transform(data), initial_net)
 

@@ -28,4 +28,16 @@ class DataPipesSpec extends FlatSpec with Matchers {
     assert(num match {case _: Double => true})
   }
 
+  "Tuple Integer Encoding" should "create a valid bijective mapping from tuples to number systems" in {
+
+    val binaryNumbers = List(2, 2)
+
+    val numbers = 0 until 4
+
+    val enc = TupleIntegerEncoder(binaryNumbers)
+
+    assert(Seq(List(0, 0), List(1, 0), List(0, 1), List(1, 1)).map(enc(_)).zip(numbers).forall(ab => ab._1 == ab._2))
+
+  }
+
 }
