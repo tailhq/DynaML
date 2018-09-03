@@ -86,6 +86,7 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     name := "DynaML",
     version := mainVersion,
     fork in run := true,
+    fork in test := true,
     mainClass in Compile := Some("io.github.mandar2812.dynaml.DynaML"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",

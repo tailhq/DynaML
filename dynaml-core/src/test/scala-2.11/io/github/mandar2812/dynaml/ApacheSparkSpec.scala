@@ -181,7 +181,7 @@ class ApacheSparkSpec extends FlatSpec
 
   }
 
-  "Distributed Conjugate Gradient " should "be able to solve linear systems "+
+  /*"Distributed Conjugate Gradient " should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
     sc.sparkContext.setLogLevel("FATAL")
@@ -201,7 +201,7 @@ class ApacheSparkSpec extends FlatSpec
       epsilon, 3, false, 100)
 
     assert(normDist(xnew-x, 1.0) <= epsilon)
-  }
+  }*/
 
 
   "Blocked CG " should "be able to solve linear systems "+
