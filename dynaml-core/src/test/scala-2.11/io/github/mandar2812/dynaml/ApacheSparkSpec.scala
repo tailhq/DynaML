@@ -13,6 +13,8 @@ import io.github.mandar2812.dynaml.optimization.ConjugateGradient
 import io.github.mandar2812.dynaml.pipes.RDDPipe
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
 import scala.util.Random
@@ -42,7 +44,13 @@ class ApacheSparkSpec extends FlatSpec
     val conf = new SparkConf()
       .setMaster(master)
       .setAppName(appName)
-    sc = new SparkContext(conf)
+
+    val spark = SparkSession.builder.config(conf).getOrCreate()
+
+    sc = spark.sparkContext
+
+    sc.setLogLevel("FATAL")
+
   }
 
   after {
