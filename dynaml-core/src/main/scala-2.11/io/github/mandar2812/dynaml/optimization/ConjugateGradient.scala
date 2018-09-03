@@ -50,9 +50,10 @@ class ConjugateGradient extends RegularizedOptimizer[DenseVector[Double],
    *
    *
    * */
-  override def optimize(nPoints: Long,
-                        ParamOutEdges: Iterable[CausalEdge],
-                        initialP: DenseVector[Double]): DenseVector[Double] = {
+  override def optimize(
+    nPoints: Long,
+    ParamOutEdges: Iterable[CausalEdge],
+    initialP: DenseVector[Double]): DenseVector[Double] = {
 
     val dims = initialP.length
     //Cast as problem of form A.w = b
@@ -70,7 +71,7 @@ class ConjugateGradient extends RegularizedOptimizer[DenseVector[Double],
     smoother(-1,-1) = 0.0
     val A = a + smoother
 
-    ConjugateGradient.runCG(A, b, initialP, 0.0001, this.numIterations)
+    ConjugateGradient.runCG(A, b, initialP, 0.0001, this.numIterations, logging, logging_rate)
   }
 }
 
@@ -83,11 +84,15 @@ object ConjugateGradient {
    * iteratively using the Conjugate Gradient
    * algorithm.
    * */
-  def runCG(A: DenseMatrix[Double],
-            b: DenseVector[Double],
-            x: DenseVector[Double],
-            epsilon: Double,
-            MAX_ITERATIONS: Int): DenseVector[Double] = {
+  def runCG(
+    A: DenseMatrix[Double],
+    b: DenseVector[Double],
+    x: DenseVector[Double],
+    epsilon: Double,
+    MAX_ITERATIONS: Int,
+    logging: Boolean = true,
+    logging_rate: Int = 100): DenseVector[Double] = {
+
     val residual = b - (A*x)
     val p = b - (A*x)
     var count = 1.0
@@ -96,9 +101,9 @@ object ConjugateGradient {
     while(norm(residual, 2) >= epsilon && count <= MAX_ITERATIONS) {
       //update alpha
       alpha = (residual dot residual)/(p dot (A*p))
-      logger.info("Iteration: "+count)
-      logger.info("----------------------------------")
-      logger.info("Residual: "+(residual dot residual))
+
+      if(logging && count.toInt % logging_rate == 0)
+        RegularizedOptimizer.prettyPrint(count.toInt, residual dot residual)
       //update x
       axpy(alpha, p, x)
       //before updating residual, calculate norm (required for beta)
@@ -119,11 +124,14 @@ object ConjugateGradient {
     * Solves for x in A.x = b (where A is symmetric +ve semi-definite [[SparkPSDMatrix]])
     * iteratively using the Conjugate Gradient algorithm.
     * */
-  def runCG(A: SparkPSDMatrix,
-            b: SparkVector,
-            x: SparkVector,
-            epsilon: Double,
-            MAX_ITERATIONS: Int): SparkVector = {
+  def runCG(
+    A: SparkPSDMatrix,
+    b: SparkVector,
+    x: SparkVector,
+    epsilon: Double,
+    MAX_ITERATIONS: Int,
+    logging: Boolean,
+    logging_rate: Int): SparkVector = {
 
     A.persist
     val residual: SparkVector = b - (A*x)
@@ -143,9 +151,8 @@ object ConjugateGradient {
 
       //update alpha
       alpha = math.pow(netError, 2.0)/(p dot inter)
-      logger.info("Iteration: "+count)
-      logger.info("----------------------------------")
-      logger.info("Residual: "+netError)
+
+      if(logging && count % logging_rate == 0) RegularizedOptimizer.prettyPrint(count.toInt, netError)
 
       //update x
       axpyDist(alpha, p, x)
@@ -177,11 +184,14 @@ object ConjugateGradient {
     x
   }
 
-  def runCG(A: SparkBlockedMatrix,
-            b: SparkBlockedVector,
-            x: SparkBlockedVector,
-            epsilon: Double,
-            MAX_ITERATIONS: Int): SparkBlockedVector = {
+  def runCG(
+    A: SparkBlockedMatrix,
+    b: SparkBlockedVector,
+    x: SparkBlockedVector,
+    epsilon: Double,
+    MAX_ITERATIONS: Int,
+    logging: Boolean,
+    logging_rate: Int): SparkBlockedVector = {
 
     A.persist
     val residual: SparkBlockedVector = b - (A*x)
@@ -201,9 +211,8 @@ object ConjugateGradient {
 
       //update alpha
       alpha = math.pow(netError, 2.0)/(p dot inter)
-      logger.info("Iteration: "+count)
-      logger.info("----------------------------------")
-      logger.info("Residual: "+netError)
+
+      if(logging && count % logging_rate == 0) RegularizedOptimizer.prettyPrint(count.toInt, netError)
 
       //update x
       axpyDist(alpha, p, x)
@@ -236,12 +245,14 @@ object ConjugateGradient {
   }
 
 
-
-  def runCG(A: PartitionedMatrix,
-            b: PartitionedVector,
-            x: PartitionedVector,
-            epsilon: Double,
-            MAX_ITERATIONS: Int): PartitionedVector = {
+  def runCG(
+    A: PartitionedMatrix,
+    b: PartitionedVector,
+    x: PartitionedVector,
+    epsilon: Double,
+    MAX_ITERATIONS: Int,
+    logging: Boolean,
+    logging_rate: Int): PartitionedVector = {
 
     val residual: PartitionedVector = b - (A*x)
     val p: PartitionedVector = b - (A*x)
@@ -259,9 +270,8 @@ object ConjugateGradient {
 
       //update alpha
       alpha = math.pow(netError, 2.0)/(p dot inter)
-      logger.info("Iteration: "+count)
-      logger.info("----------------------------------")
-      logger.info("Residual: "+netError)
+
+      if(logging && count % logging_rate == 0) RegularizedOptimizer.prettyPrint(count.toInt, netError)
 
       //update x
       axpyDist(alpha, p, x)
@@ -293,17 +303,21 @@ object ConjugateGradient {
    * iteratively using the Conjugate Gradient
    * algorithm.
    * */
-  def runMultiCG(A: DenseMatrix[Double],
-                 b: DenseMatrix[Double],
-                 x: DenseMatrix[Double],
-                 epsilon: Double,
-                 MAX_ITERATIONS: Int): DenseMatrix[Double] = {
+  def runMultiCG(
+    A: DenseMatrix[Double],
+    b: DenseMatrix[Double],
+    x: DenseMatrix[Double],
+    epsilon: Double,
+    MAX_ITERATIONS: Int,
+    logging: Boolean,
+    logging_rate: Int): DenseMatrix[Double] = {
+
     val residual:DenseMatrix[Double] = b - (A*x)
     val p = b - (A*x)
     var count = 1.0
 
     var alphaVec = DenseVector.tabulate[Double](x.cols)(i => {
-      math.pow(norm(residual(::,i), 2), 2)/(p(::,i).t * (A*p(::, i)))
+      math.pow(norm(residual(::,i), 2), 2)/(p(::, i).t * (A*p(::, i)))
     })
     var alpha = DenseMatrix.tabulate[Double](x.rows, x.cols)((i,j) => {
       alphaVec(j)
@@ -316,12 +330,15 @@ object ConjugateGradient {
 
     while(count <= MAX_ITERATIONS) {
       //update x
-      x :+= (alpha :* p)
+      x :+= (alpha *:* p)
 
       //before updating residual, calculate norm (required for beta)
       val de = DenseVector.tabulate[Double](x.cols)(i => math.pow(norm(residual(::, i), 2), 2))
       //update residual
-      residual :-= (alpha :* (A*p))
+      residual :-= (alpha *:* (A*p))
+
+      if(logging && count % logging_rate == 0)
+        RegularizedOptimizer.prettyPrint(count.toInt, trace(residual.t * residual))
 
       //calculate beta
       betaVec = DenseVector.tabulate[Double](x.cols)(i => math.pow(norm(residual(::,i), 2), 2)/de(i))
@@ -335,7 +352,7 @@ object ConjugateGradient {
 
       //update alpha
       alphaVec = DenseVector.tabulate[Double](x.cols)(i => {
-        math.pow(norm(residual(::,i), 2), 2)/(p(::,i).t * (A*p(::, i)))
+        math.pow(norm(residual(::,i), 2), 2)/(p(::, i).t * (A*p(::, i)))
       })
       alpha = DenseMatrix.tabulate[Double](x.rows, x.cols)((i,j) => {
         alphaVec(j)

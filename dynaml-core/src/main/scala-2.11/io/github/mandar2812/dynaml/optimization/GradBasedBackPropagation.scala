@@ -123,9 +123,6 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       val (patterns, targets): (Stream[I], Stream[I]) =
         data.filter(_ => Random.nextDouble() <= miniBatchFraction).unzip
 
-      println("\n--------------------------")
-      print("Epoch: ")
-      pprint.pprintln(count)
       /*
       * In each epoch conduct three stages:
       *   1. Forward propagation of fields and activations
@@ -136,7 +133,6 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
       /*
       * Stage 1
       * */
-      println("\tForward propagation")
       val layers = workingStack._layers
 
       /*
@@ -173,10 +169,8 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
 
       val avg_loss: Double = outputLosses.sum/outputLosses.length
 
-      print("\tAverage Loss = ")
-      pprint.pprintln(avg_loss)
+      if(logging && count % logging_rate == 0) RegularizedOptimizer.prettyPrint(count, avg_loss)
 
-      println("\tBack propagation")
       /*
       * Calculate the deltas for each layer
       * and discard the delta value produced
@@ -192,7 +186,6 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
           }
         ).tail
 
-      println("\tCalculating gradients")
       /*
       * Calculate the gradients for each layer
       * grad_i needs delta_i, a_[i-1]
@@ -208,7 +201,6 @@ abstract class GradBasedBackPropagation[LayerP, I] extends
         stepSize, momentum, count, regParam)
 
       //Spawn the updated network.
-      println("\tUpdating Network Parameters")
       workingStack = stackFactory(new_layer_params)
       previousUpdate = currentUpdate
     })

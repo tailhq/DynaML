@@ -46,9 +46,10 @@ class QuasiNewtonOptimizer(private var gradient: Gradient,
   /**
     * Solve the convex optimization problem.
     */
-  override def optimize(nPoints: Long,
-                        ParamOutEdges: Stream[(DenseVector[Double], Double)],
-                        initialP: DenseVector[Double]): DenseVector[Double] =
+  override def optimize(
+    nPoints: Long,
+    ParamOutEdges: Stream[(DenseVector[Double], Double)],
+    initialP: DenseVector[Double]): DenseVector[Double] =
     QuasiNewtonOptimizer.run(
       nPoints, this.regParam, this.numIterations,
       updater, gradient, this.stepSize, initialP,
@@ -60,10 +61,12 @@ object QuasiNewtonOptimizer {
 
   private val logger = Logger.getLogger(this.getClass)
 
-  def run[T](nPoints: Long, regParam: Double, numIterations: Int,
-             updater: HessianUpdater, gradient: Gradient, stepSize: Double,
-             initial: DenseVector[Double], POutEdges: T,
-             transform: DataPipe[T, Stream[(DenseVector[Double], Double)]]): DenseVector[Double] = {
+  def run[T](
+    nPoints: Long, regParam: Double, numIterations: Int,
+    updater: HessianUpdater, gradient: Gradient, stepSize: Double,
+    initial: DenseVector[Double], POutEdges: T,
+    transform: DataPipe[T, Stream[(DenseVector[Double], Double)]],
+    logging: Boolean = true, logging_rate: Int = 100): DenseVector[Double] = {
 
     var oldW: DenseVector[Double] = initial
 
@@ -89,10 +92,7 @@ object QuasiNewtonOptimizer {
         cumLoss += gradient.compute(x, y, oldW, cumGradient)
       })
 
-      print("\nIteration: ")
-      pprint.pprintln(iter)
-      print("Average Loss = ")
-      pprint.pprintln(cumLoss/nPoints.toDouble)
+      if(logging && iter % logging_rate == 0) RegularizedOptimizer.prettyPrint(iter, cumLoss/nPoints.toDouble)
 
       //Find the search direction p = inv(H)*grad(J)
       //perform update x_new = x + step*p

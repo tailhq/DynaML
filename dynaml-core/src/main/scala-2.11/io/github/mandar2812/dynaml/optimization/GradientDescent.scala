@@ -67,9 +67,10 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
    *
    *
    * */
-  override def optimize(nPoints: Long,
-                        ParamOutEdges: Stream[(DenseVector[Double], Double)],
-                        initialP: DenseVector[Double])
+  override def optimize(
+    nPoints: Long,
+    ParamOutEdges: Stream[(DenseVector[Double], Double)],
+    initialP: DenseVector[Double])
   : DenseVector[Double] =
     if(this.miniBatchFraction == 1.0) {
       GradientDescent.runSGD(
@@ -81,7 +82,9 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
         this.stepSize,
         initialP,
         ParamOutEdges,
-        DataPipe(identity[Stream[(DenseVector[Double], Double)]] _)
+        DataPipe(identity[Stream[(DenseVector[Double], Double)]] _),
+        logging,
+        logging_rate
       )
     } else {
       GradientDescent.runBatchSGD(
@@ -94,7 +97,9 @@ class GradientDescent (private var gradient: Gradient, private var updater: Upda
         initialP,
         ParamOutEdges,
         this.miniBatchFraction,
-        DataPipe(identity[Stream[(DenseVector[Double], Double)]] _)
+        DataPipe(identity[Stream[(DenseVector[Double], Double)]] _),
+        logging,
+        logging_rate
       )
     }
 
@@ -113,7 +118,10 @@ object GradientDescent {
       stepSize: Double,
       initial: DenseVector[Double],
       POutEdges: T,
-      transform: DataPipe[T, Stream[(DenseVector[Double], Double)]]): DenseVector[Double] = {
+      transform: DataPipe[T, Stream[(DenseVector[Double], Double)]],
+      logging: Boolean = true,
+      logging_rate: Int = 100): DenseVector[Double] = {
+
     var oldW: DenseVector[Double] = initial
     var newW = oldW
 
@@ -128,10 +136,7 @@ object GradientDescent {
         cumLoss += gradient.compute(x, y, oldW, cumGradient)
       })
 
-      print("\nIteration: ")
-      pprint.pprintln(count)
-      print("Average Loss = ")
-      pprint.pprintln(cumLoss/nPoints.toDouble)
+      if(logging && count % logging_rate == 0) RegularizedOptimizer.prettyPrint(count, cumLoss/nPoints.toDouble)
 
       newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
         stepSize, count, regParam)._1
@@ -151,7 +156,9 @@ object GradientDescent {
       initial: DenseVector[Double],
       POutEdges: T,
       miniBatchFraction: Double,
-      transform: DataPipe[T, Stream[(DenseVector[Double], Double)]]): DenseVector[Double] = {
+      transform: DataPipe[T, Stream[(DenseVector[Double], Double)]],
+      logging: Boolean = true,
+      logging_rate: Int = 100): DenseVector[Double] = {
 
     var oldW: DenseVector[Double] = initial
     var newW = oldW
@@ -168,10 +175,7 @@ object GradientDescent {
         }
       })
 
-      print("\nIteration: ")
-      pprint.pprintln(count)
-      print("Average Loss = ")
-      pprint.pprintln(cumLoss/nPoints.toDouble)
+      if(logging && count % logging_rate == 0) RegularizedOptimizer.prettyPrint(count, cumLoss/nPoints.toDouble)
 
       newW = updater.compute(oldW, cumGradient / nPoints.toDouble,
         stepSize, count, regParam)._1

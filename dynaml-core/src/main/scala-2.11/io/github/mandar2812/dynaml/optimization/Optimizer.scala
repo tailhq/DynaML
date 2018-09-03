@@ -46,6 +46,20 @@ abstract class RegularizedOptimizer[P, Q, R, S]
 
   protected var stepSize: Double = 1.0
 
+  protected var logging: Boolean = true
+
+  def logging_(l: Boolean): this.type = {
+    logging = l
+    this
+  }
+
+  protected var logging_rate: Int = 100
+
+  def logging_rate_(l: Int): this.type = {
+    logging_rate = l
+    this
+  }
+
   /**
    * Set the regularization parameter. Default 0.0.
    */
@@ -78,5 +92,16 @@ abstract class RegularizedOptimizer[P, Q, R, S]
   def setStepSize(step: Double): this.type = {
     this.stepSize = step
     this
+  }
+}
+
+object RegularizedOptimizer {
+
+  private[dynaml] def prettyPrint(epoch: Int, loss: Double): Unit = {
+    println("--------------------------")
+    print("\nIteration: ")
+    pprint.pprintln(epoch)
+    print("Average Loss = ")
+    pprint.pprintln(loss)
   }
 }

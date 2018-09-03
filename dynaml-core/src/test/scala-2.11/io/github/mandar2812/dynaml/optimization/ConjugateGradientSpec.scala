@@ -18,7 +18,7 @@ class ConjugateGradientSpec extends FlatSpec with Matchers {
 
     val epsilon = 1E-6
 
-    val xnew = ConjugateGradient.runCG(A, b, DenseVector(1.0, 1.0, 1.0), epsilon, 3)
+    val xnew = ConjugateGradient.runCG(A, b, DenseVector(1.0, 1.0, 1.0), epsilon, MAX_ITERATIONS = 3)
 
     assert(norm(xnew-x) <= epsilon)
   }
