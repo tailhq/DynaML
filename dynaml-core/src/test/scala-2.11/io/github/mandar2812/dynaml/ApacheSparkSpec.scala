@@ -38,19 +38,15 @@ class ApacheSparkSpec extends FlatSpec
   private val master = "local[4]"
   private val appName = "distributed-linear-algebra-test-spark"
 
-  private var sc: SparkContext = _
+  private var sc: SparkSession = _
 
   before {
     val conf = new SparkConf()
       .setMaster(master)
       .setAppName(appName)
 
-    val spark = SparkSession.builder.config(conf).getOrCreate()
-
-    sc = spark.sparkContext
-
-    sc.setLogLevel("FATAL")
-
+    sc = SparkSession.builder.config(conf).getOrCreate()
+    sc.sparkContext.setLogLevel("FATAL")
   }
 
   after {
@@ -61,8 +57,10 @@ class ApacheSparkSpec extends FlatSpec
 
   "RDD Pipes " should " have a consistent composition" in {
 
+    sc.sparkContext.setLogLevel("FATAL")
+
     val num = 20
-    val numbers = sc.parallelize(1 to num)
+    val numbers = sc.sparkContext.parallelize(1 to num)
 
     val convPipe = RDDPipe((n: Int) => n.toDouble)
 
@@ -80,17 +78,18 @@ class ApacheSparkSpec extends FlatSpec
 
   "A distributed matrix " should "have consistent multiplication with a vector" in {
 
+    sc.sparkContext.setLogLevel("FATAL")
 
     val length = 10
 
-    val vec = new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
+    val vec = new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
 
     val k = new DiracKernel(0.5)
 
     val list = for (i <- 0L until length.toLong; j <- 0L until length.toLong) yield ((i,j),
       k.evaluate(DenseVector(i.toDouble), DenseVector(j.toDouble)))
 
-    val mat = new SparkMatrix(sc.parallelize(list))
+    val mat = new SparkMatrix(sc.sparkContext.parallelize(list))
 
     assert(vec.rows == length.toLong && vec.cols == 1L, "A vector should have consistent dimensions")
 
@@ -103,16 +102,17 @@ class ApacheSparkSpec extends FlatSpec
 
   "A distributed kernel matrix " should "must be a quadratic form" in {
 
+    sc.sparkContext.setLogLevel("FATAL")
 
-    val length = 100
+    val length = 10
 
     val nFeat = 10
     implicit val ev = VectorField(nFeat)
-    val vec = new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
+    val vec = new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
 
     val k = new RBFKernel(1.5)
 
-    val list = sc.parallelize(0L until length).map(l => (l, DenseVector.tabulate(nFeat)(_ => Random.nextGaussian())))
+    val list = sc.sparkContext.parallelize(0L until length).map(l => (l, DenseVector.tabulate(nFeat)(_ => Random.nextGaussian())))
 
     val mat = SparkPSDMatrix(list)(k.evaluate)
 
@@ -127,16 +127,18 @@ class ApacheSparkSpec extends FlatSpec
 
   "Distributed matrices " should " concatenate in a consistent manner" in {
 
-    val length = 100
+    sc.sparkContext.setLogLevel("FATAL")
+
+    val length = 10
 
     val nFeat = 10
     implicit val ev = VectorField(nFeat)
-    val vec = new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
+    val vec = new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
 
     val k1 = new RBFKernel(1.5)
     val k2 = new RBFKernel(2.5)
 
-    val list = sc.parallelize(0L until length).map(l => (l, DenseVector.tabulate(nFeat)(_ => Random.nextGaussian())))
+    val list = sc.sparkContext.parallelize(0L until length).map(l => (l, DenseVector.tabulate(nFeat)(_ => Random.nextGaussian())))
 
     val mat1 = SparkPSDMatrix(list)(k1.evaluate)
     val mat2 = SparkPSDMatrix(list)(k2.evaluate)
@@ -151,17 +153,18 @@ class ApacheSparkSpec extends FlatSpec
 
   "In Place operations " should "have consistent results" in {
 
+    sc.sparkContext.setLogLevel("FATAL")
 
-    val length = 100
+    val length = 10
 
     val nFeat = 10
     implicit val ev = VectorField(nFeat)
 
-    val vec = new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
+    val vec = new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
 
-    val vec1 = new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
+    val vec1 = new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)))
 
-    val list = sc.parallelize(0L until length.toLong)
+    val list = sc.sparkContext.parallelize(0L until length.toLong)
 
     val mat = SparkSquareMatrix(list)((i,j) => if(i == j) 1.0 else 0.0)
 
@@ -181,19 +184,20 @@ class ApacheSparkSpec extends FlatSpec
   "Distributed Conjugate Gradient " should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
+    sc.sparkContext.setLogLevel("FATAL")
     val length = 10
-    val list = sc.parallelize(0L until length.toLong)
+    val list = sc.sparkContext.parallelize(0L until length.toLong)
     val A = SparkPSDMatrix[Long](list.map(i => (i, i)))((i,j) => if(i == j) 0.5 else 0.0)
     val b = SparkVector(list)(_ => 1.0)
 
-    val x = new SparkVector(sc.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
+    val x = new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
       length, false)
 
     val epsilon = 1E-6
 
     val xnew = ConjugateGradient.runCG(
       A, b,
-      new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1))),
+      new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1))),
       epsilon, 3, false, 100)
 
     assert(normDist(xnew-x, 1.0) <= epsilon)
@@ -203,9 +207,10 @@ class ApacheSparkSpec extends FlatSpec
   "Blocked CG " should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
-    val length = 1261
-    val numRowsPerBlock = 500
-    val list = sc.parallelize(0L until length.toLong)
+    sc.sparkContext.setLogLevel("FATAL")
+    val length = 12
+    val numRowsPerBlock = 5
+    val list = sc.sparkContext.parallelize(0L until length.toLong)
 
     val A: SparkBlockedMatrix = SparkBlockedMatrix(
       SparkPSDMatrix[Long](list.map(i => (i, i)))((i,j) => if(i == j) 0.5 else 0.0),
@@ -215,7 +220,7 @@ class ApacheSparkSpec extends FlatSpec
 
     val x: SparkBlockedVector =
       SparkBlockedVector(
-        new SparkVector(sc.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
+        new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
           length, false), numRowsPerBlock)
 
     val epsilon = 1E-6
@@ -223,7 +228,7 @@ class ApacheSparkSpec extends FlatSpec
     val xnew: SparkBlockedVector = ConjugateGradient.runCG(
       A, b,
       SparkBlockedVector(
-        new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)),
+        new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)),
           length, false),
         numRowsPerBlock),
       epsilon, 3,
@@ -238,13 +243,14 @@ class ApacheSparkSpec extends FlatSpec
   "An Apache Spark regression GLM" should "be able to learn parameters using "+
     "OLS given a basis function set" in {
 
+    sc.sparkContext.setLogLevel("FATAL")
     //Create synthetic data set of x,y values
     //x is sampled in unit hypercube, y = w.x + noise
     val noise = new Gaussian(0.0, 0.002)
     val uniH = new Uniform(0.0, 1.0)
 
 
-    val numPoints:Int = 5000
+    val numPoints:Int = 100
 
     val phi = (x: DenseVector[Double]) => {
       val (x1, x2) = (x(0), x(1))
@@ -266,7 +272,7 @@ class ApacheSparkSpec extends FlatSpec
 
     val epsilon = 0.85
 
-    val trainingRDD = sc.parallelize(trainingData)
+    val trainingRDD = sc.sparkContext.parallelize(trainingData)
 
     val model = new SparkGLM(trainingRDD, trainingData.length, phi)
 

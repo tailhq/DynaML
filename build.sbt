@@ -101,6 +101,9 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
         banner -> "conf/banner.txt"
       }
     ),
+    javaOptions in test ++= Seq(
+      "-Dlog4j.debug=true",
+      "-Dlog4j.configuration=log4j.properties"),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
       "-J-Xmx2048m",
