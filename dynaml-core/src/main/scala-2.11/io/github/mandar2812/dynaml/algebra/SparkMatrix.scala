@@ -229,15 +229,6 @@ object SparkPSDMatrix {
     )
   }
 
-  /**
-    * Populate a positive semi-definite matrix defined as M(i,j) = ev(i,j)
-    *
-    */
-  /*def apply(data: RDD[Long])(ev: (Long, Long) => Double) =
-    new SparkPSDMatrix(data.cartesian(data)
-      .map(c => (c, ev(c._1, c._2)))
-      .filter(e => e._1._1 >= e._1._2),
-      sanityChecks = false)*/
 
 
 }

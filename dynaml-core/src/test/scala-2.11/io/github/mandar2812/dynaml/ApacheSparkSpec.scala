@@ -4,6 +4,7 @@ import breeze.linalg._
 import breeze.stats.distributions.{Gaussian, Uniform}
 import io.github.mandar2812.dynaml.algebra.DistributedMatrixOps._
 import io.github.mandar2812.dynaml.algebra._
+import io.github.mandar2812.dynaml.algebra.BlockedMatrixOps._
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels.{DiracKernel, RBFKernel}
@@ -169,13 +170,13 @@ class ApacheSparkSpec extends FlatSpec
 
   }
 
-  /*"Distributed Conjugate Gradient " ignore should "be able to solve linear systems "+
+  "Distributed Conjugate Gradient " should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
     val length = 10
     val list = sc.parallelize(0L until length.toLong)
-    val A = SparkPSDMatrix(list)((i,j) => if(i == j) 0.5 else 0.0)
-    val b = SparkVector(list)(i => 1.0)
+    val A = SparkPSDMatrix[Long](list.map(i => (i, i)))((i,j) => if(i == j) 0.5 else 0.0)
+    val b = SparkVector(list)(_ => 1.0)
 
     val x = new SparkVector(sc.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
       length, false)
@@ -185,13 +186,13 @@ class ApacheSparkSpec extends FlatSpec
     val xnew = ConjugateGradient.runCG(
       A, b,
       new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1))),
-      epsilon, 3)
+      epsilon, 3, false, 100)
 
     assert(normDist(xnew-x, 1.0) <= epsilon)
-  }*/
+  }
 
 
-  /*"Blocked CG " should "be able to solve linear systems "+
+  "Blocked CG " should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
     val length = 1261
@@ -199,7 +200,7 @@ class ApacheSparkSpec extends FlatSpec
     val list = sc.parallelize(0L until length.toLong)
 
     val A: SparkBlockedMatrix = SparkBlockedMatrix(
-      SparkPSDMatrix(list)((i,j) => if(i == j) 0.5 else 0.0),
+      SparkPSDMatrix[Long](list.map(i => (i, i)))((i,j) => if(i == j) 0.5 else 0.0),
       numRowsPerBlock, numRowsPerBlock)
 
     val b: SparkBlockedVector = SparkBlockedVector(SparkVector(list)(i => 1.0), numRowsPerBlock)
@@ -217,11 +218,14 @@ class ApacheSparkSpec extends FlatSpec
         new SparkVector(sc.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)),
           length, false),
         numRowsPerBlock),
-      epsilon, 3)
+      epsilon, 3,
+      false, 100)
 
 
-    assert(normBDist(xnew-x, 1.0) <= epsilon)
-  }*/
+    val err_norm: Double = normBDist(xnew-x, 1.0)
+
+    assert(err_norm <= epsilon)
+  }
 
   "An Apache Spark regression GLM" should "be able to learn parameters using "+
     "OLS given a basis function set" in {
