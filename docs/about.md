@@ -12,6 +12,8 @@ DynaML is proud to be a part of the *Mozilla Science* Collaborate [platform](htt
 
 * [Amit Kumar Jaiswal](https://github.com/amitkumarj441)
 
+* [Sisir Kopakka](https://github.com/sisirkoppaka)
+
 
 Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/transcendent-ai-labs/DynaML/issues/new) or [ask me on Twitter](https://twitter.com/dyna_ml).
 

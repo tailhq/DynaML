@@ -200,4 +200,36 @@ val decomp_kernel_mult =
 -----
 
 !!! seealso "Implementing Custom Kernels"
-    For more details on implementing user defined kernels, refer to the [wiki](https://github.com/mandar2812/DynaML/wiki/Kernels).
+    You can implement your own custom kernels by extending the `LocalScalarKernel[T]` interface, for example:
+    
+    ```scala
+    import breeze.linalg.{DenseMatrix, norm, DenseVector}
+    
+    //You can have any number of constructor parameters
+    class MyNewKernel(th: Double = 1.0)
+      extends LocalScalarKernel[DenseVector[Double]]
+      with Serializable {
+      
+      //One must specify the names of each hyper-parameter
+      override val hyper_parameters = List("theta")
+    
+      //The state variable stores the 
+      //current value of all kernel hyper-parameters
+      state = Map("theta" -> th)
+    
+      // The implementation of the actual kernel function
+      override def evaluateAt(
+        config: Map[String, Double])(
+        x: DenseVector[Double],
+        y: DenseVector[Double]): Double = ???
+    
+      // Return the gradient of the kernel for each hyper-parameter
+      // for a particular pair of points x,y
+      override def gradientAt(
+        config: Map[String, Double])(
+        x: DenseVector[Double],
+        y: DenseVector[Double]): Map[String, Double] = ???
+    }
+    
+    ``` 
+

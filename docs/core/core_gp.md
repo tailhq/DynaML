@@ -166,5 +166,87 @@ val likelihood = new VectorIIDSigmoid()
 val model = new LaplaceBinaryGPC(trainingData, kernel, likelihood)
 ```
 
-!!! seealso "Implementing your own GP class"
-		To learn more about extending the Gaussian Process base classes/traits refer to the [wiki](https://github.com/mandar2812/DynaML/wiki/Gaussian-Processes).
+## Extending The GP Class
+
+In case you want to customize the implementation of _Gaussian Process_ models in DynaML, you can do so by extending the GP abstract skeleton ```GaussianProcessModel``` and using your own data structures for the type parameters `I` and `T`.
+
+```scala
+import breeze.linalg._
+import io.github.mandar2812.dynaml.pipes._
+import io.github.mandar2812.dynaml.probability._
+import io.github.mandar2812.dynaml.models.gp._
+import io.github.mandar2812.dynaml.kernels._
+ 
+ 
+class MyGPRegressionModel[T, I](
+  cov: LocalScalarKernel[I],
+  n: LocalScalarKernel[I],
+  data: T, num: Int, mean: DataPipe[I, Double]) extends 
+  AbstractGPRegressionModel[T, I](cov, n, data, num, mean) {
+
+  override val covariance = cov
+
+  override val noiseModel = n
+
+  override protected val g: T = data
+
+  /**
+    * Convert from the underlying data structure to
+    * Seq[(I, Y)] where I is the index set of the GP
+    * and Y is the value/label type.
+    **/
+  override def dataAsSeq(data: T): Seq[(I, Double)] = ???
+
+
+  /**
+    * Calculates the energy of the configuration,
+    * in most global optimization algorithms
+    * we aim to find an approximate value of
+    * the hyper-parameters such that this function
+    * is minimized.
+    *
+    * @param h The value of the hyper-parameters in 
+    *          the configuration space
+    * @param options Optional parameters
+    *                
+    * @return Configuration Energy E(h)
+    *
+    * In this particular case E(h) = -log p(Y|X,h)
+    * also known as log likelihood.
+    **/
+  override def energy(
+    h: Map[String, Double], 
+    options: Map[String, String]): Double = ???
+
+  /**
+    * Calculates the gradient energy of the configuration and
+    * subtracts this from the current value of h to yield a new
+    * hyper-parameter configuration.
+    *
+    * Over ride this function if you aim to implement a 
+    * gradient based hyper-parameter optimization routine 
+    * like ML-II
+    *
+    * @param h The value of the hyper-parameters in the 
+    *          configuration space
+    * @return Gradient of the objective function 
+    *         (marginal likelihood) as a Map
+    **/
+  override def gradEnergy(
+    h: Map[String, Double]): Map[String, Double] = ???
+
+  /**
+   * Calculates posterior predictive distribution for
+   * a particular set of test data points.
+   *
+   * @param test A Sequence or Sequence like data structure
+   *             storing the values of the input patters.
+   **/
+  override def predictiveDistribution[U <: Seq[I]](
+    test: U): MultGaussianPRV = ???
+
+ //Use the predictive distribution to generate a point prediction
+ override def predict(point: I): Double = ???
+}
+
+```

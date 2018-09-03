@@ -126,6 +126,8 @@ pages:
     - DynaML Blog:
         - State of DynaML 2016: 'blog/2016-12-11-dynaml-new-features.md'
         - Resources for Beginners: 'blog/2016-12-08-getting-started-ml.md'
+    - Contributing: 'Contributing.md'
+    - Code of Conduct: 'code_of_conduct.md'
 theme: material
 theme:
   name: 'material'
