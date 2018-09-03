@@ -4,6 +4,7 @@
 
 
 [![Join the chat at https://gitter.im/DynaML/Lobby](https://badges.gitter.im/DynaML/Lobby.svg)](https://gitter.im/DynaML/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/transcendent-ai-labs/DynaML.svg?branch=master)](https://travis-ci.org/transcendent-ai-labs/DynaML) [![](https://jitpack.io/v/transcendent-ai-labs/DynaML.svg)](https://jitpack.io/#transcendent-ai-labs/DynaML)
+[![codecov](https://codecov.io/gh/transcendent-ai-labs/DynaML/branch/master/graph/badge.svg)](https://codecov.io/gh/transcendent-ai-labs/DynaML)
 [![status](http://joss.theoj.org/papers/a561bdd3e960c5b0718c67c3f73c6f3b/status.svg)](http://joss.theoj.org/papers/a561bdd3e960c5b0718c67c3f73c6f3b)
 
 DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows. It can also be used as an educational/research tool for data analysis.
