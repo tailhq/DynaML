@@ -1270,6 +1270,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#extending-the-gp-class" title="Extending The GP Class" class="md-nav__link">
+    Extending The GP Class
+  </a>
+  
+</li>
+      
       
       
       
@@ -2123,6 +2130,30 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../Contributing/" title="Contributing" class="md-nav__link">
+      Contributing
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../code_of_conduct/" title="Code of Conduct" class="md-nav__link">
+      Code of Conduct
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -2171,6 +2202,13 @@
         <li class="md-nav__item">
   <a href="#gaussian-process-binary-classification" title="Gaussian Process Binary Classification" class="md-nav__link">
     Gaussian Process Binary Classification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extending-the-gp-class" title="Extending The GP Class" class="md-nav__link">
+    Extending The GP Class
   </a>
   
 </li>
@@ -2434,10 +2472,163 @@ K((\mathbf{x}, d), (\mathbf{x}', d')) = \sum_{i = 1}^{D} K^{i}_{x}(\mathbf{x}, \
 </pre></div>
 </td></tr></table>
 
-<div class="admonition seealso">
-<p class="admonition-title">Implementing your own GP class<p>To learn more about extending the Gaussian Process base classes/traits refer to the <a href="https://github.com/mandar2812/DynaML/wiki/Gaussian-Processes">wiki</a>.</p>
-</p>
-</div>
+<h2 id="extending-the-gp-class">Extending The GP Class<a class="headerlink" href="#extending-the-gp-class" title="Permanent link">&para;</a></h2>
+<p>In case you want to customize the implementation of <em>Gaussian Process</em> models in DynaML, you can do so by extending the GP abstract skeleton <code>GaussianProcessModel</code> and using your own data structures for the type parameters <code>I</code> and <code>T</code>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">breeze.linalg._</span>
+<span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.pipes._</span>
+<span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.probability._</span>
+<span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.models.gp._</span>
+<span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.kernels._</span>
+
+
+<span class="k">class</span> <span class="nc">MyGPRegressionModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span><span class="o">](</span>
+  <span class="n">cov</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">I</span><span class="o">],</span>
+  <span class="n">n</span><span class="k">:</span> <span class="kt">LocalScalarKernel</span><span class="o">[</span><span class="kt">I</span><span class="o">],</span>
+  <span class="n">data</span><span class="k">:</span> <span class="kt">T</span><span class="o">,</span> <span class="n">num</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">mean</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">I</span>, <span class="kt">Double</span><span class="o">])</span> <span class="k">extends</span> 
+  <span class="nc">AbstractGPRegressionModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span><span class="o">](</span><span class="n">cov</span><span class="o">,</span> <span class="n">n</span><span class="o">,</span> <span class="n">data</span><span class="o">,</span> <span class="n">num</span><span class="o">,</span> <span class="n">mean</span><span class="o">)</span> <span class="o">{</span>
+
+  <span class="k">override</span> <span class="k">val</span> <span class="n">covariance</span> <span class="k">=</span> <span class="n">cov</span>
+
+  <span class="k">override</span> <span class="k">val</span> <span class="n">noiseModel</span> <span class="k">=</span> <span class="n">n</span>
+
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">val</span> <span class="n">g</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="n">data</span>
+
+  <span class="cm">/**</span>
+<span class="cm">    * Convert from the underlying data structure to</span>
+<span class="cm">    * Seq[(I, Y)] where I is the index set of the GP</span>
+<span class="cm">    * and Y is the value/label type.</span>
+<span class="cm">    **/</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">dataAsSeq</span><span class="o">(</span><span class="n">data</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[(</span><span class="kt">I</span>, <span class="kt">Double</span><span class="o">)]</span> <span class="k">=</span> <span class="o">???</span>
+
+
+  <span class="cm">/**</span>
+<span class="cm">    * Calculates the energy of the configuration,</span>
+<span class="cm">    * in most global optimization algorithms</span>
+<span class="cm">    * we aim to find an approximate value of</span>
+<span class="cm">    * the hyper-parameters such that this function</span>
+<span class="cm">    * is minimized.</span>
+<span class="cm">    *</span>
+<span class="cm">    * @param h The value of the hyper-parameters in </span>
+<span class="cm">    *          the configuration space</span>
+<span class="cm">    * @param options Optional parameters</span>
+<span class="cm">    *                </span>
+<span class="cm">    * @return Configuration Energy E(h)</span>
+<span class="cm">    *</span>
+<span class="cm">    * In this particular case E(h) = -log p(Y|X,h)</span>
+<span class="cm">    * also known as log likelihood.</span>
+<span class="cm">    **/</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">energy</span><span class="o">(</span>
+    <span class="n">h</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">],</span> 
+    <span class="n">options</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="o">???</span>
+
+  <span class="cm">/**</span>
+<span class="cm">    * Calculates the gradient energy of the configuration and</span>
+<span class="cm">    * subtracts this from the current value of h to yield a new</span>
+<span class="cm">    * hyper-parameter configuration.</span>
+<span class="cm">    *</span>
+<span class="cm">    * Over ride this function if you aim to implement a </span>
+<span class="cm">    * gradient based hyper-parameter optimization routine </span>
+<span class="cm">    * like ML-II</span>
+<span class="cm">    *</span>
+<span class="cm">    * @param h The value of the hyper-parameters in the </span>
+<span class="cm">    *          configuration space</span>
+<span class="cm">    * @return Gradient of the objective function </span>
+<span class="cm">    *         (marginal likelihood) as a Map</span>
+<span class="cm">    **/</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">gradEnergy</span><span class="o">(</span>
+    <span class="n">h</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">])</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+
+  <span class="cm">/**</span>
+<span class="cm">   * Calculates posterior predictive distribution for</span>
+<span class="cm">   * a particular set of test data points.</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param test A Sequence or Sequence like data structure</span>
+<span class="cm">   *             storing the values of the input patters.</span>
+<span class="cm">   **/</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">predictiveDistribution</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">I</span><span class="o">]](</span>
+    <span class="n">test</span><span class="k">:</span> <span class="kt">U</span><span class="o">)</span><span class="k">:</span> <span class="kt">MultGaussianPRV</span> <span class="o">=</span> <span class="o">???</span>
+
+ <span class="c1">//Use the predictive distribution to generate a point prediction</span>
+ <span class="k">override</span> <span class="k">def</span> <span class="n">predict</span><span class="o">(</span><span class="n">point</span><span class="k">:</span> <span class="kt">I</span><span class="o">)</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="o">???</span>
+<span class="o">}</span>
+</pre></div>
+</td></tr></table>
                 
                   
                 

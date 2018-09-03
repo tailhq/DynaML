@@ -2162,6 +2162,30 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../Contributing/" title="Contributing" class="md-nav__link">
+      Contributing
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../code_of_conduct/" title="Code of Conduct" class="md-nav__link">
+      Code of Conduct
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -2528,7 +2552,63 @@ last two dimensions respectively and combine their evaluations via addition or m
 <hr />
 <div class="admonition seealso">
 <p class="admonition-title">Implementing Custom Kernels</p>
-<p>For more details on implementing user defined kernels, refer to the <a href="https://github.com/mandar2812/DynaML/wiki/Kernels">wiki</a>.</p>
+<p>You can implement your own custom kernels by extending the <code>LocalScalarKernel[T]</code> interface, for example:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">breeze.linalg.</span><span class="o">{</span><span class="nc">DenseMatrix</span><span class="o">,</span> <span class="n">norm</span><span class="o">,</span> <span class="nc">DenseVector</span><span class="o">}</span>
+
+<span class="c1">//You can have any number of constructor parameters</span>
+<span class="k">class</span> <span class="nc">MyNewKernel</span><span class="o">(</span><span class="n">th</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">)</span>
+  <span class="k">extends</span> <span class="nc">LocalScalarKernel</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span>
+  <span class="k">with</span> <span class="nc">Serializable</span> <span class="o">{</span>
+
+  <span class="c1">//One must specify the names of each hyper-parameter</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">hyper_parameters</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">&quot;theta&quot;</span><span class="o">)</span>
+
+  <span class="c1">//The state variable stores the </span>
+  <span class="c1">//current value of all kernel hyper-parameters</span>
+  <span class="n">state</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;theta&quot;</span> <span class="o">-&gt;</span> <span class="n">th</span><span class="o">)</span>
+
+  <span class="c1">// The implementation of the actual kernel function</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">evaluateAt</span><span class="o">(</span>
+    <span class="n">config</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">])(</span>
+    <span class="n">x</span><span class="k">:</span> <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">],</span>
+    <span class="n">y</span><span class="k">:</span> <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="o">???</span>
+
+  <span class="c1">// Return the gradient of the kernel for each hyper-parameter</span>
+  <span class="c1">// for a particular pair of points x,y</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">gradientAt</span><span class="o">(</span>
+    <span class="n">config</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">])(</span>
+    <span class="n">x</span><span class="k">:</span> <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">],</span>
+    <span class="n">y</span><span class="k">:</span> <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
+<span class="o">}</span>
+</pre></div>
+</td></tr></table>
+
 </div>
                 
                   
