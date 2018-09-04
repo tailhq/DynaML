@@ -5,6 +5,7 @@
   import io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils}
   import io.github.mandar2812.dynaml.tensorflow.implicits._
   import org.platanios.tensorflow.api._
+  import org.platanios.tensorflow.api.learn.layers.Activation
   import org.platanios.tensorflow.api.learn.layers.Layer
   import org.platanios.tensorflow.api.ops.NN.SameConvPadding
   import org.platanios.tensorflow.data.image.CIFARLoader
@@ -33,7 +34,7 @@
 
   val trainInput = tf.learn.Input(UINT8, Shape(-1))
 
-  val relu_act = DataPipe(tf.learn.ReLU(_))
+  val relu_act = DataPipe[String, Activation](tf.learn.ReLU(_))
 
   val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
     dtflearn.inception_unit(channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>
