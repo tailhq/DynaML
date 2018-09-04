@@ -6,6 +6,9 @@ scala:
 jdk:
    - oraclejdk7
 
+env:
+  LD_LIBRARY_PATH=/usr/local/lib64/:$LD_LIBRARY_PATH
+
 script:
    - sbt clean coverage test coverageReport
 

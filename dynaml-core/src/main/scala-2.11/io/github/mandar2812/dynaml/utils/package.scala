@@ -50,13 +50,13 @@ package object utils {
   val log1pExp: (Double) => Double = (x) => {x + math.log1p(math.exp(-x))}
 
   /**
-    * Get a [[CSVReader]] object from a file name and delimiter
+    * Get a CSVReader object from a file name and delimiter
     * character.
     *
     * @param file The file pathname as a String
     * @param delim The delimiter character used
     *              to split the csv file.
-    * @return A [[CSVReader]] object which can be
+    * @return A CSVReader object which can be
     *         iterated for each line.
     * */
   def getCSVReader(file: String, delim: Char): CSVReader = {
@@ -68,7 +68,7 @@ package object utils {
   }
 
   /**
-    * Extract the diagonal elements of a breeze [[DenseMatrix]]
+    * Extract the diagonal elements of a breeze DenseMatrix
     * */
   def diagonal(m: DenseMatrix[Double]): DenseMatrix[Double] = {
     require(m.rows == m.cols, "Matrix must be square to extract diagonal")
@@ -88,10 +88,10 @@ package object utils {
 
   /**
     * Get the mean and variance of a data set
-    * which is a [[List]] of [[DenseVector]].
+    * which is a List of DenseVector.
     *
     * @param data The data set.
-    * @return A [[Tuple2]] containing the mean
+    * @return A Tuple2 containing the mean
     *         and variance * n-1.
     *
     * */
@@ -128,10 +128,10 @@ package object utils {
 
   /**
     * Get the mean and variance of a data set
-    * which is a [[List]] of [[DenseVector]].
+    * which is a List of DenseVector.
     *
     * @param data The data set.
-    * @return A [[Tuple2]] containing the mean
+    * @return A Tuple2 containing the mean
     *         and variance.
     *
     * */
@@ -251,7 +251,7 @@ package object utils {
 
   /**
     * Convert a hyper-prior specification to a continuous distribution
-    * over [[Map]]
+    * over Map
     * */
   def getPriorMapDistr(d: Map[String, ContinuousDistr[Double]]) = {
 

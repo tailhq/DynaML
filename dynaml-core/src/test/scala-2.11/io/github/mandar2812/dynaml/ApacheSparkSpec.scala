@@ -181,29 +181,6 @@ class ApacheSparkSpec extends FlatSpec
 
   }
 
-  /*"Distributed Conjugate Gradient " should "be able to solve linear systems "+
-    "of the form A.x = b, where A is symmetric positive definite. " in {
-
-    sc.sparkContext.setLogLevel("FATAL")
-    val length = 10
-    val list = sc.sparkContext.parallelize(0L until length.toLong)
-    val A = SparkPSDMatrix[Long](list.map(i => (i, i)))((i,j) => if(i == j) 0.5 else 0.0)
-    val b = SparkVector(list)(_ => 1.0)
-
-    val x = new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
-      length, false)
-
-    val epsilon = 1E-6
-
-    val xnew = ConjugateGradient.runCG(
-      A, b,
-      new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1))),
-      epsilon, 3, false, 100)
-
-    assert(normDist(xnew-x, 1.0) <= epsilon)
-  }*/
-
-
   "Blocked CG " should "be able to solve linear systems "+
     "of the form A.x = b, where A is symmetric positive definite. " in {
 
@@ -216,11 +193,12 @@ class ApacheSparkSpec extends FlatSpec
       SparkPSDMatrix[Long](list.map(i => (i, i)))((i,j) => if(i == j) 0.5 else 0.0),
       numRowsPerBlock, numRowsPerBlock)
 
-    val b: SparkBlockedVector = SparkBlockedVector(SparkVector(list)(i => 1.0), numRowsPerBlock)
+    val b: SparkBlockedVector = SparkBlockedVector(SparkVector(list)(_ => 1.0), numRowsPerBlock)
 
     val x: SparkBlockedVector =
       SparkBlockedVector(
-        new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
+        new SparkVector(
+          sc.sparkContext.parallelize(Seq.fill[Double](length)(2.0)).zipWithIndex().map(c => (c._2, c._1)),
           length, false), numRowsPerBlock)
 
     val epsilon = 1E-6
@@ -228,7 +206,8 @@ class ApacheSparkSpec extends FlatSpec
     val xnew: SparkBlockedVector = ConjugateGradient.runCG(
       A, b,
       SparkBlockedVector(
-        new SparkVector(sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)),
+        new SparkVector(
+          sc.sparkContext.parallelize(Seq.fill[Double](length)(1.0)).zipWithIndex().map(c => (c._2, c._1)),
           length, false),
         numRowsPerBlock),
       epsilon, 3,
