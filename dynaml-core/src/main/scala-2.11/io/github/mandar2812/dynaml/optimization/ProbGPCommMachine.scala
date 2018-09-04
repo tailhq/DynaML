@@ -23,7 +23,7 @@ import breeze.numerics.exp
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.kernels.DecomposableCovariance
 import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GaussianProcessMixture}
-import io.github.mandar2812.dynaml.pipes.{DataPipe, WeightedSumReducer}
+import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder, Reducer, WeightedSumReducer}
 
 import scala.reflect.ClassTag
 
@@ -92,11 +92,11 @@ class ProbGPCommMachine[T, I: ClassTag](
     val weights = modelProbabilities(energyLandscape).map(c => (c._1, c._2 ++ blockedState))
 
     //Declare implicit value for weighted kernel
-    implicit val encoder = DynaMLPipe.genericReplicationEncoder(weights.length)
+    implicit val encoder: Encoder[I, Array[I]] = DynaMLPipe.genericReplicationEncoder(weights.length)
     //Declare implicit value for transformation required for creation of the compound kernel
     implicit val transform: DataPipe[T, Seq[(I, Double)]] = DataPipe(system.dataAsSeq)
     //Declare implicit reducer required for the weighted kernel
-    implicit val reducer = WeightedSumReducer(weights.map(c => c._1*c._1).toArray)
+    implicit val reducer: Reducer = WeightedSumReducer(weights.map(c => c._1*c._1).toArray)
 
     //Now construct a weighted Gaussian Process model
     val (covariancePipe, noisePipe) = (system.covariance.asPipe, system.noiseModel.asPipe)

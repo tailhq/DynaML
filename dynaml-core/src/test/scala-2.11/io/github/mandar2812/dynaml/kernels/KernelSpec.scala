@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.kernels
 
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.analysis.VectorField
+import io.github.mandar2812.dynaml.DynaMLPipe._
 import org.scalatest.{FlatSpec, Matchers}
 
 class KernelSpec extends FlatSpec with Matchers {
@@ -34,13 +35,13 @@ class KernelSpec extends FlatSpec with Matchers {
 
     implicit val field = VectorField(1)
 
-    val seKernel      = new SEKernel(band = 1.0, h = 1.0)
+    val seKernel       = new SEKernel(band = 1.0, h = 1.0)
 
-    val laplaceKernel = new LaplacianKernel(be = 1.0)
+    val laplaceKernel  = new LaplacianKernel(be = 1.0)
 
-    val polyKernel    = new PolynomialKernel(2, 1.0)
+    val polyKernel     = new PolynomialKernel(2, 1.0)
 
-    val cauchyKernel  = new CauchyKernel(1.0)
+    val cauchyKernel   = new CauchyKernel(1.0)
 
     val (x, y, z) = (DenseVector(1.0), DenseVector(0.0), DenseVector(1.5))
 
@@ -61,13 +62,11 @@ class KernelSpec extends FlatSpec with Matchers {
 
     implicit val field = VectorField(1)
 
-    val seKernel      = new SEKernel(band = 1.0, h = 1.0)
+    val seKernel       = new SEKernel(band = 1.0, h = 1.0)
 
-    val laplaceKernel = new LaplacianKernel(be = 1.0)
+    val laplaceKernel  = new LaplacianKernel(be = 1.0)
 
-    val polyKernel    = new PolynomialKernel(2, 1.0)
-
-    val cauchyKernel  = new CauchyKernel(1.0)
+    val polyKernel     = new PolynomialKernel(2, 1.0)
 
     val (x, y, z) = (DenseVector(1.0), DenseVector(0.0), DenseVector(1.5))
 
@@ -78,6 +77,58 @@ class KernelSpec extends FlatSpec with Matchers {
     assert(math.abs(k1.evaluate(x, z) - 7.132496902584595) < epsilon)
 
     assert(math.abs(k2.evaluate(x, z) - 3.790816623203959) < epsilon)
+  }
+
+  "Decomposable Kernels " should "compute correctly" in {
+
+    val epsilon = 1E-5
+
+    implicit val field = VectorField(1)
+
+    implicit val enc   = breezeDVSplitEncoder(1)
+
+    val seKernel       = new SEKernel(band = 1.0, h = 1.0)
+
+    val polyKernel     = new PolynomialKernel(2, 1.0)
+
+    val (x, y, z) = (DenseVector(1.0, 1.0), DenseVector(0.0, 0.0), DenseVector(1.5, 1.5))
+
+    val k1 = new DecomposableCovariance[DenseVector[Double]](seKernel, polyKernel)
+
+    assert(math.abs(k1.evaluate(x, z) - 7.132496902584595) < epsilon)
+
+  }
+
+  "Decomposable Kernels " should "handle hyper-perameters in a consistent fashion" in {
+
+    val epsilon = 1E-5
+
+    implicit val field = VectorField(1)
+
+    implicit val enc   = breezeDVSplitEncoder(1)
+
+    val seKernel       = new SEKernel(band = 1.0, h = 1.0)
+
+    val polyKernel     = new PolynomialKernel(2, 1.0)
+
+    polyKernel.block("degree")
+
+    val (x, y, z) = (DenseVector(1.0, 1.0), DenseVector(0.0, 0.0), DenseVector(1.5, 1.5))
+
+    val k1 = new DecomposableCovariance[DenseVector[Double]](seKernel, polyKernel)
+
+
+    assert(k1.hyper_parameters.forall(
+      h => h.contains(seKernel.toString.split("\\.").last) ||
+        h.contains(polyKernel.toString.split("\\.").last)
+    ))
+
+    assert(
+      k1.blocked_hyper_parameters.forall(
+        _.contains(polyKernel.toString.split("\\.").last+"/degree")
+      )
+    )
+
   }
 
 

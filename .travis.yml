@@ -23,7 +23,7 @@ before_install:
   - eval "${MATRIX_EVAL}"
 
 script:
-   - sbt clean coverage test coverageReport
+  - sbt clean coverage test coverageReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

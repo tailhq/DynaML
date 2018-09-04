@@ -25,20 +25,20 @@ import io.github.mandar2812.dynaml.pipes._
   * A kernel/covariance function which can be seen as a combination
   * of base kernels over a subset of the input space.
   *
-  * for example K((x1, y1), (x1, y2)) = k1(x1,x2) + k2(y1,y2)
+  * for example K((x1, y1), (x2, y2)) = k1(x1, x2) + k2(y1, y2)
   * */
 class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
   implicit encoding: Encoder[S, Array[S]],
   reducer: Reducer = Reducer.:+:) extends CompositeCovariance[S] {
 
-  val kernelMap = kernels.map(k => (k.toString.split("\\.").last, k)).toMap
+  val kernelMap: Map[String, LocalScalarKernel[S]] = kernels.map(k => (k.toString.split("\\.").last, k)).toMap
 
   state = kernels.map(k => {
     val id = k.toString.split("\\.").last
     k.state.map(h => (id+"/"+h._1, h._2))
   }).reduceLeft(_++_)
 
-  val encodingTuple = encoding*encoding
+  val encodingTuple: ParallelPipe[S, Array[S], S, Array[S]] = encoding*encoding
 
   override val hyper_parameters: List[String] = kernels.map(k => {
     val id = k.toString.split("\\.").last
@@ -71,7 +71,8 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     }
   })
 
-  protected def evaluationDataPipe(config: Map[String, Double]) = encodingTuple > kernelBind(config) > reducer
+  protected def evaluationDataPipe(config: Map[String, Double]): DataPipe[(S, S), Double] =
+    encodingTuple > kernelBind(config) > reducer
 
   override def setHyperParameters(h: Map[String, Double]): DecomposableCovariance.this.type = {
     //Sanity Check
