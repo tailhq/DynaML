@@ -21,7 +21,6 @@ package io.github.mandar2812.dynaml.tensorflow.dynamics
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.tensorflow.Learn
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 
 /**
@@ -156,38 +155,3 @@ case class AddTensorOperator[I](
 
 }
 
-/**
-  * Implementation of the gradient operator (∇), see
-  * [[_root_.io.github.mandar2812.dynaml.tensorflow.dynamics]],
-  * for more details.
-  * */
-private[dynamics] object Gradient extends TensorOperator[Output](s"Grad") {
-
-  override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
-
-    new Layer[Output, Output](s"Grad[${data.name}]") {
-
-      override val layerType: String = "GradLayer"
-
-      override protected def _forward(input: Output)(implicit mode: Mode): Output = {
-
-        val output = data.forward(input)
-
-
-        def gradTRec(y: Seq[Output], x: Output, rank: Int): Output = rank match {
-          case 1 =>
-            tf.stack(
-              y.map(o => tf.gradients.gradients(Seq(o), Seq(x)).head.toOutput),
-              axis = -1)
-          case _ =>
-            gradTRec(y.flatMap(_.unstack(-1, -1)), x, rank - 1)
-
-        }
-
-        gradTRec(Seq(output), input, output.rank).reshape(input.shape ++ output.shape(1::))
-
-      }
-    }
-  }
-
-}

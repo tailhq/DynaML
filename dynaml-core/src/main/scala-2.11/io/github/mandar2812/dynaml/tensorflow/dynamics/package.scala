@@ -31,10 +31,39 @@ import org.platanios.tensorflow.api._
   * */
 package object dynamics {
 
-  val jacobian: Gradient.type         = Gradient
+  val jacobian: Gradient.type                         = Gradient
 
-  val ∇ : Gradient.type               = Gradient
+  val ∇ : Gradient.type                               = Gradient
 
-  val hessian: TensorOperator[Output] = ∇(∇)
+  val hessian: TensorOperator[Output]                 = ∇(∇)
+
+  /**
+    * Calculate a `sliced` gradient.
+    *
+    * ∂f[slices]/∂x[slices]
+    *
+    * @param name A string identifier for the operator
+    * @param input_slices Determines over which subset of the inputs to compute the gradient
+    * @param output_slices Determines over which subset of the outputs to compute the gradient
+    * */
+  def ∂(
+    name: String)(
+    input_slices: Indexer*)(
+    output_slices: Indexer*): SlicedGradient          = SlicedGradient(name)(input_slices:_*)(output_slices:_*)
+
+  /**
+    * Time derivative (∂f/∂t) of a function f(t, s),
+    * which accepts space-time vectors [t, s_1, s_2, ..., s_n]
+    * as inputs
+    * */
+  val d_t: SlicedGradient                             = ∂("D_t")(0)(---)
+
+  /**
+    * Space derivative (∂f/∂s) of a function f(t, s),
+    * which accepts space-time vectors [t, s_1, s_2, ..., s_n]
+    * as inputs
+    * */
+  val d_s: SlicedGradient                             = ∂("D_s")( 0 :: -1)(---)
+
 
 }

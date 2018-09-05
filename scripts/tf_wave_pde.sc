@@ -1,4 +1,5 @@
 import org.platanios.tensorflow.api._
+import _root_.io.github.mandar2812.dynaml.analysis.implicits._
 import _root_.io.github.mandar2812.dynaml.utils
 import _root_.io.github.mandar2812.dynaml.pipes.TupleIntegerEncoder
 import _root_.io.github.mandar2812.dynaml.graphics.plot3d
