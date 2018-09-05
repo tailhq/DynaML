@@ -73,7 +73,7 @@ abstract class TensorOperator[I](override val name: String) extends
   override def -(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] = AddTensorOperator(
     self,
     ConstMultTensorOperator(
-      -1.0,
+      -1,
       other)
   )
 

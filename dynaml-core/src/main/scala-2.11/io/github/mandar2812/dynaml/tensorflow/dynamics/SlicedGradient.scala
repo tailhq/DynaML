@@ -49,9 +49,16 @@ private[dynamics] case class SlicedGradient(
 
         val output = data.forward(input)
 
-        val finalShape =
-          if(output.shape(-1) == 1) input.shape ++ output.shape(1 :: -1)
-          else input.shape ++ output.shape(1::)
+        val (final_input_shape, final_output_shape) = (
+          Shape(input.shape.asArray.filterNot(_ == 1)),
+          Shape(output.shape.asArray.filterNot(_ == 1))
+        )
+
+        val gradientShape =
+          if(final_output_shape.rank > 1) final_input_shape ++ final_output_shape(1::)
+          else final_input_shape
+          /*if(output.shape(-1) == 1) input.shape ++ output.shape(1 :: -1)
+          else input.shape ++ output.shape(1::)*/
 
         /*
         * Since there can be only one Ellipsis (---) when
@@ -63,8 +70,15 @@ private[dynamics] case class SlicedGradient(
           if(inputIndexer == Seq(---) && outputIndexer == Seq(---)) Seq(---)
           else Seq(::) ++ inputIndexer ++ outputIndexer
 
-        gradTRec(tf.unstack(output, axis = -1), input, output.rank - 1).reshape(finalShape)(indexer:_*)
+        val (unstacked_output, rank) =
+          if(output.rank > 1) (tf.unstack(output, axis = -1), output.rank - 1)
+          else (Seq(output), 1)
 
+        val sliced_output = gradTRec(unstacked_output, input, rank).reshape(gradientShape)(indexer:_*)
+
+        val finalShape = sliced_output.shape.asArray.filterNot(_ == 1)
+
+        sliced_output.reshape(finalShape)
       }
     }
   }

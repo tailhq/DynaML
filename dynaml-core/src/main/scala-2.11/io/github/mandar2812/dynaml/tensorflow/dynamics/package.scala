@@ -63,7 +63,7 @@ package object dynamics {
     * which accepts space-time vectors [t, s_1, s_2, ..., s_n]
     * as inputs
     * */
-  val d_s: SlicedGradient                             = ∂("D_s")( 0 :: -1)(---)
+  val d_s: SlicedGradient                             = ∂("D_s")( 1 ::)(---)
 
 
 }
