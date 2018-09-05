@@ -28,6 +28,7 @@ import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api.types.DataType
 import org.platanios.tensorflow.api.{FLOAT32, Graph, Output, Shape, Tensor, tf, _}
 import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
+import org.platanios.tensorflow.api.ops.variables.Initializer
 
 private[tensorflow] object Learn {
 
@@ -76,11 +77,11 @@ private[tensorflow] object Learn {
     relLossChangeTol = Some(d),
     maxSteps = Some(max_iter))
 
-  def constant[I](t: Tensor): Layer[I, Output] = new Layer[I, Output]("Constant"){
+  def constant[I](name: String, t: Output): Layer[I, Output] = new Layer[I, Output](name){
 
     override val layerType: String = "Const"
 
-    override protected def _forward(input: I)(implicit mode: Mode): Output = t.toOutput
+    override protected def _forward(input: I)(implicit mode: Mode): Output = t
   }
 
   /**

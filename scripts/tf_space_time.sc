@@ -104,5 +104,5 @@ def apply(minibatch: Int = 4) = {
     plot_field(trainBatch, results._4)
   )
 
-  (trainBatch, results, plots)
+  (trainBatch, results, plots, wave_op)
 }

@@ -40,7 +40,7 @@ import org.platanios.tensorflow.api.learn.layers.Layer
   * @author mandar2812
   *
   * */
-abstract class DifferentialOperator[I, J](val name: String) extends DataPipe[Layer[I, J], Layer[I, J]] {
+sealed abstract class DifferentialOperator[I, J](val name: String) extends DataPipe[Layer[I, J], Layer[I, J]] {
 
   def +(other: DifferentialOperator[I, J]): DifferentialOperator[I, J]
 
@@ -48,7 +48,9 @@ abstract class DifferentialOperator[I, J](val name: String) extends DataPipe[Lay
 
   def *(const: J): DifferentialOperator[I, J]
 
-  def *(layer: Layer[I, J]): DifferentialOperator[I, Output]
+  def *(layer: Layer[I, J]): DifferentialOperator[I, J]
+
+  def *(other: DifferentialOperator[I, J]): DifferentialOperator[I, J]
 
   def apply(op: DifferentialOperator[I, J]): DifferentialOperator[I, J]
 
@@ -70,19 +72,40 @@ abstract class TensorOperator[I](override val name: String) extends
     AddTensorOperator(self, other)
 
 
-  override def -(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] = AddTensorOperator(
-    self,
-    ConstMultTensorOperator(
-      -1,
-      other)
-  )
+  override def -(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
+    AddTensorOperator(self, MultTensorOperator[I](Constant[I]("-1", -1), other))
 
-  def *(const: Output): DifferentialOperator[I, Output] = ConstMultTensorOperator(const, self)
+  def *(const: Output): DifferentialOperator[I, Output] =
+    MultTensorOperator(Constant[I](const.name, const), self)
 
-  override def *(layer: Layer[I, Output]): DifferentialOperator[I, Output] = MultTensorOperator(layer, self)
+  override def *(layer: Layer[I, Output]): DifferentialOperator[I, Output] =
+    MultTensorOperator(self, SourceOperator(layer.name, layer))
+
+  override def *(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
+    MultTensorOperator(self, other)
 
   override def apply(other: DifferentialOperator[I, Output]): TensorOperator[I] =
     ComposedOperator(self, other)
+}
+
+
+/**
+  * A <i>source</i> or <i>injection</i> term is generally present
+  * in the right hand side of PDE systems.
+  *
+  * T[f(x)] = q(x)
+  * */
+private[dynamics] case class SourceOperator[I](
+  override val name: String,
+  source: Layer[I, Output]) extends
+  TensorOperator[I](name) {
+
+  override def run(data: Layer[I, Output]): Layer[I, Output] = source
+
+}
+
+private[dynamics] case class Constant[I](override val name: String, t: Output) extends TensorOperator[I](name) {
+  override def run(data: Layer[I, Output]): Layer[I, Output] = Learn.constant[I](name, t)
 }
 
 /**
@@ -97,22 +120,6 @@ private[dynamics] case class ComposedOperator[I](
 }
 
 /**
-  * A constant (tensor) multiplied to an operator.
-  *
-  * &alpha; &times; T[.]
-  *
-  * @tparam I Input domain of the underlying function space
-  * */
-private[dynamics] case class ConstMultTensorOperator[I](const: Output, operator: DifferentialOperator[I, Output]) extends
-  TensorOperator[I](s"ScalarMult[${const.toString()}, ${operator.name}]") {
-
-  override def run(data: Layer[I, Output]): Layer[I, Output] = {
-    val layer = operator(data)
-    layer >> Learn.multiply_const(const, s"${layer.name}")
-  }
-}
-
-/**
   * A function (computational layer) multiplied to an operator.
   *
   * g(x) &times; T[.]
@@ -120,14 +127,15 @@ private[dynamics] case class ConstMultTensorOperator[I](const: Output, operator:
   * @tparam I Input domain of the underlying function space
   * */
 private[dynamics] case class MultTensorOperator[I](
-  function: Layer[I, Output],
-  operator: DifferentialOperator[I, Output]) extends
-  TensorOperator[I](s"Mult[${function.name}, ${operator.name}]") {
+  operator1: DifferentialOperator[I, Output],
+  operator2: DifferentialOperator[I, Output]) extends
+  TensorOperator[I](s"Mult[${operator1.name}, ${operator2.name}]") {
 
   override def run(data: Layer[I, Output]): Layer[I, Output] = {
-    val layer = operator(data)
-    Learn.combined_layer(s"Combine[${function.name}, ${layer.name}]", Seq(function, layer)) >>
-      Learn.mult_seq(s"Multiply[${function.name}, ${layer.name}]")
+    val layer1 = operator1(data)
+    val layer2 = operator2(data)
+    Learn.combined_layer(s"Combine[${layer1.name}, ${layer2.name}]", Seq(layer1, layer2)) >>
+      Learn.mult_seq(s"Multiply[${layer1.name}, ${layer2.name}]")
   }
 }
 
@@ -152,20 +160,5 @@ private[dynamics] case class AddTensorOperator[I](
     Learn.combined_layer(s"Combine[${layer1.name}, ${layer2.name}]", Seq(layer1, layer2)) >>
       Learn.sum_seq(s"Sum[${layer1.name}, ${layer2.name}]")
   }
-
-}
-
-/**
-  * A <i>source</i> or <i>injection</i> term is generally present
-  * in the right hand side of PDE systems.
-  *
-  * T[f(x)] = q(x)
-  * */
-private[dynamics] case class SourceOperator[I](
-  override val name: String,
-  source: Layer[I, Output]) extends
-  TensorOperator[I](name) {
-
-  override def run(data: Layer[I, Output]): Layer[I, Output] = source
 
 }

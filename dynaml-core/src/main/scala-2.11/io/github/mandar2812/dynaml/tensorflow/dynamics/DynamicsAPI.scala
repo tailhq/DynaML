@@ -20,6 +20,12 @@ package io.github.mandar2812.dynaml.tensorflow.dynamics
 
 import io.github.mandar2812.dynaml.tensorflow.Learn
 import org.platanios.tensorflow.api._
+import _root_.io.github.mandar2812.dynaml.tensorflow.api.Api
+import org.platanios.tensorflow.api.learn.Mode
+import org.platanios.tensorflow.api.learn.layers.Layer
+import org.platanios.tensorflow.api.ops.Output
+import org.platanios.tensorflow.api.ops.variables.Initializer
+import org.platanios.tensorflow.api.types.DataType
 
 /**
   * <h3>Differential Operators & PDEs</h3>
@@ -36,7 +42,27 @@ private[tensorflow] trait DynamicsAPI {
   val ∇ : Gradient.type                               = Gradient
   val hessian: TensorOperator[Output]                 = ∇(∇)
   val source: SourceOperator.type                     = SourceOperator
-  def constant[I](t: Tensor): SourceOperator[I]       = source("Constant", Learn.constant[I](t))
+  val constant: Constant.type                         = Constant
+  def one[I](
+    dataType: DataType)(
+    shape: Shape): Constant[I]                        = constant[I]("Zero", Tensor.ones(dataType, shape))
+
+  def variable[I](
+    name: String,
+    dataType: DataType,
+    shape: Shape,
+    initializer: Initializer = null): SourceOperator[I] =
+    source(
+      name,
+      new Layer[I, Output](name) {
+        override val layerType: String = "Quantity"
+
+        override protected def _forward(input: I)(implicit mode: Mode): Output = {
+          val quantity = tf.variable(name = "value", dataType, shape, initializer)
+          quantity
+        }
+      })
+
 
   /**
     * Calculate a `sliced` gradient.
