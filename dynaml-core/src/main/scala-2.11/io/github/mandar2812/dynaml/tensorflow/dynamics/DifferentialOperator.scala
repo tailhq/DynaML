@@ -99,7 +99,7 @@ abstract class TensorOperator[I](override val name: String) extends
   *
   * T[f(x)] = q(x)
   * */
-private[dynamics] case class SourceOperator[I, J](
+private[dynamics] case class SourceOperator[I](
   override val name: String,
   source: Layer[I, Output]) extends
   TensorOperator[I](name) {
@@ -108,7 +108,7 @@ private[dynamics] case class SourceOperator[I, J](
 
   override def run(data: Layer[I, Output]): Layer[I, Output] = source
 
-  override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = Map(self.name -> Some(self))
+  override def sources = Map(self.name -> Some(self))
 }
 
 private[dynamics] case class Constant[I](override val name: String, t: Output) extends TensorOperator[I](name) {

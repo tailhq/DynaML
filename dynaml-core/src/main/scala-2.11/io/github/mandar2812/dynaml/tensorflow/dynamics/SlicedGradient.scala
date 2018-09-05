@@ -60,8 +60,6 @@ private[dynamics] case class SlicedGradient(
         val gradientShape =
           if(final_output_shape.rank > 1) final_input_shape ++ final_output_shape(1::)
           else final_input_shape
-          /*if(output.shape(-1) == 1) input.shape ++ output.shape(1 :: -1)
-          else input.shape ++ output.shape(1::)*/
 
         /*
         * Since there can be only one Ellipsis (---) when
