@@ -88,7 +88,7 @@ abstract class TensorOperator[I](override val name: String) extends
 /**
   * Composition of two operators.
   * */
-case class ComposedOperator[I](
+private[dynamics] case class ComposedOperator[I](
   operator1: DifferentialOperator[I, Output],
   operator2: DifferentialOperator[I, Output]) extends
   TensorOperator[I](s"${operator1.name}[${operator2.name}]") {
@@ -103,7 +103,7 @@ case class ComposedOperator[I](
   *
   * @tparam I Input domain of the underlying function space
   * */
-case class ConstMultTensorOperator[I](const: Output, operator: DifferentialOperator[I, Output]) extends
+private[dynamics] case class ConstMultTensorOperator[I](const: Output, operator: DifferentialOperator[I, Output]) extends
   TensorOperator[I](s"ScalarMult[${const.toString()}, ${operator.name}]") {
 
   override def run(data: Layer[I, Output]): Layer[I, Output] = {
@@ -119,7 +119,7 @@ case class ConstMultTensorOperator[I](const: Output, operator: DifferentialOpera
   *
   * @tparam I Input domain of the underlying function space
   * */
-case class MultTensorOperator[I](
+private[dynamics] case class MultTensorOperator[I](
   function: Layer[I, Output],
   operator: DifferentialOperator[I, Output]) extends
   TensorOperator[I](s"Mult[${function.name}, ${operator.name}]") {
@@ -138,7 +138,7 @@ case class MultTensorOperator[I](
   *
   * @tparam I Input domain of the underlying function space
   * */
-case class AddTensorOperator[I](
+private[dynamics] case class AddTensorOperator[I](
   operator1: DifferentialOperator[I, Output],
   operator2: DifferentialOperator[I, Output]) extends
   TensorOperator[I](s"OperatorAdd[${operator1.name}, ${operator2.name}]") {
@@ -155,3 +155,17 @@ case class AddTensorOperator[I](
 
 }
 
+/**
+  * A <i>source</i> or <i>injection</i> term is generally present
+  * in the right hand side of PDE systems.
+  *
+  * T[f(x)] = q(x)
+  * */
+private[dynamics] case class SourceOperator[I](
+  override val name: String,
+  source: Layer[I, Output]) extends
+  TensorOperator[I](name) {
+
+  override def run(data: Layer[I, Output]): Layer[I, Output] = source
+
+}

@@ -77,4 +77,6 @@ package object tensorflow {
     * */
   val dtfutils: Utils.type = Utils
 
+  object pde extends tensorflow.dynamics.DynamicsAPI
+
 }

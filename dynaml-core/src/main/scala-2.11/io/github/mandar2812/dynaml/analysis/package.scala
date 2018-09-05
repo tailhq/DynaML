@@ -136,4 +136,72 @@ package object analysis {
       )
   }
 
+  sealed trait QuadratureRule
+
+  case class GaussianQuadrature(nodes: Seq[Double], weights: Seq[Double]) extends QuadratureRule {
+
+    def scale(lower: Double, upper: Double): (Seq[Double], Seq[Double]) = {
+
+      val sc_nodes = nodes.map(n => {
+        val mid_point = (lower + upper) / 2d
+
+        val mid_diff  = (lower + upper) / 2d
+
+        mid_point + mid_diff*n
+      })
+
+      val sc_weights = weights.map(_*(upper - lower)/2d)
+
+      (sc_nodes, sc_weights)
+    }
+
+    def integrate(f: Double => Double)(lower: Double, upper: Double): Double = {
+
+      val (sc_nodes, sc_weights) = scale(lower, upper)
+
+      sc_weights.zip(sc_nodes.map(f)).map(c => c._2*c._1).sum
+    }
+  }
+
+
+  val twoPointGaussLegendre = GaussianQuadrature(
+    Seq(-0.5773502692d, 0.5773502692d),
+    Seq( 1d,            1d)
+  )
+
+  val threePointGaussLegendre = GaussianQuadrature(
+    Seq(-0.7745966692, 0d,           0.7745966692),
+    Seq( 0.5555555556, 0.8888888888, 0.5555555556)
+  )
+
+
+  val fourPointGaussLegendre = GaussianQuadrature(
+    Seq(-0.8611363116, -0.3399810436, 0.3399810436, 0.8611363116),
+    Seq( 0.3478548451,  0.6521451549, 0.6521451549, 0.3478548451)
+  )
+
+  val fivePointGaussLegendre = GaussianQuadrature(
+    Seq(-0.9061798459, -0.5384693101, 0d,           0.5384693101, 0.9061798459),
+    Seq( 0.2369268851,  0.4786286705, 0.5688888888, 0.4786286705, 0.2369268851)
+  )
+
+  val sixPointGaussLegendre = GaussianQuadrature(
+    Seq(-0.9324695142, -0.6612093865, -0.2386191861, 0.2386191861, 0.6612093865, 0.9324695142),
+    Seq( 0.1713244924,  0.3607615730,  0.4679139346, 0.4679139346, 0.3607615730, 0.1713244924)
+  )
+
+  val sevenPointGaussLegendre = GaussianQuadrature(
+    Seq(-0.9491079123, -0.7415311856, -0.4058451514, 0d,           0.4058451514, 0.7415311856, 0.9491079123),
+    Seq( 0.1294849662,  0.2797053915,  0.3818300505, 0.4179591837, 0.3818300505, 0.2797053915, 0.1294849662)
+  )
+
+  val eightPointGaussLegendre = GaussianQuadrature(
+    Seq(
+      -0.9602898565, -0.7966664774, -0.5255324099, -0.1834346425, 0.1834346425, 0.5255324099, 0.7966664774, 0.9602898565
+    ),
+    Seq(
+      0.1012285363,  0.2223810345,  0.3137066459,  0.3626837834, 0.3626837834, 0.3137066459, 0.2223810345, 0.1012285363
+    )
+  )
+
 }

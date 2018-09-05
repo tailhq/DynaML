@@ -16,8 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.tensorflow
+package io.github.mandar2812.dynaml.tensorflow.dynamics
 
+import io.github.mandar2812.dynaml.tensorflow.Learn
 import org.platanios.tensorflow.api._
 
 /**
@@ -29,13 +30,13 @@ import org.platanios.tensorflow.api._
   * The dynamics package contains classes and implementations of PDE operators.
   *
   * */
-package object dynamics {
+private[tensorflow] trait DynamicsAPI {
 
   val jacobian: Gradient.type                         = Gradient
-
   val ∇ : Gradient.type                               = Gradient
-
   val hessian: TensorOperator[Output]                 = ∇(∇)
+  val source: SourceOperator.type                     = SourceOperator
+  def constant[I](t: Tensor): SourceOperator[I]       = source("Constant", Learn.constant[I](t))
 
   /**
     * Calculate a `sliced` gradient.
@@ -64,6 +65,5 @@ package object dynamics {
     * as inputs
     * */
   val d_s: SlicedGradient                             = ∂("D_s")( 1 ::)(---)
-
 
 }
