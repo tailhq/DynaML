@@ -28,6 +28,8 @@ private[dynamics] case class SlicedGradient(
   outputIndexer: Indexer*) extends
   TensorOperator[Output](name) {
 
+  self =>
+
   private def gradTRec(y: Seq[Output], x: Output, rank: Int): Output = rank match {
     case 1 =>
       tf.stack(
@@ -38,6 +40,7 @@ private[dynamics] case class SlicedGradient(
 
   }
 
+  override def sources: Map[String, Option[DifferentialOperator[Output, Output]]] = Map(self.name -> None)
 
   override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
 

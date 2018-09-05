@@ -47,11 +47,11 @@ private[tensorflow] trait DynamicsAPI {
     dataType: DataType)(
     shape: Shape): Constant[I]                        = constant[I]("Zero", Tensor.ones(dataType, shape))
 
-  def variable[I](
+  def variable[I, J](
     name: String,
     dataType: DataType,
     shape: Shape,
-    initializer: Initializer = null): SourceOperator[I] =
+    initializer: Initializer = null): SourceOperator[I, Output] =
     source(
       name,
       new Layer[I, Output](name) {
