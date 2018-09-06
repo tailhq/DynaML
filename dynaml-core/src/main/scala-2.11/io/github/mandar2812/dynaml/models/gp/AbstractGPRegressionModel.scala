@@ -453,8 +453,9 @@ object AbstractGPRegressionModel {
     * @param kernelMatrix The kernel matrix of the training features
     *
     * */
-  def logLikelihood(trainingData: PartitionedVector,
-                    kernelMatrix: PartitionedPSDMatrix): Double = {
+  def logLikelihood(
+    trainingData: PartitionedVector,
+    kernelMatrix: PartitionedPSDMatrix): Double = {
 
     val smoothingMat = kernelMatrix
 
@@ -464,9 +465,7 @@ object AbstractGPRegressionModel {
 
       val d: Double = trainingData dot alpha
 
-      0.5*(d +
-        btrace(blog(Lmat)) +
-        trainingData.rows*math.log(2*math.Pi))
+      0.5*(d + btrace(blog(Lmat)) + trainingData.rows*math.log(2*math.Pi))
     } catch {
       case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
       case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
@@ -474,12 +473,12 @@ object AbstractGPRegressionModel {
   }
 
 
-  def apply[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)],
-    DenseVector[Double]]](data: Seq[(DenseVector[Double], Double)],
-                          cov: LocalScalarKernel[DenseVector[Double]],
-                          noise: LocalScalarKernel[DenseVector[Double]] = new DiracKernel(1.0),
-                          order: Int = 0, ex: Int = 0,
-                          meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)): M = {
+  def apply[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)], DenseVector[Double]]](
+    data: Seq[(DenseVector[Double], Double)],
+    cov: LocalScalarKernel[DenseVector[Double]],
+    noise: LocalScalarKernel[DenseVector[Double]] = new DiracKernel(1.0),
+    order: Int = 0, ex: Int = 0,
+    meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)): M = {
     assert(ex >= 0 && order >= 0, "Non Negative values for order and ex")
     if(order == 0) new GPRegression(cov, noise, data).asInstanceOf[M]
     else if(order > 0 && ex == 0) new GPNarModel(order, cov, noise, data).asInstanceOf[M]
