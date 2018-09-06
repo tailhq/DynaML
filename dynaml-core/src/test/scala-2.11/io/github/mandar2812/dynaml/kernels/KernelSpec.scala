@@ -179,6 +179,29 @@ class KernelSpec extends FlatSpec with Matchers {
         k3.cols == 1 &&
         DenseMatrix.tabulate[Double](nPoints, 1)((i, j) => if(i == j) 1.0 else 0.5) == k3)
 
+
+    val k4 = SVMKernel.buildPartitionedKernelMatrix(
+      data, nPoints.toLong,
+      numElementsPerRowBlock = 1,
+      numElementsPerColBlock = 1,
+      eval2)
+
+    assert(k4.rows == 2 && k4.cols == 2 && k4.rowBlocks == 2 && k4.colBlocks == 2)
+    assert(k4._data.forall(p =>
+      if(p._1._1 == p._1._2) p._2 == DenseMatrix(1.0)
+      else p._2 == DenseMatrix(0.5)))
+
+    val k5 = SVMKernel.crossPartitonedKernelMatrix(
+      data, Seq(0),
+      numElementsPerRowBlock = 1,
+      numElementsPerColBlock = 1,
+      eval2)
+
+    assert(k5.rows == 2 && k5.cols == 1 && k5.rowBlocks == 2 && k5.colBlocks == 1)
+    assert(k5._data.forall(p =>
+      if(p._1._1 == p._1._2) p._2 == DenseMatrix(1.0)
+      else p._2 == DenseMatrix(0.5)))
+
   }
 
   "Covariance functions constructed from Feature Maps" should " compute and compose correctly" in {
