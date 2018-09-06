@@ -56,13 +56,14 @@ class KernelSpec extends FlatSpec with Matchers {
   }
 
 
-  "Kernels transformations " should "compute correctly" in {
+  "Kernels transformations " should "compute and handle hyper-parameters correctly" in {
 
     val epsilon = 1E-5
 
     implicit val field = VectorField(1)
 
     val seKernel       = new SEKernel(band = 1.0, h = 1.0)
+    seKernel.block("amplitude")
 
     val laplaceKernel  = new LaplacianKernel(be = 1.0)
 
@@ -74,9 +75,29 @@ class KernelSpec extends FlatSpec with Matchers {
 
     val k2 = laplaceKernel * polyKernel
 
+    val k3 = seKernel + laplaceKernel
+
     assert(math.abs(k1.evaluate(x, z) - 7.132496902584595) < epsilon)
 
     assert(math.abs(k2.evaluate(x, z) - 3.790816623203959) < epsilon)
+
+    val block_hyp2 = Seq(polyKernel.toString.split("\\.").last+"/degree")
+
+    k2.block(block_hyp2:_*)
+
+    assert(k2.blocked_hyper_parameters.length == 1 && k2.blocked_hyper_parameters.head == block_hyp2.head)
+
+
+    assert(
+      k1.blocked_hyper_parameters.length == 1 &&
+        k1.blocked_hyper_parameters.head == seKernel.toString.split("\\.").last+"/amplitude")
+
+    assert(
+      k3.blocked_hyper_parameters.length == 1 &&
+        k3.blocked_hyper_parameters.head == seKernel.toString.split("\\.").last+"/amplitude")
+
+    assert(polyKernel.blocked_hyper_parameters == Seq("degree"))
+
   }
 
   "Decomposable Kernels " should "compute correctly" in {
