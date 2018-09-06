@@ -1,8 +1,10 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg._
 import io.github.mandar2812.dynaml.analysis.VectorField
+import io.github.mandar2812.dynaml.analysis.implicits._
 import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.scalatest.{FlatSpec, Matchers}
 
 class KernelSpec extends FlatSpec with Matchers {
@@ -122,8 +124,6 @@ class KernelSpec extends FlatSpec with Matchers {
 
   "Decomposable Kernels " should "handle hyper-perameters in a consistent fashion" in {
 
-    val epsilon = 1E-5
-
     implicit val field = VectorField(1)
 
     implicit val enc   = breezeDVSplitEncoder(1)
@@ -178,6 +178,47 @@ class KernelSpec extends FlatSpec with Matchers {
       k3.rows == nPoints &&
         k3.cols == 1 &&
         DenseMatrix.tabulate[Double](nPoints, 1)((i, j) => if(i == j) 1.0 else 0.5) == k3)
+
+  }
+
+  "Covariance functions constructed from Feature Maps" should " compute and compose correctly" in {
+
+    val epsilon = 1E-5
+
+    implicit val field = VectorField(2)
+
+    val data = Seq(0d, math.Pi/2)
+
+    val phi = DataPipe[Double, DenseVector[Double]](x => DenseVector(math.cos(x), math.sin(x)))
+
+    val id = identityPipe[Double]
+
+    val seKernel = new SEKernel(band = 1.0, h = 1.0)
+    seKernel.block("amplitude")
+
+    val id_cov = new FeatureMapCovariance[Double, Double](id)
+    val cov1 = new FeatureMapCovariance[Double, DenseVector[Double]](phi)
+
+    val cov2 = id_cov > cov1
+    val cov3 = id_cov > cov1 > seKernel
+
+    val k1 = cov1.buildKernelMatrix(data, data.length).getKernelMatrix()
+    val k2 = cov2.buildKernelMatrix(data, data.length).getKernelMatrix()
+    val k3 = cov3.buildKernelMatrix(data, data.length).getKernelMatrix()
+
+    val errMat1 = DenseMatrix.eye[Double](2) - k1
+
+    val errMat2 = DenseMatrix.eye[Double](2) - k2
+
+    val errMat3 = DenseMatrix.tabulate[Double](2, 2)((i, j) => if(i == j) 1.0 else math.exp(-1.0)) - k3
+
+    assert(
+      k1.rows == 2 &&
+        k1.cols == 2 &&
+        trace(errMat1.t*errMat1) < epsilon &&
+        trace(errMat2.t*errMat2) < epsilon)
+
+    assert(cov3.blocked_hyper_parameters == Seq("amplitude") && trace(errMat3.t*errMat3) < epsilon)
 
   }
 
