@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.kernels
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector}
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import org.scalatest.{FlatSpec, Matchers}
@@ -131,6 +131,34 @@ class KernelSpec extends FlatSpec with Matchers {
 
   }
 
+  "Kernel Matrices " should "be constructed correctly" in {
+
+    val eval1 = (x: Int, y: Int) => if(x == y) 1.0 else 0.0
+
+    val eval2 = (x: Int, y: Int) => 1/(1.0 + math.pow(x - y, 2.0))
+
+    val nPoints = 2
+
+    val data: Seq[Int] = 0 until nPoints
+
+    val k1 = SVMKernel.buildSVMKernelMatrix(data, nPoints, eval1).getKernelMatrix()
+    val k2 = SVMKernel.buildSVMKernelMatrix(data, nPoints, eval2).getKernelMatrix()
+
+    assert(k1.rows == nPoints && k1.cols == nPoints && DenseMatrix.eye[Double](nPoints) == k1)
+
+    assert(
+      k2.rows == nPoints &&
+        k2.cols == nPoints &&
+        DenseMatrix.tabulate[Double](nPoints, nPoints)((i, j) => if(i == j) 1.0 else 0.5) == k2)
+
+    val k3 = SVMKernel.crossKernelMatrix(data, Seq(0), eval2)
+
+    assert(
+      k3.rows == nPoints &&
+        k3.cols == 1 &&
+        DenseMatrix.tabulate[Double](nPoints, 1)((i, j) => if(i == j) 1.0 else 0.5) == k3)
+
+  }
 
 
 }
