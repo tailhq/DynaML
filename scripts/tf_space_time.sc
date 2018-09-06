@@ -8,6 +8,7 @@ import _root_.org.platanios.tensorflow.api._
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer
 import _root_.io.github.mandar2812.dynaml.repl.Router.main
+import org.platanios.tensorflow.api.ops.variables.{ConstantInitializer, RandomNormalInitializer, RandomUniformInitializer}
 
 import scala.util.Random
 
@@ -81,7 +82,7 @@ def apply(minibatch: Int = 4) = {
 
   val df_ds     = d_s(d_s)(function)(inputs)
 
-  val velocity  = tf.constant(Tensor(1f), FLOAT32, Shape(), "wave_velocity")
+  val velocity  = variable[Output]("wave_velocity", FLOAT32, Shape(), ConstantInitializer(1.0f))
 
   val wave_op   = d_t(d_t) - d_s(d_s)*velocity
 

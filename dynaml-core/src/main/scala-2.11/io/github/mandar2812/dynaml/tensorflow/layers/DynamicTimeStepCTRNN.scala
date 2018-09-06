@@ -18,8 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
-
-import io.github.mandar2812.dynaml.tensorflow.layers.L2Regularizer
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer

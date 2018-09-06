@@ -42,9 +42,18 @@ import org.platanios.tensorflow.api.learn.layers.Layer
   * */
 sealed trait DifferentialOperator[I, J] extends DataPipe[Layer[I, J], Layer[I, J]] {
 
+  self =>
+
   val name: String
 
-  def sources: Map[String, Option[DifferentialOperator[I, J]]]
+  protected[dynamics] def sources: Map[String, Option[DifferentialOperator[I, J]]]
+
+  lazy val variables: Map[String, DifferentialOperator[I, J]] = for {
+    kv <- self.sources
+    if kv._2.isDefined
+    s <- kv._2
+    key = kv._1
+  } yield (key, s)
 
   def +(other: DifferentialOperator[I, J]): DifferentialOperator[I, J]
 
@@ -71,6 +80,13 @@ abstract class TensorOperator[I](override val name: String) extends
   DifferentialOperator[I, Output] {
 
   self =>
+
+  /*lazy val variables: Map[String, DifferentialOperator[I, Output]] = for {
+    kv <- self.sources
+    if kv._2.isDefined
+    s <- kv._2
+    key = kv._1
+  } yield (key, s)*/
 
   override def +(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
     AddTensorOperator(self, other)
@@ -108,7 +124,7 @@ private[dynamics] case class SourceOperator[I](
 
   override def run(data: Layer[I, Output]): Layer[I, Output] = source
 
-  override def sources = Map(self.name -> Some(self))
+  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = Map(self.name -> Some(self))
 }
 
 private[dynamics] case class Constant[I](override val name: String, t: Output) extends TensorOperator[I](name) {
@@ -117,7 +133,7 @@ private[dynamics] case class Constant[I](override val name: String, t: Output) e
 
   override def run(data: Layer[I, Output]): Layer[I, Output] = Learn.constant[I](name, t)
 
-  override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = Map(self.name -> None)
+  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = Map(self.name -> None)
 }
 
 /**
@@ -130,7 +146,8 @@ private[dynamics] case class ComposedOperator[I](
 
   override def run(data: Layer[I, Output]): Layer[I, Output] = operator1.run(operator2.run(data))
 
-  override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = operator1.sources ++ operator2.sources
+  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
+    operator1.sources ++ operator2.sources
 }
 
 /**
@@ -152,7 +169,8 @@ private[dynamics] case class MultTensorOperator[I](
       Learn.mult_seq(s"Multiply[${layer1.name}, ${layer2.name}]")
   }
 
-  override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = operator1.sources ++ operator2.sources
+  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
+    operator1.sources ++ operator2.sources
 }
 
 /**
@@ -177,6 +195,7 @@ private[dynamics] case class AddTensorOperator[I](
       Learn.sum_seq(s"Sum[${layer1.name}, ${layer2.name}]")
   }
 
-  override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = operator1.sources ++ operator2.sources
+  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
+    operator1.sources ++ operator2.sources
 
 }

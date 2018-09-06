@@ -40,7 +40,8 @@ private[dynamics] case class SlicedGradient(
 
   }
 
-  override def sources: Map[String, Option[DifferentialOperator[Output, Output]]] = Map(self.name -> None)
+  protected[dynamics] override def sources(): Map[String, Option[DifferentialOperator[Output, Output]]] =
+    Map(self.name -> None)
 
   override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
 
