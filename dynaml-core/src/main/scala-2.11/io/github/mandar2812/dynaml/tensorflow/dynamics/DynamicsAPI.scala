@@ -18,9 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.dynamics
 
-import io.github.mandar2812.dynaml.tensorflow.Learn
 import org.platanios.tensorflow.api._
-import _root_.io.github.mandar2812.dynaml.tensorflow.api.Api
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api.ops.Output
