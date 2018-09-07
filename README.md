@@ -57,7 +57,7 @@ DynaML is compatible with Scala `2.11`
 
 Easiest way to install DynaML is cloning & compiling from the [github](/) repository. Please take a look at 
 the [installation](https://transcendent-ai-labs.github.io/DynaML/installation/installation/) instructions in the 
-user guide.
+[user guide](https://transcendent-ai-labs.github.io/DynaML/).
 
 ------------------
 
