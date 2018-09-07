@@ -81,7 +81,10 @@ import java.nio.file.Paths
 
 val tempdir = home/"tmp"
 
-val dataSet = CIFARLoader.load(Paths.get(tempdir.toString()), CIFARLoader.CIFAR_10)
+val dataSet = CIFARLoader.load(
+  Paths.get(tempdir.toString()), 
+  CIFARLoader.CIFAR_10)
+
 val tf_dataset = AbstractDataSet(
   dataSet.trainImages, dataSet.trainLabels, dataSet.trainLabels.shape(0),
   dataSet.testImages, dataSet.testLabels, dataSet.testLabels.shape(0))
@@ -109,8 +112,12 @@ val trainInput = tf.learn.Input(UINT8, Shape(-1))
 val relu_act = DataPipe[String, Activation](tf.learn.ReLU(_))
 
 val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
-  dtflearn.inception_unit(channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>
-  dtflearn.inception_unit(channels = 40, Seq.fill(4)(5),  relu_act)(layer_index = 2) >>
+  dtflearn.inception_unit(
+    channels = 3,  Seq.fill(4)(10), 
+    relu_act)(layer_index = 1) >>
+  dtflearn.inception_unit(
+    channels = 40, Seq.fill(4)(5), 
+    relu_act)(layer_index = 2) >>
   tf.learn.Flatten("Layer_3/Flatten") >>
   dtflearn.feedforward(256)(id = 4) >>
   tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>
@@ -118,12 +125,14 @@ val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
 
 val trainingInputLayer = tf.learn.Cast("TrainInput/Cast", INT64)
 
-val loss = tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
-  tf.learn.Mean("Loss/Mean") >> tf.learn.ScalarSummary("Loss/Summary", "Loss")
+val loss = 
+  tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >> 
+    tf.learn.Mean("Loss/Mean") >> 
+    tf.learn.ScalarSummary("Loss/Summary", "Loss")
 
 val optimizer = tf.train.Adam(0.1)
 
-val summariesDir = java.nio.file.Paths.get((tempdir/"cifar_summaries").toString())
+val summariesDir = Paths.get((tempdir/"cifar_summaries").toString())
 
 val (model, estimator) = dtflearn.build_tf_model(
   architecture, input, trainInput, trainingInputLayer,
