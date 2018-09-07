@@ -37,33 +37,41 @@ class GPSpec extends FlatSpec with Matchers {
 
   }
 
-  "A gaussian process regression model" should " compute posterior pdf correctly" in {
-
-    val epsilon = 1E-5
+  "A gaussian process regression model" should " compute posterior pdf and error bars correctly" in {
 
     val data = Seq((DenseVector(1d), 1d), (DenseVector(2d), 4d))
 
     implicit val field = VectorField(1)
     implicit val tr    = identityPipe[Seq[(DenseVector[Double], Double)]]
 
-    val polyKernel = new PolynomialKernel(2, 0.0)
-    polyKernel.block("degree")
+    val seKernel = new SEKernel(1d, 1d)
+
 
     val mean = DataPipe[DenseVector[Double], Double](v => 0d)
 
-    val noiseCov = new DiracKernel(noiseLevel = 0.5d)
+    val noiseCov = new DiracKernel(noiseLevel = 0d)
+    noiseCov.block_all_hyper_parameters
+
 
     val gp_model = AbstractGPRegressionModel(
-      polyKernel, noiseCov,
+      seKernel, noiseCov,
       mean)(data.take(1), 1)
 
     val posterior = gp_model.predictiveDistribution(data.takeRight(1).map(_._1))
 
-    val likelihood = -posterior.underlyingDist.logPdf(PartitionedVector(Stream((0L, data.takeRight(1).head._1))))
+    val (pmean, psigma) = (posterior.underlyingDist.mean, posterior.underlyingDist.covariance)
 
-    val actual_likelihood = 11.358593590728782
+    val preds_with_bars = gp_model.predictionWithErrorBars(data.takeRight(1).map(_._1), 1)
 
-    assert(likelihood - actual_likelihood < epsilon)
+
+    val rho = math.exp(-1.0/2)
+
+    assert(pmean._data.head._2(0) == rho && psigma._data.head._2(0, 0) == 1.0 - rho*rho)
+
+    assert(
+      preds_with_bars.head._3 == rho - math.sqrt(1.0 - rho*rho) &&
+        preds_with_bars.head._4 == rho + math.sqrt(1.0 - rho*rho))
+
 
   }
 
