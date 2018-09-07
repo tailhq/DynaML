@@ -7,130 +7,144 @@
 [![codecov](https://codecov.io/gh/transcendent-ai-labs/DynaML/branch/master/graph/badge.svg)](https://codecov.io/gh/transcendent-ai-labs/DynaML)
 [![status](http://joss.theoj.org/papers/a561bdd3e960c5b0718c67c3f73c6f3b/status.svg)](http://joss.theoj.org/papers/a561bdd3e960c5b0718c67c3f73c6f3b)
 
-DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows. It can also be used as an educational/research tool for data analysis.
+DynaML is a Scala & JVM Machine Learning toolbox for research, education & industry.
 
-Currently DynaML supports.
 
-* Regularized Ordinary Least Squares
-* Logistic and Probit Models for binary classification
-* Regression and Classification with kernel based Dual LS-SVM
-* Regression and Classification with Gaussian Processes
-* Feed forward Neural Networks
-* Committee Models
-  - Neural Committee Models
-  - Gaussian Process Committee Models
-* Model Learning and Optimization
-  - Gradient Descent
-  - Conjugate Gradient
-  - Committee Model Solver
-  - Back propogation with momentum
-  - LSSVM linear solver
-* Model tuning
-  * Grid Search
-  * Maximum Likelihood (ML-II)
-  * Coupled Simulated Annealing
-* Model validation metrics (RMSE, Area under ROC)
-* Entropy based data subset selection
-* Data Pipes for configurable workflows
-* Tensorflow Integration
+![3dplot](docs/images/plot3dsmall.jpeg)
 
-Include
---------
 
-To include DynaML in your maven JVM project edit your ```pom.xml``` file as follows
+------------------
 
-```xml
-<repositories>
-  <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-  </repository>
-</repositories>
-```
+## Motivation
 
-```xml
-<dependency>
-  <groupId>com.github.transcendent-ai-labs</groupId>
-  <artifactId>DynaML</artifactId>
-  <version>v1.4</version>
-</dependency>
-```
 
-for sbt projects edit your `build.sbt` (see [JitPack](https://jitpack.io/#transcendent-ai-labs/DynaML) for more details)
+ - __Interactive__ Don't want to create Maven/sbt project skeletons
+ every time you want to try out ideas? Create and execute [scala worksheets](scripts/randomvariables.sc) 
+ in the DynaML shell. DynaML comes packaged with a customized version of the [Ammonite](http://ammonite.io) REPL, 
+ with *auto-complete*, file operations and scripting capabilities.  
+ 
+ - __End to End__ Create complex pre-processing pipelines with the [data pipes](https://transcendent-ai-labs.github.io/DynaML/pipes/pipes/) API, 
+ train models ([deep nets](scripts/cifar.sc), [gaussian processes](https://transcendent-ai-labs.github.io/DynaML/core/core_gp/), 
+ [linear models](https://transcendent-ai-labs.github.io/DynaML/core/core_glm/) and more), 
+ optimize over [hyper-parameters](https://transcendent-ai-labs.github.io/DynaML/core/core_opt_global/), 
+ [evaluate](https://transcendent-ai-labs.github.io/DynaML/core/core_model_evaluation/) model predictions and 
+ [visualise](https://transcendent-ai-labs.github.io/DynaML/core/core_graphics/) results.
+ 
+ - __Enterprise Friendly__ Take advantage of the JVM and Scala ecosystem, use Apache [Spark](https://spark.apache.org) 
+ to write scalable data analysis jobs, [Tensorflow](http://tensorflow.org) for deep learning, all in the same toolbox.
+
+------------------
+
+## Getting Started
+
+### Platform Compatibility
+
+Currently, only *nix and OSX platforms are supported.
+
+DynaML is compatible with Scala `2.11`
+
+### Installation
+
+Easiest way to install DynaML is cloning & compiling from the [github](/) repository. Please take a look at 
+the [installation](https://transcendent-ai-labs.github.io/DynaML/installation/installation/) instructions in the 
+user guide.
+
+### CIFAR in 100 lines
 
 ```scala
-resolvers += "jitpack" at "https://jitpack.io"
-libraryDependencies += "com.github.transcendent-ai-labs" % "DynaML" % version
+  import ammonite.ops._
+  import io.github.mandar2812.dynaml.pipes.DataPipe
+  import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
+  import io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils}
+  import io.github.mandar2812.dynaml.tensorflow.implicits._
+  import org.platanios.tensorflow.api._
+  import org.platanios.tensorflow.api.learn.layers.Activation
+  import org.platanios.tensorflow.api.learn.layers.Layer
+  import org.platanios.tensorflow.api.ops.NN.SameConvPadding
+  import org.platanios.tensorflow.data.image.CIFARLoader
+  import java.nio.file.Paths
+
+
+  val tempdir = home/"tmp"
+
+  val dataSet = CIFARLoader.load(Paths.get(tempdir.toString()), CIFARLoader.CIFAR_10)
+  val tf_dataset = AbstractDataSet(
+    dataSet.trainImages, dataSet.trainLabels, dataSet.trainLabels.shape(0),
+    dataSet.testImages, dataSet.testLabels, dataSet.testLabels.shape(0))
+
+  val trainData =
+    tf_dataset.training_data
+      .repeat()
+      .shuffle(10000)
+      .batch(128)
+      .prefetch(10)
+
+
+  println("Building the model.")
+  val input = tf.learn.Input(
+    UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2), dataSet.trainImages.shape(3))
+  )
+
+  val trainInput = tf.learn.Input(UINT8, Shape(-1))
+
+  val relu_act = DataPipe[String, Activation](tf.learn.ReLU(_))
+
+  val architecture = tf.learn.Cast("Input/Cast", FLOAT32) >>
+    dtflearn.inception_unit(channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>
+    dtflearn.inception_unit(channels = 40, Seq.fill(4)(5),  relu_act)(layer_index = 2) >>
+    tf.learn.Flatten("Layer_3/Flatten") >>
+    dtflearn.feedforward(256)(id = 4) >>
+    tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>
+    dtflearn.feedforward(10)(id = 5)
+
+  val trainingInputLayer = tf.learn.Cast("TrainInput/Cast", INT64)
+
+  val loss = tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
+    tf.learn.Mean("Loss/Mean") >> tf.learn.ScalarSummary("Loss/Summary", "Loss")
+
+  val optimizer = tf.train.Adam(0.1)
+
+  val summariesDir = java.nio.file.Paths.get((tempdir/"cifar_summaries").toString())
+
+  val (model, estimator) = dtflearn.build_tf_model(
+    architecture, input, trainInput, trainingInputLayer,
+    loss, optimizer, summariesDir, dtflearn.max_iter_stop(500),
+    100, 100, 100)(
+    trainData, true)
+
+  def accuracy(predictions: Tensor, labels: Tensor): Float =
+    predictions.argmax(1)
+      .cast(UINT8)
+      .equal(labels)
+      .cast(FLOAT32)
+      .mean()
+      .scalar
+      .asInstanceOf[Float]
+
+  val (trainingPreds, testPreds): (Option[Tensor], Option[Tensor]) =
+    dtfutils.predict_data[
+      Tensor, Output, DataType, Shape, Output,
+      Tensor, Output, DataType, Shape, Output,
+      Tensor, Tensor](
+      estimator,
+      data = tf_dataset,
+      pred_flags = (true, true),
+      buff_size = 20000)
+
+  val (trainAccuracy, testAccuracy) = (
+    accuracy(trainingPreds.get, dataSet.trainLabels),
+    accuracy(testPreds.get, dataSet.testLabels))
+
+  print("Train accuracy = ")
+  pprint.pprintln(trainAccuracy)
+
+  print("Test accuracy = ")
+  pprint.pprintln(testAccuracy)
 ```
 
+## Support & Community
 
-
-Installation
-============
-
-Platform Compatibility
-----------------------
-DynaML installs and runs on *nix platforms, though it is possible to build the project on windows, running the generated .bat file might not work and one would need to resort to using the `java -jar` command.
-
-Pre-requisites
--------------
-* sbt
-* A modern HTML5 enabled browser (to view plots generated by Wisp)
-* BLAS, LAPACK and ARPACK binaries for your platform. In case they are not installed, it is possible to disable this feature by commenting out (`//`) the section of the build.sbt file given below.
-
-  ```scala
-    "org.scalanlp" % "breeze-natives_2.11" % "0.11.2" % "compile",
-  ```
-
-Steps
--------
-
-* Clone this repository
-* Run the following.
-```shell
-  sbt
-```
-
-The sbt shell will open
-
-```shell
- [info] Loading project definition from ~/DynaML/project
- [info] Set current project to DynaML (in build file:~/Development/DynaML/)
- >
-```
-
-Now enter the following commands
-
-```shell
->stage
->console
-```
-
-After the project builds, you should get the following prompt.
-
-```
-       _        _        _          _             _                  _   _         _
-      /\ \     /\ \     /\_\       /\ \     _    / /\               /\_\/\_\ _    _\ \
-     /  \ \____\ \ \   / / /      /  \ \   /\_\ / /  \             / / / / //\_\ /\__ \
-    / /\ \_____\\ \ \_/ / /      / /\ \ \_/ / // / /\ \           /\ \/ \ \/ / // /_ \_\
-   / / /\/___  / \ \___/ /      / / /\ \___/ // / /\ \ \         /  \____\__/ // / /\/_/
-  / / /   / / /   \ \ \_/      / / /  \/____// / /  \ \ \       / /\/________// / /
- / / /   / / /     \ \ \      / / /    / / // / /___/ /\ \     / / /\/_// / // / /
-/ / /   / / /       \ \ \    / / /    / / // / /_____/ /\ \   / / /    / / // / / ____
-\ \ \__/ / /         \ \ \  / / /    / / // /_________/\ \ \ / / /    / / // /_/_/ ___/\
- \ \___\/ /           \ \_\/ / /    / / // / /_       __\ \_\\/_/    / / //_______/\__\/
-  \/_____/             \/_/\/_/     \/_/ \_\___\     /____/_/        \/_/ \_______\/
-
-Welcome to DynaML v1.4.1-beta.11
-Interactive Scala shell for Machine Learning Research
-(Scala 2.11.8 Java 1.8.0_101)
-DynaML>
-
-```
-
-Getting Started
-===============
-Refer to the [user guide](https://transcendent-ai-labs.github.io/DynaML/) for a more detailed introduction, for contributing; refer to the [wiki](https://github.com/transcendent-ai-labs/DynaML/wiki).
-
+ - [User guide](https://transcendent-ai-labs.github.io/DynaML/)
+ - [Gitter](https://gitter.im/DynaML/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
  - [Contributing](https://github.com/transcendent-ai-labs/DynaML/blob/master/CONTRIBUTING.md)
  - [Code of Conduct](https://github.com/transcendent-ai-labs/DynaML/blob/master/CODE_OF_CONDUCT.md)
