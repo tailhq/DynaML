@@ -1,6 +1,6 @@
 ![3dplot](docs/images/dynaml_logo3.png)
 
-# DynaML
+# DynaML: ML + JVM + Scala
 
 
 [![Join the chat at https://gitter.im/DynaML/Lobby](https://badges.gitter.im/DynaML/Lobby.svg)](https://gitter.im/DynaML/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/transcendent-ai-labs/DynaML.svg?branch=master)](https://travis-ci.org/transcendent-ai-labs/DynaML) [![](https://jitpack.io/v/transcendent-ai-labs/DynaML.svg)](https://jitpack.io/#transcendent-ai-labs/DynaML)
@@ -16,6 +16,7 @@ DynaML is a Scala & JVM Machine Learning toolbox for research, education & indus
 <br/>
 
 ![3dplot](docs/images/plot3dsmall.jpeg)
+![plots](docs/images/plots_small.png)
 
 
 ------------------
