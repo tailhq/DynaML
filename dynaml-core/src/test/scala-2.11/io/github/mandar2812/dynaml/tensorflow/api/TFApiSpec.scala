@@ -3,6 +3,7 @@ package io.github.mandar2812.dynaml.tensorflow.api
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
+import _root_.io.github.mandar2812.dynaml.probability.GaussianRV
 
 class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
@@ -27,16 +28,34 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
     val int32tensor = dtf.tensor_i32(2, 2)(numbers:_*)
 
+    val int64tensor = dtf.tensor_i64(2, 2)(numbers:_*)
+
+    val f16tensor = dtf.tensor_f16(2, 2)(numbers.map(_.toDouble):_*)
+
     val f32tensor = dtf.tensor_f32(2, 2)(numbers.map(_.toDouble):_*)
 
     val f64tensor = dtf.tensor_f64(2, 2)(numbers.map(_.toDouble):_*)
 
-    assert(uint8tensor.dataType.toString() == "UINT8")
-    assert(int16tensor.dataType.toString() == "INT16")
-    assert(int32tensor.dataType.toString() == "INT32")
-    assert(f32tensor.dataType.toString() == "FLOAT32")
-    assert(f64tensor.dataType.toString() == "FLOAT64")
-    assert(f64tensor.shape == Shape(2, 2))
+    val f_tensor  = dtf.fill(FLOAT32, 3, 2)(1f)
+
+    val r_tensor = dtf.random(FLOAT64, 3, 3)(GaussianRV(0.0, 1.0))
+
+    val b_tensor = dtf.tensor_from_buffer(INT32, Shape(5, 5))((0 until 100).map(_.toByte).toArray)
+
+    assert(uint8tensor.dataType == UINT8 && uint8tensor.shape == Shape(2, 2))
+    assert(int16tensor.dataType == INT16 && int16tensor.shape == Shape(2, 2))
+    assert(int32tensor.dataType == INT32 && int32tensor.shape == Shape(2, 2))
+    assert(int64tensor.dataType == INT64 && int64tensor.shape == Shape(2, 2))
+    assert(f16tensor.dataType == FLOAT16 && f16tensor.shape == Shape(2, 2))
+    assert(f32tensor.dataType == FLOAT32 && f32tensor.shape == Shape(2, 2))
+    assert(f64tensor.dataType == FLOAT64 && f64tensor.shape == Shape(2, 2))
+
+    assert(f_tensor.shape == Shape(3, 2) && f_tensor.dataType == FLOAT32)
+    assert(f_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 1f))
+
+    assert(r_tensor.shape == Shape(3, 3) && r_tensor.dataType == FLOAT64)
+
+    assert(b_tensor.shape == Shape(5, 5) && b_tensor.dataType == INT32)
 
   }
 
