@@ -2302,97 +2302,106 @@ the <a href="https://transcendent-ai-labs.github.io/DynaML/installation/installa
 <p>Below is a sample <a href="./scripts/cifar.sc">script</a> where we train a neural network of stacked 
 <a href="https://arxiv.org/pdf/1409.4842.pdf">Inception</a> cells on the <a href="https://en.wikipedia.org/wiki/CIFAR-10">CIFAR-10</a>
 image classification task.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">ammonite.ops._</span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">ammonite.ops._</span>
 <span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.pipes.DataPipe</span>
 <span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet</span>
 <span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.tensorflow.</span><span class="o">{</span><span class="n">dtflearn</span><span class="o">,</span> <span class="n">dtfutils</span><span class="o">}</span>
@@ -2405,7 +2414,10 @@ image classification task.</p>
 
 <span class="k">val</span> <span class="n">tempdir</span> <span class="k">=</span> <span class="n">home</span><span class="o">/</span><span class="s">&quot;tmp&quot;</span>
 
-<span class="k">val</span> <span class="n">dataSet</span> <span class="k">=</span> <span class="nc">CIFARLoader</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="nc">Paths</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">tempdir</span><span class="o">.</span><span class="n">toString</span><span class="o">()),</span> <span class="nc">CIFARLoader</span><span class="o">.</span><span class="nc">CIFAR_10</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">dataSet</span> <span class="k">=</span> <span class="nc">CIFARLoader</span><span class="o">.</span><span class="n">load</span><span class="o">(</span>
+  <span class="nc">Paths</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">tempdir</span><span class="o">.</span><span class="n">toString</span><span class="o">()),</span> 
+  <span class="nc">CIFARLoader</span><span class="o">.</span><span class="nc">CIFAR_10</span><span class="o">)</span>
+
 <span class="k">val</span> <span class="n">tf_dataset</span> <span class="k">=</span> <span class="nc">AbstractDataSet</span><span class="o">(</span>
   <span class="n">dataSet</span><span class="o">.</span><span class="n">trainImages</span><span class="o">,</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">trainLabels</span><span class="o">,</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">trainLabels</span><span class="o">.</span><span class="n">shape</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span>
   <span class="n">dataSet</span><span class="o">.</span><span class="n">testImages</span><span class="o">,</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">testLabels</span><span class="o">,</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">testLabels</span><span class="o">.</span><span class="n">shape</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span>
@@ -2433,8 +2445,12 @@ image classification task.</p>
 <span class="k">val</span> <span class="n">relu_act</span> <span class="k">=</span> <span class="nc">DataPipe</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Activation</span><span class="o">](</span><span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">ReLU</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">architecture</span> <span class="k">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">Cast</span><span class="o">(</span><span class="s">&quot;Input/Cast&quot;</span><span class="o">,</span> <span class="nc">FLOAT32</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
-  <span class="n">dtflearn</span><span class="o">.</span><span class="n">inception_unit</span><span class="o">(</span><span class="n">channels</span> <span class="k">=</span> <span class="mi">3</span><span class="o">,</span>  <span class="nc">Seq</span><span class="o">.</span><span class="n">fill</span><span class="o">(</span><span class="mi">4</span><span class="o">)(</span><span class="mi">10</span><span class="o">),</span> <span class="n">relu_act</span><span class="o">)(</span><span class="n">layer_index</span> <span class="k">=</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
-  <span class="n">dtflearn</span><span class="o">.</span><span class="n">inception_unit</span><span class="o">(</span><span class="n">channels</span> <span class="k">=</span> <span class="mi">40</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">.</span><span class="n">fill</span><span class="o">(</span><span class="mi">4</span><span class="o">)(</span><span class="mi">5</span><span class="o">),</span>  <span class="n">relu_act</span><span class="o">)(</span><span class="n">layer_index</span> <span class="k">=</span> <span class="mi">2</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
+  <span class="n">dtflearn</span><span class="o">.</span><span class="n">inception_unit</span><span class="o">(</span>
+    <span class="n">channels</span> <span class="k">=</span> <span class="mi">3</span><span class="o">,</span>  <span class="nc">Seq</span><span class="o">.</span><span class="n">fill</span><span class="o">(</span><span class="mi">4</span><span class="o">)(</span><span class="mi">10</span><span class="o">),</span> 
+    <span class="n">relu_act</span><span class="o">)(</span><span class="n">layer_index</span> <span class="k">=</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
+  <span class="n">dtflearn</span><span class="o">.</span><span class="n">inception_unit</span><span class="o">(</span>
+    <span class="n">channels</span> <span class="k">=</span> <span class="mi">40</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">.</span><span class="n">fill</span><span class="o">(</span><span class="mi">4</span><span class="o">)(</span><span class="mi">5</span><span class="o">),</span> 
+    <span class="n">relu_act</span><span class="o">)(</span><span class="n">layer_index</span> <span class="k">=</span> <span class="mi">2</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
   <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">Flatten</span><span class="o">(</span><span class="s">&quot;Layer_3/Flatten&quot;</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
   <span class="n">dtflearn</span><span class="o">.</span><span class="n">feedforward</span><span class="o">(</span><span class="mi">256</span><span class="o">)(</span><span class="n">id</span> <span class="k">=</span> <span class="mi">4</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
   <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">ReLU</span><span class="o">(</span><span class="s">&quot;Layer_4/ReLU&quot;</span><span class="o">,</span> <span class="mf">0.1f</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
@@ -2442,12 +2458,14 @@ image classification task.</p>
 
 <span class="k">val</span> <span class="n">trainingInputLayer</span> <span class="k">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">Cast</span><span class="o">(</span><span class="s">&quot;TrainInput/Cast&quot;</span><span class="o">,</span> <span class="nc">INT64</span><span class="o">)</span>
 
-<span class="k">val</span> <span class="n">loss</span> <span class="k">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">SparseSoftmaxCrossEntropy</span><span class="o">(</span><span class="s">&quot;Loss/CrossEntropy&quot;</span><span class="o">)</span> <span class="o">&gt;&gt;</span>
-  <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">Mean</span><span class="o">(</span><span class="s">&quot;Loss/Mean&quot;</span><span class="o">)</span> <span class="o">&gt;&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">ScalarSummary</span><span class="o">(</span><span class="s">&quot;Loss/Summary&quot;</span><span class="o">,</span> <span class="s">&quot;Loss&quot;</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">loss</span> <span class="k">=</span> 
+  <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">SparseSoftmaxCrossEntropy</span><span class="o">(</span><span class="s">&quot;Loss/CrossEntropy&quot;</span><span class="o">)</span> <span class="o">&gt;&gt;</span> 
+    <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">Mean</span><span class="o">(</span><span class="s">&quot;Loss/Mean&quot;</span><span class="o">)</span> <span class="o">&gt;&gt;</span> 
+    <span class="n">tf</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="nc">ScalarSummary</span><span class="o">(</span><span class="s">&quot;Loss/Summary&quot;</span><span class="o">,</span> <span class="s">&quot;Loss&quot;</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">optimizer</span> <span class="k">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="nc">Adam</span><span class="o">(</span><span class="mf">0.1</span><span class="o">)</span>
 
-<span class="k">val</span> <span class="n">summariesDir</span> <span class="k">=</span> <span class="n">java</span><span class="o">.</span><span class="n">nio</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="nc">Paths</span><span class="o">.</span><span class="n">get</span><span class="o">((</span><span class="n">tempdir</span><span class="o">/</span><span class="s">&quot;cifar_summaries&quot;</span><span class="o">).</span><span class="n">toString</span><span class="o">())</span>
+<span class="k">val</span> <span class="n">summariesDir</span> <span class="k">=</span> <span class="nc">Paths</span><span class="o">.</span><span class="n">get</span><span class="o">((</span><span class="n">tempdir</span><span class="o">/</span><span class="s">&quot;cifar_summaries&quot;</span><span class="o">).</span><span class="n">toString</span><span class="o">())</span>
 
 <span class="k">val</span> <span class="o">(</span><span class="n">model</span><span class="o">,</span> <span class="n">estimator</span><span class="o">)</span> <span class="k">=</span> <span class="n">dtflearn</span><span class="o">.</span><span class="n">build_tf_model</span><span class="o">(</span>
   <span class="n">architecture</span><span class="o">,</span> <span class="n">input</span><span class="o">,</span> <span class="n">trainInput</span><span class="o">,</span> <span class="n">trainingInputLayer</span><span class="o">,</span>
