@@ -57,6 +57,26 @@ class KernelSpec extends FlatSpec with Matchers {
     assert(math.abs(cauchyKernel.evaluate(x, z) - 0.8) < epsilon)
   }
 
+  "FBM, MLP Kernels " should "compute correct values" in {
+
+    val epsilon = 1E-5
+
+    implicit val field = VectorField(1)
+
+    val (fbmKernel, fbmCovFunc) = (new FBMKernel(hurst = 1.0), new FBMCovFunction(hurst = 1.0))
+
+    val (mlpKernel, mlpCovFunc)    = (new MLPKernel(1.0, 0.0), new MLP1dKernel(1.0, 0.0))
+
+    val (x, y, z) = (DenseVector(1.0), DenseVector(0.0), DenseVector(1.5))
+
+    assert(fbmKernel.evaluate(x, y) == 0d)
+    assert(fbmCovFunc.evaluate(1d, 0d) == 0d)
+
+    assert(math.abs(mlpKernel.evaluate(x, x) - math.Pi/6) < epsilon)
+    assert(math.abs(mlpCovFunc.evaluate(1d, 1d) - math.Pi/6) < epsilon)
+
+  }
+
 
   "Kernels transformations " should "compute and handle hyper-parameters correctly" in {
 
