@@ -22,10 +22,10 @@ package io.github.mandar2812.dynaml.kernels
 import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
-  * @author mandar2812 date 13/09/16.
-  *
   * Implementation of the Maximum Likelihood Perceptron (MLP) kernel
-  */
+  *
+  * @author mandar2812 date 13/09/16.
+  * */
 class MLPKernel(w: Double, b: Double) extends SVMKernel[DenseMatrix[Double]]
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable{
@@ -50,7 +50,11 @@ class MLPKernel(w: Double, b: Double) extends SVMKernel[DenseMatrix[Double]]
       (math.sqrt(config("w")*(x.t*x) + config("b") + 1) * math.sqrt(config("w")*(y.t*y) + config("b") + 1))
     )
 
-  override def gradientAt(config: Map[String, Double])(x: DenseVector[Double], y: DenseVector[Double]) = {
+  override def gradientAt(
+    config: Map[String, Double])(
+    x: DenseVector[Double],
+    y: DenseVector[Double]): Map[String, Double] = {
+
     val (wxy, wxx, wyy) = (
       config("w")*(x.t*y) + config("b"),
       math.sqrt(config("w")*(x.t*x) + config("b") + 1),
@@ -94,7 +98,7 @@ class MLP1dKernel(w: Double, b: Double) extends LocalSVMKernel[Double]
         (math.sqrt(config("w")*(x*x) + config("b") + 1) * math.sqrt(config("w")*(y*y) + config("b") + 1))
     )
 
-  override def gradientAt(config: Map[String, Double])(x: Double, y: Double) = {
+  override def gradientAt(config: Map[String, Double])(x: Double, y: Double): Map[String, Double] = {
     val (wxy, wxx, wyy) = (
       config("w")*(x*y) + config("b"),
       math.sqrt(config("w")*(x*x) + config("b") + 1),

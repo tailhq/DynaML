@@ -72,6 +72,12 @@ class KernelSpec extends FlatSpec with Matchers {
     assert(fbmKernel.evaluate(x, y) == 0d)
     assert(fbmCovFunc.evaluate(1d, 0d) == 0d)
 
+    assert(fbmKernel.gradient(x, z)("hurst") == 1.5*1.5*math.log(1.5*1.5) - 0.5*0.5*math.log(0.5*0.5))
+    assert(fbmCovFunc.gradient(1.0, 1.5)("hurst") == 1.5*1.5*math.log(1.5*1.5) - 0.5*0.5*math.log(0.5*0.5))
+
+    assert(fbmKernel.gradient(x, y)("hurst").isNaN)
+    assert(fbmCovFunc.gradient(1.0, 0.0)("hurst").isNaN)
+
     assert(math.abs(mlpKernel.evaluate(x, x) - math.Pi/6) < epsilon)
     assert(math.abs(mlpCovFunc.evaluate(1d, 1d) - math.Pi/6) < epsilon)
 
