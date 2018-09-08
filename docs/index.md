@@ -29,12 +29,12 @@ DynaML is a Scala & JVM Machine Learning toolbox for research, education & indus
 
 
  - __Interactive__ Don't want to create Maven/sbt project skeletons
- every time you want to try out ideas? Create and execute [scala worksheets](scripts/randomvariables.sc) 
+ every time you want to try out ideas? Create and execute [scala worksheets](https://github.com/transcendent-ai-labs/DynaML/blob/master/scripts/randomvariables.sc) 
  in the DynaML shell. DynaML comes packaged with a customized version of the [Ammonite](http://ammonite.io) REPL, 
  with *auto-complete*, file operations and scripting capabilities.  
  
  - __End to End__ Create complex pre-processing pipelines with the [data pipes](https://transcendent-ai-labs.github.io/DynaML/pipes/pipes/) API, 
- train models ([deep nets](scripts/cifar.sc), [gaussian processes](https://transcendent-ai-labs.github.io/DynaML/core/core_gp/), 
+ train models ([deep nets](https://github.com/transcendent-ai-labs/DynaML/blob/master/scripts/cifar.sc), [gaussian processes](https://transcendent-ai-labs.github.io/DynaML/core/core_gp/), 
  [linear models](https://transcendent-ai-labs.github.io/DynaML/core/core_glm/) and more), 
  optimize over [hyper-parameters](https://transcendent-ai-labs.github.io/DynaML/core/core_opt_global/), 
  [evaluate](https://transcendent-ai-labs.github.io/DynaML/core/core_model_evaluation/) model predictions and 
@@ -56,14 +56,14 @@ DynaML is compatible with Scala `2.11`
 ### Installation
 
 Easiest way to install DynaML is cloning & compiling from the [github](/) repository. Please take a look at 
-the [installation](https://transcendent-ai-labs.github.io/DynaML/installation/installation/) instructions in the 
-[user guide](https://transcendent-ai-labs.github.io/DynaML/).
+the [installation](https://transcendent-ai-labs.github.io/DynaML/installation/installation/) instructions, 
+to make sure that you have the pre-requisites and to configure your installation.
 
 ------------------
 
 ## CIFAR in 100 lines
 
-Below is a sample [script](scripts/cifar.sc) where we train a neural network of stacked 
+Below is a sample [script](https://github.com/transcendent-ai-labs/DynaML/blob/master/scripts/cifar.sc) where we train a neural network of stacked 
 [Inception](https://arxiv.org/pdf/1409.4842.pdf) cells on the [CIFAR-10](https://en.wikipedia.org/wiki/CIFAR-10)
 image classification task.
 
@@ -175,7 +175,6 @@ pprint.pprintln(testAccuracy)
 
 ## Support & Community
 
- - [User guide](https://transcendent-ai-labs.github.io/DynaML/)
  - [Gitter](https://gitter.im/DynaML/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
  - [Contributing](https://github.com/transcendent-ai-labs/DynaML/blob/master/CONTRIBUTING.md)
  - [Code of Conduct](https://github.com/transcendent-ai-labs/DynaML/blob/master/CODE_OF_CONDUCT.md)

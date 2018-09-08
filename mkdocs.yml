@@ -4,7 +4,7 @@ site_description: 'User guide and documentation for the DynaML machine learning 
 site_author: 'Mandar Chandorkar'
 site_url: 'https://transcendent-ai-labs.github.io/DynaML'
 copyright: 'Copyright &copy; 2015 Mandar Chandorkar'
-pages:
+nav:
     - 'DynaML': index.md
     - 'Getting DynaML':
       - 'Installation': installation/installation.md
