@@ -28,19 +28,19 @@ DynaML is a Scala & JVM Machine Learning toolbox for research, education & indus
 ## Motivation
 
 
- - __Interactive__ Don't want to create Maven/sbt project skeletons
+ - __Interactive.__ Don't want to create Maven/sbt project skeletons
  every time you want to try out ideas? Create and execute [scala worksheets](https://github.com/transcendent-ai-labs/DynaML/blob/master/scripts/randomvariables.sc) 
  in the DynaML shell. DynaML comes packaged with a customized version of the [Ammonite](http://ammonite.io) REPL, 
  with *auto-complete*, file operations and scripting capabilities.  
  
- - __End to End__ Create complex pre-processing pipelines with the [data pipes](https://transcendent-ai-labs.github.io/DynaML/pipes/pipes/) API, 
+ - __End to End.__ Create complex pre-processing pipelines with the [data pipes](https://transcendent-ai-labs.github.io/DynaML/pipes/pipes/) API, 
  train models ([deep nets](https://github.com/transcendent-ai-labs/DynaML/blob/master/scripts/cifar.sc), [gaussian processes](https://transcendent-ai-labs.github.io/DynaML/core/core_gp/), 
  [linear models](https://transcendent-ai-labs.github.io/DynaML/core/core_glm/) and more), 
  optimize over [hyper-parameters](https://transcendent-ai-labs.github.io/DynaML/core/core_opt_global/), 
  [evaluate](https://transcendent-ai-labs.github.io/DynaML/core/core_model_evaluation/) model predictions and 
  [visualise](https://transcendent-ai-labs.github.io/DynaML/core/core_graphics/) results.
  
- - __Enterprise Friendly__ Take advantage of the JVM and Scala ecosystem, use Apache [Spark](https://spark.apache.org) 
+ - __Enterprise Friendly.__ Take advantage of the JVM and Scala ecosystem, use Apache [Spark](https://spark.apache.org) 
  to write scalable data analysis jobs, [Tensorflow](http://tensorflow.org) for deep learning, all in the same toolbox.
 
 ------------------
