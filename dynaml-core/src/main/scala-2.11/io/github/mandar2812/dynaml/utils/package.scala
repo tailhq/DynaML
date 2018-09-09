@@ -95,9 +95,8 @@ package object utils {
     *         and variance * n-1.
     *
     * */
-  def getStats(data: List[DenseVector[Double]]):
-  (DenseVector[Double], DenseVector[Double]) = {
-    @tailrec
+  def getStats(data: List[DenseVector[Double]]): (DenseVector[Double], DenseVector[Double]) = {
+
     def getStatsRec(d: List[DenseVector[Double]],
                     m: DenseVector[Double],
                     s: DenseVector[Double],
@@ -135,15 +134,17 @@ package object utils {
     *         and variance.
     *
     * */
-  def getStatsMult(data: List[DenseVector[Double]]):
-  (DenseVector[Double], DenseMatrix[Double]) = {
-    def getStatsRec(d: List[DenseVector[Double]],
-                    m: DenseVector[Double],
-                    s: DenseMatrix[Double],
-                    i: Int):
-    (DenseVector[Double], DenseMatrix[Double]) = d match {
+  def getStatsMult(data: List[DenseVector[Double]]): (DenseVector[Double], DenseMatrix[Double]) = {
+
+    def getStatsRec(
+      d: List[DenseVector[Double]],
+      m: DenseVector[Double],
+      s: DenseMatrix[Double],
+      i: Int): (DenseVector[Double], DenseMatrix[Double]) = d match {
+
       case Nil =>
         (m,s)
+
       case x :: rest =>
         val mnew = m + (x - m)/(i+1).toDouble
         getStatsRec(rest, mnew,
@@ -151,7 +152,6 @@ package object utils {
           i + 1)
 
     }
-
 
     val n = data.length
 
@@ -166,15 +166,16 @@ package object utils {
     (mean, biasedSigmaSq*adjustment)
   }
 
-  def getMinMax(data: List[DenseVector[Double]]):
-  (DenseVector[Double], DenseVector[Double]) = {
-    @tailrec
-    def getMinMaxRec(d: List[DenseVector[Double]],
-                     m: DenseVector[Double],
-                     s: DenseVector[Double],
-                     i: Int):
-    (DenseVector[Double], DenseVector[Double]) = d match {
+  def getMinMax(data: List[DenseVector[Double]]): (DenseVector[Double], DenseVector[Double]) = {
+
+    def getMinMaxRec(
+      d: List[DenseVector[Double]],
+      m: DenseVector[Double],
+      s: DenseVector[Double],
+      i: Int): (DenseVector[Double], DenseVector[Double]) = d match {
+
       case Nil => (m, s)
+
       case x :: rest =>
         getMinMaxRec(rest,
           DenseVector((x.toArray zip m.toArray).map(c => math.min(c._1, c._2))),
@@ -417,19 +418,21 @@ package object utils {
     * NOTE: n must be a power of 2.
     *
     * */
-  def haarMatrix(n: Int) = {
+  def haarMatrix(n: Int): DenseMatrix[Double] = {
 
-    val pos = DenseMatrix(Array(1.0, 1.0))
-    val neg = DenseMatrix(Array(-1.0, 1.0))
-    val hMat = DenseMatrix(Array(1.0, 1.0), Array(-1.0, 1.0))
+    val pos = DenseVector(1.0, 1.0).toDenseMatrix
+    val neg = DenseVector(1.0, -1.0).toDenseMatrix
+    val hMat = DenseMatrix((1.0, 1.0), (1.0, -1.0))
 
     def haarMatrixAcc(i: Int, hMatAcc: DenseMatrix[Double]): DenseMatrix[Double] = i match {
       case `n` => hMatAcc
-      case index =>
+      case _ =>
         haarMatrixAcc(i*2,
           DenseMatrix.vertcat[Double](
             kron(hMatAcc, pos),
-            kron(DenseMatrix.eye[Double](i), neg)))
+            kron(DenseMatrix.eye[Double](i), neg)
+          )
+        )
     }
 
     haarMatrixAcc(2, hMat)

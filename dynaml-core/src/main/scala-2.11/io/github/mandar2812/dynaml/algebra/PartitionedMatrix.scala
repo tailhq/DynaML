@@ -16,9 +16,10 @@ import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
   *             block indices and a breeze [[DenseMatrix]] containing
   *             all the elements in the said block.
   */
-private[dynaml] class PartitionedMatrix(data: Stream[((Long, Long), DenseMatrix[Double])],
-                                        num_rows: Long = -1L, num_cols: Long = -1L,
-                                        num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
+private[dynaml] class PartitionedMatrix(
+  data: Stream[((Long, Long), DenseMatrix[Double])],
+  num_rows: Long = -1L, num_cols: Long = -1L,
+  num_row_blocks: Long = -1L, num_col_blocks: Long = -1L)
   extends AbstractPartitionedMatrix[DenseMatrix[Double]](data, num_row_blocks, num_col_blocks)
     with NumericOps[PartitionedMatrix] {
 
