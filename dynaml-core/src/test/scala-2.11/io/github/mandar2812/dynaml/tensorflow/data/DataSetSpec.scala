@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.tensorflow.data
 
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
+import io.github.mandar2812.dynaml.DynaMLPipe._
 import org.scalatest.{FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.tensorflow._
 
@@ -42,6 +43,9 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     val run_sum = running_sum.data.toSeq
 
+    assert(numbers.flatMap(i => 1 to i).size == numbers.size*(numbers.size + 1)/2)
+    assert(numbers.flatMap(DataPipe[Int, Iterable[Int]](1 to _)).size == numbers.size*(numbers.size + 1)/2)
+
     assert(numbers.scan[Int](0)(addPipe).data.forall(run_sum.contains(_)))
 
     assert(numbers_rev.scanRight[Int](0)(addPipe).data.zip(max to 1).forall(c => c._1 == c._2*(c._2 + 1)/2))
@@ -51,6 +55,25 @@ class DataSetSpec extends FlatSpec with Matchers {
     assert(
       numbers.transform(DataPipe[Iterable[Int], Iterable[Int]](c => Iterable(c.sum))).data.head ==
         numbers.size*(numbers.size + 1)/2)
+
+    assert(odd_numbers.concatenate(even_numbers).size == max)
+
+    val zip_numbers = numbers.zip(numbers)
+
+    val (f, t) = zip_numbers.unzip
+
+    assert(f.size == max && t.size == max)
+
+    val supervisedDataSet = zip_numbers.to_supervised(identityPipe[(Int, Int)])
+
+    assert(supervisedDataSet.features.data.zipWithIndex.forall(c => c._1 == c._2 + 1))
+    assert(supervisedDataSet.targets.data.zipWithIndex.forall(c => c._1 == c._2 + 1))
+
+    val tr_te = supervisedDataSet.partition(DataPipe[(Int, Int), Boolean](c => c._1 % 2 == 0))
+
+    assert(
+      tr_te.training_dataset.data.forall(c => c._1 % 2 == 0) &&
+        tr_te.test_dataset.data.forall(c => c._1 % 2 == 1))
 
   }
 
