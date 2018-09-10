@@ -43,7 +43,7 @@ private[tensorflow] trait DynamicsAPI {
   val constant: Constant.type                         = Constant
   def one[I](
     dataType: DataType)(
-    shape: Shape): Constant[I]                        = constant[I]("Zero", Tensor.ones(dataType, shape))
+    shape: Shape): Constant[I]                        = constant[I]("One", Tensor.ones(dataType, shape))
 
   def variable[I](
     name: String,

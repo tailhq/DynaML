@@ -1,8 +1,6 @@
 package io.github.mandar2812.dynaml.tensorflow.dynamics
 
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d.DelauneySurface
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d
 import _root_.io.github.mandar2812.dynaml.utils
 import _root_.io.github.mandar2812.dynaml.analysis.implicits._
 import _root_.io.github.mandar2812.dynaml.tensorflow._
@@ -15,9 +13,10 @@ import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
 import scala.util.Random
 
 class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
-  val random = new Random()
 
-  def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor = {
+  protected val random = new Random()
+
+  protected def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor = {
 
     val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize)))
 
@@ -25,7 +24,7 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
     dtf.tensor_f32(Seq.fill(dim)(gridSize).product, dim)(points.flatten:_*)
   }
 
-  val layer = new Layer[Output, Output]("Exp") {
+  protected val layer = new Layer[Output, Output]("Exp") {
     override val layerType = "Exp"
 
     override protected def _forward(input: Output)(implicit mode: Mode): Output =
@@ -33,19 +32,19 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
   }
 
 
-  implicit val mode: Mode = tf.learn.INFERENCE
+  protected implicit val mode: Mode = tf.learn.INFERENCE
 
-  val domain = (0.0, 5.0)
+  protected val domain = (0.0, 5.0)
 
-  val domain_size = domain._2 - domain._1
+  protected val domain_size = domain._2 - domain._1
 
-  val input_dim: Int = 2
+  protected val input_dim: Int = 2
 
-  val output_dim: Int = 1
+  protected val output_dim: Int = 1
 
-  val inputs = tf.placeholder(FLOAT32, Shape(-1, input_dim))
+  protected val inputs = tf.placeholder(FLOAT32, Shape(-1, input_dim))
 
-  val feedforward = new Layer[Output, Output]("Exp") {
+  protected val feedforward = new Layer[Output, Output]("Exp") {
     override val layerType = "MatMul"
 
     override protected def _forward(input: Output)(implicit mode: Mode): Output =
@@ -58,27 +57,27 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
       ).reshape(Shape(input.shape(0)))
   }
 
-  val function  = feedforward >> layer
+  protected val function  = feedforward >> layer
 
-  val outputs   = function.forward(inputs)
+  protected val outputs   = function.forward(inputs)
 
-  val df_dt     = d_t(d_t)(function)(inputs)
+  protected val df_dt     = d_t(d_t)(function)(inputs)
 
-  val df_ds     = d_s(d_s)(function)(inputs)
+  protected val df_ds     = d_s(d_s)(function)(inputs)
 
-  val velocity  = variable[Output]("wave_velocity", FLOAT32, Shape(), ConstantInitializer(1.0f))
+  protected val velocity  = variable[Output]("wave_velocity", FLOAT32, Shape(), ConstantInitializer(1.0f))
 
-  val wave_op   = d_t(d_t) - d_s(d_s)*velocity
+  protected val wave_op   = d_t(d_t) - d_s(d_s)*velocity
 
-  val op_f      = wave_op(function)(inputs)
+  protected val op_f      = wave_op(function)(inputs)
 
-  var session: Session = _
+  protected var session: Session = _
 
-  var trainBatch: Tensor = _
+  protected var trainBatch: Tensor = _
 
-  var feeds: Map[Output, Tensor] = _
+  protected var feeds: Map[Output, Tensor] = _
 
-  var results: (Tensor, Tensor, Tensor, Tensor) = _
+  protected var results: (Tensor, Tensor, Tensor, Tensor) = _
 
   before {
 
@@ -101,7 +100,7 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
     session.close()
   }
 
-  "Wave Equation " should "have 'wave_velocity' as the epistemic source" in {
+  "Wave Equation " should "have 'wave_velocity' as the only epistemic source" in {
 
     assert(
       wave_op.variables.toSeq.length == 1 &&

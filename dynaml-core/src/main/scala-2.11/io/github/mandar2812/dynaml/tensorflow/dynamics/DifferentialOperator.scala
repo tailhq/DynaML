@@ -133,7 +133,8 @@ private[dynamics] case class Constant[I](override val name: String, t: Output) e
 
   override def run(data: Layer[I, Output]): Layer[I, Output] = Learn.constant[I](name, t)
 
-  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = Map(self.name -> None)
+  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
+    Map(self.name -> None)
 }
 
 /**
