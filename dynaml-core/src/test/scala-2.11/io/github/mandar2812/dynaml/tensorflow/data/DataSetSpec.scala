@@ -4,6 +4,7 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import org.scalatest.{FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.tensorflow._
+import org.platanios.tensorflow.api._
 
 class DataSetSpec extends FlatSpec with Matchers {
 
@@ -29,7 +30,17 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     val doubleofnumbers = numbers.map((i: Int) => 2*i)
 
-    assert(doubleofnumbers.data.forall(_ % 2 == 0) && numbers.zip(doubleofnumbers).data.forall(c => c._2 == c._1 * 2))
+    val tripleofnumbers = numbers.map((i: Int) => 3*i)
+
+    assert(
+      doubleofnumbers.data.forall(_ % 2 == 0) &&
+        numbers.map(DataPipe((i: Int) => 2*i)).data.forall(_ % 2 == 0) &&
+        numbers.zip(doubleofnumbers).data.forall(c => c._2 == c._1 * 2) &&
+        ZipDataSet(numbers, doubleofnumbers).data.forall(c => c._2 == c._1 * 2) &&
+        numbers.zip(doubleofnumbers)
+          .join(numbers.zip(tripleofnumbers))
+          .data.forall(c => c._2._1 == 2*c._1 && c._2._2 == 3*c._1)
+    )
 
     val addPipe = DataPipe2[Int, Int, Int]((x, y) => x + y)
 
@@ -74,6 +85,34 @@ class DataSetSpec extends FlatSpec with Matchers {
     assert(
       tr_te.training_dataset.data.forall(c => c._1 % 2 == 0) &&
         tr_te.test_dataset.data.forall(c => c._1 % 2 == 1))
+
+    val tr_te2 = numbers.partition(DataPipe[Int, Boolean](_ % 2 == 0))
+
+    assert(
+      tr_te2.training_dataset.data.forall(_ % 2 == 0) &&
+        tr_te2.test_dataset.data.forall(_ % 2 == 1))
+
+  }
+
+  "DynaML data sets" should " build Tensor Flow data sets properly" in {
+
+    val max = 10
+
+    val numbers = dtfdata.dataset(1 to max)
+
+    val tf_data1 = numbers.build(Left(DataPipe[Int, Tensor](Tensor(_))), INT32, Shape(1))
+
+    assert(
+      tf_data1.outputDataTypes == INT32 &&
+        tf_data1.outputShapes == Shape(1) &&
+        tf_data1.createInitializableIterator().next() != null)
+
+    val tf_data2 = numbers.build(Right(DataPipe[Int, Output](Tensor(_).toOutput)), INT32, Shape(1))
+
+    assert(
+      tf_data2.outputDataTypes == INT32 &&
+        tf_data2.outputShapes == Shape(1) &&
+        tf_data2.createInitializableIterator().next() != null)
 
   }
 
