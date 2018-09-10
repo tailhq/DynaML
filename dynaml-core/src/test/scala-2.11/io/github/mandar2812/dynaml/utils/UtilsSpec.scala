@@ -7,6 +7,8 @@ import io.github.mandar2812.dynaml.algebra.{PartitionedMatrix, btrace}
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.utils
 import org.scalatest.{FlatSpec, Matchers}
+import spire.algebra._
+import spire.implicits._
 
 class UtilsSpec extends FlatSpec with Matchers {
 
@@ -93,8 +95,68 @@ class UtilsSpec extends FlatSpec with Matchers {
 
   "Haar DWT matrix " should "compute correctly" in {
     assert(utils.haarMatrix(2) == DenseMatrix((1d, 1d), (1d, -1d)))
+
+    assert(
+      utils.haarMatrix(4) ==
+        DenseMatrix(
+          (1d, 1d, 1d, 1d),
+          (1d, 1d, -1d, -1d),
+          (1d, -1d, 0d, 0d),
+          (0d, 0d, 1d, -1d))
+    )
   }
 
+  "Product Fields" should " extend from their components" in {
+
+    val f = Field[Double]
+
+    val pf = utils.productField(f, f)
+
+    val (x, y) = ((1d, 2d), (1d, 2d))
+
+    assert(
+      pf.plus(x, y) == (2d, 4d) &&
+        pf.minus(x, y) == (0d, 0d) &&
+        pf.times(x, y) == (1d, 4d) &&
+        pf.div(x, y) == (1d, 1d) &&
+        pf.negate(x) == (-1d, -2d) &&
+        pf.zero == (f.zero, f.zero) &&
+        pf.one == (f.one, f.one) &&
+        pf.mod(x, y) == (0d, 0d) &&
+        pf.quot(x, y) == (1d, 1d) &&
+        pf.gcd(x, y) == (1d, 1d) &&
+        pf.lcm(x, y) == (1d, 4d))
+
+
+  }
+
+  "String replace function" should " work as expected" in
+    assert(utils.replace("abab")("blah")("abab blah abab") == "blah blah blah")
+
+  "isSquareMatrix and isSymmetricMatrix methods" should " yield correct results" in {
+
+    val res1 = try {
+      utils.isSquareMatrix(DenseMatrix.zeros[Double](2, 3))
+      None
+    } catch {
+      case m: MatrixNotSquareException => Some(m)
+    }
+
+
+    val res2 = try {
+      utils.isSymmetricMatrix(DenseMatrix((1d, 3d), (2d, 4d)))
+      None
+    } catch {
+      case m: MatrixNotSymmetricException => Some(m)
+    }
+
+
+
+    assert(res1.isDefined)
+    assert(res2.isDefined)
+
+
+  }
 
 
 }
