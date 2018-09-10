@@ -43,8 +43,14 @@ class DataSetSpec extends FlatSpec with Matchers {
     )
 
     val addPipe = DataPipe2[Int, Int, Int]((x, y) => x + y)
+    val addPipe2 = DataPipe[Iterable[Int], Int](_.sum)
 
-    assert(numbers.reduce[Int](addPipe) == numbers.size*(numbers.size + 1)/2)
+
+    assert(
+      numbers.reduce[Int](addPipe) == numbers.size*(numbers.size + 1)/2 &&
+        numbers.reduce[Int](addPipe2) == numbers.size*(numbers.size + 1)/2)
+
+    assert(numbers.transform((d: Iterable[Int]) => d.map(2 * _)).data.forall(_ % 2 == 0))
 
     assert(numbers.reduceLeft[Int](addPipe) == numbers.size*(numbers.size + 1)/2)
 
