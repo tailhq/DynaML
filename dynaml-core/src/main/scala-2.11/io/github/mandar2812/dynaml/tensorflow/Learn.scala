@@ -108,10 +108,11 @@ private[tensorflow] object Learn {
     *                       the layers start with, defaults to 1.
     * */
   def feedforward_stack(
-    get_act: Int => Activation,
+    get_act: Int => Layer[Output, Output],
     dataType: DataType)(
     layer_sizes: Seq[Int],
-    starting_index: Int = 1): Layer[Output, Output] = {
+    starting_index: Int = 1,
+    useBias: Boolean = true): Layer[Output, Output] = {
 
     def stack_ff_layers_rec(
       ls: Seq[Int],
@@ -120,11 +121,11 @@ private[tensorflow] object Learn {
 
       case Seq() => layer_acc
 
-      case Seq(num_output_units) => layer_acc >> dtflearn.feedforward(num_output_units)(layer_index)
+      case Seq(num_output_units) => layer_acc >> dtflearn.feedforward(num_output_units, useBias)(layer_index)
 
       case _ => stack_ff_layers_rec(
         ls.tail,
-        layer_acc >> dtflearn.feedforward(ls.head)(layer_index) >> get_act(layer_index),
+        layer_acc >> dtflearn.feedforward(ls.head, useBias)(layer_index) >> get_act(layer_index),
         layer_index + 1)
     }
 
@@ -178,7 +179,7 @@ private[tensorflow] object Learn {
     * stacked versions of [Conv2d --> ReLU --> Dropout] layers.
     *
     * The number of filters learned in each Conv2d layer are
-    * arranged in decreasing exponents of 2. They are costructed
+    * arranged in decreasing exponents of 2. They are constructed
     * using calls to [[conv2d_unit()]]
     *
     * ... Conv_unit(128) --> Conv_unit(64) --> Conv_unit(32) --> Conv_unit(16) ...
@@ -361,7 +362,7 @@ private[tensorflow] object Learn {
     observables: Int,
     horizon: Int, timestep: Double = -1d)(index: Int) =
     if (timestep <= 0d) {
-      DynamicTimeStepCTRNN(s"FHctrnn_$index", horizon) >>
+      DynamicTimeStepCTRNN(s"DFHctrnn_$index", horizon) >>
         FiniteHorizonLinear(s"FHlinear_$index", observables)
     } else {
       FiniteHorizonCTRNN(s"FHctrnn_$index", horizon, timestep) >>
