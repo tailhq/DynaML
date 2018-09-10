@@ -41,11 +41,11 @@ case class RBFLayer(
   centers_initializer: Initializer = tf.RandomNormalInitializer(),
   scales_initializer: Initializer  = tf.OnesInitializer,
   weights_initializer: Initializer = tf.RandomNormalInitializer()) extends
-    Layer[Output, Seq[Output]](name) {
+    Layer[Output, Output](name) {
 
   override val layerType: String = s"RBFLayer[num_units:$num_units]"
 
-  override def _forward(input: Output)(implicit mode: Mode): Seq[Output] = {
+  override def _forward(input: Output)(implicit mode: Mode): Output = {
 
     val node_centers    = (0 until num_units).map(
       i => tf.variable("node_"+i, input.dataType, Shape(input.shape(-1)), centers_initializer)
@@ -55,8 +55,12 @@ case class RBFLayer(
       i => tf.variable("scale_"+i, input.dataType, Shape(input.shape(-1)), scales_initializer)
     )
 
-    node_centers.zip(scales).map(cs => {
-      input.subtract(cs._1).square.divide(cs._2.square.add(1E-6)).multiply(-0.5).sum(axes = 1).exp
-    })
+    tf.concatenate(
+      node_centers.zip(scales).map(cs => {
+        input.subtract(cs._1).square.divide(cs._2.square.add(1E-6)).multiply(-0.5).sum(axes = 1).exp
+      }),
+      axis = -1).reshape(
+      Shape(-1, num_units)
+    )
   }
 }

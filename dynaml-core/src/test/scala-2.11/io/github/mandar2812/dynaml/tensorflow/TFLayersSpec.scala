@@ -29,6 +29,13 @@ class TFLayersSpec extends FlatSpec with Matchers {
       starting_index = 3,
       useBias = false)
 
+    val lin_stack2 = dtflearn.feedforward_stack(
+      (i: Int) => dtflearn.GeneralizedLogistic(s"Id_$i"),
+      FLOAT32)(
+      Seq(2, 1),
+      starting_index = 100,
+      useBias = false)
+
     val conv2d = dtflearn.conv2d(2, 4, 2, (1, 1))(0)
 
     val conv_pyramid_dropout = dtflearn.conv2d_pyramid(
@@ -54,9 +61,13 @@ class TFLayersSpec extends FlatSpec with Matchers {
     val ctrnn_stack = dtflearn.ctrnn_block(2, 3)(1)
     val ctrnn_stack2 = dtflearn.ctrnn_block(4, 3, 0.5)(10)
 
+    val rbf_l = dtflearn.rbf_layer("RBF_Layer1", 4)
+
     val lin_output = lin.forward(vec_input)
 
     val lin_stack_output = lin_stack.forward(vec_input)
+
+    val lin_stack_output2 = lin_stack2.forward(vec_input)
 
     val conv_output = conv2d.forward(image_input)
 
@@ -64,6 +75,9 @@ class TFLayersSpec extends FlatSpec with Matchers {
     val conv_py_output2 = conv_pyramid_batch(image_input)
 
     val (ctrnn_output1, ctrnn_output2) = (ctrnn_stack.forward(vec_input), ctrnn_stack2.forward(vec_input))
+
+    val rbf_output = rbf_l.forward(vec_input)
+
 
     val inception_output = inception.forward(image_input)
 
@@ -79,24 +93,27 @@ class TFLayersSpec extends FlatSpec with Matchers {
 
     val feeds = Map(vec_input -> sample_input, image_input -> sample_image)
 
-    val (lin_tensor, lin_stack_tensor, conv_tensor, inception_tensor, in_stack_tensor)
-    : (Tensor, Tensor, Tensor, Tensor, Tensor) = session.run(
+    val (lin_tensor, lin_stack_tensor, lin_stack_tensor2, conv_tensor, inception_tensor, in_stack_tensor)
+    : (Tensor, Tensor, Tensor, Tensor, Tensor, Tensor) = session.run(
       feeds = feeds,
       fetches = (
         lin_output,
         lin_stack_output,
+        lin_stack_output2,
         conv_output,
         inception_output,
         inception_stack_output)
     )
 
-    val (conv_batch, conv_dropout, ctrnn_tensor1, ctrnn_tensor2): (Tensor, Tensor, Tensor, Tensor) = session.run(
+    val (conv_batch, conv_dropout, ctrnn_tensor1, ctrnn_tensor2, rbf_tensor)
+    : (Tensor, Tensor, Tensor, Tensor, Tensor) = session.run(
       feeds = feeds,
       fetches = (
         conv_py_output2,
         conv_py_output1,
         ctrnn_output1,
-        ctrnn_output2
+        ctrnn_output2,
+        rbf_output
       )
     )
 
@@ -109,13 +126,15 @@ class TFLayersSpec extends FlatSpec with Matchers {
     assert(
       lin_tensor.shape == Shape(1, 2) &&
         lin_stack_tensor.shape == Shape(1, 1) &&
+        lin_stack_tensor2.shape == Shape(1, 1) &&
         conv_tensor.shape == Shape(1, 3, 3, 2) &&
         conv_batch.shape == Shape(1, 1, 1, 4) &&
         conv_dropout.shape == Shape(1, 1, 1, 4) &&
         inception_tensor.shape == Shape(1, 3, 3, 10) &&
         in_stack_tensor.shape == Shape(1, 3, 3, 4) &&
         ctrnn_tensor1.shape == Shape(1, 2, 3) &&
-        ctrnn_tensor2.shape == Shape(1, 4, 3))
+        ctrnn_tensor2.shape == Shape(1, 4, 3) &&
+        rbf_tensor.shape == Shape(1, 4))
 
     assert(
       lin_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 0f) &&

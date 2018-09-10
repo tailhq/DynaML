@@ -26,6 +26,8 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
     val uint8tensor = dtf.tensor_from("UINT8", 2, 2)(numbers.map(_.toByte))
 
+    val int32tensor2 = dtf.tensor_from[Int](INT32, Shape(2, 2))(numbers:_*)
+
     val int32tensor = dtf.tensor_i32(2, 2)(numbers:_*)
 
     val int64tensor = dtf.tensor_i64(2, 2)(numbers:_*)
@@ -37,14 +39,18 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
     val f64tensor = dtf.tensor_f64(2, 2)(numbers.map(_.toDouble):_*)
 
     val f_tensor  = dtf.fill(FLOAT32, 3, 2)(1f)
+    val f_tensor2  = dtf.fill(FLOAT32, Shape(3, 2))(1f)
 
     val r_tensor = dtf.random(FLOAT64, 3, 3)(GaussianRV(0.0, 1.0))
 
     val b_tensor = dtf.tensor_from_buffer(INT32, Shape(5, 5))((0 until 100).map(_.toByte).toArray)
 
+    val b_tensor2 = dtf.tensor_from_buffer("INT32", 5, 5)((0 until 100).map(_.toByte).toArray)
+
     assert(uint8tensor.dataType == UINT8 && uint8tensor.shape == Shape(2, 2))
     assert(int16tensor.dataType == INT16 && int16tensor.shape == Shape(2, 2))
     assert(int32tensor.dataType == INT32 && int32tensor.shape == Shape(2, 2))
+    assert(int32tensor2.dataType == INT32 && int32tensor2.shape == Shape(2, 2))
     assert(int64tensor.dataType == INT64 && int64tensor.shape == Shape(2, 2))
     assert(f16tensor.dataType == FLOAT16 && f16tensor.shape == Shape(2, 2))
     assert(f32tensor.dataType == FLOAT32 && f32tensor.shape == Shape(2, 2))
@@ -53,9 +59,13 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
     assert(f_tensor.shape == Shape(3, 2) && f_tensor.dataType == FLOAT32)
     assert(f_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 1f))
 
+    assert(f_tensor2.shape == Shape(3, 2) && f_tensor2.dataType == FLOAT32)
+    assert(f_tensor2.entriesIterator.forall(_.asInstanceOf[Float] == 1f))
+
     assert(r_tensor.shape == Shape(3, 3) && r_tensor.dataType == FLOAT64)
 
     assert(b_tensor.shape == Shape(5, 5) && b_tensor.dataType == INT32)
+    assert(b_tensor2.shape == Shape(5, 5) && b_tensor2.dataType == INT32)
 
   }
 
