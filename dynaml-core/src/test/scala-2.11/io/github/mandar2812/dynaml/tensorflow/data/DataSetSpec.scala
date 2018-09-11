@@ -85,6 +85,8 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     assert(supervisedDataSet.features.data.zipWithIndex.forall(c => c._1 == c._2 + 1))
     assert(supervisedDataSet.targets.data.zipWithIndex.forall(c => c._1 == c._2 + 1))
+    assert(dtfdata.supervised_dataset(numbers, numbers).unzip._2.size == numbers.size)
+
 
     val tr_te = supervisedDataSet.partition(DataPipe[(Int, Int), Boolean](c => c._1 % 2 == 0))
 
@@ -106,19 +108,32 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     val numbers = dtfdata.dataset(1 to max)
 
-    val tf_data1 = numbers.build(Left(DataPipe[Int, Tensor](Tensor(_))), INT32, Shape(1))
+    implicit val convertToOutput: DataPipe[Int, Output] = DataPipe(Tensor(_).toOutput)
+
+    val tf_data1 = numbers.build(Left(DataPipe[Int, Tensor](i => Tensor(i).reshape(Shape(1)))), INT32, Shape(1))
+    val tf_data2 = numbers.build(Right(DataPipe[Int, Output](Tensor(_).toOutput)), INT32, Shape(1))
+    val tf_data3 = numbers.build_buffered(
+      2,
+      DataPipe[Iterable[Output], Output](
+        s => tf.concatenate(s.toSeq, 0)), INT32, Shape(-1)
+    )
 
     assert(
       tf_data1.outputDataTypes == INT32 &&
         tf_data1.outputShapes == Shape(1) &&
         tf_data1.createInitializableIterator().next() != null)
 
-    val tf_data2 = numbers.build(Right(DataPipe[Int, Output](Tensor(_).toOutput)), INT32, Shape(1))
+
 
     assert(
       tf_data2.outputDataTypes == INT32 &&
         tf_data2.outputShapes == Shape(1) &&
         tf_data2.createInitializableIterator().next() != null)
+
+    assert(
+      tf_data3.outputDataTypes == INT32 &&
+        tf_data3.outputShapes == Shape() &&
+        tf_data3.createInitializableIterator().next() != null)
 
   }
 

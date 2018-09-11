@@ -204,7 +204,8 @@ class DataSet[X](val data: Iterable[X]) {
     self
       .transform(transformation)
       .map(DataPipe((batch: O) => tf.data.OutputSlicesDataset[T, O, D, S](batch)))
-      .reduceLeft(DataPipe2((l: Dataset[T, O, D, S], r: OutputSlicesDataset[T, O, D, S]) => l.concatenate(r)))
+      .reduceLeft[Dataset[T, O, D, S]](
+      DataPipe2((l: Dataset[T, O, D, S], r: OutputSlicesDataset[T, O, D, S]) => l.concatenate(r)))
 
 
   def build_buffered[T, O, DA, D, S](
