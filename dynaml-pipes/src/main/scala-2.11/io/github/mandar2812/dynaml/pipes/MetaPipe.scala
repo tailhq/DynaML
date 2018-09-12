@@ -29,7 +29,7 @@ trait MetaPipe[Source, Intermediate, Destination] extends
 object MetaPipe {
 
   def apply[Source, Intermediate, Destination](
-    f: (Source) => (Intermediate) => (Destination))
+    f: Source => Intermediate => Destination)
   : MetaPipe[Source, Intermediate, Destination] =
     new MetaPipe[Source, Intermediate, Destination] {
       override def run(data: Source) = DataPipe(f(data))
@@ -52,7 +52,7 @@ trait MetaPipe21[A, B, C, D] extends DataPipe2[A, B, DataPipe[C, D]] {
 }
 
 object MetaPipe21 {
-  def apply[A, B, C, D](f: (A, B) => (C) => D): MetaPipe21[A, B, C, D] =
+  def apply[A, B, C, D](f: (A, B) => C => D): MetaPipe21[A, B, C, D] =
     new MetaPipe21[A, B, C, D]{
       override def run(data1: A, data2: B) = DataPipe(f(data1, data2))
     }
@@ -74,7 +74,7 @@ trait MetaPipe12[A, B, C, D] extends DataPipe[A, DataPipe2[B, C, D]] {
 }
 
 object MetaPipe12 {
-  def apply[A, B, C, D](f: (A) => (B, C) => D): MetaPipe12[A, B, C, D] =
+  def apply[A, B, C, D](f: A => (B, C) => D): MetaPipe12[A, B, C, D] =
     new MetaPipe12[A, B, C, D] {
       override def run(data: A) = DataPipe2(f(data))
     }
