@@ -2217,22 +2217,25 @@
                 
                   <h1>Students T Processes</h1>
                 
-                <p><a href="https://www.cs.cmu.edu/~andrewgw/tprocess.pdf">Student T Processes</a> (STP) can be viewed as a generalization of Gaussian Processes, in GP models we use the multivariate normal distribution to model noisy observations of an unknown function. Likewise for STP models, we employ the multivariate student t distribution. Formally a student t process is a stochastic process where the finite dimensional distribution is multivariate t.</p>
+                <p><a href="https://www.cs.cmu.edu/~andrewgw/tprocess.pdf">Student T Processes</a> (STP) can be viewed as a generalization of 
+Gaussian Processes, in GP models we use the multivariate normal distribution to model noisy observations of an 
+unknown function. Likewise for STP models, we employ the multivariate student t distribution. Formally a student t 
+process is a stochastic process where the finite dimensional distribution is multivariate t.</p>
 <div>
 <div class="MathJax_Preview">
 \begin{align}
 \mathbf{y} &amp; \in \mathbb{R}^n \\
 \mathbf{y} &amp; \sim MVT_{n}(\nu, \phi, K) \\
-p(\mathbf{y}) &amp; = \frac{\Gamma(\frac{\nu + n}{2})}{((\nu - 2)\pi)^{n/2} \Gamma(\nu/2)} |K|^{-1/2} \\
-&amp; \times (1 + (\mathbf{y} - \phi)^T K^{-1} (\mathbf{y} - \phi))^{-\frac{\nu +n}{2}}
+p(\mathbf{y}) &amp; = \frac{\Gamma(\frac{\nu + n}{2})}{(\nu \pi)^{n/2} \Gamma(\nu/2)} |K|^{-1/2} \\
+&amp; \times (1 + \frac{(\mathbf{y} - \phi)^T K^{-1} (\mathbf{y} - \phi)}{\nu})^{-\frac{\nu + n}{2}}
 \end{align}
 </div>
 <script type="math/tex; mode=display">
 \begin{align}
 \mathbf{y} & \in \mathbb{R}^n \\
 \mathbf{y} & \sim MVT_{n}(\nu, \phi, K) \\
-p(\mathbf{y}) & = \frac{\Gamma(\frac{\nu + n}{2})}{((\nu - 2)\pi)^{n/2} \Gamma(\nu/2)} |K|^{-1/2} \\
-& \times (1 + (\mathbf{y} - \phi)^T K^{-1} (\mathbf{y} - \phi))^{-\frac{\nu +n}{2}}
+p(\mathbf{y}) & = \frac{\Gamma(\frac{\nu + n}{2})}{(\nu \pi)^{n/2} \Gamma(\nu/2)} |K|^{-1/2} \\
+& \times (1 + \frac{(\mathbf{y} - \phi)^T K^{-1} (\mathbf{y} - \phi)}{\nu})^{-\frac{\nu + n}{2}}
 \end{align}
 </script>
 </div>
