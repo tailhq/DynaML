@@ -100,7 +100,7 @@ abstract class AbstractSTPRegressionModel[T, I](
     noiseModel.setHyperParameters(noiseHyp)
 
     current_state = covariance.state ++ noiseModel.state
-    current_state += ("degrees_of_freedom" -> (s("degrees_of_freedom")+2.0))
+    current_state += ("degrees_of_freedom" -> (s("degrees_of_freedom") + 2.0))
     this
   }
 
@@ -109,7 +109,7 @@ abstract class AbstractSTPRegressionModel[T, I](
 
 
   override protected var current_state: Map[String, Double] =
-    covariance.state ++ noiseModel.state ++ Map("degrees_of_freedom" -> (2.0+mu))
+    covariance.state ++ noiseModel.state ++ Map("degrees_of_freedom" -> (2.0 + mu))
 
   /**
     * Predict the value of the
@@ -352,5 +352,37 @@ object AbstractSTPRegressionModel {
     }
 
   }
+
+  /**
+    * Create an instance of [[AbstractSTPRegressionModel]] for a
+    * particular data type [[T]]
+    *
+    * @tparam T The type of the training data
+    * @tparam I The type of the input patterns in the data set of type [[T]]
+    *
+    * @param cov The covariance function
+    * @param noise The noise covariance function
+    * @param meanFunc The trend or mean function
+    * @param trainingdata The actual data set of type [[T]]
+    * @param transform An implicit conversion from [[T]] to [[Seq]] represented as a [[DataPipe]]
+    * */
+  def apply[T, I: ClassTag](
+    mu: Double,
+    cov: LocalScalarKernel[I],
+    noise: LocalScalarKernel[I],
+    meanFunc: DataPipe[I, Double])(
+    trainingdata: T, num: Int)(
+    implicit transform: DataPipe[T, Seq[(I, Double)]]): AbstractSTPRegressionModel[T, I] = {
+
+    val num_points = if(num > 0) num else transform(trainingdata).length
+
+    new AbstractSTPRegressionModel[T, I](mu, cov, noise, trainingdata, num_points, meanFunc) {
+
+      override def dataAsSeq(data: T) = transform(data)
+
+    }
+
+  }
+
 
 }

@@ -503,7 +503,7 @@ object AbstractGPRegressionModel {
     noise: LocalScalarKernel[I],
     meanFunc: DataPipe[I, Double])(
     trainingdata: T, num: Int)(
-    implicit transform: DataPipe[T, Seq[(I, Double)]]) = {
+    implicit transform: DataPipe[T, Seq[(I, Double)]]): AbstractGPRegressionModel[T, I] = {
 
     val num_points = if(num > 0) num else transform(trainingdata).length
 

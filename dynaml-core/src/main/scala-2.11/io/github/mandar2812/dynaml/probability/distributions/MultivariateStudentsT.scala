@@ -103,7 +103,7 @@ case class MultivariateStudentsT(
     val centered = t - mean
     val slv = covariance \ centered
 
-    -0.5*(mu+mean.length)*log(1.0 + ((slv dot centered) / (mu - 2.0)))
+    -0.5*(mu+mean.length)*log(1.0 + ((slv dot centered) / mu))
 
   }
 
@@ -111,7 +111,7 @@ case class MultivariateStudentsT(
     // determinant of the cholesky decomp is the sqrt of the determinant of the cov matrix
     // this is the log det of the cholesky decomp
     val det = sum(log(diag(root)))
-    ((mean.length/2) * (log(mu - 2.0) + log(Pi))) + 0.5*det + lgamma(mu/2.0) - lgamma((mu+mean.length)/2.0)
+    ((mean.length/2) * (log(mu) + log(Pi))) + 0.5*det + lgamma(mu/2.0) - lgamma((mu+mean.length)/2.0)
   }
 
   def variance = covariance*(mu/(mu-2.0))

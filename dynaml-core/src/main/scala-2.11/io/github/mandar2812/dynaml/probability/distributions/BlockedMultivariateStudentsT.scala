@@ -47,7 +47,7 @@ case class BlockedMultivariateStudentsT(
     val z: PartitionedVector = root \ centered
     val slv: PartitionedVector = root.t \ z
 
-    -0.5*(mu+mean.rows)*log(1.0 + ((slv dot centered) / (mu - 2.0)))
+    -0.5*(mu+mean.rows)*log(1.0 + ((slv dot centered) / mu))
 
   }
 
@@ -55,14 +55,14 @@ case class BlockedMultivariateStudentsT(
     // determinant of the cholesky decomp is the sqrt of the determinant of the cov matrix
     // this is the log det of the cholesky decomp
     val det = bsum(blog(bdiag(root)))
-    ((mean.rows/2) * (log(mu - 2.0) + log(Pi))) + 0.5*det + lgamma(mu/2.0) - lgamma((mu+mean.rows)/2.0)
+    ((mean.rows/2) * (log(mu) + log(Pi))) + 0.5*det + lgamma(mu/2.0) - lgamma((mu+mean.rows)/2.0)
   }
 
   def variance = new PartitionedPSDMatrix(
     covariance._underlyingdata.map(c => (c._1, c._2*(mu/(mu-2.0)))),
     covariance.rows, covariance.cols, covariance.rowBlocks, covariance.colBlocks)
 
-  def mode = mean
+  def mode: PartitionedVector = mean
 
   //TODO: Check and correct calculation of entropy for Mult Students T
   lazy val entropy = {
