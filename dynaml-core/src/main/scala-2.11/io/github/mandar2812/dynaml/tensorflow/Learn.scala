@@ -18,6 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow
 
+import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
+import _root_.io.github.mandar2812.dynaml.models.TFModel
 import io.github.mandar2812.dynaml.tensorflow.layers.{DynamicTimeStepCTRNN, FiniteHorizonCTRNN, FiniteHorizonLinear}
 import org.platanios.tensorflow.api.learn.{Mode, StopCriteria}
 import org.platanios.tensorflow.api.learn.layers.{Activation, Input, Layer}
@@ -27,7 +29,6 @@ import org.platanios.tensorflow.api.ops.io.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api.types.DataType
 import org.platanios.tensorflow.api.{FLOAT32, Graph, Output, Shape, Tensor, tf, _}
-import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
 import org.platanios.tensorflow.api.ops.variables.Initializer
 
 private[tensorflow] object Learn {
@@ -76,6 +77,8 @@ private[tensorflow] object Learn {
   val rel_loss_change_stop: (Double, Long) => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
     relLossChangeTol = Some(d),
     maxSteps = Some(max_iter))
+
+  val model: TFModel.type = TFModel
 
   def constant[I](name: String, t: Output): Layer[I, Output] = new Layer[I, Output](name){
 

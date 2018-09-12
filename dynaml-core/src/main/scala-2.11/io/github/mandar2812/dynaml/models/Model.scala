@@ -45,7 +45,7 @@ trait Model[T, Q, R] {
     * */
   protected val g: T
 
-  def data = g
+  def data: T = g
 
   /**
     * Predict the value of the
