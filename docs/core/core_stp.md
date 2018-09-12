@@ -1,11 +1,14 @@
-[Student T Processes](https://www.cs.cmu.edu/~andrewgw/tprocess.pdf) (STP) can be viewed as a generalization of Gaussian Processes, in GP models we use the multivariate normal distribution to model noisy observations of an unknown function. Likewise for STP models, we employ the multivariate student t distribution. Formally a student t process is a stochastic process where the finite dimensional distribution is multivariate t.
+[Student T Processes](https://www.cs.cmu.edu/~andrewgw/tprocess.pdf) (STP) can be viewed as a generalization of 
+Gaussian Processes, in GP models we use the multivariate normal distribution to model noisy observations of an 
+unknown function. Likewise for STP models, we employ the multivariate student t distribution. Formally a student t 
+process is a stochastic process where the finite dimensional distribution is multivariate t.
 
 $$
 \begin{align}
 \mathbf{y} & \in \mathbb{R}^n \\
 \mathbf{y} & \sim MVT_{n}(\nu, \phi, K) \\
-p(\mathbf{y}) & = \frac{\Gamma(\frac{\nu + n}{2})}{((\nu - 2)\pi)^{n/2} \Gamma(\nu/2)} |K|^{-1/2} \\
-& \times (1 + (\mathbf{y} - \phi)^T K^{-1} (\mathbf{y} - \phi))^{-\frac{\nu +n}{2}}
+p(\mathbf{y}) & = \frac{\Gamma(\frac{\nu + n}{2})}{(\nu \pi)^{n/2} \Gamma(\nu/2)} |K|^{-1/2} \\
+& \times (1 + \frac{(\mathbf{y} - \phi)^T K^{-1} (\mathbf{y} - \phi)}{\nu})^{-\frac{\nu + n}{2}}
 \end{align}
 $$
 

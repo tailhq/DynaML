@@ -81,7 +81,7 @@ object IterableDataPipe {
     }
 
   //Iterable pipes which map from the original domain to a new one
-  def apply[I, J](mapFunc: (I) => J): IterableMapPipe[I, J] =
+  def apply[I, J](mapFunc: I => J): IterableMapPipe[I, J] =
     new IterableMapPipe[I, J] {
       val pipe = mapFunc
     }
@@ -92,7 +92,7 @@ object IterableDataPipe {
     }
 
   //Iterable pipes which act as filters
-  def apply[I](mapFunc: (I) => Boolean): IterableFilterPipe[I] =
+  def apply[I](mapFunc: I => Boolean): IterableFilterPipe[I] =
     new IterableFilterPipe[I] {
       val pipe = mapFunc
     }
@@ -103,7 +103,7 @@ object IterableDataPipe {
     }
 
   //stream pipes with side effects
-  def apply[I](seFunc: (I) => Unit): IterableSideEffectPipe[I] =
+  def apply[I](seFunc: I => Unit): IterableSideEffectPipe[I] =
     new IterableSideEffectPipe[I] {
       val pipe = seFunc
     }
@@ -115,7 +115,7 @@ object IterableDataPipe {
 }
 
 object IterableFlatMapPipe {
-  def apply[I, J](mapFunc: (I) => Iterable[J]) =
+  def apply[I, J](mapFunc: I => Iterable[J]) =
     new IterableFlatMapPipe[I, J] {
       override val pipe = mapFunc
     }
