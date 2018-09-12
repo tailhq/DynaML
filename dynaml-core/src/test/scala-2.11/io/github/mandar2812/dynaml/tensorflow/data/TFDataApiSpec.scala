@@ -9,9 +9,6 @@ import org.scalatest.{FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
-import scala.util.Random
-
-
 class TFDataApiSpec extends FlatSpec with Matchers {
 
   private val image_paths =
