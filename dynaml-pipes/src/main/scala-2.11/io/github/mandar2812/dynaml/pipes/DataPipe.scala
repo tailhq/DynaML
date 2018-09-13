@@ -87,7 +87,7 @@ object DataPipe {
     def run(x: Unit) = func()
   }
 
-  def apply[S,D](func: (S) => D):
+  def apply[S, D](func: S => D):
   DataPipe[S, D] = {
     new DataPipe[S,D] {
       def run(data: S) = func(data)
@@ -104,8 +104,7 @@ object DataPipe {
     }
   }
 
-  def apply[S](func: (S) => Unit):
-  SideEffectPipe[S] = {
+  def apply[S](func: S => Unit): SideEffectPipe[S] = {
     new SideEffectPipe[S] {
       def run(data: S) = func(data)
     }
@@ -121,8 +120,7 @@ trait ParallelPipe[-Source1, +Result1, -Source2, +Result2]
 }
 
 object ParallelPipe {
-  def apply[S1, D1, S2, D2](func1: (S1) => D1, func2: (S2) => D2):
-  ParallelPipe[S1, D1, S2, D2] = {
+  def apply[S1, D1, S2, D2](func1: S1 => D1, func2: S2 => D2): ParallelPipe[S1, D1, S2, D2] = {
     new ParallelPipe[S1, D1, S2, D2] {
 
       def run(data: (S1, S2)): (D1, D2) = (func1(data._1), func2(data._2))

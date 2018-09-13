@@ -115,12 +115,12 @@ object IterableDataPipe {
 }
 
 object IterableFlatMapPipe {
-  def apply[I, J](mapFunc: I => Iterable[J]) =
+  def apply[I, J](mapFunc: I => Iterable[J]): IterableFlatMapPipe[I, J] =
     new IterableFlatMapPipe[I, J] {
       override val pipe = mapFunc
     }
 
-  def apply[I, J](mapFunc: DataPipe[I, Iterable[J]]) =
+  def apply[I, J](mapFunc: DataPipe[I, Iterable[J]]): IterableFlatMapPipe[I, J] =
     new IterableFlatMapPipe[I, J] {
       override val pipe = mapFunc.run _
     }
