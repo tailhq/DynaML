@@ -19,10 +19,38 @@ class DataPipesSpec extends FlatSpec with Matchers {
   }
 
   "DataPipes" should "be consistent with respect to composition" in {
-    val pipe1 = DataPipe((x: Int) => x+1)
+    val pipe1 = DataPipe((x: Int) => x + 1)
     val pipe2 = DataPipe((y: Int) => y/2.0)
+    val pipe3 = DataPipe((y: Int) => y * 2)
 
     val p = pipe1 > pipe2
+
+    val bifurcation = DataPipe((x: Int) => (x + 1, x * 2))
+
+    val other_bifurcation = pipe1 >-< pipe3
+
+    val add_num = DataPipe2((x: Int, y: Int) => x + y)
+    val add_tup = DataPipe((xy: (Int, Int)) => xy._1 + xy._2)
+
+
+    val final_pipe = other_bifurcation > add_tup
+    val final_pipe2 = bifurcation > add_num
+
+    val trip = DataPipe((x: Int) => (x+1, x+2, x+3))
+    val pipe_3 = DataPipe3((x: Int, y: Int, z: Int) => x + y + z)
+
+    val proc3 = trip > pipe_3
+
+    assert(proc3(1) == 9)
+
+    val quad = DataPipe((x: Int) => (x+1, x+2, x+3, x+4))
+    val pipe_4 = DataPipe4((x: Int, y: Int, z: Int, u: Int) => x + y + z + u)
+
+    val proc4 = quad > pipe_4
+
+    assert(proc4(1) == 14)
+
+    assert(bifurcation(1) == (2, 2) && bifurcation(1) == other_bifurcation(1, 1) && final_pipe(1, 1) == final_pipe2(1))
 
     val num = p(0)
 
@@ -56,7 +84,7 @@ class DataPipesSpec extends FlatSpec with Matchers {
     val mapPipe    = DataPipe[Int, Int](_ * 2)
     val mapFunc    = (n: Int) => n*2
 
-    val sideEff    = DataPipe[Int, Unit](buffer.append(_))
+    val sideEff    = DataPipe[Int]((i: Int) => buffer.append(Seq(i):_*))
     val sideEffFun = (n: Int) => buffer.append(n)
 
     val flatMap    = DataPipe[Int, Iterable[Int]](1 to _)
@@ -68,6 +96,10 @@ class DataPipesSpec extends FlatSpec with Matchers {
     assert(
       IterableDataPipe(filterPipe).run(numbers).forall(_ % 2 == 0) &&
         IterableDataPipe(filterFunc).run(numbers).forall(_ % 2 == 0))
+
+    val st_pipe = IterableDataPipe(filterPipe) > StreamDataPipe.toStreamPipe[Int, Iterable[Int]]
+
+    assert(st_pipe.run(numbers).forall(_ % 2 == 0))
 
     assert(
       IterablePartitionPipe(filterPipe).run(numbers)._2.forall(_ % 2 == 1) &&
@@ -94,6 +126,10 @@ class DataPipesSpec extends FlatSpec with Matchers {
     assert(
       StreamDataPipe(filterPipe).run(numbers.toStream).forall(_ % 2 == 0) &&
         StreamDataPipe(filterFunc).run(numbers.toStream).forall(_ % 2 == 0))
+
+    val it_pipe = StreamDataPipe(filterPipe) > IterableDataPipe.toIterablePipe[Int, Stream[Int]]
+
+    assert(it_pipe.run(numbers.toStream).forall(_ % 2 == 0))
 
     assert(
       StreamPartitionPipe(filterPipe).run(numbers.toStream)._2.forall(_ % 2 == 1) &&

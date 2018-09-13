@@ -19,8 +19,13 @@ class MetaPipeSpec extends FlatSpec with Matchers {
 
     val linear_then_square = linear_transform >> square_num
 
+    val mult_by_n = MetaPipe12((n: Int) => (x: Int, y: Int) => (x*n, y*n))
+
+    val mult_by_n_then_square = mult_by_n >> (square_num * square_num)
+
     assert(mult_by_num(2)(1) == 2 && mult_by_num_add_one(3)(1) == 4)
     assert(linear_transform(2, 2)(2) == 6 && linear_then_square(2, 1)(2) == 25)
+    assert(mult_by_n_then_square(2)(1, 2) == (4, 16))
 
   }
 
