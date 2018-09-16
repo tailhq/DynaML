@@ -22,6 +22,8 @@ import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 
+import scala.reflect.ClassTag
+
 /**
   * Stacks output produced by a tensorflow concatenation layer
   *
@@ -100,6 +102,16 @@ case class SeqLayer[T, R](override val name: String, layers: Seq[Layer[T, R]]) e
     layers.zip(input).map(c => c._1.forward(c._2)(mode))
 }
 
+case class ArrayLayer[T, R: ClassTag](
+  override val name: String,
+  layers: Array[Layer[T, R]]) extends
+  Layer[Array[T], Array[R]](name) {
+  override val layerType: String = s"ArrayLayer[${layers.map(_.layerType).mkString(",")}]"
+
+  override protected def _forward(input: Array[T])(implicit mode: Mode): Array[R] =
+    layers.zip(input).map(c => c._1.forward(c._2)(mode)).toArray
+}
+
 
 /**
   * Combine a collection of layers into a layer which maps
@@ -114,6 +126,14 @@ case class CombinedLayer[T, R](override val name: String, layers: Seq[Layer[T, R
 
   override protected def _forward(input: T)(implicit mode: Mode): Seq[R] =
     layers.map(_.forward(input)(mode))
+}
+
+case class CombinedArrayLayer[T, R: ClassTag](override val name: String, layers: Array[Layer[T, R]])
+  extends Layer[T, Array[R]](name) {
+  override val layerType: String = s"CombinedArrayLayer[${layers.map(_.layerType).mkString(",")}]"
+
+  override protected def _forward(input: T)(implicit mode: Mode): Array[R] =
+    layers.map(_.forward(input)(mode)).toArray
 }
 
 

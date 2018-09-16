@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.models
 import ammonite.ops.Path
 import io.github.mandar2812.dynaml.tensorflow.data.DataSet
 import io.github.mandar2812.dynaml.tensorflow.Learn
+import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import org.platanios.tensorflow.api.learn.StopCriteria
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
@@ -31,7 +32,7 @@ import org.platanios.tensorflow.api.core.client.Fetchable
 import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, DataTypeToOutput, OutputToTensor}
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.hooks.Hook
-import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
+import org.platanios.tensorflow.api.ops.io.data.Data
 
 /**
   * <h4>Supervised Learning</h4>
@@ -70,17 +71,13 @@ import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
   *                      the original target of type [[TO]]
   *                      into a type [[T]], usable by the Estimator API
   * @param loss The loss function to be optimized during training.
-  * @param optimizer The optimization algorithm implementation.
-  * @param summaryDir A filesystem path of type [[ammonite.ops.Path]], which
-  *                     determines where the intermediate model parameters/checkpoints
-  *                     will be written.
-  * @param stopCriteria The stopping criteria for training, for examples see
-  *                     [[Learn.max_iter_stop]], [[Learn.abs_loss_change_stop]] and
-  *                     [[Learn.rel_loss_change_stop]]
-  * @param trainHooks   A set of training hooks to run, training hooks perform activities
-  *                     such as saving the current TensorFlow graph, saving the loss, step rate,
-  *                     summaries (audio, video, tensor) etc. See the `_train_hooks()` method
-  *                     for setting some default training hooks.
+  *
+  * @param trainConfig A [[_root_.io.github.mandar2812.dynaml.models.TFModel.TrainConfig]] instance, containing
+  *                    information on how to carry out the learning process.
+  *
+  * @param data_processing The data processing operations to execute before launching model training.
+  *                        See [[_root_.io.github.mandar2812.dynaml.models.TFModel.DataOps]]
+  *
   * @param inMemory     Set to true if the estimator should be in-memory.
   * @author mandar2812 date 2018/09/11
   * */
@@ -95,12 +92,10 @@ ModelInferenceOutput](
   val target: (TDA, TS),
   val processTarget: Layer[TO, T],
   val loss: Layer[(I, T), Output],
-  val optimizer: Optimizer,
-  val summaryDir: Path,
-  val stopCriteria: StopCriteria,
-  val trainHooks: Option[Set[Hook]] = None,
+  val trainConfig: TFModel.TrainConfig,
   val data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
-  val inMemory: Boolean = false)(
+  val inMemory: Boolean = false,
+  val existingGraph: Option[Graph] = None)(
   implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
   evDToOI: DataTypeToOutput.Aux[ID, IO],
   evOToTI: OutputToTensor.Aux[IO, IT],
@@ -119,9 +114,7 @@ ModelInferenceOutput](
   ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) extends
   Model[DataSet[(IT, TT)], InferInput, InferOutput] {
 
-  type ModelTF = tf.learn.SupervisedTrainableModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
-
-  type EstimatorTF = Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, T)]
+  type ModelPair = dtflearn.SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
 
   private lazy val tf_dataset = g.build[(IT, TT), (IO, TO), (IDA, TDA), (ID, TD), (IS, TS)](
     Left(identityPipe[(IT, TT)]),
@@ -132,11 +125,19 @@ ModelInferenceOutput](
     .batch(data_processing.batchSize)
     .prefetch(data_processing.prefetchSize)
 
+  private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
+
   lazy val (input_handle, target_handle): (Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS]) = (
     tf.learn.Input[IT, IO, IDA, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
     tf.learn.Input[TT, TO, TDA, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
 
-  val (model, estimator): (ModelTF, EstimatorTF) = tf.createWith(graph = Graph()) {
+  private val graphInstance = if(existingGraph.isDefined) {
+    println("Using existing provided TensorFlow graph")
+    existingGraph.get
+  } else Graph()
+
+  val (model, estimator): ModelPair = tf.createWith(graph = graphInstance) {
+
     val m = tf.learn.Model.supervised(
       input_handle, architecture,
       target_handle, processTarget,
@@ -171,7 +172,41 @@ object TFModel {
 
   protected case class DataOps(shuffleBuffer: Int, batchSize: Int, prefetchSize: Int)
 
-  val data_ops: DataOps.type = DataOps
+  type Ops = DataOps
+
+  /**
+    * A training configuration, contains information on
+    * optimization method, convergence test etc.
+    *
+    * @param optimizer The optimization algorithm implementation.
+    * @param summaryDir A filesystem path of type [[ammonite.ops.Path]], which
+    *                     determines where the intermediate model parameters/checkpoints
+    *                     will be written.
+    * @param stopCriteria The stopping criteria for training, for examples see
+    *                     [[Learn.max_iter_stop]], [[Learn.abs_loss_change_stop]] and
+    *                     [[Learn.rel_loss_change_stop]]
+    * @param trainHooks   A set of training hooks to run, training hooks perform activities
+    *                     such as saving the current TensorFlow graph, saving the loss, step rate,
+    *                     summaries (audio, video, tensor) etc. See the `_train_hooks()` method
+    *                     for setting some default training hooks.
+    * */
+  protected case class TrainConfig(
+    summaryDir: Path,
+    optimizer: Optimizer = tf.train.Adam(0.01),
+    stopCriteria: StopCriteria = dtflearn.rel_loss_change_stop(0.05, 100000),
+    trainHooks: Option[Set[Hook]] = None)
+
+  type Config = TrainConfig
+
+  /**
+    * Creates a [[DataOps]] instance.
+    * */
+  val data_ops: DataOps.type        = DataOps
+
+  /**
+    * Creates a [[TrainConfig]] instance.
+    * */
+  val trainConfig: TrainConfig.type = TrainConfig
 
   /**
     * Create a set of training hooks which save
@@ -213,12 +248,10 @@ object TFModel {
   target: (TDA, TS),
   processTarget: Layer[TO, T],
   loss: Layer[(I, T), Output],
-  optimizer: Optimizer,
-  summaryDir: Path,
-  stopCriteria: StopCriteria,
-  trainHooks: Option[Set[Hook]] = None,
+  trainConfig: TFModel.TrainConfig,
   data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
-  inMemory: Boolean = false)(
+  inMemory: Boolean = false,
+  existingGraph: Option[Graph] = None)(
   implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
   evDToOI: DataTypeToOutput.Aux[ID, IO],
   evOToTI: OutputToTensor.Aux[IO, IT],
@@ -236,8 +269,8 @@ object TFModel {
   evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
   ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) =
     new TFModel(
-      g, architecture, input, target, processTarget, loss, optimizer,
-      summaryDir, stopCriteria, trainHooks, data_processing, inMemory
+      g, architecture, input, target, processTarget, loss,
+      trainConfig, data_processing, inMemory, existingGraph
     )
 
 }

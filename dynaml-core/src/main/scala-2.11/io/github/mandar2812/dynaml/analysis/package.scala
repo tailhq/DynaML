@@ -140,26 +140,26 @@ package object analysis {
 
   case class GaussianQuadrature(nodes: Seq[Double], weights: Seq[Double]) extends QuadratureRule {
 
-    def scale(lower: Double, upper: Double): (Seq[Double], Seq[Double]) = {
+    self =>
+
+    def scale(lower: Double, upper: Double): GaussianQuadrature = {
 
       val sc_nodes = nodes.map(n => {
         val mid_point = (lower + upper) / 2d
 
-        val mid_diff  = (lower + upper) / 2d
+        val mid_diff  = (upper - lower) / 2d
 
         mid_point + mid_diff*n
       })
 
       val sc_weights = weights.map(_*(upper - lower)/2d)
 
-      (sc_nodes, sc_weights)
+      self.copy(nodes = sc_nodes, weights = sc_weights)
     }
 
-    def integrate(f: Double => Double)(lower: Double, upper: Double): Double = {
+    def integrate(f: Double => Double): Double = {
 
-      val (sc_nodes, sc_weights) = scale(lower, upper)
-
-      sc_weights.zip(sc_nodes.map(f)).map(c => c._2*c._1).sum
+      weights.zip(nodes.map(f)).map(c => c._2*c._1).sum
     }
   }
 

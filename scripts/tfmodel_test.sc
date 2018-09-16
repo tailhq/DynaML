@@ -40,11 +40,22 @@ val regression_model = dtflearn.model[
   Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
   Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
   Tensor, Tensor, Tensor](
-  tf_dataset.training_dataset, arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)), process_targets, loss,
-  tf.train.Adam(0.1), summary_dir, dtflearn.rel_loss_change_stop(0.05, 10000),
-  Some(dtflearn.model._train_hooks(summary_dir, stepRateFreq = 500, summarySaveFreq = 500, checkPointFreq = 500)),
-  dtflearn.model.data_ops(10000, 16, 10)
+  tf_dataset.training_dataset,
+  arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
+  process_targets, loss,
+  dtflearn.model.trainConfig(
+    summary_dir,
+    tf.train.Adam(0.1),
+    dtflearn.rel_loss_change_stop(0.05, 5000),
+    Some(
+      dtflearn.model._train_hooks(
+        summary_dir, stepRateFreq = 1000,
+        summarySaveFreq = 1000,
+        checkPointFreq = 1000)
+    )),
+  dtflearn.model.data_ops(5000, 16, 10)
 )
+
 
 
 regression_model.train()

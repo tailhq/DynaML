@@ -8,7 +8,7 @@ import _root_.org.platanios.tensorflow.api._
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer
 import _root_.io.github.mandar2812.dynaml.repl.Router.main
-import org.platanios.tensorflow.api.ops.variables.{ConstantInitializer, RandomNormalInitializer, RandomUniformInitializer}
+import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
 
 import scala.util.Random
 

@@ -25,6 +25,7 @@ import org.platanios.tensorflow.api.implicits.helpers.OutputToTensor
 import org.platanios.tensorflow.api.learn.estimators.Estimator.SupportedInferInput
 import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
+import shapeless.Lazy
 
 
 package object implicits {
@@ -97,6 +98,51 @@ package object implicits {
   implicit val convOutputTupToOutputTup: DataPipe[(Output, Output), (Output, Output)] =
     convOutputToOutput * convOutputToOutput
 
+
+  implicit val nil: Function.ArgType[Nil.type] = new Function.ArgType[Nil.type] {
+    override def numOutputs: Int = 0
+    override def outputs(arg: Nil.type): Seq[Output] = Seq.empty[Output]
+    override def dataTypes(arg: Nil.type): Seq[DataType] = Seq.empty[DataType]
+    override def outputsDecoder(outputs: Seq[Output]): (Nil.type, Seq[Output]) = (Nil, outputs)
+    override def outputsDecoderWithKnownArg(arg: Nil.type, outputs: Seq[Output]): (Nil.type, Seq[Output]) = (Nil, outputs)
+  }
+
+  implicit def seqFuncArgTypeConstructor(size: Int): Function.ArgType[Seq[Output]] =
+    new Function.ArgType[Seq[Output]] {
+
+      override def numOutputs: Int = size//argTypes.value.map(_.value.numOutputs).sum
+
+      override def outputs(arg: Seq[Output]): Seq[Output] = arg
+
+      /*{
+        argTypes.zip(arg).flatMap(c => c._1.value.outputs(c._2))
+      }*/
+
+      override def dataTypes(arg: Seq[Output]): Seq[DataType] = arg.map(_.dataType)
+
+      /*{
+        argTypes.zip(arg).flatMap(c => c._1.value.dataTypes(c._2))
+      }*/
+
+      override def outputsDecoder(outputs: Seq[Output]): (Seq[Output], Seq[Output]) =
+        (outputs, outputs.drop(outputs.length))
+
+      /*{
+
+        val (decodedHead, outputsTail) = argTypes.head.value.outputsDecoder(outputs)
+        val (decodedTail, tail) = argTypes.tail.map(_.value.outputsDecoder(outputsTail)).unzip
+        (Seq(decodedHead) ++ decodedTail, tail.flatten)
+      }*/
+
+      override def outputsDecoderWithKnownArg(arg: Seq[Output], outputs: Seq[Output]): (Seq[Output], Seq[Output]) =
+        (outputs, outputs.drop(outputs.length))
+
+      /*{
+        val (decodedHead, outputsTail) = argTypes.head.value.outputsDecoderWithKnownArg(arg.head, outputs)
+        val (decodedTail, tail) = argTypes.tail.map(_.value.outputsDecoderWithKnownArg(arg.head, outputsTail)).unzip
+        (Seq(decodedHead) ++ decodedTail, tail.flatten)
+      }*/
+    }
 
 
 

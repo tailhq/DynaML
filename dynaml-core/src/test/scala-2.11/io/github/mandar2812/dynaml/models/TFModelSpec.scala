@@ -53,7 +53,7 @@ class TFModelSpec extends FlatSpec with Matchers {
       DataPipe[(Tensor, Tensor), Boolean](_ => Random.nextDouble() <= train_fraction)
     )
 
-    val arch = dtflearn.feedforward(1, true)(1)
+    val arch = dtflearn.feedforward(num_units = 1)(id = 1)
 
     val process_targets = dtflearn.identity[Output]("Id")
 
@@ -65,14 +65,19 @@ class TFModelSpec extends FlatSpec with Matchers {
       Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
       Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
       Tensor, Tensor, Tensor](
-      tf_dataset.training_dataset, arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)), process_targets, loss,
-      tf.train.Adam(0.1), summary_dir, dtflearn.rel_loss_change_stop(0.05, 5000),
-      Some(
-        dtflearn.model._train_hooks(
-          summary_dir, stepRateFreq = 1000,
-          summarySaveFreq = 1000,
-          checkPointFreq = 1000)
-      ),
+      tf_dataset.training_dataset,
+      arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
+      process_targets, loss,
+      dtflearn.model.trainConfig(
+        summary_dir,
+        tf.train.Adam(0.1),
+        dtflearn.rel_loss_change_stop(0.05, 5000),
+        Some(
+          dtflearn.model._train_hooks(
+            summary_dir, stepRateFreq = 1000,
+            summarySaveFreq = 1000,
+            checkPointFreq = 1000)
+        )),
       dtflearn.model.data_ops(5000, 16, 10)
     )
 

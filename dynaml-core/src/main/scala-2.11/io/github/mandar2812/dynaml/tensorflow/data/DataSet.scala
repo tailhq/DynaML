@@ -232,7 +232,23 @@ class DataSet[X](val data: Iterable[X]) {
 }
 
 object DataSet {
+
   def apply[X](data: Iterable[X]): DataSet[X] = new DataSet(data)
+
+  /**
+    * Collect a sequence of data sets into a single data set.
+    *
+    * @tparam X The type of each data instance.
+    * @param datasets A sequence of [[DataSet]] objects.
+    *
+    * @return A [[DataSet]] over sequence of [[X]]
+    * */
+  def collect[X](datasets: Seq[DataSet[X]]): DataSet[Seq[X]] = {
+    require(datasets.map(_.size) == Seq.fill(datasets.length)(datasets.head.size))
+
+    apply(Iterable.tabulate(datasets.head.size)(i => datasets.map(d => d.data.toSeq(i))))
+  }
+
 }
 
 case class OutputDataSet(override val data: Iterable[Output]) extends
@@ -328,6 +344,37 @@ case class SupervisedDataSet[X, Y](
       SupervisedDataSet(new DataSet[X](features_test),  new DataSet[Y](targets_test)))
   }
 
+
+}
+
+object SupervisedDataSet {
+
+  def apply[X, Y](features: Iterable[X], targets: Iterable[Y]): SupervisedDataSet[X, Y] =
+    SupervisedDataSet(DataSet(features), DataSet(targets))
+
+  def apply[X, Y](data: Iterable[(X, Y)]): SupervisedDataSet[X, Y] = {
+
+    val (features, targets) = data.unzip
+
+    SupervisedDataSet(DataSet(features), DataSet(targets))
+  }
+
+  /**
+    * Collect a sequence of supervised data sets into a single data set.
+    *
+    * @tparam X The type of the data features/inputs.
+    * @tparam Y The type of the data outputs/targets.
+    * @param datasets A sequence of [[SupervisedDataSet]] objects.
+    *
+    * @return A [[SupervisedDataSet]] over sequences of [[X]] and  [[Y]] respectively.
+    * */
+  def collect[X, Y](datasets: Seq[SupervisedDataSet[X, Y]]): SupervisedDataSet[Seq[X], Seq[Y]] = {
+    require(datasets.map(_.size) == Seq.fill(datasets.length)(datasets.head.size))
+
+    SupervisedDataSet(
+      DataSet.collect[X](datasets.map(_.features)),
+      DataSet.collect[Y](datasets.map(_.targets)))
+  }
 
 }
 

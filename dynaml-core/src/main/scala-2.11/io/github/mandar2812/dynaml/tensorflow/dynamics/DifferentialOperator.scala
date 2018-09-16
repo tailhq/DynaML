@@ -36,7 +36,6 @@ import org.platanios.tensorflow.api.learn.layers.Layer
   *
   * @tparam I Input domain of the underlying function space.
   * @tparam J Output domain of the underlying function space.
-  * @param name A string identifier for the operator.
   * @author mandar2812
   *
   * */
@@ -44,6 +43,9 @@ sealed trait DifferentialOperator[I, J] extends DataPipe[Layer[I, J], Layer[I, J
 
   self =>
 
+  /**
+    * A string identifier for the operator.
+    * */
   val name: String
 
   protected[dynamics] def sources: Map[String, Option[DifferentialOperator[I, J]]]
@@ -59,7 +61,7 @@ sealed trait DifferentialOperator[I, J] extends DataPipe[Layer[I, J], Layer[I, J
 
   def -(other: DifferentialOperator[I, J]): DifferentialOperator[I, J]
 
-  def *(const: J): DifferentialOperator[I, J]
+  //def *(const: J): DifferentialOperator[I, J]
 
   def *(layer: Layer[I, J]): DifferentialOperator[I, J]
 
@@ -81,13 +83,6 @@ abstract class TensorOperator[I](override val name: String) extends
 
   self =>
 
-  /*lazy val variables: Map[String, DifferentialOperator[I, Output]] = for {
-    kv <- self.sources
-    if kv._2.isDefined
-    s <- kv._2
-    key = kv._1
-  } yield (key, s)*/
-
   override def +(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
     AddTensorOperator(self, other)
 
@@ -95,7 +90,7 @@ abstract class TensorOperator[I](override val name: String) extends
   override def -(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
     AddTensorOperator(self, MultTensorOperator[I](Constant[I]("-1", -1), other))
 
-  def *(const: Output): DifferentialOperator[I, Output] =
+  def *(const: Tensor): DifferentialOperator[I, Output] =
     MultTensorOperator(Constant[I](const.name, const), self)
 
   override def *(layer: Layer[I, Output]): DifferentialOperator[I, Output] =
@@ -124,10 +119,11 @@ private[dynamics] case class SourceOperator[I](
 
   override def run(data: Layer[I, Output]): Layer[I, Output] = source
 
-  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] = Map(self.name -> Some(self))
+  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
+    Map(self.name -> Some(self))
 }
 
-private[dynamics] case class Constant[I](override val name: String, t: Output) extends TensorOperator[I](name) {
+private[dynamics] case class Constant[I](override val name: String, t: Tensor) extends TensorOperator[I](name) {
 
   self =>
 

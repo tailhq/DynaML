@@ -100,6 +100,18 @@ class DataSetSpec extends FlatSpec with Matchers {
       tr_te2.training_dataset.data.forall(_ % 2 == 0) &&
         tr_te2.test_dataset.data.forall(_ % 2 == 1))
 
+    val coll_data = dtfdata.dataset.collect(Seq(numbers, numbers))
+
+    assert(coll_data.data.zipWithIndex.forall(p => p._1 == Seq.fill(2)(p._2 + 1)))
+
+    val coll_sup_data = dtfdata.supervised_dataset.collect(
+      Seq(
+        dtfdata.supervised_dataset(numbers, numbers),
+        dtfdata.supervised_dataset(numbers, numbers))
+    )
+
+    assert(coll_sup_data.data.forall(p => p._1 == p._2))
+
   }
 
   "DynaML data sets" should " build Tensor Flow data sets properly" in {

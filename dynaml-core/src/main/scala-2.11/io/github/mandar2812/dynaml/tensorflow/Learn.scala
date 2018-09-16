@@ -22,18 +22,37 @@ import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
 import _root_.io.github.mandar2812.dynaml.models.TFModel
 import io.github.mandar2812.dynaml.tensorflow.layers.{DynamicTimeStepCTRNN, FiniteHorizonCTRNN, FiniteHorizonLinear}
 import org.platanios.tensorflow.api.learn.{Mode, StopCriteria}
-import org.platanios.tensorflow.api.learn.layers.{Activation, Input, Layer}
+import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.NN.SameConvPadding
-import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.ops.io.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api.types.DataType
 import org.platanios.tensorflow.api.{FLOAT32, Graph, Output, Shape, Tensor, tf, _}
-import org.platanios.tensorflow.api.ops.variables.Initializer
+import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.DynamicalSystem
+
 
 private[tensorflow] object Learn {
 
   type TFDATA = Dataset[(Tensor, Tensor), (Output, Output), (DataType, DataType), (Shape, Shape)]
+
+  type SupervisedModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T] =
+    tf.learn.SupervisedTrainableModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
+
+  type UnsupervisedModel[IT, IO, ID, IS, I] =
+    tf.learn.UnsupervisedTrainableModel[IT, IO, ID, IS, I]
+
+  type SupEstimatorTF[IT, IO, ID, IS, I, TT, TO, TD, TS, T] =
+    tf.learn.Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, T)]
+
+  type UnsupEstimatorTF[IT, IO, ID, IS, I] = tf.learn.Estimator[IT, IO, ID, IS, I, IT, IO, ID, IS, I]
+
+  type SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T] = (
+    SupervisedModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T],
+    SupEstimatorTF[IT, IO, ID, IS, I, TT, TO, TD, TS, T])
+
+  type UnsupModelPair[IT, IO, ID, IS, I] = (
+    UnsupervisedModel[IT, IO, ID, IS, I],
+    UnsupEstimatorTF[IT, IO, ID, IS, I])
 
   val Phi: layers.Phi.type                           = layers.Phi
   val Tanh: layers.Tanh.type                         = layers.Tanh
@@ -48,7 +67,9 @@ private[tensorflow] object Learn {
   val stack_outputs: layers.StackOutputs.type        = layers.StackOutputs
   val concat_outputs: layers.ConcatenateOutputs.type = layers.ConcatenateOutputs
   val seq_layer: layers.SeqLayer.type                = layers.SeqLayer
+  val array_layer: layers.ArrayLayer.type            = layers.ArrayLayer
   val combined_layer: layers.CombinedLayer.type      = layers.CombinedLayer
+  val combined_array_layer: layers.CombinedArrayLayer.type      = layers.CombinedArrayLayer
   val unstack: layers.Unstack.type                   = layers.Unstack
   val identity: layers.IdentityLayer.type            = layers.IdentityLayer
   val tuple2_layer: layers.Tuple2Layer.type          = layers.Tuple2Layer
@@ -78,9 +99,10 @@ private[tensorflow] object Learn {
     relLossChangeTol = Some(d),
     maxSteps = Some(max_iter))
 
-  val model: TFModel.type = TFModel
+  val model: TFModel.type                    = TFModel
+  val dynamical_system: DynamicalSystem.type = DynamicalSystem
 
-  def constant[I](name: String, t: Output): Layer[I, Output] = new Layer[I, Output](name){
+  def constant[I](name: String, t: Tensor): Layer[I, Output] = new Layer[I, Output](name){
 
     override val layerType: String = "Const"
 
@@ -263,9 +285,11 @@ private[tensorflow] object Learn {
     * @param channels The depth of the input.
     * @param num_filters The number of filters to learn in each branch of
     *                    the module, supplied as a sequence of integers.
+    * @param activation_generator A DataPipe which takes a name/identifier as input
+    *                             and returns an activation.
     * @param use_batch_norm If true, apply batch normalisation at the end
     *                       of each convolution.
-    * @param relu_param The parameter to be fed to each ReLU activation.
+    *
     * */
   def inception_unit(
     channels: Int,
@@ -363,7 +387,7 @@ private[tensorflow] object Learn {
     * */
   def ctrnn_block(
     observables: Int,
-    horizon: Int, timestep: Double = -1d)(index: Int) =
+    horizon: Int, timestep: Double = -1d)(index: Int): Layer[Output, Output] =
     if (timestep <= 0d) {
       DynamicTimeStepCTRNN(s"DFHctrnn_$index", horizon) >>
         FiniteHorizonLinear(s"FHlinear_$index", observables)
@@ -455,8 +479,8 @@ private[tensorflow] object Learn {
     training_data: Dataset[
       (IT, TT), (IO, TO),
       (ID, TD), (IS, TS)],
-    inMemory: Boolean = false
-  ) = {
+    inMemory: Boolean = false)
+  : SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T] = {
 
     val (model, estimator) = tf.createWith(graph = Graph()) {
       val model = tf.learn.Model.supervised(
@@ -560,8 +584,7 @@ private[tensorflow] object Learn {
     summarySaveFreq: Int,
     checkPointFreq: Int)(
     training_data: Dataset[IT, IO, ID, IS],
-    inMemory: Boolean
-  ) = {
+    inMemory: Boolean): UnsupModelPair[IT, IO, ID, IS, I] = {
 
     val (model, estimator) = tf.createWith(graph = Graph()) {
 
