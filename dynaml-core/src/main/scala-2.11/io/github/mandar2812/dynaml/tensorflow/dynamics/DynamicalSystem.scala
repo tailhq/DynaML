@@ -50,7 +50,7 @@ private[dynaml] class DynamicalSystem[T](
   val system_variables: Seq[Map[String, DifferentialOperator[Output, Output]]] =
     dynamics.map(_.variables)
 
-  val data_handles = (
+  private val data_handles = (
     tf.learn.Input(
       Seq.fill(quantities.toSeq.length)(input._1),
       Seq.fill(quantities.toSeq.length)(Shape(-1) ++ input._2),
