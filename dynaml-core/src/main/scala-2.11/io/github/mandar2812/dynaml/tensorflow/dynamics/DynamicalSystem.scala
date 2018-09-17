@@ -10,7 +10,7 @@ import org.platanios.tensorflow.api.core.client.Fetchable
 import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, DataTypeToOutput, OutputToTensor}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.estimators.Estimator
-import org.platanios.tensorflow.api.learn.layers.Layer
+import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.io.data.Data
 import org.platanios.tensorflow.api.types.DataType
@@ -49,6 +49,16 @@ private[dynaml] class DynamicalSystem[T](
 
   val system_variables: Seq[Map[String, DifferentialOperator[Output, Output]]] =
     dynamics.map(_.variables)
+
+  val data_handles = (
+    tf.learn.Input(
+      Seq.fill(quantities.toSeq.length)(input._1),
+      Seq.fill(quantities.toSeq.length)(Shape(-1) ++ input._2),
+      "Input"),
+    tf.learn.Input(
+      target._1,
+      target._2.map(s => Shape(-1) ++ s),
+      "Outputs"))
 
   val system_variables_mapping: Layer[Seq[Output], Seq[Output]] =
     dtflearn.seq_layer[Output, Seq[Output]](
@@ -105,11 +115,14 @@ private[dynaml] class DynamicalSystem[T](
       Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output],
       Seq[Tensor], Seq[Tensor], Seq[Tensor]](
       dtfdata.supervised_dataset.collect(data).map(p => (p._1, p._2)),
-      model_architecture, (Seq.fill(quantities.size)(input._1), Seq.fill(quantities.size)(input._2)), target,
+      model_architecture,
+      (Seq.fill(quantities.size)(input._1), Seq.fill(quantities.size)(input._2)),
+      target,
       dtflearn.identity[Seq[Output]]("ID"),
       system_loss, trainConfig,
       data_processing, inMemory,
-      Some(graphInstance))
+      Some(graphInstance),
+      Some(data_handles))
 
     model.train()
 

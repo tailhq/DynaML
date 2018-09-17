@@ -61,8 +61,6 @@ sealed trait DifferentialOperator[I, J] extends DataPipe[Layer[I, J], Layer[I, J
 
   def -(other: DifferentialOperator[I, J]): DifferentialOperator[I, J]
 
-  //def *(const: J): DifferentialOperator[I, J]
-
   def *(layer: Layer[I, J]): DifferentialOperator[I, J]
 
   def *(other: DifferentialOperator[I, J]): DifferentialOperator[I, J]

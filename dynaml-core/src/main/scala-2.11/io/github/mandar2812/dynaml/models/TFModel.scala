@@ -95,7 +95,8 @@ ModelInferenceOutput](
   val trainConfig: TFModel.TrainConfig,
   val data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   val inMemory: Boolean = false,
-  val existingGraph: Option[Graph] = None)(
+  val existingGraph: Option[Graph] = None,
+  data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
   implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
   evDToOI: DataTypeToOutput.Aux[ID, IO],
   evOToTI: OutputToTensor.Aux[IO, IT],
@@ -127,9 +128,11 @@ ModelInferenceOutput](
 
   private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
 
-  lazy val (input_handle, target_handle): (Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS]) = (
-    tf.learn.Input[IT, IO, IDA, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
-    tf.learn.Input[TT, TO, TDA, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
+  lazy val (input_handle, target_handle): (Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS]) =
+    if(data_handles.isDefined) data_handles.get
+    else (
+      tf.learn.Input[IT, IO, IDA, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
+      tf.learn.Input[TT, TO, TDA, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
 
   private val graphInstance = if(existingGraph.isDefined) {
     println("Using existing provided TensorFlow graph")
@@ -251,7 +254,8 @@ object TFModel {
   trainConfig: TFModel.TrainConfig,
   data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   inMemory: Boolean = false,
-  existingGraph: Option[Graph] = None)(
+  existingGraph: Option[Graph] = None,
+  data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
   implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
   evDToOI: DataTypeToOutput.Aux[ID, IO],
   evOToTI: OutputToTensor.Aux[IO, IT],
@@ -270,7 +274,8 @@ object TFModel {
   ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) =
     new TFModel(
       g, architecture, input, target, processTarget, loss,
-      trainConfig, data_processing, inMemory, existingGraph
+      trainConfig, data_processing, inMemory, existingGraph,
+      data_handles
     )
 
 }
