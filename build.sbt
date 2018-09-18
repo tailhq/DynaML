@@ -91,6 +91,8 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
     buildInfoUsePackageAsPath := true,
+    dataDirectory := new File("data"),
+    mappings in Universal ++= dataDirectory.value.listFiles().toSeq.map(p => p -> s"data/${p.getName}"),
     mappings in Universal ++= Seq(
       {
         //Initialization script for the DynaML REPL
@@ -110,7 +112,7 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-J-Xmx2048m",
       "-J-Xms64m"
     ),
-    dataDirectory := new File("data/"),
+    scalacOptions in Universal ++= Seq("-Xlog-implicits"),
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())""",
     dockerfile in docker := {
       val appDir: File = stage.value
