@@ -4,7 +4,6 @@ import io.github.mandar2812.dynaml.models.TFModel
 import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.tensorflow.layers.PDEQuadrature
 import io.github.mandar2812.dynaml.tensorflow.data._
-import io.github.mandar2812.dynaml.tensorflow.implicits._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.client.Fetchable
 import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, DataTypeToOutput, OutputToTensor}
@@ -21,7 +20,16 @@ import org.platanios.tensorflow.api.types.DataType
   *
   * @param quantities A map containing quantity names and their associated function approximations.
   * @param dynamics A system of differential operators, representing the system dynamics
-  * @param input The
+  * @param input The data type and shape of the input tensor.
+  * @param target The data types and shapes of the outputs and the latent variables.
+  * @param data_loss The loss/error measure between the neural surrogate output and
+  *                  the observations.
+  * @param quadrature_nodes The co-location points in the input domain, packaged as a tensor.
+  * @param quadrature_weights The weights associated with each co-location point.
+  * @param quadrature_loss_weightage The weight attached to the quadrature constructed
+  *                                  for approximating the integrated error between the
+  *                                  surrogate and the dynamical system.
+  * @param graphInstance An optional TensorFlow graph instance to create model in.
   *
   * */
 private[dynaml] class DynamicalSystem[T](
@@ -31,11 +39,11 @@ private[dynaml] class DynamicalSystem[T](
   val target: (Seq[DataType.Aux[T]], Seq[Shape]),
   val data_loss: Layer[(Output, Output), Output],
   quadrature_nodes: Tensor,
-  weights: Tensor,
-  loss_weightage: Tensor,
-  graphInstance: Graph) {
+  quadrature_weights: Tensor,
+  quadrature_loss_weightage: Tensor,
+  graphInstance: Option[Graph]) {
 
-  protected val observational_error: Layer[(Seq[Output], Seq[Output]), Output] = 
+  protected val observational_error: Layer[(Seq[Output], Seq[Output]), Output] =
     DynamicalSystem.error("ExtObsError", data_loss)
 
   val system_outputs: Seq[Layer[Output, Output]] = quantities.values.toSeq
@@ -44,8 +52,8 @@ private[dynaml] class DynamicalSystem[T](
     PDEQuadrature(
       "ColocationError",
       dynamics.zip(system_outputs).map(c => c._1(c._2)),
-      quadrature_nodes, weights,
-      loss_weightage)
+      quadrature_nodes, quadrature_weights,
+      quadrature_loss_weightage)
 
   val system_variables: Seq[Map[String, DifferentialOperator[Output, Output]]] =
     dynamics.map(_.variables)
@@ -121,7 +129,7 @@ private[dynaml] class DynamicalSystem[T](
       dtflearn.identity[Seq[Output]]("ID"),
       system_loss, trainConfig,
       data_processing, inMemory,
-      Some(graphInstance),
+      graphInstance,
       Some(data_handles))
 
     model.train()
@@ -207,7 +215,7 @@ object DynamicalSystem {
     quadrature_nodes: Tensor,
     weights: Tensor,
     loss_weightage: Tensor,
-    graphInstance: Graph): DynamicalSystem[T] =
+    graphInstance: Option[Graph] = None): DynamicalSystem[T] =
     new DynamicalSystem[T](
       quantities,
       dynamics,

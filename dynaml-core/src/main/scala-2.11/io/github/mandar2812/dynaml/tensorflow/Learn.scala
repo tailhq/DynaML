@@ -29,6 +29,7 @@ import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api.types.DataType
 import org.platanios.tensorflow.api.{FLOAT32, Graph, Output, Shape, Tensor, tf, _}
 import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.DynamicalSystem
+import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer}
 
 
 private[tensorflow] object Learn {
@@ -112,12 +113,19 @@ private[tensorflow] object Learn {
   /**
     * Constructs a feed-forward layer.
     *
-    * @param num_units The number of neurons in the layer
+    * @param num_units The number of neurons in the layer.
+    * @param useBias Set to true if bias unit is to be included.
+    * @param weightsInitializer Initialization for the weights.
+    * @param biasInitializer Initialization for the bias.
     * @param id A unique integer id for constructing the layer name.
     *
     * */
-  def feedforward(num_units: Int, useBias: Boolean = true)(id: Int) =
-    tf.learn.Linear("Linear_"+id, num_units, useBias)
+  def feedforward(
+    num_units: Int,
+    useBias: Boolean = true,
+    weightsInitializer: Initializer = RandomNormalInitializer(),
+    biasInitializer: Initializer = RandomNormalInitializer())(id: Int) =
+    tf.learn.Linear("Linear_"+id, num_units, useBias, weightsInitializer, biasInitializer)
 
   /**
     * Constructs a simple feed-forward stack of layers.
@@ -131,13 +139,18 @@ private[tensorflow] object Learn {
     *
     * @param starting_index Specify which layer number should the indexing of
     *                       the layers start with, defaults to 1.
+    * @param useBias Set to true if bias unit is to be included.
+    * @param weightsInitializer Initialization for the weights.
+    * @param biasInitializer Initialization for the bias.
     * */
   def feedforward_stack(
     get_act: Int => Layer[Output, Output],
     dataType: DataType)(
     layer_sizes: Seq[Int],
     starting_index: Int = 1,
-    useBias: Boolean = true): Layer[Output, Output] = {
+    useBias: Boolean = true,
+    weightsInitializer: Initializer = RandomNormalInitializer(),
+    biasInitializer: Initializer = RandomNormalInitializer()): Layer[Output, Output] = {
 
     def stack_ff_layers_rec(
       ls: Seq[Int],
@@ -150,7 +163,11 @@ private[tensorflow] object Learn {
 
       case _ => stack_ff_layers_rec(
         ls.tail,
-        layer_acc >> dtflearn.feedforward(ls.head, useBias)(layer_index) >> get_act(layer_index),
+        layer_acc >>
+          dtflearn.feedforward(
+            ls.head, useBias, weightsInitializer,
+            biasInitializer)(layer_index) >>
+          get_act(layer_index),
         layer_index + 1)
     }
 
