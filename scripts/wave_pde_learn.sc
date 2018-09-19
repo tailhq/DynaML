@@ -20,12 +20,16 @@ import scala.util.Random
 
 val random = new Random()
 
-def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor = {
+def batch(dim: Int, min: Double, max: Double, gridSize: Int, func: Seq[Double] => Double): (Tensor, Tensor) = {
 
-  val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize)))
+  val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize) :+ max))
 
+  val targets = points.map(func)
 
-  dtf.tensor_f64(Seq.fill(dim)(gridSize).product, dim)(points.flatten:_*)
+  (
+    dtf.tensor_from("FLOAT64", Seq.fill(dim)(gridSize + 1).product, dim)(points.flatten),
+    dtf.tensor_from("FLOAT64", Seq.fill(dim)(gridSize + 1).product, 1)(targets)
+  )
 }
 
 val layer = new Layer[Output, Output]("Sin") {
@@ -52,13 +56,14 @@ def plot_field(x: Tensor, t: Tensor): DelauneySurface = {
 
 
 @main
-def apply() = {
+def apply(num_data: Int = 100) = {
+
+  val session = Session()
 
 
   val tempdir = home/"tmp"
 
-  val summary_dir = tempdir/s"dtf_wave1d_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm")}"
-
+  val summary_dir = tempdir/s"dtf_wave1d_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
   val domain = (0.0, 5.0)
 
@@ -68,6 +73,15 @@ def apply() = {
 
   val output_dim: Int = 1
 
+
+  val ground_truth = (tl: Seq[Double]) => math.sin(2*math.Pi*tl.head/domain_size + 2*math.Pi*tl.last/domain_size)
+
+  val f1 = (l: Double) => math.sin(2*math.Pi*l/domain_size)
+  val f2 = (l: Double) => math.cos(2*math.Pi*l/domain_size)
+
+
+  val (test_data, test_targets) = batch(input_dim, domain._1, domain._2, gridSize = 10, ground_truth)
+
   val input = (FLOAT64, Shape(2))
 
   val output = (Seq(FLOAT64), Seq(Shape(1)))
@@ -75,20 +89,17 @@ def apply() = {
 
   val function  =
     dtflearn.feedforward(
-      2, false,
+      num_units = 2, useBias = false,
       RandomUniformInitializer(),
       RandomUniformInitializer())(1) >>
       layer >>
       dtflearn.feedforward(
-        1, true,
+        num_units = 1, useBias = false,
         RandomUniformInitializer(),
         RandomUniformInitializer())(2)
 
 
-  val xs = utils.range(domain._1, domain._2, 500) ++ Seq(domain._2)
-
-  val f1 = (l: Double) => math.sin(2*math.Pi*l/domain_size)
-  val f2 = (l: Double) => math.cos(2*math.Pi*l/domain_size)
+  val xs = utils.range(domain._1, domain._2, num_data) ++ Seq(domain._2)
 
 
   val training_data = dtfdata.supervised_dataset(xs.flatMap(x => Seq(
@@ -97,11 +108,10 @@ def apply() = {
   )))
 
 
-  val velocity  = constant[Output]("velocity", Tensor(1.0))
+  val velocity = constant[Output]("velocity", Tensor(1.0))
 
 
-  val wave_equation   = d_t(d_t) - d_s(d_s)*velocity
-
+  val wave_equation = d_t(d_t) - velocity*d_s(d_s)
 
   val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
 
@@ -119,7 +129,7 @@ def apply() = {
     Map("wave_displacement" -> function),
     Seq(wave_equation), input, output,
     tf.learn.L2Loss("Loss/L2") >> tf.learn.Mean("L2/Mean"),
-    nodes_tensor, weights_tensor, Tensor(0.5))
+    nodes_tensor, weights_tensor, Tensor(1.0))
 
 
   implicit val seqArgType: Function.ArgType[Seq[Output]] = seqFuncArgTypeConstructor(1)
@@ -128,23 +138,38 @@ def apply() = {
     Seq(training_data),
     dtflearn.model.trainConfig(
       summary_dir,
-      tf.train.Adam(0.01),
-      dtflearn.rel_loss_change_stop(0.05, 5000),
+      tf.train.RMSProp(0.001),
+      dtflearn.abs_loss_change_stop(0.0001, 5000),
       Some(
         dtflearn.model._train_hooks(
           summary_dir, stepRateFreq = 1000,
           summarySaveFreq = 1000,
           checkPointFreq = 1000)
       )),
-    dtflearn.model.data_ops(training_data.size, training_data.size, 10)
+    dtflearn.model.data_ops(training_data.size/10, training_data.size, 10)
   )
 
-  val test_data = batch(2, domain._1, domain._2, 100)
+  print("Test Data Shapes: ")
+  pprint.pprintln(test_data.shape)
+  pprint.pprintln(test_targets.shape)
 
   val predictions = wave_model1d.predict("wave_displacement")(test_data).head
 
   val plot = plot_field(test_data, predictions)
 
-  (wave_system1d, wave_model1d, training_data, plot)
+  val error_tensor = predictions.subtract(test_targets)
+
+  val mae = error_tensor.abs.mean().scalar.asInstanceOf[Double]
+
+  session.close()
+
+  print("Test Error is = ")
+  pprint.pprintln(mae)
+
+
+
+  val error_plot = plot_field(test_data, error_tensor)
+
+  (wave_system1d, wave_model1d, training_data, plot, error_plot, mae)
 
 }

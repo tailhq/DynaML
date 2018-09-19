@@ -344,7 +344,7 @@ package object utils {
     if(n == 0) accumulator else factorial(n - 1, accumulator*n)
   }
 
-  def getTypeTag[T: ru.TypeTag](obj: T) = ru.typeTag[T]
+  def getTypeTag[T: ru.TypeTag](obj: T): ru.TypeTag[T] = ru.typeTag[T]
 
   def combine[A](xs: Traversable[Traversable[A]]): Seq[Seq[A]] =
     xs.foldLeft(Seq(Seq.empty[A])) {
