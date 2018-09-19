@@ -21,6 +21,7 @@ package io.github.mandar2812.dynaml.tensorflow.dynamics
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.tensorflow.Learn
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 
 /**
@@ -97,6 +98,9 @@ abstract class TensorOperator[I](override val name: String) extends
   override def *(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
     MultTensorOperator(self, other)
 
+  def x(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
+    MatrixMultOperator(self, other)
+
   override def apply(other: DifferentialOperator[I, Output]): TensorOperator[I] =
     ComposedOperator(self, other)
 }
@@ -110,7 +114,8 @@ abstract class TensorOperator[I](override val name: String) extends
   * */
 private[dynamics] case class SourceOperator[I](
   override val name: String,
-  source: Layer[I, Output]) extends
+  source: Layer[I, Output],
+  isSystemVariable: Boolean = true) extends
   TensorOperator[I](name) {
 
   self =>
@@ -118,7 +123,8 @@ private[dynamics] case class SourceOperator[I](
   override def run(data: Layer[I, Output]): Layer[I, Output] = source
 
   protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
-    Map(self.name -> Some(self))
+    if(isSystemVariable) Map(self.name -> Some(self))
+    else Map(self.name -> None)
 }
 
 private[dynamics] case class Constant[I](override val name: String, t: Tensor) extends TensorOperator[I](name) {
@@ -193,4 +199,29 @@ private[dynamics] case class AddTensorOperator[I](
   protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
     operator1.sources ++ operator2.sources
 
+}
+
+private[dynamics] case class MatrixMultOperator[I](
+  operator1: DifferentialOperator[I, Output],
+  operator2: DifferentialOperator[I, Output])
+  extends TensorOperator[I](s"MatMul[${operator1.name}, ${operator2.name}]") {
+
+  override protected[dynamics] def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
+    operator1.sources ++ operator2.sources
+
+  override def run(data: Layer[I, Output]): Layer[I, Output] = {
+
+    val layer1 = operator1(data)
+    val layer2 = operator2(data)
+
+    Learn.combined_layer(s"Combine[${layer1.name}, ${layer2.name}]", Seq(layer1, layer2)) >>
+      new Layer[Seq[Output], Output](s"MatMul[${layer1.name}, ${layer2.name}]") {
+
+        override val layerType: String = "MatMul"
+
+        override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output =
+          tf.matmul(input.head, input.last)
+      }
+
+  }
 }

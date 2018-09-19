@@ -13,7 +13,7 @@ import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics._
   *
   * @param name String identifier for this loss function
   * @param f A sequence of residual functions, obtained as a result of
-  *          applying some PDE operators [[DifferentialOperator]].
+  *          applying some PDE operators (see [[DifferentialOperator]]).
   * @param quadrature_nodes A set of nodal points in the domain of the system on which
   *                         the error should be computed.
   * @param weights Weights associated with each quadrature node.
@@ -43,11 +43,25 @@ case class PDEQuadrature(
       tf.constant(loss_weightage, loss_weightage.dataType, loss_weightage.shape, "colocation_error_weight")
     )
 
-    val quadrature_loss = tf.stack(
-      f.map(q => q.forward(q_nodes).square.multiply(q_weights).sum()),
-      axis = -1)
-      .multiply(importance)
-      .sum()
+    val quadrature_loss =
+      tf.stack(
+        f.map(q => {
+          val output = q.forward(q_nodes)
+
+          val rank_output = output.rank
+          val reduce_axes =
+            if(rank_output > 2) Tensor(1 until rank_output)
+            else if(rank_output == 2) Tensor(1)
+            else null
+
+          if(reduce_axes == null) {
+            output.square.multiply(q_weights).sum()
+          } else {
+            output.square.sum(reduce_axes).multiply(q_weights).sum()
+          }
+        }), axis = -1)
+        .multiply(importance)
+        .sum()
 
     input.add(quadrature_loss)
   }
