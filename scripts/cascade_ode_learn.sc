@@ -1,5 +1,5 @@
 import _root_.io.github.mandar2812.dynaml.analysis
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d.DelauneySurface
+import _root_.io.github.mandar2812.dynaml.graphics.plot3d.LinePlot3D
 import _root_.io.github.mandar2812.dynaml.graphics.plot3d
 import _root_.io.github.mandar2812.dynaml.utils
 import _root_.io.github.mandar2812.dynaml.analysis.implicits._
@@ -15,6 +15,7 @@ import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
 import _root_.io.github.mandar2812.dynaml.tensorflow.implicits._
 import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, RandomUniformInitializer}
+
 import scala.util.Random
 import com.quantifind.charts.Highcharts._
 
@@ -63,6 +64,25 @@ def plot_outputs(x: Tensor, t: Tensor, titleS: String): Unit = {
   yAxis("Output")
   unhold()
   title(titleS)
+}
+
+def plot3d_outputs(x: Tensor, t: Tensor): LinePlot3D = {
+  val size = x.shape(0)
+
+  val num_outputs = t.shape(1)
+
+  val data = (0 until size).map(row => {
+
+    val inputs = x(row).scalar.asInstanceOf[Double]
+    val outputs = (0 until num_outputs).map(i => t(row, i).scalar.asInstanceOf[Double])
+
+    (inputs, outputs)
+  })
+
+  val trajectory = data.map(_._2).map(p => (p.head, p(1), p(2)))
+
+  plot3d.draw(trajectory, 2, true)
+
 }
 
 
@@ -126,7 +146,7 @@ def apply(f1: Double, f2: Double, f3: Double) = {
   )
 
   val gain = constant[Output](
-    "Gain",
+    name = "Gain",
     Tensor(
       -1.0/2,  0.0,    0.0,
        1.0/2, -1.0/4,  0.0,
@@ -193,6 +213,9 @@ def apply(f1: Double, f2: Double, f3: Double) = {
   plot_outputs(test_data, test_targets, "Actual Targets")
 
 
-  (cascade_system, brine_model, training_data, mae)
+
+  (cascade_system, brine_model, training_data, mae,
+    plot3d_outputs(test_data, predictions),
+    plot3d_outputs(test_data, test_targets))
 
 }

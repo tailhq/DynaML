@@ -106,6 +106,16 @@ abstract class TensorOperator[I](override val name: String) extends
 }
 
 
+private[dynamics] case object IdentityOperator extends TensorOperator[Output]("IdentityOperator") {
+
+  self =>
+
+  override protected[dynamics] def sources: Map[String, Option[DifferentialOperator[Output, Output]]] =
+    Map(self.name -> None)
+
+  override def run(data: Layer[Output, Output]): Layer[Output, Output] = data
+}
+
 /**
   * A <i>source</i> or <i>injection</i> term is generally present
   * in the right hand side of PDE systems.
@@ -221,6 +231,30 @@ private[dynamics] case class MatrixMultOperator[I](
 
         override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output =
           tf.matmul(input.head, input.last)
+      }
+
+  }
+}
+
+private[dynamics] case class TensorDotOperator[I](
+  operator1: DifferentialOperator[I, Output],
+  operator2: DifferentialOperator[I, Output],
+  axes1: Seq[Int], axes2: Seq[Int]) extends
+  TensorOperator[I](s"TensorDot[(${operator1.name}, $axes1)," + s"(${operator2.name}, $axes2)]") {
+
+  override protected[dynamics] def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
+    operator1.sources ++ operator2.sources
+
+  override def run(data: Layer[I, Output]): Layer[I, Output] = {
+
+    val (layer1, layer2) = (operator1(data), operator2(data))
+
+    Learn.combined_layer(s"Combine[${layer1.name}, ${layer2.name}]", Seq(layer1, layer2)) >>
+      new Layer[Seq[Output], Output](s"TensorDot[${layer1.name}, ${layer2.name}]") {
+        override val layerType: String = "TensorDot"
+
+        override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output =
+          tf.tensorDot(input.head, input.last, axes1, axes2)
       }
 
   }

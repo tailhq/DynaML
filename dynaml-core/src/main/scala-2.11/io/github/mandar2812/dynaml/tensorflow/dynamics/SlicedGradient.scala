@@ -24,8 +24,8 @@ import org.platanios.tensorflow.api._
 
 private[dynamics] case class SlicedGradient(
   override val name: String)(
-  inputIndexer: Indexer*)(
-  outputIndexer: Indexer*) extends
+  val inputIndexer: Indexer*)(
+  val outputIndexer: Indexer*) extends
   TensorOperator[Output](name) {
 
   self =>

@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.dynamics
 
+import io.github.mandar2812.dynaml.tensorflow.api.Api
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
@@ -36,6 +37,7 @@ import org.platanios.tensorflow.api.types.DataType
   * */
 private[tensorflow] trait DynamicsAPI {
 
+  val identityOperator: IdentityOperator.type         = IdentityOperator
   val jacobian: Gradient.type                         = Gradient
   val ∇ : Gradient.type                               = Gradient
   val hessian: TensorOperator[Output]                 = ∇(∇)
@@ -60,6 +62,20 @@ private[tensorflow] trait DynamicsAPI {
           quantity
         }
       })
+
+  def divergence(dim: Int, inputSlices: Seq[Indexer] = Seq(---)): TensorOperator[Output] = {
+
+    val Id = constant[Output](
+      s"IdentityMat($dim)",
+      Api.tensor_i32(dim, dim)(
+        Seq.tabulate[Int](dim, dim)((i, j) => if(i == j) 1 else 0).flatten:_*
+      )
+    )
+
+    TensorDotOperator[Output](Id, SlicedGradient(name = s"Grad")(inputSlices:_*)(---), Seq(0, 1), Seq(1, 2))
+  }
+
+  val div: TensorOperator[Output]                    = divergence(dim = 3, Seq(1::))
 
 
   /**

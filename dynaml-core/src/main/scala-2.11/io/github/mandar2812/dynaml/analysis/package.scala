@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml
 
 import breeze.linalg._
 import io.github.mandar2812.dynaml.pipes._
+import io.github.mandar2812.dynaml.probability.RandomVariable
 import io.github.mandar2812.dynaml.utils._
 
 
@@ -136,14 +137,12 @@ package object analysis {
       )
   }
 
-  sealed trait QuadratureRule
+  sealed class QuadratureRule(
+    val nodes: Seq[Double],
+    val weights: Seq[Double]) {
 
-  case class GaussianQuadrature(nodes: Seq[Double], weights: Seq[Double]) extends QuadratureRule {
 
-    self =>
-
-    def scale(lower: Double, upper: Double): GaussianQuadrature = {
-
+    protected def scale_nodes_and_weights(lower: Double, upper: Double): (Seq[Double], Seq[Double]) = {
       val sc_nodes = nodes.map(n => {
         val mid_point = (lower + upper) / 2d
 
@@ -154,13 +153,53 @@ package object analysis {
 
       val sc_weights = weights.map(_*(upper - lower)/2d)
 
-      self.copy(nodes = sc_nodes, weights = sc_weights)
+      (sc_nodes, sc_weights)
+    }
+
+    def scale(lower: Double, upper: Double): QuadratureRule = {
+
+      val (sc_nodes, sc_weights) = scale_nodes_and_weights(lower, upper)
+
+      new QuadratureRule(nodes = sc_nodes, weights = sc_weights)
     }
 
     def integrate(f: Double => Double): Double = {
 
       weights.zip(nodes.map(f)).map(c => c._2*c._1).sum
     }
+  }
+
+  case class MonteCarloQuadrature(override val nodes: Seq[Double]) extends
+    QuadratureRule(nodes, Seq.fill(nodes.length)(1d/nodes.length)) {
+
+    self =>
+
+    override def scale(lower: Double, upper: Double): MonteCarloQuadrature = {
+
+      val q = super.scale(lower, upper)
+
+      self.copy(nodes = q.nodes)
+    }
+
+  }
+
+  val monte_carlo_quadrature: MetaPipe[RandomVariable[Double], Int, MonteCarloQuadrature] =
+    MetaPipe((rv: RandomVariable[Double]) => (n: Int) => MonteCarloQuadrature(rv.iid(n).draw))
+
+  case class GaussianQuadrature(
+    override val nodes: Seq[Double],
+    override val weights: Seq[Double]) extends
+    QuadratureRule(nodes, weights) {
+
+    self =>
+
+    override def scale(lower: Double, upper: Double): GaussianQuadrature = {
+
+      val q = super.scale(lower, upper)
+
+      self.copy(nodes = q.nodes, weights = q.weights)
+    }
+
   }
 
 
