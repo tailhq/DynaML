@@ -71,6 +71,9 @@ package object plot3d {
   def draw(data: Traversable[(Double, Double)], numBins: Int): Histogram3D =
     new Histogram3D(data.map(d => new Coord2d(d._1.toFloat, d._2.toFloat)).toIterable, numBins)
 
+  def draw(points: Traversable[(Double, Double, Double)], resolution: Int, drawPoints: Boolean): LinePlot3D =
+    new LinePlot3D(points.map(p => (p._1.toFloat, p._2.toFloat, p._3.toFloat)), resolution, drawPoints)
+
   /**
     * Render a 3d surface on the system GUI.
     * */
