@@ -50,6 +50,7 @@ val layer_poly = (n: String) => new Layer[Output, Output](n) {
 }
 
 
+
 val layer_trig = (n: String) => new Layer[Output, Output](n) {
   override val layerType = "Cos"
 
@@ -75,12 +76,16 @@ def plot_outputs(x: Tensor, t: Seq[Tensor], titleS: String): Unit = {
   spline(data.map(p => (p._1, p._2.head)))
   hold()
   spline(data.map(p => (p._1, p._2(1))))
-  spline(data.map(p => (p._1, p._2.last)))
-  legend(Seq("Output 1", "Output 2", "Output 3"))
+  legend(Seq("Prey Population", "Predator Population"))
   xAxis("Time")
   yAxis("Output")
   unhold()
   title(titleS)
+
+  spline(data.map(p => (p._2.head, p._2(1))))
+  xAxis("Prey Population")
+  yAxis("Predator Population")
+  title(titleS+": Phase Space Trajectory")
 }
 
 def plot3d_outputs(x: Tensor, t: Seq[Tensor]): LinePlot3D = {
@@ -96,7 +101,7 @@ def plot3d_outputs(x: Tensor, t: Seq[Tensor]): LinePlot3D = {
     (inputs, outputs)
   })
 
-  val trajectory = data.map(_._2).map(p => (p.head, p(1), p(2)))
+  val trajectory = data.map(_._2).map(p => (p.head, p(1), 0.0))
 
   plot3d.draw(trajectory, 2, true)
 
@@ -105,7 +110,7 @@ def plot3d_outputs(x: Tensor, t: Seq[Tensor]): LinePlot3D = {
 
 @main
 def apply(
-  f1: Double, f2: Double, f3: Double,
+  f1: Double, f2: Double,
   optimizer: Optimizer = tf.train.RMSProp(0.001),
   maxIt: Int = 200000, reg_param: Double = 0.001) = {
 
@@ -114,13 +119,13 @@ def apply(
 
   val tempdir = home/"tmp"
 
-  val summary_dir = tempdir/s"dtf_lorenz_ode_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
+  val summary_dir = tempdir/s"dtf_lotka_volterra_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
-  val domain = (0.0, 100.0)
+  val domain = (0.0, 20.0)
 
   val input_dim: Int = 1
 
-  val output_dim: Int = 3
+  val output_dim: Int = 2
 
 
   val ground_truth = (tl: Seq[Double]) => {
@@ -130,7 +135,7 @@ def apply(
     Seq(
       f1*math.exp(-t/2),
       -2*f1*math.exp(-t/2) + (f2 + 2*f1)*math.exp(-t/4),
-      3*f1*math.exp(-t/2)/2 - 3*(f2 + 2*f1)*math.exp(-t/4) + (f3 - 3*f1/2 + 3*(f2 + 2*f1))*math.exp(-t/6)
+      3*f1*math.exp(-t/2)/2 - 3*(f2 + 2*f1)*math.exp(-t/4) + (3*f1/2 + 3*(f2 + 2*f1))*math.exp(-t/6)
     )
 
   }
@@ -143,60 +148,56 @@ def apply(
   val output = (Seq.fill(output_dim)(FLOAT64), Seq.fill(output_dim)(Shape(1)))
 
 
-  val getAct = (s: Int) => (i: Int) => if((i - s) % 2 == 0) layer_trig(s"Act_$i") else dtflearn.Phi(s"Act_$i")
+  val getAct = (s: Int) => (i: Int) =>
+    if((i - s) % 2 == 0) layer_trig(s"Act_$i")
+    else dtflearn.Phi(s"Act_$i")
 
   val layer_sizes = (
-    Seq(30, 20, 1),
-    Seq(30, 20, 1),
-    Seq(30, 20, 1)
+    Seq(20, 20, 1),
+    Seq(20, 20, 1)
   )
 
-  val (xs, ys, zs) = (
+  val (xs, ys) = (
     dtflearn.feedforward_stack(getAct(1), FLOAT64)(
       layer_sizes._1, 1,
       true),
     dtflearn.feedforward_stack(getAct(layer_sizes._1.length + 1), FLOAT64)(
       layer_sizes._2, layer_sizes._1.length + 1,
-      true),
-    dtflearn.feedforward_stack(getAct(layer_sizes._1.length + layer_sizes._2.length + 1), FLOAT64)(
-      layer_sizes._3, layer_sizes._1.length + layer_sizes._2.length + 1,
       true)
   )
 
-  val (xs_params, ys_params, zs_params) = (
+  val (xs_params, ys_params) = (
     dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._1, 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._2, layer_sizes._1.length + 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._3, layer_sizes._1.length + layer_sizes._2.length + 1, "FLOAT64")
+    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._2, layer_sizes._1.length + 1, "FLOAT64")
   )
 
 
   val l2_reg = L2Regularization(
-    xs_params._2 ++ ys_params._2 ++ zs_params._2 ,
-    xs_params._3 ++ ys_params._3 ++ zs_params._3,
-    xs_params._1 ++ ys_params._1 ++ zs_params._1,
+    xs_params._2 ++ ys_params._2,
+    xs_params._3 ++ ys_params._3,
+    xs_params._1 ++ ys_params._1,
     reg = reg_param)
 
-  val (x, y, z) = (
+  val (x, y) = (
     q("xs", xs, false),
-    q("ys", ys, false),
-    q("zs", zs, false)
+    q("ys", ys, false)
   )
 
-  val (σ, β, ρ) = (
-    constant[Output]("sigma", Tensor(10.0)),
-    constant[Output]("beta", Tensor(8.0/3)),
-    constant[Output]("rho", Tensor(28.0))
+  val (α, β, γ, δ) = (
+    constant[Output]("alpha", Tensor(1.0)),
+    constant[Output]("beta", Tensor(1.5)),
+    constant[Output]("gamma", Tensor(1.25)),
+    constant[Output]("delta", Tensor(1.5))
   )
 
 
 
-  val lorenz_ode = Seq(
-    ∇ - σ*(y - x),
-    ∇ - x*(ρ - z) - y,
-    ∇ - x*y - β*z
+  val lotka_volterra = Seq(
+    ∇ - α*x + β*x*y,
+    ∇ - δ*x*y + γ*y
   )
 
-  val training_data = Seq(f1, f2, f3).map(f => {
+  val training_data = Seq(f1, f2).map(f => {
     dtfdata.supervised_dataset(
       Iterable(
         (
@@ -209,28 +210,30 @@ def apply(
 
   //val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
 
-  val monte_carlo = analysis.monte_carlo_quadrature(RandomVariable(Uniform(-1.0, 1.0)))(100).scale(domain._1, domain._2)
+  val quadrature_scheme = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
+
+  // analysis.monte_carlo_quadrature(RandomVariable(Uniform(-1.0, 1.0)))(100).scale(domain._1, domain._2)
 
   val nodes_tensor: Tensor = dtf.tensor_f64(
-    monte_carlo.nodes.length, 1)(
-    monte_carlo.nodes:_*
+    quadrature_scheme.nodes.length, 1)(
+    quadrature_scheme.nodes:_*
   )
 
   val weights_tensor: Tensor = dtf.tensor_f64(
-    monte_carlo.nodes.length)(
-    monte_carlo.weights:_*
+    quadrature_scheme.nodes.length)(
+    quadrature_scheme.weights:_*
   )
 
   val lorenz_system = dtflearn.dynamical_system[Double](
-    Map("x" -> xs, "y" -> ys, "z" -> zs),
-    lorenz_ode, input, output,
+    Map("x" -> xs, "y" -> ys),
+    lotka_volterra, input, output,
     tf.learn.L2Loss("Loss/L2") >> l2_reg >> tf.learn.Mean("L2/Mean"),
     nodes_tensor, weights_tensor, Tensor(1.0).reshape(Shape()))
 
 
-  implicit val seqArgType: Function.ArgType[Seq[Output]] = seqFuncArgTypeConstructor(3)
+  implicit val seqArgType: Function.ArgType[Seq[Output]] = seqFuncArgTypeConstructor(output_dim)
 
-  val lorenz_model = lorenz_system.solve(
+  val predator_prey_model = lorenz_system.solve(
     training_data,
     dtflearn.model.trainConfig(
       summary_dir,
@@ -245,7 +248,7 @@ def apply(
     dtflearn.model.data_ops(training_data.size, training_data.size, 10)
   )
 
-  val predictions = lorenz_model.predict("x", "y", "z")(test_data)
+  val predictions = predator_prey_model.predict("x", "y")(test_data)
 
   //val error_tensor = predictions.subtract(test_targets)
 
@@ -256,12 +259,12 @@ def apply(
   //print("Test Error is = ")
   //pprint.pprintln(mae)
 
-  plot_outputs(test_data, predictions, "Predicted Targets")
+  plot_outputs(test_data, predictions, "Predicted Populations")
 
   //plot_outputs(test_data, test_targets, "Actual Targets")
 
 
 
-  (lorenz_system, lorenz_model, training_data, plot3d_outputs(test_data, predictions))
+  (lorenz_system, predator_prey_model, training_data, plot3d_outputs(test_data, predictions))
 
 }
