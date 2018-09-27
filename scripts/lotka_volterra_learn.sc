@@ -38,13 +38,11 @@ def batch(dim: Int, min: Double, max: Double, gridSize: Int, func: Seq[Double] =
   )
 }
 
-val layer_poly = (n: String) => new Layer[Output, Output](n) {
-  override val layerType = "Poly"
+val layer_exp = (n: String) => new Layer[Output, Output](n) {
+  override val layerType = "Exp"
 
   override protected def _forward(input: Output)(implicit mode: Mode): Output = {
-    val power = dtf.tensor_i32(input.shape(1))((1 to input.shape(1)):_*)
-
-    input.pow(power)
+    input.exp
 
   }
 }
@@ -110,7 +108,7 @@ def plot3d_outputs(x: Tensor, t: Seq[Tensor]): LinePlot3D = {
 
 @main
 def apply(
-  f1: Double, f2: Double,
+  f1: Double, f2: Double, sizes: Seq[Int] = Seq(20, 20),
   optimizer: Optimizer = tf.train.RMSProp(0.001),
   maxIt: Int = 200000, reg_param: Double = 0.001) = {
 
@@ -121,7 +119,7 @@ def apply(
 
   val summary_dir = tempdir/s"dtf_lotka_volterra_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
-  val domain = (0.0, 20.0)
+  val domain = (0.0, 100.0)
 
   val input_dim: Int = 1
 
@@ -149,12 +147,12 @@ def apply(
 
 
   val getAct = (s: Int) => (i: Int) =>
-    if((i - s) % 2 == 0) layer_trig(s"Act_$i")
+    if(i - s == 0) layer_trig(s"Act_$i")
     else dtflearn.Phi(s"Act_$i")
 
   val layer_sizes = (
-    Seq(20, 20, 1),
-    Seq(20, 20, 1)
+    sizes :+ 1,
+    sizes :+ 1
   )
 
   val (xs, ys) = (
@@ -173,9 +171,9 @@ def apply(
 
 
   val l2_reg = L2Regularization(
-    xs_params._2 ++ ys_params._2,
-    xs_params._3 ++ ys_params._3,
-    xs_params._1 ++ ys_params._1,
+    xs_params._2.tail ++ ys_params._2.tail,
+    xs_params._3.tail ++ ys_params._3.tail,
+    xs_params._1.tail ++ ys_params._1.tail,
     reg = reg_param)
 
   val (x, y) = (
@@ -184,10 +182,10 @@ def apply(
   )
 
   val (α, β, γ, δ) = (
-    constant[Output]("alpha", Tensor(1.0)),
-    constant[Output]("beta", Tensor(1.5)),
-    constant[Output]("gamma", Tensor(1.25)),
-    constant[Output]("delta", Tensor(1.5))
+    constant[Output]("alpha", Tensor(2.0/3)),
+    constant[Output]("beta", Tensor(4.0/3)),
+    constant[Output]("gamma", Tensor(1.0)),
+    constant[Output]("delta", Tensor(1.0))
   )
 
 
@@ -208,11 +206,12 @@ def apply(
     )
   })
 
-  //val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
+  val quadrature_scheme = analysis.monte_carlo_quadrature(
+    RandomVariable(Uniform(-1.0, 1.0)))(100)
+    .scale(domain._1, domain._2)
 
-  val quadrature_scheme = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
+  //analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
 
-  // analysis.monte_carlo_quadrature(RandomVariable(Uniform(-1.0, 1.0)))(100).scale(domain._1, domain._2)
 
   val nodes_tensor: Tensor = dtf.tensor_f64(
     quadrature_scheme.nodes.length, 1)(
