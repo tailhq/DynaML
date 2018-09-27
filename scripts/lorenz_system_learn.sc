@@ -105,7 +105,7 @@ def plot3d_outputs(x: Tensor, t: Seq[Tensor]): LinePlot3D = {
 
 @main
 def apply(
-  f1: Double, f2: Double, f3: Double,
+  f1: Double, f2: Double, f3: Double, sizes: Seq[Int] = Seq(20, 20),
   optimizer: Optimizer = tf.train.RMSProp(0.001),
   maxIt: Int = 200000, reg_param: Double = 0.001) = {
 
@@ -143,12 +143,14 @@ def apply(
   val output = (Seq.fill(output_dim)(FLOAT64), Seq.fill(output_dim)(Shape(1)))
 
 
-  val getAct = (s: Int) => (i: Int) => if((i - s) % 2 == 0) layer_trig(s"Act_$i") else dtflearn.Phi(s"Act_$i")
+  val getAct = (s: Int) => (i: Int) =>
+    if(i - s == 0) layer_trig(s"Act_$i")
+    else dtflearn.Phi(s"Act_$i")
 
   val layer_sizes = (
-    Seq(30, 20, 1),
-    Seq(30, 20, 1),
-    Seq(30, 20, 1)
+    Seq(input_dim) ++ sizes :+ 1,
+    Seq(input_dim) ++ sizes :+ 1,
+    Seq(input_dim) ++ sizes :+ 1
   )
 
   val (xs, ys, zs) = (
@@ -164,16 +166,16 @@ def apply(
   )
 
   val (xs_params, ys_params, zs_params) = (
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._1, 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._2, layer_sizes._1.length + 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._3, layer_sizes._1.length + layer_sizes._2.length + 1, "FLOAT64")
+    dtfutils.get_ffstack_properties(layer_sizes._1, 1, "FLOAT64"),
+    dtfutils.get_ffstack_properties(layer_sizes._2, layer_sizes._1.length + 1, "FLOAT64"),
+    dtfutils.get_ffstack_properties(layer_sizes._3, layer_sizes._1.length + layer_sizes._2.length + 1, "FLOAT64")
   )
 
 
   val l2_reg = L2Regularization(
-    xs_params._2 ++ ys_params._2 ++ zs_params._2 ,
-    xs_params._3 ++ ys_params._3 ++ zs_params._3,
-    xs_params._1 ++ ys_params._1 ++ zs_params._1,
+    xs_params._2.tail ++ ys_params._2.tail ++ zs_params._2.tail,
+    xs_params._3.tail ++ ys_params._3.tail ++ zs_params._3.tail,
+    xs_params._1.tail ++ ys_params._1.tail ++ zs_params._1.tail,
     reg = reg_param)
 
   val (x, y, z) = (
