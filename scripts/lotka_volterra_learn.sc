@@ -119,7 +119,7 @@ def apply(
 
   val summary_dir = tempdir/s"dtf_lotka_volterra_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
-  val domain = (0.0, 100.0)
+  val domain = (0.0, 200.0)
 
   val input_dim: Int = 1
 
@@ -206,12 +206,7 @@ def apply(
     )
   })
 
-  val quadrature_scheme = analysis.monte_carlo_quadrature(
-    RandomVariable(Uniform(-1.0, 1.0)))(100)
-    .scale(domain._1, domain._2)
-
-  //analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
-
+  val quadrature_scheme = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
 
   val nodes_tensor: Tensor = dtf.tensor_f64(
     quadrature_scheme.nodes.length, 1)(

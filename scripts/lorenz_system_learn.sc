@@ -116,7 +116,7 @@ def apply(
 
   val summary_dir = tempdir/s"dtf_lorenz_ode_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
-  val domain = (0.0, 100.0)
+  val domain = (0.0, 1000.0)
 
   val input_dim: Int = 1
 
@@ -148,9 +148,9 @@ def apply(
     else dtflearn.Phi(s"Act_$i")
 
   val layer_sizes = (
-    Seq(input_dim) ++ sizes :+ 1,
-    Seq(input_dim) ++ sizes :+ 1,
-    Seq(input_dim) ++ sizes :+ 1
+    sizes :+ 1,
+    sizes :+ 1,
+    sizes :+ 1
   )
 
   val (xs, ys, zs) = (
@@ -166,9 +166,9 @@ def apply(
   )
 
   val (xs_params, ys_params, zs_params) = (
-    dtfutils.get_ffstack_properties(layer_sizes._1, 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(layer_sizes._2, layer_sizes._1.length + 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(layer_sizes._3, layer_sizes._1.length + layer_sizes._2.length + 1, "FLOAT64")
+    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._1, 1, "FLOAT64"),
+    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._2, layer_sizes._1.length + 1, "FLOAT64"),
+    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._3, layer_sizes._1.length + layer_sizes._2.length + 1, "FLOAT64")
   )
 
 
@@ -211,7 +211,7 @@ def apply(
 
   //val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
 
-  val monte_carlo = analysis.monte_carlo_quadrature(RandomVariable(Uniform(-1.0, 1.0)))(100).scale(domain._1, domain._2)
+  val monte_carlo = analysis.monte_carlo_quadrature(RandomVariable(Uniform(-1.0, 1.0)))(500).scale(domain._1, domain._2)
 
   val nodes_tensor: Tensor = dtf.tensor_f64(
     monte_carlo.nodes.length, 1)(
