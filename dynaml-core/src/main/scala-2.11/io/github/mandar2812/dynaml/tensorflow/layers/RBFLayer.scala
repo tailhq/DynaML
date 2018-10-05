@@ -30,6 +30,7 @@ import org.platanios.tensorflow.api.ops.Output
   *
   * @param name Name of the layer.
   * @param num_units The number of centers/units.
+  * @param rbf The radial basis function to use, defaults to gaussian radial basis.
   * @param centers_initializer The initialization of the node centers.
   * @param scales_initializer The initialization of the node length scales.
   * @param weights_initializer The initialization of the node importance weights.
@@ -38,6 +39,7 @@ import org.platanios.tensorflow.api.ops.Output
 case class RBFLayer(
   override val name: String,
   num_units: Int,
+  rbf: RBFLayer.Function = RBFLayer.Gaussian,
   centers_initializer: Initializer = tf.RandomNormalInitializer(),
   scales_initializer: Initializer  = tf.OnesInitializer,
   weights_initializer: Initializer = tf.RandomNormalInitializer()) extends
@@ -56,11 +58,42 @@ case class RBFLayer(
     )
 
     tf.concatenate(
-      node_centers.zip(scales).map(cs => {
-        input.subtract(cs._1).square.divide(cs._2.square.add(1E-6)).multiply(-0.5).sum(axes = 1).exp
-      }),
+      node_centers.zip(scales).map(cs => rbf(input, cs._1, cs._2.square)),
       axis = -1).reshape(
       Shape(-1, num_units)
     )
   }
+}
+
+object RBFLayer {
+
+  sealed trait Function {
+    def apply(input: Output, center: Output, scale: Output): Output
+  }
+
+  object Gaussian extends Function {
+    override def apply(input: Output, center: Output, scale: Output): Output =
+      input.subtract(center).square.multiply(scale).multiply(-1).sum(axes = 1).exp
+  }
+
+  object MultiQuadric extends Function {
+    override def apply(input: Output, center: Output, scale: Output): Output =
+      input.subtract(center).square.multiply(scale).sum(axes = 1).add(1).sqrt
+  }
+
+  object InverseMultiQuadric extends Function {
+    override def apply(input: Output, center: Output, scale: Output): Output =
+      input.subtract(center).square.multiply(scale).sum(axes = 1).add(1).sqrt.pow(-1)
+  }
+
+  object InverseQuadric extends Function {
+    override def apply(input: Output, center: Output, scale: Output): Output =
+      input.subtract(center).square.multiply(scale).sum(axes = 1).add(1).pow(-1)
+  }
+
+  object Sigmoid extends Function {
+    override def apply(input: Output, center: Output, scale: Output): Output =
+      input.subtract(center).square.multiply(scale).sigmoid
+  }
+
 }
