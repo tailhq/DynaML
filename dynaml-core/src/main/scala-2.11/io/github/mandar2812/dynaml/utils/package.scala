@@ -310,6 +310,20 @@ package object utils {
   }
 
   /**
+    * Calculate the generalised Laguerre polynomial
+    * */
+  def laguerre(n: Int, alpha: Double, x: Double): Double = {
+
+    def laguerreRec(k: Int, alphav: Double, xv: Double, a: Double, b: Double): Double = k match {
+      case 0 => a
+      case 1 => b
+      case _ => laguerreRec(k - 1, xv, alphav, ((2*k + 1 + alphav - xv)*a - (k + alphav)*b)/(k + 1), a)
+    }
+
+    laguerreRec(n, alpha, x, 1.0, 1.0 + alpha - x)
+  }
+
+  /**
     * Calculate the value of the Legendre polynomials
     * tail recursively.
     * */
