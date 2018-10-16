@@ -148,7 +148,7 @@ def apply(
 
   val getAct = (s: Int) => (i: Int) =>
     if(i - s == 0) layer_trig(s"Act_$i")
-    else dtflearn.Phi(s"Act_$i")
+    else dtflearn.identity[Output](s"Act_$i")//dtflearn.Phi(s"Act_$i")
 
   val layer_sizes = (
     sizes :+ 1,
@@ -156,24 +156,26 @@ def apply(
   )
 
   val (xs, ys) = (
-    dtflearn.feedforward_stack(getAct(1), FLOAT64)(
-      layer_sizes._1, 1,
+    dtflearn.rbf_layer("RBF_X", layer_sizes._1.head, dtflearn.rbf_layer.MultiQuadric) >>
+    dtflearn.feedforward_stack(getAct(0), FLOAT64)(
+      layer_sizes._1.tail, 1,
       true),
-    dtflearn.feedforward_stack(getAct(layer_sizes._1.length + 1), FLOAT64)(
-      layer_sizes._2, layer_sizes._1.length + 1,
+    dtflearn.rbf_layer("RBF_Y", layer_sizes._2.head, dtflearn.rbf_layer.MultiQuadric) >>
+    dtflearn.feedforward_stack(getAct(layer_sizes._1.length - 1), FLOAT64)(
+      layer_sizes._2.tail, layer_sizes._1.length,
       true)
   )
 
   val (xs_params, ys_params) = (
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._1, 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._2, layer_sizes._1.length + 1, "FLOAT64")
+    dtfutils.get_ffstack_properties(/*Seq(input_dim) ++*/ layer_sizes._1, 1, "FLOAT64"),
+    dtfutils.get_ffstack_properties(/*Seq(input_dim) ++*/ layer_sizes._2, layer_sizes._1.length, "FLOAT64")
   )
 
 
   val l2_reg = L2Regularization(
-    xs_params._2.tail ++ ys_params._2.tail,
-    xs_params._3.tail ++ ys_params._3.tail,
-    xs_params._1.tail ++ ys_params._1.tail,
+    xs_params._2/*.tail*/ ++ ys_params._2/*.tail*/,
+    xs_params._3/*.tail*/ ++ ys_params._3/*.tail*/,
+    xs_params._1/*.tail*/ ++ ys_params._1/*.tail*/,
     reg = reg_param)
 
   val (x, y) = (
@@ -256,8 +258,6 @@ def apply(
   plot_outputs(test_data, predictions, "Predicted Populations")
 
   //plot_outputs(test_data, test_targets, "Actual Targets")
-
-
 
   (lorenz_system, predator_prey_model, training_data, plot3d_outputs(test_data, predictions))
 
