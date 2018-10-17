@@ -14,6 +14,7 @@ import org.joda.time.DateTime
 import _root_.io.github.mandar2812.dynaml.tensorflow.implicits._
 import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.variables._
+import org.platanios.tensorflow.api.types.{DataType, MathDataType}
 
 import scala.util.Random
 
@@ -22,22 +23,27 @@ class DynamicalSystemsSpec extends FlatSpec with Matchers {
 
   val random = new Random()
 
-  def batch(dim: Int, min: Double, max: Double, gridSize: Int, func: Seq[Double] => Double): (Tensor, Tensor) = {
+  def batch(
+    dim: Int,
+    min: Double,
+    max: Double,
+    gridSize: Int,
+    func: Seq[Double] => Double): (Tensor[FLOAT64], Tensor[FLOAT64]) = {
 
     val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize) :+ max))
 
     val targets = points.map(func)
 
     (
-      dtf.tensor_from("FLOAT64", Seq.fill(dim)(gridSize + 1).product, dim)(points.flatten),
-      dtf.tensor_from("FLOAT64", Seq.fill(dim)(gridSize + 1).product, 1)(targets)
+      dtf.tensor_from(FLOAT64, Seq.fill(dim)(gridSize + 1).product, dim)(points.flatten),
+      dtf.tensor_from(FLOAT64, Seq.fill(dim)(gridSize + 1).product, 1)(targets)
     )
   }
 
   val layer = new Layer[Output, Output]("Sin") {
     override val layerType = "Sin"
 
-    override protected def _forward(input: Output)(implicit mode: Mode): Output =
+    override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
       input.sin
   }
 
@@ -76,42 +82,43 @@ class DynamicalSystemsSpec extends FlatSpec with Matchers {
     val function  =
       dtflearn.feedforward(
         num_units = 2, useBias = false,
-        ConstantInitializer(1.0),
-        ConstantInitializer(1.0))(1) >>
+        ConstantInitializer(Tensor(1.0)),
+        ConstantInitializer(Tensor(1.0)))(1) >>
         layer >>
         dtflearn.feedforward(
           num_units = 1, useBias = false,
-          ConstantInitializer(1.0),
-          ConstantInitializer(1.0))(2)
+          ConstantInitializer(Tensor(1.0)),
+          ConstantInitializer(Tensor(1.0)))(2)
 
 
     val xs = utils.range(domain._1, domain._2, num_data) ++ Seq(domain._2)
 
 
-    val training_data = dtfdata.supervised_dataset(xs.flatMap(x => Seq(
-      (dtf.tensor_f64(input_dim)(0, x), dtf.tensor_f64(output_dim)(f1(x))),
-      (dtf.tensor_f64(input_dim)(domain_size/4, x), dtf.tensor_f64(output_dim)(f2(x)))
+    val training_data = dtfdata.supervised_dataset[Tensor[DataType], Tensor[DataType]](
+      data = xs.flatMap(x => Seq(
+        (dtf.tensor_f64(input_dim)(0, x), dtf.tensor_f64(output_dim)(f1(x))),
+        (dtf.tensor_f64(input_dim)(domain_size/4, x), dtf.tensor_f64(output_dim)(f2(x)))
     )))
 
 
-    val velocity = constant[Output]("velocity", Tensor(1.0))
+    val velocity = constant[Output, FLOAT64]("velocity", Tensor(1.0))
 
 
     val wave_equation = d_t(d_t) - velocity*d_s(d_s)
 
     val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
 
-    val nodes_tensor: Tensor = dtf.tensor_f64(
+    val nodes_tensor: Tensor[FLOAT64] = dtf.tensor_f64(
       nodes.length*nodes.length, 2)(
       utils.combine(Seq(nodes, nodes)).flatten:_*
     )
 
-    val weights_tensor: Tensor = dtf.tensor_f64(
+    val weights_tensor: Tensor[FLOAT64] = dtf.tensor_f64(
       nodes.length*nodes.length)(
       utils.combine(Seq(weights, weights)).map(_.product):_*
     )
 
-    val wave_system1d = dtflearn.dynamical_system[Double](
+    val wave_system1d = dtflearn.dynamical_system[DataType](
       Map("wave_displacement" -> function),
       Seq(wave_equation), input, output,
       tf.learn.L2Loss("Loss/L2") >> tf.learn.Mean("L2/Mean"),
@@ -124,7 +131,7 @@ class DynamicalSystemsSpec extends FlatSpec with Matchers {
       Seq(training_data),
       dtflearn.model.trainConfig(
         summary_dir,
-        tf.train.RMSProp(0.001),
+        tf.train.Adam(0.001f),
         dtflearn.abs_loss_change_stop(0.0001, 5000),
         Some(
           dtflearn.model._train_hooks(
@@ -135,17 +142,17 @@ class DynamicalSystemsSpec extends FlatSpec with Matchers {
       dtflearn.model.data_ops(training_data.size/10, training_data.size, 10)
     )
 
-    val predictions = wave_model1d.predict("wave_displacement")(test_data).head
+    val predictions = wave_model1d.predict("wave_displacement")(test_data).head.cast(FLOAT64)
 
-    val error_tensor = predictions.subtract(test_targets)
+    val error_tensor = tfi.subtract(predictions, test_targets)
 
-    val mae = error_tensor.abs.mean().scalar.asInstanceOf[Double]
+    val mae = tfi.mean(tfi.abs(error_tensor)).scalar
 
     session.close()
 
     val epsilon = 1E-3
 
-    assert(mae <= epsilon)
+    assert(mae.asInstanceOf[Double] <= epsilon)
   }
 
 

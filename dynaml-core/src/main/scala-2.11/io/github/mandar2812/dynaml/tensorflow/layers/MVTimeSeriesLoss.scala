@@ -31,7 +31,7 @@ case class MVTimeSeriesLoss(override val name: String)
   extends Loss[(Output, Output)](name) {
   override val layerType: String = "L2Loss"
 
-  override protected def _forward(input: (Output, Output))(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: (Output, Output))(implicit mode: Mode): Output = {
     input._1.subtract(input._2).square.mean(axes = 0).sum()
   }
 }

@@ -122,7 +122,7 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     implicit val convertToOutput: DataPipe[Int, Output] = DataPipe(Tensor(_).toOutput)
 
-    val tf_data1 = numbers.build(Left(DataPipe[Int, Tensor](i => Tensor(i).reshape(Shape(1)))), INT32, Shape(1))
+    val tf_data1 = numbers.build(Left(DataPipe[Int, Tensor[INT32]](i => Tensor(i).reshape(Shape(1)))), INT32, Shape(1))
     val tf_data2 = numbers.build(Right(DataPipe[Int, Output](Tensor(_).toOutput)), INT32, Shape(1))
     val tf_data3 = numbers.build_buffered(
       2,

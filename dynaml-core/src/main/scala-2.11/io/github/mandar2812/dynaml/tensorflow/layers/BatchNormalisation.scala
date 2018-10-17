@@ -35,7 +35,7 @@ case class BatchNormalisation(override val name: String)
 
   private val EPSILON = 1E-5f
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
     val gamma      = tf.variable(
       "scaling", FLOAT32,
       input.shape(1::), OnesInitializer)

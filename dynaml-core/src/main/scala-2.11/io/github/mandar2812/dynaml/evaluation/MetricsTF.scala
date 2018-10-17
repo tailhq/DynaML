@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.evaluation
 
+import org.platanios.tensorflow.api.types.{DecimalDataType, MathDataType}
 import org.platanios.tensorflow.api.{---, ::, Tensor}
 
 
@@ -28,13 +29,13 @@ import org.platanios.tensorflow.api.{---, ::, Tensor}
   *
   * @param targets The actual output values.
   * */
-abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets: Tensor) {
+abstract class MetricsTF[D <: DecimalDataType](val names: Seq[String], val preds: Tensor[D], val targets: Tensor[D]) {
 
-  protected val scoresAndLabels: (Tensor, Tensor) = (preds, targets)
+  protected val scoresAndLabels: (Tensor[D], Tensor[D]) = (preds, targets)
 
   protected var name = "Target"
 
-  lazy val results: Tensor = run()
+  lazy val results: Tensor[D] = run()
 
   def _target_quantity: String = name
 
@@ -49,7 +50,7 @@ abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets:
 
     names.zipWithIndex.foreach(n => {
 
-      val value: Tensor = results(n._2, ---)
+      val value: Tensor[D] = results(n._2, ---)
 
       val metric = n._1
 
@@ -67,7 +68,7 @@ abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets:
     *
     * Implement this method in sub-classes.
     * */
-  protected def run(): Tensor
+  protected def run(): Tensor[D]
 
 
 }

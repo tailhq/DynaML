@@ -39,7 +39,7 @@
     tf.learn.Mean("Loss/Mean") >>
     tf.learn.ScalarSummary("Loss/Summary", "Loss")
 
-  val optimizer = tf.train.AdaGrad(0.1)
+  val optimizer = tf.train.AdaGrad(0.1f)
 
   // Directory in which to save summaries and checkpoints
   val summariesDir = java.nio.file.Paths.get((tempdir/"mnist_summaries").toString())

@@ -23,6 +23,7 @@ import io.github.mandar2812.dynaml.tensorflow.Learn
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
+import org.platanios.tensorflow.api.types.DataType
 
 /**
   * <h3>Differential Operator</h3>
@@ -87,10 +88,10 @@ abstract class TensorOperator[I](override val name: String) extends
 
 
   override def -(other: DifferentialOperator[I, Output]): DifferentialOperator[I, Output] =
-    AddTensorOperator(self, MultTensorOperator[I](Constant[I]("-1", -1), other))
+    AddTensorOperator(self, MultTensorOperator[I](Constant[I, INT32]("-1", -1), other))
 
-  def *(const: Tensor): DifferentialOperator[I, Output] =
-    MultTensorOperator(Constant[I](const.name, const), self)
+  def *[D <: DataType](const: Tensor[D]): DifferentialOperator[I, Output] =
+    MultTensorOperator(Constant[I, D](const.name, const), self)
 
   override def *(layer: Layer[I, Output]): DifferentialOperator[I, Output] =
     MultTensorOperator(self, SourceOperator(layer.name, layer))
@@ -137,11 +138,11 @@ private[dynamics] case class SourceOperator[I](
     else Map(self.name -> None)
 }
 
-private[dynamics] case class Constant[I](override val name: String, t: Tensor) extends TensorOperator[I](name) {
+private[dynamics] case class Constant[I, D <: DataType](override val name: String, t: Tensor[D]) extends TensorOperator[I](name) {
 
   self =>
 
-  override def run(data: Layer[I, Output]): Layer[I, Output] = Learn.constant[I](name, t)
+  override def run(data: Layer[I, Output]): Layer[I, Output] = Learn.constant[I, D](name, t)
 
   protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output]]] =
     Map(self.name -> None)
@@ -229,7 +230,7 @@ private[dynamics] case class MatrixMultOperator[I](
 
         override val layerType: String = "MatMul"
 
-        override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output =
+        override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output =
           tf.matmul(input.head, input.last)
       }
 
@@ -253,7 +254,7 @@ private[dynamics] case class TensorDotOperator[I](
       new Layer[Seq[Output], Output](s"TensorDot[${layer1.name}, ${layer2.name}]") {
         override val layerType: String = "TensorDot"
 
-        override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output =
+        override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output =
           tf.tensorDot(input.head, input.last, axes1, axes2)
       }
 

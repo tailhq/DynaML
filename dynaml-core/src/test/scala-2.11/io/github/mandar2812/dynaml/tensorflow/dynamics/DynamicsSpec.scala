@@ -14,7 +14,7 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
   val random = new Random()
 
-  def batch(dim: Int, batchSize: Int): Tensor = {
+  def batch(dim: Int, batchSize: Int): Tensor[FLOAT32] = {
     val inputs = ArrayBuffer.empty[Seq[Float]]
     var i = 0
     while (i < batchSize) {
@@ -26,10 +26,10 @@ class DynamicsSpec extends FlatSpec with Matchers {
     Tensor(inputs).reshape(Shape(-1, dim))
   }
 
-  val layer = new Layer[Output, Output]("Exp") {
+  val layer: Layer[Output, Output] = new Layer[Output, Output]("Exp") {
     override val layerType = "Exp"
 
-    override protected def _forward(input: Output)(implicit mode: Mode): Output =
+    override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
       input.exp
   }
 
@@ -45,14 +45,14 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
     val inputs = tf.placeholder(FLOAT32, Shape(-1, input_dim))
 
-    val feedforward = new Layer[Output, Output]("Exp") {
+    val feedforward: Layer[Output, Output] = new Layer[Output, Output]("Exp") {
       override val layerType = "MatMul"
 
-      override protected def _forward(input: Output)(implicit mode: Mode): Output =
+      override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
         tf.matmul(
           input,
           dtf.tensor_f32(input.shape(1), output_dim)(
-            Seq.tabulate(input.shape(1), output_dim)((i, j) => if(i == j) 1.0 else 1.0).flatten:_*
+            Seq.tabulate(input.shape(1), output_dim)((i, j) => if(i == j) 1.0f else 1.0f).flatten:_*
           )
         )
     }
@@ -74,7 +74,7 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
     val feeds = Map(inputs -> trainBatch)
 
-    val results: (Tensor, Tensor, Tensor, Tensor) =
+    val results: (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) =
       session.run(feeds = feeds, fetches = (outputs, inter_outputs, grad, hess))
 
 
@@ -105,14 +105,14 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
     val inputs = tf.placeholder(FLOAT32, Shape(-1, input_dim))
 
-    val feedforward = new Layer[Output, Output]("Exp") {
+    val feedforward: Layer[Output, Output] = new Layer[Output, Output]("Exp") {
       override val layerType = "MatMul"
 
-      override protected def _forward(input: Output)(implicit mode: Mode): Output =
+      override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
         tf.matmul(
           input,
           dtf.tensor_f32(input.shape(1), output_dim)(
-            Seq.tabulate(input.shape(1), output_dim)((i, j) => if(i == j) 1.0 else 1.0).flatten:_*
+            Seq.tabulate(input.shape(1), output_dim)((i, j) => if(i == j) 1.0f else 1.0f).flatten:_*
           )
         )
     }
@@ -134,7 +134,7 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
     val feeds = Map(inputs -> trainBatch)
 
-    val results: (Tensor, Tensor, Tensor, Tensor) =
+    val results: (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) =
       session.run(feeds = feeds, fetches = (outputs, inter_outputs, grad, hess))
 
 

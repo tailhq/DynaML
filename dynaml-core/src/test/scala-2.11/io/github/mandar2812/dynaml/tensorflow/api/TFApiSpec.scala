@@ -4,6 +4,7 @@ import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.probability.GaussianRV
+import spire.math.UByte
 
 class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
@@ -22,19 +23,19 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
     val numbers: Seq[Int] = 1 to 4
 
-    val int16tensor = dtf.tensor_i16(2, 2)(numbers:_*)
+    val int16tensor = dtf.tensor_i16(2, 2)(numbers.map(_.toShort):_*)
 
-    val uint8tensor = dtf.tensor_from("UINT8", 2, 2)(numbers.map(_.toByte))
+    val uint8tensor = dtf.tensor_from(UINT8, 2, 2)(numbers.map(_.toByte).map(UByte(_)))
 
-    val int32tensor2 = dtf.tensor_from[Int](INT32, Shape(2, 2))(numbers:_*)
+    val int32tensor2 = dtf.tensor_from(INT32, Shape(2, 2))(numbers:_*)
 
     val int32tensor = dtf.tensor_i32(2, 2)(numbers:_*)
 
-    val int64tensor = dtf.tensor_i64(2, 2)(numbers:_*)
+    val int64tensor = dtf.tensor_i64(2, 2)(numbers.map(_.toLong):_*)
 
-    val f16tensor = dtf.tensor_f16(2, 2)(numbers.map(_.toDouble):_*)
+    val f16tensor = dtf.tensor_f16(2, 2)(numbers.map(_.toFloat):_*)
 
-    val f32tensor = dtf.tensor_f32(2, 2)(numbers.map(_.toDouble):_*)
+    val f32tensor = dtf.tensor_f32(2, 2)(numbers.map(_.toFloat):_*)
 
     val f64tensor = dtf.tensor_f64(2, 2)(numbers.map(_.toDouble):_*)
 
@@ -45,7 +46,7 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
     val b_tensor = dtf.tensor_from_buffer(INT32, Shape(5, 5))((0 until 100).map(_.toByte).toArray)
 
-    val b_tensor2 = dtf.tensor_from_buffer("INT32", 5, 5)((0 until 100).map(_.toByte).toArray)
+    val b_tensor2 = dtf.tensor_from_buffer(INT32, 5, 5)((0 until 100).map(_.toByte).toArray)
 
     assert(uint8tensor.dataType == UINT8 && uint8tensor.shape == Shape(2, 2))
     assert(int16tensor.dataType == INT16 && int16tensor.shape == Shape(2, 2))
@@ -57,10 +58,10 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
     assert(f64tensor.dataType == FLOAT64 && f64tensor.shape == Shape(2, 2))
 
     assert(f_tensor.shape == Shape(3, 2) && f_tensor.dataType == FLOAT32)
-    assert(f_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 1f))
+    assert(f_tensor.entriesIterator.forall(_ == 1f))
 
     assert(f_tensor2.shape == Shape(3, 2) && f_tensor2.dataType == FLOAT32)
-    assert(f_tensor2.entriesIterator.forall(_.asInstanceOf[Float] == 1f))
+    assert(f_tensor2.entriesIterator.forall(_ == 1f))
 
     assert(r_tensor.shape == Shape(3, 3) && r_tensor.dataType == FLOAT64)
 
@@ -74,7 +75,7 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
     val numbers: Seq[Int] = 1 to 6
 
-    val int16tensor = dtf.tensor_i16(2, 3)(numbers:_*)
+    val int16tensor = dtf.tensor_i16(2, 3)(numbers.map(_.toShort):_*)
 
     val unstack_tensors = dtf.unstack(int16tensor, axis = -1)
 

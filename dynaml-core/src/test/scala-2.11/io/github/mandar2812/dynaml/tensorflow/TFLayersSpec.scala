@@ -94,19 +94,20 @@ class TFLayersSpec extends FlatSpec with Matchers {
     val feeds = Map(vec_input -> sample_input, image_input -> sample_image)
 
     val (lin_tensor, lin_stack_tensor, lin_stack_tensor2, conv_tensor, inception_tensor, in_stack_tensor)
-    : (Tensor, Tensor, Tensor, Tensor, Tensor, Tensor) = session.run(
-      feeds = feeds,
-      fetches = (
-        lin_output,
-        lin_stack_output,
-        lin_stack_output2,
-        conv_output,
-        inception_output,
-        inception_stack_output)
+    : (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) =
+      session.run(
+        feeds = feeds,
+        fetches = (
+          lin_output,
+          lin_stack_output,
+          lin_stack_output2,
+          conv_output,
+          inception_output,
+          inception_stack_output)
     )
 
     val (conv_batch, conv_dropout, ctrnn_tensor1, ctrnn_tensor2, rbf_tensor)
-    : (Tensor, Tensor, Tensor, Tensor, Tensor) = session.run(
+    : (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) = session.run(
       feeds = feeds,
       fetches = (
         conv_py_output2,

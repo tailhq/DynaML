@@ -42,7 +42,7 @@ class TFModelSpec extends FlatSpec with Matchers {
     val rv = GaussianRV(0.0, 2.0).iid(data_size)
 
     val data = dtfdata.dataset(rv.draw).to_supervised(
-      DataPipe[Double, (Tensor, Tensor)](n => (
+      DataPipe[Double, (Tensor[DataType], Tensor[DataType])](n => (
         dtf.tensor_f64(1)(n),
         dtf.tensor_f64(1)(n*weight + bias)))
     )
@@ -50,7 +50,7 @@ class TFModelSpec extends FlatSpec with Matchers {
     val train_fraction = 0.7
 
     val tf_dataset = data.partition(
-      DataPipe[(Tensor, Tensor), Boolean](_ => Random.nextDouble() <= train_fraction)
+      DataPipe[(Tensor[DataType], Tensor[DataType]), Boolean](_ => Random.nextDouble() <= train_fraction)
     )
 
     val arch = dtflearn.feedforward(num_units = 1)(id = 1)
@@ -62,15 +62,15 @@ class TFModelSpec extends FlatSpec with Matchers {
       tf.learn.ScalarSummary("Loss/ModelLoss", "ModelLoss")
 
     val regression_model = dtflearn.model[
-      Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
-      Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
-      Tensor, Tensor, Tensor](
+      Tensor[DataType], Output, DataType, Shape, Output,
+      Tensor[DataType], Output, DataType, Shape, Output,
+      Tensor[DataType], Tensor[DataType], Tensor[DataType]](
       tf_dataset.training_dataset,
       arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
       process_targets, loss,
       dtflearn.model.trainConfig(
         summary_dir,
-        tf.train.Adam(0.1),
+        tf.train.Adam(0.1f),
         dtflearn.rel_loss_change_stop(0.05, 5000),
         Some(
           dtflearn.model._train_hooks(
@@ -83,7 +83,7 @@ class TFModelSpec extends FlatSpec with Matchers {
 
     regression_model.train()
 
-    val test_pred = regression_model.predict(Tensor(1.0).reshape(Shape(1, 1))).scalar.asInstanceOf[Double]
+    val test_pred = regression_model.predict(Tensor(1.0).reshape(Shape(1, 1))).scalar
 
     assert(test_pred == 4.0)
 

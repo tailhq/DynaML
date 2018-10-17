@@ -20,7 +20,7 @@ package io.github.mandar2812.dynaml.tensorflow.data
 
 import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, OutputToTensor}
+import org.platanios.tensorflow.api.implicits.helpers.{StructureFromDataType, StructureFromTensor}
 import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset, OutputDataset, OutputSlicesDataset}
 
@@ -174,13 +174,13 @@ class DataSet[X](val data: Iterable[X]) {
     *
     * @return A TensorFlow data set handle.
     * */
-  def build[T, O, DA, D, S](
+  def build[T, O, D, S](
     transformation: Either[DataPipe[X, T], DataPipe[X, O]],
-    dataType: DA, shape: S)(
+    dataType: D, shape: S)(
     implicit
-    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
+    evStructureFromDataType: StructureFromDataType.Aux[T, O, D, S],
     evData: Data.Aux[T, O, D, S],
-    evOToT: OutputToTensor.Aux[O, T],
+    evStructureFromTensor: StructureFromTensor.Aux[T, O, D, S],
     evFunctionOutput: Function.ArgType[O]
   ): Dataset[T, O, D, S] = transformation match {
     case Left(pipe) => tf.data.fromGenerator(
@@ -193,13 +193,13 @@ class DataSet[X](val data: Iterable[X]) {
     )
   }
 
-  protected def build[T, O, DA, D, S](
+  protected def build[T, O, D, S](
     transformation: DataPipe[Iterable[X], Iterable[O]],
-    dataType: DA, shape: S)(
+    dataType: D, shape: S)(
     implicit
-    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
+    evStructureFromDataType: StructureFromDataType.Aux[T, O, D, S],
     evData: Data.Aux[T, O, D, S],
-    evOToT: OutputToTensor.Aux[O, T],
+    evStructureFromTensor: StructureFromTensor.Aux[T, O, D, S],
     evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] =
     self
       .transform(transformation)
@@ -208,16 +208,16 @@ class DataSet[X](val data: Iterable[X]) {
       DataPipe2((l: Dataset[T, O, D, S], r: OutputSlicesDataset[T, O, D, S]) => l.concatenate(r)))
 
 
-  def build_buffered[T, O, DA, D, S](
+  def build_buffered[T, O, D, S](
     buffer_size: Int,
     stackOp: DataPipe[Iterable[O], O],
-    dataType: DA,
+    dataType: D,
     shape: S = null)(
     implicit
     convertToOutput: DataPipe[X, O],
-    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
+    evStructureFromDataType: StructureFromDataType.Aux[T, O, D, S],
     evData: Data.Aux[T, O, D, S],
-    evOToT: OutputToTensor.Aux[O, T],
+    evStructureFromTensor: StructureFromTensor.Aux[T, O, D, S],
     evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] = {
 
     val buffer_and_stack =
@@ -256,11 +256,11 @@ case class OutputDataSet(override val data: Iterable[Output]) extends
 
   self =>
 
-  def build[T, DA, D, S](dataType: DA, shape: S)(
+  def build[T, D, S](dataType: D, shape: S)(
     implicit
-    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
+    evStructureFromDataType: StructureFromDataType.Aux[T, Output, D, S],
     evData: Data.Aux[T, Output, D, S],
-    evOToT: OutputToTensor.Aux[Output, T],
+    evStructureFromTensor: StructureFromTensor.Aux[T, Output, D, S],
     evFunctionOutput: Function.ArgType[Output]): Dataset[T, Output, D, S] =
     tf.data.OutputSlicesDataset(tf.concatenate(self.data.toSeq))
 

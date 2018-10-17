@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.data
 
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.implicits.helpers.OutputToTensor
+import org.platanios.tensorflow.api.implicits.helpers.StructureFromTensor
 import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
 
@@ -28,10 +28,11 @@ case class AbstractDataSet[TI, TT](
   testData: TI, testLabels: TT, nTest: Int) {
 
   def training_data[OI, DI, SI, OT, DT, ST](
-    implicit evData1: Data.Aux[TI,OI,DI,SI],
+    implicit
+    evData1: Data.Aux[TI,OI,DI,SI],
     evData2: Data.Aux[TT,OT,DT,ST],
-    evOToT1: OutputToTensor.Aux[OI, TI],
-    evOToT2: OutputToTensor.Aux[OT, TT],
+    evStructure1: StructureFromTensor.Aux[TI, OI, DI, SI],
+    evStructure2: StructureFromTensor.Aux[TT, OT, DT, ST],
     evFunctionInput1: Function.ArgType[OI],
     evFunctionInput2: Function.ArgType[OT])
   : Dataset[(TI, TT), (OI, OT), (DI, DT), (SI, ST)] =
@@ -40,10 +41,11 @@ case class AbstractDataSet[TI, TT](
     )
 
   def test_data[OI, DI, SI, OT, DT, ST](
-    implicit evData1: Data.Aux[TI,OI,DI,SI],
+    implicit
+    evData1: Data.Aux[TI,OI,DI,SI],
     evData2: Data.Aux[TT,OT,DT,ST],
-    evOToT1: OutputToTensor.Aux[OI, TI],
-    evOToT2: OutputToTensor.Aux[OT, TT],
+    evStructure1: StructureFromTensor.Aux[TI, OI, DI, SI],
+    evStructure2: StructureFromTensor.Aux[TT, OT, DT, ST],
     evFunctionInput1: Function.ArgType[OI],
     evFunctionInput2: Function.ArgType[OT])
   : Dataset[(TI, TT), (OI, OT), (DI, DT), (SI, ST)] =

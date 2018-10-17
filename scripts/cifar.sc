@@ -8,6 +8,8 @@
   import org.platanios.tensorflow.api.learn.layers.Activation
   import org.platanios.tensorflow.api.learn.layers.Layer
   import org.platanios.tensorflow.api.ops.NN.SameConvPadding
+  import org.platanios.tensorflow.api.learn.layers.Input
+  import org.platanios.tensorflow.api.types.MathDataType
   import org.platanios.tensorflow.data.image.CIFARLoader
   import java.nio.file.Paths
 
@@ -15,7 +17,7 @@
   val tempdir = home/"tmp"
 
   val dataSet = CIFARLoader.load(Paths.get(tempdir.toString()), CIFARLoader.CIFAR_10)
-  val tf_dataset = AbstractDataSet(
+  val tf_dataset = AbstractDataSet[Tensor[DataType], Tensor[DataType]](
     dataSet.trainImages, dataSet.trainLabels, dataSet.trainLabels.shape(0),
     dataSet.testImages, dataSet.testLabels, dataSet.testLabels.shape(0))
 
@@ -28,11 +30,12 @@
 
 
   println("Building the model.")
-  val input = tf.learn.Input(
-    UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2), dataSet.trainImages.shape(3))
+  val input: Input[Tensor[DataType], Output, DataType, Shape] = tf.learn.Input(
+    UINT8,
+    Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2), dataSet.trainImages.shape(3))
   )
 
-  val trainInput = tf.learn.Input(UINT8, Shape(-1))
+  val trainInput: Input[Tensor[DataType], Output, DataType, Shape] = tf.learn.Input(UINT8, Shape(-1))
 
   val relu_act = DataPipe[String, Activation](tf.learn.ReLU(_))
 
@@ -47,9 +50,10 @@
   val trainingInputLayer = tf.learn.Cast("TrainInput/Cast", INT64)
 
   val loss = tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
-    tf.learn.Mean("Loss/Mean") >> tf.learn.ScalarSummary("Loss/Summary", "Loss")
+    tf.learn.Mean("Loss/Mean") >>
+    tf.learn.ScalarSummary("Loss/Summary", "Loss")
 
-  val optimizer = tf.train.Adam(0.1)
+  val optimizer = tf.train.Adam(0.1f)
 
   val summariesDir = java.nio.file.Paths.get((tempdir/"cifar_summaries").toString())
 
@@ -57,30 +61,25 @@
     architecture, input, trainInput, trainingInputLayer,
     loss, optimizer, summariesDir, dtflearn.max_iter_stop(500),
     100, 100, 100)(
-    trainData, true)
+    trainData, false)
 
-  def accuracy(predictions: Tensor, labels: Tensor): Float =
-    predictions.argmax(1)
-      .cast(UINT8)
-      .equal(labels)
+  def accuracy[D <: MathDataType](predictions: Tensor[D], labels: Tensor[D]): Float =
+    tfi.equal(predictions.argmax(1).cast(UINT8), labels.cast(UINT8))
       .cast(FLOAT32)
       .mean()
       .scalar
       .asInstanceOf[Float]
 
-  val (trainingPreds, testPreds): (Option[Tensor], Option[Tensor]) =
+  val (trainingPreds, testPreds): (Option[Tensor[DataType]], Option[Tensor[DataType]]) =
     dtfutils.predict_data[
-      Tensor, Output, DataType, Shape, Output,
-      Tensor, Output, DataType, Shape, Output,
-      Tensor, Tensor](
-      estimator,
-      data = tf_dataset,
-      pred_flags = (true, true),
-      buff_size = 20000)
+      Tensor[DataType], Output, DataType, Shape, Output,
+      Tensor[DataType], Output, DataType, Shape, Output,
+      Tensor[DataType], Tensor[DataType]](
+      estimator, data = tf_dataset, pred_flags = (true, true), buff_size = 20000)
 
   val (trainAccuracy, testAccuracy) = (
-    accuracy(trainingPreds.get, dataSet.trainLabels),
-    accuracy(testPreds.get, dataSet.testLabels))
+    accuracy(trainingPreds.get.cast(UINT8), dataSet.trainLabels),
+    accuracy(testPreds.get.cast(UINT8), dataSet.testLabels))
 
   print("Train accuracy = ")
   pprint.pprintln(trainAccuracy)

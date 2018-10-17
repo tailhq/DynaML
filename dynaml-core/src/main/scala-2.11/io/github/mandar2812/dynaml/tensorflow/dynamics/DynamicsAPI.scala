@@ -43,9 +43,9 @@ private[tensorflow] trait DynamicsAPI {
   val hessian: TensorOperator[Output]                 = ∇(∇)
   val source: SourceOperator.type                     = SourceOperator
   val constant: Constant.type                         = Constant
-  def one[I](
-    dataType: DataType)(
-    shape: Shape): Constant[I]                        = constant[I]("One", Tensor.ones(dataType, shape))
+  def one[I, D <: DataType](
+    dataType: D)(
+    shape: Shape): Constant[I, D]                     = constant[I, D]("One", Tensor.ones[D](dataType, shape))
 
   def variable[I](
     name: String,
@@ -57,7 +57,7 @@ private[tensorflow] trait DynamicsAPI {
       new Layer[I, Output](name) {
         override val layerType: String = "Quantity"
 
-        override protected def _forward(input: I)(implicit mode: Mode): Output = {
+        override def forwardWithoutContext(input: I)(implicit mode: Mode): Output = {
           val quantity = tf.variable(name = "value", dataType, shape, initializer)
           quantity
         }
@@ -65,7 +65,7 @@ private[tensorflow] trait DynamicsAPI {
 
   def divergence(dim: Int, inputSlices: Seq[Indexer] = Seq(---)): TensorOperator[Output] = {
 
-    val Id = constant[Output](
+    val Id = constant[Output, INT32](
       s"IdentityMat($dim)",
       Api.tensor_i32(dim, dim)(
         Seq.tabulate[Int](dim, dim)((i, j) => if(i == j) 1 else 0).flatten:_*
