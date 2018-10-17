@@ -16,18 +16,18 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
 
   protected val random = new Random()
 
-  protected def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor = {
+  protected def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor[FLOAT32] = {
 
     val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize)))
 
 
-    dtf.tensor_f32(Seq.fill(dim)(gridSize).product, dim)(points.flatten:_*)
+    dtf.tensor_f32(Seq.fill(dim)(gridSize).product, dim)(points.flatten.map(_.toFloat):_*)
   }
 
-  protected val layer = new Layer[Output, Output]("Exp") {
+  protected val layer: Layer[Output, Output] = new Layer[Output, Output]("Exp") {
     override val layerType = "Exp"
 
-    override protected def _forward(input: Output)(implicit mode: Mode): Output =
+    override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
       input.sin
   }
 
@@ -47,12 +47,14 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
   protected val feedforward = new Layer[Output, Output]("Exp") {
     override val layerType = "MatMul"
 
-    override protected def _forward(input: Output)(implicit mode: Mode): Output =
+    override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
       tf.matmul(
         input,
         dtf.tensor_f32(input.shape(1), output_dim)(
-          Seq.tabulate(input.shape(1), output_dim)(
-            (i, j) => if(i == j) math.Pi*2/domain_size else -math.Pi*2/domain_size).flatten:_*
+          Seq.tabulate[Float](
+            input.shape(1), output_dim)(
+            (i, j) => if(i == j) math.Pi.toFloat*2/domain_size.toFloat else -math.Pi.toFloat*2/domain_size.toFloat
+          ).flatten:_*
         )
       ).reshape(Shape(input.shape(0)))
   }
@@ -65,7 +67,10 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
 
   protected val df_ds     = d_s(d_s)(function)(inputs)
 
-  protected val velocity  = variable[Output]("wave_velocity", FLOAT32, Shape(), ConstantInitializer(1.0f))
+  protected val velocity  = variable[Output](
+    "wave_velocity",
+    FLOAT32, Shape(),
+    ConstantInitializer(Tensor(1.0f)))
 
   protected val wave_op   = d_t(d_t) - d_s(d_s)*velocity
 
@@ -73,11 +78,11 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
 
   protected var session: Session = _
 
-  protected var trainBatch: Tensor = _
+  protected var trainBatch: Tensor[FLOAT32] = _
 
-  protected var feeds: Map[Output, Tensor] = _
+  protected var feeds: Map[Output, Tensor[FLOAT32]] = _
 
-  protected var results: (Tensor, Tensor, Tensor, Tensor) = _
+  protected var results: (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) = _
 
   before {
 

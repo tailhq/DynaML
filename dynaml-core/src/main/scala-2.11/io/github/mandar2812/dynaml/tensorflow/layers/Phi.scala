@@ -31,7 +31,7 @@ case class Phi(override val name: String)
   extends Activation(name) {
   override val layerType: String = "Phi"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
     ops.Math.erf(input.divide(math.sqrt(2.0f))).add(1.0f).multiply(0.5f).cast(input.dataType)
   }
 }

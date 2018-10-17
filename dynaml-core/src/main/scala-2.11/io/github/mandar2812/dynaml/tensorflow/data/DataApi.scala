@@ -29,8 +29,6 @@ private[tensorflow] object DataApi {
 
   val dataset: DataSet.type = DataSet
 
-  def supervised_dataset[X, Y](inputs: Iterable[X], outputs: Iterable[Y]): SupervisedDataSet[X, Y] =
-    new SupervisedDataSet[X, Y](new DataSet[X](inputs), new DataSet[Y](outputs))
 
   val supervised_dataset: SupervisedDataSet.type = SupervisedDataSet
 
@@ -49,7 +47,7 @@ private[tensorflow] object DataApi {
     buff_size: Int,
     image_to_bytes: DataPipe[Image, Array[Byte]],
     image_height: Int, image_width: Int, num_channels: Int)(
-    coll: Iterable[Path], size: Int): Tensor = {
+    coll: Iterable[Path], size: Int): Tensor[UINT8] = {
 
     val load_image = StreamDataPipe(DataPipe((p: Path) => Image.fromPath(p.toNIO)) > image_to_bytes)
 
@@ -64,12 +62,12 @@ private[tensorflow] object DataApi {
       pprint.pprintln(progress)
 
       Api.tensor_from_buffer(
-        dtype = "UINT8", split_seq.length,
+        dtype = UINT8, split_seq.length,
         image_height, image_width, num_channels)(load_image(split_seq).flatten.toArray)
 
     })
 
-    Api.concatenate(tensor_splits.toSeq, axis = 0)
+    Api.concatenate(tensor_splits.toSeq, 0)
   }
 
   /**
@@ -88,7 +86,7 @@ private[tensorflow] object DataApi {
     image_process: Map[Source, DataPipe[Image, Image]],
     images_to_bytes: DataPipe[Seq[Image], Array[Byte]],
     image_height: Int, image_width: Int, num_channels: Int)(
-    coll: Iterable[Map[Source, Seq[Path]]], size: Int): Tensor = {
+    coll: Iterable[Map[Source, Seq[Path]]], size: Int): Tensor[UINT8] = {
 
     val load_image = StreamDataPipe(DataPipe((images_map: Map[Source, Seq[Path]]) => {
       image_sources.map(source => {
@@ -110,7 +108,7 @@ private[tensorflow] object DataApi {
       pprint.pprintln(progress)
 
       Api.tensor_from_buffer(
-        dtype = "UINT8", split_seq.length,
+        dtype = UINT8, split_seq.length,
         image_height, image_width, num_channels)(
         load_image(split_seq).flatten.toArray)
 

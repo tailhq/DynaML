@@ -49,7 +49,7 @@ private[dynamics] case class SlicedGradient(
 
       override val layerType: String = "GradLayer"
 
-      override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+      override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
 
         val output = data.forward(input)
 
@@ -76,7 +76,8 @@ private[dynamics] case class SlicedGradient(
           if(output.rank > 1) (tf.unstack(output, axis = -1), output.rank - 1)
           else (Seq(output), 1)
 
-        val sliced_output = gradTRec(unstacked_output, input, rank).reshape(gradientShape)(indexer:_*)
+        val sliced_output =
+          gradTRec(unstacked_output, input, rank).reshape(gradientShape)(indexer.head, indexer.tail:_*)
 
         val finalShape = sliced_output.shape.asArray.filterNot(_ == 1)
 

@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.evaluation
 
 import org.platanios.tensorflow.api.Tensor
+import org.platanios.tensorflow.api.types.DecimalDataType
 
 /**
   * Evaluates classification models, by calculating confusion matrices.
@@ -27,18 +28,19 @@ import org.platanios.tensorflow.api.Tensor
   * @param preds Predictions expressed as class probabilities/one-hot vectors
   * @param targets Class labels expressed as one-hot vectors
   * */
-class ClassificationMetricsTF(num_classes: Int, preds: Tensor, targets: Tensor) extends
-  MetricsTF(Seq("Class Fidelity Score"), preds, targets) {
+class ClassificationMetricsTF[D <: DecimalDataType](
+  num_classes: Int, preds: Tensor[D], targets: Tensor[D])
+  extends MetricsTF(Seq("Class Fidelity Score"), preds, targets) {
 
-  val confusion_matrix: Tensor = targets.transpose().matmul(preds)
+  val confusion_matrix: Tensor[D] = targets.transpose().matmul(preds)
 
-  val class_score: Tensor = {
+  val class_score: Tensor[D] = {
     val d = confusion_matrix.trace
     val s = confusion_matrix.sum()
     d.divide(s)
   }
 
-  override protected def run(): Tensor = class_score
+  override protected def run(): Tensor[D] = class_score
 
   override def print(): Unit = {
     println("\nClassification Model Performance: "+name)

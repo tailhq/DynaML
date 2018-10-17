@@ -20,23 +20,24 @@ package io.github.mandar2812.dynaml.evaluation
 
 import com.quantifind.charts.Highcharts.{regression, title, xAxis, yAxis}
 import io.github.mandar2812.dynaml.tensorflow.{dtf, dtfutils}
-import org.platanios.tensorflow.api.{::, Tensor}
+import org.platanios.tensorflow.api.types.{DecimalDataType, MathDataType}
+import org.platanios.tensorflow.api._
 
 /**
   * Implements a common use for Regression Task Evaluators.
   * */
-class RegressionMetricsTF(preds: Tensor, targets: Tensor) extends MetricsTF(
+class RegressionMetricsTF[D <: DecimalDataType](preds: Tensor[D], targets: Tensor[D]) extends MetricsTF(
   Seq("RMSE", "MAE", "Pearson Corr.", "Spearman Corr.", "Yield"),
   preds, targets) {
 
-  private val num_outputs = if (preds.shape.toTensor().size == 1) 1 else preds.shape(1)
+  private val num_outputs = if (preds.shape.toTensor(INT32).size == 1) 1 else preds.shape(1)
 
   private lazy val (_ , rmse , mae, corr, spearman_corr) = RegressionMetricsTF.calculate(preds, targets)
 
   private lazy val modelyield =
     (preds.max(axes = 0) - preds.min(axes = 0)).divide(targets.max(axes = 0) - targets.min(axes = 0))
 
-  override protected def run(): Tensor = dtf.stack(Seq(rmse, mae, corr, spearman_corr, modelyield))
+  override protected def run(): Tensor[D] = dtf.stack[D](Seq(rmse, mae, corr, spearman_corr, modelyield))
 
   override def generatePlots(): Unit = {
     println("Generating Plot of Fit for each target")
@@ -70,7 +71,7 @@ class RegressionMetricsTF(preds: Tensor, targets: Tensor) extends MetricsTF(
   * */
 object RegressionMetricsTF {
 
-  protected def calculate(preds: Tensor, targets: Tensor): (Tensor, Tensor, Tensor, Tensor, Tensor) = {
+  protected def calculate[D <: MathDataType](preds: Tensor[D], targets: Tensor[D]): (Tensor[D], Tensor[D], Tensor[D], Tensor[D], Tensor[D]) = {
     val error = targets.subtract(preds)
 
     println("Shape of error tensor: "+error.shape.toString()+"\n")

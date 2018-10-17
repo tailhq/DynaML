@@ -44,7 +44,7 @@ case class FiniteHorizonCTRNN(
 
   override val layerType: String = s"CTRNN[horizon:$horizon, deltaT:$timestep]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
 
     val units        = input.shape(-1)
 

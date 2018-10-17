@@ -26,7 +26,7 @@ import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.NN.SameConvPadding
 import org.platanios.tensorflow.api.ops.io.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
-import org.platanios.tensorflow.api.types.DataType
+import org.platanios.tensorflow.api.types.{DataType, MathDataType}
 import org.platanios.tensorflow.api.{FLOAT32, Graph, Output, Shape, Tensor, tf, _}
 import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.DynamicalSystem
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer}
@@ -34,7 +34,7 @@ import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInit
 
 private[tensorflow] object Learn {
 
-  type TFDATA = Dataset[(Tensor, Tensor), (Output, Output), (DataType, DataType), (Shape, Shape)]
+  type TFDATA[D <: DataType] = Dataset[(Tensor[D], Tensor[D]), (Output, Output), (DataType, DataType), (Shape, Shape)]
 
   type SupervisedModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T] =
     tf.learn.SupervisedTrainableModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
@@ -480,11 +480,11 @@ private[tensorflow] object Learn {
     * @author mandar2812
     * */
   def build_tf_model[
-  IT, IO, IDA, ID, IS, I,
-  TT, TO, TDA, TD, TS, T](
+  IT, IO, ID, IS, I,
+  TT, TO, TD, TS, T](
     architecture: Layer[IO, I],
-    input: Input[IT, IO, IDA, ID, IS],
-    target: Input[TT, TO, TDA, TD, TS],
+    input: Input[IT, IO, ID, IS],
+    target: Input[TT, TO, TD, TS],
     processTarget: Layer[TO, T],
     loss: Layer[(I, T), Output],
     optimizer: Optimizer,
@@ -558,8 +558,6 @@ private[tensorflow] object Learn {
     * @tparam IO The type representing symbolic tensors of the input patterns,
     *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
     *
-    * @tparam IDA The underlying (scalar) data types of the input,
-    *             e.g. `DataType.Aux[Double]`, `(DataType.Aux[Double], DataType.Aux[Double])` etc.
     *
     * @tparam ID The input pattern's tensorflow data type,
     *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
@@ -594,7 +592,7 @@ private[tensorflow] object Learn {
     * */
   def build_unsup_tf_model[IT, IO, IDA, ID, IS, I](
     architecture: Layer[IO, I],
-    input: Input[IT, IO, IDA, ID, IS],
+    input: Input[IT, IO, ID, IS],
     loss: Layer[(IO, I), Output],
     optimizer: Optimizer,
     summariesDir: java.nio.file.Path,

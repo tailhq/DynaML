@@ -29,7 +29,7 @@ import org.platanios.tensorflow.api.ops.{Function, Output}
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.core.client.Fetchable
-import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, DataTypeToOutput, OutputToTensor}
+import org.platanios.tensorflow.api.implicits.helpers.{StructureFromDataType, StructureFromTensor}
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.hooks.Hook
 import org.platanios.tensorflow.api.ops.io.data.Data
@@ -82,32 +82,28 @@ import org.platanios.tensorflow.api.ops.io.data.Data
   * @author mandar2812 date 2018/09/11
   * */
 private[dynaml] class TFModel[
-IT, IO, IDA, ID, IS, I,
-TT, TO, TDA, TD, TS, T,
+IT, IO, ID, IS, I,
+TT, TO, TD, TS, T,
 InferInput, InferOutput,
 ModelInferenceOutput](
   override val g: DataSet[(IT, TT)],
   val architecture: Layer[IO, I],
-  val input: (IDA, IS),
-  val target: (TDA, TS),
+  val input: (ID, IS),
+  val target: (TD, TS),
   val processTarget: Layer[TO, T],
   val loss: Layer[(I, T), Output],
   val trainConfig: TFModel.TrainConfig,
   val data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   val inMemory: Boolean = false,
   val existingGraph: Option[Graph] = None,
-  data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
-  implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
-  evDToOI: DataTypeToOutput.Aux[ID, IO],
-  evOToTI: OutputToTensor.Aux[IO, IT],
+  data_handles: Option[(Input[IT, IO, ID, IS], Input[TT, TO, TD, TS])] = None)(
+  implicit
+  evStructureFromTensor: StructureFromTensor.Aux[(IT, TT),(IO, TO),(ID, TD),(IS, TS)],
+  evStructureI: StructureFromDataType.Aux[IT, IO, ID, IS],
+  evStructureT: StructureFromDataType.Aux[TT, TO, TD, TS],
   evDataI: Data.Aux[IT, IO, ID, IS],
-  evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
-  evDToOT: DataTypeToOutput.Aux[TD, TO],
-  evOToTT: OutputToTensor.Aux[TO, TT],
   evDataT: Data.Aux[TT, TO, TD, TS],
-  evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
   evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
-  evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
   evFunctionOutput: Function.ArgType[(IO, TO)],
   evFetchableIO: Fetchable.Aux[IO, IT],
   evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
@@ -117,7 +113,7 @@ ModelInferenceOutput](
 
   type ModelPair = dtflearn.SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
 
-  private lazy val tf_dataset = g.build[(IT, TT), (IO, TO), (IDA, TDA), (ID, TD), (IS, TS)](
+  private lazy val tf_dataset = g.build[(IT, TT), (IO, TO), (ID, TD), (IS, TS)](
     Left(identityPipe[(IT, TT)]),
     (input._1, target._1),
     (input._2, target._2))
@@ -128,11 +124,11 @@ ModelInferenceOutput](
 
   private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
 
-  lazy val (input_handle, target_handle): (Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS]) =
+  lazy val (input_handle, target_handle): (Input[IT, IO, ID, IS], Input[TT, TO, TD, TS]) =
     if(data_handles.isDefined) data_handles.get
     else (
-      tf.learn.Input[IT, IO, IDA, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
-      tf.learn.Input[TT, TO, TDA, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
+      tf.learn.Input[IT, IO, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
+      tf.learn.Input[TT, TO, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
 
   private val graphInstance = if(existingGraph.isDefined) {
     println("Using existing provided TensorFlow graph")
@@ -195,7 +191,7 @@ object TFModel {
     * */
   protected case class TrainConfig(
     summaryDir: Path,
-    optimizer: Optimizer = tf.train.Adam(0.01),
+    optimizer: Optimizer = tf.train.Adam(0.01f),
     stopCriteria: StopCriteria = dtflearn.rel_loss_change_stop(0.05, 100000),
     trainHooks: Option[Set[Hook]] = None)
 
@@ -241,37 +237,33 @@ object TFModel {
     )
 
   def apply[
-  IT, IO, IDA, ID, IS, I,
-  TT, TO, TDA, TD, TS, T,
+  IT, IO, ID, IS, I,
+  TT, TO, TD, TS, T,
   InferInput, InferOutput,
   ModelInferenceOutput](
   g: DataSet[(IT, TT)],
   architecture: Layer[IO, I],
-  input: (IDA, IS),
-  target: (TDA, TS),
+  input: (ID, IS),
+  target: (TD, TS),
   processTarget: Layer[TO, T],
   loss: Layer[(I, T), Output],
   trainConfig: TFModel.TrainConfig,
   data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   inMemory: Boolean = false,
   existingGraph: Option[Graph] = None,
-  data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
-  implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
-  evDToOI: DataTypeToOutput.Aux[ID, IO],
-  evOToTI: OutputToTensor.Aux[IO, IT],
-  evDataI: Data.Aux[IT, IO, ID, IS],
-  evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
-  evDToOT: DataTypeToOutput.Aux[TD, TO],
-  evOToTT: OutputToTensor.Aux[TO, TT],
-  evDataT: Data.Aux[TT, TO, TD, TS],
-  evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
-  evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
-  evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
-  evFunctionOutput: Function.ArgType[(IO, TO)],
-  evFetchableIO: Fetchable.Aux[IO, IT],
-  evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
-  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
-  ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) =
+  data_handles: Option[(Input[IT, IO, ID, IS], Input[TT, TO, TD, TS])] = None)(
+    implicit
+    evStructureFromTensor: StructureFromTensor.Aux[(IT, TT),(IO, TO),(ID, TD),(IS, TS)],
+    evStructureI: StructureFromDataType.Aux[IT, IO, ID, IS],
+    evStructureT: StructureFromDataType.Aux[TT, TO, TD, TS],
+    evDataI: Data.Aux[IT, IO, ID, IS],
+    evDataT: Data.Aux[TT, TO, TD, TS],
+    evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
+    evFunctionOutput: Function.ArgType[(IO, TO)],
+    evFetchableIO: Fetchable.Aux[IO, IT],
+    evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
+    ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) =
     new TFModel(
       g, architecture, input, target, processTarget, loss,
       trainConfig, data_processing, inMemory, existingGraph,

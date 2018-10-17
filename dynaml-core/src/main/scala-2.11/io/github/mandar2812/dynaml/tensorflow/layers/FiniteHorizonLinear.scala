@@ -39,7 +39,7 @@ case class FiniteHorizonLinear(
 
   override val layerType: String = s"FHLinear[observables:$observables]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
 
     val units        = input.shape(-2)
 

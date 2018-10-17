@@ -5,15 +5,15 @@ import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
 import org.platanios.tensorflow.api.core.client.Fetchable
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.ops.Output
-import org.platanios.tensorflow.api.ops.io.data.Dataset
-import org.platanios.tensorflow.api.{Shape, Tensor}
+import org.platanios.tensorflow.api.types.{DecimalDataType, MathDataType}
+import org.platanios.tensorflow.api._
 
 object Utils {
 
   /**
     * Convert a float tensor to a Sequence.
     * */
-  def toDoubleSeq(t: Tensor): Iterator[Double] = {
+  def toDoubleSeq[D <: DecimalDataType](t: Tensor[D]): Iterator[Double] = {
     val datatype = t.dataType.toString()
     t.entriesIterator.map(x =>
       if(datatype == "FLOAT64") x.asInstanceOf[Double]
@@ -41,42 +41,43 @@ object Utils {
   def kl(prior: Output, p: Output): Output =
     prior.divide(p).log.multiply(prior).sum(axes = 1).mean()
 
-  def kl(prior: Tensor, p: Tensor): Output =
+  def kl[D <: DecimalDataType](prior: Tensor[D], p: Tensor[D]): Tensor[D] =
     prior.divide(p).log.multiply(prior).sum(axes = 1).mean()
 
   /**
     * Calculate the Jensen Shannon divergence
     * between a probability and a target probability.
     * */
-  def js(target_prob: Output, prob: Output) = {
+  def js(target_prob: Output, prob: Output): Output = {
     val m = target_prob.add(prob).divide(2.0)
     kl(target_prob, m).add(kl(prob, m)).multiply(0.5)
   }
 
-  def js(target_prob: Tensor, prob: Tensor) = {
-    val m = target_prob.add(prob).divide(2.0)
-    kl(target_prob, m).add(kl(prob, m)).multiply(0.5)
+  def js[D <: DecimalDataType](target_prob: Tensor[D], prob: Tensor[D]): Tensor[D] = {
+    val two = Tensor(2).cast(target_prob.dataType)
+    val m = tfi.divide[D](target_prob.add(prob), two)
+    tfi.divide[D](kl(target_prob, m).add(kl(prob, m)), two)
   }
 
   /**
     * Calculate the Hellinger distance between two
     * probability distributions.
     * */
-  def hellinger(target_prob: Output, prob: Output) =
-    target_prob.sqrt.subtract(prob.sqrt).square.sum().sqrt.divide(math.sqrt(2.0))
+  def hellinger(target_prob: Output, prob: Output): Output =
+    target_prob.sqrt.subtract(prob.sqrt).square.sum(axes = 1).sqrt.divide(Tensor(math.sqrt(2.0)))
 
-  def hellinger(target_prob: Tensor, prob: Tensor) =
-    target_prob.sqrt.subtract(prob.sqrt).square.sum().sqrt.divide(math.sqrt(2.0))
+  def hellinger[D <: DecimalDataType](target_prob: Tensor[D], prob: Tensor[D]): Tensor[D] =
+    target_prob.sqrt.subtract(prob.sqrt).square.sum(axes = 1).sqrt
 
-  def cross_entropy(target_prob: Output, prob: Output) =
+  def cross_entropy(target_prob: Output, prob: Output): Output =
     target_prob.multiply(prob.log).sum(axes = 1).multiply(-1.0).mean()
 
   /**
     * Calculate the cross-entropy of two
     * probability distributions.
     * */
-  def cross_entropy(target_prob: Tensor, prob: Tensor) =
-    target_prob.multiply(prob.log).sum(axes = 1).multiply(-1.0).mean()
+  def cross_entropy[D <: DecimalDataType](target_prob: Tensor[D], prob: Tensor[D]): Output =
+    target_prob.multiply(prob.log).sum(axes = 1).multiply(Tensor(-1.0).cast(target_prob.dataType)).mean()
 
   def buffered_preds[
   IT, IO, ID, IS, I,

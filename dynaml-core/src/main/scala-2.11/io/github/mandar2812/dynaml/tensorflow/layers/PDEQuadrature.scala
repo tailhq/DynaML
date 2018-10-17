@@ -21,12 +21,12 @@ import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics._
   *                       element of [[f]].
   *
   * */
-case class PDEQuadrature(
+case class PDEQuadrature[D <: DataType](
   override val name: String,
   f: Seq[Layer[Output, Output]],
-  quadrature_nodes: Tensor,
-  weights: Tensor,
-  loss_weightage: Tensor) extends
+  quadrature_nodes: Tensor[D],
+  weights: Tensor[D],
+  loss_weightage: Tensor[D]) extends
   Layer[Output, Output](name) {
 
   require(quadrature_nodes.shape(0) == weights.shape(0) && weights.rank == 1)
@@ -35,7 +35,7 @@ case class PDEQuadrature(
 
   override val layerType: String = s"QuadratureLoss[${f.map(_.layerType)}]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
 
     val (q_nodes, q_weights, importance) = (
       tf.constant(quadrature_nodes, quadrature_nodes.dataType, quadrature_nodes.shape, "quadrature_nodes"),

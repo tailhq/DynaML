@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.tensorflow.utils
 
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.pipes._
+import org.platanios.tensorflow.api.types.MathDataType
 
 /**
   * Scales attributes of a vector pattern using the sample minimum and maximum of
@@ -30,15 +31,17 @@ import _root_.io.github.mandar2812.dynaml.pipes._
   * @author mandar2812 date: 07/03/2018.
   *
   * */
-case class MinMaxScalerTF(min: Tensor, max: Tensor) extends TFScaler {
+case class MinMaxScalerTF[D <: MathDataType](min: Tensor[D], max: Tensor[D]) extends TFScaler[D] {
 
-  val delta: Tensor = max.subtract(min)
+  val delta: Tensor[D] = tfi.subtract(max, min)
 
-  override val i: Scaler[Tensor] = Scaler((xc: Tensor) => xc.multiply(delta).add(min))
+  override val i: Scaler[Tensor[D]] = Scaler((xc: Tensor[D]) => tfi.add(tfi.multiply(xc, delta), min))
 
-  override def run(data: Tensor): Tensor = data.subtract(min).divide(delta)
+  override def run(data: Tensor[D]): Tensor[D] = data.subtract(min).divide(delta)
 
-  def apply(indexers: Indexer*): MinMaxScalerTF = this.copy(min(indexers:_*), max(indexers:_*))
+  def apply(indexers: Indexer*): MinMaxScalerTF[D] = this.copy(
+    min(indexers.head, indexers.tail:_*),
+    max(indexers.head, indexers.tail:_*))
 
 
 }
@@ -51,6 +54,8 @@ case class MinMaxScalerTO(min: Output, max: Output) extends TOScaler {
 
   override def run(data: Output): Output = data.subtract(min).divide(delta)
 
-  def apply(indexers: Indexer*): MinMaxScalerTO = this.copy(min(indexers:_*), max(indexers:_*))
+  def apply(indexers: Indexer*): MinMaxScalerTO = this.copy(
+    min(indexers.head, indexers.tail:_*),
+    max(indexers.head, indexers.tail:_*))
 
 }

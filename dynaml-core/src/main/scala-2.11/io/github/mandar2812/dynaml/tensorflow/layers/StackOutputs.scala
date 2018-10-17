@@ -36,7 +36,7 @@ case class StackOutputs(override val name: String, axis: Int = -1) extends Layer
 
   override val layerType: String = s"Stack[axis:$axis]"
 
-  override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output = tf.stack(input, axis)
+  override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output = tf.stack(input, axis)
 
 }
 
@@ -45,7 +45,7 @@ case class Unstack(override val name: String, axis: Int = -1) extends Layer[Outp
 
   override val layerType: String = s"Unstack[axis:$axis]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Seq[Output] = tf.unstack(input, axis)
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Seq[Output] = tf.unstack(input, axis)
 }
 
 
@@ -61,7 +61,7 @@ case class ConcatenateOutputs(override val name: String, axis: Int = -1) extends
 
   override val layerType: String = s"Concatenate[axis:$axis]"
 
-  override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output = tf.concatenate(input, axis)
+  override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output = tf.concatenate(input, axis)
 
 }
 
@@ -69,14 +69,14 @@ case class SumSeq(override val name: String) extends Layer[Seq[Output], Output](
 
   override val layerType: String = s"SumSeq"
 
-  override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output = input.reduceLeft(_.add(_))
+  override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output = input.reduceLeft(_.add(_))
 }
 
 case class MultSeq(override val name: String) extends Layer[Seq[Output], Output](name) {
 
   override val layerType: String = s"MultSeq"
 
-  override protected def _forward(input: Seq[Output])(implicit mode: Mode): Output = input.reduceLeft(_.multiply(_))
+  override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output = input.reduceLeft(_.multiply(_))
 }
 
 
@@ -84,7 +84,7 @@ case class SumTuple(override val name: String) extends Layer[(Output, Output), O
 
   override val layerType: String = s"Sum"
 
-  override protected def _forward(input: (Output, Output))(implicit mode: Mode): Output = input._1.add(input._2)
+  override def forwardWithoutContext(input: (Output, Output))(implicit mode: Mode): Output = input._1.add(input._2)
 }
 
 /**
@@ -98,7 +98,7 @@ case class SumTuple(override val name: String) extends Layer[(Output, Output), O
 case class SeqLayer[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[Seq[T], Seq[R]](name) {
   override val layerType: String = s"SeqLayer[${layers.map(_.layerType).mkString(",")}]"
 
-  override protected def _forward(input: Seq[T])(implicit mode: Mode): Seq[R] =
+  override def forwardWithoutContext(input: Seq[T])(implicit mode: Mode): Seq[R] =
     layers.zip(input).map(c => c._1.forward(c._2)(mode))
 }
 
@@ -108,7 +108,7 @@ case class ArrayLayer[T, R: ClassTag](
   Layer[Array[T], Array[R]](name) {
   override val layerType: String = s"ArrayLayer[${layers.map(_.layerType).mkString(",")}]"
 
-  override protected def _forward(input: Array[T])(implicit mode: Mode): Array[R] =
+  override def forwardWithoutContext(input: Array[T])(implicit mode: Mode): Array[R] =
     layers.zip(input).map(c => c._1.forward(c._2)(mode)).toArray
 }
 
@@ -124,7 +124,7 @@ case class ArrayLayer[T, R: ClassTag](
 case class CombinedLayer[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[T, Seq[R]](name) {
   override val layerType: String = s"CombinedLayer[${layers.map(_.layerType).mkString(",")}]"
 
-  override protected def _forward(input: T)(implicit mode: Mode): Seq[R] =
+  override def forwardWithoutContext(input: T)(implicit mode: Mode): Seq[R] =
     layers.map(_.forward(input)(mode))
 }
 
@@ -132,7 +132,7 @@ case class CombinedArrayLayer[T, R: ClassTag](override val name: String, layers:
   extends Layer[T, Array[R]](name) {
   override val layerType: String = s"CombinedArrayLayer[${layers.map(_.layerType).mkString(",")}]"
 
-  override protected def _forward(input: T)(implicit mode: Mode): Array[R] =
+  override def forwardWithoutContext(input: T)(implicit mode: Mode): Array[R] =
     layers.map(_.forward(input)(mode)).toArray
 }
 
@@ -141,7 +141,7 @@ case class IdentityLayer[I](override val name: String) extends Layer[I, I](name)
 
   override val layerType: String = s"Identity"
 
-  override protected def _forward(input: I)(implicit mode: Mode): I = input
+  override def forwardWithoutContext(input: I)(implicit mode: Mode): I = input
 
 }
 
@@ -149,6 +149,6 @@ case class IdentityLayer[I](override val name: String) extends Layer[I, I](name)
 case class MultConstant(const: Output, override val name: String) extends Layer[Output, Output](name) {
   override val layerType: String = s"MultConst"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = input.multiply(const)
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = input.multiply(const)
 }
 

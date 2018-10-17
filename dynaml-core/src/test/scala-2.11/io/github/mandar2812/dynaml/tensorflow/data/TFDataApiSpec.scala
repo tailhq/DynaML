@@ -1,6 +1,5 @@
 package io.github.mandar2812.dynaml.tensorflow.data
 
-import org.scalatest.{FlatSpec, Matchers}
 import ammonite.ops._
 import com.sksamuel.scrimage.Image
 import com.sksamuel.scrimage.filter.GrayscaleFilter

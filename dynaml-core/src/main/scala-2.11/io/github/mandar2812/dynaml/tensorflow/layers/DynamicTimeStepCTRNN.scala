@@ -49,7 +49,7 @@ case class DynamicTimeStepCTRNN(
 
   override val layerType: String = s"CTRNN[horizon:$horizon]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
 
     val timestep     = tf.variable("time_step", input.dataType, Shape(), new RandomUniformInitializer)
 

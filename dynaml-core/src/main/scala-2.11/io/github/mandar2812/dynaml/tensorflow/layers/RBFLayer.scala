@@ -47,7 +47,7 @@ case class RBFLayer(
 
   override val layerType: String = s"RBFLayer[num_units:$num_units]"
 
-  override def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
 
     val node_centers    = (0 until num_units).map(
       i => tf.variable("node_"+i, input.dataType, Shape(input.shape(-1)), centers_initializer)

@@ -43,7 +43,7 @@ case class Tuple2Layer[I1, O1, I2, O2](override val name: String, layer1: Layer[
   val _1: Layer[I1, O1] = layer1
   val _2: Layer[I2, O2] = layer2
 
-  override protected def _forward(input: (I1, I2))(implicit mode: Mode): (O1, O2) =
+  override def forwardWithoutContext(input: (I1, I2))(implicit mode: Mode): (O1, O2) =
     (layer1.forward(input._1)(mode), layer2.forward(input._2)(mode))
 }
 
@@ -58,7 +58,7 @@ case class ConcatenateTuple2(override val name: String, axis: Int)
 
   override val layerType: String = s"ConcatTuple2"
 
-  override protected def _forward(input: (Output, Output))(implicit mode: Mode): Output =
+  override def forwardWithoutContext(input: (Output, Output))(implicit mode: Mode): Output =
     tf.concatenate(Seq(input._1, input._2), axis)
 }
 
@@ -73,6 +73,6 @@ case class StackTuple2(override val name: String, axis: Int)
 
   override val layerType: String = s"StackTuple2"
 
-  override protected def _forward(input: (Output, Output))(implicit mode: Mode): Output =
+  override def forwardWithoutContext(input: (Output, Output))(implicit mode: Mode): Output =
     tf.stack(Seq(input._1, input._2), axis)
 }
