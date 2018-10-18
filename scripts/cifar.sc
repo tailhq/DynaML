@@ -32,7 +32,7 @@
   println("Building the model.")
   val input: Input[Tensor[DataType], Output, DataType, Shape] = tf.learn.Input(
     UINT8,
-    Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2), dataSet.trainImages.shape(3))
+    Shape(-1) ++ dataSet.trainImages.shape(1::)
   )
 
   val trainInput: Input[Tensor[DataType], Output, DataType, Shape] = tf.learn.Input(UINT8, Shape(-1))
