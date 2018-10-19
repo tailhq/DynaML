@@ -18,20 +18,24 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
+import org.platanios.tensorflow.api.core.types.{IsReal, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Activation
 import org.platanios.tensorflow.api.ops
 import org.platanios.tensorflow.api.ops.Output
+import org.platanios.tensorflow.api.tensors.Tensor
 
 /**
   * The cumulative gaussian function, as a
   * Tensorflow activation.
   * */
-case class Phi(override val name: String)
-  extends Activation(name) {
+case class Phi[T: TF : IsReal](override val name: String)
+  extends Activation[T](name) {
   override val layerType: String = "Phi"
 
-  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
-    ops.Math.erf(input.divide(math.sqrt(2.0f))).add(1.0f).multiply(0.5f).cast(input.dataType)
-  }
+  override def forwardWithoutContext(input: Output[T])(implicit mode: Mode): Output[T] =
+    ops.Math.erf(input.divide(Tensor(math.sqrt(2.0f)).toOutput.castTo[T]))
+      .add(Tensor(1.0f).toOutput.castTo[T])
+      .multiply(Tensor(0.5f).toOutput.castTo[T])
+      .castTo[T]
 }

@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.layers
 
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsReal, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Activation
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, Regularizer}
@@ -30,23 +31,23 @@ import org.platanios.tensorflow.api.ops.Output
   * 
   * @author mandar2812 date 30/03/2018
   * */
-case class GeneralizedLogistic(override val name: String) extends Activation(name) {
+case class GeneralizedLogistic[T: TF : IsReal](override val name: String) extends Activation(name) {
 
   override val layerType: String = "GeneralizedLogistic"
 
-  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output[T])(implicit mode: Mode): Output[T] = {
 
-    val alpha: tf.Variable = tf.variable("alpha", input.dataType, Shape(input.shape(-1)), tf.RandomUniformInitializer())
-    val nu:    tf.Variable = tf.variable("nu",    input.dataType, Shape(input.shape(-1)), tf.OnesInitializer)
-    val q:     tf.Variable = tf.variable("Q",     input.dataType, Shape(input.shape(-1)), tf.OnesInitializer) 
-    val c:     tf.Variable = tf.variable("C",     input.dataType, Shape(input.shape(-1)), tf.OnesInitializer)
+    val alpha: tf.Variable[T] = tf.variable("alpha", Shape(input.shape(-1)), tf.RandomUniformInitializer())
+    val nu:    tf.Variable[T] = tf.variable("nu",    Shape(input.shape(-1)), tf.OnesInitializer)
+    val q:     tf.Variable[T] = tf.variable("Q",     Shape(input.shape(-1)), tf.OnesInitializer)
+    val c:     tf.Variable[T] = tf.variable("C",     Shape(input.shape(-1)), tf.OnesInitializer)
 
     input
-      .multiply(alpha.square.add(1E-6).multiply(-1.0))
+      .multiply(alpha.square.add(Tensor(1E-6).toOutput.castTo[T]).multiply(Tensor(-1.0).toOutput.castTo[T]))
       .exp
       .multiply(q.square)
       .add(c)
-      .pow(nu.square.pow(-1.0).multiply(-1.0))
+      .pow(nu.square.pow(Tensor(-1.0).toOutput.castTo[T]).multiply(Tensor(-1.0).toOutput.castTo[T]))
   }
 
 }

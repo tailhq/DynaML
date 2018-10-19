@@ -23,6 +23,7 @@ import com.sksamuel.scrimage.Image
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import io.github.mandar2812.dynaml.tensorflow.api.Api
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.UByte
 
 
 private[tensorflow] object DataApi {
@@ -47,7 +48,7 @@ private[tensorflow] object DataApi {
     buff_size: Int,
     image_to_bytes: DataPipe[Image, Array[Byte]],
     image_height: Int, image_width: Int, num_channels: Int)(
-    coll: Iterable[Path], size: Int): Tensor[UINT8] = {
+    coll: Iterable[Path], size: Int): Tensor[UByte] = {
 
     val load_image = StreamDataPipe(DataPipe((p: Path) => Image.fromPath(p.toNIO)) > image_to_bytes)
 
@@ -61,8 +62,8 @@ private[tensorflow] object DataApi {
       print("Progress %:\t")
       pprint.pprintln(progress)
 
-      Api.tensor_from_buffer(
-        dtype = UINT8, split_seq.length,
+      Api.tensor_from_buffer[UByte](
+        split_seq.length,
         image_height, image_width, num_channels)(load_image(split_seq).flatten.toArray)
 
     })
@@ -86,7 +87,7 @@ private[tensorflow] object DataApi {
     image_process: Map[Source, DataPipe[Image, Image]],
     images_to_bytes: DataPipe[Seq[Image], Array[Byte]],
     image_height: Int, image_width: Int, num_channels: Int)(
-    coll: Iterable[Map[Source, Seq[Path]]], size: Int): Tensor[UINT8] = {
+    coll: Iterable[Map[Source, Seq[Path]]], size: Int): Tensor[UByte] = {
 
     val load_image = StreamDataPipe(DataPipe((images_map: Map[Source, Seq[Path]]) => {
       image_sources.map(source => {
@@ -107,8 +108,8 @@ private[tensorflow] object DataApi {
       print("Progress %:\t")
       pprint.pprintln(progress)
 
-      Api.tensor_from_buffer(
-        dtype = UINT8, split_seq.length,
+      Api.tensor_from_buffer[UByte](
+        split_seq.length,
         image_height, image_width, num_channels)(
         load_image(split_seq).flatten.toArray)
 

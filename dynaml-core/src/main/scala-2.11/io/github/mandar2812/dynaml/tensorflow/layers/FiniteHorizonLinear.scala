@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, Regularizer}
@@ -30,27 +31,27 @@ import org.platanios.tensorflow.api.{---, Output, Shape, tf}
   * @param observables The dimensionality of the observations at each time epoch.
   * @author mandar2812 date 11/03/2018
   * */
-case class FiniteHorizonLinear(
+case class FiniteHorizonLinear[T: TF: IsNotQuantized](
   override val name: String, observables: Int,
   weightsInitializer: Initializer = RandomNormalInitializer(),
   biasInitializer: Initializer = RandomNormalInitializer(),
-  regularization: Regularizer = L2Regularizer()) extends
-  Layer[Output, Output](name) {
+  regularization: Regularizer = null) extends
+  Layer[Output[T], Output[T]](name) {
 
   override val layerType: String = s"FHLinear[observables:$observables]"
 
-  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output[T])(implicit mode: Mode): Output[T] = {
 
     val units        = input.shape(-2)
 
     val horizon      = input.shape(-1)
 
-    val weights      = tf.variable(
-      "Weights", input.dataType, Shape(observables, units),
+    val weights      = tf.variable[T](
+      "Weights", Shape(observables, units),
       weightsInitializer, regularizer = regularization)
 
-    val bias         = tf.variable(
-      "Bias", input.dataType, Shape(observables),
+    val bias         = tf.variable[T](
+      "Bias", Shape(observables),
       biasInitializer)
 
     tf.stack(

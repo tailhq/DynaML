@@ -25,51 +25,46 @@ import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import org.platanios.tensorflow.api.learn.StopCriteria
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
-import org.platanios.tensorflow.api.ops.{Function, Output}
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
-import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.core.client.Fetchable
-import org.platanios.tensorflow.api.implicits.helpers.{StructureFromDataType, StructureFromTensor}
+import org.platanios.tensorflow.api.core.types.{IsFloat32OrFloat64, TF}
+import org.platanios.tensorflow.api.implicits.helpers.NestedStructure
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.hooks.Hook
-import org.platanios.tensorflow.api.ops.io.data.Data
+import org.platanios.tensorflow.api.ops.data.Dataset
+import org.platanios.tensorflow.api._
 
 /**
   * <h4>Supervised Learning</h4>
   *
   * @tparam IT The type representing input tensors,
   *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
-  * @tparam IO The type representing symbolic tensors of the input patterns,
+  * @tparam In The type representing symbolic tensors of the input patterns,
   *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
-  * @tparam IDA The underlying (scalar) data types of the input,
-  *             e.g. `DataType.Aux[Double]`, `(DataType.Aux[Double], DataType.Aux[Double])` etc.
   * @tparam ID The input pattern's tensorflow data type,
   *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
   * @tparam IS The type of the input pattern's shape,
   *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
-  * @tparam I The type of the symbolic tensor returned by the neural architecture,
+  * @tparam Out The type of the symbolic tensor returned by the neural architecture,
   *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
   * @tparam TT The type representing target/label tensors,
   *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
-  * @tparam TO The type representing symbolic tensors of the target patterns,
+  * @tparam TrainIn The type representing symbolic tensors of the target patterns,
   *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
-  * @tparam TDA The underlying (scalar) data types of the targets,
-  *             e.g. `DataType.Aux[Double]`, `(DataType.Aux[Double], DataType.Aux[Double])` etc.
   * @tparam TD The target pattern's tensorflow data type,
   *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
   * @tparam TS The type of the target pattern's shape,
   *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
-  * @tparam T The type of the symbolic tensor of the processed targets, this is the type
+  * @tparam TrainOut The type of the symbolic tensor of the processed targets, this is the type
   *           of the tensorflow symbol which is used to compute the loss.
   *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
   * @param architecture The network architecture,
-  *                     takes a value of type [[IO]] and returns
-  *                     a value of type [[I]].
+  *                     takes a value of type [[In]] and returns
+  *                     a value of type [[Out]].
   * @param input The input meta data.
   * @param target The output label meta data
   * @param processTarget A computation layer which converts
-  *                      the original target of type [[TO]]
-  *                      into a type [[T]], usable by the Estimator API
+  *                      the original target of type [[TrainIn]]
+  *                      into a type [[TrainOut]], usable by the Estimator API
   * @param loss The loss function to be optimized during training.
   *
   * @param trainConfig A [[_root_.io.github.mandar2812.dynaml.models.TFModel.TrainConfig]] instance, containing
@@ -82,41 +77,39 @@ import org.platanios.tensorflow.api.ops.io.data.Data
   * @author mandar2812 date 2018/09/11
   * */
 private[dynaml] class TFModel[
-IT, IO, ID, IS, I,
-TT, TO, TD, TS, T,
-InferInput, InferOutput,
-ModelInferenceOutput](
+In, TrainIn, TrainOut, Out,
+Loss: TF : IsFloat32OrFloat64,
+IT, ID, IS, TT, TD, TS,
+InferIn, InferOut](
   override val g: DataSet[(IT, TT)],
-  val architecture: Layer[IO, I],
+  val architecture: Layer[In, Out],
   val input: (ID, IS),
   val target: (TD, TS),
-  val processTarget: Layer[TO, T],
-  val loss: Layer[(I, T), Output],
+  val processTarget: Layer[TrainIn, TrainOut],
+  val loss: Layer[(Out, TrainOut), Output[Loss]],
   val trainConfig: TFModel.TrainConfig,
   val data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   val inMemory: Boolean = false,
   val existingGraph: Option[Graph] = None,
-  data_handles: Option[(Input[IT, IO, ID, IS], Input[TT, TO, TD, TS])] = None)(
+  data_handles: Option[(Input[In], Input[TrainIn])] = None)(
   implicit
-  evStructureFromTensor: StructureFromTensor.Aux[(IT, TT),(IO, TO),(ID, TD),(IS, TS)],
-  evStructureI: StructureFromDataType.Aux[IT, IO, ID, IS],
-  evStructureT: StructureFromDataType.Aux[TT, TO, TD, TS],
-  evDataI: Data.Aux[IT, IO, ID, IS],
-  evDataT: Data.Aux[TT, TO, TD, TS],
-  evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
-  evFunctionOutput: Function.ArgType[(IO, TO)],
-  evFetchableIO: Fetchable.Aux[IO, IT],
-  evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
-  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
-  ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) extends
-  Model[DataSet[(IT, TT)], InferInput, InferOutput] {
+  evStructureI: NestedStructure.Aux[In, IT, ID, IS],
+  evStructureT: NestedStructure.Aux[TrainIn, TT, TD, TS],
+  evStructure: NestedStructure.Aux[(In, TrainIn), (IT, TT), (ID, TD), (IS, TS)],
+  //evFetchableIn: NestedStructure.Aux[In, IT, ID, IS],
+  evFetchableOut: NestedStructure.Aux[Out, TT, TD, TS],
+  ev: Estimator.SupportedInferInput[In, IT, TT, InferIn, InferOut],
+  // This implicit helps the Scala 2.11 compiler.
+  evFetchableInOut: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)]) extends
+  Model[DataSet[(IT, TT)], InferIn, InferOut] {
 
-  type ModelPair = dtflearn.SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
+  type ModelPair = dtflearn.SupModelPair[In, TrainIn, TrainOut, Out, Loss, (Out, TrainOut)]
 
-  private lazy val tf_dataset = g.build[(IT, TT), (IO, TO), (ID, TD), (IS, TS)](
-    Left(identityPipe[(IT, TT)]),
+  private lazy val tf_dataset: Dataset[(In, TrainIn)] = g.build(
+    identityPipe[(IT, TT)],
     (input._1, target._1),
-    (input._2, target._2))
+    (input._2, target._2))(
+    evStructure)
     .repeat()
     .shuffle(data_processing.shuffleBuffer)
     .batch(data_processing.batchSize)
@@ -124,11 +117,11 @@ ModelInferenceOutput](
 
   private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
 
-  lazy val (input_handle, target_handle): (Input[IT, IO, ID, IS], Input[TT, TO, TD, TS]) =
+  lazy val (input_handle, target_handle): (Input[In], Input[TrainIn]) =
     if(data_handles.isDefined) data_handles.get
     else (
-      tf.learn.Input[IT, IO, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
-      tf.learn.Input[TT, TO, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
+      tf.learn.Input[In, IT, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
+      tf.learn.Input[TrainIn, TT, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
 
   private val graphInstance = if(existingGraph.isDefined) {
     println("Using existing provided TensorFlow graph")
@@ -164,7 +157,7 @@ ModelInferenceOutput](
     * point.
     *
     **/
-  override def predict(point: InferInput): InferOutput = estimator.infer(() => point)
+  override def predict(point: InferIn): InferOut = estimator.infer(() => point)
 }
 
 object TFModel {
@@ -237,33 +230,30 @@ object TFModel {
     )
 
   def apply[
-  IT, IO, ID, IS, I,
-  TT, TO, TD, TS, T,
-  InferInput, InferOutput,
-  ModelInferenceOutput](
+  In, TrainIn, TrainOut, Out,
+  Loss: TF : IsFloat32OrFloat64,
+  IT, ID, IS, TT, TD, TS,
+  InferIn, InferOut](
   g: DataSet[(IT, TT)],
-  architecture: Layer[IO, I],
+  architecture: Layer[In, Out],
   input: (ID, IS),
   target: (TD, TS),
-  processTarget: Layer[TO, T],
-  loss: Layer[(I, T), Output],
+  processTarget: Layer[TrainIn, TrainOut],
+  loss: Layer[(Out, TrainOut), Output[Loss]],
   trainConfig: TFModel.TrainConfig,
   data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   inMemory: Boolean = false,
   existingGraph: Option[Graph] = None,
-  data_handles: Option[(Input[IT, IO, ID, IS], Input[TT, TO, TD, TS])] = None)(
-    implicit
-    evStructureFromTensor: StructureFromTensor.Aux[(IT, TT),(IO, TO),(ID, TD),(IS, TS)],
-    evStructureI: StructureFromDataType.Aux[IT, IO, ID, IS],
-    evStructureT: StructureFromDataType.Aux[TT, TO, TD, TS],
-    evDataI: Data.Aux[IT, IO, ID, IS],
-    evDataT: Data.Aux[TT, TO, TD, TS],
-    evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
-    evFunctionOutput: Function.ArgType[(IO, TO)],
-    evFetchableIO: Fetchable.Aux[IO, IT],
-    evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
-    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
-    ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) =
+  data_handles: Option[(Input[In], Input[TrainIn])] = None)(
+  implicit
+  evStructureI: NestedStructure.Aux[In, IT, ID, IS],
+  evStructureT: NestedStructure.Aux[TrainIn, TT, TD, TS],
+  evStructure: NestedStructure.Aux[(In, TrainIn), (IT, TT), (ID, TD), (IS, TS)],
+  //evFetchableIn: NestedStructure.Aux[In, IT, ID, IS],
+  evFetchableOut: NestedStructure.Aux[Out, TT, TD, TS],
+  ev: Estimator.SupportedInferInput[In, IT, TT, InferIn, InferOut],
+  // This implicit helps the Scala 2.11 compiler.
+  evFetchableInOut: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)]) =
     new TFModel(
       g, architecture, input, target, processTarget, loss,
       trainConfig, data_processing, inMemory, existingGraph,

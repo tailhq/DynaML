@@ -20,7 +20,7 @@ package io.github.mandar2812.dynaml.tensorflow.utils
 
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.pipes._
-import org.platanios.tensorflow.api.types.MathDataType
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 
 /**
   * Scales attributes of a vector pattern using the sample mean and variance of
@@ -32,7 +32,7 @@ import org.platanios.tensorflow.api.types.MathDataType
   * @author mandar2812 date: 07/03/2018.
   *
   * */
-case class GaussianScalerTF[D <: MathDataType](mean: Tensor[D], sigma: Tensor[D]) extends TFScaler[D] {
+case class GaussianScalerTF[D : TF: IsNotQuantized](mean: Tensor[D], sigma: Tensor[D]) extends TFScaler[D] {
 
   override val i: Scaler[Tensor[D]] = Scaler((xc: Tensor[D]) => tfi.add(tfi.multiply(xc, sigma), mean))
 
@@ -45,13 +45,13 @@ case class GaussianScalerTF[D <: MathDataType](mean: Tensor[D], sigma: Tensor[D]
 }
 
 
-case class GaussianScalerTO(mean: Output, sigma: Output) extends TOScaler {
+case class GaussianScalerTO[D : TF: IsNotQuantized](mean: Output[D], sigma: Output[D]) extends TOScaler {
 
-  override val i: Scaler[Output] = Scaler((xc: Output) => xc.multiply(sigma).add(mean))
+  override val i: Scaler[Output[D]] = Scaler((xc: Output[D]) => xc.multiply(sigma).add(mean))
 
-  override def run(data: Output): Output = data.subtract(mean).divide(sigma)
+  override def run(data: Output[D]): Output[D] = data.subtract(mean).divide(sigma)
 
-  def apply(indexers: Indexer*): GaussianScalerTO = this.copy(
+  def apply(indexers: Indexer*): GaussianScalerTO[D] = this.copy(
     mean(indexers.head, indexers.tail:_*),
     sigma(indexers.head, indexers.tail:_*))
 

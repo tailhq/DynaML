@@ -22,45 +22,48 @@ import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
 import _root_.io.github.mandar2812.dynaml.models.TFModel
 import io.github.mandar2812.dynaml.tensorflow.layers.{DynamicTimeStepCTRNN, FiniteHorizonCTRNN, FiniteHorizonLinear}
 import org.platanios.tensorflow.api.learn.{Mode, StopCriteria}
-import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
+import org.platanios.tensorflow.api.learn.layers.{Compose, Input, Layer, Linear}
 import org.platanios.tensorflow.api.ops.NN.SameConvPadding
-import org.platanios.tensorflow.api.ops.io.data.Dataset
+import org.platanios.tensorflow.api.ops.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
-import org.platanios.tensorflow.api.types.{DataType, MathDataType}
-import org.platanios.tensorflow.api.{FLOAT32, Graph, Output, Shape, Tensor, tf, _}
+import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.DynamicalSystem
+import org.platanios.tensorflow.api.core.types._
+import org.platanios.tensorflow.api.implicits.helpers.NestedStructure
+import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer}
 
 
 private[tensorflow] object Learn {
 
-  type TFDATA[D <: DataType] = Dataset[(Tensor[D], Tensor[D]), (Output, Output), (DataType, DataType), (Shape, Shape)]
+  type TFDATA[D] = Dataset[(Tensor[D], Tensor[D])]
 
-  type SupervisedModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T] =
-    tf.learn.SupervisedTrainableModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
+  type SupervisedModel[In, TrainIn, TrainOut, Out, Loss] =
+    tf.learn.SupervisedTrainableModel[In, TrainIn, TrainOut, Out, Loss]
 
-  type UnsupervisedModel[IT, IO, ID, IS, I] =
-    tf.learn.UnsupervisedTrainableModel[IT, IO, ID, IS, I]
+  type SupEstimatorTF[In, TrainIn, TrainOut, Out, Loss, EvalIn] =
+    tf.learn.Estimator[In, (In, TrainIn), TrainOut, Out, Loss, EvalIn]
 
-  type SupEstimatorTF[IT, IO, ID, IS, I, TT, TO, TD, TS, T] =
-    tf.learn.Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, T)]
+  type SupModelPair[In, TrainIn, TrainOut, Out, Loss, EvalIn] = (
+    SupervisedModel[In, TrainIn, TrainOut, Out, Loss],
+      SupEstimatorTF[In, TrainIn, TrainOut, Out, Loss, EvalIn])
 
-  type UnsupEstimatorTF[IT, IO, ID, IS, I] = tf.learn.Estimator[IT, IO, ID, IS, I, IT, IO, ID, IS, I]
+  type UnsupervisedModel[In, Out, Loss] =
+    tf.learn.UnsupervisedTrainableModel[In, Out, Loss]
 
-  type SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T] = (
-    SupervisedModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T],
-    SupEstimatorTF[IT, IO, ID, IS, I, TT, TO, TD, TS, T])
+  type UnsupEstimatorTF[In, Out, Loss] = tf.learn.Estimator[In, In, Unit, Out, Loss, Out]
 
-  type UnsupModelPair[IT, IO, ID, IS, I] = (
-    UnsupervisedModel[IT, IO, ID, IS, I],
-    UnsupEstimatorTF[IT, IO, ID, IS, I])
+
+  type UnsupModelPair[In, Out, Loss] = (
+    UnsupervisedModel[In, Out, Loss],
+    UnsupEstimatorTF[In, Out, Loss])
 
   val Phi: layers.Phi.type                           = layers.Phi
   val Tanh: layers.Tanh.type                         = layers.Tanh
   val GeneralizedLogistic
   : layers.GeneralizedLogistic.type                  = layers.GeneralizedLogistic
 
-  val batch_norm: layers.BatchNormalisation.type     = layers.BatchNormalisation
+  val batch_norm: tf.learn.BatchNormalization.type   = tf.learn.BatchNormalization
   val ctrnn: layers.FiniteHorizonCTRNN.type          = layers.FiniteHorizonCTRNN
   val dctrnn: layers.DynamicTimeStepCTRNN.type       = layers.DynamicTimeStepCTRNN
   val ts_linear: layers.FiniteHorizonLinear.type     = layers.FiniteHorizonLinear
@@ -70,7 +73,8 @@ private[tensorflow] object Learn {
   val seq_layer: layers.SeqLayer.type                = layers.SeqLayer
   val array_layer: layers.ArrayLayer.type            = layers.ArrayLayer
   val combined_layer: layers.CombinedLayer.type      = layers.CombinedLayer
-  val combined_array_layer: layers.CombinedArrayLayer.type      = layers.CombinedArrayLayer
+  val combined_array_layer
+  : layers.CombinedArrayLayer.type                   = layers.CombinedArrayLayer
   val unstack: layers.Unstack.type                   = layers.Unstack
   val identity: layers.IdentityLayer.type            = layers.IdentityLayer
   val tuple2_layer: layers.Tuple2Layer.type          = layers.Tuple2Layer
@@ -103,11 +107,11 @@ private[tensorflow] object Learn {
   val model: TFModel.type                    = TFModel
   val dynamical_system: DynamicalSystem.type = DynamicalSystem
 
-  def constant[I, D <: DataType](name: String, t: Tensor[D]): Layer[I, Output] = new Layer[I, Output](name){
+  def constant[I, D: TF](name: String, t: Tensor[D]): Layer[I, Output[D]] = new Layer[I, Output[D]](name){
 
     override val layerType: String = "Const"
 
-    override def forwardWithoutContext(input: I)(implicit mode: Mode): Output = t
+    override def forwardWithoutContext(input: I)(implicit mode: Mode): Output[D] = t
   }
 
   /**
@@ -120,11 +124,11 @@ private[tensorflow] object Learn {
     * @param id A unique integer id for constructing the layer name.
     *
     * */
-  def feedforward(
+  def feedforward[T: TF : IsNotQuantized](
     num_units: Int,
     useBias: Boolean = true,
     weightsInitializer: Initializer = RandomNormalInitializer(),
-    biasInitializer: Initializer = RandomNormalInitializer())(id: Int) =
+    biasInitializer: Initializer = RandomNormalInitializer())(id: Int): Linear[T] =
     tf.learn.Linear("Linear_"+id, num_units, useBias, weightsInitializer, biasInitializer)
 
   /**
@@ -143,19 +147,18 @@ private[tensorflow] object Learn {
     * @param weightsInitializer Initialization for the weights.
     * @param biasInitializer Initialization for the bias.
     * */
-  def feedforward_stack(
-    get_act: Int => Layer[Output, Output],
-    dataType: DataType)(
+  def feedforward_stack[T: TF : IsNotQuantized](
+    get_act: Int => Layer[Output[T], Output[T]])(
     layer_sizes: Seq[Int],
     starting_index: Int = 1,
     useBias: Boolean = true,
     weightsInitializer: Initializer = RandomNormalInitializer(),
-    biasInitializer: Initializer = RandomNormalInitializer()): Layer[Output, Output] = {
+    biasInitializer: Initializer = RandomNormalInitializer()): Layer[Output[T], Output[T]] = {
 
     def stack_ff_layers_rec(
       ls: Seq[Int],
-      layer_acc: Layer[Output, Output],
-      layer_index: Int): Layer[Output, Output] = ls match {
+      layer_acc: Layer[Output[T], Output[T]],
+      layer_index: Int): Layer[Output[T], Output[T]] = ls match {
 
       case Seq() => layer_acc
 
@@ -172,7 +175,7 @@ private[tensorflow] object Learn {
     }
 
     stack_ff_layers_rec(
-      layer_sizes, tf.learn.Cast(s"Cast_$starting_index", dataType),
+      layer_sizes, tf.learn.Cast(s"Cast_$starting_index"),
       starting_index)
 
   }
@@ -188,7 +191,11 @@ private[tensorflow] object Learn {
     * @param strides A [[Tuple2]] with strides, for each direction i.e. breadth and height.
     * @param index The layer id or index, helps in creating a unique layer name
     * */
-  def conv2d(size: Int, num_channels_input: Int, num_filters: Int, strides: (Int, Int))(index: Int) =
+  def conv2d[T: TF : IsDecimal](
+    size: Int,
+    num_channels_input: Int,
+    num_filters: Int,
+    strides: (Int, Int))(index: Int) =
     tf.learn.Conv2D(
       "Conv2D_"+index,
       Shape(size, size, num_channels_input, num_filters),
@@ -200,10 +207,10 @@ private[tensorflow] object Learn {
     * an option of appending a dropout layer.
     *
     * */
-  def conv2d_unit(
+  def conv2d_unit[T: TF : IsDecimal: IsFloat16OrFloat32OrFloat64](
     shape: Shape, stride: (Int, Int) = (1, 1),
     relu_param: Float = 0.1f, dropout: Boolean = true,
-    keep_prob: Float = 0.6f)(i: Int) =
+    keep_prob: Float = 0.6f)(i: Int): Compose[Output[T], Output[T], Output[T]] =
     if(dropout) {
       tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SameConvPadding) >>
         tf.learn.AddBias(name = "Bias_"+i) >>
@@ -213,7 +220,7 @@ private[tensorflow] object Learn {
       tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SameConvPadding) >>
         batch_norm(name = "BatchNorm_"+i) >>
         tf.learn.ReLU("ReLU_"+i, relu_param) >>
-        tf.learn.Cast("Cast_"+i, FLOAT32)
+        tf.learn.Cast("Cast_"+i)
     }
 
   /**
@@ -241,18 +248,18 @@ private[tensorflow] object Learn {
     *
     * @param keep_prob If dropout is enabled, then this determines the retain probability.
     * */
-  def conv2d_pyramid(
+  def conv2d_pyramid[T: TF : IsDecimal: IsFloat16OrFloat32OrFloat64](
     size: Int, num_channels_input: Int)(
     start_num_bits: Int, end_num_bits: Int)(
     relu_param: Float = 0.1f, dropout: Boolean = true,
-    keep_prob: Float = 0.6f, starting_index: Int = 0) = {
+    keep_prob: Float = 0.6f, starting_index: Int = 0): Compose[Output[T], Output[T], Output[T]] = {
 
     require(
       start_num_bits > end_num_bits,
       "To construct a 2d-convolutional pyramid, you need to start_num_bits > end_num_bits")
 
     //Create the first layer segment.
-    val head_segment = conv2d_unit(
+    val head_segment = conv2d_unit[T](
       Shape(size, size, num_channels_input, math.pow(2, start_num_bits).toInt),
       stride = (1, 1), relu_param, dropout, keep_prob)(starting_index)
 
@@ -260,7 +267,7 @@ private[tensorflow] object Learn {
     val tail_segments = (end_num_bits until start_num_bits).reverse.zipWithIndex.map(bitsAndIndices => {
       val (bits, index) = bitsAndIndices
 
-      conv2d_unit(
+      conv2d_unit[T](
         Shape(size, size, math.pow(2, bits+1).toInt, math.pow(2, bits).toInt),
         stride = (math.pow(2, index+1).toInt, math.pow(2, index+1).toInt),
         relu_param, dropout, keep_prob)(index+1+starting_index)
@@ -308,12 +315,12 @@ private[tensorflow] object Learn {
     *                       of each convolution.
     *
     * */
-  def inception_unit(
+  def inception_unit[T: TF : IsDecimal](
     channels: Int,
     num_filters: Seq[Int],
-    activation_generator: DataPipe[String, Layer[Output, Output]],
+    activation_generator: DataPipe[String, Layer[Output[T], Output[T]]],
     use_batch_norm: Boolean = true)(
-    layer_index: Int): Layer[Output, Output] = {
+    layer_index: Int): Layer[Output[T], Output[T]] = {
 
     require(num_filters.length == 4,
       s"Inception module has only 4 branches, but ${num_filters.length}" +
@@ -323,7 +330,7 @@ private[tensorflow] object Learn {
 
     def get_post_conv_layer(b_index: Int, l_index: Int) =
       if(use_batch_norm) {
-        batch_norm (s"$name/B$b_index/BatchNorm_$l_index") >>
+        batch_norm(s"$name/B$b_index/BatchNorm_$l_index") >>
           activation_generator(s"$name/B$b_index/Act_$l_index")
       } else {
         activation_generator(s"$name/B$b_index/Act_$l_index")
@@ -372,12 +379,12 @@ private[tensorflow] object Learn {
     * @param starting_index The starting index of the stack. The stack is named in a consecutive manner,
     *                       i.e. Inception_i, Inception_i+1, ...
     * */
-  def inception_stack(
+  def inception_stack[T: TF : IsDecimal](
     num_channels_image: Int,
     num_filters: Seq[Seq[Int]],
-    activation_generator: DataPipe[String, Layer[Output, Output]],
+    activation_generator: DataPipe[String, Layer[Output[T], Output[T]]],
     use_batch_norm: Boolean)(
-    starting_index: Int): Layer[Output, Output] = {
+    starting_index: Int): Layer[Output[T], Output[T]] = {
 
     val head = inception_unit(num_channels_image, num_filters.head, activation_generator)(starting_index)
 
@@ -402,9 +409,9 @@ private[tensorflow] object Learn {
     * @param horizon The number of steps in time to simulate the dynamical system
     * @param index The layer index, should be unique.
     * */
-  def ctrnn_block(
+  def ctrnn_block[T: TF : IsDecimal](
     observables: Int,
-    horizon: Int, timestep: Double = -1d)(index: Int): Layer[Output, Output] =
+    horizon: Int, timestep: Double = -1d)(index: Int): Layer[Output[T], Output[T]] =
     if (timestep <= 0d) {
       DynamicTimeStepCTRNN(s"DFHctrnn_$index", horizon) >>
         FiniteHorizonLinear(s"FHlinear_$index", observables)
@@ -418,47 +425,14 @@ private[tensorflow] object Learn {
     *
     * Trains a supervised tensorflow model/estimator.
     *
-    * @tparam IT The type representing input tensors,
-    *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
-    *
-    * @tparam IO The type representing symbolic tensors of the input patterns,
-    *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
-    *
-    * @tparam IDA The underlying (scalar) data types of the input,
-    *             e.g. `DataType.Aux[Double]`, `(DataType.Aux[Double], DataType.Aux[Double])` etc.
-    *
-    * @tparam ID The input pattern's tensorflow data type,
-    *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
-    *
-    * @tparam IS The type of the input pattern's shape,
-    *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
-    *
-    * @tparam I The type of the symbolic tensor returned by the neural architecture,
-    *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
-    *
-    * @tparam TT The type representing target/label tensors,
-    *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
-    * @tparam TO The type representing symbolic tensors of the target patterns,
-    *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
-    *
-    * @tparam TD The target pattern's tensorflow data type,
-    *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
-    *
-    * @tparam TS The type of the target pattern's shape,
-    *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
-    *
-    * @tparam T The type of the symbolic tensor of the processed targets, this is the type
-    *           of the tensorflow symbol which is used to compute the loss.
-    *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
-    *
     * @param architecture The network architecture,
-    *                     takes a value of type [[IO]] and returns
-    *                     a value of type [[I]].
+    *                     takes a value of type [[In]] and returns
+    *                     a value of type [[Out]].
     * @param input The input meta data.
     * @param target The output label meta data
     * @param processTarget A computation layer which converts
-    *                      the original target of type [[TO]]
-    *                      into a type [[T]], usable by the Estimator API
+    *                      the original target of type [[TrainIn]]
+    *                      into a type [[TrainOut]], usable by the Estimator API
     * @param loss The loss function to be optimized during training.
     * @param optimizer The optimization algorithm implementation.
     * @param summariesDir A filesystem path of type [[java.nio.file.Path]], which
@@ -477,27 +451,25 @@ private[tensorflow] object Learn {
     *
     * @author mandar2812
     * */
-  def build_tf_model[
-  IT, IO, ID, IS, I,
-  TT, TO, TD, TS, T](
-    architecture: Layer[IO, I],
-    input: Input[IT, IO, ID, IS],
-    target: Input[TT, TO, TD, TS],
-    processTarget: Layer[TO, T],
-    loss: Layer[(I, T), Output],
+  def build_tf_model[In, TrainIn, TrainOut, Out, Loss: TF : IsFloat32OrFloat64, EvalIn](
+    architecture: Layer[In, Out],
+    input: Input[In],
+    target: Input[TrainIn],
+    processTarget: Layer[TrainIn, TrainOut],
+    loss: Layer[(Out, TrainOut), Output[Loss]],
     optimizer: Optimizer,
     summariesDir: java.nio.file.Path,
     stopCriteria: StopCriteria,
     stepRateFreq: Int = 5000,
     summarySaveFreq: Int = 5000,
     checkPointFreq: Int = 5000)(
-    training_data: Dataset[
-      (IT, TT), (IO, TO),
-      (ID, TD), (IS, TS)],
-    inMemory: Boolean = false)
-  : SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T] = {
+    training_data: Dataset[(In, TrainIn)],
+    inMemory: Boolean = false)(
+    implicit
+    evIn: NestedStructure.Aux[In, _, _, _],
+    evTrainIn: NestedStructure.Aux[TrainIn, _, _, _]): SupModelPair[In, TrainIn, TrainOut, Out, Loss, (Out, TrainOut)] = {
 
-    val (model, estimator) = tf.createWith(graph = Graph()) {
+    val (model, estimator): SupModelPair[In, TrainIn, TrainOut, Out, Loss, (Out, TrainOut)] = tf.createWith(graph = Graph()) {
       val model = tf.learn.Model.supervised(
         input, architecture,
         target, processTarget,
@@ -548,25 +520,9 @@ private[tensorflow] object Learn {
     *
     * Trains an unsupervised tensorflow model/estimator.
     *
-    * @tparam IT The type representing input tensors,
-    *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
-    *
-    * @tparam IO The type representing symbolic tensors of the input patterns,
-    *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
-    *
-    *
-    * @tparam ID The input pattern's tensorflow data type,
-    *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
-    *
-    * @tparam IS The type of the input pattern's shape,
-    *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
-    *
-    * @tparam I The type of the symbolic tensor returned by the neural architecture,
-    *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
-    *
     * @param architecture The network architecture,
-    *                     takes a value of type [[IO]] and returns
-    *                     a value of type [[I]].
+    *                     takes a value of type [[In]] and returns
+    *                     a value of type [[Out]].
     * @param input The input meta data.
     * @param loss The loss function to be optimized during training.
     * @param optimizer The optimization algorithm implementation.
@@ -586,18 +542,19 @@ private[tensorflow] object Learn {
     *
     * @author mandar2812
     * */
-  def build_tf_model[IT, IO, ID, IS, I](
-    architecture: Layer[IO, I],
-    input: Input[IT, IO, ID, IS],
-    loss: Layer[(IO, I), Output],
+  def build_tf_model[In, Out, Loss: TF : IsFloat32OrFloat64](
+    architecture: Layer[In, Out],
+    input: Input[In],
+    loss: Layer[(In, Out), Output[Loss]],
     optimizer: Optimizer,
     summariesDir: java.nio.file.Path,
     stopCriteria: StopCriteria,
     stepRateFreq: Int,
     summarySaveFreq: Int,
     checkPointFreq: Int)(
-    training_data: Dataset[IT, IO, ID, IS],
-    inMemory: Boolean): UnsupModelPair[IT, IO, ID, IS, I] = {
+    training_data: Dataset[In],
+    inMemory: Boolean)(
+    implicit evIn: NestedStructure.Aux[In, _, _, _]): UnsupModelPair[In, Out, Loss] = {
 
     val (model, estimator) = tf.createWith(graph = Graph()) {
 

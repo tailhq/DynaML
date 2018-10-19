@@ -4,6 +4,7 @@ import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 
 /**
   * <h3>Quadrature for PDE Systems</h3>
@@ -21,13 +22,13 @@ import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics._
   *                       element of [[f]].
   *
   * */
-case class PDEQuadrature[D <: DataType](
+case class PDEQuadrature[D: TF: IsNotQuantized](
   override val name: String,
-  f: Seq[Layer[Output, Output]],
+  f: Seq[Layer[Output[D], Output[D]]],
   quadrature_nodes: Tensor[D],
   weights: Tensor[D],
   loss_weightage: Tensor[D]) extends
-  Layer[Output, Output](name) {
+  Layer[Output[D], Output[D]](name) {
 
   require(quadrature_nodes.shape(0) == weights.shape(0) && weights.rank == 1)
   require(loss_weightage.rank == 0 || (loss_weightage.rank == 1 && loss_weightage.shape(0) == f.length))
@@ -35,12 +36,12 @@ case class PDEQuadrature[D <: DataType](
 
   override val layerType: String = s"QuadratureLoss[${f.map(_.layerType)}]"
 
-  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output[D])(implicit mode: Mode): Output[D] = {
 
     val (q_nodes, q_weights, importance) = (
-      tf.constant(quadrature_nodes, quadrature_nodes.dataType, quadrature_nodes.shape, "quadrature_nodes"),
-      tf.constant(weights, weights.dataType, weights.shape, "quadrature_nodal_weights"),
-      tf.constant(loss_weightage, loss_weightage.dataType, loss_weightage.shape, "colocation_error_weight")
+      tf.constant[D](quadrature_nodes, quadrature_nodes.shape, "quadrature_nodes"),
+      tf.constant[D](weights, weights.shape, "quadrature_nodal_weights"),
+      tf.constant[D](loss_weightage, loss_weightage.shape, "colocation_error_weight")
     )
 
     val quadrature_loss =
@@ -55,13 +56,13 @@ case class PDEQuadrature[D <: DataType](
             else null
 
           if(reduce_axes == null) {
-            output.square.multiply(q_weights).sum()
+            output.square.multiply(q_weights).sum[Int]()
           } else {
-            output.square.sum(reduce_axes).multiply(q_weights).sum()
+            output.square.sum(reduce_axes).multiply(q_weights).sum[Int]()
           }
         }), axis = -1)
         .multiply(importance)
-        .sum()
+        .sum[Int]()
 
     input.add(quadrature_loss)
   }
