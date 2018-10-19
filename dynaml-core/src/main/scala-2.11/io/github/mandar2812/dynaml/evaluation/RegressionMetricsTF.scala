@@ -20,17 +20,18 @@ package io.github.mandar2812.dynaml.evaluation
 
 import com.quantifind.charts.Highcharts.{regression, title, xAxis, yAxis}
 import io.github.mandar2812.dynaml.tensorflow.{dtf, dtfutils}
-import org.platanios.tensorflow.api.types.{DecimalDataType, MathDataType}
+
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF, IsReal}
 
 /**
   * Implements a common use for Regression Task Evaluators.
   * */
-class RegressionMetricsTF[D <: DecimalDataType](preds: Tensor[D], targets: Tensor[D]) extends MetricsTF(
+class RegressionMetricsTF[D: TF: IsNotQuantized: IsReal](preds: Tensor[D], targets: Tensor[D]) extends MetricsTF(
   Seq("RMSE", "MAE", "Pearson Corr.", "Spearman Corr.", "Yield"),
   preds, targets) {
 
-  private val num_outputs = if (preds.shape.toTensor(INT32).size == 1) 1 else preds.shape(1)
+  private val num_outputs = if (preds.shape.toTensor.size == 1) 1 else preds.shape(1)
 
   private lazy val (_ , rmse , mae, corr, spearman_corr) = RegressionMetricsTF.calculate(preds, targets)
 
@@ -71,7 +72,10 @@ class RegressionMetricsTF[D <: DecimalDataType](preds: Tensor[D], targets: Tenso
   * */
 object RegressionMetricsTF {
 
-  protected def calculate[D <: MathDataType](preds: Tensor[D], targets: Tensor[D]): (Tensor[D], Tensor[D], Tensor[D], Tensor[D], Tensor[D]) = {
+  protected def calculate[D: TF: IsNotQuantized: IsReal](
+    preds: Tensor[D],
+    targets: Tensor[D]): (Tensor[D], Tensor[D], Tensor[D], Tensor[D], Tensor[D]) = {
+
     val error = targets.subtract(preds)
 
     println("Shape of error tensor: "+error.shape.toString()+"\n")
@@ -99,8 +103,8 @@ object RegressionMetricsTF {
     val sp_corr = {
 
       val (ranks_preds, ranks_targets) = (
-        preds.topK(num_instances)._2.cast(preds.dataType),
-        targets.topK(num_instances)._2.cast(targets.dataType))
+        preds.topK(num_instances)._2.castTo[D],
+        targets.topK(num_instances)._2.castTo[D])
 
       val mean_rank_preds = ranks_preds.mean(axes = 0)
 

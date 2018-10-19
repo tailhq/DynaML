@@ -21,35 +21,36 @@ package io.github.mandar2812.dynaml.tensorflow.dynamics
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 
-private[dynamics] case class SlicedGradient(
+private[dynamics] case class SlicedGradient[D: TF: IsNotQuantized](
   override val name: String)(
   val inputIndexer: Indexer*)(
   val outputIndexer: Indexer*) extends
-  TensorOperator[Output](name) {
+  TensorOperator[Output[D], D](name) {
 
   self =>
 
-  private def gradTRec(y: Seq[Output], x: Output, rank: Int): Output = rank match {
+  private def gradTRec(y: Seq[Output[D]], x: Output[D], rank: Int): Output[D] = rank match {
     case 1 =>
       tf.stack(
-        y.map(o => tf.gradients.gradients(Seq(o), Seq(x)).head.toOutput),
+        y.map(o => tf.gradients.gradients[D, D, D](Seq(o), Seq(x), TF[D].dataType).head.toOutput),
         axis = -1)
     case _ =>
       gradTRec(y.flatMap(_.unstack(-1, -1)), x, rank - 1)
 
   }
 
-  protected[dynamics] override def sources(): Map[String, Option[DifferentialOperator[Output, Output]]] =
+  protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[Output[D], Output[D]]]] =
     Map(self.name -> None)
 
-  override def run(data: Layer[Output, Output]): Layer[Output, Output] = {
+  override def run(data: Layer[Output[D], Output[D]]): Layer[Output[D], Output[D]] = {
 
-    new Layer[Output, Output](s"Grad[${data.name}]") {
+    new Layer[Output[D], Output[D]](s"Grad[${data.name}]") {
 
       override val layerType: String = "GradLayer"
 
-      override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
+      override def forwardWithoutContext(input: Output[D])(implicit mode: Mode): Output[D] = {
 
         val output = data.forward(input)
 
@@ -76,12 +77,13 @@ private[dynamics] case class SlicedGradient(
           if(output.rank > 1) (tf.unstack(output, axis = -1), output.rank - 1)
           else (Seq(output), 1)
 
-        val sliced_output =
-          gradTRec(unstacked_output, input, rank).reshape(gradientShape)(indexer.head, indexer.tail:_*)
+        val sliced_output = gradTRec(unstacked_output, input, rank)
+          .reshape(gradientShape.toOutput)
+          .slice(indexer.head, indexer.tail:_*)
 
         val finalShape = sliced_output.shape.asArray.filterNot(_ == 1)
 
-        sliced_output.reshape(finalShape)
+        sliced_output.reshape(Tensor(finalShape).toOutput)
       }
     }
   }
@@ -93,4 +95,8 @@ private[dynamics] case class SlicedGradient(
   * [[_root_.io.github.mandar2812.dynaml.tensorflow.dynamics]],
   * for more details.
   * */
-private[dynamics] object Gradient extends SlicedGradient(name = s"Grad")(---)(---)
+private[dynamics] class Gradient[D: TF: IsNotQuantized] extends SlicedGradient[D](name = s"Grad")(---)(---)
+
+private[dynamics] object Gradient {
+  def apply[D: TF : IsNotQuantized]: Gradient[D] = new Gradient()
+}

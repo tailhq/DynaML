@@ -19,9 +19,8 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.data
 
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.implicits.helpers.StructureFromTensor
-import org.platanios.tensorflow.api.ops.Function
-import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
+import org.platanios.tensorflow.api.implicits.helpers.NestedStructure
+import org.platanios.tensorflow.api.ops.data.Dataset
 
 case class AbstractDataSet[TI, TT](
   trainData: TI, trainLabels: TT, nTrain: Int,
@@ -29,28 +28,18 @@ case class AbstractDataSet[TI, TT](
 
   def training_data[OI, DI, SI, OT, DT, ST](
     implicit
-    evData1: Data.Aux[TI,OI,DI,SI],
-    evData2: Data.Aux[TT,OT,DT,ST],
-    evStructure1: StructureFromTensor.Aux[TI, OI, DI, SI],
-    evStructure2: StructureFromTensor.Aux[TT, OT, DT, ST],
-    evFunctionInput1: Function.ArgType[OI],
-    evFunctionInput2: Function.ArgType[OT])
-  : Dataset[(TI, TT), (OI, OT), (DI, DT), (SI, ST)] =
-    tf.data.TensorSlicesDataset[TI, OI, DI, SI](trainData).zip(
-      tf.data.TensorSlicesDataset[TT, OT, DT, ST](trainLabels)
+    evStructureI: NestedStructure.Aux[OI, TI, DI, SI],
+    evStructureT: NestedStructure.Aux[OT, TT, DT, ST]): Dataset[(OI, OT)] =
+    tf.data.datasetFromTensorSlices[OI, TI, DI, SI](trainData).zip(
+      tf.data.datasetFromTensorSlices[OT, TT, DT, ST](trainLabels)
     )
 
   def test_data[OI, DI, SI, OT, DT, ST](
     implicit
-    evData1: Data.Aux[TI,OI,DI,SI],
-    evData2: Data.Aux[TT,OT,DT,ST],
-    evStructure1: StructureFromTensor.Aux[TI, OI, DI, SI],
-    evStructure2: StructureFromTensor.Aux[TT, OT, DT, ST],
-    evFunctionInput1: Function.ArgType[OI],
-    evFunctionInput2: Function.ArgType[OT])
-  : Dataset[(TI, TT), (OI, OT), (DI, DT), (SI, ST)] =
-    tf.data.TensorSlicesDataset[TI, OI, DI, SI](testData).zip(
-      tf.data.TensorSlicesDataset[TT, OT, DT, ST](testLabels)
+    evStructureI: NestedStructure.Aux[OI, TI, DI, SI],
+    evStructureT: NestedStructure.Aux[OT, TT, DT, ST]): Dataset[(OI, OT)] =
+    tf.data.datasetFromTensorSlices[OI, TI, DI, SI](testData).zip(
+      tf.data.datasetFromTensorSlices[OT, TT, DT, ST](testLabels)
     )
 }
 

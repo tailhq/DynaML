@@ -3,9 +3,10 @@ package io.github.mandar2812.dynaml.tensorflow
 import ammonite.ops.Path
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.tensorflow.utils.{GaussianScalerTF, MinMaxScalerTF}
-import org.platanios.tensorflow.api.tf.image.DCTMethod
-import org.platanios.tensorflow.api.types.MathDataType
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, IsReal, TF, UByte}
+import org.platanios.tensorflow.api.ops.Image.DCTMethod
+
 
 private[tensorflow] object Pipe {
 
@@ -19,27 +20,27 @@ private[tensorflow] object Pipe {
   tryRecoverTruncated: Boolean = false,
   acceptableFraction: Float = 1,
   dctMethod: DCTMethod = DCTMethod.SystemDefault,
-  name: String = "DecodeJpeg"): DataPipe[Path, Output] =
-    DataPipe((image: Path) => tf.data.readFile(image.toString())) >
-      DataPipe((content: Output) => tf.image.decodeJpeg(
+  name: String = "DecodeJpeg"): DataPipe[Path, Output[UByte]] =
+    DataPipe((image: Path) => Tensor(image.toString()).toOutput) >
+      DataPipe((content: Output[String]) => tf.image.decodeJpeg(
         content, num_channels, ratio, fancyUpscaling,
         tryRecoverTruncated, acceptableFraction, dctMethod,
         name))
 
-  def resize_image(
+  def resize_image[T: TF: IsReal](
     size: (Int, Int),
     alignCorners: Boolean = false,
-    name: String = "ResizeArea"): DataPipe[Output, Output] =
-    DataPipe((image_content: Output) => tf.image.resizeArea(
+    name: String = "ResizeArea"): DataPipe[Output[T], Output[Float]] =
+    DataPipe((image_content: Output[T]) => tf.image.resizeArea(
       image_content,
       Array(size._1, size._2),
       alignCorners, name)
     )
 
-  def extract_image_patch(
+  def extract_image_patch[T: TF](
     heightRange: Range,
-    widthRange: Range): DataPipe[Output, Output] =
-    DataPipe((image: Output) =>
+    widthRange: Range): DataPipe[Output[T], Output[T]] =
+    DataPipe((image: Output[T]) =>
       image(
         ---,
         heightRange.min :: heightRange.max + 1,
@@ -47,7 +48,7 @@ private[tensorflow] object Pipe {
         ::)
     )
 
-  def gauss_std[D <: MathDataType](ax: Int = 0): DataPipe[Tensor[D], (Tensor[D], GaussianScalerTF[D])] =
+  def gauss_std[D: TF: IsNotQuantized](ax: Int = 0): DataPipe[Tensor[D], (Tensor[D], GaussianScalerTF[D])] =
     DataPipe((labels: Tensor[D]) => {
 
       val labels_mean: Tensor[D] = labels.mean(axes = Tensor(ax))
@@ -55,7 +56,7 @@ private[tensorflow] object Pipe {
       val n_data: Double = labels.shape(0).scalar.toDouble
 
       val labels_sd: Tensor[D] = tfi.multiply[D](
-        labels.subtract(labels_mean).square.mean(axes = ax), Tensor(labels.dataType, n_data/(n_data - 1d))).sqrt
+        labels.subtract(labels_mean).square.mean(axes = ax), Tensor(n_data/(n_data - 1d)).castTo[D]).sqrt
 
       val labels_scaler = GaussianScalerTF(labels_mean, labels_sd)
 
@@ -64,7 +65,7 @@ private[tensorflow] object Pipe {
       (labels_scaled, labels_scaler)
     })
 
-  def minmax_std[D <: MathDataType](ax: Int = 0): DataPipe[Tensor[D], (Tensor[D], MinMaxScalerTF[D])] =
+  def minmax_std[D: TF: IsNotQuantized](ax: Int = 0): DataPipe[Tensor[D], (Tensor[D], MinMaxScalerTF[D])] =
     DataPipe((labels: Tensor[D]) => {
 
       val labels_min = labels.min(axes = ax)
@@ -77,7 +78,7 @@ private[tensorflow] object Pipe {
       (labels_scaled, labels_scaler)
     })
 
-  def gaussian_standardization[D <: MathDataType, E <: MathDataType]: DataPipe2[
+  def gaussian_standardization[D: TF: IsNotQuantized, E: TF: IsNotQuantized]: DataPipe2[
     Tensor[D], Tensor[E],
     ((Tensor[D], Tensor[E]), (GaussianScalerTF[D], GaussianScalerTF[E]))] =
     DataPipe2((features: Tensor[D], labels: Tensor[E]) => {
@@ -89,10 +90,10 @@ private[tensorflow] object Pipe {
       val (features_sd, labels_sd) = (
         tfi.multiply[D](
           features.subtract(features_mean).square.mean(axes = 0),
-          Tensor(features.dataType, n_data/(n_data - 1d))).sqrt,
+          Tensor(n_data/(n_data - 1d)).castTo[D]).sqrt,
         tfi.multiply[E](
           labels.subtract(labels_mean).square.mean(axes = 0),
-          Tensor(labels.dataType, n_data/(n_data - 1d))).sqrt
+          Tensor(n_data/(n_data - 1d)).castTo[E]).sqrt
       )
 
       val (features_scaler, labels_scaler) = (
@@ -108,7 +109,7 @@ private[tensorflow] object Pipe {
       ((features_scaled, labels_scaled), (features_scaler, labels_scaler))
     })
 
-  def minmax_standardization[D <: MathDataType, E <: MathDataType]: DataPipe2[
+  def minmax_standardization[D: TF: IsNotQuantized, E: TF: IsNotQuantized]: DataPipe2[
     Tensor[D], Tensor[E],
     ((Tensor[D], Tensor[E]), (MinMaxScalerTF[D], MinMaxScalerTF[E]))] =
     DataPipe2((features: Tensor[D], labels: Tensor[E]) => {
@@ -133,7 +134,7 @@ private[tensorflow] object Pipe {
       ((features_scaled, labels_scaled), (features_scaler, labels_scaler))
     })
 
-  def gauss_minmax_standardization[D <: MathDataType, E <: MathDataType]: DataPipe2[
+  def gauss_minmax_standardization[D: TF: IsNotQuantized, E: TF: IsNotQuantized]: DataPipe2[
     Tensor[D], Tensor[E],
     ((Tensor[D], Tensor[E]), (GaussianScalerTF[D], MinMaxScalerTF[E]))] =
     DataPipe2((features: Tensor[D], labels: Tensor[E]) => {
@@ -146,7 +147,7 @@ private[tensorflow] object Pipe {
 
       val features_sd = tfi.multiply[D](
           features.subtract(features_mean).square.mean(axes = 0),
-          Tensor(features.dataType, n_data/(n_data - 1d))).sqrt
+          Tensor(n_data/(n_data - 1d)).castTo[D]).sqrt
 
       val (features_scaler, labels_scaler) = (
         GaussianScalerTF(features_mean, features_sd),

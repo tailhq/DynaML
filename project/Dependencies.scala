@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
 
-  val scala = "2.11.11"
+  val scala = "2.11.8"
 
   val platform: String = {
     // Determine platform name using code similar to javacpp
@@ -35,7 +35,7 @@ object Dependencies {
     platformName
   }
 
-  val tfscala_version = "0.4.0"
+  val tfscala_version = "0.4.0-SNAPSHOT"
 
   //Set to true if, building with Nvidia GPU support.
   val gpuFlag: Boolean = false

@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
+import org.platanios.tensorflow.api.core.types.TF
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api.{Output, tf}
@@ -53,12 +54,12 @@ case class Tuple2Layer[I1, O1, I2, O2](override val name: String, layer1: Layer[
   *
   * @author mandar2812 date 31/05/2018
   * */
-case class ConcatenateTuple2(override val name: String, axis: Int)
-  extends Layer[(Output, Output), Output](name) {
+case class ConcatenateTuple2[T: TF](override val name: String, axis: Int)
+  extends Layer[(Output[T], Output[T]), Output[T]](name) {
 
   override val layerType: String = s"ConcatTuple2"
 
-  override def forwardWithoutContext(input: (Output, Output))(implicit mode: Mode): Output =
+  override def forwardWithoutContext(input: (Output[T], Output[T]))(implicit mode: Mode): Output[T] =
     tf.concatenate(Seq(input._1, input._2), axis)
 }
 
@@ -68,11 +69,11 @@ case class ConcatenateTuple2(override val name: String, axis: Int)
   *
   * @author mandar2812 date 31/05/2018
   * */
-case class StackTuple2(override val name: String, axis: Int)
-  extends Layer[(Output, Output), Output](name) {
+case class StackTuple2[T: TF](override val name: String, axis: Int)
+  extends Layer[(Output[T], Output[T]), Output[T]](name) {
 
   override val layerType: String = s"StackTuple2"
 
-  override def forwardWithoutContext(input: (Output, Output))(implicit mode: Mode): Output =
+  override def forwardWithoutContext(input: (Output[T], Output[T]))(implicit mode: Mode): Output[T] =
     tf.stack(Seq(input._1, input._2), axis)
 }

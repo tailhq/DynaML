@@ -18,12 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
-import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsDecimal, IsNotQuantized, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
-import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, Regularizer}
-import org.platanios.tensorflow.api.ops
-import org.platanios.tensorflow.api.ops.Output
+import org.platanios.tensorflow.api.ops.variables.Initializer
+import org.platanios.tensorflow.api._
 
 /**
   * Radial Basis Function Feedforward Layer.
@@ -36,64 +35,92 @@ import org.platanios.tensorflow.api.ops.Output
   * @param weights_initializer The initialization of the node importance weights.
   * @author mandar2812 date 30/03/2018
   * */
-case class RBFLayer(
+case class RBFLayer[T: TF : IsDecimal : IsNotQuantized](
   override val name: String,
   num_units: Int,
-  rbf: RBFLayer.Function = RBFLayer.Gaussian,
+  rbf: RBFLayer.RadialBasisFunction = RBFLayer.Gaussian,
   centers_initializer: Initializer = tf.RandomNormalInitializer(),
   scales_initializer: Initializer  = tf.OnesInitializer,
   weights_initializer: Initializer = tf.RandomNormalInitializer()) extends
-    Layer[Output, Output](name) {
+    Layer[Output[T], Output[T]](name) {
 
   override val layerType: String = s"RBFLayer[num_units:$num_units]"
 
-  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output[T])(implicit mode: Mode): Output[T] = {
 
     val node_centers    = (0 until num_units).map(
-      i => tf.variable("node_"+i, input.dataType, Shape(input.shape(-1)), centers_initializer)
+      i => tf.variable[T]("node_"+i, Shape(input.shape(-1)), centers_initializer)
     )
 
     val scales          = (0 until num_units).map(
-      i => tf.variable("scale_"+i, input.dataType, Shape(input.shape(-1)), scales_initializer)
+      i => tf.variable[T]("scale_"+i, Shape(input.shape(-1)), scales_initializer)
     )
 
     tf.concatenate(
       node_centers.zip(scales).map(cs => rbf(input, cs._1, cs._2.square)),
-      axis = -1).reshape(
-      Shape(-1, num_units)
-    )
+      axis = -1).reshape(Shape(-1, num_units).toOutput)
   }
 }
 
 object RBFLayer {
 
-  sealed trait Function {
-    def apply(input: Output, center: Output, scale: Output): Output
+  sealed trait RadialBasisFunction {
+    def apply[T: TF : IsDecimal : IsNotQuantized](input: Output[T], center: Output[T], scale: Output[T]): Output[T]
   }
 
-  object Gaussian extends Function {
-    override def apply(input: Output, center: Output, scale: Output): Output =
-      input.subtract(center).square.multiply(scale).multiply(-1).sum(axes = 1).exp
+  object Gaussian extends RadialBasisFunction {
+    override def apply[T: TF : IsDecimal : IsNotQuantized](
+      input: Output[T],
+      center: Output[T],
+      scale: Output[T]): Output[T] =
+      input.subtract(center)
+        .square.multiply(scale)
+        .multiply(Tensor(-1.0).toOutput.castTo[T])
+        .sum(axes = 1).exp
   }
 
-  object MultiQuadric extends Function {
-    override def apply(input: Output, center: Output, scale: Output): Output =
-      input.subtract(center).square.multiply(scale).sum(axes = 1).add(1).sqrt
+  object MultiQuadric extends RadialBasisFunction {
+    override def apply[T: TF : IsDecimal : IsNotQuantized](
+      input: Output[T], center: Output[T], scale: Output[T]): Output[T] =
+      input.subtract(center)
+        .square
+        .multiply(scale)
+        .sum(axes = 1).add(Tensor(1.0).toOutput.castTo[T])
+        .sqrt
   }
 
-  object InverseMultiQuadric extends Function {
-    override def apply(input: Output, center: Output, scale: Output): Output =
-      input.subtract(center).square.multiply(scale).sum(axes = 1).add(1).sqrt.pow(-1)
+  object InverseMultiQuadric extends RadialBasisFunction {
+    override def apply[T: TF : IsDecimal : IsNotQuantized](
+      input: Output[T],
+      center: Output[T],
+      scale: Output[T]): Output[T] =
+      input.subtract(center)
+        .square
+        .multiply(scale)
+        .sum(axes = 1)
+        .add(Tensor(1.0).toOutput.castTo[T]).sqrt.pow(Tensor(-1.0).toOutput.castTo[T])
   }
 
-  object InverseQuadric extends Function {
-    override def apply(input: Output, center: Output, scale: Output): Output =
-      input.subtract(center).square.multiply(scale).sum(axes = 1).add(1).pow(-1)
+  object InverseQuadric extends RadialBasisFunction {
+    override def apply[T: TF : IsDecimal : IsNotQuantized](
+      input: Output[T],
+      center: Output[T],
+      scale: Output[T]): Output[T] =
+      input.subtract(center)
+        .square.multiply(scale).sum(axes = 1)
+        .add(Tensor(1.0).toOutput.castTo[T])
+        .pow(Tensor(-1.0).toOutput.castTo[T])
   }
 
-  object Sigmoid extends Function {
-    override def apply(input: Output, center: Output, scale: Output): Output =
-      input.subtract(center).square.multiply(scale).sigmoid
+  object Sigmoid extends RadialBasisFunction {
+    override def apply[T: TF : IsDecimal : IsNotQuantized](
+      input: Output[T],
+      center: Output[T],
+      scale: Output[T]): Output[T] =
+      input.subtract(center)
+        .square
+        .multiply(scale)
+        .sigmoid
   }
 
 }

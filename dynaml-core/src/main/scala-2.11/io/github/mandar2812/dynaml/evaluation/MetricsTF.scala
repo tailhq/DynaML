@@ -18,8 +18,9 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.evaluation
 
-import org.platanios.tensorflow.api.types.{DecimalDataType, MathDataType}
-import org.platanios.tensorflow.api.{---, ::, Tensor}
+
+import org.platanios.tensorflow.api.core.types.TF
+import org.platanios.tensorflow.api._
 
 
 /**
@@ -29,7 +30,7 @@ import org.platanios.tensorflow.api.{---, ::, Tensor}
   *
   * @param targets The actual output values.
   * */
-abstract class MetricsTF[D <: DecimalDataType](val names: Seq[String], val preds: Tensor[D], val targets: Tensor[D]) {
+abstract class MetricsTF[D: TF](val names: Seq[String], val preds: Tensor[D], val targets: Tensor[D]) {
 
   protected val scoresAndLabels: (Tensor[D], Tensor[D]) = (preds, targets)
 

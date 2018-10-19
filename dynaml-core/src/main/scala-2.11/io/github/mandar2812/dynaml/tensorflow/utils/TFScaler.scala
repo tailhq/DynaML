@@ -19,9 +19,9 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.utils
 
 import io.github.mandar2812.dynaml.pipes.ReversibleScaler
-import org.platanios.tensorflow.api.types.DataType
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 import org.platanios.tensorflow.api.{Output, Tensor}
 
-abstract class TFScaler[D <: DataType] extends ReversibleScaler[Tensor[D]]
+abstract class TFScaler[D : TF: IsNotQuantized] extends ReversibleScaler[Tensor[D]]
 
-abstract class TOScaler extends ReversibleScaler[Output]
+abstract class TOScaler[D : TF: IsNotQuantized] extends ReversibleScaler[Output[D]]

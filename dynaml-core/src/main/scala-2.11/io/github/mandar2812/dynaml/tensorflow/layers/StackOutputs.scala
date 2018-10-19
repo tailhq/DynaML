@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.layers
 
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 
@@ -32,20 +33,26 @@ import scala.reflect.ClassTag
   *
   * @author mandar2812 date 2018/03/16
   * */
-case class StackOutputs(override val name: String, axis: Int = -1) extends Layer[Seq[Output], Output](name) {
+case class StackOutputs[D: TF](
+  override val name: String,
+  axis: Int = -1) extends
+  Layer[Seq[Output[D]], Output[D]](name) {
 
   override val layerType: String = s"Stack[axis:$axis]"
 
-  override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output = tf.stack(input, axis)
+  override def forwardWithoutContext(input: Seq[Output[D]])(implicit mode: Mode): Output[D] = tf.stack(input, axis)
 
 }
 
 
-case class Unstack(override val name: String, axis: Int = -1) extends Layer[Output, Seq[Output]](name) {
+case class Unstack[D: TF](
+  override val name: String,
+  axis: Int = -1) extends
+  Layer[Output[D], Seq[Output[D]]](name) {
 
   override val layerType: String = s"Unstack[axis:$axis]"
 
-  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Seq[Output] = tf.unstack(input, axis)
+  override def forwardWithoutContext(input: Output[D])(implicit mode: Mode): Seq[Output[D]] = tf.unstack(input, axis)
 }
 
 
@@ -57,34 +64,47 @@ case class Unstack(override val name: String, axis: Int = -1) extends Layer[Outp
   *
   * @author mandar2812 date 2018/06/03
   * */
-case class ConcatenateOutputs(override val name: String, axis: Int = -1) extends Layer[Seq[Output], Output](name) {
+case class ConcatenateOutputs[D: TF](
+  override val name: String,
+  axis: Int = -1) extends
+  Layer[Seq[Output[D]], Output[D]](name) {
 
   override val layerType: String = s"Concatenate[axis:$axis]"
 
-  override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output = tf.concatenate(input, axis)
+  override def forwardWithoutContext(input: Seq[Output[D]])(implicit mode: Mode): Output[D] =
+    tf.concatenate(input, axis)
 
 }
 
-case class SumSeq(override val name: String) extends Layer[Seq[Output], Output](name) {
+case class SumSeq[D: TF: IsNotQuantized](
+  override val name: String) extends
+  Layer[Seq[Output[D]], Output[D]](name) {
 
   override val layerType: String = s"SumSeq"
 
-  override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output = input.reduceLeft(_.add(_))
+  override def forwardWithoutContext(input: Seq[Output[D]])(implicit mode: Mode): Output[D] =
+    input.reduceLeft(tf.add(_, _))
 }
 
-case class MultSeq(override val name: String) extends Layer[Seq[Output], Output](name) {
+case class MultSeq[D: TF: IsNotQuantized](
+  override val name: String) extends
+  Layer[Seq[Output[D]], Output[D]](name) {
 
   override val layerType: String = s"MultSeq"
 
-  override def forwardWithoutContext(input: Seq[Output])(implicit mode: Mode): Output = input.reduceLeft(_.multiply(_))
+  override def forwardWithoutContext(input: Seq[Output[D]])(implicit mode: Mode): Output[D] = 
+    input.reduceLeft(tf.multiply(_, _))
 }
 
 
-case class SumTuple(override val name: String) extends Layer[(Output, Output), Output](name) {
+case class SumTuple[D: TF: IsNotQuantized](
+  override val name: String)
+  extends Layer[(Output[D], Output[D]), Output[D]](name) {
 
   override val layerType: String = s"Sum"
 
-  override def forwardWithoutContext(input: (Output, Output))(implicit mode: Mode): Output = input._1.add(input._2)
+  override def forwardWithoutContext(input: (Output[D], Output[D]))(implicit mode: Mode): Output[D] = 
+    tf.add(input._1, input._2)
 }
 
 /**
@@ -95,7 +115,10 @@ case class SumTuple(override val name: String) extends Layer[(Output, Output), O
   *
   * @author mandar2812 date 2018/03/16
   * */
-case class SeqLayer[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[Seq[T], Seq[R]](name) {
+case class SeqLayer[T, R](
+  override val name: String,
+  layers: Seq[Layer[T, R]]) extends
+  Layer[Seq[T], Seq[R]](name) {
   override val layerType: String = s"SeqLayer[${layers.map(_.layerType).mkString(",")}]"
 
   override def forwardWithoutContext(input: Seq[T])(implicit mode: Mode): Seq[R] =
@@ -109,7 +132,7 @@ case class ArrayLayer[T, R: ClassTag](
   override val layerType: String = s"ArrayLayer[${layers.map(_.layerType).mkString(",")}]"
 
   override def forwardWithoutContext(input: Array[T])(implicit mode: Mode): Array[R] =
-    layers.zip(input).map(c => c._1.forward(c._2)(mode)).toArray
+    layers.zip(input).map(c => c._1.forward(c._2)(mode))
 }
 
 
@@ -121,7 +144,10 @@ case class ArrayLayer[T, R: ClassTag](
   *
   * @author mandar2812 date 2018/03/16
   * */
-case class CombinedLayer[T, R](override val name: String, layers: Seq[Layer[T, R]]) extends Layer[T, Seq[R]](name) {
+case class CombinedLayer[T, R](
+  override val name: String,
+  layers: Seq[Layer[T, R]])
+  extends Layer[T, Seq[R]](name) {
   override val layerType: String = s"CombinedLayer[${layers.map(_.layerType).mkString(",")}]"
 
   override def forwardWithoutContext(input: T)(implicit mode: Mode): Seq[R] =
@@ -146,9 +172,10 @@ case class IdentityLayer[I](override val name: String) extends Layer[I, I](name)
 }
 
 
-case class MultConstant(const: Output, override val name: String) extends Layer[Output, Output](name) {
+case class MultConstant[D: TF: IsNotQuantized](const: Output[D], override val name: String)
+  extends Layer[Output[D], Output[D]](name) {
   override val layerType: String = s"MultConst"
 
-  override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output = input.multiply(const)
+  override def forwardWithoutContext(input: Output[D])(implicit mode: Mode): Output[D] = tf.multiply(input, const)
 }
 

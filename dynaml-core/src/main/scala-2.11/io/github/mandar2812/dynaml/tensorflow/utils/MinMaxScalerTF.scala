@@ -20,7 +20,8 @@ package io.github.mandar2812.dynaml.tensorflow.utils
 
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.pipes._
-import org.platanios.tensorflow.api.types.MathDataType
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
+
 
 /**
   * Scales attributes of a vector pattern using the sample minimum and maximum of
@@ -31,7 +32,7 @@ import org.platanios.tensorflow.api.types.MathDataType
   * @author mandar2812 date: 07/03/2018.
   *
   * */
-case class MinMaxScalerTF[D <: MathDataType](min: Tensor[D], max: Tensor[D]) extends TFScaler[D] {
+case class MinMaxScalerTF[D: TF: IsNotQuantized](min: Tensor[D], max: Tensor[D]) extends TFScaler[D] {
 
   val delta: Tensor[D] = tfi.subtract(max, min)
 
@@ -46,15 +47,15 @@ case class MinMaxScalerTF[D <: MathDataType](min: Tensor[D], max: Tensor[D]) ext
 
 }
 
-case class MinMaxScalerTO(min: Output, max: Output) extends TOScaler {
+case class MinMaxScalerTO[D: TF: IsNotQuantized](min: Output[D], max: Output[D]) extends TOScaler {
 
-  val delta: Output = max.subtract(min)
+  val delta: Output[D] = max.subtract(min)
 
-  override val i: Scaler[Output] = Scaler((xc: Output) => xc.multiply(delta).add(min))
+  override val i: Scaler[Output[D]] = Scaler((xc: Output[D]) => xc.multiply(delta).add(min))
 
-  override def run(data: Output): Output = data.subtract(min).divide(delta)
+  override def run(data: Output[D]): Output[D] = data.subtract(min).divide(delta)
 
-  def apply(indexers: Indexer*): MinMaxScalerTO = this.copy(
+  def apply(indexers: Indexer*): MinMaxScalerTO[D] = this.copy(
     min(indexers.head, indexers.tail:_*),
     max(indexers.head, indexers.tail:_*))
 
