@@ -92,8 +92,10 @@ object Utils {
     concatenateSplits: DataPipe[Iterable[InferOut], InferOut],
     evFetchableIn: NestedStructure.Aux[In, IT, ID, IS],
     evFetchableOut: NestedStructure.Aux[Out, TT, TD, TS],
+    evFetchableTOut: NestedStructure.Aux[TrainOut, TT, TD, TS],
     ev: Estimator.SupportedInferInput[In, IT, TT, InferIn, InferOut],
     // This implicit helps the Scala 2.11 compiler.
+    evFetchableIO: NestedStructure.Aux[(In, TrainOut), (IT, TT), (ID, TD), (IS, TS)],
     evFetchableInOut: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)]
   ): InferOut = {
 
@@ -128,8 +130,10 @@ object Utils {
     concatenateSplits: DataPipe[Iterable[InferOut], InferOut],
     evFetchableIn: NestedStructure.Aux[In, IT, ID, IS],
     evFetchableOut: NestedStructure.Aux[Out, TT, TD, TS],
+    evFetchableTOut: NestedStructure.Aux[TrainOut, TT, TD, TS],
     ev: Estimator.SupportedInferInput[In, IT, TT, IT, InferOut],
     // This implicit helps the Scala 2.11 compiler.
+    evFetchableIO: NestedStructure.Aux[(In, TrainOut), (IT, TT), (ID, TD), (IS, TS)],
     evFetchableInOut: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)]
   ): (Option[InferOut], Option[InferOut]) = {
 

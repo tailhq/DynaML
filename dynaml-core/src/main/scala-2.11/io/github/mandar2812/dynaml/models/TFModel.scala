@@ -27,7 +27,7 @@ import org.platanios.tensorflow.api.learn.StopCriteria
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api.core.types.{IsFloat32OrFloat64, TF}
-import org.platanios.tensorflow.api.implicits.helpers.NestedStructure
+import org.platanios.tensorflow.api.implicits.helpers.{DataTypeToOutput, NestedStructure}
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.hooks.Hook
 import org.platanios.tensorflow.api.ops.data.Dataset
@@ -48,13 +48,13 @@ import org.platanios.tensorflow.api._
   *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
   * @tparam TT The type representing target/label tensors,
   *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
-  * @tparam TrainIn The type representing symbolic tensors of the target patterns,
+  * @tparam Out The type representing symbolic tensors of the target patterns,
   *            e.g. `Output`, `(Output, Output)`, `Seq[Output]` etc.
   * @tparam TD The target pattern's tensorflow data type,
   *            e.g. `FLOAT64`, `(FLOAT64, FLOAT64)`, etc.
   * @tparam TS The type of the target pattern's shape,
   *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
-  * @tparam TrainOut The type of the symbolic tensor of the processed targets, this is the type
+  * @tparam Out The type of the symbolic tensor of the processed targets, this is the type
   *           of the tensorflow symbol which is used to compute the loss.
   *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
   * @param architecture The network architecture,
@@ -63,8 +63,8 @@ import org.platanios.tensorflow.api._
   * @param input The input meta data.
   * @param target The output label meta data
   * @param processTarget A computation layer which converts
-  *                      the original target of type [[TrainIn]]
-  *                      into a type [[TrainOut]], usable by the Estimator API
+  *                      the original target of type [[Out]]
+  *                      into a type [[Out]], usable by the Estimator API
   * @param loss The loss function to be optimized during training.
   *
   * @param trainConfig A [[_root_.io.github.mandar2812.dynaml.models.TFModel.TrainConfig]] instance, containing
@@ -77,7 +77,7 @@ import org.platanios.tensorflow.api._
   * @author mandar2812 date 2018/09/11
   * */
 private[dynaml] class TFModel[
-In, TrainIn, TrainOut, Out,
+In, Out,
 Loss: TF : IsFloat32OrFloat64,
 IT, ID, IS, TT, TD, TS,
 InferIn, InferOut](
@@ -85,31 +85,34 @@ InferIn, InferOut](
   val architecture: Layer[In, Out],
   val input: (ID, IS),
   val target: (TD, TS),
-  val processTarget: Layer[TrainIn, TrainOut],
-  val loss: Layer[(Out, TrainOut), Output[Loss]],
+  val loss: Layer[(Out, Out), Output[Loss]],
   val trainConfig: TFModel.TrainConfig,
   val data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   val inMemory: Boolean = false,
   val existingGraph: Option[Graph] = None,
-  data_handles: Option[(Input[In], Input[TrainIn])] = None)(
+  data_handles: Option[(Input[In], Input[Out])] = None)(
   implicit
+  evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
+  evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
   evStructureI: NestedStructure.Aux[In, IT, ID, IS],
-  evStructureT: NestedStructure.Aux[TrainIn, TT, TD, TS],
-  evStructure: NestedStructure.Aux[(In, TrainIn), (IT, TT), (ID, TD), (IS, TS)],
+  evStructureT: NestedStructure.Aux[Out, TT, TD, TS],
+  //evStructureTOut: NestedStructure.Aux[Out, TT, TD, TS],
+  //evStructure: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)],
   //evFetchableIn: NestedStructure.Aux[In, IT, ID, IS],
-  evFetchableOut: NestedStructure.Aux[Out, TT, TD, TS],
+  //evFetchableOut: NestedStructure.Aux[Out, TT, TD, TS],
   ev: Estimator.SupportedInferInput[In, IT, TT, InferIn, InferOut],
   // This implicit helps the Scala 2.11 compiler.
+  //evFetchableIO: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)],
   evFetchableInOut: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)]) extends
   Model[DataSet[(IT, TT)], InferIn, InferOut] {
 
-  type ModelPair = dtflearn.SupModelPair[In, TrainIn, TrainOut, Out, Loss, (Out, TrainOut)]
+  type ModelPair = dtflearn.SupModelPair[In, Out, Out, Out, Loss, (Out, (In, Out))]
 
-  private lazy val tf_dataset: Dataset[(In, TrainIn)] = g.build(
+  private lazy val tf_dataset: Dataset[(In, Out)] = g.build(
     identityPipe[(IT, TT)],
     (input._1, target._1),
     (input._2, target._2))(
-    evStructure)
+    evFetchableInOut)
     .repeat()
     .shuffle(data_processing.shuffleBuffer)
     .batch(data_processing.batchSize)
@@ -117,11 +120,11 @@ InferIn, InferOut](
 
   private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
 
-  lazy val (input_handle, target_handle): (Input[In], Input[TrainIn]) =
+  lazy val (input_handle, target_handle): (Input[In], Input[Out]) =
     if(data_handles.isDefined) data_handles.get
     else (
       tf.learn.Input[In, IT, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
-      tf.learn.Input[TrainIn, TT, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
+      tf.learn.Input[Out, TT, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
 
   private val graphInstance = if(existingGraph.isDefined) {
     println("Using existing provided TensorFlow graph")
@@ -130,9 +133,10 @@ InferIn, InferOut](
 
   val (model, estimator): ModelPair = tf.createWith(graph = graphInstance) {
 
-    val m = tf.learn.Model.supervised(
-      input_handle, architecture,
-      target_handle, processTarget,
+    val m = tf.learn.Model.simpleSupervised[In, Out, Out, Out, Loss](
+      input_handle,
+      target_handle,
+      architecture,
       loss, optimizer)
 
     val train_hooks = trainHooks match {
@@ -157,7 +161,8 @@ InferIn, InferOut](
     * point.
     *
     **/
-  override def predict(point: InferIn): InferOut = estimator.infer(() => point)
+  override def predict(point: InferIn): InferOut =
+    estimator.infer[IT, ID, IS, TT, TD, TS, InferIn, InferOut](() => point)
 }
 
 object TFModel {
@@ -230,32 +235,38 @@ object TFModel {
     )
 
   def apply[
-  In, TrainIn, TrainOut, Out,
+  In, Out,
   Loss: TF : IsFloat32OrFloat64,
   IT, ID, IS, TT, TD, TS,
   InferIn, InferOut](
-  g: DataSet[(IT, TT)],
-  architecture: Layer[In, Out],
-  input: (ID, IS),
-  target: (TD, TS),
-  processTarget: Layer[TrainIn, TrainOut],
-  loss: Layer[(Out, TrainOut), Output[Loss]],
-  trainConfig: TFModel.TrainConfig,
-  data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
-  inMemory: Boolean = false,
-  existingGraph: Option[Graph] = None,
-  data_handles: Option[(Input[In], Input[TrainIn])] = None)(
-  implicit
-  evStructureI: NestedStructure.Aux[In, IT, ID, IS],
-  evStructureT: NestedStructure.Aux[TrainIn, TT, TD, TS],
-  evStructure: NestedStructure.Aux[(In, TrainIn), (IT, TT), (ID, TD), (IS, TS)],
-  //evFetchableIn: NestedStructure.Aux[In, IT, ID, IS],
-  evFetchableOut: NestedStructure.Aux[Out, TT, TD, TS],
-  ev: Estimator.SupportedInferInput[In, IT, TT, InferIn, InferOut],
-  // This implicit helps the Scala 2.11 compiler.
-  evFetchableInOut: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)]) =
-    new TFModel(
-      g, architecture, input, target, processTarget, loss,
+    g: DataSet[(IT, TT)],
+    architecture: Layer[In, Out],
+    input: (ID, IS),
+    target: (TD, TS),
+    loss: Layer[(Out, Out), Output[Loss]],
+    trainConfig: TFModel.TrainConfig,
+    data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
+    inMemory: Boolean = false,
+    existingGraph: Option[Graph] = None,
+    data_handles: Option[(Input[In], Input[Out])] = None)(
+    implicit
+    evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
+    evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
+    evStructureI: NestedStructure.Aux[In, IT, ID, IS],
+    evStructureT: NestedStructure.Aux[Out, TT, TD, TS],
+    //evStructureTOut: NestedStructure.Aux[Out, TT, TD, TS],
+    //evStructure: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)],
+    //evFetchableIn: NestedStructure.Aux[In, IT, ID, IS],
+    //evFetchableOut: NestedStructure.Aux[Out, TT, TD, TS],
+    ev: Estimator.SupportedInferInput[In, IT, TT, InferIn, InferOut],
+    // This implicit helps the Scala 2.11 compiler.
+    //evFetchableIO: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)],
+    evFetchableInOut: NestedStructure.Aux[(In, Out), (IT, TT), (ID, TD), (IS, TS)]) =
+    new TFModel[
+      In, Out,
+      Loss, IT, ID, IS, TT, TD, TS,
+      InferIn, InferOut](
+      g, architecture, input, target, loss,
       trainConfig, data_processing, inMemory, existingGraph,
       data_handles
     )

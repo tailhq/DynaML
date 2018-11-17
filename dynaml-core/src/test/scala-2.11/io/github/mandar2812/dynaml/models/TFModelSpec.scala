@@ -22,12 +22,12 @@ import ammonite.ops._
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.tensorflow._
+import org.scalatest.{FlatSpec, Matchers}
 import org.joda.time.DateTime
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.types.DataType
-import org.scalatest.{FlatSpec, Matchers}
+import org.platanios.tensorflow.api.learn.layers.Layer
 
-import scala.util.Random
+
 
 class TFModelSpec extends FlatSpec with Matchers {
   "DynaML TensorFlow model wrappers" should " train and predict as expected" in {
@@ -42,7 +42,7 @@ class TFModelSpec extends FlatSpec with Matchers {
     val rv = GaussianRV(0.0, 2.0).iid(data_size)
 
     val data = dtfdata.dataset(rv.draw).to_supervised(
-      DataPipe[Double, (Tensor[DataType], Tensor[DataType])](n => (
+      DataPipe[Double, (Tensor[Double], Tensor[Double])](n => (
         dtf.tensor_f64(1)(n),
         dtf.tensor_f64(1)(n*weight + bias)))
     )
@@ -50,24 +50,25 @@ class TFModelSpec extends FlatSpec with Matchers {
     val train_fraction = 0.7
 
     val tf_dataset = data.partition(
-      DataPipe[(Tensor[DataType], Tensor[DataType]), Boolean](_ => Random.nextDouble() <= train_fraction)
+      DataPipe[(Tensor[Double], Tensor[Double]), Boolean](_ => scala.util.Random.nextDouble() <= train_fraction)
     )
 
-    val arch = dtflearn.feedforward(num_units = 1)(id = 1)
+    val arch: Layer[Output[Double], Output[Double]] = dtflearn.feedforward[Double](num_units = 1)(id = 1)
 
-    val process_targets = dtflearn.identity[Output]("Id")
 
-    val loss = tf.learn.L2Loss("Loss/L2") >>
-      tf.learn.Mean("Loss/Mean") >>
-      tf.learn.ScalarSummary("Loss/ModelLoss", "ModelLoss")
+    val loss: Layer[(Output[Double], Output[Double]), Output[Double]] =
+      tf.learn.L2Loss[Double, Double]("Loss/L2") >>
+      tf.learn.Mean[Double]("Loss/Mean") >>
+      tf.learn.ScalarSummary[Double]("Loss/ModelLoss", "ModelLoss")
 
     val regression_model = dtflearn.model[
-      Tensor[DataType], Output, DataType, Shape, Output,
-      Tensor[DataType], Output, DataType, Shape, Output,
-      Tensor[DataType], Tensor[DataType], Tensor[DataType]](
+      Output[Double], Output[Double], Double,
+      Tensor[Double], FLOAT64, Shape,
+      Tensor[Double], FLOAT64, Shape,
+      Tensor[Double], Tensor[Double]](
       tf_dataset.training_dataset,
       arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
-      process_targets, loss,
+      loss,
       dtflearn.model.trainConfig(
         summary_dir,
         tf.train.Adam(0.1f),
@@ -83,7 +84,7 @@ class TFModelSpec extends FlatSpec with Matchers {
 
     regression_model.train()
 
-    val test_pred = regression_model.predict(Tensor(1.0).reshape(Shape(1, 1))).scalar
+    val test_pred = regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1))).scalar
 
     assert(test_pred == 4.0)
 

@@ -28,7 +28,7 @@ import org.platanios.tensorflow.api.ops.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.DynamicalSystem
-import org.platanios.tensorflow.api.core.types._
+import org.platanios.tensorflow.api.core.types.{IsFloat32OrFloat64, _}
 import org.platanios.tensorflow.api.implicits.helpers.NestedStructure
 import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer}
@@ -51,7 +51,7 @@ private[tensorflow] object Learn {
   type UnsupervisedModel[In, Out, Loss] =
     tf.learn.UnsupervisedTrainableModel[In, Out, Loss]
 
-  type UnsupEstimatorTF[In, Out, Loss] = tf.learn.Estimator[In, In, Unit, Out, Loss, Out]
+  type UnsupEstimatorTF[In, Out, Loss] = tf.learn.Estimator[In, In, Out, Out, Loss, Out]
 
 
   type UnsupModelPair[In, Out, Loss] = (
@@ -456,7 +456,7 @@ private[tensorflow] object Learn {
     input: Input[In],
     target: Input[TrainIn],
     processTarget: Layer[TrainIn, TrainOut],
-    loss: Layer[(Out, TrainOut), Output[Loss]],
+    loss: Layer[(Out, TrainIn), Output[Loss]],
     optimizer: Optimizer,
     summariesDir: java.nio.file.Path,
     stopCriteria: StopCriteria,
@@ -467,12 +467,11 @@ private[tensorflow] object Learn {
     inMemory: Boolean = false)(
     implicit
     evIn: NestedStructure.Aux[In, _, _, _],
-    evTrainIn: NestedStructure.Aux[TrainIn, _, _, _]): SupModelPair[In, TrainIn, TrainOut, Out, Loss, (Out, TrainOut)] = {
+    evTrainIn: NestedStructure.Aux[TrainIn, _, _, _]): SupModelPair[In, TrainIn, Out, Out, Loss, (Out, (In, TrainIn))] = {
 
-    val (model, estimator): SupModelPair[In, TrainIn, TrainOut, Out, Loss, (Out, TrainOut)] = tf.createWith(graph = Graph()) {
-      val model = tf.learn.Model.supervised(
-        input, architecture,
-        target, processTarget,
+    val (model, estimator): SupModelPair[In, TrainIn, Out, Out, Loss, (Out, (In, TrainIn))] = tf.createWith(graph = Graph()) {
+      val model = tf.learn.Model.simpleSupervised[In, TrainIn, Out, TrainOut, Loss](
+        input, target, architecture,
         loss, optimizer)
 
       println("\nTraining model.\n")
@@ -556,7 +555,7 @@ private[tensorflow] object Learn {
     inMemory: Boolean)(
     implicit evIn: NestedStructure.Aux[In, _, _, _]): UnsupModelPair[In, Out, Loss] = {
 
-    val (model, estimator) = tf.createWith(graph = Graph()) {
+    val (model, estimator): UnsupModelPair[In, Out, Loss] = tf.createWith(graph = Graph()) {
 
       val model = tf.learn.Model.unsupervised(input, architecture, loss, optimizer)
 

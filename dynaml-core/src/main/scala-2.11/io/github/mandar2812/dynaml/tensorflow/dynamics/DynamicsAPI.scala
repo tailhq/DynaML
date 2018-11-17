@@ -37,12 +37,12 @@ import org.platanios.tensorflow.api.ops.variables.Initializer
   * */
 private[tensorflow] trait DynamicsAPI {
 
-  val identityOperator: IdentityOperator.type                                   = IdentityOperator
-  def jacobian[D: TF: IsNotQuantized]: Gradient[D]                              = Gradient[D]
-  def ∇[D: TF: IsNotQuantized] : Gradient[D]                                    = Gradient[D]
-  def hessian[D: TF: IsNotQuantized]: TensorOperator[Output[D], D]              = ∇.apply(∇)
-  val source: SourceOperator.type                                               = SourceOperator
-  val constant: Constant.type                                                   = Constant
+  val identityOperator: IdentityOperator.type       = IdentityOperator
+  val jacobian: Gradient[Float]                     = Gradient[Float]
+  val ∇ : Gradient[Float]                           = Gradient[Float]
+  val hessian: TensorOperator[Output[Float], Float] = ∇(∇)
+  val source: SourceOperator.type                   = SourceOperator
+  val constant: Constant.type                       = Constant
 
 
   def one[I, D: TF: IsNotQuantized](shape: Shape): Constant[I, D] =
@@ -97,20 +97,20 @@ private[tensorflow] trait DynamicsAPI {
   def ∂[D: TF: IsNotQuantized](
     name: String)(
     input_slices: Indexer*)(
-    output_slices: Indexer*): SlicedGradient[D]          = SlicedGradient(name)(input_slices:_*)(output_slices:_*)
+    output_slices: Indexer*): SlicedGradient[D] = SlicedGradient(name)(input_slices:_*)(output_slices:_*)
 
   /**
     * Time derivative (∂f/∂t) of a function f(t, s),
     * which accepts space-time vectors [t, s_1, s_2, ..., s_n]
     * as inputs
     * */
-  def d_t[D: TF: IsNotQuantized]: SlicedGradient[D]      = ∂("D_t")(0)(---)
+  def d_t: SlicedGradient[Float]                = ∂("D_t")(0)(---)
 
   /**
     * Space derivative (∂f/∂s) of a function f(t, s),
     * which accepts space-time vectors [t, s_1, s_2, ..., s_n]
     * as inputs
     * */
-  def d_s[D: TF: IsNotQuantized]: SlicedGradient[D]      = ∂("D_s")( 1 ::)(---)
+  def d_s: SlicedGradient[Float]                = ∂("D_s")( 1 ::)(---)
 
 }

@@ -4,7 +4,8 @@ import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.probability.GaussianRV
-import spire.math.UByte
+import org.platanios.tensorflow.api.core.types.UByte
+
 
 class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
@@ -25,9 +26,9 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
     val int16tensor = dtf.tensor_i16(2, 2)(numbers.map(_.toShort):_*)
 
-    val uint8tensor = dtf.tensor_from(UINT8, 2, 2)(numbers.map(_.toByte).map(UByte(_)))
+    val uint8tensor = dtf.tensor_from[UByte](2, 2)(numbers.map(_.toByte).map(UByte))
 
-    val int32tensor2 = dtf.tensor_from(INT32, Shape(2, 2))(numbers:_*)
+    val int32tensor2 = dtf.tensor_from[Int](Shape(2, 2))(numbers:_*)
 
     val int32tensor = dtf.tensor_i32(2, 2)(numbers:_*)
 
@@ -39,14 +40,14 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
     val f64tensor = dtf.tensor_f64(2, 2)(numbers.map(_.toDouble):_*)
 
-    val f_tensor  = dtf.fill(FLOAT32, 3, 2)(1f)
-    val f_tensor2  = dtf.fill(FLOAT32, Shape(3, 2))(1f)
+    val f_tensor  = dtf.fill[Float](3, 2)(1f)
+    val f_tensor2  = dtf.fill[Float](Shape(3, 2))(1f)
 
-    val r_tensor = dtf.random(FLOAT64, 3, 3)(GaussianRV(0.0, 1.0))
+    val r_tensor = dtf.random[Double](3, 3)(GaussianRV(0.0, 1.0))
 
-    val b_tensor = dtf.tensor_from_buffer(INT32, Shape(5, 5))((0 until 100).map(_.toByte).toArray)
+    val b_tensor = dtf.tensor_from_buffer[Int](Shape(5, 5))((0 until 100).map(_.toByte).toArray)
 
-    val b_tensor2 = dtf.tensor_from_buffer(INT32, 5, 5)((0 until 100).map(_.toByte).toArray)
+    val b_tensor2 = dtf.tensor_from_buffer[Int](5, 5)((0 until 100).map(_.toByte).toArray)
 
     assert(uint8tensor.dataType == UINT8 && uint8tensor.shape == Shape(2, 2))
     assert(int16tensor.dataType == INT16 && int16tensor.shape == Shape(2, 2))

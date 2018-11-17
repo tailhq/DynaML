@@ -34,7 +34,7 @@ private[dynamics] case class SlicedGradient[D: TF: IsNotQuantized](
   private def gradTRec(y: Seq[Output[D]], x: Output[D], rank: Int): Output[D] = rank match {
     case 1 =>
       tf.stack(
-        y.map(o => tf.gradients.gradients[D, D, D](Seq(o), Seq(x), TF[D].dataType).head.toOutput),
+        y.map(o => tf.gradients.gradients[D, D](Seq(o), Seq(x), TF[D].dataType).head.toOutput),
         axis = -1)
     case _ =>
       gradTRec(y.flatMap(_.unstack(-1, -1)), x, rank - 1)

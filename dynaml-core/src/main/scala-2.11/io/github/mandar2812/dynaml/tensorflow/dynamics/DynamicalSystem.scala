@@ -4,13 +4,11 @@ import io.github.mandar2812.dynaml.models.TFModel
 import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.tensorflow.layers.PDEQuadrature
 import io.github.mandar2812.dynaml.tensorflow.data._
-import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.core.types.{IsFloat32OrFloat64, IsNotQuantized, TF}
-import org.platanios.tensorflow.api.implicits.helpers.NestedStructure
+import org.platanios.tensorflow.api.implicits.helpers.{DataTypeToOutput, NestedStructure}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.estimators.Estimator
-import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
-import org.platanios.tensorflow.api.ops.Function
+import org.platanios.tensorflow.api.learn.layers.Layer
+import org.platanios.tensorflow.api._
 
 /**
   * <h3>Dynamical Systems</h3>
@@ -18,8 +16,8 @@ import org.platanios.tensorflow.api.ops.Function
   *
   * @param quantities A map containing quantity names and their associated function approximations.
   * @param dynamics A system of differential operators, representing the system dynamics
-  * @param input The data type and shape of the input tensor.
-  * @param target The data types and shapes of the outputs and the latent variables.
+  * @param input_shape The data type and shape of the input tensor.
+  * @param target_shape The data types and shapes of the outputs and the latent variables.
   * @param data_loss The loss/error measure between the neural surrogate output and
   *                  the observations.
   * @param quadrature_nodes The co-location points in the input domain, packaged as a tensor.
@@ -30,93 +28,99 @@ import org.platanios.tensorflow.api.ops.Function
   * @param graphInstance An optional TensorFlow graph instance to create model in.
   *
   * */
-private[dynaml] class DynamicalSystem[D : TF: IsNotQuantized: IsFloat32OrFloat64](
-  val quantities: Map[String, Layer[Output[D], Output[D]]],
-  val dynamics: Seq[DifferentialOperator[Output[D], Output[D]]],
-  val input: (D, Shape),
-  val target: (Seq[D], Seq[Shape]),
-  val data_loss: Layer[(Output[D], Output[D]), Output[D]],
-  quadrature_nodes: Tensor[D],
-  quadrature_weights: Tensor[D],
-  quadrature_loss_weightage: Tensor[D],
+private[dynaml] class DynamicalSystem(
+  val quantities: Map[String, Layer[Output[Float], Output[Float]]],
+  val dynamics: Seq[DifferentialOperator[Output[Float], Output[Float]]],
+  val input_shape: Shape,
+  val target_shape: Seq[Shape],
+  val data_loss: Layer[(Output[Float], Output[Float]), Output[Float]],
+  quadrature_nodes: Tensor[Float],
+  quadrature_weights: Tensor[Float],
+  quadrature_loss_weightage: Tensor[Float],
   graphInstance: Option[Graph])(
   implicit
-  evStructureI: NestedStructure.Aux[Seq[Output[D]], Seq[Tensor[D]], Seq[D], Seq[Shape]],
+  evDataTypeToOutputI: DataTypeToOutput.Aux[Seq[FLOAT32], Seq[Output[Float]]],
+  //evDataTypeToOutputT: DataTypeToOutput.Aux[Seq[FLOAT32], Seq[Output[Float]]],
+  evStructureI: NestedStructure.Aux[
+    Seq[Output[Float]],
+    Seq[Tensor[Float]],
+    Seq[FLOAT32],
+    Seq[Shape]],
   evStructure: NestedStructure.Aux[
-    (Seq[Output[D]], Seq[Output[D]]),
-    (Seq[Tensor[D]], Seq[Tensor[D]]),
-    (Seq[D], Seq[D]), (Seq[Shape], Seq[Shape])]) {
+    (Seq[Output[Float]], Seq[Output[Float]]),
+    (Seq[Tensor[Float]], Seq[Tensor[Float]]),
+    (Seq[FLOAT32], Seq[FLOAT32]),
+    (Seq[Shape], Seq[Shape])]) {
 
-  protected val observational_error: Layer[(Seq[Output[D]], Seq[Output[D]]), Output[D]] =
+  protected val observational_error: Layer[(Seq[Output[Float]], Seq[Output[Float]]), Output[Float]] =
     DynamicalSystem.error("ExtObsError", data_loss)
 
-  val system_outputs: Seq[Layer[Output[D], Output[D]]] = quantities.values.toSeq
+  val system_outputs: Seq[Layer[Output[Float], Output[Float]]] = quantities.values.toSeq
 
-  protected val quadrature: PDEQuadrature[D] =
+  protected val quadrature: PDEQuadrature[Float] =
     PDEQuadrature(
       "ColocationError",
       dynamics.zip(system_outputs).map(c => c._1(c._2)),
       quadrature_nodes, quadrature_weights,
       quadrature_loss_weightage)
 
-  val system_variables: Seq[Map[String, DifferentialOperator[Output[D], Output[D]]]] =
+  val system_variables: Seq[Map[String, DifferentialOperator[Output[Float], Output[Float]]]] =
     dynamics.map(_.variables)
 
   private val data_handles = (
-    tf.learn.Input[Seq[Output[D]], Seq[Tensor[D]], Seq[D], Seq[Shape]](
-      Seq.fill(quantities.toSeq.length)(input._1),
-      Seq.fill(quantities.toSeq.length)(Shape(-1) ++ input._2),
+    tf.learn.Input[Seq[Output[Float]], Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape]](
+      Seq.fill(quantities.toSeq.length)(FLOAT32),
+      Seq.fill(quantities.toSeq.length)(Shape(-1) ++ input_shape),
       "Input"),
-    tf.learn.Input[Seq[Output[D]], Seq[Tensor[D]], Seq[D], Seq[Shape]](
-      target._1,
-      target._2.map(s => Shape(-1) ++ s),
+    tf.learn.Input[Seq[Output[Float]], Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape]](
+      target_shape.map(_ => FLOAT32),
+      target_shape.map(s => Shape(-1) ++ s),
       "Outputs"))
 
-  val system_variables_mapping: Layer[Seq[Output[D]], Seq[Output[D]]] =
-    dtflearn.seq_layer[Output[D], Seq[Output[D]]](
+  val system_variables_mapping: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
+    dtflearn.seq_layer[Output[Float], Seq[Output[Float]]](
       "SystemVariables",
       system_variables.zip(system_outputs).map(variablesAndQuantities => {
 
         val (variables, quantity) = variablesAndQuantities
 
-        dtflearn.combined_layer[Output[D], Output[D]]("MapVariables", variables.values.toSeq.map(_(quantity)))
+        dtflearn.combined_layer[Output[Float], Output[Float]]("MapVariables", variables.values.toSeq.map(_(quantity)))
 
       })) >>
-      DynamicalSystem.flatten[D]("FlattenVariables")
+      DynamicalSystem.flatten("FlattenVariables")
 
-  protected val output_mapping: Layer[Seq[Output[D]], Seq[Output[D]]] =
-    dtflearn.seq_layer[Output[D], Output[D]](name ="CombinedOutput[D]s", system_outputs)
+  protected val output_mapping: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
+    dtflearn.seq_layer[Output[Float], Output[Float]](name ="CombinedOutput[Float]s", system_outputs)
 
-  val model_architecture: Layer[Seq[Output[D]], Seq[Output[D]]] =
-    dtflearn.combined_layer("CombineOutput[D]sAndVars", Seq(output_mapping, system_variables_mapping)) >>
-      DynamicalSystem.flatten("FlattenModelOutput[D]s")
+  val model_architecture: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
+    dtflearn.combined_layer("CombineOutput[Float]sAndVars", Seq(output_mapping, system_variables_mapping)) >>
+      DynamicalSystem.flatten("FlattenModelOutput[Float]s")
 
-  protected val system_loss: Layer[(Seq[Output[D]], Seq[Output[D]]), Output[D]] =
+  protected val system_loss: Layer[(Seq[Output[Float]], Seq[Output[Float]]), Output[Float]] =
     observational_error >>
       quadrature >>
-      tf.learn.Mean("Loss/Mean") >>
-      tf.learn.ScalarSummary("Loss/Summary", "Loss")
-  
+      tf.learn.Mean[Float]("Loss/Mean") >>
+      tf.learn.ScalarSummary[Float]("Loss/Summary", "Loss")
+
   def solve(
-    data: Seq[SupervisedDataSet[Tensor[D], Tensor[D]]],
+    data: Seq[SupervisedDataSet[Tensor[Float], Tensor[Float]]],
     trainConfig: TFModel.Config,
     data_processing: TFModel.Ops = TFModel.data_ops(10000, 16, 10),
     inMemory: Boolean = false)(
     implicit
     ev: Estimator.SupportedInferInput[
-      Seq[Output[D]], Seq[Tensor[D]], Seq[Tensor[D]],
-      Seq[Output[D]], Seq[Output[D]]]): DynamicalSystem.Model[D] = {
+      Seq[Output[Float]], Seq[Tensor[Float]], Seq[Tensor[Float]],
+      Seq[Output[Float]], Seq[Output[Float]]]): DynamicalSystem.Model = {
 
     val model = dtflearn.model[
-      Seq[Output[D]], Seq[Output[D]], Seq[Output[D]], Seq[Output[D]],
-      D, Seq[Tensor[D]], Seq[D], Seq[Shape], Seq[Tensor[D]], Seq[D], Seq[Shape],
-      Seq[Tensor[D]], Seq[Tensor[D]]
-      ](
+      Seq[Output[Float]], Seq[Output[Float]],
+      Float, Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
+      Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
+      Seq[Tensor[Float]], Seq[Tensor[Float]]](
       dtfdata.supervised_dataset.collect(data).map(p => (p._1, p._2)),
       model_architecture,
-      (Seq.fill(quantities.size)(input._1), Seq.fill(quantities.size)(input._2)),
-      target,
-      dtflearn.identity[Seq[Output[D]]]("ID"),
+      (Seq.fill(quantities.size)(FLOAT32), Seq.fill(quantities.size)(input_shape)),
+      (Seq.fill(quantities.size)(FLOAT32), target_shape),
       system_loss, trainConfig,
       data_processing, inMemory,
       graphInstance, Some(data_handles))
@@ -135,35 +139,40 @@ private[dynaml] class DynamicalSystem[D : TF: IsNotQuantized: IsFloat32OrFloat64
 
 object DynamicalSystem {
 
-  protected case class ObservationalError[D: TF: IsNotQuantized](
+  protected case class ObservationalError(
     override val name: String,
-    error_measure: Layer[(Output[D], Output[D]), Output[D]]) extends
-    Layer[(Seq[Output[D]], Seq[Output[D]]), Output[D]](name) {
+    error_measure: Layer[(Output[Float], Output[Float]), Output[Float]]) extends
+    Layer[(Seq[Output[Float]], Seq[Output[Float]]), Output[Float]](name) {
 
     override val layerType: String = "ObservationalError"
 
-    override def forwardWithoutContext(input: (Seq[Output[D]], Seq[Output[D]]))(implicit mode: Mode): Output[D] =
-      input._1.zip(input._2).map(c => error_measure.forward(c._1, c._2)).reduceLeft(_.add(_))
+    override def forwardWithoutContext(
+      input: (Seq[Output[Float]], Seq[Output[Float]]))(
+      implicit mode: Mode): Output[Float] =
+      input._1.zip(input._2)
+        .map(c => error_measure.forward(c._1, c._2))
+        .reduceLeft(tf.add[Float](_, _))
   }
 
-  protected case class Model[D : TF: IsNotQuantized](
+  protected case class Model(
     tfModel: TFModel[
-      Seq[Output[D]], Seq[Output[D]], Seq[Output[D]], Seq[Output[D]],
-      D, Seq[Tensor[D]], Seq[D], Seq[Shape], Seq[Tensor[D]], Seq[D], Seq[Shape],
-      Seq[Tensor[D]], Seq[Tensor[D]]],
+      Seq[Output[Float]], Seq[Output[Float]],
+      Float, Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
+      Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
+      Seq[Tensor[Float]], Seq[Tensor[Float]]],
     outputs: Seq[String],
     variables: Seq[String]) {
 
     private val model_quantities = outputs ++ variables
 
-    protected def predict(input: Tensor[D]): Map[String, Tensor[D]] = {
+    protected def predict(input: Tensor[Float]): Map[String, Tensor[Float]] = {
 
-      val model_preds = tfModel.predict(Seq.fill[Tensor[D]](outputs.length)(input))
+      val model_preds = tfModel.predict(Seq.fill[Tensor[Float]](outputs.length)(input))
 
       model_quantities.zip(model_preds).toMap
     }
 
-    def predict(quantities: String*)(input: Tensor[D]): Seq[Tensor[D]] = {
+    def predict(quantities: String*)(input: Tensor[Float]): Seq[Tensor[Float]] = {
       require(
         quantities.forall(model_quantities.contains),
         "Each provided quantity should be in the list of model quantities,"+
@@ -180,38 +189,45 @@ object DynamicalSystem {
   val error: ObservationalError.type = ObservationalError
   val model: Model.type              = Model
 
-  def combine_tuple[D: TF: IsNotQuantized]: String => Layer[(Seq[Output[D]], Seq[Output[D]]), Seq[Output[D]]] =
-    (name: String) => new Layer[(Seq[Output[D]], Seq[Output[D]]), Seq[Output[D]]](name) {
+  def combine_tuple: String => Layer[(Seq[Output[Float]], Seq[Output[Float]]), Seq[Output[Float]]] =
+    (name: String) => new Layer[(Seq[Output[Float]], Seq[Output[Float]]), Seq[Output[Float]]](name) {
       override val layerType: String = "CombineSeqTuple"
 
-      override def forwardWithoutContext(input: (Seq[Output[D]], Seq[Output[D]]))(implicit mode: Mode): Seq[Output[D]] =
+      override def forwardWithoutContext(input: (Seq[Output[Float]], Seq[Output[Float]]))(implicit mode: Mode): Seq[Output[Float]] =
         input._1 ++ input._2
     }
 
-  def flatten[D: TF: IsNotQuantized](name: String): Layer[Seq[Seq[Output[D]]], Seq[Output[D]]] =
-    new Layer[Seq[Seq[Output[D]]], Seq[Output[D]]](name) {
+  def flatten(name: String): Layer[Seq[Seq[Output[Float]]], Seq[Output[Float]]] =
+    new Layer[Seq[Seq[Output[Float]]], Seq[Output[Float]]](name) {
       override val layerType: String = "FlattenSeq"
 
-      override def forwardWithoutContext(input: Seq[Seq[Output[D]]])(implicit mode: Mode): Seq[Output[D]] = input.flatten
+      override def forwardWithoutContext(input: Seq[Seq[Output[Float]]])(implicit mode: Mode): Seq[Output[Float]] = input.flatten
     }
 
-  def apply[D : TF: IsNotQuantized: IsFloat32OrFloat64](
-    quantities: Map[String, Layer[Output[D], Output[D]]],
-    dynamics: Seq[DifferentialOperator[Output[D], Output[D]]],
-    input: (D, Shape),
-    target: (Seq[D], Seq[Shape]),
-    data_loss: Layer[(Output[D], Output[D]), Output[D]],
-    quadrature_nodes: Tensor[D],
-    weights: Tensor[D],
-    loss_weightage: Tensor[D],
+  def apply(
+    quantities: Map[String, Layer[Output[Float], Output[Float]]],
+    dynamics: Seq[DifferentialOperator[Output[Float], Output[Float]]],
+    input: Shape,
+    target: Seq[Shape],
+    data_loss: Layer[(Output[Float], Output[Float]), Output[Float]],
+    quadrature_nodes: Tensor[Float],
+    weights: Tensor[Float],
+    loss_weightage: Tensor[Float],
     graphInstance: Option[Graph] = None)(
     implicit
-    evStructureI: NestedStructure.Aux[Seq[Output[D]], Seq[Tensor[D]], Seq[D], Seq[Shape]],
+    evDataTypeToOutputI: DataTypeToOutput.Aux[Seq[FLOAT32], Seq[Output[Float]]],
+    //evDataTypeToOutputT: DataTypeToOutput.Aux[Seq[FLOAT32], Seq[Output[Float]]],
+    evStructureI: NestedStructure.Aux[
+      Seq[Output[Float]],
+      Seq[Tensor[Float]],
+      Seq[FLOAT32],
+      Seq[Shape]],
     evStructure: NestedStructure.Aux[
-      (Seq[Output[D]], Seq[Output[D]]),
-      (Seq[Tensor[D]], Seq[Tensor[D]]),
-      (Seq[D], Seq[D]), (Seq[Shape], Seq[Shape])]): DynamicalSystem[D] =
-    new DynamicalSystem[D](
+      (Seq[Output[Float]], Seq[Output[Float]]),
+      (Seq[Tensor[Float]], Seq[Tensor[Float]]),
+      (Seq[FLOAT32], Seq[FLOAT32]),
+      (Seq[Shape], Seq[Shape])]): DynamicalSystem =
+    new DynamicalSystem(
       quantities,
       dynamics,
       input,

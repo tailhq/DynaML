@@ -14,7 +14,7 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
   val random = new Random()
 
-  def batch(dim: Int, batchSize: Int): Tensor[FLOAT32] = {
+  def batch(dim: Int, batchSize: Int): Tensor[Float] = {
     val inputs = ArrayBuffer.empty[Seq[Float]]
     var i = 0
     while (i < batchSize) {
@@ -23,14 +23,14 @@ class DynamicsSpec extends FlatSpec with Matchers {
       i += 1
     }
 
-    Tensor(inputs).reshape(Shape(-1, dim))
+    dtf.tensor_f32(-1, dim)(inputs.flatten:_*)
   }
 
-  val layer: Layer[Output, Output] = new Layer[Output, Output]("Exp") {
+  val layer: Layer[Output[Float], Output[Float]] = new Layer[Output[Float], Output[Float]]("Exp") {
     override val layerType = "Exp"
 
-    override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
-      input.exp
+    override def forwardWithoutContext(input: Output[Float])(implicit mode: Mode): Output[Float] =
+      tf.exp(input)
   }
 
   "Gradient/Jacobian & Hessian operators on single output functions" should " yield correct results" in {
@@ -43,12 +43,12 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
     implicit val mode: Mode = tf.learn.INFERENCE
 
-    val inputs = tf.placeholder(FLOAT32, Shape(-1, input_dim))
+    val inputs = tf.placeholder[Float](Shape(-1, input_dim))
 
-    val feedforward: Layer[Output, Output] = new Layer[Output, Output]("Exp") {
+    val feedforward: Layer[Output[Float], Output[Float]] = new Layer[Output[Float], Output[Float]]("Exp") {
       override val layerType = "MatMul"
 
-      override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
+      override def forwardWithoutContext(input: Output[Float])(implicit mode: Mode): Output[Float] =
         tf.matmul(
           input,
           dtf.tensor_f32(input.shape(1), output_dim)(
@@ -74,7 +74,7 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
     val feeds = Map(inputs -> trainBatch)
 
-    val results: (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) =
+    val results: (Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float]) =
       session.run(feeds = feeds, fetches = (outputs, inter_outputs, grad, hess))
 
 
@@ -103,12 +103,12 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
     implicit val mode: Mode = tf.learn.INFERENCE
 
-    val inputs = tf.placeholder(FLOAT32, Shape(-1, input_dim))
+    val inputs = tf.placeholder[Float](Shape(-1, input_dim))
 
-    val feedforward: Layer[Output, Output] = new Layer[Output, Output]("Exp") {
+    val feedforward: Layer[Output[Float], Output[Float]] = new Layer[Output[Float], Output[Float]]("Exp") {
       override val layerType = "MatMul"
 
-      override def forwardWithoutContext(input: Output)(implicit mode: Mode): Output =
+      override def forwardWithoutContext(input: Output[Float])(implicit mode: Mode): Output[Float] =
         tf.matmul(
           input,
           dtf.tensor_f32(input.shape(1), output_dim)(
@@ -134,7 +134,7 @@ class DynamicsSpec extends FlatSpec with Matchers {
 
     val feeds = Map(inputs -> trainBatch)
 
-    val results: (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) =
+    val results: (Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float]) =
       session.run(feeds = feeds, fetches = (outputs, inter_outputs, grad, hess))
 
 

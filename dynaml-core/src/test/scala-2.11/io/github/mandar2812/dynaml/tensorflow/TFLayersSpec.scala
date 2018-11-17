@@ -16,52 +16,50 @@ class TFLayersSpec extends FlatSpec with Matchers {
 
     implicit val mode: Mode = tf.learn.INFERENCE
 
-    val vec_input = tf.placeholder(FLOAT32, Shape(-1, 3))
+    val vec_input = tf.placeholder[Float](Shape(-1, 3))
 
-    val image_input = tf.placeholder(FLOAT32, Shape(-1, 3, 3, 4))
+    val image_input = tf.placeholder[Float](Shape(-1, 3, 3, 4))
 
-    val lin = dtflearn.feedforward(2, false)(0)
+    val lin = dtflearn.feedforward[Float](2, false)(0)
 
-    val lin_stack = dtflearn.feedforward_stack(
-      (i: Int) => dtflearn.identity(s"Id_$i"),
-      FLOAT32)(
+    val lin_stack = dtflearn.feedforward_stack[Float](
+      (i: Int) => dtflearn.identity(s"Id_$i"))(
       Seq(2, 1),
       starting_index = 3,
       useBias = false)
 
-    val lin_stack2 = dtflearn.feedforward_stack(
-      (i: Int) => dtflearn.GeneralizedLogistic(s"Id_$i"),
-      FLOAT32)(
+    val lin_stack2 = dtflearn.feedforward_stack[Float](
+      (i: Int) => dtflearn.GeneralizedLogistic(s"Id_$i"))(
       Seq(2, 1),
       starting_index = 100,
       useBias = false)
 
-    val conv2d = dtflearn.conv2d(2, 4, 2, (1, 1))(0)
+    val conv2d = dtflearn.conv2d[Float](2, 4, 2, (1, 1))(0)
 
-    val conv_pyramid_dropout = dtflearn.conv2d_pyramid(
+    val conv_pyramid_dropout = dtflearn.conv2d_pyramid[Float](
       2, 4)(
       4, 2)(
       0.1f, true, 0.6f, 20)
 
-    val conv_pyramid_batch = dtflearn.conv2d_pyramid(
+    val conv_pyramid_batch = dtflearn.conv2d_pyramid[Float](
       2, 4)(
       4, 2)(
       0.1f, false, 0.6f, 40)
 
-    val inception = dtflearn.inception_unit(
+    val inception = dtflearn.inception_unit[Float](
       4, Seq(1, 2, 3, 4),
-      DataPipe[String, Layer[Output, Output]](dtflearn.identity[Output]),
+      DataPipe[String, Layer[Output[Float], Output[Float]]](dtflearn.identity[Output[Float]]),
       false)(0)
 
-    val inception_stack = dtflearn.inception_stack(
+    val inception_stack = dtflearn.inception_stack[Float](
       4, Seq(Seq(1, 2, 3, 4), Seq(1, 1, 1, 1)),
-      DataPipe[String, Layer[Output, Output]](dtflearn.identity[Output]),
+      DataPipe[String, Layer[Output[Float], Output[Float]]](dtflearn.identity[Output[Float]]),
       true)(10)
 
-    val ctrnn_stack = dtflearn.ctrnn_block(2, 3)(1)
-    val ctrnn_stack2 = dtflearn.ctrnn_block(4, 3, 0.5)(10)
+    val ctrnn_stack = dtflearn.ctrnn_block[Float](2, 3)(1)
+    val ctrnn_stack2 = dtflearn.ctrnn_block[Float](4, 3, 0.5)(10)
 
-    val rbf_l = dtflearn.rbf_layer("RBF_Layer1", 4)
+    val rbf_l = dtflearn.rbf_layer[Float]("RBF_Layer1", 4)
 
     val lin_output = lin.forward(vec_input)
 
@@ -87,14 +85,14 @@ class TFLayersSpec extends FlatSpec with Matchers {
     session.run(targets = tf.globalVariablesInitializer())
 
 
-    val sample_input = dtf.fill(FLOAT32, 1, 3)(0f)
+    val sample_input = dtf.fill[Float](1, 3)(0f)
 
-    val sample_image = dtf.fill(FLOAT32, 1, 3, 3, 4)(0f)
+    val sample_image = dtf.fill[Float](1, 3, 3, 4)(0f)
 
     val feeds = Map(vec_input -> sample_input, image_input -> sample_image)
 
     val (lin_tensor, lin_stack_tensor, lin_stack_tensor2, conv_tensor, inception_tensor, in_stack_tensor)
-    : (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) =
+    : (Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float]) =
       session.run(
         feeds = feeds,
         fetches = (
@@ -107,7 +105,7 @@ class TFLayersSpec extends FlatSpec with Matchers {
     )
 
     val (conv_batch, conv_dropout, ctrnn_tensor1, ctrnn_tensor2, rbf_tensor)
-    : (Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType], Tensor[DataType]) = session.run(
+    : (Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float]) = session.run(
       feeds = feeds,
       fetches = (
         conv_py_output2,
@@ -138,12 +136,12 @@ class TFLayersSpec extends FlatSpec with Matchers {
         rbf_tensor.shape == Shape(1, 4))
 
     assert(
-      lin_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 0f) &&
-        lin_stack_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 0f) &&
-        conv_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 0f) &&
-        conv_batch.entriesIterator.forall(_.asInstanceOf[Float] == 0f) &&
-        inception_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 0.0f) &&
-        in_stack_tensor.entriesIterator.forall(_.asInstanceOf[Float] == 0.0f)
+      lin_tensor.entriesIterator.forall(_ == 0f) &&
+        lin_stack_tensor.entriesIterator.forall(_ == 0f) &&
+        conv_tensor.entriesIterator.forall(_ == 0f) &&
+        conv_batch.entriesIterator.forall(_ == 0f) &&
+        inception_tensor.entriesIterator.forall(_ == 0.0f) &&
+        in_stack_tensor.entriesIterator.forall(_ == 0.0f)
     )
 
 
