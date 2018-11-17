@@ -590,7 +590,7 @@ private[tensorflow] object Learn {
     *
     * @author mandar2812
     * */
-  def build_tf_model[IT, IO, IDA, ID, IS, I](
+  def build_unsup_tf_model[IT, IO, IDA, ID, IS, I](
     architecture: Layer[IO, I],
     input: Input[IT, IO, IDA, ID, IS],
     loss: Layer[(IO, I), Output],
