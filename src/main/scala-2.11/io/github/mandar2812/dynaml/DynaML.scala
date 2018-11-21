@@ -151,7 +151,7 @@ case class DynaML(
         Defaults.predefString + DynaML.extraPredefString
       )
 
-      val (colorsRef, printer) = DynaMLInterpreter.initPrinters(
+      val (colorsRef, printer) = Interpreter.initPrinters(
         colors,
         outputStream,
         errorStream,
@@ -159,48 +159,7 @@ case class DynaML(
       )
       val frame = Frame.createInitial()
 
-      val interp: Interpreter = new DynaMLInterpreter(
-        printer,
-        storageBackend,
-        basePredefs = Seq(
-          PredefInfo(Name("DefaultPredef"), augmentedPredef, false, None)
-        ),
-        predefFileInfoOpt.toSeq ++ Seq(
-          PredefInfo(Name("CodePredef"), predefCode, false, None)
-        ),
-        Vector.empty,
-        wd,
-        colorsRef,
-        verboseOutput,
-        () => frame,
-        () => throw new Exception("session loading / saving not possible here"),
-        replCodeWrapper,
-        scriptCodeWrapper
-      )
-      interp.initializePredef() match{
-        case None => Right(interp)
-        case Some(problems) => Left(problems)
-      }
-    }
-
-  }
-
-  def instantiateDynaZepplinInterpreter() = {
-    loadedPredefFile.right.flatMap { predefFileInfoOpt =>
-      val augmentedPredef = DynaML.maybeDefaultPredef(
-        defaultPredef,
-        Defaults.predefString + DynaML.extraPredefString
-      )
-
-      val (colorsRef, printer) = DynaMLInterpreter.initPrinters(
-        colors,
-        outputStream,
-        errorStream,
-        verboseOutput
-      )
-      val frame = Frame.createInitial()
-
-      val interp: DynaMLInterpreter = new DynaMLInterpreter(
+      val interp: Interpreter = new Interpreter(
         printer,
         storageBackend,
         basePredefs = Seq(

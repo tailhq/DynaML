@@ -52,67 +52,15 @@ class DynaMLRepl(
   initialColors: Colors = Colors.Default,
   remoteLogger: Option[RemoteLogger],
   replCodeWrapper: Preprocessor.CodeWrapper,
-  scriptCodeWrapper: Preprocessor.CodeWrapper)
+  scriptCodeWrapper: Preprocessor.CodeWrapper,
+  alreadyLoadedDependencies: Seq[coursier.Dependency])
   extends Repl(
     input, output, error, storage,
     basePredefs, customPredefs, wd, welcomeBanner,
     replArgs, initialColors, remoteLogger,
-    replCodeWrapper, scriptCodeWrapper) { repl =>
+    replCodeWrapper, scriptCodeWrapper, alreadyLoadedDependencies) { repl =>
 
   override val prompt = Ref("DynaML>")
-
-  /*override val interp: DynaMLInterpreter = new DynaMLInterpreter(
-    printer,
-    storage,
-    basePredefs,
-    customPredefs,
-    Seq((
-      "ammonite.repl.ReplBridge",
-      "repl",
-      new ReplApiImpl {
-        def replArgs0 = repl.replArgs
-        def printer = repl.printer
-        val colors = repl.colors
-        def sess = repl.sess0
-        val prompt = repl.prompt
-        val frontEnd = repl.frontEnd
-
-        def lastException = repl.lastException
-        def fullHistory = storage.fullHistory()
-        def history = repl.history
-        def newCompiler() = interp.compilerManager.init(force = true)
-        def compiler = interp.compilerManager.compiler.compiler
-        def fullImports = repl.fullImports
-        def imports = repl.imports
-        def usedEarlierDefinitions = repl.usedEarlierDefinitions
-        def width = frontEnd().width
-        def height = frontEnd().height
-
-        object load extends ReplLoad with (String => Unit){
-
-          def apply(line: String) = {
-            interp.processExec(line, currentLine, () => currentLine += 1) match{
-              case Res.Failure(s) => throw new CompilationError(s)
-              case Res.Exception(t, s) => throw t
-              case _ =>
-            }
-          }
-
-          def exec(file: Path): Unit = {
-            interp.watch(file)
-            apply(normalizeNewlines(read(file)))
-          }
-        }
-      }
-    )),
-    wd,
-    colors,
-    verboseOutput = true,
-    getFrame = () => frames().head,
-    createFrame = () => { val f = sess0.childFrame(frames().head); frames() = f :: frames(); f },
-    replCodeWrapper = replCodeWrapper,
-    scriptCodeWrapper = scriptCodeWrapper
-  )*/
 
 
 }
