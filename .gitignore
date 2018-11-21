@@ -29,8 +29,8 @@ index-*.html
 *.DS_Store
 javascripts
 stylesheets
-!project/project/plugins.sbt
 project/project
+!project/project/plugins.sbt
 project/target
 .ensime
 .ensime_cache
