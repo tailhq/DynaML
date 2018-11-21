@@ -22,22 +22,22 @@ import java.io.{InputStream, OutputStream}
 import java.nio.file.NoSuchFileException
 
 import ammonite.interp.Preprocessor
-import ammonite.ops.{Path, _}
-import ammonite.repl.{RemoteLogger, Repl, ReplApiImpl, ReplLoad}
+import ammonite.ops._
+import ammonite.repl.{RemoteLogger, Repl}
 import ammonite.runtime.Evaluator.AmmoniteExit
 import ammonite.runtime.Storage
-import ammonite.util.Name.backtickWrap
-import ammonite.util.Util.{CodeSource, normalizeNewlines}
+import ammonite.util.Util.CodeSource
+import ammonite.util.Name._
 import ammonite.util._
-import fastparse.utils.Compat.Context
-import fastparse.utils.Utils._
+import fastparse.internal.Util.literalize
 import io.github.mandar2812.dynaml.repl.Router.{ArgSig, EntryPoint}
 
+import scala.io.{Codec, Source}
 import scala.annotation.{StaticAnnotation, tailrec}
 import scala.collection.mutable
-import scala.io.Source
 import scala.language.experimental.macros
-import fastparse.utils.Compat.Context
+import scala.reflect.macros.blackbox.Context
+import sourcecode.Compat.Context
 
 /**
   * Customised version of the Ammonite REPL
@@ -119,25 +119,31 @@ object Defaults {
                      |  typeOf
                      |}
                    """.stripMargin
-  def ammoniteHome = ammonite.ops.Path(System.getProperty("user.home"))/".ammonite"
+  def ammoniteHome = os.Path(System.getProperty("user.home"))/".ammonite"
 
-  val ignoreUselessImports = """
-                               |notify => _,
-                               |  wait => _,
-                               |  equals => _,
-                               |  asInstanceOf => _,
-                               |  synchronized => _,
-                               |  notifyAll => _,
-                               |  isInstanceOf => _,
-                               |  == => _,
-                               |  != => _,
-                               |  getClass => _,
-                               |  ne => _,
-                               |  eq => _,
-                               |  ## => _,
-                               |  hashCode => _,
-                               |  _
-                               |"""
+  def alreadyLoadedDependencies(resourceName: String = "amm-dependencies.txt"): Seq[coursier.Dependency] = {
+
+    var is: InputStream = null
+
+    try {
+      is = Thread.currentThread().getContextClassLoader.getResourceAsStream(resourceName)
+      if (is == null)
+        throw new Exception(s"Resource $resourceName not found")
+      scala.io.Source.fromInputStream(is)(Codec.UTF8)
+        .mkString
+        .split('\n')
+        .filter(_.nonEmpty)
+        .map(l => l.split(':') match {
+          case Array(org, name, ver) =>
+            coursier.Dependency(coursier.Module(org, name), ver)
+          case other =>
+            throw new Exception(s"Cannot parse line '$other' from resource $resourceName")
+        })
+    } finally {
+      if (is != null)
+        is.close()
+    }
+  }
 
   def dynaMlPredef = Source.fromFile(root_dir+"/conf/DynaMLInit.scala").getLines.mkString("\n")
 
@@ -167,17 +173,17 @@ object Cli{
   case class Config(predefCode: String = "",
                     defaultPredef: Boolean = true,
                     homePredef: Boolean = true,
-                    storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
-                    wd: Path = ammonite.ops.pwd,
+                    wd: os.Path = os.pwd,
                     welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
                     verboseOutput: Boolean = true,
                     remoteLogging: Boolean = true,
                     watch: Boolean = false,
                     code: Option[String] = None,
-                    home: Path = Defaults.ammoniteHome,
-                    predefFile: Option[Path] = None,
+                    home: os.Path = Defaults.ammoniteHome,
+                    predefFile: Option[os.Path] = None,
                     help: Boolean = false,
-                    colored: Option[Boolean] = None)
+                    colored: Option[Boolean] = None,
+                    classBased: Boolean = false)
 
 
   import Scripts.pathScoptRead
@@ -194,12 +200,12 @@ object Cli{
       "Pass in code to be run immediately in the REPL",
       (c, v) => c.copy(code = Some(v))
     ),
-    Arg[Config, Path](
+    Arg[Config, os.Path](
       "home", Some('h'),
       "The home directory of the REPL; where it looks for config and caches",
       (c, v) => c.copy(home = v)
     ),
-    Arg[Config, Path](
+    Arg[Config, os.Path](
       "predef", Some('p'),
       """Lets you load your predef from a custom location, rather than the
         |default location in your Ammonite home""".stripMargin,
@@ -250,7 +256,7 @@ object Cli{
     Arg[Config, String](
       "banner", Some('b'),
       "Customize the welcome banner that gets shown when Ammonite starts",
-      (c, v) => c.copy(welcomeBanner = Some(v))
+      (c, v) => c.copy(welcomeBanner = if (v.nonEmpty) Some(v) else None)
     ),
     Arg[Config, Unit](
       "no-remote-logging", None,
@@ -258,6 +264,13 @@ object Cli{
         |commands
         |""".stripMargin,
       (c, v) => c.copy(remoteLogging= false)
+    ),
+    Arg[Config, Unit](
+      "class-based", None,
+      """Wrap user code in classes rather than singletons, typically for Java serialization
+        |friendliness.
+        |""".stripMargin,
+      (c, v) => c.copy(classBased=true)
     )
 
   )
@@ -271,7 +284,7 @@ object Cli{
 
     for(arg <- args) yield {
       showArg(arg).padTo(leftMargin, ' ').mkString +
-        arg.doc.lines.mkString(Util.newLine + " " * leftMargin)
+        Predef.augmentString(arg.doc).lines.mkString(Util.newLine + " " * leftMargin)
     }
   }
   def ammoniteHelp = {
@@ -331,18 +344,30 @@ object Cli{
   * the Scala compiler and greatly reduces the startup time of cached scripts.
   */
 object Router{
+  /**
+    * Allows you to query how many things are overridden by the enclosing owner.
+    */
+  case class Overrides(value: Int)
+  object Overrides{
+    def apply()(implicit c: Overrides) = c.value
+    implicit def generate: Overrides = macro impl
+    def impl(c: Context): c.Tree = {
+      import c.universe._
+      q"new _root_.io.github.mandar2812.dynaml.repl.Router.Overrides(${c.internal.enclosingOwner.overrides.length})"
+    }
+  }
+
   class doc(s: String) extends StaticAnnotation
   class main extends StaticAnnotation
-  def generateRoutes[T](t: T): Seq[Router.EntryPoint] = macro generateRoutesImpl[T]
-  def generateRoutesImpl[T: c.WeakTypeTag](c: Context)(t: c.Expr[T]): c.Expr[Seq[EntryPoint]] = {
+  def generateRoutes[T]: Seq[Router.EntryPoint[T]] = macro generateRoutesImpl[T]
+  def generateRoutesImpl[T: c.WeakTypeTag](c: Context): c.Expr[Seq[EntryPoint[T]]] = {
     import c.universe._
     val r = new Router(c)
     val allRoutes = r.getAllRoutesForClass(
-      weakTypeOf[T].asInstanceOf[r.c.Type],
-      t.tree.asInstanceOf[r.c.Tree]
+      weakTypeOf[T].asInstanceOf[r.c.Type]
     ).asInstanceOf[Iterable[c.Tree]]
 
-    c.Expr[Seq[EntryPoint]](q"_root_.scala.Seq(..$allRoutes)")
+    c.Expr[Seq[EntryPoint[T]]](q"_root_.scala.Seq(..$allRoutes)")
   }
 
   /**
@@ -351,10 +376,10 @@ object Router{
     * (just for logging and reading, not a replacement for a `TypeTag`) and
     * possible a function that can compute its default value
     */
-  case class ArgSig(name: String,
-                    typeString: String,
-                    doc: Option[String],
-                    default: Option[() => Any])
+  case class ArgSig[T](name: String,
+                       typeString: String,
+                       doc: Option[String],
+                       default: Option[T => Any])
 
   def stripDashes(s: String) = {
     if (s.startsWith("--")) s.drop(2)
@@ -370,16 +395,17 @@ object Router{
     * instead, which provides a nicer API to call it that mimmicks the API of
     * calling a Scala method.
     */
-  case class EntryPoint(name: String,
-                        argSignatures: Seq[ArgSig],
-                        doc: Option[String],
-                        varargs: Boolean,
-                        invoke0: (Map[String, String], Seq[String]) => Result[Any]){
-    def invoke(groupedArgs: Seq[(String, Option[String])]): Result[Any] = {
+  case class EntryPoint[T](name: String,
+                           argSignatures: Seq[ArgSig[T]],
+                           doc: Option[String],
+                           varargs: Boolean,
+                           invoke0: (T, Map[String, String], Seq[String]) => Result[Any],
+                           overrides: Int){
+    def invoke(target: T, groupedArgs: Seq[(String, Option[String])]): Result[Any] = {
       var remainingArgSignatures = argSignatures.toList
 
 
-      val accumulatedKeywords = mutable.Map.empty[ArgSig, mutable.Buffer[String]]
+      val accumulatedKeywords = mutable.Map.empty[ArgSig[T], mutable.Buffer[String]]
       val keywordableArgs = if (varargs) argSignatures.dropRight(1) else argSignatures
 
       for(arg <- keywordableArgs) accumulatedKeywords(arg) = mutable.Buffer.empty
@@ -388,13 +414,13 @@ object Router{
 
       val lookupArgSig = argSignatures.map(x => (x.name, x)).toMap
 
-      var incomplete: Option[ArgSig] = None
+      var incomplete: Option[ArgSig[T]] = None
 
       for(group <- groupedArgs){
 
         group match{
           case (value, None) =>
-            if (value(0) == '-' && !varargs){
+            if (value.startsWith("-") && !varargs){
               lookupArgSig.get(stripDashes(value)) match{
                 case None => leftoverArgs.append(value)
                 case Some(sig) => incomplete = Some(sig)
@@ -450,7 +476,7 @@ object Router{
           .collect{case (k, Seq(single)) => (k.name, single)}
           .toMap
 
-        try invoke0(mapping, leftoverArgs)
+        try invoke0(target, mapping, leftoverArgs)
         catch{case e: Throwable =>
           Result.Error.Exception(e)
         }
@@ -462,7 +488,7 @@ object Router{
     try Right(t)
     catch{ case e: Throwable => Left(error(e))}
   }
-  def readVarargs[T](arg: ArgSig,
+  def readVarargs[T](arg: ArgSig[_],
                      values: Seq[String],
                      thunk: String => T) = {
     val attempts =
@@ -476,7 +502,7 @@ object Router{
   }
   def read[T](dict: Map[String, String],
               default: => Option[Any],
-              arg: ArgSig,
+              arg: ArgSig[_],
               thunk: String => T): FailMaybe = {
     dict.get(arg.name) match{
       case None =>
@@ -516,10 +542,10 @@ object Router{
         * Invoking the [[EntryPoint]] failed because the arguments provided
         * did not line up with the arguments expected
         */
-      case class MismatchedArguments(missing: Seq[ArgSig],
+      case class MismatchedArguments(missing: Seq[ArgSig[_]],
                                      unknown: Seq[String],
-                                     duplicate: Seq[(ArgSig, Seq[String])],
-                                     incomplete: Option[ArgSig]) extends Error
+                                     duplicate: Seq[(ArgSig[_], Seq[String])],
+                                     incomplete: Option[ArgSig[_]]) extends Error
       /**
         * Invoking the [[EntryPoint]] failed because there were problems
         * deserializing/parsing individual arguments
@@ -533,12 +559,12 @@ object Router{
         * Something went wrong trying to de-serialize the input parameter;
         * the thrown exception is stored in [[ex]]
         */
-      case class Invalid(arg: ArgSig, value: String, ex: Throwable) extends ParamError
+      case class Invalid(arg: ArgSig[_], value: String, ex: Throwable) extends ParamError
       /**
         * Something went wrong trying to evaluate the default value
         * for this input parameter
         */
-      case class DefaultFailed(arg: ArgSig, ex: Throwable) extends ParamError
+      case class DefaultFailed(arg: ArgSig[_], ex: Throwable) extends ParamError
     }
   }
 
@@ -555,21 +581,37 @@ object Router{
       Result.Success(rights)
     }
   }
+
+  def makeReadCall[T: scopt.Read](dict: Map[String, String],
+                                  default: => Option[Any],
+                                  arg: ArgSig[_]) = {
+    read[T](dict, default, arg, implicitly[scopt.Read[T]].reads(_))
+  }
+  def makeReadVarargsCall[T: scopt.Read](arg: ArgSig[_],
+                                         values: Seq[String]) = {
+    readVarargs[T](arg, values, implicitly[scopt.Read[T]].reads(_))
+  }
 }
+
 class Router [C <: Context](val c: C) {
   import c.universe._
   def getValsOrMeths(curCls: Type): Iterable[MethodSymbol] = {
-    def isAMemberOfAnyRef(member: Symbol) =
-      weakTypeOf[AnyRef].members.exists(_.name == member.name)
+    def isAMemberOfAnyRef(member: Symbol) = {
+      // AnyRef is an alias symbol, we go to the real "owner" of these methods
+      val anyRefSym = c.mirror.universe.definitions.ObjectClass
+      member.owner == anyRefSym
+    }
     val extractableMembers = for {
-      member <- curCls.declarations
+      member <- curCls.members.toList.reverse
       if !isAMemberOfAnyRef(member)
       if !member.isSynthetic
       if member.isPublic
       if member.isTerm
       memTerm = member.asTerm
       if memTerm.isMethod
+      if !memTerm.isModule
     } yield memTerm.asMethod
+
     extractableMembers flatMap { case memTerm =>
       if (memTerm.isSetter || memTerm.isConstructor || memTerm.isGetter) Nil
       else Seq(memTerm)
@@ -577,22 +619,21 @@ class Router [C <: Context](val c: C) {
     }
   }
 
-  def extractMethod(meth: MethodSymbol,
-                    curCls: c.universe.Type,
-                    target: c.Tree): c.universe.Tree = {
+
+
+  def extractMethod(meth: MethodSymbol, curCls: c.universe.Type): c.universe.Tree = {
+    val baseArgSym = TermName(c.freshName())
     val flattenedArgLists = meth.paramss.flatten
     def hasDefault(i: Int) = {
       val defaultName = s"${meth.name}$$default$$${i + 1}"
-      if (curCls.members.exists(_.name.toString == defaultName)) {
-        Some(defaultName)
-      } else {
-        None
-      }
+      if (curCls.members.exists(_.name.toString == defaultName)) Some(defaultName)
+      else None
     }
     val argListSymbol = q"${c.fresh[TermName]("argsList")}"
     val extrasSymbol = q"${c.fresh[TermName]("extras")}"
     val defaults = for ((arg, i) <- flattenedArgLists.zipWithIndex) yield {
-      hasDefault(i).map(defaultName => q"() => $target.${newTermName(defaultName)}")
+      val arg = TermName(c.freshName())
+      hasDefault(i).map(defaultName => q"($arg: $curCls) => $arg.${newTermName(defaultName)}")
     }
 
     def getDocAnnotation(annotations: List[Annotation]) = {
@@ -626,7 +667,7 @@ class Router [C <: Context](val c: C) {
       val default =
         if (vararg) q"scala.Some(scala.Nil)"
         else defaultOpt match {
-          case Some(defaultExpr) => q"scala.Some($defaultExpr())"
+          case Some(defaultExpr) => q"scala.Some($defaultExpr($baseArgSym))"
           case None => q"scala.None"
         }
 
@@ -655,19 +696,18 @@ class Router [C <: Context](val c: C) {
 
       val reader =
         if(vararg) q"""
-          io.github.mandar2812.dynaml.repl.Router.readVarargs[$docUnwrappedType](
+          io.github.mandar2812.dynaml.repl.Router.makeReadVarargsCall[$docUnwrappedType](
             $argSig,
-            $extrasSymbol,
-            implicitly[scopt.Read[$docUnwrappedType]].reads(_)
+            $extrasSymbol
           )
         """ else q"""
-        io.github.mandar2812.dynaml.repl.Router.read[$docUnwrappedType](
+        io.github.mandar2812.dynaml.repl.Router.makeReadCall[$docUnwrappedType](
           $argListSymbol,
           $default,
-          $argSig,
-          implicitly[scopt.Read[$docUnwrappedType]].reads(_)
+          $argSig
         )
         """
+      c.internal.setPos(reader, meth.pos)
       (reader, argSig, vararg)
     }
 
@@ -682,6 +722,7 @@ class Router [C <: Context](val c: C) {
       )
     }.unzip
 
+
     q"""
     io.github.mandar2812.dynaml.repl.Router.EntryPoint(
       ${meth.name.toString},
@@ -691,20 +732,32 @@ class Router [C <: Context](val c: C) {
       case Some(s) => q"scala.Some($s)"
     }},
       ${varargs.contains(true)},
-      ($argListSymbol: Map[String, String], $extrasSymbol: Seq[String]) =>
+      ($baseArgSym: $curCls, $argListSymbol: Map[String, String], $extrasSymbol: Seq[String]) =>
         io.github.mandar2812.dynaml.repl.Router.validate(Seq(..$readArgs)) match{
           case io.github.mandar2812.dynaml.repl.Router.Result.Success(List(..$argNames)) =>
-            io.github.mandar2812.dynaml.repl.Router.Result.Success($target.${meth.name.toTermName}(..$argNameCasts))
-          case x => x
-        }
+            io.github.mandar2812.dynaml.repl.Router.Result.Success(
+              $baseArgSym.${meth.name.toTermName}(..$argNameCasts)
+            )
+          case x: io.github.mandar2812.dynaml.repl.Router.Result.Error => x
+        },
+      io.github.mandar2812.dynaml.repl.Router.Overrides()
     )
     """
   }
 
-  def getAllRoutesForClass(curCls: Type, target: c.Tree): Iterable[c.universe.Tree] = for{
-    t <- getValsOrMeths(curCls)
-    if t.annotations.exists(_.tpe =:= typeOf[Router.main])
-  } yield extractMethod(t, curCls, target)
+  def hasMainAnnotation(t: MethodSymbol) = {
+    t.annotations.exists(_.tpe =:= typeOf[Router.main])
+  }
+  def getAllRoutesForClass(curCls: Type,
+                           pred: MethodSymbol => Boolean = hasMainAnnotation)
+  : Iterable[c.universe.Tree] = {
+    for{
+      t <- getValsOrMeths(curCls)
+      if pred(t)
+    } yield {
+      extractMethod(t, curCls)
+    }
+  }
 }
 
 /**
@@ -728,17 +781,18 @@ object Scripts {
     scriptArgs
   }
 
-  def runScript(wd: Path,
-                path: Path,
+  def runScript(wd: os.Path,
+                path: os.Path,
                 interp: ammonite.interp.Interpreter,
                 scriptArgs: Seq[(String, Option[String])] = Nil) = {
     interp.watch(path)
     val (pkg, wrapper) = Util.pathToPackageWrapper(Seq(), path relativeTo wd)
 
     for{
-      scriptTxt <- try Res.Success(Util.normalizeNewlines(read(path))) catch{
+      scriptTxt <- try Res.Success(Util.normalizeNewlines(os.read(path))) catch{
         case e: NoSuchFileException => Res.Failure("Script file not found: " + path)
       }
+
       processed <- interp.processModule(
         scriptTxt,
         CodeSource(wrapper, pkg, Seq(Name("ammonite"), Name("$file")), Some(path)),
@@ -751,8 +805,9 @@ object Scripts {
         extraCode = Util.normalizeNewlines(
           s"""
              |val $$routesOuter = this
-             |object $$routes extends scala.Function0[scala.Seq[io.github.mandar2812.dynaml.repl.Router.EntryPoint]]{
-             |  def apply() = io.github.mandar2812.dynaml.repl.Router.generateRoutes[$$routesOuter.type]($$routesOuter)
+             |object $$routes
+             |extends scala.Function0[scala.Seq[io.github.mandar2812.dynaml.repl.Router.EntryPoint[$$routesOuter.type]]]{
+             |  def apply() = io.github.mandar2812.dynaml.repl.Router.generateRoutes[$$routesOuter.type]
              |}
           """.stripMargin
         ),
@@ -764,6 +819,11 @@ object Scripts {
         case None => Res.Skip
       }
 
+      mainCls =
+      interp
+        .evalClassloader
+        .loadClass(processed.blockInfo.last.id.wrapperPath + "$")
+
       routesCls =
       interp
         .evalClassloader
@@ -773,8 +833,11 @@ object Scripts {
       routesCls
         .getField("MODULE$")
         .get(null)
-        .asInstanceOf[() => Seq[Router.EntryPoint]]
+        .asInstanceOf[() => Seq[Router.EntryPoint[Any]]]
         .apply()
+
+
+      mainObj = mainCls.getField("MODULE$").get(null)
 
       res <- Util.withContextClassloader(interp.evalClassloader){
         scriptMains match {
@@ -790,12 +853,12 @@ object Scripts {
             }
 
           // If there's one @main method, we run it with all args
-          case Seq(main) => runMainMethod(main, scriptArgs)
+          case Seq(main) => runMainMethod(mainObj, main, scriptArgs)
 
           // If there are multiple @main methods, we use the first arg to decide
           // which method to run, and pass the rest to that main method
           case mainMethods =>
-            val suffix = formatMainMethods(mainMethods)
+            val suffix = formatMainMethods(mainObj, mainMethods)
             scriptArgs match{
               case Seq() =>
                 Res.Failure(
@@ -813,21 +876,21 @@ object Scripts {
                       s"Unable to find subcommand: " + backtickWrap(head) + suffix
                     )
                   case Some(main) =>
-                    runMainMethod(main, tail)
+                    runMainMethod(mainObj, main, tail)
                 }
             }
         }
       }
     } yield res
   }
-  def formatMainMethods(mainMethods: Seq[Router.EntryPoint]) = {
+  def formatMainMethods[T](base: T, mainMethods: Seq[Router.EntryPoint[T]]) = {
     if (mainMethods.isEmpty) ""
     else{
       val leftColWidth = getLeftColWidth(mainMethods.flatMap(_.argSignatures))
 
       val methods =
         for(main <- mainMethods)
-          yield formatMainMethodSignature(main, 2, leftColWidth)
+          yield formatMainMethodSignature(base, main, 2, leftColWidth)
 
       Util.normalizeNewlines(
         s"""
@@ -838,24 +901,25 @@ object Scripts {
       )
     }
   }
-  def getLeftColWidth(items: Seq[ArgSig]) = {
+  def getLeftColWidth[T](items: Seq[ArgSig[T]]) = {
     items.map(_.name.length + 2) match{
       case Nil => 0
       case x => x.max
     }
   }
-  def formatMainMethodSignature(main: Router.EntryPoint,
-                                leftIndent: Int,
-                                leftColWidth: Int) = {
+  def formatMainMethodSignature[T](base: T,
+                                   main: Router.EntryPoint[T],
+                                   leftIndent: Int,
+                                   leftColWidth: Int) = {
     // +2 for space on right of left col
-    val args = main.argSignatures.map(renderArg(_, leftColWidth + leftIndent + 2 + 2, 80))
+    val args = main.argSignatures.map(renderArg(base, _, leftColWidth + leftIndent + 2 + 2, 80))
 
     val leftIndentStr = " " * leftIndent
     val argStrings =
       for((lhs, rhs) <- args)
         yield {
           val lhsPadded = lhs.padTo(leftColWidth, ' ')
-          val rhsPadded = rhs.lines.mkString(Util.newLine)
+          val rhsPadded = Predef.augmentString(rhs).lines.mkString(Util.newLine)
           s"$leftIndentStr  $lhsPadded  $rhsPadded"
         }
     val mainDocSuffix = main.doc match{
@@ -863,20 +927,21 @@ object Scripts {
       case None => ""
     }
 
-    s"""$leftIndentStr${main.name}${mainDocSuffix}
+    s"""$leftIndentStr${main.name}$mainDocSuffix
        |${argStrings.map(_ + Util.newLine).mkString}""".stripMargin
   }
-  def runMainMethod(mainMethod: Router.EntryPoint,
-                    scriptArgs: Seq[(String, Option[String])]): Res[Any] = {
+  def runMainMethod[T](base: T,
+                       mainMethod: Router.EntryPoint[T],
+                       scriptArgs: Seq[(String, Option[String])]): Res[Any] = {
     val leftColWidth = getLeftColWidth(mainMethod.argSignatures)
 
-    def expectedMsg = formatMainMethodSignature(mainMethod, 0, leftColWidth)
+    def expectedMsg = formatMainMethodSignature(base: T, mainMethod, 0, leftColWidth)
 
     def pluralize(s: String, n: Int) = {
       if (n == 1) s else s + "s"
     }
 
-    mainMethod.invoke(scriptArgs) match{
+    mainMethod.invoke(base, scriptArgs) match{
       case Router.Result.Success(x) => Res.Success(x)
       case Router.Result.Error.Exception(x: AmmoniteExit) => Res.Success(x.value)
       case Router.Result.Error.Exception(x) => Res.Exception(x, "")
@@ -958,7 +1023,7 @@ object Scripts {
   }
 
   def softWrap(s: String, leftOffset: Int, maxWidth: Int) = {
-    val oneLine = s.lines.mkString(" ").split(' ')
+    val oneLine = Predef.augmentString(s).lines.mkString(" ").split(' ')
 
     lazy val indent = " " * leftOffset
 
@@ -978,10 +1043,13 @@ object Scripts {
     }
     output.mkString
   }
-  def renderArgShort(arg: ArgSig) = "--" + backtickWrap(arg.name)
-  def renderArg(arg: ArgSig, leftOffset: Int, wrappedWidth: Int): (String, String) = {
+  def renderArgShort[T](arg: ArgSig[T]) = "--" + backtickWrap(arg.name)
+  def renderArg[T](base: T,
+                   arg: ArgSig[T],
+                   leftOffset: Int,
+                   wrappedWidth: Int): (String, String) = {
     val suffix = arg.default match{
-      case Some(f) => " (default " + f() + ")"
+      case Some(f) => " (default " + f(base) + ")"
       case None => ""
     }
     val docSuffix = arg.doc match{
@@ -997,7 +1065,7 @@ object Scripts {
   }
 
 
-  def mainMethodDetails(ep: EntryPoint) = {
+  def mainMethodDetails[T](ep: EntryPoint[T]) = {
     ep.argSignatures.collect{
       case ArgSig(name, tpe, Some(doc), default) =>
         Util.newLine + name + " // " + doc
@@ -1007,7 +1075,7 @@ object Scripts {
   /**
     * Additional [[scopt.Read]] instance to teach it how to read Ammonite paths
     */
-  implicit def pathScoptRead: scopt.Read[Path] = scopt.Read.stringRead.map(Path(_, pwd))
+  implicit def pathScoptRead: scopt.Read[os.Path] = scopt.Read.stringRead.map(os.Path(_, os.pwd))
 
 }
 
@@ -1025,7 +1093,7 @@ object Scripts {
   */
 private[dynaml] object ProxyFromEnv {
   private lazy val KeyPattern ="""([\w\d]+)_proxy""".r
-  private lazy val UrlPattern ="""([\w\d]+://)?(.+@)?([\w\d\.]+):(\d+)/?""".r
+  private lazy val UrlPattern ="""([\w\d]+://)?(.+@)?([\w\d\.\-]+):(\d+)/?""".r
 
   /**
     * Get current proxy environment variables.

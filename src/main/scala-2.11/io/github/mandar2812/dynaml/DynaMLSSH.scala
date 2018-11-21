@@ -68,10 +68,10 @@ class DynaMLSSH(
 object DynaMLSSH {
   // Actually runs a repl inside of session serving a remote user shell.
   private def runRepl(
-    homePath: Path,
+    homePath: os.Path,
     predefCode: String,
     defaultPredef: Boolean,
-    wd: Path,
+    wd: os.Path,
     replArgs: Seq[Bind[_]],
     replServerClassLoader: ClassLoader)(
     in: InputStream, out: OutputStream): Unit = {
