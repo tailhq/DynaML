@@ -29,6 +29,7 @@ index-*.html
 *.DS_Store
 javascripts
 stylesheets
+!project/project/plugins.sbt
 project/project
 project/target
 .ensime

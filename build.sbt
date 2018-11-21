@@ -3,18 +3,16 @@ import java.io.File
 import Dependencies._
 import sbtbuildinfo.BuildInfoPlugin.autoImport._
 
-maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
-
-packageSummary := "Scala Library/REPL for Machine Learning Research"
-
-packageDescription := "DynaML is a Scala environment for conducting research and education in Machine Learning. DynaML comes packaged with a powerful library of classes for various predictive models and a Scala REPL where one can not only build custom models but also play around with data work-flows. It can also be used as an educational/research tool for data analysis."
 
 val mainVersion = "v2.0-SNAPSHOT"
+maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
+packageSummary := "Scala Library/REPL for Machine Learning Research"
+packageDescription := "DynaML is a Scala & JVM Machine Learning toolbox for research, education & industry."
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
 val baseSettings = Seq(
-  organization := "io.github.mandar2812",
+  organization := "io.github.transcendent-ai-labs",
   scalaVersion in ThisBuild := scala,
   resolvers in ThisBuild ++= Seq(
     "jzy3d-releases" at "http://maven.jzy3d.org/releases",
@@ -22,7 +20,9 @@ val baseSettings = Seq(
     "BeDataDriven" at "https://nexus.bedatadriven.com/content/groups/public",
     Resolver.sonatypeRepo("public"),
     Resolver.sonatypeRepo("snapshots")),
-  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline", "-target:jvm-1.8")
+  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline", "-target:jvm-1.8"),
+  publishTo := sonatypePublishTo.value,
+  useGpg := true
 )
 
 lazy val commonSettings = Seq(

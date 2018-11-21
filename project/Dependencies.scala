@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
 
-  val scala = "2.11.8"
+  val scala = "2.11.11"
 
   val platform: String = {
     // Determine platform name using code similar to javacpp
