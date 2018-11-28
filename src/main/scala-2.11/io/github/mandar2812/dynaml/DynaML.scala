@@ -107,7 +107,7 @@ case class DynaML(predefCode: String = "",
     loadedPredefFile.right.map{ predefFileInfoOpt =>
       val augmentedPredef = DynaML.maybeDefaultPredef(
         defaultPredef,
-        Defaults.replPredef + Defaults.predefString + DynaML.extraPredefString
+        Defaults.replPredef + Defaults.predefString + DynaML.extraPredefString + Defaults.dynaMlPredef
       )
 
       val argString = replArgs.zipWithIndex.map{ case (b, idx) =>
@@ -150,7 +150,7 @@ case class DynaML(predefCode: String = "",
     loadedPredefFile.right.flatMap { predefFileInfoOpt =>
       val augmentedPredef = DynaML.maybeDefaultPredef(
         defaultPredef,
-        Defaults.predefString + DynaML.extraPredefString
+        Defaults.predefString + DynaML.extraPredefString + Defaults.dynaMlPredef
       )
 
       val (colorsRef, printer) = Interpreter.initPrinters(
@@ -345,8 +345,8 @@ object DynaML{
   def isInteractive() = System.console() != null
 
   val extraPredefString = s"""
-                             |import ammonite.main.Router.{doc, main}
-                             |import ammonite.main.Scripts.pathScoptRead
+                             |import io.github.mandar2812.dynaml.repl.Router.{doc, main}
+                             |import io.github.mandar2812.dynaml.repl.Scripts.pathScoptRead
                              |""".stripMargin
 
 }

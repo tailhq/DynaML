@@ -19,7 +19,8 @@ val baseSettings = Seq(
     "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
     "BeDataDriven" at "https://nexus.bedatadriven.com/content/groups/public",
     Resolver.sonatypeRepo("public"),
-    Resolver.sonatypeRepo("snapshots")),
+    Resolver.sonatypeRepo("snapshots"),
+    Resolver.typesafeIvyRepo("releases")),
   scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline", "-target:jvm-1.8"),
   publishTo := sonatypePublishTo.value,
   useGpg := true
