@@ -1133,7 +1133,6 @@ private[dynaml] object ProxyFromEnv {
     val sysProps = sys.props
     val proxyProps = envs.flatMap { env =>
       val props = envToProps(env)
-      if (props.isEmpty) println(s"Warn: environment variable$env cannot be parsed.")
       props
     }.filter(p => !sysProps.exists(sp => sp._1 == p._1))
     sysProps ++= proxyProps
