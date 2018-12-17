@@ -6,9 +6,7 @@ regarding copyright ownership.  The ASF licenses this file
 to you under the Apache License, Version 2.0 (the
 "License"); you may not use this file except in compliance
 with the License.  You may obtain a copy of the License at
-
   http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an
 "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -40,12 +38,12 @@ import ammonite.util.{Bind, Colors}
   * @param classLoader classloader for ammonite to use
   */
 class DynaMLSSH(
-  sshConfig: SshServerConfig,
-  predef: String = "",
-  defaultPredef: Boolean = true,
-  wd: Path = ammonite.ops.pwd,
-  replArgs: Seq[Bind[_]] = Nil,
-  classLoader: ClassLoader = DynaMLSSH.getClass.getClassLoader) {
+                 sshConfig: SshServerConfig,
+                 predef: String = "",
+                 defaultPredef: Boolean = true,
+                 wd: Path = ammonite.ops.pwd,
+                 replArgs: Seq[Bind[_]] = Nil,
+                 classLoader: ClassLoader = DynaMLSSH.getClass.getClassLoader) {
   private lazy val sshd = SshServer(
     sshConfig,
     shellServer = DynaMLSSH.runRepl(
@@ -68,13 +66,13 @@ class DynaMLSSH(
 object DynaMLSSH {
   // Actually runs a repl inside of session serving a remote user shell.
   private def runRepl(
-    homePath: os.Path,
-    predefCode: String,
-    defaultPredef: Boolean,
-    wd: os.Path,
-    replArgs: Seq[Bind[_]],
-    replServerClassLoader: ClassLoader)(
-    in: InputStream, out: OutputStream): Unit = {
+                       homePath: Path,
+                       predefCode: String,
+                       defaultPredef: Boolean,
+                       wd: Path,
+                       replArgs: Seq[Bind[_]],
+                       replServerClassLoader: ClassLoader)(
+                       in: InputStream, out: OutputStream): Unit = {
     // since sshd server has it's own customised environment,
     // where things like System.out will output to the
     // server's console, we need to prepare individual environment

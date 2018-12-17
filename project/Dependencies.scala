@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
 
-  val scala = "2.11.11"
+  val scala = "2.11.8"
 
   val platform: String = {
     // Determine platform name using code similar to javacpp
@@ -103,8 +103,8 @@ object Dependencies {
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" % "ammonite-repl_2.11.11" % "1.5.0",
-    "com.lihaoyi" % "ammonite-sshd_2.11.11" % "1.5.0"
+    "com.lihaoyi" % "ammonite-repl_2.11.8" % "1.1.0",
+    "com.lihaoyi" % "ammonite-sshd_2.11.8" % "1.1.0"
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
