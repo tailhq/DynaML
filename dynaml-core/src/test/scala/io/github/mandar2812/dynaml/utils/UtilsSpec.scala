@@ -2,9 +2,9 @@ package io.github.mandar2812.dynaml.utils
 
 import breeze.linalg._
 import breeze.stats.distributions.{Gaussian, LogNormal}
-import io.github.mandar2812.dynaml.analysis.implicits._
-import io.github.mandar2812.dynaml.algebra.{PartitionedMatrix, btrace}
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
+import io.github.mandar2812.dynaml.algebra.{PartitionedMatrix, btrace}
+import io.github.mandar2812.dynaml.analysis.implicits._
 import io.github.mandar2812.dynaml.utils
 import org.scalatest.{FlatSpec, Matchers}
 import spire.algebra._

@@ -80,8 +80,8 @@ object Dependencies {
 
   val apacheSparkDependency = Seq(
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
-    "org.apache.spark" % "spark-core_2.12" % "2.4.0" % "compile",
-    "org.apache.spark" % "spark-mllib_2.12" % "2.4.0" % "compile")
+    "org.apache.spark" % "spark-core_2.12" % "2.4.0",
+    "org.apache.spark" % "spark-mllib_2.12" % "2.4.0")
     .map(_.exclude("org.slf4j", "slf4j-log4j12"))
     .map(_.exclude("org.scalanlp", "breeze_2.12"))
     .map(_.exclude("javax.ws.rs" , "javax.ws.rs-api"))
