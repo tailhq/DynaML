@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.DenseVector
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 import io.github.mandar2812.dynaml.DynaMLPipe
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.graph.FFNeuralGraph

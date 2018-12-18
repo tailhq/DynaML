@@ -11,7 +11,7 @@ import io.github.mandar2812.dynaml.optimization.GridSearch
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability._
 import spire.implicits._
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 import io.github.mandar2812.dynaml.utils
 
 val data = new Gaussian(-2.0, 3.25).sample(2000).toStream

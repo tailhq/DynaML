@@ -21,7 +21,6 @@ package io.github.mandar2812.dynaml
 import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.pipes.DataPipe
 
-import scalaxy.streams.optimize
 import spire.algebra.InnerProductSpace
 
 
@@ -45,7 +44,7 @@ package object probability {
     * @param rv The random variable from which to sample
     * @param f An implicit object representing an inner product on [[I]]
     * */
-  def E[@specialized(Double) I](rv: RandomVariable[I])(implicit f: InnerProductSpace[I, Double]): I = optimize {
+  def E[@specialized(Double) I](rv: RandomVariable[I])(implicit f: InnerProductSpace[I, Double]): I =
     f.divr(
       rv.iid(candidates)
         .sample()
@@ -53,12 +52,10 @@ package object probability {
           (x, y) => f.plus(x,y)
         ),
       candidates.toDouble)
-  }
 
 
-  def E(rv: RandomVariable[Double]): Double = optimize {
-    rv.iid(candidates).sample().sum/candidates.toDouble
-  }
+  def E(rv: RandomVariable[Double]): Double = rv.iid(candidates).sample().sum/candidates.toDouble
+
 
 
   /**

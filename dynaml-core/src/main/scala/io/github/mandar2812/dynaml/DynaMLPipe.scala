@@ -36,7 +36,7 @@ import org.apache.spark.rdd.RDD
 import org.renjin.script.RenjinScriptEngine
 import org.renjin.sexp._
 
-import scalaxy.streams.optimize
+//import scalaxy.streams.optimize
 import scala.reflect.ClassTag
 import scala.util.Random
 
@@ -709,15 +709,9 @@ object DynaMLPipe {
     * [[DenseVector]] instances into uniform splits and
     * put them back together.
     * */
-  val breezeDVSplitEncoder = (n: Int) => Encoder((v: DenseVector[Double]) => {
-    optimize {
-      Array.tabulate(v.length/n)(i => v(i*n until math.min((i+1)*n, v.length)))
-    }
-  }, (vs: Array[DenseVector[Double]]) => {
-    optimize {
-      DenseVector(vs.map(_.toArray).reduceLeft((a,b) => a++b))
-    }
-  })
+  val breezeDVSplitEncoder = (n: Int) => Encoder(
+    (v: DenseVector[Double]) => Array.tabulate(v.length/n)(i => v(i*n until math.min((i+1)*n, v.length))),
+    (vs: Array[DenseVector[Double]]) => DenseVector(vs.map(_.toArray).reduceLeft((a,b) => a++b)))
 
   /**
     * Creates an [[Encoder]] which replicates a

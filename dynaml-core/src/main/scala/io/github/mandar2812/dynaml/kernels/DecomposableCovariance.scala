@@ -18,7 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.kernels
 
-import scalaxy.streams.optimize
 import io.github.mandar2812.dynaml.pipes._
 
 /**
@@ -66,9 +65,7 @@ class DecomposableCovariance[S](kernels: LocalScalarKernel[S]*)(
     })
 
     //Bind kernel functions to inputs by zip.
-    optimize {
-      (x, y, kxy).zipped.map((x, y, k) => k(x, y))
-    }
+    (x, y, kxy).zipped.map((x, y, k) => k(x, y))
   })
 
   protected def evaluationDataPipe(config: Map[String, Double]): DataPipe[(S, S), Double] =

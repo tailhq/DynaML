@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.utils
 
-import com.quantifind.charts.Highcharts.{regression, title, xAxis, yAxis}
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts.{regression, title, xAxis, yAxis}
 import io.github.mandar2812.dynaml.evaluation.RegressionMetricsTF
 import io.github.mandar2812.dynaml.tensorflow.dtf
 import org.platanios.tensorflow.api._

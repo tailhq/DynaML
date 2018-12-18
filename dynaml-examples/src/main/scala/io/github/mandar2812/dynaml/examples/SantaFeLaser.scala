@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.examples
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.log4j.Logger
 import io.github.mandar2812.dynaml.DynaMLPipe

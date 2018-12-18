@@ -21,7 +21,7 @@ package io.github.mandar2812.dynaml.evaluation
 import breeze.linalg.DenseVector
 import org.apache.log4j.{Priority, Logger}
 
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 
 /**
  * Class implementing the calculation

@@ -36,7 +36,7 @@ import java.net.URL
 import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrix
 
-import scalaxy.streams.optimize
+//import scalaxy.streams.optimize
 import spire.algebra.{Eq, Field}
 
 import scala.util.Random
@@ -362,9 +362,8 @@ package object utils {
 
   def combine[A](xs: Traversable[Traversable[A]]): Seq[Seq[A]] =
     xs.foldLeft(Seq(Seq.empty[A])) {
-      (x, y) => optimize {
-        for (a <- x.view; b <- y) yield a :+ b
-      }
+      (x, y) => for (a <- x.view; b <- y) yield a :+ b
+
     }
 
   def range[I](min: I, max: I, steps: Int)(implicit field: InnerProductSpace[I, Double]): Stream[I] = {
@@ -385,11 +384,9 @@ package object utils {
 
   def strReplace(fileName: String)(
     findStringRegex: String,
-    replaceString: String): Stream[String] = optimize {
+    replaceString: String): Stream[String] =
+    textFileToStream(fileName).map(replace(findStringRegex)(replaceString))
 
-    textFileToStream(fileName).map(
-      replace(findStringRegex)(replaceString))
-  }
 
   def writeToFile(destination: String)(lines: Stream[String]): Unit = {
     val writer = new BufferedWriter(new FileWriter(new File(destination)))
@@ -400,7 +397,7 @@ package object utils {
   }
 
   def transformData(transform: (String) => String)(lines: Stream[String]): Stream[String] =
-    optimize { lines.map(transform) }
+    lines.map(transform)
 
   def extractColumns(
     lines: Stream[String], sep: String,
@@ -409,18 +406,17 @@ package object utils {
     val tFunc = (line: String) => {
       val fields = line.split(sep)
 
-      optimize {
-        val newFields:List[String] = columns.map(col => {
-          if (!naStrings.contains(col) || fields(col) != naStrings(col)) fields(col)
-          else "<NA>"
-        })
+      val newFields:List[String] = columns.map(col => {
+        if (!naStrings.contains(col) || fields(col) != naStrings(col)) fields(col)
+        else "<NA>"
+      })
 
-        val newLine = newFields.foldLeft("")(
-          (str1, str2) => str1+sep+str2
-        )
+      val newLine = newFields.foldLeft("")(
+        (str1, str2) => str1+sep+str2
+      )
 
-        newLine.tail
-      }
+      newLine.tail
+
     }
 
     transformData(tFunc)(lines)
@@ -494,12 +490,8 @@ package object utils {
 
   def isSymmetricMatrix[V](mat: Matrix[V]): Unit = {
     isSquareMatrix(mat)
-
-    optimize {
-      for (i <- 0 until mat.rows; j <- 0 until i)
-        if (mat(i,j) != mat(j,i))
-          throw new MatrixNotSymmetricException
-    }
+    for (i <- 0 until mat.rows; j <- 0 until i)
+      if (mat(i,j) != mat(j,i)) throw new MatrixNotSymmetricException
   }
 
   /**

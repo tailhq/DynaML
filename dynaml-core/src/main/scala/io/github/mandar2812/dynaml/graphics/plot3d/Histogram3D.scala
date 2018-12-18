@@ -27,7 +27,6 @@ import org.jzy3d.colors.{Color, ColorMapper}
 import org.jzy3d.maths.{Coord2d, Coord3d}
 import org.jzy3d.plot3d.primitives.HistogramBar
 import org.jzy3d.plot3d.rendering.canvas.Quality
-import scalaxy.streams.optimize
 
 
 /**
@@ -75,15 +74,15 @@ class Histogram3D(
 
     val hist: Map[Histogram3D.Range, Int] = {
 
-      val dataAndBin = optimize { for(d <- data; b <- bins) yield (d, b)}
+      val dataAndBin = for(d <- data; b <- bins) yield (d, b)
 
-      optimize {
-        dataAndBin.map(pattern => {
-          val (data, bin) = pattern
-          if(bin.contains(data.x, data.y)) (bin, 1) else (bin, 0)
-        }).groupBy(_._1).map(gr => (gr._1, gr._2.map(_._2).sum))
-          .filter(kv => kv._2 > 0)
-      }
+
+      dataAndBin.map(pattern => {
+        val (data, bin) = pattern
+        if(bin.contains(data.x, data.y)) (bin, 1) else (bin, 0)
+      }).groupBy(_._1).map(gr => (gr._1, gr._2.map(_._2).sum))
+        .filter(kv => kv._2 > 0)
+
     }
 
     val col_mapper = new ColorMapper(

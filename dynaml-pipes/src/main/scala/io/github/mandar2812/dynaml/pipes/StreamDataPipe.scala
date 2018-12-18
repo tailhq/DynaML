@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
 import scala.collection.GenTraversable
-import scalaxy.streams.optimize
+//import scalaxy.streams.optimize
 
 
 /**
@@ -36,7 +36,7 @@ trait StreamDataPipe[I, J, K] extends DataPipe[Stream[I], K]{
     * pipe operations.
     *
     * */
-  val pipe: (I) => J
+  val pipe: I => J
 
   /**
     * The function which writes
@@ -51,7 +51,7 @@ trait StreamDataPipe[I, J, K] extends DataPipe[Stream[I], K]{
   * performs the scala `map`operation.
   * */
 trait StreamMapPipe[I, J] extends StreamDataPipe[I, J, Stream[J]] {
-  override def run(data: Stream[I]): Stream[J] = optimize { data.map(pipe) }
+  override def run(data: Stream[I]): Stream[J] = data.map(pipe)
 }
 
 /**
@@ -59,15 +59,15 @@ trait StreamMapPipe[I, J] extends StreamDataPipe[I, J, Stream[J]] {
   * performs the scala `flatMap` operation.
   * */
 trait StreamFlatMapPipe[I, J] extends StreamDataPipe[I, Stream[J], Stream[J]] {
-  override def run(data: Stream[I]) = optimize { data.flatMap(pipe) }
+  override def run(data: Stream[I]) = data.flatMap(pipe)
 }
 
 trait StreamFilterPipe[I] extends StreamDataPipe[I, Boolean, Stream[I]] {
-  override def run(data: Stream[I]): Stream[I] = optimize { data.filter(pipe) }
+  override def run(data: Stream[I]): Stream[I] = data.filter(pipe)
 }
 
 trait StreamPartitionPipe[I] extends StreamDataPipe[I, Boolean, (Stream[I], Stream[I])] {
-  override def run(data: Stream[I]): (Stream[I], Stream[I]) = optimize { data.partition(pipe) }
+  override def run(data: Stream[I]): (Stream[I], Stream[I]) = data.partition(pipe)
 }
 
 trait StreamSideEffectPipe[I] extends StreamDataPipe[I, Unit, Unit] {

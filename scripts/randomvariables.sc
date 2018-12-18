@@ -3,7 +3,7 @@ import io.github.mandar2812.dynaml.analysis.{DifferentiableMap, PushforwardMap}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.{E, GaussianRV, RandomVariable, OrderStats}
 import spire.implicits._
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 import io.github.mandar2812.dynaml.probability.distributions.{SkewGaussian, UESN}
 
 val g = GaussianRV(0.0, 0.5)

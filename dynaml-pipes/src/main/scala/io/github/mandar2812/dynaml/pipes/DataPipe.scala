@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
 
-import scalaxy.streams.optimize
+//import scalaxy.streams.optimize
 
 trait DataPipeConvertible[-Source, +Destination] {
   def toPipe: (Source) => Destination
@@ -41,7 +41,7 @@ trait DataPipe[-Source, +Destination] extends DataPipeConvertible[Source, Destin
   def apply(data: Source): Destination = run(data)
 
   def apply[T <: Traversable[Source]](data: T): T =
-    optimize { data.map(run).asInstanceOf[T] }
+    data.map(run).asInstanceOf[T]
 
   /**
     * Represents the composition of two

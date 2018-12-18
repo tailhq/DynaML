@@ -18,8 +18,6 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
 
-import scalaxy.streams._
-
 /**
   * @author mandar2812 17/6/16.
   *
@@ -28,7 +26,7 @@ import scalaxy.streams._
   */
 trait Scaler[S] extends DataPipe[S, S]{
   override def apply[T <: Traversable[S]](data: T) =
-    optimize { data.map(run).asInstanceOf[T] }
+    data.map(run).asInstanceOf[T]
 
   def *[T](that: Scaler[T]) = {
     val firstRun = this.run _
@@ -69,7 +67,7 @@ trait ReversibleScaler[S] extends Scaler[S] with Encoder[S, S]{
   override val i: Scaler[S]
 
   override def apply[T<: Traversable[S]](data: T):T =
-    optimize { data.map(run).asInstanceOf[T] }
+    data.map(run).asInstanceOf[T]
 
   def *[T](that: ReversibleScaler[T]) = {
 

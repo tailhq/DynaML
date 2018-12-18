@@ -342,7 +342,7 @@ object LSSVMModel {
 
   def readCSV(reader: CSVReader, head: Boolean):
   (Iterable[(DenseVector[Double], Double)], Int) = {
-    val stream = reader.toStream().toIterable
+    val stream = reader.toStream.toIterable
     val dim = stream.head.length
 
     def lines = if(head) {

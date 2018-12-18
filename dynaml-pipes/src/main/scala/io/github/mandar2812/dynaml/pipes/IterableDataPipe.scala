@@ -17,7 +17,6 @@ specific language governing permissions and limitations
 under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
-import scalaxy.streams.optimize
 
 
 /**
@@ -35,7 +34,7 @@ trait IterableDataPipe[I, J, K] extends DataPipe[Iterable[I], K]{
     * pipe operations.
     *
     * */
-  val pipe: (I) => J
+  val pipe: I => J
 
   /**
     * The function which writes
@@ -50,7 +49,7 @@ trait IterableDataPipe[I, J, K] extends DataPipe[Iterable[I], K]{
   * performs the scala `map`operation.
   * */
 trait IterableMapPipe[I, J] extends IterableDataPipe[I, J, Iterable[J]] {
-  override def run(data: Iterable[I]): Iterable[J] = optimize { data.map(pipe) }
+  override def run(data: Iterable[I]): Iterable[J] = data.map(pipe)
 }
 
 /**
@@ -58,15 +57,15 @@ trait IterableMapPipe[I, J] extends IterableDataPipe[I, J, Iterable[J]] {
   * performs the scala `flatMap` operation.
   * */
 trait IterableFlatMapPipe[I, J] extends IterableDataPipe[I, Iterable[J], Iterable[J]] {
-  override def run(data: Iterable[I]) = optimize { data.flatMap(pipe) }
+  override def run(data: Iterable[I]) = data.flatMap(pipe)
 }
 
 trait IterableFilterPipe[I] extends IterableDataPipe[I, Boolean, Iterable[I]] {
-  override def run(data: Iterable[I]): Iterable[I] = optimize { data.filter(pipe) }
+  override def run(data: Iterable[I]): Iterable[I] = data.filter(pipe)
 }
 
 trait IterablePartitionPipe[I] extends IterableDataPipe[I, Boolean, (Iterable[I], Iterable[I])] {
-  override def run(data: Iterable[I]): (Iterable[I], Iterable[I]) = optimize { data.partition(pipe) }
+  override def run(data: Iterable[I]): (Iterable[I], Iterable[I]) = data.partition(pipe)
 }
 
 trait IterableSideEffectPipe[I] extends IterableDataPipe[I, Unit, Unit] {

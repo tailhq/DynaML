@@ -4,7 +4,6 @@ import breeze.linalg._
 import io.github.mandar2812.dynaml.algebra.{PartitionedMatrix, PartitionedPSDMatrix}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
-import scalaxy.streams.optimize
 
 /**
  * Defines an abstract class outlines the basic
@@ -75,12 +74,12 @@ object SVMKernel {
       eval: (T, T) =>  Double):
   KernelMatrix[DenseMatrix[Double]] = {
 
-    val kernelIndex = optimize {
+    val kernelIndex =
       utils.combine(Seq(mappedData.zipWithIndex, mappedData.zipWithIndex))
         .filter(s => s.head._2 >= s.last._2)
         .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
         .toMap
-    }
+
 
     val kernel = DenseMatrix.tabulate[Double](length, length){
       (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
@@ -94,11 +93,10 @@ object SVMKernel {
                                         eval: (T, T) =>  Double)
   : DenseMatrix[Double] = {
 
-    val kernelIndex = optimize {
+    val kernelIndex =
       utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
         .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
         .toMap
-    }
 
     println("   Dimensions: " + data1.length + " x " + data2.length)
     DenseMatrix.tabulate[Double](data1.length, data2.length){
@@ -110,7 +108,7 @@ object SVMKernel {
     data1: S,
     hyper_parameters: Seq[String],
     eval: (T, T) => Double,
-    evalGrad: (String) => (T, T) =>  Double):
+    evalGrad: String => (T, T) =>  Double):
   Map[String, DenseMatrix[Double]] = {
 
     val (rows, cols) = (data1.length, data1.length)
@@ -119,28 +117,26 @@ object SVMKernel {
 
     val keys = Seq("kernel-matrix") ++ hyper_parameters
 
-    optimize {
-      utils.combine(Seq(data1.zipWithIndex, data1.zipWithIndex))
-        .filter(s => s.head._2 >= s.last._2)
-        .flatMap(s => {
-          keys.map(k =>
-            if(k == "kernel-matrix") (k, ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
-            else (k, ((s.head._2, s.last._2), evalGrad(k)(s.head._1, s.last._1))))
-        }).groupBy(_._1).map(cl => {
+    utils.combine(Seq(data1.zipWithIndex, data1.zipWithIndex))
+      .filter(s => s.head._2 >= s.last._2)
+      .flatMap(s => {
+        keys.map(k =>
+          if(k == "kernel-matrix") (k, ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+          else (k, ((s.head._2, s.last._2), evalGrad(k)(s.head._1, s.last._1))))
+      }).groupBy(_._1).map(cl => {
 
-        if (cl._1 == "kernel-matrix") println("Constructing Kernel Matrix")
-        else println("Constructing Grad Matrix for: "+cl._1)
+      if (cl._1 == "kernel-matrix") println("Constructing Kernel Matrix")
+      else println("Constructing Grad Matrix for: "+cl._1)
 
-        val kernelIndex = cl._2.map(_._2).toMap
+      val kernelIndex = cl._2.map(_._2).toMap
 
-        (
-          cl._1,
-          DenseMatrix.tabulate[Double](rows, cols){
-            (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
-          }
-        )
-      })
-    }
+      (
+        cl._1,
+        DenseMatrix.tabulate[Double](rows, cols){
+          (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
+        }
+      )
+    })
   }
 
 
@@ -161,27 +157,25 @@ object SVMKernel {
 
     val keys = Seq("kernel-matrix") ++ hyper_parameters
 
-    optimize {
-      utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
-        .flatMap(s => {
-          keys.map(k =>
-            if(k == "kernel-matrix") (k, ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
-            else (k, ((s.head._2, s.last._2), evalGrad(k)(s.head._1, s.last._1))))
-        }).groupBy(_._1).map(cl => {
+    utils.combine(Seq(data1.zipWithIndex, data2.zipWithIndex))
+      .flatMap(s => {
+        keys.map(k =>
+          if(k == "kernel-matrix") (k, ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
+          else (k, ((s.head._2, s.last._2), evalGrad(k)(s.head._1, s.last._1))))
+      }).groupBy(_._1).map(cl => {
 
-        if (cl._1 == "kernel-matrix") println("Constructing Kernel Matrix")
-        else println("Constructing Grad Matrix for: "+cl._1)
+      if (cl._1 == "kernel-matrix") println("Constructing Kernel Matrix")
+      else println("Constructing Grad Matrix for: "+cl._1)
 
-        val kernelIndex = cl._2.map(_._2).toMap
+      val kernelIndex = cl._2.map(_._2).toMap
 
-        (
-          cl._1,
-          DenseMatrix.tabulate[Double](rows, cols){
-            (i, j) => kernelIndex((i,j))
-          }
-        )
-      })
-    }
+      (
+        cl._1,
+        DenseMatrix.tabulate[Double](rows, cols){
+          (i, j) => kernelIndex((i,j))
+        }
+      )
+    })
   }
 
   def buildPartitionedKernelMatrix[S <: Seq[T], T](
@@ -205,7 +199,7 @@ object SVMKernel {
 
     println("~~~~~~~~~~~~~~~~~~~~~~~")
     println("Constructing Partitions")
-    new PartitionedPSDMatrix(optimize {
+    new PartitionedPSDMatrix(
       utils.combine(Seq(partitionedData, partitionedData))
         .filter(c => c.head._2 >= c.last._2)
         .toStream.map(c => {
@@ -220,7 +214,7 @@ object SVMKernel {
 
         (partitionIndex, matrix)
       })
-    }, rows, cols, num_R_blocks, num_C_blocks)
+    , rows, cols, num_R_blocks, num_C_blocks)
 
   }
 
