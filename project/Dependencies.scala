@@ -81,7 +81,9 @@ object Dependencies {
   val apacheSparkDependency = Seq(
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
     "org.apache.spark" % "spark-core_2.12" % "2.4.0",
-    "org.apache.spark" % "spark-mllib_2.12" % "2.4.0")
+    "org.apache.spark" % "spark-mllib_2.12" % "2.4.0",
+    "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.7")
     .map(_.exclude("org.slf4j", "slf4j-log4j12"))
     .map(_.exclude("org.scalanlp", "breeze_2.12"))
     .map(_.exclude("javax.ws.rs" , "javax.ws.rs-api"))
@@ -96,8 +98,7 @@ object Dependencies {
 
   val chartsDependencies = Seq(
     "com.github.wookietreiber" % "scala-chart_2.12" % "0.5.1" % "compile",
-    "org.jzy3d" % "jzy3d-api" % "1.0.2" % "compile"/*,
-    "com.quantifind" % "wisp_2.11" % "0.0.4" % "compile"*/
+    "org.jzy3d" % "jzy3d-api" % "1.0.2" % "compile"
   )
 
   val replDependency = Seq(
