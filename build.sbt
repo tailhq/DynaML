@@ -14,6 +14,7 @@ val dataDirectory = settingKey[File]("The directory holding the data files for r
 val baseSettings = Seq(
   organization := "io.github.transcendent-ai-labs",
   scalaVersion in ThisBuild := scala,
+  crossScalaVersions in ThisBuild := crossScala,
   resolvers in ThisBuild ++= Seq(
     "jzy3d-releases" at "http://maven.jzy3d.org/releases",
     "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
@@ -21,9 +22,10 @@ val baseSettings = Seq(
     Resolver.sonatypeRepo("public"),
     Resolver.sonatypeRepo("snapshots"),
     Resolver.typesafeIvyRepo("releases")),
-  scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline", "-target:jvm-1.8"),
   publishTo := sonatypePublishTo.value,
-  useGpg := true
+  useGpg := true,
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
+  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true)
 )
 
 lazy val commonSettings = Seq(

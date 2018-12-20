@@ -45,3 +45,4 @@ interpreter/*
 temp
 temp/*
 /bin/
+test_output

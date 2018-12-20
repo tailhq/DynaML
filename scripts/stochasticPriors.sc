@@ -4,7 +4,7 @@
   import io.github.mandar2812.dynaml.kernels._
   import io.github.mandar2812.dynaml.models.bayes.{LinearTrendESGPrior, LinearTrendGaussianPrior}
   import io.github.mandar2812.dynaml.probability._
-  import com.quantifind.charts.Highcharts._
+  import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
   import io.github.mandar2812.dynaml.analysis.implicits._
   import io.github.mandar2812.dynaml.optimization.GPMixtureMachine
   import io.github.mandar2812.dynaml.pipes.Encoder

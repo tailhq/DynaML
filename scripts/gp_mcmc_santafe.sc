@@ -8,7 +8,7 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import io.github.mandar2812.dynaml.probability.MultGaussianRV
 import io.github.mandar2812.dynaml.probability.mcmc.HyperParameterMCMC
 import io.github.mandar2812.dynaml.utils.GaussianScaler
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 
 
 val deltaT = 4

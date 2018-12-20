@@ -17,7 +17,7 @@ import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, RandomUniformInitializer}
 
 import scala.util.Random
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 
 
 val random = new Random()
