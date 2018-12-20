@@ -22,7 +22,6 @@ val baseSettings = Seq(
     Resolver.sonatypeRepo("public"),
     Resolver.sonatypeRepo("snapshots"),
     Resolver.typesafeIvyRepo("releases")),
-  //scalacOptions ++= Seq("-optimise", "-Yclosure-elim", "-Yinline", "-target:jvm-1.8"),
   publishTo := sonatypePublishTo.value,
   useGpg := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
