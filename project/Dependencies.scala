@@ -2,7 +2,13 @@ import sbt._
 
 object Dependencies {
 
-  val scala = "2.12.4"
+  val scala_major = 2.12
+
+  val scala_minor = 4
+
+  val scala = s"$scala_major.$scala_minor"
+
+  val crossScala = Seq("2.11.8", "2.12.4")
 
   val platform: String = {
     // Determine platform name using code similar to javacpp
@@ -62,14 +68,14 @@ object Dependencies {
     "org.scala-lang" % "scala-reflect" % scala % "compile",
     "com.typesafe" % "config" % "1.2.1" % "compile",
     "junit" % "junit" % "4.11",
-    "com.github.tototoshi" % "scala-csv_2.12" % "1.3.5" % "compile",
+    "com.github.tototoshi" %% "scala-csv" % "1.3.5" % "compile",
     "org.scala-lang" % "jline" % "2.11.0-M3" % "compile",
     "org.scalaforge" % "scalax" % "0.1" % "compile",
     "org.scalaz" %% "scalaz-core" % "7.2.7",
     "org.scala-graph" %% "graph-core" % "1.12.5",
-    "org.scalatest" % "scalatest_2.12" % "3.0.1" % "test",
-    "com.github.scopt" % "scopt_2.12" % "3.5.0",
-    "org.scalameta" % "scalameta_2.12" % "2.0.1",
+    "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+    "com.github.scopt" %% "scopt" % "3.5.0",
+    "org.scalameta" %% "scalameta" % "2.0.1",
     "javax.ws.rs" % "javax.ws.rs-api" % "2.0-m10",
     "org.json4s" %% "json4s-jackson" % "3.6.2",
     "ws.unfiltered" %% "unfiltered-filter" % "0.9.1",
@@ -80,30 +86,34 @@ object Dependencies {
 
   val apacheSparkDependency = Seq(
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
-    "org.apache.spark" % "spark-core_2.12" % "2.4.0",
-    "org.apache.spark" % "spark-mllib_2.12" % "2.4.0",
+    "org.apache.spark" %% "spark-core" % "2.4.0",
+    "org.apache.spark" %% "spark-mllib" % "2.4.0",
     "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.7")
-    .map(_.exclude("org.slf4j", "slf4j-log4j12"))
-    .map(_.exclude("org.scalanlp", "breeze_2.12"))
-    .map(_.exclude("javax.ws.rs" , "javax.ws.rs-api"))
+    .map(_.withExclusions(
+      Vector(
+        "org.slf4j" %% "slf4j-log4j12", 
+        "org.scalanlp" %% "breeze", 
+        "javax.ws.rs" %% "javax.ws.rs-api"))
+    )
+    
 
   val loggingDependency = Seq("log4j" % "log4j" % "1.2.17" % "compile")
 
   val linearAlgebraDependencies = Seq(
-    "org.typelevel" % "spire_2.12" % "0.14.1",
-    "org.scalanlp" % "breeze_2.12" % "0.13.2" % "compile",
-    "org.scalanlp" % "breeze-natives_2.12" % "0.13.2" % "compile"
-  ).map(_.exclude("org.spire-math", "spire_2.12"))
+    "org.typelevel" %% "spire" % "0.14.1",
+    "org.scalanlp" %% "breeze" % "0.13.2" % "compile",
+    "org.scalanlp" %% "breeze-natives" % "0.13.2" % "compile"
+  ).map(_.withExclusions(Vector("org.spire-math" %% "spire")))
 
   val chartsDependencies = Seq(
-    "com.github.wookietreiber" % "scala-chart_2.12" % "0.5.1" % "compile",
+    "com.github.wookietreiber" %% "scala-chart" % "0.5.1" % "compile",
     "org.jzy3d" % "jzy3d-api" % "1.0.2" % "compile"
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" % "ammonite-repl_2.12.4" % "1.1.0",
-    "com.lihaoyi" % "ammonite-sshd_2.12.4" % "1.1.0"
+    "com.lihaoyi" %% "ammonite-repl" % "1.1.0" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "1.1.0" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -126,18 +136,18 @@ object Dependencies {
   )
 
   val dynaServeDependencies = Seq(
-    "com.typesafe.akka" % "akka-actor_2.12" % "2.5.3",
-    "com.typesafe.akka" % "akka-stream_2.12" % "2.5.3",
-    "com.typesafe.akka" % "akka-testkit_2.12" % "2.5.3",
-    "com.typesafe.akka" % "akka-http_2.12" % "10.0.9",
-    "com.typesafe.akka" % "akka-http-spray-json_2.12" % "10.0.9",
-    "com.typesafe.akka" % "akka-http-testkit_2.12" % "10.0.9"
+    "com.typesafe.akka" %% "akka-actor" % "2.5.3",
+    "com.typesafe.akka" %% "akka-stream" % "2.5.3",
+    "com.typesafe.akka" %% "akka-testkit" % "2.5.3",
+    "com.typesafe.akka" %% "akka-http" % "10.0.9",
+    "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.9",
+    "com.typesafe.akka" %% "akka-http-testkit" % "10.0.9"
   )
 
   val imageDependencies = Seq(
-    "com.sksamuel.scrimage" % "scrimage-core_2.12" % "2.1.8",
-    "com.sksamuel.scrimage" % "scrimage-io-extra_2.12" % "2.1.8",
-    "com.sksamuel.scrimage" % "scrimage-filters_2.12" % "2.1.8"
+    "com.sksamuel.scrimage" %% "scrimage-core" % "2.1.8",
+    "com.sksamuel.scrimage" %% "scrimage-io-extra" % "2.1.8",
+    "com.sksamuel.scrimage" %% "scrimage-filters" % "2.1.8"
   )
 
   val dataFormatDependencies = Seq(
@@ -145,7 +155,7 @@ object Dependencies {
   )
 
   val tensorflowDependency = Seq(
-    "org.platanios" % "tensorflow_2.12" % tfscala_version classifier tensorflow_classifier,
-    "org.platanios" % "tensorflow-data_2.12" % tfscala_version
-  ).map(_.exclude("org.typelevel", "spire_2.12"))
+    "org.platanios" %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
+    "org.platanios" %% "tensorflow-data" % tfscala_version
+  ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
 }

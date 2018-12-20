@@ -15,12 +15,14 @@ licenses := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
 // or if you want to set these fields manually
 homepage := Some(url("https://transcendent-ai-labs.github.io/DynaML/"))
+
 scmInfo := Some(
   ScmInfo(
     url("https://github.com/transcendent-ai-labs/DynaML"),
     "git@github.com:transcendent-ai-labs/DynaML.git"
   )
 )
+
 developers := List(
   Developer(
     id="mandar2812",
