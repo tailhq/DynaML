@@ -33,6 +33,7 @@ import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, Da
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.hooks.Hook
 import org.platanios.tensorflow.api.ops.io.data.Data
+import org.platanios.tensorflow.api.ops.io.data.Dataset
 
 /**
   * <h4>Supervised Learning</h4>
@@ -83,9 +84,7 @@ import org.platanios.tensorflow.api.ops.io.data.Data
   * */
 private[dynaml] class TFModel[
 IT, IO, IDA, ID, IS, I,
-TT, TO, TDA, TD, TS, T,
-InferInput, InferOutput,
-ModelInferenceOutput](
+TT, TO, TDA, TD, TS, T](
   override val g: DataSet[(IT, TT)],
   val architecture: Layer[IO, I],
   val input: (IDA, IS),
@@ -110,21 +109,17 @@ ModelInferenceOutput](
   evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
   evFunctionOutput: Function.ArgType[(IO, TO)],
   evFetchableIO: Fetchable.Aux[IO, IT],
-  evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
-  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
-  ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) extends
-  Model[DataSet[(IT, TT)], InferInput, InferOutput] {
+  evFetchableI: Fetchable.Aux[I, IT],
+  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
+  ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT]) extends
+  Model[DataSet[(IT, TT)], IT, TT] {
 
   type ModelPair = dtflearn.SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
 
-  private lazy val tf_dataset = g.build[(IT, TT), (IO, TO), (IDA, TDA), (ID, TD), (IS, TS)](
-    Left(identityPipe[(IT, TT)]),
+  private lazy val tf_dataset = TFModel._tf_data_set[(IT, TT), (IO, TO), (IDA, TDA), (ID, TD), (IS, TS)](
+    g, data_processing,
     (input._1, target._1),
     (input._2, target._2))
-    .repeat()
-    .shuffle(data_processing.shuffleBuffer)
-    .batch(data_processing.batchSize)
-    .prefetch(data_processing.prefetchSize)
 
   private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
 
@@ -163,19 +158,102 @@ ModelInferenceOutput](
   def train(): Unit = estimator.train(() => tf_dataset)
 
   /**
-    * Predict the value of the
-    * target variable given a
-    * point.
+    * @param point Input consisting of a nested structure of Tensors.
+    * @return The model predictions of type [[TT]]
+    * */
+  override def predict(point: IT): TT = estimator.infer[IT, TT, IT](() => point)
+
+  /**
+    * Generate predictions for a data set.
     *
-    **/
-  override def predict(point: InferInput): InferOutput = estimator.infer(() => point)
+    * Here `input_data` can be of one of the following types:
+    *
+    *   - A [[Dataset]], in which case this method returns an iterator over `(input, output)` tuples corresponding to
+    *     each element in the dataset. Note that the predictions are computed lazily in this case, whenever an element
+    *     is requested from the returned iterator.
+    *   - A single input of type [[IT]], in which case this method returns a prediction of type [[I]].
+    *
+    * Note that, [[ModelInferenceOutput]] refers to the tensor type that corresponds to the symbolic type [[I]].
+    * For example, if [[I]] is `(Output, Output)`, then [[ModelInferenceOutput]] will be `(Tensor, Tensor)`.
+    *
+    * */
+  def infer[InferInput, InferOutput, ModelInferenceOutput](
+    input_data: InferInput)(
+    implicit
+    evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
+    ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]
+  ): InferOutput = estimator.infer(() => input_data)
+
+  /**
+    * Generate predictions for a DynaML data set.
+    *
+    * @param input_data_set The data set containing input patterns
+    * @return A DynaML data set of input-prediction tuples.
+    * */
+  def infer(
+    input_data_set: DataSet[IT])(
+    implicit ev: Estimator.SupportedInferInput[
+      Dataset[IT, IO, ID, IS],
+      Iterator[(IT, TT)],
+      IT, IO, ID, IS, TT],
+    evFetchableI: Fetchable.Aux[I, TT],
+    evFunctionOutput: org.platanios.tensorflow.api.ops.Function.ArgType[IO]
+  ): DataSet[(IT, TT)] = {
+
+    val tf_test_set = TFModel._tf_data_set[IT, IO, IDA, ID, IS](
+      input_data_set, TFModel.data_ops(0, data_processing.batchSize, 0),
+      input._1, input._2)
+
+    dtfdata.dataset(infer[Dataset[IT, IO, ID, IS], Iterator[(IT, TT)], TT](tf_test_set).toIterable)
+  }
+
 }
 
 object TFModel {
 
+  /**
+    * Defines data operations to be performed using TensorFlow data API.
+    *
+    * @param shuffleBuffer The size of the shuffle buffer, set to zero if
+    *                      data shuffling is not needed.
+    *
+    * @param batchSize Size of the mini batch.
+    *
+    * @param prefetchSize Number of elements to prefetch.
+    * */
   protected case class DataOps(shuffleBuffer: Int, batchSize: Int, prefetchSize: Int)
 
   type Ops = DataOps
+
+  /**
+    * Generate a Tensorflow Dataset.
+    *
+    * @param data A DynaML data set consisting of nested Tensors.
+    * @param ops A [[DataOps]] instance which specifies the
+    *            TensorFlow Data API pipeline operations to perform.
+    * @param data_type A nested structure of data types corresponding to the input tensors.
+    * @param shape A nested structure of shapes corresponding to the inputs.
+    * */
+  def _tf_data_set[T, O, DA, D, S](
+    data: DataSet[T],
+    ops: DataOps,
+    data_type: DA,
+    shape: S)(
+    implicit
+    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
+    evData: Data.Aux[T, O, D, S],
+    evOToT: OutputToTensor.Aux[O, T],
+    evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] = {
+
+    val starting_data = data.build[T, O, DA, D, S](Left(identityPipe[T]), data_type, shape).repeat()
+
+    val shuffled_dataset = if(ops.shuffleBuffer > 0) starting_data.shuffle(ops.shuffleBuffer) else starting_data
+
+    val batched_dataset = if(ops.batchSize > 0) shuffled_dataset.batch(ops.batchSize) else shuffled_dataset
+
+    if(ops.prefetchSize > 0) batched_dataset.prefetch(ops.prefetchSize) else batched_dataset
+  }
 
   /**
     * A training configuration, contains information on
@@ -242,9 +320,7 @@ object TFModel {
 
   def apply[
   IT, IO, IDA, ID, IS, I,
-  TT, TO, TDA, TD, TS, T,
-  InferInput, InferOutput,
-  ModelInferenceOutput](
+  TT, TO, TDA, TD, TS, T](
   g: DataSet[(IT, TT)],
   architecture: Layer[IO, I],
   input: (IDA, IS),
@@ -269,9 +345,9 @@ object TFModel {
   evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
   evFunctionOutput: Function.ArgType[(IO, TO)],
   evFetchableIO: Fetchable.Aux[IO, IT],
-  evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
-  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
-  ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]) =
+  evFetchableI: Fetchable.Aux[I, IT],
+  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
+  ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT]) =
     new TFModel(
       g, architecture, input, target, processTarget, loss,
       trainConfig, data_processing, inMemory, existingGraph,

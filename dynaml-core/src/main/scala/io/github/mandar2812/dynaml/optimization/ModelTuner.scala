@@ -20,7 +20,7 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
 import breeze.stats.distributions.ContinuousDistr
-import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, ContinuousRVWithDistr, RandomVariable}
+import io.github.mandar2812.dynaml.probability.{ContinuousRVWithDistr, RandomVariable}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
 
@@ -78,11 +78,11 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
       else (i: Int) => initialConfig(param) - (i+1).toDouble*step
 
     //one list for each key in initialConfig
-    val gridvecs = initialConfig.map((keyValue) => {
+    val gridvecs = initialConfig.map(keyValue => {
       (keyValue._1, List.tabulate(gridsize)(scaleFunc(keyValue._1)))
     })
 
-    utils.combine(gridvecs.values).map(x => DenseVector(x.toArray)).map((config) => {
+    utils.combine(gridvecs.values).map(x => DenseVector(x.toArray)).map(config => {
       List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
     })
   }

@@ -63,8 +63,8 @@ class TFModelSpec extends FlatSpec with Matchers {
 
     val regression_model = dtflearn.model[
       Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
-      Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
-      Tensor, Tensor, Tensor](
+      Tensor, Output, DataType.Aux[Double], DataType, Shape, Output/*,
+      Tensor, Tensor, Tensor*/](
       tf_dataset.training_dataset,
       arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
       process_targets, loss,

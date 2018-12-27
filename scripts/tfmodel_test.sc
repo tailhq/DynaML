@@ -38,8 +38,7 @@ val loss = tf.learn.L2Loss("Loss/L2") >>
 
 val regression_model = dtflearn.model[
   Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
-  Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
-  Tensor, Tensor, Tensor](
+  Tensor, Output, DataType.Aux[Double], DataType, Shape, Output](
   tf_dataset.training_dataset,
   arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
   process_targets, loss,

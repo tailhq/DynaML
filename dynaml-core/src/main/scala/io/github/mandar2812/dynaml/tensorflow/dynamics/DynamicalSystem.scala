@@ -98,7 +98,8 @@ private[dynaml] class DynamicalSystem[T](
     trainConfig: TFModel.Config,
     data_processing: TFModel.Ops = TFModel.data_ops(10000, 16, 10),
     inMemory: Boolean = false)(
-    implicit evDAToDI: DataTypeAuxToDataType.Aux[Seq[DataType.Aux[T]], Seq[DataType]],
+    implicit
+    evDAToDI: DataTypeAuxToDataType.Aux[Seq[DataType.Aux[T]], Seq[DataType]],
     evDToOI: DataTypeToOutput.Aux[Seq[DataType], Seq[Output]],
     evOToTI: OutputToTensor.Aux[Seq[Output], Seq[Tensor]],
     evDataI: Data.Aux[Seq[Tensor], Seq[Output], Seq[DataType], Seq[Shape]],
@@ -120,8 +121,7 @@ private[dynaml] class DynamicalSystem[T](
 
     val model = dtflearn.model[
       Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output],
-      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output],
-      Seq[Tensor], Seq[Tensor], Seq[Tensor]](
+      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output]](
       dtfdata.supervised_dataset.collect(data).map(p => (p._1, p._2)),
       model_architecture,
       (Seq.fill(quantities.size)(input._1), Seq.fill(quantities.size)(input._2)),
@@ -160,8 +160,8 @@ object DynamicalSystem {
   protected case class Model[T](
     tfModel: TFModel[
       Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output],
-      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output],
-      Seq[Tensor], Seq[Tensor], Seq[Tensor]],
+      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output]/*,
+      Seq[Tensor], Seq[Tensor], Seq[Tensor]*/],
     outputs: Seq[String],
     variables: Seq[String]) {
 
