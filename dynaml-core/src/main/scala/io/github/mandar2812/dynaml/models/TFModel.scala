@@ -191,7 +191,7 @@ TT, TO, TDA, TD, TS, T](
     * @param input_data_set The data set containing input patterns
     * @return A DynaML data set of input-prediction tuples.
     * */
-  def infer(
+  def infer_coll(
     input_data_set: DataSet[IT])(
     implicit ev: Estimator.SupportedInferInput[
       Dataset[IT, IO, ID, IS],

@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow
 
 import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
-import _root_.io.github.mandar2812.dynaml.models.TFModel
+import _root_.io.github.mandar2812.dynaml.models.{TFModel, TunableTFModel}
 import io.github.mandar2812.dynaml.tensorflow.layers.{DynamicTimeStepCTRNN, FiniteHorizonCTRNN, FiniteHorizonLinear}
 import org.platanios.tensorflow.api.learn.{ClipGradients, Mode, NoClipGradients, StopCriteria}
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
@@ -101,6 +101,7 @@ private[tensorflow] object Learn {
     maxSteps = Some(max_iter))
 
   val model: TFModel.type                    = TFModel
+  val tunable_tf_model: TunableTFModel.type  = TunableTFModel
   val dynamical_system: DynamicalSystem.type = DynamicalSystem
 
   def constant[I](name: String, t: Tensor): Layer[I, Output] = new Layer[I, Output](name){
