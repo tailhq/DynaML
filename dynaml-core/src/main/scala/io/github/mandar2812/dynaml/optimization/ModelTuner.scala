@@ -111,8 +111,9 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
       if(usePriorFlag) priorRVAsMap.iid(num_samples).sample()
       else getGrid(initialConfig)
 
-    grid.map((config) => {
-      val configMap = config //List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
+    grid.map(config => {
+
+      val configMap = config
       println("\nEvaluating Configuration: ")
       pprint.pprintln(configMap)
 

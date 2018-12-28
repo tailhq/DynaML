@@ -29,8 +29,9 @@ class GridSearch[M <: GloballyOptimizable](model: M) extends
   AbstractGridSearch[M, M](model) with
   GlobalOptimizer[M] {
 
-  override def optimize(initialConfig: Map[String, Double],
-                        options: Map[String, String] = Map()) = {
+  override def optimize(
+    initialConfig: Map[String, Double],
+    options: Map[String, String] = Map()) = {
 
     val energyLandscape = getEnergyLandscape(initialConfig, options, meanFieldPrior).toMap
     val optimum = energyLandscape.keys.min

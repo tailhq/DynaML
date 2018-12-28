@@ -19,8 +19,10 @@ under the License.
 package io.github.mandar2812.dynaml.models
 
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
+import io.github.mandar2812.dynaml.utils
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, MetaPipe}
 import io.github.mandar2812.dynaml.tensorflow.data.{DataSet, TFDataSet}
+import ammonite.ops._
 import org.platanios.tensorflow.api.Graph
 import org.platanios.tensorflow.api.core.client.Fetchable
 import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, DataTypeToOutput, OutputToTensor}
@@ -82,10 +84,10 @@ import org.platanios.tensorflow.api.ops.{Function, Output}
 private[dynaml] class TunableTFModel[
 IT, IO, IDA, ID, IS, I,
 TT, TO, TDA, TD, TS, T](
-  modelFunction: TunableTFModel.ModelFunc[
+  val modelFunction: TunableTFModel.ModelFunc[
     IT, IO, IDA, ID, IS, I,
     TT, TO, TDA, TD, TS, T],
-  hyp_params: Seq[String],
+  val hyp_params: Seq[String],
   protected val training_data: DataSet[(IT, TT)],
   val fitness_function: DataPipe[DataSet[(TT, TT)], Double],
   protected val validation_data: Option[DataSet[(IT, TT)]] = None,
@@ -126,6 +128,8 @@ TT, TO, TDA, TD, TS, T](
     **/
   override def energy(h: TunableTFModel.HyperParams, options: Map[String, String]): Double = {
 
+    current_state = h
+
     val TFDataSet(train_split, validation_split) = _data_splits
 
     val (validation_inputs, validation_targets) = (
@@ -135,9 +139,11 @@ TT, TO, TDA, TD, TS, T](
 
     val model_instance = modelFunction(h)(train_split)
 
+
+
     model_instance.train()
 
-    try {
+    val fitness = try {
       val predictions = model_instance.infer_coll(validation_inputs).map((c: (IT, TT)) => c._2)
 
       fitness_function(predictions.zip(validation_targets))
@@ -145,6 +151,12 @@ TT, TO, TDA, TD, TS, T](
       case _: java.lang.IllegalStateException => Double.NaN
       case _: Throwable => Double.NaN
     }
+
+    write(
+      model_instance.trainConfig.summaryDir/"state.csv",
+      h.keys.mkString(",")+s",energy\n"+h.values.mkString(",")+s",$fitness")
+
+    fitness
   }
 }
 
@@ -212,10 +224,20 @@ object TunableTFModel {
     ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
   : TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
 
-    val modelFunc = MetaPipe((h: TunableTFModel.HyperParams) => (data: DataSet[(IT, TT)]) => TFModel(
-      data, architecture, input, target, processTarget, loss_func_gen(h), trainConfig,
-      data_processing, inMemory, existingGraph, data_handles
-    ))
+    val config_to_str = (s: Map[String, Double]) => s.map(c => s"${c._1}_${c._2}").mkString("-")
+
+    val modelFunc = MetaPipe(
+      (h: TunableTFModel.HyperParams) =>
+        (data: DataSet[(IT, TT)]) =>
+          TFModel(
+            data, architecture, input, target,
+            processTarget, loss_func_gen(h),
+            trainConfig.copy(
+              summaryDir = trainConfig.summaryDir/utils.tokenGenerator.generateMD5Token(config_to_str(h))),
+            data_processing, inMemory, existingGraph,
+            data_handles
+          )
+    )
 
 
     new TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T](
@@ -224,7 +246,5 @@ object TunableTFModel {
     )
 
   }
-
-
 
 }

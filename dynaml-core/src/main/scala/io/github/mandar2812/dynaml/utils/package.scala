@@ -49,6 +49,8 @@ package object utils {
 
   val log1pExp: (Double) => Double = (x) => {x + math.log1p(math.exp(-x))}
 
+  val tokenGenerator = new BearerTokenGenerator
+
   /**
     * Get a CSVReader object from a file name and delimiter
     * character.
