@@ -154,7 +154,7 @@ class DynamicalSystem[T](
       Seq[Output], Seq[DataType], Seq[Shape], Seq[Tensor]]): DynamicalSystem.Model[T] = {
 
     val model = dtflearn.model[
-      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output],
+      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output], Seq[Tensor],
       Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output]](
       dtfdata.supervised_dataset.collect(data).map(p => (p._1, p._2)),
       model_architecture,
@@ -207,7 +207,7 @@ object DynamicalSystem {
     * */
   case class Model[T](
     tfModel: TFModel[
-      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output],
+      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output], Seq[Tensor],
       Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output]],
     outputs: Seq[String],
     variables: Seq[String]) {

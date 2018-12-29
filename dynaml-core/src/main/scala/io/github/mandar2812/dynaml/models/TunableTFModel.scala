@@ -85,21 +85,21 @@ import org.json4s.jackson.Serialization.{read => read_json, write => write_json}
   *
   * */
 class TunableTFModel[
-IT, IO, IDA, ID, IS, I,
+IT, IO, IDA, ID, IS, I, ITT,
 TT, TO, TDA, TD, TS, T](
   val modelFunction: TunableTFModel.ModelFunc[
-    IT, IO, IDA, ID, IS, I,
+    IT, IO, IDA, ID, IS, I, ITT,
     TT, TO, TDA, TD, TS, T],
   val hyp_params: Seq[String],
   protected val training_data: DataSet[(IT, TT)],
-  val fitness_function: DataPipe[DataSet[(TT, TT)], Double],
+  val fitness_function: DataPipe[DataSet[(ITT, TT)], Double],
   protected val validation_data: Option[DataSet[(IT, TT)]] = None,
   protected val data_split_func: Option[DataPipe[(IT, TT), Boolean]] = None)(
   implicit ev: Estimator.SupportedInferInput[
   Dataset[IT, IO, ID, IS],
-  Iterator[(IT, TT)],
-  IT, IO, ID, IS, TT],
-  evFetchableI: Fetchable.Aux[I, TT],
+  Iterator[(IT, ITT)],
+  IT, IO, ID, IS, ITT],
+  evFetchableI: Fetchable.Aux[I, ITT],
   evFunctionOutput: org.platanios.tensorflow.api.ops.Function.ArgType[IO])
   extends GloballyOptimizable {
 
@@ -151,7 +151,7 @@ TT, TO, TDA, TD, TS, T](
 
     //Compute the model fitness, guard against weird exceptions
     val fitness = try {
-      val predictions = model_instance.infer_coll(validation_inputs).map((c: (IT, TT)) => c._2)
+      val predictions: DataSet[ITT] = model_instance.infer_coll(validation_inputs).map((c: (IT, ITT)) => c._2)
 
       fitness_function(predictions.zip(validation_targets))
     } catch {
@@ -184,11 +184,11 @@ object TunableTFModel {
     * and return an instantiated TensorFlow Model [[TFModel]].
     *
     * */
-  type ModelFunc[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = MetaPipe[
+  type ModelFunc[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T] = MetaPipe[
     HyperParams,
     DataSet[(IT, TT)],
     TFModel[
-      IT, IO, IDA, ID, IS, I,
+      IT, IO, IDA, ID, IS, I, ITT,
       TT, TO, TDA, TD, TS, T]
     ]
 
@@ -272,7 +272,7 @@ object TunableTFModel {
       *                     the model input-output handles.
       * */
     def from_loss_generator[
-    IT, IO, IDA, ID, IS, I,
+    IT, IO, IDA, ID, IS, I, ITT,
     TT, TO, TDA, TD, TS, T](
       loss_gen: HyperParams => Layer[(I, T), Output],
       architecture: Layer[IO, I],
@@ -297,10 +297,10 @@ object TunableTFModel {
       evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
       evFunctionOutput: Function.ArgType[(IO, TO)],
       evFetchableIO: Fetchable.Aux[IO, IT],
-      evFetchableI: Fetchable.Aux[I, IT],
-      evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
-      ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
-    : ModelFunc[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
+      evFetchableI: Fetchable.Aux[I, ITT],
+      evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
+      ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT])
+    : ModelFunc[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T] = {
 
       MetaPipe(
         (h: TunableTFModel.HyperParams) =>
@@ -351,7 +351,7 @@ object TunableTFModel {
       *                     the model input-output handles.
       * */
     def from_arch_loss_generator[
-    IT, IO, IDA, ID, IS, I,
+    IT, IO, IDA, ID, IS, I, ITT,
     TT, TO, TDA, TD, TS, T](
       arch_loss_gen: HyperParams => (Layer[IO, I], Layer[(I, T), Output]),
       input: (IDA, IS),
@@ -375,10 +375,10 @@ object TunableTFModel {
       evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
       evFunctionOutput: Function.ArgType[(IO, TO)],
       evFetchableIO: Fetchable.Aux[IO, IT],
-      evFetchableI: Fetchable.Aux[I, IT],
-      evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
-      ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
-    : ModelFunc[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
+      evFetchableI: Fetchable.Aux[I, ITT],
+      evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
+      ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT])
+    : ModelFunc[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T] = {
 
       MetaPipe(
         (h: TunableTFModel.HyperParams) =>
@@ -402,12 +402,12 @@ object TunableTFModel {
   }
 
   def apply[
-  IT, IO, IDA, ID, IS, I,
+  IT, IO, IDA, ID, IS, I, ITT,
   TT, TO, TDA, TD, TS, T](
     loss_func_gen: HyperParams => Layer[(I, T), Output],
     hyp: List[String],
     training_data: DataSet[(IT, TT)],
-    fitness_function: DataPipe[DataSet[(TT, TT)], Double],
+    fitness_function: DataPipe[DataSet[(ITT, TT)], Double],
     architecture: Layer[IO, I],
     input: (IDA, IS),
     target: (TDA, TS),
@@ -421,10 +421,9 @@ object TunableTFModel {
     data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
     implicit ev1: Estimator.SupportedInferInput[
     Dataset[IT, IO, ID, IS],
-    Iterator[(IT, TT)],
-    IT, IO, ID, IS, TT],
-    evFetchableI1: Fetchable.Aux[I, TT],
-    evFunctionOutput1: org.platanios.tensorflow.api.ops.Function.ArgType[IO],
+    Iterator[(IT, ITT)],
+    IT, IO, ID, IS, ITT],
+    evFunctionOutput1: Function.ArgType[IO],
     evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
     evDToOI: DataTypeToOutput.Aux[ID, IO],
     evOToTI: OutputToTensor.Aux[IO, IT],
@@ -438,10 +437,10 @@ object TunableTFModel {
     evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
     evFunctionOutput: Function.ArgType[(IO, TO)],
     evFetchableIO: Fetchable.Aux[IO, IT],
-    evFetchableI: Fetchable.Aux[I, IT],
-    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
-    ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
-  : TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
+    evFetchableI: Fetchable.Aux[I, ITT],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
+    ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT])
+  : TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T] = {
 
     val modelFunc = ModelFunction.from_loss_generator(
       loss_func_gen, architecture, input, target,
@@ -450,7 +449,7 @@ object TunableTFModel {
       existingGraph, data_handles
     )
 
-    new TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T](
+    new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](
       modelFunc, hyp, training_data, fitness_function,
       validation_data, data_split_func
     )
@@ -458,12 +457,12 @@ object TunableTFModel {
   }
 
   def apply[
-  IT, IO, IDA, ID, IS, I,
+  IT, IO, IDA, ID, IS, I, ITT,
   TT, TO, TDA, TD, TS, T](
     arch_loss_gen: HyperParams => (Layer[IO, I], Layer[(I, T), Output]),
     hyp: List[String],
     training_data: DataSet[(IT, TT)],
-    fitness_function: DataPipe[DataSet[(TT, TT)], Double],
+    fitness_function: DataPipe[DataSet[(ITT, TT)], Double],
     input: (IDA, IS),
     target: (TDA, TS),
     processTarget: Layer[TO, T],
@@ -478,8 +477,7 @@ object TunableTFModel {
     Dataset[IT, IO, ID, IS],
     Iterator[(IT, TT)],
     IT, IO, ID, IS, TT],
-    evFetchableI1: Fetchable.Aux[I, TT],
-    evFunctionOutput1: org.platanios.tensorflow.api.ops.Function.ArgType[IO],
+    evFunctionOutput1: Function.ArgType[IO],
     evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
     evDToOI: DataTypeToOutput.Aux[ID, IO],
     evOToTI: OutputToTensor.Aux[IO, IT],
@@ -493,10 +491,10 @@ object TunableTFModel {
     evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
     evFunctionOutput: Function.ArgType[(IO, TO)],
     evFetchableIO: Fetchable.Aux[IO, IT],
-    evFetchableI: Fetchable.Aux[I, IT],
-    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
-    ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
-  : TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
+    evFetchableI: Fetchable.Aux[I, ITT],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
+    ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT])
+  : TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T] = {
 
     val modelFunc = ModelFunction.from_arch_loss_generator(
       arch_loss_gen, input, target,
@@ -505,7 +503,7 @@ object TunableTFModel {
       existingGraph, data_handles
     )
 
-    new TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T](
+    new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](
       modelFunc, hyp, training_data, fitness_function,
       validation_data, data_split_func
     )

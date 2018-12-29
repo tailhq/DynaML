@@ -50,6 +50,8 @@ import org.platanios.tensorflow.api.ops.io.data.Dataset
   *            e.g. `Shape`, `(Shape, Shape)`, `Seq[Shape]`
   * @tparam I The type of the symbolic tensor returned by the neural architecture,
   *           e.g. `Output`, `(Output, Output)`, `Seq[Output]`
+  * @tparam ITT The type of the tensor returned by the neural architecture,
+  *             corresponding to [[I]]
   * @tparam TT The type representing target/label tensors,
   *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
   * @tparam TO The type representing symbolic tensors of the target patterns,
@@ -83,7 +85,7 @@ import org.platanios.tensorflow.api.ops.io.data.Dataset
   * @author mandar2812 date 2018/09/11
   * */
 class TFModel[
-IT, IO, IDA, ID, IS, I,
+IT, IO, IDA, ID, IS, I, ITT,
 TT, TO, TDA, TD, TS, T](
   override val g: DataSet[(IT, TT)],
   val architecture: Layer[IO, I],
@@ -109,10 +111,10 @@ TT, TO, TDA, TD, TS, T](
   evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
   evFunctionOutput: Function.ArgType[(IO, TO)],
   evFetchableIO: Fetchable.Aux[IO, IT],
-  evFetchableI: Fetchable.Aux[I, IT],
-  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
-  ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT]) extends
-  Model[DataSet[(IT, TT)], IT, TT] {
+  evFetchableI: Fetchable.Aux[I, ITT],
+  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
+  ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT]) extends
+  Model[DataSet[(IT, TT)], IT, ITT] {
 
   type ModelPair = dtflearn.SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
 
@@ -161,7 +163,7 @@ TT, TO, TDA, TD, TS, T](
     * @param point Input consisting of a nested structure of Tensors.
     * @return The model predictions of type [[TT]]
     * */
-  override def predict(point: IT): TT = estimator.infer[IT, TT, IT](() => point)
+  override def predict(point: IT): ITT = estimator.infer[IT, ITT, ITT](() => point)
 
   /**
     * Generate predictions for a data set.
@@ -195,17 +197,16 @@ TT, TO, TDA, TD, TS, T](
     input_data_set: DataSet[IT])(
     implicit ev: Estimator.SupportedInferInput[
       Dataset[IT, IO, ID, IS],
-      Iterator[(IT, TT)],
-      IT, IO, ID, IS, TT],
-    evFetchableI: Fetchable.Aux[I, TT],
+      Iterator[(IT, ITT)],
+      IT, IO, ID, IS, ITT],
     evFunctionOutput: org.platanios.tensorflow.api.ops.Function.ArgType[IO]
-  ): DataSet[(IT, TT)] = {
+  ): DataSet[(IT, ITT)] = {
 
     val tf_test_set = TFModel._tf_data_set[IT, IO, IDA, ID, IS](
       input_data_set, TFModel.data_ops(0, data_processing.batchSize, 0),
       input._1, input._2)
 
-    dtfdata.dataset(infer[Dataset[IT, IO, ID, IS], Iterator[(IT, TT)], TT](tf_test_set).toIterable)
+    dtfdata.dataset(infer[Dataset[IT, IO, ID, IS], Iterator[(IT, ITT)], ITT](tf_test_set).toIterable)
   }
 
 }
@@ -324,35 +325,36 @@ object TFModel {
     )
 
   def apply[
-  IT, IO, IDA, ID, IS, I,
+  IT, IO, IDA, ID, IS, I, ITT,
   TT, TO, TDA, TD, TS, T](
-  g: DataSet[(IT, TT)],
-  architecture: Layer[IO, I],
-  input: (IDA, IS),
-  target: (TDA, TS),
-  processTarget: Layer[TO, T],
-  loss: Layer[(I, T), Output],
-  trainConfig: TFModel.TrainConfig,
-  data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
-  inMemory: Boolean = false,
-  existingGraph: Option[Graph] = None,
-  data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
-  implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
-  evDToOI: DataTypeToOutput.Aux[ID, IO],
-  evOToTI: OutputToTensor.Aux[IO, IT],
-  evDataI: Data.Aux[IT, IO, ID, IS],
-  evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
-  evDToOT: DataTypeToOutput.Aux[TD, TO],
-  evOToTT: OutputToTensor.Aux[TO, TT],
-  evDataT: Data.Aux[TT, TO, TD, TS],
-  evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
-  evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
-  evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
-  evFunctionOutput: Function.ArgType[(IO, TO)],
-  evFetchableIO: Fetchable.Aux[IO, IT],
-  evFetchableI: Fetchable.Aux[I, IT],
-  evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
-  ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT]) =
+    g: DataSet[(IT, TT)],
+    architecture: Layer[IO, I],
+    input: (IDA, IS),
+    target: (TDA, TS),
+    processTarget: Layer[TO, T],
+    loss: Layer[(I, T), Output],
+    trainConfig: TFModel.TrainConfig,
+    data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
+    inMemory: Boolean = false,
+    existingGraph: Option[Graph] = None,
+    data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
+    implicit
+    evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
+    evDToOI: DataTypeToOutput.Aux[ID, IO],
+    evOToTI: OutputToTensor.Aux[IO, IT],
+    evDataI: Data.Aux[IT, IO, ID, IS],
+    evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
+    evDToOT: DataTypeToOutput.Aux[TD, TO],
+    evOToTT: OutputToTensor.Aux[TO, TT],
+    evDataT: Data.Aux[TT, TO, TD, TS],
+    evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
+    evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
+    evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
+    evFunctionOutput: Function.ArgType[(IO, TO)],
+    evFetchableIO: Fetchable.Aux[IO, IT],
+    evFetchableI: Fetchable.Aux[I, ITT],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
+    ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT]) =
     new TFModel(
       g, architecture, input, target, processTarget, loss,
       trainConfig, data_processing, inMemory, existingGraph,
