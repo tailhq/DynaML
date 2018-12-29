@@ -19,7 +19,10 @@ val data_size = 100
 val rv = GaussianRV(0.0, 2.0).iid(data_size)
 
 val data = dtfdata.dataset(rv.draw).to_supervised(
-  DataPipe[Double, (Tensor, Tensor)](n => (dtf.tensor_f64(1)(n), dtf.tensor_f64(1)(n*weight + bias)))
+  DataPipe[Double, (Tensor, Tensor)](n => (
+    dtf.tensor_f64(1)(n),
+    dtf.tensor_f64(1)(n*weight + bias))
+  )
 )
 
 val train_fraction = 0.7

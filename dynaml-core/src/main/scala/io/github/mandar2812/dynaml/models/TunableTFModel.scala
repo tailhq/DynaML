@@ -235,6 +235,12 @@ object TunableTFModel {
     * */
   object ModelFunction {
 
+
+    val config_to_str: DataPipe[Map[String, Double], String] = DataPipe(_.map(c => s"${c._1}_${c._2}").mkString("-"))
+    val generate_token: DataPipe[String, String]             = DataPipe(utils.tokenGenerator.generateMD5Token)
+
+    private val to_token = config_to_str > generate_token
+
     /**
       * Create a [[ModelFunc]] from a "loss generator".
       *
@@ -296,8 +302,6 @@ object TunableTFModel {
       ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
     : ModelFunc[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
 
-      val config_to_str = (s: Map[String, Double]) => s.map(c => s"${c._1}_${c._2}").mkString("-")
-
       MetaPipe(
         (h: TunableTFModel.HyperParams) =>
           (data: DataSet[(IT, TT)]) => {
@@ -305,7 +309,7 @@ object TunableTFModel {
 
             val loss = loss_gen(h)
 
-            val model_summaries = trainConfig.summaryDir/utils.tokenGenerator.generateMD5Token(config_to_str(h))
+            val model_summaries = trainConfig.summaryDir/to_token(h)
 
             TFModel(
               data, architecture, input, target,
@@ -376,15 +380,13 @@ object TunableTFModel {
       ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
     : ModelFunc[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
 
-      val config_to_str = (s: Map[String, Double]) => s.map(c => s"${c._1}_${c._2}").mkString("-")
-
       MetaPipe(
         (h: TunableTFModel.HyperParams) =>
           (data: DataSet[(IT, TT)]) => {
 
             val (architecture, loss) = arch_loss_gen(h)
 
-            val model_summaries = trainConfig.summaryDir/utils.tokenGenerator.generateMD5Token(config_to_str(h))
+            val model_summaries = trainConfig.summaryDir/to_token(h)
 
             TFModel(
               data, architecture, input, target,
