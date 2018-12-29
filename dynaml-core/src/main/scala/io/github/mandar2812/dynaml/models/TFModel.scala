@@ -82,7 +82,7 @@ import org.platanios.tensorflow.api.ops.io.data.Dataset
   * @param inMemory     Set to true if the estimator should be in-memory.
   * @author mandar2812 date 2018/09/11
   * */
-private[dynaml] class TFModel[
+class TFModel[
 IT, IO, IDA, ID, IS, I,
 TT, TO, TDA, TD, TS, T](
   override val g: DataSet[(IT, TT)],
@@ -95,7 +95,7 @@ TT, TO, TDA, TD, TS, T](
   val data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   val inMemory: Boolean = false,
   val existingGraph: Option[Graph] = None,
-  data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
+  data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
   implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
   evDToOI: DataTypeToOutput.Aux[ID, IO],
   evOToTI: OutputToTensor.Aux[IO, IT],
@@ -212,6 +212,11 @@ TT, TO, TDA, TD, TS, T](
 
 object TFModel {
 
+  type Handle[IT, IO, IDA, ID, IS]  = Input[IT, IO, IDA, ID, IS]
+
+  type DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS] =
+    (Handle[IT, IO, IDA, ID, IS], Handle[TT, TO, TDA, TD, TS])
+
   /**
     * Defines data operations to be performed using TensorFlow data API.
     *
@@ -261,8 +266,8 @@ object TFModel {
     *
     * @param optimizer The optimization algorithm implementation.
     * @param summaryDir A filesystem path of type [[ammonite.ops.Path]], which
-    *                     determines where the intermediate model parameters/checkpoints
-    *                     will be written.
+    *                   determines where the intermediate model parameters/checkpoints
+    *                   will be written.
     * @param stopCriteria The stopping criteria for training, for examples see
     *                     [[Learn.max_iter_stop]], [[Learn.abs_loss_change_stop]] and
     *                     [[Learn.rel_loss_change_stop]]

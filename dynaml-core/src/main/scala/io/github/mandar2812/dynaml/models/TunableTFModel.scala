@@ -31,6 +31,9 @@ import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.{Function, Output}
 
+import org.json4s._
+import org.json4s.jackson.Serialization.{read => read_json, write => write_json}
+
 /**
   * <h4>Hyper-parameter based Tensorflow Model</h4>
   *
@@ -81,7 +84,7 @@ import org.platanios.tensorflow.api.ops.{Function, Output}
   *                        if [[validation_data]] is defined.
   *
   * */
-private[dynaml] class TunableTFModel[
+class TunableTFModel[
 IT, IO, IDA, ID, IS, I,
 TT, TO, TDA, TD, TS, T](
   val modelFunction: TunableTFModel.ModelFunc[
@@ -99,6 +102,8 @@ TT, TO, TDA, TD, TS, T](
   evFetchableI: Fetchable.Aux[I, TT],
   evFunctionOutput: org.platanios.tensorflow.api.ops.Function.ArgType[IO])
   extends GloballyOptimizable {
+
+  implicit protected val formats: Formats = DefaultFormats
 
   override protected var hyper_parameters: List[String] = hyp_params.toList
 
@@ -128,8 +133,10 @@ TT, TO, TDA, TD, TS, T](
     **/
   override def energy(h: TunableTFModel.HyperParams, options: Map[String, String]): Double = {
 
+    //Set the current state to `h`
     current_state = h
 
+    //Obtain training and validation data splits
     val TFDataSet(train_split, validation_split) = _data_splits
 
     val (validation_inputs, validation_targets) = (
@@ -137,12 +144,12 @@ TT, TO, TDA, TD, TS, T](
       validation_split.map((c: (IT, TT)) => c._2)
     )
 
+    //Get the model instance.
     val model_instance = modelFunction(h)(train_split)
-
-
-
+    //Train the model instance
     model_instance.train()
 
+    //Compute the model fitness, guard against weird exceptions
     val fitness = try {
       val predictions = model_instance.infer_coll(validation_inputs).map((c: (IT, TT)) => c._2)
 
@@ -152,10 +159,16 @@ TT, TO, TDA, TD, TS, T](
       case _: Throwable => Double.NaN
     }
 
+    //Append the model fitness to the hyper-parameter configuration
+    val hyp_config_json = write_json(h + ("energy" -> fitness))
+
+    //Write the configuration along with its fitness into the model
+    //instance's summary directory
     write(
       model_instance.trainConfig.summaryDir/"state.csv",
-      h.keys.mkString(",")+s",energy\n"+h.values.mkString(",")+s",$fitness")
+      hyp_config_json)
 
+    //Return the model fitness.
     fitness
   }
 }
@@ -164,6 +177,13 @@ object TunableTFModel {
 
   type HyperParams = Map[String, Double]
 
+  /**
+    * Type-alias for "Model Functions".
+    *
+    * Model Functions take hyper-parameters as input
+    * and return an instantiated TensorFlow Model [[TFModel]].
+    *
+    * */
   type ModelFunc[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = MetaPipe[
     HyperParams,
     DataSet[(IT, TT)],
@@ -173,14 +193,211 @@ object TunableTFModel {
     ]
 
   /**
-    * Create a fitness function using the Map-Reduce paradigm.
+    * Type alias for "Fitness Functions"
     *
+    * During hyper-parameter search, each model
+    * instance is trained and evaluated on a validation
+    * data set.
+    *
+    * After a model instance produces predictions for a
+    * validation data set, fitness functions compute the
+    * fitness from the predictions and data labels.
     * */
-  def map_reduce_fitness[TT](
-    map_func: DataPipe[(TT, TT), Double],
-    reduce_func: DataPipe2[Double, Double, Double]): DataPipe[DataSet[(TT, TT)], Double] =
-    DataPipe((d: DataSet[(TT, TT)]) => d.map(map_func).reduce(reduce_func))
+  type FitnessFunc[TT] = DataPipe[DataSet[(TT, TT)], Double]
 
+  /**
+    * <h4>Fitness Function Utility</h4>
+    *
+    * Provides methods setting up fitness function computations.
+    * */
+  object FitnessFunction {
+
+    /**
+      * Create a fitness function using the Map-Reduce paradigm.
+      * This method assumes that the fitness function can be computed
+      * by applying an element-wise `map` operation followed by a
+      * `reduce` operation which computes the model's fitness function.
+      *
+      * @param map_func The element-wise map operation to apply to
+      * */
+    def apply[TT](
+      map_func: DataPipe[(TT, TT), Double],
+      reduce_func: DataPipe2[Double, Double, Double]): FitnessFunc[TT] =
+      DataPipe((d: DataSet[(TT, TT)]) => d.map(map_func).reduce(reduce_func))
+
+  }
+
+  /**
+    * <h4>Model Functions</h4>
+    *
+    * Helpful methods for creating [[ModelFunc]] instances, which
+    * are needed for creating [[TunableTFModel]].
+    * */
+  object ModelFunction {
+
+    /**
+      * Create a [[ModelFunc]] from a "loss generator".
+      *
+      * @param loss_gen A function which takes the [[HyperParams]] and creates
+      *                 the Loss function.
+      *
+      * @param architecture The model architecture.
+      *
+      * @param input Data type and shape of the model inputs.
+      *
+      * @param target Data type and shape of the model outputs/training labels.
+      *
+      * @param processTarget A layer which processes the labels/targets before using
+      *                      them for training.
+      *
+      * @param trainConfig An instance of type [[TFModel.Config]], contains information
+      *                    on the optimizer, summary directory and train hooks.
+      *
+      * @param data_processing An instance of type [[TFModel.DataOps]], contains details
+      *                        on the data processing pipeline to be applied.
+      *
+      * @param inMemory Set to true if the model should be entirely in memory. Defaults
+      *                 to false.
+      *
+      * @param existingGraph Defaults to None, set this parameter if the model should
+      *                      be created in an existing TensorFlow graph.
+      *
+      * @param data_handles Defaults to None, set this parameter if you wish to instantiate
+      *                     the model input-output handles.
+      * */
+    def from_loss_generator[
+    IT, IO, IDA, ID, IS, I,
+    TT, TO, TDA, TD, TS, T](
+      loss_gen: HyperParams => Layer[(I, T), Output],
+      architecture: Layer[IO, I],
+      input: (IDA, IS),
+      target: (TDA, TS),
+      processTarget: Layer[TO, T],
+      trainConfig: TFModel.Config,
+      data_processing: TFModel.Ops,
+      inMemory: Boolean = false,
+      existingGraph: Option[Graph] = None,
+      data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
+      implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
+      evDToOI: DataTypeToOutput.Aux[ID, IO],
+      evOToTI: OutputToTensor.Aux[IO, IT],
+      evDataI: Data.Aux[IT, IO, ID, IS],
+      evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
+      evDToOT: DataTypeToOutput.Aux[TD, TO],
+      evOToTT: OutputToTensor.Aux[TO, TT],
+      evDataT: Data.Aux[TT, TO, TD, TS],
+      evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
+      evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
+      evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
+      evFunctionOutput: Function.ArgType[(IO, TO)],
+      evFetchableIO: Fetchable.Aux[IO, IT],
+      evFetchableI: Fetchable.Aux[I, IT],
+      evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
+      ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
+    : ModelFunc[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
+
+      val config_to_str = (s: Map[String, Double]) => s.map(c => s"${c._1}_${c._2}").mkString("-")
+
+      MetaPipe(
+        (h: TunableTFModel.HyperParams) =>
+          (data: DataSet[(IT, TT)]) => {
+
+
+            val loss = loss_gen(h)
+
+            val model_summaries = trainConfig.summaryDir/utils.tokenGenerator.generateMD5Token(config_to_str(h))
+
+            TFModel(
+              data, architecture, input, target,
+              processTarget, loss,
+              trainConfig.copy(summaryDir = model_summaries),
+              data_processing, inMemory, existingGraph,
+              data_handles
+            )
+          }
+      )
+    }
+
+    /**
+      * Create a [[ModelFunc]] from a "architecture-loss generator".
+      *
+      * @param arch_loss_gen A function which takes the [[HyperParams]] and creates
+      *                      an architecture-loss tuple.
+      *
+      * @param input Data type and shape of the model inputs.
+      *
+      * @param target Data type and shape of the model outputs/training labels.
+      *
+      * @param processTarget A layer which processes the labels/targets before using
+      *                      them for training.
+      *
+      * @param trainConfig An instance of type [[TFModel.Config]], contains information
+      *                    on the optimizer, summary directory and train hooks.
+      *
+      * @param data_processing An instance of type [[TFModel.DataOps]], contains details
+      *                        on the data processing pipeline to be applied.
+      *
+      * @param inMemory Set to true if the model should be entirely in memory. Defaults
+      *                 to false.
+      *
+      * @param existingGraph Defaults to None, set this parameter if the model should
+      *                      be created in an existing TensorFlow graph.
+      *
+      * @param data_handles Defaults to None, set this parameter if you wish to instantiate
+      *                     the model input-output handles.
+      * */
+    def from_arch_loss_generator[
+    IT, IO, IDA, ID, IS, I,
+    TT, TO, TDA, TD, TS, T](
+      arch_loss_gen: HyperParams => (Layer[IO, I], Layer[(I, T), Output]),
+      input: (IDA, IS),
+      target: (TDA, TS),
+      processTarget: Layer[TO, T],
+      trainConfig: TFModel.Config,
+      data_processing: TFModel.Ops,
+      inMemory: Boolean = false,
+      existingGraph: Option[Graph] = None,
+      data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
+      implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
+      evDToOI: DataTypeToOutput.Aux[ID, IO],
+      evOToTI: OutputToTensor.Aux[IO, IT],
+      evDataI: Data.Aux[IT, IO, ID, IS],
+      evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
+      evDToOT: DataTypeToOutput.Aux[TD, TO],
+      evOToTT: OutputToTensor.Aux[TO, TT],
+      evDataT: Data.Aux[TT, TO, TD, TS],
+      evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
+      evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
+      evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
+      evFunctionOutput: Function.ArgType[(IO, TO)],
+      evFetchableIO: Fetchable.Aux[IO, IT],
+      evFetchableI: Fetchable.Aux[I, IT],
+      evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
+      ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
+    : ModelFunc[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
+
+      val config_to_str = (s: Map[String, Double]) => s.map(c => s"${c._1}_${c._2}").mkString("-")
+
+      MetaPipe(
+        (h: TunableTFModel.HyperParams) =>
+          (data: DataSet[(IT, TT)]) => {
+
+            val (architecture, loss) = arch_loss_gen(h)
+
+            val model_summaries = trainConfig.summaryDir/utils.tokenGenerator.generateMD5Token(config_to_str(h))
+
+            TFModel(
+              data, architecture, input, target,
+              processTarget, loss,
+              trainConfig.copy(summaryDir = model_summaries),
+              data_processing, inMemory, existingGraph,
+              data_handles
+            )
+          }
+      )
+
+    }
+  }
 
   def apply[
   IT, IO, IDA, ID, IS, I,
@@ -199,7 +416,7 @@ object TunableTFModel {
     data_processing: TFModel.Ops = TFModel.data_ops(10000, 16, 10),
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
-    data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
+    data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
     implicit ev1: Estimator.SupportedInferInput[
     Dataset[IT, IO, ID, IS],
     Iterator[(IT, TT)],
@@ -224,21 +441,67 @@ object TunableTFModel {
     ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
   : TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
 
-    val config_to_str = (s: Map[String, Double]) => s.map(c => s"${c._1}_${c._2}").mkString("-")
-
-    val modelFunc = MetaPipe(
-      (h: TunableTFModel.HyperParams) =>
-        (data: DataSet[(IT, TT)]) =>
-          TFModel(
-            data, architecture, input, target,
-            processTarget, loss_func_gen(h),
-            trainConfig.copy(
-              summaryDir = trainConfig.summaryDir/utils.tokenGenerator.generateMD5Token(config_to_str(h))),
-            data_processing, inMemory, existingGraph,
-            data_handles
-          )
+    val modelFunc = ModelFunction.from_loss_generator(
+      loss_func_gen, architecture, input, target,
+      processTarget, trainConfig,
+      data_processing, inMemory,
+      existingGraph, data_handles
     )
 
+    new TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T](
+      modelFunc, hyp, training_data, fitness_function,
+      validation_data, data_split_func
+    )
+
+  }
+
+  def apply[
+  IT, IO, IDA, ID, IS, I,
+  TT, TO, TDA, TD, TS, T](
+    arch_loss_gen: HyperParams => (Layer[IO, I], Layer[(I, T), Output]),
+    hyp: List[String],
+    training_data: DataSet[(IT, TT)],
+    fitness_function: DataPipe[DataSet[(TT, TT)], Double],
+    input: (IDA, IS),
+    target: (TDA, TS),
+    processTarget: Layer[TO, T],
+    trainConfig: TFModel.Config,
+    validation_data: Option[DataSet[(IT, TT)]],
+    data_split_func: Option[DataPipe[(IT, TT), Boolean]],
+    data_processing: TFModel.Ops,
+    inMemory: Boolean,
+    existingGraph: Option[Graph],
+    data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]])(
+    implicit ev1: Estimator.SupportedInferInput[
+    Dataset[IT, IO, ID, IS],
+    Iterator[(IT, TT)],
+    IT, IO, ID, IS, TT],
+    evFetchableI1: Fetchable.Aux[I, TT],
+    evFunctionOutput1: org.platanios.tensorflow.api.ops.Function.ArgType[IO],
+    evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
+    evDToOI: DataTypeToOutput.Aux[ID, IO],
+    evOToTI: OutputToTensor.Aux[IO, IT],
+    evDataI: Data.Aux[IT, IO, ID, IS],
+    evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
+    evDToOT: DataTypeToOutput.Aux[TD, TO],
+    evOToTT: OutputToTensor.Aux[TO, TT],
+    evDataT: Data.Aux[TT, TO, TD, TS],
+    evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
+    evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
+    evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
+    evFunctionOutput: Function.ArgType[(IO, TO)],
+    evFetchableIO: Fetchable.Aux[IO, IT],
+    evFetchableI: Fetchable.Aux[I, IT],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, IT)],
+    ev: Estimator.SupportedInferInput[IT, TT, IT, IO, ID, IS, IT])
+  : TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T] = {
+
+    val modelFunc = ModelFunction.from_arch_loss_generator(
+      arch_loss_gen, input, target,
+      processTarget, trainConfig,
+      data_processing, inMemory,
+      existingGraph, data_handles
+    )
 
     new TunableTFModel[IT, IO, IDA, ID, IS, I, TT, TO, TDA, TD, TS, T](
       modelFunc, hyp, training_data, fitness_function,

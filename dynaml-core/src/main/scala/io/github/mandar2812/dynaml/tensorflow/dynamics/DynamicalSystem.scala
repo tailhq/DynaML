@@ -1,3 +1,21 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+* */
 package io.github.mandar2812.dynaml.tensorflow.dynamics
 
 import io.github.mandar2812.dynaml.models.TFModel
@@ -32,7 +50,7 @@ import org.platanios.tensorflow.api.types.DataType
   * @param graphInstance An optional TensorFlow graph instance to create model in.
   *
   * */
-private[dynaml] class DynamicalSystem[T](
+class DynamicalSystem[T](
   val quantities: Map[String, Layer[Output, Output]],
   val dynamics: Seq[DifferentialOperator[Output, Output]],
   val input: (DataType.Aux[T], Shape),
@@ -92,11 +110,27 @@ private[dynaml] class DynamicalSystem[T](
       quadrature >>
       tf.learn.Mean("Loss/Mean") >>
       tf.learn.ScalarSummary("Loss/Summary", "Loss")
-  
+
+  /**
+    * Train a neural net based approximation for the
+    * dynamical system.
+    *
+    * @param data Training data, a sequence of supervised/labeled data
+    *             sets the length of the sequence must equal the number
+    *             of governing equations.
+    *
+    * @param trainConfig Training configuration, of type [[TFModel.Config]]
+    *
+    * @param data_processing TensorFlow data operation pipeline, instance of [[TFModel.Ops]]
+    *
+    * @param inMemory Set to true if model is to be kept entirely in memory, defaults to false.
+    *
+    * @return A [[DynamicalSystem.Model]] which encapsulates a predictive model of type [[TFModel]]
+    * */
   def solve(
     data: Seq[SupervisedDataSet[Tensor, Tensor]],
     trainConfig: TFModel.Config,
-    data_processing: TFModel.Ops = TFModel.data_ops(10000, 16, 10),
+    data_processing: TFModel.Ops = TFModel.data_ops(100, 16, 10),
     inMemory: Boolean = false)(
     implicit
     evDAToDI: DataTypeAuxToDataType.Aux[Seq[DataType.Aux[T]], Seq[DataType]],
@@ -146,7 +180,10 @@ private[dynaml] class DynamicalSystem[T](
 
 object DynamicalSystem {
 
-  protected case class ObservationalError(
+  /**
+    * Observational Error loss function.
+    * */
+  case class ObservationalError(
     override val name: String,
     error_measure: Layer[(Output, Output), Output]) extends
     Layer[(Seq[Output], Seq[Output]), Output](name) {
@@ -157,11 +194,21 @@ object DynamicalSystem {
       input._1.zip(input._2).map(c => error_measure.forward(c._1, c._2)).reduceLeft(_.add(_))
   }
 
-  protected case class Model[T](
+  /**
+    * Neural-net based predictive model for dynamical systems.
+    *
+    * @param tfModel A DynaML TensorFlow model [[TFModel]]
+    *
+    * @param outputs The model quantities of interest which are
+    *                governed by the system dynamics.
+    *
+    * @param variables The unobserved quantities of the system.
+    *
+    * */
+  case class Model[T](
     tfModel: TFModel[
       Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output],
-      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output]/*,
-      Seq[Tensor], Seq[Tensor], Seq[Tensor]*/],
+      Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output]],
     outputs: Seq[String],
     variables: Seq[String]) {
 
