@@ -34,7 +34,7 @@ val mexican_hat_chart = plot3d.draw(mexican_hat)
 plot3d.show(mexican_hat_chart)
 ```
 
-![mexican](/images/plot3d.jpeg)
+![mexican](../../images/plot3d.jpeg)
 
 #### From a set of points 
 
@@ -58,7 +58,7 @@ val plot = plot3d.draw(points)
 plot3d.show(plot)
 ```
 
-![delauney](/images/delauney.png)
+![delauney](../../images/delauney.png)
 
 ### Histograms
 
@@ -81,4 +81,4 @@ val histogram = plot3d.draw(rv.iid(2000).draw, 40)
 plot3d.show(histogram)
 ```
 
-![histogram](/images/histogram.png)
+![histogram](../../images/histogram.png)

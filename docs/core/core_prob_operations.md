@@ -21,7 +21,7 @@ val multR = b * (n + g)
 histogram((1 to 1000).map(_ => multR.sample()))
 ```
 
-![histogram](/images/histogram-mult.png)
+![histogram](../../images/histogram-mult.png)
 
 ## Measurable Functions
 
@@ -34,8 +34,8 @@ val chsq = MeasurableFunction(n, DataPipe((x: Double) => x*x))
 histogram((1 to 1000).map(_ => chsq.sample()))
 ```
 
-![histogram](/images/histogram-ch.png)
+![histogram](../../images/histogram-ch.png)
 
 ## Push-forward Maps
 
-![pushforward](/images/randomVar.gif)
+![pushforward](../../images/randomVar.gif)

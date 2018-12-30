@@ -5,7 +5,7 @@
 
 <br/>
 
-![kernel](/images/kernel.png)
+![kernel](../../images/kernel.png)
 
 
 _Positive definite_ functions or _positive type_ functions occupy an important place in various areas of mathematics, from the construction of covariances of random variables to quantifying distance measures in _Hilbert spaces_. Symmetric positive type functions defined on the cartesian product of a set with itself $K: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ are also known as _kernel_ functions in machine learning. They are applied extensively in problems such as.
