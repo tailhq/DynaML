@@ -2409,15 +2409,15 @@ to speed up training of deep neural nets.</p>
 <h4 id="inception-v2">Inception v2<a class="headerlink" href="#inception-v2" title="Permanent link">&para;</a></h4>
 <p>The <a href="https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf"><em>Inception</em></a> architecture, proposed by Google is an important 
 building block of <em>convolutional neural network</em> architectures used in vision applications.</p>
-<p><img alt="inception" src="/images/inception.png" /></p>
+<p><img alt="inception" src="../../images/inception.png" /></p>
 <p>In a subsequent <a href="https://arxiv.org/pdf/1512.00567.pdf">paper</a>, the authors introduced optimizations in the Inception 
 architecture, known colloquially as <em>Inception v2</em>.</p>
 <p>In <em>Inception v2</em>, larger convolutions (i.e. <code>3 x 3</code> and <code>5 x 5</code>) are implemented in a factorized manner 
 to reduce the number of parameters to be learned. For example the <code>3 x 3</code> convolution is expressed as a 
 combination of <code>1 x 3</code> and <code>3 x 1</code> convolutions.</p>
-<p><img alt="inception" src="/images/conv-fact.png" /></p>
+<p><img alt="inception" src="../../images/conv-fact.png" /></p>
 <p>Similarly the <code>5 x 5</code> convolutions can be expressed a combination of two <code>3 x 3</code> convolutions</p>
-<p><img alt="inception" src="/images/conv-fact2.png" /></p>
+<p><img alt="inception" src="../../images/conv-fact2.png" /></p>
 <p>DynaML now offers the Inception cell as a computational layer. </p>
 <p><strong>Usage</strong></p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
