@@ -175,13 +175,14 @@ trait WebPlot[T] extends Plottable[T] {
   }
 }
 
-/*
-Chart augmenting functions:
- - hold (from Matlab syntax) - until unhold is called, graphs will be plotted on the same plot, ie the series will be merged into one Highchart
- - unhold: stop holding. Next graph will be on its own plot
- - xlabel: assigns a label to the x-axis of the most recent plot
- - ylabel: assign a label to the y-axis of the most recent plot
-*/
+/**
+  * Chart augmenting functions:
+  *  - hold (from Matlab syntax) - until unhold is called, graphs will be plotted on the same plot, ie the series will be merged into one Highchart
+  *  - unhold: stop holding. Next graph will be on its own plot
+  *  - xlabel: assigns a label to the x-axis of the most recent plot
+  *  - ylabel: assign a label to the y-axis of the most recent plot
+  *
+  * */
 trait Hold[T] extends PlotLike[T] {
   var isHeld: Boolean = false
   def hold(): Unit = {
