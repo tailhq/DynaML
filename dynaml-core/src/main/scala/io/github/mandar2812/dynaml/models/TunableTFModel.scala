@@ -103,6 +103,7 @@ TT, TO, TDA, TD, TS, T](
   evFunctionOutput: org.platanios.tensorflow.api.ops.Function.ArgType[IO])
   extends GloballyOptimizable {
 
+  //Implicit required by the json4s library for reading and writing json
   implicit protected val formats: Formats = DefaultFormats
 
   override protected var hyper_parameters: List[String] = hyp_params.toList
@@ -133,12 +134,19 @@ TT, TO, TDA, TD, TS, T](
     **/
   override def energy(h: TunableTFModel.HyperParams, options: Map[String, String]): Double = {
 
+    //Check that all the model hyper-parameters are contained in
+    //the input `h`
+    require(
+      hyp_params.forall(h.contains),
+      s"All hyper-parameters: [$hyp_params] of the model, must be contained in the input `h` when calling energy(h)")
+
     //Set the current state to `h`
     current_state = h
 
     //Obtain training and validation data splits
     val TFDataSet(train_split, validation_split) = _data_splits
 
+    //Separate the validation data inputs and outputs
     val (validation_inputs, validation_targets) = (
       validation_split.map((c: (IT, TT)) => c._1),
       validation_split.map((c: (IT, TT)) => c._2)
@@ -150,22 +158,22 @@ TT, TO, TDA, TD, TS, T](
     model_instance.train()
 
     //Compute the model fitness, guard against weird exceptions
-    val fitness = try {
+    val (fitness, comment) = try {
       val predictions: DataSet[ITT] = model_instance.infer_coll(validation_inputs).map((c: (IT, ITT)) => c._2)
 
-      fitness_function(predictions.zip(validation_targets))
+      (fitness_function(predictions.zip(validation_targets)), None)
     } catch {
-      case _: java.lang.IllegalStateException => Double.NaN
-      case _: Throwable => Double.NaN
+      case e: java.lang.IllegalStateException => (Double.NaN, Some(e.getMessage))
+      case e: Throwable => (Double.NaN, Some(e.getMessage))
     }
 
     //Append the model fitness to the hyper-parameter configuration
-    val hyp_config_json = write_json(h + ("energy" -> fitness))
+    val hyp_config_json = write_json(h ++ Map("energy" -> fitness, "comment" -> comment.getOrElse("")))
 
     //Write the configuration along with its fitness into the model
     //instance's summary directory
     write(
-      model_instance.trainConfig.summaryDir/"state.csv",
+      model_instance.trainConfig.summaryDir/"state.json",
       hyp_config_json)
 
     //Return the model fitness.
