@@ -211,7 +211,7 @@ object TunableTFModel {
     * validation data set, fitness functions compute the
     * fitness from the predictions and data labels.
     * */
-  type FitnessFunc[TT] = DataPipe[DataSet[(TT, TT)], Double]
+  type FitnessFunc[ITT, TT] = DataPipe[DataSet[(ITT, TT)], Double]
 
   /**
     * <h4>Fitness Function Utility</h4>
@@ -228,10 +228,10 @@ object TunableTFModel {
       *
       * @param map_func The element-wise map operation to apply to
       * */
-    def apply[TT](
-      map_func: DataPipe[(TT, TT), Double],
-      reduce_func: DataPipe2[Double, Double, Double]): FitnessFunc[TT] =
-      DataPipe((d: DataSet[(TT, TT)]) => d.map(map_func).reduce(reduce_func))
+    def apply[ITT, TT](
+      map_func: DataPipe[(ITT, TT), Double],
+      reduce_func: DataPipe2[Double, Double, Double]): FitnessFunc[ITT, TT] =
+      DataPipe((d: DataSet[(ITT, TT)]) => d.map(map_func).reduce(reduce_func))
 
   }
 
