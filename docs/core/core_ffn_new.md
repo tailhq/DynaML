@@ -1,7 +1,7 @@
 !!! Note "Feed forward neural networks"
     <br/>
 
-    ![feedforward-NN](/images/fnn.png)
+    ![feedforward-NN](../../images/fnn.png)
 
     <br/>
 
