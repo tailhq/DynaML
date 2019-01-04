@@ -22,7 +22,7 @@ import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, OutputToTensor}
 import org.platanios.tensorflow.api.ops.Function
-import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset, OutputDataset, OutputSlicesDataset}
+import org.platanios.tensorflow.api.ops.io.data._
 
 /**
   * <h3>DynaML Data Set</h3>
@@ -194,7 +194,7 @@ class DataSet[X](val data: Iterable[X]) {
   }
 
   protected def build[T, O, DA, D, S](
-    transformation: DataPipe[Iterable[X], Iterable[O]],
+    transformation: DataPipe[Iterable[X], Iterable[T]],
     dataType: DA, shape: S)(
     implicit
     evDAToD: DataTypeAuxToDataType.Aux[DA, D],
@@ -203,18 +203,18 @@ class DataSet[X](val data: Iterable[X]) {
     evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] =
     self
       .transform(transformation)
-      .map(DataPipe((batch: O) => tf.data.OutputSlicesDataset[T, O, D, S](batch)))
+      .map(DataPipe((batch: T) => tf.data.TensorSlicesDataset[T, O, D, S](batch)))
       .reduceLeft[Dataset[T, O, D, S]](
-      DataPipe2((l: Dataset[T, O, D, S], r: OutputSlicesDataset[T, O, D, S]) => l.concatenate(r)))
+      DataPipe2((l: Dataset[T, O, D, S], r: TensorSlicesDataset[T, O, D, S]) => l.concatenate(r)))
 
 
   def build_buffered[T, O, DA, D, S](
+    convertToTensor: DataPipe[X, T],
     buffer_size: Int,
-    stackOp: DataPipe[Iterable[O], O],
+    stackOp: DataPipe[Iterable[T], T],
     dataType: DA,
     shape: S = null)(
     implicit
-    convertToOutput: DataPipe[X, O],
     evDAToD: DataTypeAuxToDataType.Aux[DA, D],
     evData: Data.Aux[T, O, D, S],
     evOToT: OutputToTensor.Aux[O, T],
@@ -222,7 +222,7 @@ class DataSet[X](val data: Iterable[X]) {
 
     val buffer_and_stack =
       DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
-        IterableDataPipe(IterableDataPipe(convertToOutput)) >
+        IterableDataPipe(IterableDataPipe(convertToTensor)) >
         IterableDataPipe(stackOp)
 
 

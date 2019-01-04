@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.models
 
 import ammonite.ops.Path
+import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.tensorflow.data.DataSet
 import io.github.mandar2812.dynaml.tensorflow.Learn
 import io.github.mandar2812.dynaml.tensorflow._
@@ -97,7 +98,8 @@ TT, TO, TDA, TD, TS, T](
   val data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   val inMemory: Boolean = false,
   val existingGraph: Option[Graph] = None,
-  data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
+  data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
+  concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
   implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
   evDToOI: DataTypeToOutput.Aux[ID, IO],
   evOToTI: OutputToTensor.Aux[IO, IT],
@@ -116,12 +118,18 @@ TT, TO, TDA, TD, TS, T](
   ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT]) extends
   Model[DataSet[(IT, TT)], IT, ITT] {
 
+  if(data_processing.groupBuffer > 0)
+    require(
+      concatOp.isDefined,
+      "`groupBuffer` is non zero but concatenate operation not defined. Set `concatOp` variable")
+
   type ModelPair = dtflearn.SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
 
   private lazy val tf_dataset = TFModel._tf_data_set[(IT, TT), (IO, TO), (IDA, TDA), (ID, TD), (IS, TS)](
     g, data_processing,
     (input._1, target._1),
-    (input._2, target._2))
+    (input._2, target._2),
+    concatOp)
 
   private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
 
@@ -227,8 +235,16 @@ object TFModel {
     * @param batchSize Size of the mini batch.
     *
     * @param prefetchSize Number of elements to prefetch.
+    *
+    * @param groupBuffer If set to a value greater than 0,
+    *                    use [[DataSet.build_buffered()]] instead
+    *                    of the default [[DataSet.build()]].
     * */
-  protected case class DataOps(shuffleBuffer: Int, batchSize: Int, prefetchSize: Int)
+  protected case class DataOps(
+    shuffleBuffer: Int,
+    batchSize: Int,
+    prefetchSize: Int,
+    groupBuffer: Int = 0)
 
   type Ops = DataOps
 
@@ -240,19 +256,32 @@ object TFModel {
     *            TensorFlow Data API pipeline operations to perform.
     * @param data_type A nested structure of data types corresponding to the input tensors.
     * @param shape A nested structure of shapes corresponding to the inputs.
+    * @param concatOp A data pipe which concatenates tensor groups.
+    *                 Use only if [[DataOps.groupBuffer]] is set to a non zero value.
+    *
     * */
   def _tf_data_set[T, O, DA, D, S](
     data: DataSet[T],
     ops: DataOps,
     data_type: DA,
-    shape: S)(
+    shape: S,
+    concatOp: Option[DataPipe[Iterable[T], T]] = None)(
     implicit
     evDAToD: DataTypeAuxToDataType.Aux[DA, D],
     evData: Data.Aux[T, O, D, S],
     evOToT: OutputToTensor.Aux[O, T],
     evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] = {
 
-    val starting_data = data.build[T, O, DA, D, S](Left(identityPipe[T]), data_type, shape).repeat()
+    val starting_data = if(ops.groupBuffer > 0) {
+      require(
+        concatOp.isDefined,
+        "Concatenate Operation not defined. Set `concatOp` variable")
+
+      data.build_buffered[T, O, DA, D, S](identityPipe[T], ops.groupBuffer, concatOp.get, data_type, shape).repeat()
+    } else {
+
+      data.build[T, O, DA, D, S](Left(identityPipe[T]), data_type, shape).repeat()
+    }
 
     val shuffled_dataset = if(ops.shuffleBuffer > 0) starting_data.shuffle(ops.shuffleBuffer) else starting_data
 
@@ -337,7 +366,8 @@ object TFModel {
     data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
-    data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None)(
+    data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None,
+    concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
     implicit
     evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
     evDToOI: DataTypeToOutput.Aux[ID, IO],
@@ -358,7 +388,7 @@ object TFModel {
     new TFModel(
       g, architecture, input, target, processTarget, loss,
       trainConfig, data_processing, inMemory, existingGraph,
-      data_handles
+      data_handles, concatOp
     )
 
 }

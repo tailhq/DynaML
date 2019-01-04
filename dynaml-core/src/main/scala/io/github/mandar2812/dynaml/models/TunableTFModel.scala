@@ -291,7 +291,8 @@ object TunableTFModel {
       data_processing: TFModel.Ops,
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
-      data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
+      data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
+      concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
       implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
       evDToOI: DataTypeToOutput.Aux[ID, IO],
       evOToTI: OutputToTensor.Aux[IO, IT],
@@ -324,7 +325,7 @@ object TunableTFModel {
               processTarget, loss,
               trainConfig.copy(summaryDir = model_summaries),
               data_processing, inMemory, existingGraph,
-              data_handles
+              data_handles, concatOp
             )
           }
       )
@@ -369,7 +370,8 @@ object TunableTFModel {
       data_processing: TFModel.Ops,
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
-      data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
+      data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
+      concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
       implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
       evDToOI: DataTypeToOutput.Aux[ID, IO],
       evOToTI: OutputToTensor.Aux[IO, IT],
@@ -401,7 +403,7 @@ object TunableTFModel {
               processTarget, loss,
               trainConfig.copy(summaryDir = model_summaries),
               data_processing, inMemory, existingGraph,
-              data_handles
+              data_handles, concatOp
             )
           }
       )
@@ -426,7 +428,8 @@ object TunableTFModel {
     data_processing: TFModel.Ops = TFModel.data_ops(10000, 16, 10),
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
-    data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None)(
+    data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
+    concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
     implicit ev1: Estimator.SupportedInferInput[
     Dataset[IT, IO, ID, IS],
     Iterator[(IT, ITT)],
@@ -454,7 +457,8 @@ object TunableTFModel {
       loss_func_gen, architecture, input, target,
       processTarget, trainConfig,
       data_processing, inMemory,
-      existingGraph, data_handles
+      existingGraph, data_handles,
+      concatOp
     )
 
     new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](
@@ -480,7 +484,8 @@ object TunableTFModel {
     data_processing: TFModel.Ops,
     inMemory: Boolean,
     existingGraph: Option[Graph],
-    data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]])(
+    data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]],
+    concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]])(
     implicit ev1: Estimator.SupportedInferInput[
     Dataset[IT, IO, ID, IS],
     Iterator[(IT, TT)],
@@ -508,7 +513,8 @@ object TunableTFModel {
       arch_loss_gen, input, target,
       processTarget, trainConfig,
       data_processing, inMemory,
-      existingGraph, data_handles
+      existingGraph, data_handles,
+      concatOp
     )
 
     new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](

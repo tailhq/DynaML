@@ -22,6 +22,7 @@ import ammonite.ops._
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.tensorflow._
+import io.github.mandar2812.dynaml.tensorflow.implicits.concatTensorTup2Splits
 import org.joda.time.DateTime
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.types.DataType
@@ -77,7 +78,8 @@ class TFModelSpec extends FlatSpec with Matchers {
             summarySaveFreq = 1000,
             checkPointFreq = 1000)
         )),
-      dtflearn.model.data_ops(5000, 16, 10)
+      dtflearn.model.data_ops(5, data_size/10, 10/*, (train_fraction*data_size).toInt*/)//,
+      //concatOp = Some(concatTensorTup2Splits)
     )
 
     regression_model.train()

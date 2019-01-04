@@ -125,9 +125,9 @@ class DataSetSpec extends FlatSpec with Matchers {
     val tf_data1 = numbers.build(Left(DataPipe[Int, Tensor](i => Tensor(i).reshape(Shape(1)))), INT32, Shape(1))
     val tf_data2 = numbers.build(Right(DataPipe[Int, Output](Tensor(_).toOutput)), INT32, Shape(1))
     val tf_data3 = numbers.build_buffered(
+      DataPipe((i: Int) => Tensor(i)),
       2,
-      DataPipe[Iterable[Output], Output](
-        s => tf.concatenate(s.toSeq, 0)), INT32, Shape(-1)
+      DataPipe[Iterable[Tensor], Tensor](s => tfi.concatenate(s.toSeq, 0)), INT32, Shape(-1)
     )
 
     assert(
