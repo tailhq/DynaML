@@ -71,8 +71,7 @@ import org.json4s.jackson.Serialization.{read => read_json, write => write_json}
   *
   * @param training_data Training data, as a DynaML [[DataSet]].
   *
-  * @param fitness_function A [[DataPipe]] which takes a validation data collection
-  *                         consisting of prediction-target tuples and outputs a
+  * @param fitness_function A [[DataPipe2]] which takes a prediction-target tuple and outputs a
   *                         performance metric or fitness value. Ideally this value
   *                         should follow the "Lesser is better" paradigm.
   *
@@ -92,7 +91,7 @@ TT, TO, TDA, TD, TS, T](
     TT, TO, TDA, TD, TS, T],
   val hyp_params: Seq[String],
   protected val training_data: DataSet[(IT, TT)],
-  val fitness_function: DataPipe[DataSet[(ITT, TT)], Double],
+  val fitness_function: DataPipe2[ITT, TT, Double],
   protected val validation_data: Option[DataSet[(IT, TT)]] = None,
   protected val data_split_func: Option[DataPipe[(IT, TT), Boolean]] = None)(
   implicit ev: Estimator.SupportedInferInput[
@@ -159,12 +158,29 @@ TT, TO, TDA, TD, TS, T](
 
     //Compute the model fitness, guard against weird exceptions
     val (fitness, comment) = try {
-      val predictions: DataSet[ITT] = model_instance.infer_coll(validation_inputs).map((c: (IT, ITT)) => c._2)
+      val predictions = model_instance.infer_coll(validation_inputs)
 
-      (fitness_function(predictions.zip(validation_targets)), None)
+      predictions match {
+
+        case Left(pred_tensor) => (
+          fitness_function(pred_tensor, model_instance.concatOpT.get(validation_targets.data)),
+          None
+        )
+
+        case Right(pred_collection) => (
+          pred_collection
+            .zip(validation_targets)
+            .map((p: (ITT, TT)) => fitness_function(p._1, p._2))
+            .reduce(DataPipe2[Double, Double, Double](_ + _))/validation_split.size,
+          None
+        )
+
+      }
     } catch {
       case e: java.lang.IllegalStateException => (Double.NaN, Some(e.getMessage))
-      case e: Throwable => (Double.NaN, Some(e.getMessage))
+      case e: Throwable =>
+        e.printStackTrace()
+        (Double.NaN, Some(e.getMessage))
     }
 
     //Append the model fitness to the hyper-parameter configuration
@@ -292,7 +308,8 @@ object TunableTFModel {
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
       data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
-      concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
+      concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
+      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
       implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
       evDToOI: DataTypeToOutput.Aux[ID, IO],
       evOToTI: OutputToTensor.Aux[IO, IT],
@@ -325,7 +342,7 @@ object TunableTFModel {
               processTarget, loss,
               trainConfig.copy(summaryDir = model_summaries),
               data_processing, inMemory, existingGraph,
-              data_handles, concatOp
+              data_handles, concatOpI, concatOpT
             )
           }
       )
@@ -371,7 +388,8 @@ object TunableTFModel {
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
       data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
-      concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
+      concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
+      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
       implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
       evDToOI: DataTypeToOutput.Aux[ID, IO],
       evOToTI: OutputToTensor.Aux[IO, IT],
@@ -403,7 +421,7 @@ object TunableTFModel {
               processTarget, loss,
               trainConfig.copy(summaryDir = model_summaries),
               data_processing, inMemory, existingGraph,
-              data_handles, concatOp
+              data_handles, concatOpI, concatOpT
             )
           }
       )
@@ -417,7 +435,7 @@ object TunableTFModel {
     loss_func_gen: HyperParams => Layer[(I, T), Output],
     hyp: List[String],
     training_data: DataSet[(IT, TT)],
-    fitness_function: DataPipe[DataSet[(ITT, TT)], Double],
+    fitness_function: DataPipe2[ITT, TT, Double],
     architecture: Layer[IO, I],
     input: (IDA, IS),
     target: (TDA, TS),
@@ -429,7 +447,8 @@ object TunableTFModel {
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
     data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
-    concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
+    concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
+    concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
     implicit ev1: Estimator.SupportedInferInput[
     Dataset[IT, IO, ID, IS],
     Iterator[(IT, ITT)],
@@ -458,7 +477,7 @@ object TunableTFModel {
       processTarget, trainConfig,
       data_processing, inMemory,
       existingGraph, data_handles,
-      concatOp
+      concatOpI, concatOpT
     )
 
     new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](
@@ -474,7 +493,7 @@ object TunableTFModel {
     arch_loss_gen: HyperParams => (Layer[IO, I], Layer[(I, T), Output]),
     hyp: List[String],
     training_data: DataSet[(IT, TT)],
-    fitness_function: DataPipe[DataSet[(ITT, TT)], Double],
+    fitness_function: DataPipe2[ITT, TT, Double],
     input: (IDA, IS),
     target: (TDA, TS),
     processTarget: Layer[TO, T],
@@ -485,7 +504,8 @@ object TunableTFModel {
     inMemory: Boolean,
     existingGraph: Option[Graph],
     data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]],
-    concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]])(
+    concatOpI: Option[DataPipe[Iterable[IT], IT]],
+    concatOpT: Option[DataPipe[Iterable[TT], TT]])(
     implicit ev1: Estimator.SupportedInferInput[
     Dataset[IT, IO, ID, IS],
     Iterator[(IT, TT)],
@@ -514,7 +534,7 @@ object TunableTFModel {
       processTarget, trainConfig,
       data_processing, inMemory,
       existingGraph, data_handles,
-      concatOp
+      concatOpI, concatOpT
     )
 
     new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](

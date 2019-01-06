@@ -10,6 +10,8 @@ import org.platanios.tensorflow.api.{Shape, Tensor}
 
 object Utils {
 
+  type NNPROP      = (Seq[Int], Seq[Shape], Seq[String], Seq[String])
+
   /**
     * Convert a float tensor to a Sequence.
     * */
@@ -21,17 +23,34 @@ object Utils {
   }
 
 
+  /**
+    * Returns the properties [[NNPROP]] (i.e. layer sizes, shapes, parameter names, & data types)
+    * of a feed-forward/dense neural stack which consists of layers of unequal size.
+    *
+    * @param d The dimensionality of the input (assumed to be a rank 1 tensor).
+    * @param num_pred_dims The dimensionality of the network output.
+    * @param layer_sizes The size of each hidden layer.
+    * @param dType The data type of the layer weights and biases.
+    * @param starting_index The numeric index of the first layer, defaults to 1.
+    *
+    * */
   def get_ffstack_properties(
-    neuron_counts: Seq[Int],
-    ff_index: Int,
-    data_type: String): (Seq[Shape], Seq[String], Seq[String]) = {
+    d: Int, num_pred_dims: Int,
+    layer_sizes: Seq[Int],
+    dType: String = "FLOAT64",
+    starting_index: Int = 1): NNPROP = {
 
-    val layer_parameter_names = (ff_index until ff_index + neuron_counts.length - 1).map(i => "Linear_"+i+"/Weights")
-    val layer_shapes          = neuron_counts.sliding(2).toSeq.map(c => Shape(c.head, c.last))
-    val layer_datatypes       = Seq.fill(layer_shapes.length)(data_type)
+    val net_layer_sizes       = Seq(d) ++ layer_sizes ++ Seq(num_pred_dims)
 
+    val layer_shapes          = net_layer_sizes.sliding(2).toSeq.map(c => Shape(c.head, c.last))
 
-    (layer_shapes, layer_parameter_names, layer_datatypes)
+    val size                  = net_layer_sizes.tail.length
+
+    val layer_parameter_names = (starting_index until starting_index + size).map(i => s"Linear_$i/Weights")
+
+    val layer_datatypes       = Seq.fill(net_layer_sizes.tail.length)(dType)
+
+    (net_layer_sizes, layer_shapes, layer_parameter_names, layer_datatypes)
   }
 
   /**

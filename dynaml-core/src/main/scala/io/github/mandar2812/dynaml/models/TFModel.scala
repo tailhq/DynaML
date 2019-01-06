@@ -99,8 +99,10 @@ TT, TO, TDA, TD, TS, T](
   val inMemory: Boolean = false,
   val existingGraph: Option[Graph] = None,
   data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
-  concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
-  implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
+  val concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
+  val concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
+  implicit
+  evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
   evDToOI: DataTypeToOutput.Aux[ID, IO],
   evOToTI: OutputToTensor.Aux[IO, IT],
   evDataI: Data.Aux[IT, IO, ID, IS],
@@ -118,12 +120,18 @@ TT, TO, TDA, TD, TS, T](
   ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT]) extends
   Model[DataSet[(IT, TT)], IT, ITT] {
 
+
+
   if(data_processing.groupBuffer > 0)
     require(
-      concatOp.isDefined,
-      "`groupBuffer` is non zero but concatenate operation not defined. Set `concatOp` variable")
+      concatOpI.isDefined && concatOpT.isDefined,
+      "`groupBuffer` is non zero but concatenate operation not defined. Set `concatOpI` and `concatOpT` variables")
 
   type ModelPair = dtflearn.SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
+
+  val concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] =
+    if(concatOpI.isEmpty || concatOpT.isEmpty) None
+    else Some(DataPipe((it: Iterable[(IT, TT)]) => it.unzip) > concatOpI.get * concatOpT.get)
 
   private lazy val tf_dataset = TFModel._tf_data_set[(IT, TT), (IO, TO), (IDA, TDA), (ID, TD), (IS, TS)](
     g, data_processing,
@@ -201,21 +209,20 @@ TT, TO, TDA, TD, TS, T](
     * @param input_data_set The data set containing input patterns
     * @return A DynaML data set of input-prediction tuples.
     * */
-  def infer_coll(
-    input_data_set: DataSet[IT])(
+  def infer_coll(input_data_set: DataSet[IT])(
     implicit ev: Estimator.SupportedInferInput[
       Dataset[IT, IO, ID, IS],
       Iterator[(IT, ITT)],
       IT, IO, ID, IS, ITT],
     evFunctionOutput: org.platanios.tensorflow.api.ops.Function.ArgType[IO]
-  ): DataSet[(IT, ITT)] = {
+  ): Either[ITT, DataSet[ITT]] = concatOpI match {
 
-    val tf_test_set = TFModel._tf_data_set[IT, IO, IDA, ID, IS](
-      input_data_set, TFModel.data_ops(0, data_processing.batchSize, 0),
-      input._1, input._2)
+    case None => Right(input_data_set.map((pattern: IT) => infer[IT, ITT, ITT](pattern)))
 
-    dtfdata.dataset(infer[Dataset[IT, IO, ID, IS], Iterator[(IT, ITT)], ITT](tf_test_set).toSeq)
+    case Some(concatFunc) => Left(infer[IT, ITT, ITT](concatFunc(input_data_set.data)))
+
   }
+
 
 }
 
@@ -367,7 +374,8 @@ object TFModel {
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
     data_handles: Option[(Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS])] = None,
-    concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] = None)(
+    concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
+    concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
     implicit
     evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
     evDToOI: DataTypeToOutput.Aux[ID, IO],
@@ -388,7 +396,7 @@ object TFModel {
     new TFModel(
       g, architecture, input, target, processTarget, loss,
       trainConfig, data_processing, inMemory, existingGraph,
-      data_handles, concatOp
+      data_handles, concatOpI, concatOpT
     )
 
 }
