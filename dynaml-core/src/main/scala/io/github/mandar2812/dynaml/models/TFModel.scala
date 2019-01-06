@@ -214,7 +214,7 @@ TT, TO, TDA, TD, TS, T](
       input_data_set, TFModel.data_ops(0, data_processing.batchSize, 0),
       input._1, input._2)
 
-    dtfdata.dataset(infer[Dataset[IT, IO, ID, IS], Iterator[(IT, ITT)], ITT](tf_test_set).toIterable)
+    dtfdata.dataset(infer[Dataset[IT, IO, ID, IS], Iterator[(IT, ITT)], ITT](tf_test_set).toSeq)
   }
 
 }

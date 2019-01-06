@@ -18,10 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
 
-//import scalaxy.streams.optimize
-
 trait DataPipeConvertible[-Source, +Destination] {
-  def toPipe: (Source) => Destination
+  def toPipe: Source => Destination
 }
 
 
@@ -151,7 +149,7 @@ trait SideEffectPipe[I] extends DataPipe[I, Unit] {
 
 object BifurcationPipe {
 
-  def apply[Source, Destination1, Destination2](f: (Source) => (Destination1, Destination2)) = DataPipe(f)
+  def apply[Source, Destination1, Destination2](f: Source => (Destination1, Destination2)) = DataPipe(f)
 
   def apply[Source, Destination1, Destination2](
     pipe1: DataPipe[Source, Destination1],
