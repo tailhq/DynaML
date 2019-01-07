@@ -263,7 +263,15 @@ object TunableTFModel {
     val config_to_str: DataPipe[Map[String, Double], String] = DataPipe(_.map(c => s"${c._1}_${c._2}").mkString("-"))
     val generate_token: DataPipe[String, String]             = DataPipe(utils.tokenGenerator.generateMD5Token)
 
-    private val to_token = config_to_str > generate_token
+    val to_token = config_to_str > generate_token
+
+    private def get_summary_dir(
+      top_dir: Path, 
+      h: HyperParams, 
+      create_working_dir: Option[DataPipe[HyperParams, String]] = Some(to_token)): Path = create_working_dir match {
+      case None => top_dir
+      case Some(working_dir_gen) => top_dir/working_dir_gen(h)
+    }
 
     /**
       * Create a [[ModelFunc]] from a "loss generator".
@@ -309,7 +317,8 @@ object TunableTFModel {
       existingGraph: Option[Graph] = None,
       data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
       concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
-      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
+      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None, 
+      create_working_dir: Option[DataPipe[HyperParams, String]] = Some(to_token))(
       implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
       evDToOI: DataTypeToOutput.Aux[ID, IO],
       evOToTI: OutputToTensor.Aux[IO, IT],
@@ -335,7 +344,7 @@ object TunableTFModel {
 
             val loss = loss_gen(h)
 
-            val model_summaries = trainConfig.summaryDir/to_token(h)
+            val model_summaries: Path = get_summary_dir(trainConfig.summaryDir, h, create_working_dir)
 
             TFModel(
               data, architecture, input, target,
@@ -389,7 +398,8 @@ object TunableTFModel {
       existingGraph: Option[Graph] = None,
       data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
       concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
-      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
+      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
+      create_working_dir: Option[DataPipe[HyperParams, String]] = Some(to_token))(
       implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
       evDToOI: DataTypeToOutput.Aux[ID, IO],
       evOToTI: OutputToTensor.Aux[IO, IT],
@@ -414,7 +424,7 @@ object TunableTFModel {
 
             val (architecture, loss) = arch_loss_gen(h)
 
-            val model_summaries = trainConfig.summaryDir/to_token(h)
+            val model_summaries: Path = get_summary_dir(trainConfig.summaryDir, h, create_working_dir)
 
             TFModel(
               data, architecture, input, target,
@@ -427,6 +437,90 @@ object TunableTFModel {
       )
 
     }
+
+
+    /**
+      * Create a [[ModelFunc]] from a "architecture generator".
+      *
+      * @param arch_generator A function which takes the [[HyperParams]] and creates
+      *                       a neural architecture.
+      *
+      * @param input Data type and shape of the model inputs.
+      *
+      * @param target Data type and shape of the model outputs/training labels.
+      *
+      * @param processTarget A layer which processes the labels/targets before using
+      *                      them for training.
+      *
+      * @param trainConfig An instance of type [[TFModel.Config]], contains information
+      *                    on the optimizer, summary directory and train hooks.
+      *
+      * @param data_processing An instance of type [[TFModel.DataOps]], contains details
+      *                        on the data processing pipeline to be applied.
+      *
+      * @param inMemory Set to true if the model should be entirely in memory. Defaults
+      *                 to false.
+      *
+      * @param existingGraph Defaults to None, set this parameter if the model should
+      *                      be created in an existing TensorFlow graph.
+      *
+      * @param data_handles Defaults to None, set this parameter if you wish to instantiate
+      *                     the model input-output handles.
+      * */
+      def from_arch_generator[
+        IT, IO, IDA, ID, IS, I, ITT,
+        TT, TO, TDA, TD, TS, T](
+          arch_generator: HyperParams => Layer[IO, I],
+          loss: Layer[(I, T), Output],
+          input: (IDA, IS),
+          target: (TDA, TS),
+          processTarget: Layer[TO, T],
+          trainConfig: TFModel.Config,
+          data_processing: TFModel.Ops,
+          inMemory: Boolean = false,
+          existingGraph: Option[Graph] = None,
+          data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
+          concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
+          concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
+          create_working_dir: Option[DataPipe[HyperParams, String]] = Some(to_token))(
+          implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
+          evDToOI: DataTypeToOutput.Aux[ID, IO],
+          evOToTI: OutputToTensor.Aux[IO, IT],
+          evDataI: Data.Aux[IT, IO, ID, IS],
+          evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
+          evDToOT: DataTypeToOutput.Aux[TD, TO],
+          evOToTT: OutputToTensor.Aux[TO, TT],
+          evDataT: Data.Aux[TT, TO, TD, TS],
+          evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
+          evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
+          evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
+          evFunctionOutput: Function.ArgType[(IO, TO)],
+          evFetchableIO: Fetchable.Aux[IO, IT],
+          evFetchableI: Fetchable.Aux[I, ITT],
+          evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
+          ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT])
+        : ModelFunc[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T] = {
+    
+          MetaPipe(
+            (h: TunableTFModel.HyperParams) =>
+              (data: DataSet[(IT, TT)]) => {
+    
+                val architecture = arch_generator(h)
+    
+                val model_summaries: Path = get_summary_dir(trainConfig.summaryDir, h, create_working_dir)
+    
+                TFModel(
+                  data, architecture, input, target,
+                  processTarget, loss,
+                  trainConfig.copy(summaryDir = model_summaries),
+                  data_processing, inMemory, existingGraph,
+                  data_handles, concatOpI, concatOpT
+                )
+              }
+          )
+    
+        }
+
   }
 
   def apply[
@@ -448,7 +542,8 @@ object TunableTFModel {
     existingGraph: Option[Graph] = None,
     data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
     concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
-    concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
+    concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
+    create_working_dir: Option[DataPipe[HyperParams, String]] = Some(ModelFunction.to_token))(
     implicit ev1: Estimator.SupportedInferInput[
     Dataset[IT, IO, ID, IS],
     Iterator[(IT, ITT)],
@@ -477,7 +572,8 @@ object TunableTFModel {
       processTarget, trainConfig,
       data_processing, inMemory,
       existingGraph, data_handles,
-      concatOpI, concatOpT
+      concatOpI, concatOpT, 
+      create_working_dir
     )
 
     new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](
@@ -505,7 +601,8 @@ object TunableTFModel {
     existingGraph: Option[Graph],
     data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]],
     concatOpI: Option[DataPipe[Iterable[IT], IT]],
-    concatOpT: Option[DataPipe[Iterable[TT], TT]])(
+    concatOpT: Option[DataPipe[Iterable[TT], TT]],
+    create_working_dir: Option[DataPipe[HyperParams, String]])(
     implicit ev1: Estimator.SupportedInferInput[
     Dataset[IT, IO, ID, IS],
     Iterator[(IT, TT)],
@@ -534,7 +631,8 @@ object TunableTFModel {
       processTarget, trainConfig,
       data_processing, inMemory,
       existingGraph, data_handles,
-      concatOpI, concatOpT
+      concatOpI, concatOpT,
+      create_working_dir
     )
 
     new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](
@@ -543,5 +641,67 @@ object TunableTFModel {
     )
 
   }
+
+  def apply[
+  IT, IO, IDA, ID, IS, I, ITT,
+  TT, TO, TDA, TD, TS, T](
+    arch_gen: HyperParams => Layer[IO, I],
+    loss: Layer[(I, T), Output],
+    hyp: List[String],
+    training_data: DataSet[(IT, TT)],
+    fitness_function: DataPipe2[ITT, TT, Double],
+    input: (IDA, IS),
+    target: (TDA, TS),
+    processTarget: Layer[TO, T],
+    trainConfig: TFModel.Config,
+    validation_data: Option[DataSet[(IT, TT)]],
+    data_split_func: Option[DataPipe[(IT, TT), Boolean]],
+    data_processing: TFModel.Ops,
+    inMemory: Boolean,
+    existingGraph: Option[Graph],
+    data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]],
+    concatOpI: Option[DataPipe[Iterable[IT], IT]],
+    concatOpT: Option[DataPipe[Iterable[TT], TT]],
+    create_working_dir: Option[DataPipe[HyperParams, String]])(
+    implicit ev1: Estimator.SupportedInferInput[
+    Dataset[IT, IO, ID, IS],
+    Iterator[(IT, TT)],
+    IT, IO, ID, IS, TT],
+    evFunctionOutput1: Function.ArgType[IO],
+    evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
+    evDToOI: DataTypeToOutput.Aux[ID, IO],
+    evOToTI: OutputToTensor.Aux[IO, IT],
+    evDataI: Data.Aux[IT, IO, ID, IS],
+    evDAToDT: DataTypeAuxToDataType.Aux[TDA, TD],
+    evDToOT: DataTypeToOutput.Aux[TD, TO],
+    evOToTT: OutputToTensor.Aux[TO, TT],
+    evDataT: Data.Aux[TT, TO, TD, TS],
+    evDAToD: DataTypeAuxToDataType.Aux[(IDA, TDA), (ID, TD)],
+    evData: Data.Aux[(IT, TT), (IO, TO), (ID, TD), (IS, TS)],
+    evOToT: OutputToTensor.Aux[(IO, TO), (IT, TT)],
+    evFunctionOutput: Function.ArgType[(IO, TO)],
+    evFetchableIO: Fetchable.Aux[IO, IT],
+    evFetchableI: Fetchable.Aux[I, ITT],
+    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
+    ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT])
+  : TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T] = {
+
+    val modelFunc = ModelFunction.from_arch_generator(
+      arch_gen, loss, input, target,
+      processTarget, trainConfig,
+      data_processing, inMemory,
+      existingGraph, data_handles,
+      concatOpI, concatOpT,
+      create_working_dir
+    )
+
+    new TunableTFModel[IT, IO, IDA, ID, IS, I, ITT, TT, TO, TDA, TD, TS, T](
+      modelFunc, hyp, training_data, fitness_function,
+      validation_data, data_split_func
+    )
+
+  }
+
+
 
 }
