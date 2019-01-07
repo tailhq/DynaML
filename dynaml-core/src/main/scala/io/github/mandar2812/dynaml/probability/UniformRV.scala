@@ -24,6 +24,7 @@ import spire.implicits._
 /**
   * Created by mandar on 26/7/16.
   */
-case class UniformRV(min: Double, max: Double) extends ContinuousDistrRV[Double] {
+case class UniformRV(min: Double, max: Double) extends
+  ContinuousRVWithDistr[Double, Uniform] {
   override val underlyingDist = new Uniform(min, max)
 }

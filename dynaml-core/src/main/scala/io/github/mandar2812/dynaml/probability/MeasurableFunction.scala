@@ -35,15 +35,14 @@ import io.github.mandar2812.dynaml.pipes.Encoder
   * @author mandar2812 date 24/09/2016.
   *
   * */
-trait MeasurableFunction[
-Domain1, Domain2, +R <: RandomVariable[Domain1]]
+trait MeasurableFunction[Domain1, Domain2, +R <: RandomVariable[Domain1]]
   extends RandomVariable[Domain2] {
 
   val baseRV: R
 
   val func: DataPipe[Domain1, Domain2]
 
-  def _baseRandomVar = baseRV
+  def _baseRandomVar: R = baseRV
 
 }
 
@@ -51,23 +50,23 @@ object MeasurableFunction {
 
   def apply[Domain1, Domain2, R  <: RandomVariable[Domain1]](f: Domain1 => Domain2)(base: R)
   : MeasurableFunction[Domain1, Domain2, R] = new MeasurableFunction[Domain1, Domain2, R] {
-    override val baseRV = base
-    override val func = DataPipe(f)
+    override val baseRV: R                       = base
+    override val func                            = DataPipe(f)
     override val sample: DataPipe[Unit, Domain2] = baseRV.sample > func
   }
 
   def apply[Domain1, Domain2, R <: RandomVariable[Domain1]](base: R)(f: Domain1 => Domain2)
   : MeasurableFunction[Domain1, Domain2, R] = new MeasurableFunction[Domain1, Domain2, R] {
-    override val baseRV = base
-    override val func = DataPipe(f)
+    override val baseRV: R                       = base
+    override val func                            = DataPipe(f)
     override val sample: DataPipe[Unit, Domain2] = baseRV.sample > func
   }
 
   def apply[Domain1, Domain2, R <: RandomVariable[Domain1]](base: R, f: DataPipe[Domain1, Domain2])
   : MeasurableFunction[Domain1, Domain2, R] = new MeasurableFunction[Domain1, Domain2, R] {
-    override val baseRV = base
-    override val func = f
-    override val sample: DataPipe[Unit, Domain2] = baseRV.sample > func
+    override val baseRV: R                        = base
+    override val func: DataPipe[Domain1, Domain2] = f
+    override val sample: DataPipe[Unit, Domain2]  = baseRV.sample > func
   }
 
 }
@@ -76,11 +75,16 @@ trait ContinuousMeasurableFunc[Domain1, Domain2, +R <: ContinuousRandomVariable[
   extends ContinuousRandomVariable[Domain2] with MeasurableFunction[Domain1, Domain2, R]
 
 object ContinuousMeasurableFunc {
-  def apply[Domain1, Domain2, R <: ContinuousRandomVariable[Domain1]](f: Domain1 => Domain2)(base: R) =
+  def apply[
+  Domain1,
+  Domain2,
+  R <: ContinuousRandomVariable[Domain1]](
+    f: Domain1 => Domain2)(
+    base: R): ContinuousMeasurableFunc[Domain1, Domain2, R] =
     new ContinuousMeasurableFunc[Domain1, Domain2, R] {
-      override val baseRV = base
-      override val func = DataPipe(f)
-      override val sample = baseRV.sample > func
+      override val baseRV: R                       = base
+      override val func                            = DataPipe(f)
+      override val sample: DataPipe[Unit, Domain2] = baseRV.sample > func
     }
 }
 
@@ -102,15 +106,16 @@ class MeasurableDistrRV[Domain1, Domain2, Jacobian, Distr1 <: ContinuousDistr[Do
   ContinuousMeasurableFunc[
     Domain1, Domain2,
     ContinuousRVWithDistr[Domain1, Distr1]] with
-  ContinuousDistrRV[Domain2] {
+  ContinuousRVWithDistr[Domain2, ContinuousDistr[Domain2]] {
 
-  override val underlyingDist = new ContinuousDistr[Domain2] {
-    override def unnormalizedLogPdf(x: Domain2) =
+  override val underlyingDist: ContinuousDistr[Domain2] = new ContinuousDistr[Domain2] {
+
+    override def unnormalizedLogPdf(x: Domain2): Double =
       baseRV.underlyingDist.unnormalizedLogPdf(func.i(x)) + log(func._det(func.i.J(x)))
 
-    override def logNormalizer = baseRV.underlyingDist.logNormalizer
+    override def logNormalizer: Double = baseRV.underlyingDist.logNormalizer
 
-    override def draw() = func.run(baseRV.underlyingDist.draw())
+    override def draw(): Domain2 = func.run(baseRV.underlyingDist.draw())
   }
 
 }
@@ -125,16 +130,18 @@ class MeasurableDistrRV[Domain1, Domain2, Jacobian, Distr1 <: ContinuousDistr[Do
   * @param encoder The morphing function from [[Domain1]] to [[Domain2]]
   * @author mandar2812 date 16/05/2017.
   * */
-class EncodedContDistrRV[Domain1, Domain2, Distr <: ContinuousDistr[Domain1]](
-  base: Distr, encoder: Encoder[Domain1, Domain2])
-  extends ContinuousRVWithDistr[Domain2, ContinuousDistr[Domain2]] {
+class EncodedContDistrRV[
+Domain1, Domain2,
+Distr <: ContinuousDistr[Domain1]](
+  base: Distr, encoder: Encoder[Domain1, Domain2]) extends
+  ContinuousRVWithDistr[Domain2, ContinuousDistr[Domain2]] {
 
-  override val underlyingDist = new ContinuousDistr[Domain2] {
-    override def unnormalizedLogPdf(x: Domain2) = base.unnormalizedLogPdf(encoder.i(x))
+  override val underlyingDist: ContinuousDistr[Domain2] = new ContinuousDistr[Domain2] {
+    override def unnormalizedLogPdf(x: Domain2): Double = base.unnormalizedLogPdf(encoder.i(x))
 
-    override def logNormalizer = base.logNormalizer
+    override def logNormalizer: Double = base.logNormalizer
 
-    override def draw() = encoder(base.draw())
+    override def draw(): Domain2 = encoder(base.draw())
   }
 }
 

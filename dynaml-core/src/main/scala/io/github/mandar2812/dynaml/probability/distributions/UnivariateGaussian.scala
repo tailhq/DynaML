@@ -31,7 +31,7 @@ import scala.math.log1p
   * */
 class UnivariateGaussian(mu: Double, sigma: Double)
   extends Gaussian(mu, sigma) with HasErrorBars[Double] {
-  override def confidenceInterval(s: Double) = {
+  override def confidenceInterval(s: Double): (Double, Double) = {
     (mu-s*sigma, mu+s*sigma)
   }
 }
@@ -52,17 +52,17 @@ class MVGaussian(
 
   protected lazy val root: DenseMatrix[Double] = cholesky(covariance)
 
-  override def mean = mu
+  override def mean: DenseVector[Double] = mu
 
-  override def variance = covariance
+  override def variance: DenseMatrix[Double] = covariance
 
-  override def entropy = {
+  override def entropy: Double = {
     mean.length * log1p(2 * math.Pi) + sum(log(diag(root)))
   }
 
-  override def mode = mean
+  override def mode: DenseVector[Double] = mean
 
-  override def unnormalizedLogPdf(x: DenseVector[Double]) = {
+  override def unnormalizedLogPdf(x: DenseVector[Double]): Double = {
     val centered = x - mean
     val slv = covariance \ centered
 
@@ -70,19 +70,19 @@ class MVGaussian(
 
   }
 
-  override def logNormalizer = {
+  override def logNormalizer: Double = {
     // determinant of the cholesky decomp is the sqrt of the determinant of the cov matrix
     // this is the log det of the cholesky decomp
     val det = trace(log(root))
     mean.length/2.0 *  log(2 * math.Pi) + 0.5*det
   }
 
-  override def draw() = {
+  override def draw(): DenseVector[Double] = {
     val z: DenseVector[Double] = DenseVector.rand(mean.length, rand.gaussian(0, 1))
     root * z += mean
   }
 
-  override def confidenceInterval(s: Double) = {
+  override def confidenceInterval(s: Double): (DenseVector[Double], DenseVector[Double]) = {
 
     val signFlag = if(s < 0) -1.0 else 1.0
 

@@ -305,8 +305,7 @@ trait DiscreteRVWithDistr[Domain, +Distr <: DiscreteDistr[Domain]] extends
   *
   * */
 @deprecated("ContinuousDistrRV is deprecated as of DynaML v1.5, prefer ContinuousRVWithDistr")
-trait ContinuousDistrRV[Domain] extends
-  ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]] { self =>
+trait ContinuousDistrRV[Domain] extends ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]] { self =>
 
 
   def :*[Domain1](other: ContinuousDistrRV[Domain1])(

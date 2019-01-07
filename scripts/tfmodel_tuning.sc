@@ -56,7 +56,7 @@ val loss_func_generator = (h: Map[String, Double]) => {
     tf.learn.ScalarSummary("Loss", "ModelLoss")
 }
 
-implicit val detImpl = DynaMLPipe.identityPipe[Double]
+implicit val detImpl: DataPipe[Double, Double] = DataPipe(math.abs)
 
 val h: PushforwardMap[Double, Double, Double] = PushforwardMap(
   DataPipe((x: Double) => math.exp(x)),
@@ -100,10 +100,6 @@ val train_config_tuning = dtflearn.model.trainConfig(
 )
 
 val tf_data_ops = dtflearn.model.data_ops(10, 1000, 10, data_size/5)
-
-/*val stackOperation = DataPipe[Iterable[(Tensor, Tensor)], (Tensor, Tensor)](bat =>
-  (tfi.concatenate(bat.map(_._1).toSeq, axis = 0), tfi.concatenate(bat.map(_._2).toSeq, axis = 0))
-)*/
 
 val stackOperationI = DataPipe[Iterable[Tensor], Tensor](bat => tfi.concatenate(bat.toSeq, axis = 0))
 

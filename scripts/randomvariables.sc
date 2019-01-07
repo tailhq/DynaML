@@ -28,7 +28,7 @@ legend(List("UESN", "Gaussian", "Skew Gaussian"))
 title("Probability Density Functions")
 
 //push forward maps
-implicit val detImpl = identityPipe[Double]
+implicit val detImpl: DataPipe[Double, Double] = DataPipe(math.abs)
 
 val h: PushforwardMap[Double, Double, Double] = PushforwardMap(
   DataPipe((x: Double) => math.exp(x)),

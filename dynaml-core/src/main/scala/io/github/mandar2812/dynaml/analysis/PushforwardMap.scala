@@ -53,7 +53,7 @@ abstract class PushforwardMap[
     * Return the implementation used for calculating
     * determinant of the inverse function's Jacobian
     * */
-  def _det = detImpl
+  def _det: DataPipe[Jacobian, Double] = detImpl
 
 }
 

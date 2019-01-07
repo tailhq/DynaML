@@ -50,7 +50,8 @@ case class GaussianRV(mu: Double, sigma: Double) extends
   * @author mandar2812
   * */
 case class MultGaussianRV(
-  mu: DenseVector[Double], covariance: DenseMatrix[Double])(
+  mu: DenseVector[Double],
+  covariance: DenseMatrix[Double])(
   implicit ev: Field[DenseVector[Double]])
   extends AbstractGaussianRV[DenseVector[Double], DenseMatrix[Double], MVGaussian] {
 
