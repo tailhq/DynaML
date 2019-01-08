@@ -161,7 +161,7 @@ TT, TO, TDA, TD, TS, T](
 
     val train_hooks = trainHooks match {
       case Some(hooks) => hooks
-      case None => TFModel._train_hooks(summary_dir = summaryDir)
+      case None => if(inMemory) Set[Hook]() else TFModel._train_hooks(summary_dir = summaryDir)
     }
 
     val config = tf.learn.Configuration(Some(summaryDir.toNIO))
