@@ -151,13 +151,15 @@ TT, TO, TDA, TD, TS, T](
       validation_split.map((c: (IT, TT)) => c._2)
     )
 
+    
     //Get the model instance.
     val model_instance = modelFunction(h)(train_split)
-    //Train the model instance
-    model_instance.train()
 
     //Compute the model fitness, guard against weird exceptions
     val (fitness, comment) = try {
+      //Train the model instance
+      model_instance.train()
+
       val predictions = model_instance.infer_coll(validation_inputs)
 
       predictions match {
