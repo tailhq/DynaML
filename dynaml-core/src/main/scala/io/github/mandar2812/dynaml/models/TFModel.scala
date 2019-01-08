@@ -223,6 +223,11 @@ TT, TO, TDA, TD, TS, T](
 
   }
 
+  /**
+    * Close the underlying tensorflow graph.
+    * */
+  def close(): Unit = graphInstance.close()
+
 
 }
 

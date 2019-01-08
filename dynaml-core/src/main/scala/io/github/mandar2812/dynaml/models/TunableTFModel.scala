@@ -183,6 +183,8 @@ TT, TO, TDA, TD, TS, T](
       case e: Throwable =>
         e.printStackTrace()
         (Double.NaN, Some(e.getMessage))
+    } finally {
+      model_instance.close()
     }
 
     //Append the model fitness to the hyper-parameter configuration
