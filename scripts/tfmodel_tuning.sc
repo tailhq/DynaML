@@ -56,6 +56,14 @@ val loss_func_generator = (h: Map[String, Double]) => {
     tf.learn.ScalarSummary("Loss", "ModelLoss")
 }
 
+val tuning_config_generator =
+  dtflearn.tunable_tf_model.ModelFunction.hyper_params_to_dir >>
+  DataPipe((p: Path) => dtflearn.model.trainConfig(
+    p, tf.train.Adam(0.1),
+    dtflearn.rel_loss_change_stop(0.005, 5000),
+    Some(dtflearn.model._train_hooks(p))
+  ))
+
 implicit val detImpl: DataPipe[Double, Double] = DataPipe(math.abs)
 
 val h: PushforwardMap[Double, Double, Double] = PushforwardMap(
@@ -94,11 +102,6 @@ val fitness_function = DataPipe2[Tensor, Tensor, Double](
 )
 
 
-val train_config_tuning = dtflearn.model.trainConfig(
-  tf_summary_dir, tf.train.Adam(0.1),
-  dtflearn.rel_loss_change_stop(0.005, 5000)
-)
-
 val tf_data_ops = dtflearn.model.data_ops(10, 1000, 10, data_size/5)
 
 val stackOperationI = DataPipe[Iterable[Tensor], Tensor](bat => tfi.concatenate(bat.toSeq, axis = 0))
@@ -115,7 +118,7 @@ val tunableTFModel: TunableTFModel[
     (FLOAT64, Shape(1, 1)),
     (FLOAT64, Shape(1)),
     tf.learn.Cast("TrainInput", FLOAT64),
-    train_config_tuning,
+    tuning_config_generator(tf_summary_dir),
     data_split_func = Some(DataPipe[(Tensor, Tensor), Boolean](_ => scala.util.Random.nextGaussian() <= 0.7)),
     data_processing = tf_data_ops,
     inMemory = false,

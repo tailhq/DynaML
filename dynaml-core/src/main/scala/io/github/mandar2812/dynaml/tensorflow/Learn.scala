@@ -86,6 +86,12 @@ private[tensorflow] object Learn {
     * */
   val max_iter_stop: Long => StopCriteria           = (n: Long) => tf.learn.StopCriteria(maxSteps = Some(n))
 
+
+  /**
+    * Stop after a specified maximum number of epochs has been reached.
+    * */
+  val max_epochs_stop: Long => StopCriteria         = (n: Long) => tf.learn.StopCriteria(maxEpochs = Some(n))
+
   /**
     * Stop after the change in the loss function falls below a specified threshold.
     * */
