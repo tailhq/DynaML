@@ -179,10 +179,10 @@ TT, TO, TDA, TD, TS, T](
 
       }
     } catch {
-      case e: java.lang.IllegalStateException => (Double.NaN, Some(e.getMessage))
+      case e: java.lang.IllegalStateException => (Double.PositiveInfinity, Some(e.getMessage))
       case e: Throwable =>
         e.printStackTrace()
-        (Double.NaN, Some(e.getMessage))
+        (Double.PositiveInfinity, Some(e.getMessage))
     } finally {
       model_instance.close()
     }
