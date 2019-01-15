@@ -75,7 +75,7 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
       println("Mutating configuration: ")
       pprint.pprintln(config)
 
-      config.map((param) => {
+      config.map(param => {
         val dist = new CauchyDistribution(0.0, temperature)
         val mutated = param._2 + dist.sample()
         (param._1, math.abs(mutated))

@@ -65,7 +65,7 @@ object Encoder {
   /**
     * Create an encoder on the fly by supplying the encode and decode function
     * */
-  def apply[S, D](forwardEnc: (S) => D, reverseEnc: (D) => S): Encoder[S, D] =
+  def apply[S, D](forwardEnc: S => D, reverseEnc: D => S): Encoder[S, D] =
     new Encoder[S, D] {
 
       val i = DataPipe(reverseEnc)

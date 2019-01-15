@@ -2,7 +2,7 @@ import ammonite.ops._
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.models._
-import io.github.mandar2812.dynaml.optimization.GridSearch
+import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.tensorflow.data.DataSet
 import io.github.mandar2812.dynaml.tensorflow.layers.L2Regularization
@@ -126,11 +126,21 @@ val tunableTFModel: TunableTFModel[
     concatOpT = Some(stackOperationI)
   )
 
-val gs = new GridSearch[tunableTFModel.type](tunableTFModel)
+
+
+val gs = new CMAES(
+  tunableTFModel,
+  hyper_parameters,
+  hyp_parameter_scaling = Some(
+    Map(
+      "reg" -> Encoder((x: Double) => math.exp(x), (x: Double) => math.log(x))
+    )
+  ))
 
 gs.setPrior(hyper_prior)
 
 gs.setNumSamples(2)
+gs.setMaxIterations(2)
 
 
 println("--------------------------------------------------------------------")
