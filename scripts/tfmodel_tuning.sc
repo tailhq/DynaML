@@ -133,7 +133,7 @@ val gs = new CMAES(
   hyper_parameters,
   hyp_parameter_scaling = Some(
     Map(
-      "reg" -> Encoder((x: Double) => math.exp(x), (x: Double) => math.log(x))
+      "reg" -> Encoder((x: Double) => math.log(x), (x: Double) => math.exp(x))
     )
   ))
 
