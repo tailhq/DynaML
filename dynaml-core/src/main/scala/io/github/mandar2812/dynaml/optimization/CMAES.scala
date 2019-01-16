@@ -188,7 +188,7 @@ object CMAES {
 
     val w_adj = config.w.toArray.zip(y).map(c => if(c._1 > 0d) c._1 else c._1 * config.n/math.pow(norm(L\c._2), 2d))
 
-    def dirac(x: Double, c: Double = 0d): Double = if(x - c == 0d) 1.0 else 0d
+    def dirac(x: Double): Double = (1d - x)*config.c_c*(2 - config.c_c)
 
     val C =
       state.C*(1d + config.c1*dirac(h_s) - config.c1 - config.c_µ*sum(config.w)) +
