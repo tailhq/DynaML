@@ -18,7 +18,11 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.evaluation
 
-import org.platanios.tensorflow.api.{---, ::, Tensor}
+import org.platanios.tensorflow.api._
+
+import org.json4s._
+import org.json4s.jackson.Serialization.{read => read_json, write => write_json}
+
 
 
 /**
@@ -29,6 +33,8 @@ import org.platanios.tensorflow.api.{---, ::, Tensor}
   * @param targets The actual output values.
   * */
 abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets: Tensor) {
+
+  implicit val formats = DefaultFormats
 
   protected val scoresAndLabels: (Tensor, Tensor) = (preds, targets)
 
@@ -68,6 +74,18 @@ abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets:
     * Implement this method in sub-classes.
     * */
   protected def run(): Tensor
+
+  def to_json: String = {
+
+    val metrics = tfi.unstack(run(), number = names.length, axis = 0)
+
+    val results: Map[String, Any] =
+      names.zip(metrics.map(_.entriesIterator.toIndexedSeq)).toMap ++
+        Map("shape" -> metrics.head.shape.entriesIterator.toIndexedSeq) ++
+        Map("quantity" -> name)
+
+    write_json(results)
+  }
 
 
 }
