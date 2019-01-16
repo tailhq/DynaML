@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg._
+import breeze.numerics.lgamma
 import io.github.mandar2812.dynaml.{DynaMLPipe, utils}
 import io.github.mandar2812.dynaml.algebra.square
 import io.github.mandar2812.dynaml.analysis.VectorField
@@ -32,7 +33,12 @@ import io.github.mandar2812.dynaml.probability.{GaussianRV, MultGaussianRV}
   * optimization algorithm as described in
   * <a href="https://arxiv.org/pdf/1604.00772.pdf">https://arxiv.org/pdf/1604.00772.pdf</a>
   *
-  *
+  * @param model The model having hyper-parameters. Must extend [[GloballyOptimizable]]
+  * @param hyper_parameters A list of model hyper-parameters.
+  * @param learning_rate Usually set to a value of 1, or some value less than 1.
+  * @param hyp_parameter_scaling In case the search space is not the whole Euclidean
+  *                              space, set a one-to-one mapping from the hyper-parameter
+  *                              space to a latent Euclidean space.
   * */
 class CMAES[T <: GloballyOptimizable](
   model: T,
@@ -44,6 +50,13 @@ class CMAES[T <: GloballyOptimizable](
 
   protected var MAX_ITERATIONS: Int = 10
 
+  val problem_size = hyper_parameters.length
+
+  val config = CMAES.get_default_config(problem_size)
+
+  /**
+    * Set the maximum number of generations to run.
+    * */
   def setMaxIterations(m: Int): this.type = {
     MAX_ITERATIONS = m
     this
@@ -66,7 +79,13 @@ class CMAES[T <: GloballyOptimizable](
 
   private val hyp_encoder = process_hyp > hyp_map_to_vec
 
-
+  /**
+    * Evaluate the fitness of a population sample.
+    * @param sample A population sample
+    * @return A sorted sequence of fitness values
+    *         and candidates.
+    *
+    * */
   def evaluate_population(sample: Seq[DenseVector[Double]]): Seq[(Double, DenseVector[Double])] =
     sample.map(s => {
 
@@ -84,16 +103,22 @@ class CMAES[T <: GloballyOptimizable](
     }).sortBy(_._1)
 
 
-
+  /**
+    * Run [[MAX_ITERATIONS]] generations of CMA-ES.
+    *
+    * @param initialConfig Used as the m<sub>0</sub>, the
+    *                      initial sampling mean.
+    * @param options Extra options for the algorithm,
+    *                set the variance scaling as
+    *                {{{
+    *                  Map("stepSize" -> 1.5)
+    *                }}}
+    * */
   override def optimize(
     initialConfig: Map[String, Double],
     options: Map[String, String]): (T, Map[String, Double]) = {
 
-    val problem_size = hyper_parameters.length
-
-    val config = CMAES.get_default_config(problem_size)
-
-    val sigma = if(options.isDefinedAt("step_size")) options("stepSize").toDouble else 1.0
+    val sigma = if(options.isDefinedAt("stepSize")) options("stepSize").toDouble else 1.0
 
     val initialState = CMAES.State(
       hyp_encoder(initialConfig),
@@ -103,8 +128,15 @@ class CMAES[T <: GloballyOptimizable](
 
     println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     println("Covariance Matrix Adaptation - Evolutionary Search (CMA-ES): ")
+    print("Population Size: ")
+    pprint.pprintln(config.λ)
+    print("Parent Number: ")
+    pprint.pprintln(config.µ)
     println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     println()
+
+    println("Configuration: ")
+    pprint.pprintln(config)
 
     val result = (0 until MAX_ITERATIONS).foldLeft((initialState, Seq[DenseVector[Double]]()))(
       (generation: (CMAES.State, Seq[DenseVector[Double]]), it: Int) => {
@@ -113,7 +145,12 @@ class CMAES[T <: GloballyOptimizable](
         print("Generation ")
         pprint.pprintln(it)
 
+        println("Covariance matrix: ")
+
+
         val (state, _) = generation
+
+        pprint.pprintln(state.C)
 
         val population = CMAES.sample_population(state, config)
 
@@ -121,6 +158,9 @@ class CMAES[T <: GloballyOptimizable](
 
         val new_state = CMAES.update_state(learning_rate, config)(state, ranked_population.map(_._2), it)
 
+        println("------------------------------------------------------------------------")
+        println("New State: ")
+        pprint.pprintln(new_state)
         println("------------------------------------------------------------------------")
 
         (new_state, ranked_population.map(_._2))
@@ -151,12 +191,30 @@ object CMAES {
 
   /**
     * Represents a CMA-ES configuration.
+    *
+    * @param n The problem size.
+    * @param λ The population size.
+    * @param µ The number of parents to choose.
+    * @param µ_eff The <i>variance effective selection mass</i>,
+    *              should be set to
+    *              (&Sigma;<sub>i</sub>|w<sub>i</sub>|)<sup>2</sup>/(&Sigma;w<sub>i</sub><sup>2</sup>)
+    *
+    * @param w The weights assigned to each ranked candidate.
+    *          Assumed to be in the order of fitness value.
+    *
+    * @param c_s Exponential smoothing factor for the step size.
+    * @param d_s Scaling constant in exponential smoothing of step size.
+    * @param c_c Smoothing parameter for updating the evolution path [[State.p_c]]
+    * @param c1 Parameter used in update of covariance matrix.
+    * @param c_µ Multiplicative factor used to scale sum of weights.
+    *
     * */
-  private[optimization] case class Config(
+  case class Config(
     n: Int, λ: Int, µ: Int, µ_eff: Double, w: DenseVector[Double],
     c_s: Double, d_s: Double, c_c: Double, c1: Double,
     c_µ: Double
   )
+
 
   def update_state(
     learning_rate: Double,
@@ -174,24 +232,27 @@ object CMAES {
 
     val L = cholesky(state.C)
 
-    val Exp_N01 = config.n*math.sqrt(2d/math.Pi)
+    val Exp_N01 = math.sqrt(2d)*math.exp(lgamma((config.n + 1)/2d) - lgamma(config.n/2d))
 
     //Update the step size control parameters
     val p_s = (1 - config.c_s)*state.p_s + (L\y_w)*math.sqrt(config.c_s*(2 - config.c_s)*config.µ_eff)
     val sigma = state.sigma*math.exp(config.c_s*(norm(p_s, 1)/Exp_N01 - 1)/config.d_s)
 
+    //Compute primitives needed for covariance adaptation.
     val h_s =
       if(norm(p_s, 1)/math.sqrt(1d - math.pow(1 - config.c_s, 2*(g+1))) < (1.4 + 2/(config.n + 1))*Exp_N01) 1.0
       else 0d
 
     val p_c = state.p_c*(1d - config.c_c) + y_w*(h_s*math.sqrt(config.c_s*(2 - config.c_s)*config.µ_eff))
 
+    //Adjust the weights.
     val w_adj = config.w.toArray.zip(y).map(c => if(c._1 > 0d) c._1 else c._1 * config.n/math.pow(norm(L\c._2), 2d))
 
-    def dirac(x: Double): Double = (1d - x)*config.c_c*(2 - config.c_c)
+    def delta(x: Double): Double = (1d - x)*config.c_c*(2 - config.c_c)
 
+    //Update the covariance matrix
     val C =
-      state.C*(1d + config.c1*dirac(h_s) - config.c1 - config.c_µ*sum(config.w)) +
+      state.C*(1d + config.c1*delta(h_s) - config.c1 - config.c_µ*sum(config.w)) +
         (p_c*p_c.t)*config.c1 +
         w_adj.map(x => x*config.c_µ).zip(y).map(c => (c._2*c._2.t)*c._1).reduce(_ + _)
 
@@ -199,6 +260,12 @@ object CMAES {
     State(m, C, p_c, sigma, p_s)
   }
 
+  /**
+    * Generate a population sample.
+    * @param state The algorithm state as a [[State]] instance.
+    * @param config The configuration of the algorithm.
+    * @return A population sample.
+    * */
   def sample_population(state: State, config: Config): Seq[DenseVector[Double]] = {
 
     implicit val f = VectorField(config.n)
@@ -208,6 +275,11 @@ object CMAES {
     pop_random_variable.iid(config.λ).draw
   }
 
+  /**
+    * Generate the default configuration [[Config]] of CMA-ES.
+    * @param n The problem size, i.e. the number of
+    *          hyper-parameters to optimize.
+    * */
   def get_default_config(n: Int): Config = {
 
     val λ = 4 + math.floor(3*math.log(n)).toInt
@@ -215,7 +287,7 @@ object CMAES {
 
     val µ = math.floor(λ/2.0).toInt
 
-    val w1 = DenseVector.tabulate[Double](λ)(i => math.log((λ+1d)/2) - math.log(i))
+    val w1 = DenseVector.tabulate[Double](λ)(i => math.log((λ+1d)/2) - math.log(i+1))
 
     val µ_eff: Double = math.pow(sum(w1), 2d)/square(sum(w1))
 
@@ -243,7 +315,7 @@ object CMAES {
 
     val alpha_µ_neg = 1d + c1/c_µ
 
-    val alpha_µ_eff_neg = 1d + 2*µ_eff/(µ_eff + 2d)
+    val alpha_µ_eff_neg = 1d + 2*µ_eff_neg/(µ_eff + 2d)
 
     val alpha_neg_posdef = (1d - c1 - c_µ)/(n*c_µ)
 

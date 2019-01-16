@@ -4,7 +4,7 @@ logLevel := Level.Error
 
 resolvers ++= Seq(Resolver.sonatypeRepo("snapshots"))
 
-addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.1.0-SNAPSHOT")
+addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.1.0-M9")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.11")
 
