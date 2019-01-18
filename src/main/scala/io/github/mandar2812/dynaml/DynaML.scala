@@ -73,20 +73,20 @@ import scala.annotation.tailrec
   *                    part of the REPL or script's output
   */
 case class DynaML(
-                   predefCode: String = "",
-                   predefFile: Option[Path] = None,
-                   defaultPredef: Boolean = true,
-                   storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
-                   wd: Path = ammonite.ops.pwd,
-                   welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
-                   inputStream: InputStream = System.in,
-                   outputStream: OutputStream = System.out,
-                   errorStream: OutputStream = System.err,
-                   verboseOutput: Boolean = true,
-                   remoteLogging: Boolean = true,
-                   colors: Colors = Colors.Default,
-                   replCodeWrapper: Preprocessor.CodeWrapper = Preprocessor.CodeWrapper,
-                   scriptCodeWrapper: Preprocessor.CodeWrapper = Preprocessor.CodeWrapper){
+  predefCode: String = "",
+  predefFile: Option[Path] = None,
+  defaultPredef: Boolean = true,
+  storageBackend: Storage = new Storage.Folder(Defaults.ammoniteHome),
+  wd: Path = ammonite.ops.pwd,
+  welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
+  inputStream: InputStream = System.in,
+  outputStream: OutputStream = System.out,
+  errorStream: OutputStream = System.err,
+  verboseOutput: Boolean = true,
+  remoteLogging: Boolean = true,
+  colors: Colors = Colors.Default,
+  replCodeWrapper: Preprocessor.CodeWrapper = Preprocessor.CodeWrapper,
+  scriptCodeWrapper: Preprocessor.CodeWrapper = Preprocessor.CodeWrapper){
 
   def loadedPredefFile = predefFile match{
     case Some(path) =>
@@ -100,7 +100,7 @@ case class DynaML(
     * Instantiates an ammonite.Repl using the configuration
     */
   def instantiateRepl(replArgs: IndexedSeq[Bind[_]] = Vector.empty,
-                      remoteLogger: Option[RemoteLogger]) = {
+    remoteLogger: Option[RemoteLogger]) = {
 
 
     loadedPredefFile.right.map{ predefFileInfoOpt =>
@@ -231,7 +231,7 @@ case class DynaML(
     * of `args` and a map of keyword `kwargs` to pass to that file.
     */
   def runScript(path: Path,
-                scriptArgs: Seq[(String, Option[String])])
+    scriptArgs: Seq[(String, Option[String])])
   : (Res[Any], Seq[(Path, Long)]) = {
 
     instantiateInterpreter() match{
@@ -283,9 +283,9 @@ object DynaML {
     * processes
     */
   def main0(args: List[String],
-            stdIn: InputStream,
-            stdOut: OutputStream,
-            stdErr: OutputStream): Boolean = {
+    stdIn: InputStream,
+    stdOut: OutputStream,
+    stdErr: OutputStream): Boolean = {
     val printErr = new PrintStream(stdErr)
     val printOut = new PrintStream(stdOut)
     // We have to use explicit flatmaps instead of a for-comprehension here
@@ -356,11 +356,11 @@ object DynaML {
   * - Logic around the watch-and-rerun flag
   */
 class MainRunner(cliConfig: Cli.Config,
-                 outprintStream: PrintStream,
-                 errPrintStream: PrintStream,
-                 stdIn: InputStream,
-                 stdOut: OutputStream,
-                 stdErr: OutputStream){
+  outprintStream: PrintStream,
+  errPrintStream: PrintStream,
+  stdIn: InputStream,
+  stdOut: OutputStream,
+  stdErr: OutputStream){
 
   val colors =
     if(cliConfig.colored.getOrElse(DynaML.isInteractive())) Colors.Default
@@ -370,8 +370,8 @@ class MainRunner(cliConfig: Cli.Config,
   def printError(s: String) = errPrintStream.println(colors.error()(s))
 
   @tailrec final def watchLoop[T](isRepl: Boolean,
-                                  printing: Boolean,
-                                  run: DynaML => (Res[T], Seq[(Path, Long)])): Boolean = {
+    printing: Boolean,
+    run: DynaML => (Res[T], Seq[(Path, Long)])): Boolean = {
     val (result, watched) = run(initMain(isRepl))
 
     val success = handleWatchRes(result, printing)
