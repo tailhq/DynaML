@@ -18,6 +18,8 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.optimization
 
+import io.github.mandar2812.dynaml.pipes.Encoder
+
 /**
   * Implementation of the Coupled Simulated Annealing algorithm
   * for global optimization.
@@ -25,8 +27,10 @@ package io.github.mandar2812.dynaml.optimization
   * @author mandar datum 25/6/15.
   *
   * */
-class CoupledSimulatedAnnealing[M <: GloballyOptimizable](model: M) extends
-  AbstractCSA[M, M](model: M) with
+class CoupledSimulatedAnnealing[M <: GloballyOptimizable](
+  model: M,
+  hyp_parameter_scaling: Option[Map[String, Encoder[Double, Double]]] = None) extends
+  AbstractCSA[M, M](model: M, hyp_parameter_scaling) with
   GlobalOptimizer[M] {
 
   override def optimize(initialConfig: Map[String, Double],

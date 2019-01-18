@@ -13,6 +13,7 @@ import _root_.spire.implicits._
 import _root_.io.github.mandar2812.dynaml.probability._
 import _root_.io.github.mandar2812.dynaml.DynaMLPipe
 import _root_.io.github.mandar2812.dynaml.analysis._
+import breeze.numerics.sigmoid
 
 import scala.util.Random
 
@@ -127,15 +128,23 @@ val tunableTFModel: TunableTFModel[
   )
 
 
+val hyp_scaling = hyper_prior.map(p =>
+  (
+    p._1,
+    Encoder((x: Double) => (x - p._2.min)/(p._2.max - p._2.min), (u: Double) => u*(p._2.max - p._2.min) + p._2.min)
+  )
+)
 
-val gs = new CMAES(
-  tunableTFModel,
-  hyper_parameters,
-  hyp_parameter_scaling = Some(
-    Map(
-      "reg" -> Encoder((x: Double) => math.log(x), (x: Double) => math.exp(x))
-    )
-  ))
+val logit = Encoder((x: Double) => math.log(x/(1d - x)), (x: Double) => sigmoid(x))
+
+val hyp_mapping = Some(
+  hyper_parameters.map(
+    h => (h, hyp_scaling(h) > logit)
+  ).toMap
+)
+
+
+val gs = new CoupledSimulatedAnnealing(tunableTFModel, Some(hyp_scaling))
 
 gs.setPrior(hyper_prior)
 

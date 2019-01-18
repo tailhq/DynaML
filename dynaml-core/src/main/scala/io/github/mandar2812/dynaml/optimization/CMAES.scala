@@ -145,9 +145,6 @@ class CMAES[T <: GloballyOptimizable](
         print("Generation ")
         pprint.pprintln(it)
 
-        println("Covariance matrix: ")
-
-
         val (state, _) = generation
 
         pprint.pprintln(state.C)

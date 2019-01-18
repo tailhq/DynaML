@@ -20,7 +20,8 @@ package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
 import breeze.stats.distributions.CauchyDistribution
-import io.github.mandar2812.dynaml.utils
+import io.github.mandar2812.dynaml.pipes.{DataPipe, Encoder}
+import io.github.mandar2812.dynaml.{DynaMLPipe, utils}
 
 import scala.util.Random
 
@@ -28,8 +29,25 @@ import scala.util.Random
   * Skeleton implementation of the Coupled Simulated Annealing algorithm
   * @author mandar2812 date 01/12/15.
   * */
-abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
+abstract class AbstractCSA[M <: GloballyOptimizable, M1](
+  model: M,
+  hyp_parameter_scaling: Option[Map[String, Encoder[Double, Double]]] = None)
   extends AbstractGridSearch[M, M1](model: M) {
+
+  private val process_hyp: Encoder[CMAES.HyperParams, CMAES.HyperParams] = hyp_parameter_scaling match {
+    case None => Encoder(
+      DynaMLPipe.identityPipe[CMAES.HyperParams],
+      DynaMLPipe.identityPipe[CMAES.HyperParams])
+
+    case Some(scaling) => Encoder[CMAES.HyperParams, CMAES.HyperParams](
+      DataPipe((config: CMAES.HyperParams) =>
+        config.map(kv => (kv._1, if(scaling.contains(kv._1)) scaling(kv._1)(kv._2) else kv._2))
+      ),
+      DataPipe((config: CMAES.HyperParams) =>
+        config.map(kv => (kv._1, if(scaling.contains(kv._1)) scaling(kv._1).i(kv._2) else kv._2))
+      )
+    )
+  }
 
   protected var MAX_ITERATIONS: Int = 10
 
@@ -75,11 +93,19 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
       println("Mutating configuration: ")
       pprint.pprintln(config)
 
-      config.map(param => {
+      val mapped_config = process_hyp(config)
+
+      val mutated_config = mapped_config.map(param => {
         val dist = new CauchyDistribution(0.0, temperature)
         val mutated = param._2 + dist.sample()
         (param._1, math.abs(mutated))
       })
+
+      println("Proposed Configuration: ")
+      val proposal = process_hyp.i(mutated_config)
+      pprint.pprintln(proposal)
+
+      proposal
     }
 
   def acceptanceTemperature(initialTemp: Double)(k: Int): Double =
@@ -144,7 +170,7 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](model: M)
 
           //Now mutate each solution and accept/reject
           //according to the acceptance probability
-          val (newEnergyLandscape,probabilities) = eLandscape.map((config) => {
+          val (newEnergyLandscape,probabilities) = eLandscape.map(config => {
             //mutate this config
             val new_config = mutate(config._2, mutTemp)
 
