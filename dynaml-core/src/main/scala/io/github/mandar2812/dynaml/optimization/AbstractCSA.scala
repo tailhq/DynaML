@@ -181,29 +181,39 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
                 )
               else 0.0
 
-            val new_energy = system.energy(new_config, options) + priorEnergy
+            val energy_proposed_config = system.energy(new_config, options)
 
-            println("\nNew Configuration: ")
-            pprint.pprintln(new_config)
-            print("Energy = ")
-            pprint.pprintln(new_energy)
+            val new_energy_net = energy_proposed_config + priorEnergy
+
+
+            print("\nEnergy = ")
+            pprint.pprintln(energy_proposed_config)
+
+            if(usePriorFlag) {
+
+              print("Energy due to Prior = ")
+              pprint.pprintln(priorEnergy)
+
+              print("Net Energy = ")
+              pprint.pprintln(new_energy_net)
+            }
 
             //Calculate the acceptance probability
             val acceptanceProbability =
               computeAcceptanceProb(
-                new_energy - maxEnergy, config._1,
+                new_energy_net - maxEnergy, config._1,
                 couplingFactor, accTemp)
 
-            val ans = if(new_energy < config._1) {
+            val ans = if(new_energy_net < config._1) {
 
               println("Status: Accepted\n")
-              ((new_energy, new_config), acceptanceProbability)
+              ((new_energy_net, new_config), acceptanceProbability)
 
             } else {
 
               if(Random.nextDouble <= acceptanceProbability) {
                 println("Status: Accepted\n")
-                ((new_energy, new_config), acceptanceProbability)
+                ((new_energy_net, new_config), acceptanceProbability)
               } else {
                 println("Status: Rejected\n")
                 (config, acceptanceProbability)
