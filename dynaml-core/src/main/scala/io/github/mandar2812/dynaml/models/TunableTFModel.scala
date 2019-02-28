@@ -160,7 +160,7 @@ TT, TO, TDA, TD, TS, T](
       //Train the model instance
       model_instance.train()
 
-      val predictions = model_instance.infer_coll(validation_inputs)
+      val predictions = model_instance.infer_batch(validation_inputs)
 
       predictions match {
 
@@ -323,7 +323,8 @@ object TunableTFModel {
       existingGraph: Option[Graph] = None,
       data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
       concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
-      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
+      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
+      concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)(
       implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
       evDToOI: DataTypeToOutput.Aux[ID, IO],
       evOToTI: OutputToTensor.Aux[IO, IT],
@@ -356,7 +357,7 @@ object TunableTFModel {
               processTarget, loss,
               model_training_config,
               data_processing, inMemory, existingGraph,
-              data_handles, concatOpI, concatOpT
+              data_handles, concatOpI, concatOpT, concatOpO
             )
           }
       )
@@ -403,7 +404,8 @@ object TunableTFModel {
       existingGraph: Option[Graph] = None,
       data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
       concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
-      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
+      concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
+      concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)(
       implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
       evDToOI: DataTypeToOutput.Aux[ID, IO],
       evOToTI: OutputToTensor.Aux[IO, IT],
@@ -435,7 +437,7 @@ object TunableTFModel {
               processTarget, loss,
               model_training_config,
               data_processing, inMemory, existingGraph,
-              data_handles, concatOpI, concatOpT
+              data_handles, concatOpI, concatOpT, concatOpO
             )
           }
       )
@@ -486,7 +488,7 @@ object TunableTFModel {
           data_handles: Option[TFModel.DataHandles[IT, IO, IDA, ID, IS, TT, TO, TDA, TD, TS]] = None,
           concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
           concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
-          create_working_dir: Option[DataPipe[HyperParams, String]] = Some(to_token))(
+          concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)(
           implicit evDAToDI: DataTypeAuxToDataType.Aux[IDA, ID],
           evDToOI: DataTypeToOutput.Aux[ID, IO],
           evOToTI: OutputToTensor.Aux[IO, IT],
@@ -518,7 +520,7 @@ object TunableTFModel {
                   processTarget, loss,
                   model_training_config,
                   data_processing, inMemory, existingGraph,
-                  data_handles, concatOpI, concatOpT
+                  data_handles, concatOpI, concatOpT, concatOpO
                 )
               }
           )
