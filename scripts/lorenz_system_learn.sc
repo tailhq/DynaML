@@ -20,7 +20,7 @@ import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, RandomUniformInitializer}
 
 import scala.util.Random
-import com.quantifind.charts.Highcharts._
+import _root_.io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 
 
@@ -166,16 +166,22 @@ def apply(
   )
 
   val (xs_params, ys_params, zs_params) = (
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._1, 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._2, layer_sizes._1.length + 1, "FLOAT64"),
-    dtfutils.get_ffstack_properties(Seq(input_dim) ++ layer_sizes._3, layer_sizes._1.length + layer_sizes._2.length + 1, "FLOAT64")
+    dtfutils.get_ffstack_properties(
+      input_dim, num_pred_dims = 1,
+      layer_sizes._1),
+    dtfutils.get_ffstack_properties(
+      input_dim, num_pred_dims = 1, layer_sizes._2,
+      starting_index = layer_sizes._1.length + 1),
+    dtfutils.get_ffstack_properties(
+      input_dim, num_pred_dims = 1, layer_sizes._3,
+      starting_index = layer_sizes._1.length + layer_sizes._2.length + 1)
   )
 
 
   val l2_reg = L2Regularization(
-    xs_params._2.tail ++ ys_params._2.tail ++ zs_params._2.tail,
     xs_params._3.tail ++ ys_params._3.tail ++ zs_params._3.tail,
-    xs_params._1.tail ++ ys_params._1.tail ++ zs_params._1.tail,
+    xs_params._4.tail ++ ys_params._4.tail ++ zs_params._4.tail,
+    xs_params._2.tail ++ ys_params._2.tail ++ zs_params._2.tail,
     reg = reg_param)
 
   val (x, y, z) = (

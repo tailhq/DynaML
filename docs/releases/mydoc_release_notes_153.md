@@ -62,7 +62,7 @@ val bn = dtflearn.batch_norm("BatchNorm1")
 The [_Inception_](https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf) architecture, proposed by Google is an important 
 building block of _convolutional neural network_ architectures used in vision applications.
  
-![inception](/images/inception.png)
+![inception](../../images/inception.png)
  
 In a subsequent [paper](https://arxiv.org/pdf/1512.00567.pdf), the authors introduced optimizations in the Inception 
 architecture, known colloquially as _Inception v2_.
@@ -71,11 +71,11 @@ In _Inception v2_, larger convolutions (i.e. `3 x 3` and `5 x 5`) are implemente
 to reduce the number of parameters to be learned. For example the `3 x 3` convolution is expressed as a 
 combination of `1 x 3` and `3 x 1` convolutions.
  
-![inception](/images/conv-fact.png)
+![inception](../../images/conv-fact.png)
  
 Similarly the `5 x 5` convolutions can be expressed a combination of two `3 x 3` convolutions
  
-![inception](/images/conv-fact2.png)
+![inception](../../images/conv-fact2.png)
 
 DynaML now offers the Inception cell as a computational layer. 
  

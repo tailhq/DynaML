@@ -8,7 +8,7 @@
 
 ## Google Tensorflow
 
-![tensorflow logo](/images/TensorFlowLogo.svg.png)
+![tensorflow logo](../../images/TensorFlowLogo.svg.png)
 > courtesy Google.
 
 [Tensorflow](http://tensorflow.org) is a versatile and general computational framework 
@@ -17,7 +17,7 @@ It provides tensor primitives as well as the ability to define transformations o
 these transformations are baked into a *computational graph*. Obtaining results of computations now 
 becomes a job of *evaluating* the relevant nodes of these graphs.
 
-![computational graph](/images/ReverseaccumulationAD.png)
+![computational graph](../../images/ReverseaccumulationAD.png)
 > courtesy Wikipedia.
 
 It turns out that representing computation in this manner is advantageous when you need to compute derivatives of
@@ -31,7 +31,7 @@ The tensorflow API is roughly divided into two levels.
 
 ## Tensorflow for Scala
 
-![tf scala logo](/images/tf_scala.png)
+![tf scala logo](../../images/tf_scala.png)
 
 The [tensorflow for scala](http://platanios.org/tensorflow_scala) library provides scala users with access to the low 
 as well as high level API's. Among its packages include.

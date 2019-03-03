@@ -3,7 +3,7 @@ import io.github.mandar2812.dynaml.analysis.{DifferentiableMap, PushforwardMap}
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability.{E, GaussianRV, RandomVariable, OrderStats}
 import spire.implicits._
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 import io.github.mandar2812.dynaml.probability.distributions.{SkewGaussian, UESN}
 
 val g = GaussianRV(0.0, 0.5)
@@ -28,7 +28,7 @@ legend(List("UESN", "Gaussian", "Skew Gaussian"))
 title("Probability Density Functions")
 
 //push forward maps
-implicit val detImpl = identityPipe[Double]
+implicit val detImpl: DataPipe[Double, Double] = DataPipe(math.abs)
 
 val h: PushforwardMap[Double, Double, Double] = PushforwardMap(
   DataPipe((x: Double) => math.exp(x)),

@@ -20,7 +20,7 @@ Note that any norm may be used to quantify the distance between the two vectors 
 
 ## Radial Basis Function Kernel
 
-![kernel](/images/gaussiankernel.jpg)
+![kernel](../../images/gaussiankernel.jpg)
 
 $$
 C(\mathbf{x},\mathbf{y}) = exp\left(-\frac{||\mathbf{x}-\mathbf{y}||^2}{2\sigma^2}\right)

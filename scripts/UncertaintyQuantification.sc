@@ -9,7 +9,7 @@ import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.probability.distributions.MultivariateUniform
 import spire.implicits._
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 
 
 val num_features: Int = 1

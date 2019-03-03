@@ -1,11 +1,11 @@
-![gp](/images/gp.png)
+![gp](../../images/gp.png)
 
 <br/>
 _Gaussian Processes_ are stochastic processes whose finite dimensional distributions are multivariate gaussians.
 
 _Gaussian Processes_ are powerful non-parametric predictive models, which represent probability measures over spaces of functions. [Ramussen and Williams](https://books.google.nl/books/about/Gaussian_Processes_for_Machine_Learning.html?id=vWtwQgAACAAJ&hl=en) is the definitive guide on understanding their applications in machine learning and a gateway to their deeper theoretical foundations.
 
-![gp-book](/images/gpbook.jpg)
+![gp-book](../../images/gpbook.jpg)
 
 <br/>
 

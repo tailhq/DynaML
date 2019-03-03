@@ -19,7 +19,10 @@ val data_size = 100
 val rv = GaussianRV(0.0, 2.0).iid(data_size)
 
 val data = dtfdata.dataset(rv.draw).to_supervised(
-  DataPipe[Double, (Tensor, Tensor)](n => (dtf.tensor_f64(1)(n), dtf.tensor_f64(1)(n*weight + bias)))
+  DataPipe[Double, (Tensor, Tensor)](n => (
+    dtf.tensor_f64(1)(n),
+    dtf.tensor_f64(1)(n*weight + bias))
+  )
 )
 
 val train_fraction = 0.7
@@ -37,9 +40,8 @@ val loss = tf.learn.L2Loss("Loss/L2") >>
   tf.learn.ScalarSummary("Loss/ModelLoss", "ModelLoss")
 
 val regression_model = dtflearn.model[
-  Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
-  Tensor, Output, DataType.Aux[Double], DataType, Shape, Output,
-  Tensor, Tensor, Tensor](
+  Tensor, Output, DataType.Aux[Double], DataType, Shape, Output, Tensor,
+  Tensor, Output, DataType.Aux[Double], DataType, Shape, Output](
   tf_dataset.training_dataset,
   arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
   process_targets, loss,

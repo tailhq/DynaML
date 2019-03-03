@@ -11,7 +11,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
 //Load Wisp-Highcharts for plotting
-import com.quantifind.charts.Highcharts._
+import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 //Import spire implicits for definition of
 //fields, algebraic structures on primitive types
 import spire.implicits._

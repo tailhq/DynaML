@@ -45,3 +45,7 @@ interpreter/*
 temp
 temp/*
 /bin/
+test_output
+.bloop
+project/.bloop
+.metals
