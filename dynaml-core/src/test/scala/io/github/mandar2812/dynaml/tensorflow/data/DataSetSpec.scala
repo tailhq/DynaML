@@ -134,14 +134,14 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     val tf_data3 = numbers.build_buffered(
       2,
-      DataPipe[Iterable[Output[Int]], Output[Int]](
-        s => tf.concatenate(s.toSeq, 0)), INT32, Shape(-1)
+      DataPipe[Iterable[Output[Int]], Output[Int]](s => tf.concatenate(s.toSeq, 0)),
+      INT32, Shape(-1)
     )
 
     assert(
-      tf_data1.outputDataTypes[Tensor[Int], INT32, Shape] == Int &&
-        tf_data1.outputShapes[Tensor[Int], INT32, Shape] == Shape(1) &&
-        tf_data1.createInitializableIterator[Tensor[Int], INT32, Shape]().next() != null)
+      tf_data1.outputDataTypes[INT32] == INT32 &&
+        tf_data1.outputShapes[Shape] == Shape(1) &&
+        tf_data1.createInitializableIterator[INT32, Shape]().next() != null)
 
 
 
@@ -151,9 +151,9 @@ class DataSetSpec extends FlatSpec with Matchers {
         tf_data2.createInitializableIterator().next() != null)*/
 
     assert(
-      tf_data3.outputDataTypes[Tensor[Int], INT32, Shape] == Int &&
-        tf_data3.outputShapes[Tensor[Int], INT32, Shape] == Shape() &&
-        tf_data3.createInitializableIterator[Tensor[Int], INT32, Shape]().next() != null)
+      tf_data3.outputDataTypes[INT32] == INT32 &&
+        tf_data3.outputShapes[Shape] == Shape() &&
+        tf_data3.createInitializableIterator[INT32, Shape]().next() != null)
 
   }
 

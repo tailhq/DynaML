@@ -9,7 +9,9 @@ import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api._
 
+//TODO: Fix issues around system variables, or lack there of
 /**
+  *
   * <h3>Dynamical Systems</h3>
   * <h4>Forecasting, System Identification and Design</h4>
   *
@@ -36,10 +38,7 @@ private[dynaml] class DynamicalSystem(
   quadrature_nodes: Tensor[Float],
   quadrature_weights: Tensor[Float],
   quadrature_loss_weightage: Tensor[Float],
-  graphInstance: Option[Graph])/*(
-  implicit
-  evDataTypeToOutput: DataTypeToOutput.Aux[Seq[FLOAT32], Seq[Output[Float]]],
-  evOutputToShape: OutputToShape.Aux[Seq[Output[Float]], Seq[Shape]])*/ {
+  graphInstance: Option[Graph]) {
 
   protected val observational_error: Layer[(Seq[Output[Float]], Seq[Output[Float]]), Output[Float]] =
     DynamicalSystem.error("ExtObsError", data_loss)
@@ -64,7 +63,8 @@ private[dynaml] class DynamicalSystem(
     tf.learn.Input[Seq[Output[Float]], Seq[FLOAT32], Seq[Shape]](
       target_shape.map(_ => FLOAT32),
       target_shape.map(s => Shape(-1) ++ s),
-      "Outputs"))
+      "Outputs")
+  )
 
   val system_variables_mapping: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
     dtflearn.seq_layer[Output[Float], Seq[Output[Float]]](
@@ -79,11 +79,11 @@ private[dynaml] class DynamicalSystem(
       DynamicalSystem.flatten("FlattenVariables")
 
   protected val output_mapping: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
-    dtflearn.seq_layer[Output[Float], Output[Float]](name ="CombinedOutput[Float]s", system_outputs)
+    dtflearn.seq_layer[Output[Float], Output[Float]](name ="CombinedOutputs", system_outputs)
 
   val model_architecture: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
-    dtflearn.combined_layer("CombineOutput[Float]sAndVars", Seq(output_mapping, system_variables_mapping)) >>
-      DynamicalSystem.flatten("FlattenModelOutput[Float]s")
+    dtflearn.combined_layer("CombineOutputsAndVars", Seq(output_mapping, system_variables_mapping)) >>
+      DynamicalSystem.flatten("FlattenModelOutputs")
 
   protected val system_loss: Layer[(Seq[Output[Float]], Seq[Output[Float]]), Output[Float]] =
     observational_error >>
@@ -95,16 +95,14 @@ private[dynaml] class DynamicalSystem(
     data: Seq[SupervisedDataSet[Tensor[Float], Tensor[Float]]],
     trainConfig: TFModel.Config,
     data_processing: TFModel.Ops = TFModel.data_ops(10000, 16, 10),
-    inMemory: Boolean = false)(
-
-  ): DynamicalSystem.Model = {
+    inMemory: Boolean = false): DynamicalSystem.Model = {
 
     val model = dtflearn.model[
-      Seq[Output[Float]], Seq[Output[Float]], Seq[Output[Float]],
-      Float, Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
+      Seq[Output[Float]], Seq[Output[Float]], Seq[Output[Float]], Float,
+      Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
       Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
       Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape]](
-      dtfdata.supervised_dataset.collect(data).map(p => (p._1, p._2)),
+      dtfdata.supervised_dataset.collect(data),
       model_architecture,
       (Seq.fill(quantities.size)(FLOAT32), Seq.fill(quantities.size)(input_shape)),
       (Seq.fill(quantities.size)(FLOAT32), target_shape),
@@ -154,8 +152,8 @@ object DynamicalSystem {
     * */
   case class Model(
     tfModel: TFModel[
-      Seq[Output[Float]], Seq[Output[Float]], Seq[Output[Float]],
-      Float, Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
+      Seq[Output[Float]], Seq[Output[Float]], Seq[Output[Float]], Float,
+      Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
       Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
       Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape]],
     outputs: Seq[String],

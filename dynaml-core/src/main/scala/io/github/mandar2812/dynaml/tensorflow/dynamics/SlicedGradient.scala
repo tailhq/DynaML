@@ -46,7 +46,7 @@ private[dynamics] case class SlicedGradient[D: TF: IsNotQuantized](
 
   override def run(data: Layer[Output[D], Output[D]]): Layer[Output[D], Output[D]] = {
 
-    new Layer[Output[D], Output[D]](s"Grad[${data.name}]") {
+    new Layer[Output[D], Output[D]](s"Grad_${data.name}_") {
 
       override val layerType: String = "GradLayer"
 
@@ -83,7 +83,7 @@ private[dynamics] case class SlicedGradient[D: TF: IsNotQuantized](
 
         val finalShape = sliced_output.shape.asArray.filterNot(_ == 1)
 
-        sliced_output.reshape(Tensor(finalShape).toOutput)
+        sliced_output.reshape(finalShape)
       }
     }
   }

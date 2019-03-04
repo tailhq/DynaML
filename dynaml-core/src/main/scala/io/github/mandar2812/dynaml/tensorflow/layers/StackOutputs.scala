@@ -136,6 +136,17 @@ case class ArrayLayer[T, R: ClassTag](
 }
 
 
+case class MapLayer[K, T, R: ClassTag](
+  override val name: String,
+  layers: Map[K, Layer[T, R]]) extends
+  Layer[Seq[T], Map[K, R]](name) {
+
+  override val layerType: String = s"Map[${layers.map(kv => (kv._1.toString, kv._2.layerType)).mkString(",")}]"
+
+  override def forwardWithoutContext(input: Seq[T])(implicit mode: Mode): Map[K, R] =
+    layers.zip(input).map(c => (c._1._1, c._1._2.forwardWithoutContext(c._2)))
+}
+
 /**
   * Combine a collection of layers into a layer which maps
   * its input through each layer in the sequence.

@@ -63,10 +63,10 @@ class TFModelSpec extends FlatSpec with Matchers {
       tf.learn.ScalarSummary[Double]("Loss/ModelLoss", "ModelLoss")
 
     val regression_model = dtflearn.model[
-      Output[Double], Output[Double], Double,
+      Output[Double], Output[Double], Output[Double], Double,
       Tensor[Double], FLOAT64, Shape,
       Tensor[Double], FLOAT64, Shape,
-      Tensor[Double], Tensor[Double]](
+      Tensor[Double], FLOAT64, Shape](
       tf_dataset.training_dataset,
       arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
       loss,

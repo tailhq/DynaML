@@ -72,6 +72,7 @@ private[tensorflow] object Learn {
   val concat_outputs: layers.ConcatenateOutputs.type = layers.ConcatenateOutputs
   val seq_layer: layers.SeqLayer.type                = layers.SeqLayer
   val array_layer: layers.ArrayLayer.type            = layers.ArrayLayer
+  val map_layer: layers.MapLayer.type                = layers.MapLayer
   val combined_layer: layers.CombinedLayer.type      = layers.CombinedLayer
   val combined_array_layer
   : layers.CombinedArrayLayer.type                   = layers.CombinedArrayLayer

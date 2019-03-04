@@ -46,7 +46,7 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
     override val layerType = "MatMul"
 
     override def forwardWithoutContext(input: Output[Float])(implicit mode: Mode): Output[Float] =
-      tf.reshape[Float, Long](
+      tf.reshape[Float, Int](
         tf.matmul(
           input,
           dtf.tensor_f32(input.shape(1), output_dim)(

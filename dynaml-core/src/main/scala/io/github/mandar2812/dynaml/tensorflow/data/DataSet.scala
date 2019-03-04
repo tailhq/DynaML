@@ -196,7 +196,7 @@ class DataSet[X](val data: Iterable[X]) {
   ): Dataset[O] =
     self
       .transform(transformation)
-      .map(DataPipe((batch: O) => tf.data.datasetFromOutputs(batch)))
+      .map(DataPipe((batch: O) => tf.data.datasetFromOutputSlices(batch)))
       .reduceLeft[Dataset[O]](
       DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r)))
 
