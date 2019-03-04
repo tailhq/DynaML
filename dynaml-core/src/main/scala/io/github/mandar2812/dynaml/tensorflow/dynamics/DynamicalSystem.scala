@@ -43,6 +43,8 @@ private[dynaml] class DynamicalSystem(
   protected val observational_error: Layer[(Seq[Output[Float]], Seq[Output[Float]]), Output[Float]] =
     DynamicalSystem.error("ExtObsError", data_loss)
 
+  protected val projection = DynamicalSystem.projectOutputs("ProjectOutputs")
+
   val system_outputs: Seq[Layer[Output[Float], Output[Float]]] = quantities.values.toSeq
 
   protected val quadrature: PDEQuadrature[Float] =
@@ -66,27 +68,26 @@ private[dynaml] class DynamicalSystem(
       "Outputs")
   )
 
-  val system_variables_mapping: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
-    dtflearn.seq_layer[Output[Float], Seq[Output[Float]]](
+  val system_variables_mapping: Layer[Seq[Output[Float]], Seq[Map[String, Output[Float]]]] =
+    dtflearn.seq_layer[Output[Float], Map[String, Output[Float]]](
       "SystemVariables",
       system_variables.zip(system_outputs).map(variablesAndQuantities => {
 
         val (variables, quantity) = variablesAndQuantities
 
-        dtflearn.combined_layer[Output[Float], Output[Float]]("MapVariables", variables.values.toSeq.map(_(quantity)))
+        dtflearn.map_layer("MapVars", variables.map(kv => (kv._1, kv._2(quantity))))
 
-      })) >>
-      DynamicalSystem.flatten("FlattenVariables")
+      }))
 
   protected val output_mapping: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
     dtflearn.seq_layer[Output[Float], Output[Float]](name ="CombinedOutputs", system_outputs)
 
-  val model_architecture: Layer[Seq[Output[Float]], Seq[Output[Float]]] =
-    dtflearn.combined_layer("CombineOutputsAndVars", Seq(output_mapping, system_variables_mapping)) >>
-      DynamicalSystem.flatten("FlattenModelOutputs")
+  val model_architecture: Layer[Seq[Output[Float]], DynamicalSystem.ModelOutputs] =
+    dtflearn.bifurcation_layer("CombineOutputsAndVars", output_mapping, system_variables_mapping)
 
-  protected val system_loss: Layer[(Seq[Output[Float]], Seq[Output[Float]]), Output[Float]] =
-    observational_error >>
+  protected val system_loss: Layer[(DynamicalSystem.ModelOutputs, Seq[Output[Float]]), Output[Float]] =
+    projection >>
+      observational_error >>
       quadrature >>
       tf.learn.Mean[Float]("Loss/Mean") >>
       tf.learn.ScalarSummary[Float]("Loss/Summary", "Loss")
@@ -98,10 +99,12 @@ private[dynaml] class DynamicalSystem(
     inMemory: Boolean = false): DynamicalSystem.Model = {
 
     val model = dtflearn.model[
-      Seq[Output[Float]], Seq[Output[Float]], Seq[Output[Float]], Float,
+      Seq[Output[Float]], Seq[Output[Float]], DynamicalSystem.ModelOutputs, Float,
       Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
       Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
-      Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape]](
+      DynamicalSystem.ModelOutputsT,
+      (Seq[FLOAT32], Seq[Map[String, FLOAT32]]),
+      (Seq[Shape], Seq[Map[String, Shape]])](
       dtfdata.supervised_dataset.collect(data),
       model_architecture,
       (Seq.fill(quantities.size)(FLOAT32), Seq.fill(quantities.size)(input_shape)),
@@ -124,6 +127,9 @@ private[dynaml] class DynamicalSystem(
 
 object DynamicalSystem {
 
+  type ModelOutputs  = (Seq[Output[Float]], Seq[Map[String, Output[Float]]])
+  type ModelOutputsT = (Seq[Tensor[Float]], Seq[Map[String, Tensor[Float]]])
+
   protected case class ObservationalError(
     override val name: String,
     error_measure: Layer[(Output[Float], Output[Float]), Output[Float]]) extends
@@ -139,6 +145,18 @@ object DynamicalSystem {
         .reduceLeft(tf.add[Float](_, _))
   }
 
+  protected case class ProjectOutputs(override val name: String)
+    extends Layer[
+      ((Seq[Output[Float]], Seq[Map[String, Output[Float]]]), Seq[Output[Float]]),
+      (Seq[Output[Float]], Seq[Output[Float]])] {
+    override val layerType: String = "ProjectOutputs"
+
+    override def forwardWithoutContext(
+      input: ((Seq[Output[Float]], Seq[Map[String, Output[Float]]]), Seq[Output[Float]]))(
+      implicit mode: Mode): (Seq[Output[Float]], Seq[Output[Float]]) =
+      (input._1._1, input._2)
+  }
+
   /**
     * Neural-net based predictive model for dynamical systems.
     *
@@ -152,10 +170,11 @@ object DynamicalSystem {
     * */
   case class Model(
     tfModel: TFModel[
-      Seq[Output[Float]], Seq[Output[Float]], Seq[Output[Float]], Float,
+      Seq[Output[Float]], Seq[Output[Float]], ModelOutputs, Float,
       Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
       Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape],
-      Seq[Tensor[Float]], Seq[FLOAT32], Seq[Shape]],
+      ModelOutputsT, (Seq[FLOAT32], Seq[Map[String, FLOAT32]]),
+      (Seq[Shape], Seq[Map[String, Shape]])],
     outputs: Seq[String],
     variables: Seq[String]) {
 
@@ -165,7 +184,7 @@ object DynamicalSystem {
 
       val model_preds = tfModel.predict(Seq.fill[Tensor[Float]](outputs.length)(input))
 
-      model_quantities.zip(model_preds).toMap
+      model_quantities.zip(model_preds._1).toMap ++ model_preds._2.reduceLeft(_++_)
     }
 
     def predict(quantities: String*)(input: Tensor[Float]): Seq[Tensor[Float]] = {
@@ -182,8 +201,9 @@ object DynamicalSystem {
 
   }
 
-  val error: ObservationalError.type = ObservationalError
-  val model: Model.type              = Model
+  val error: ObservationalError.type      = ObservationalError
+  val model: Model.type                   = Model
+  val projectOutputs: ProjectOutputs.type = ProjectOutputs
 
   def combine_tuple: String => Layer[(Seq[Output[Float]], Seq[Output[Float]]), Seq[Output[Float]]] =
     (name: String) => new Layer[(Seq[Output[Float]], Seq[Output[Float]]), Seq[Output[Float]]](name) {

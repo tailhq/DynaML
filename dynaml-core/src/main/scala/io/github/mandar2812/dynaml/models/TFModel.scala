@@ -160,7 +160,7 @@ ITT, IDD, ISS](
     (m, e)
   }
 
-  def train(): Unit = estimator.train(() => tf_dataset)
+  def train(): Unit = estimator.train[(ID, TD), (IS, TS)](() => tf_dataset)
 
   /**
     * Generate predictions for a data set.

@@ -58,33 +58,34 @@ private[tensorflow] object Learn {
     UnsupervisedModel[In, Out, Loss],
     UnsupEstimatorTF[In, Out, Loss])
 
-  val Phi: layers.Phi.type                           = layers.Phi
-  val Tanh: layers.Tanh.type                         = layers.Tanh
+  val Phi: layers.Phi.type                            = layers.Phi
+  val Tanh: layers.Tanh.type                          = layers.Tanh
   val GeneralizedLogistic
-  : layers.GeneralizedLogistic.type                  = layers.GeneralizedLogistic
+  : layers.GeneralizedLogistic.type                   = layers.GeneralizedLogistic
 
-  val batch_norm: tf.learn.BatchNormalization.type   = tf.learn.BatchNormalization
-  val ctrnn: layers.FiniteHorizonCTRNN.type          = layers.FiniteHorizonCTRNN
-  val dctrnn: layers.DynamicTimeStepCTRNN.type       = layers.DynamicTimeStepCTRNN
-  val ts_linear: layers.FiniteHorizonLinear.type     = layers.FiniteHorizonLinear
-  val rbf_layer: layers.RBFLayer.type                = layers.RBFLayer
-  val stack_outputs: layers.StackOutputs.type        = layers.StackOutputs
-  val concat_outputs: layers.ConcatenateOutputs.type = layers.ConcatenateOutputs
-  val seq_layer: layers.SeqLayer.type                = layers.SeqLayer
-  val array_layer: layers.ArrayLayer.type            = layers.ArrayLayer
-  val map_layer: layers.MapLayer.type                = layers.MapLayer
-  val combined_layer: layers.CombinedLayer.type      = layers.CombinedLayer
+  val batch_norm: tf.learn.BatchNormalization.type    = tf.learn.BatchNormalization
+  val ctrnn: layers.FiniteHorizonCTRNN.type           = layers.FiniteHorizonCTRNN
+  val dctrnn: layers.DynamicTimeStepCTRNN.type        = layers.DynamicTimeStepCTRNN
+  val ts_linear: layers.FiniteHorizonLinear.type      = layers.FiniteHorizonLinear
+  val rbf_layer: layers.RBFLayer.type                 = layers.RBFLayer
+  val stack_outputs: layers.StackOutputs.type         = layers.StackOutputs
+  val concat_outputs: layers.ConcatenateOutputs.type  = layers.ConcatenateOutputs
+  val seq_layer: layers.SeqLayer.type                 = layers.SeqLayer
+  val array_layer: layers.ArrayLayer.type             = layers.ArrayLayer
+  val map_layer: layers.MapLayer.type                 = layers.MapLayer
+  val combined_layer: layers.CombinedLayer.type       = layers.CombinedLayer
   val combined_array_layer
-  : layers.CombinedArrayLayer.type                   = layers.CombinedArrayLayer
-  val unstack: layers.Unstack.type                   = layers.Unstack
-  val identity: layers.IdentityLayer.type            = layers.IdentityLayer
-  val tuple2_layer: layers.Tuple2Layer.type          = layers.Tuple2Layer
-  val stack_tuple2: layers.StackTuple2.type          = layers.StackTuple2
-  val concat_tuple2: layers.ConcatenateTuple2.type   = layers.ConcatenateTuple2
-  val sum_tuple: layers.SumTuple.type                = layers.SumTuple
-  val sum_seq: layers.SumSeq.type                    = layers.SumSeq
-  val mult_seq: layers.MultSeq.type                  = layers.MultSeq
-  val multiply_const: layers.MultConstant.type       = layers.MultConstant
+  : layers.CombinedArrayLayer.type                    = layers.CombinedArrayLayer
+  val unstack: layers.Unstack.type                    = layers.Unstack
+  val identity: layers.IdentityLayer.type             = layers.IdentityLayer
+  val bifurcation_layer: layers.BifurcationLayer.type = layers.BifurcationLayer
+  val tuple2_layer: layers.Tuple2Layer.type           = layers.Tuple2Layer
+  val stack_tuple2: layers.StackTuple2.type           = layers.StackTuple2
+  val concat_tuple2: layers.ConcatenateTuple2.type    = layers.ConcatenateTuple2
+  val sum_tuple: layers.SumTuple.type                 = layers.SumTuple
+  val sum_seq: layers.SumSeq.type                     = layers.SumSeq
+  val mult_seq: layers.MultSeq.type                   = layers.MultSeq
+  val multiply_const: layers.MultConstant.type        = layers.MultConstant
 
   /**
     * Stop after a specified maximum number of iterations has been reached.

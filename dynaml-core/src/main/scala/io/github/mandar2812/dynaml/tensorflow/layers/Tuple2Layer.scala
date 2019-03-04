@@ -48,6 +48,23 @@ case class Tuple2Layer[I1, O1, I2, O2](override val name: String, layer1: Layer[
     (layer1.forward(input._1)(mode), layer2.forward(input._2)(mode))
 }
 
+
+case class BifurcationLayer[I, O1, O2](
+  override val name: String,
+  layer1: Layer[I, O1],
+  layer2: Layer[I, O2])
+  extends Layer[I, (O1, O2)](name) {
+
+  override val layerType: String = s"TupleLayer[${layer1.layerType}, ${layer2.layerType}]"
+
+  val _1: Layer[I, O1] = layer1
+  val _2: Layer[I, O2] = layer2
+
+  override def forwardWithoutContext(input: I)(implicit mode: Mode): (O1, O2) =
+    (layer1.forward(input)(mode), layer2.forward(input)(mode))
+}
+
+
 /**
   * Take a tuple of symbolic tensors and concatenate them along a
   * specified axis.
