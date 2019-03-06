@@ -151,35 +151,37 @@ TT, TO, TDA, TD, TS, T](
       (input._2, target._2),
       concatOp)
 
-    val (input_handle, target_handle): (Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS]) =
-      if(data_handles.isDefined) data_handles.get
-      else (
-        tf.learn.Input[IT, IO, IDA, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
-        tf.learn.Input[TT, TO, TDA, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
+    if(estimator.isEmpty) {
+      val (input_handle, target_handle): (Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS]) =
+        if(data_handles.isDefined) data_handles.get
+        else (
+          tf.learn.Input[IT, IO, IDA, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
+          tf.learn.Input[TT, TO, TDA, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
 
-    val underlying_tf_pair = tf.createWith(graph = graphInstance) {
+      val underlying_tf_pair = tf.createWith(graph = graphInstance) {
 
-      val m = tf.learn.Model.supervised(
-        input_handle, architecture,
-        target_handle, processTarget,
-        loss, optimizer)
+        val m = tf.learn.Model.supervised(
+          input_handle, architecture,
+          target_handle, processTarget,
+          loss, optimizer)
 
-      val train_hooks = trainHooks match {
-        case Some(hooks) => hooks
-        case None => if(inMemory) Set[Hook]() else TFModel._train_hooks(summary_dir = summaryDir)
+        val train_hooks = trainHooks match {
+          case Some(hooks) => hooks
+          case None => if(inMemory) Set[Hook]() else TFModel._train_hooks(summary_dir = summaryDir)
+        }
+
+        val config = tf.learn.Configuration(Some(summaryDir.toNIO))
+
+        val e =
+          if (inMemory) tf.learn.InMemoryEstimator(m, config, stopCriteria, train_hooks)
+          else tf.learn.FileBasedEstimator(m, config, stopCriteria, train_hooks)
+
+        (Some(m), Some(e))
       }
 
-      val config = tf.learn.Configuration(Some(summaryDir.toNIO))
-
-      val e =
-        if (inMemory) tf.learn.InMemoryEstimator(m, config, stopCriteria, train_hooks)
-        else tf.learn.FileBasedEstimator(m, config, stopCriteria, train_hooks)
-
-      (Some(m), Some(e))
+      model     = underlying_tf_pair._1
+      estimator = underlying_tf_pair._2
     }
-
-    model     = underlying_tf_pair._1
-    estimator = underlying_tf_pair._2
 
     estimator.get.train(() => tf_dataset)
   }
