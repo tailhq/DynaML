@@ -156,7 +156,6 @@ class DynamicalSystem[T](
     val model = dtflearn.model[
       Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output], Seq[Tensor],
       Seq[Tensor], Seq[Output], Seq[DataType.Aux[T]], Seq[DataType], Seq[Shape], Seq[Output]](
-      dtfdata.supervised_dataset.collect(data).map(p => (p._1, p._2)),
       model_architecture,
       (Seq.fill(quantities.size)(input._1), Seq.fill(quantities.size)(input._2)),
       target,
@@ -166,7 +165,7 @@ class DynamicalSystem[T](
       graphInstance,
       Some(data_handles))
 
-    model.train()
+    model.train(dtfdata.supervised_dataset.collect(data).map(p => (p._1, p._2)))
 
     DynamicalSystem.model(
       model,

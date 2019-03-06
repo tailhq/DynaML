@@ -88,7 +88,6 @@ import org.platanios.tensorflow.api.ops.io.data.Dataset
 class TFModel[
 IT, IO, IDA, ID, IS, I, ITT,
 TT, TO, TDA, TD, TS, T](
-  override val g: DataSet[(IT, TT)],
   val architecture: Layer[IO, I],
   val input: (IDA, IS),
   val target: (TDA, TS),
@@ -119,68 +118,88 @@ TT, TO, TDA, TD, TS, T](
   evFetchableI: Fetchable.Aux[I, ITT],
   evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
   ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT]) extends
-  Model[DataSet[(IT, TT)], IT, ITT] {
-
-
+  Predictor[IT, ITT] {
 
   if(data_processing.groupBuffer > 0)
     require(
       concatOpI.isDefined && concatOpT.isDefined,
       "`groupBuffer` is non zero but concatenate operation not defined. Set `concatOpI` and `concatOpT` variables")
 
-  type ModelPair = dtflearn.SupModelPair[IT, IO, ID, IS, I, TT, TO, TD, TS, T]
+  type UnderlyingModel = (
+    Option[dtflearn.SupervisedModel[IT, IO, ID, IS, I, TT, TO, TD, TS, T]],
+    Option[dtflearn.SupEstimatorTF[IT, IO, ID, IS, I, TT, TO, TD, TS, T]])
 
   val concatOp: Option[DataPipe[Iterable[(IT, TT)], (IT, TT)]] =
     if(concatOpI.isEmpty || concatOpT.isEmpty) None
     else Some(DataPipe((it: Iterable[(IT, TT)]) => it.unzip) > concatOpI.get * concatOpT.get)
 
-  private lazy val tf_dataset = TFModel._tf_data_set[(IT, TT), (IO, TO), (IDA, TDA), (ID, TD), (IS, TS)](
-    g, data_processing,
-    (input._1, target._1),
-    (input._2, target._2),
-    concatOp)
-
   private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
-
-  lazy val (input_handle, target_handle): (Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS]) =
-    if(data_handles.isDefined) data_handles.get
-    else (
-      tf.learn.Input[IT, IO, IDA, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
-      tf.learn.Input[TT, TO, TDA, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
 
   private val graphInstance = if(existingGraph.isDefined) {
     println("Using existing provided TensorFlow graph")
     existingGraph.get
   } else Graph()
 
-  val (model, estimator): ModelPair = tf.createWith(graph = graphInstance) {
+  var (model, estimator): UnderlyingModel = (None, None)
 
-    val m = tf.learn.Model.supervised(
-      input_handle, architecture,
-      target_handle, processTarget,
-      loss, optimizer)
 
-    val train_hooks = trainHooks match {
-      case Some(hooks) => hooks
-      case None => if(inMemory) Set[Hook]() else TFModel._train_hooks(summary_dir = summaryDir)
+  def train(data: DataSet[(IT, TT)]): Unit = {
+
+    val tf_dataset = TFModel._tf_data_set[(IT, TT), (IO, TO), (IDA, TDA), (ID, TD), (IS, TS)](
+      data, data_processing,
+      (input._1, target._1),
+      (input._2, target._2),
+      concatOp)
+
+    val (input_handle, target_handle): (Input[IT, IO, IDA, ID, IS], Input[TT, TO, TDA, TD, TS]) =
+      if(data_handles.isDefined) data_handles.get
+      else (
+        tf.learn.Input[IT, IO, IDA, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
+        tf.learn.Input[TT, TO, TDA, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
+
+    val underlying_tf_pair = tf.createWith(graph = graphInstance) {
+
+      val m = tf.learn.Model.supervised(
+        input_handle, architecture,
+        target_handle, processTarget,
+        loss, optimizer)
+
+      val train_hooks = trainHooks match {
+        case Some(hooks) => hooks
+        case None => if(inMemory) Set[Hook]() else TFModel._train_hooks(summary_dir = summaryDir)
+      }
+
+      val config = tf.learn.Configuration(Some(summaryDir.toNIO))
+
+      val e =
+        if (inMemory) tf.learn.InMemoryEstimator(m, config, stopCriteria, train_hooks)
+        else tf.learn.FileBasedEstimator(m, config, stopCriteria, train_hooks)
+
+      (Some(m), Some(e))
     }
 
-    val config = tf.learn.Configuration(Some(summaryDir.toNIO))
+    model     = underlying_tf_pair._1
+    estimator = underlying_tf_pair._2
 
-    val e =
-      if (inMemory) tf.learn.InMemoryEstimator(m, config, stopCriteria, train_hooks)
-      else tf.learn.FileBasedEstimator(m, config, stopCriteria, train_hooks)
-
-    (m, e)
+    estimator.get.train(() => tf_dataset)
   }
 
-  def train(): Unit = estimator.train(() => tf_dataset)
+  protected def check_underlying_estimator(): Unit =
+    require(
+      estimator.isDefined,
+      "Underlying TensorFlow Estimator is undefined! Either \\n " +
+        "1. Model training probably threw an Exception or error. \\n " +
+        "2. Model has been closed via close() method."
+    )
 
   /**
     * @param point Input consisting of a nested structure of Tensors.
     * @return The model predictions of type [[TT]]
     * */
-  override def predict(point: IT): ITT = estimator.infer[IT, ITT, ITT](() => point)
+  override def predict(point: IT): ITT = {
+    check_underlying_estimator()
+    estimator.get.infer[IT, ITT, ITT](() => point)
+  }
 
   /**
     * Generate predictions for a data set.
@@ -195,6 +214,7 @@ TT, TO, TDA, TD, TS, T](
     * Note that, [[ModelInferenceOutput]] refers to the tensor type that corresponds to the symbolic type [[I]].
     * For example, if [[I]] is `(Output, Output)`, then [[ModelInferenceOutput]] will be `(Tensor, Tensor)`.
     *
+    * @throws java.util.NoSuchElementException if the underlying TensorFlow estimator is undefined.
     * */
   def infer[InferInput, InferOutput, ModelInferenceOutput](
     input_data: InferInput)(
@@ -202,7 +222,7 @@ TT, TO, TDA, TD, TS, T](
     evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
     evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
     ev: Estimator.SupportedInferInput[InferInput, InferOutput, IT, IO, ID, IS, ModelInferenceOutput]
-  ): InferOutput = estimator.infer(() => input_data)
+  ): InferOutput = estimator.get.infer(() => input_data)
 
   /**
     * Generate predictions for a DynaML data set.
@@ -216,12 +236,16 @@ TT, TO, TDA, TD, TS, T](
       Iterator[(IT, ITT)],
       IT, IO, ID, IS, ITT],
     evFunctionOutput: org.platanios.tensorflow.api.ops.Function.ArgType[IO]
-  ): Either[ITT, DataSet[ITT]] = concatOpI match {
+  ): Either[ITT, DataSet[ITT]] = {
+    check_underlying_estimator()
 
-    case None => Right(input_data_set.map((pattern: IT) => infer[IT, ITT, ITT](pattern)))
+    concatOpI match {
 
-    case Some(concatFunc) => Left(infer[IT, ITT, ITT](concatFunc(input_data_set.data)))
+      case None => Right(input_data_set.map((pattern: IT) => infer[IT, ITT, ITT](pattern)))
 
+      case Some(concatFunc) => Left(infer[IT, ITT, ITT](concatFunc(input_data_set.data)))
+
+    }
   }
 
   def infer_batch(input_data_set: DataSet[IT])(
@@ -231,6 +255,8 @@ TT, TO, TDA, TD, TS, T](
     IT, IO, ID, IS, ITT],
     evFunctionOutput: org.platanios.tensorflow.api.ops.Function.ArgType[IO]
   ): Either[ITT, DataSet[ITT]] = {
+
+    check_underlying_estimator()
 
     val prediction_collection = concatOpI match {
 
@@ -252,7 +278,11 @@ TT, TO, TDA, TD, TS, T](
   /**
     * Close the underlying tensorflow graph.
     * */
-  def close(): Unit = graphInstance.close()
+  def close(): Unit = {
+    model = None
+    estimator = None
+    graphInstance.close()
+  }
 
 
 }
@@ -394,7 +424,6 @@ object TFModel {
   def apply[
   IT, IO, IDA, ID, IS, I, ITT,
   TT, TO, TDA, TD, TS, T](
-    g: DataSet[(IT, TT)],
     architecture: Layer[IO, I],
     input: (IDA, IS),
     target: (TDA, TS),
@@ -426,7 +455,7 @@ object TFModel {
     evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ITT)],
     ev: Estimator.SupportedInferInput[IT, ITT, IT, IO, ID, IS, ITT]) =
     new TFModel(
-      g, architecture, input, target, processTarget, loss,
+      architecture, input, target, processTarget, loss,
       trainConfig, data_processing, inMemory, existingGraph,
       data_handles, concatOpI, concatOpT, concatOpO
     )
