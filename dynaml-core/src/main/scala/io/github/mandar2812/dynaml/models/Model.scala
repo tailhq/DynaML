@@ -18,14 +18,21 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.models
 
-import breeze.linalg._
-import io.github.mandar2812.dynaml.kernels.SVMKernel
-import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
-import io.github.mandar2812.dynaml.evaluation.Metrics
-import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.optimization._
 
-import scala.util.Random
+
+trait Predictor[Q, R] {
+
+  /**
+    * Predict the value of the
+    * target variable given a
+    * point.
+    *
+    * */
+  def predict(point: Q): R
+}
+
+
 
 /**
   * Basic Higher Level abstraction
@@ -38,7 +45,7 @@ import scala.util.Random
   * @tparam R The type of a single output pattern
   *
   * */
-trait Model[T, Q, R] {
+trait Model[T, Q, R] extends Predictor[Q, R] {
 
   /**
     * The training data
@@ -53,7 +60,7 @@ trait Model[T, Q, R] {
     * point.
     *
     * */
-  def predict(point: Q): R
+  override def predict(point: Q): R
 }
 
 /**
@@ -135,183 +142,10 @@ trait LinearModel[T, P, Q , R, S]
     * defined by the kernel applied, this is initialized
     * to an identity map.
     * */
-  var featureMap: (Q) => Q = identity
+  var featureMap: Q => Q = identity
 
 
 
   def clearParameters(): Unit
-
-}
-
-/**
- * An evaluable model is on in which
- * there is a function taking in a csv
- * reader object pointing to a test csv file
- * and returns the appropriate [[Metrics]] object
- *
- * @tparam P The type of the model's Parameters
- * @tparam R The type of the output value
- * */
-trait EvaluableModel [P, R]{
-  def evaluate(config: Map[String, String]): Metrics[R]
-}
-
-abstract class KernelizedModel[G, L, T <: Tensor[K1, Double],
-Q <: Tensor[K2, Double], R, K1, K2](protected val task: String)
-  extends LinearModel[G, T, Q, R, L] with GloballyOptimizable
-  with EvaluableModel[T, R]{
-
-  override protected var hyper_parameters: List[String] = List("RegParam")
-
-  override protected var current_state: Map[String, Double] = Map("RegParam" -> 1.0)
-
-  protected val nPoints: Long
-
-  def npoints = nPoints
-
-  /**
-   * This variable stores the indexes of the
-   * prototype points of the data set.
-   * */
-  protected var points: List[Long] = List()
-
-  def getXYEdges: L
-
-  /**
-   * Implements the changes in the model
-   * after application of a given kernel.
-   *
-   * It calculates
-   *
-   * 1) Eigen spectrum of the kernel
-   *
-   * 2) Calculates an approximation to the
-   * non linear feature map induced by the
-   * application of the kernel
-   *
-   * @param kernel A kernel object.
-   * @param M The number of prototypes to select
-   *          in order to approximate the kernel
-   *          matrix.
-   * */
-  def applyKernel(kernel: SVMKernel[DenseMatrix[Double]],
-                  M: Int = math.sqrt(nPoints).toInt): Unit = {}
-
-  /**
-   * Calculate an approximation to
-   * the subset of size M
-   * with the maximum entropy.
-   * */
-  def optimumSubset(M: Int): Unit
-
-  def trainTest(test: List[Long]): (L,L)
-
-  def crossvalidate(folds: Int, reg: Double,
-                    optionalStateFlag: Boolean = false): (Double, Double, Double) = {
-    //Create the folds as lists of integers
-    //which index the data points
-    this.optimizer.setRegParam(reg).setNumIterations(40)
-      .setStepSize(0.001).setMiniBatchFraction(1.0)
-    val shuffle = Random.shuffle((1L to this.npoints).toList)
-    //run batch sgd on each fold
-    //and test
-    val avg_metrics: DenseVector[Double] = (1 to folds).map{a =>
-      //For the ath fold
-      //partition the data
-      //ceil(a-1*npoints/folds) -- ceil(a*npoints/folds)
-      //as test and the rest as training
-      val test = shuffle.slice((a-1)*this.nPoints.toInt/folds, a*this.nPoints.toInt/folds)
-      val(training_data, test_data) = this.trainTest(test)
-
-      val tempparams = this.optimizer.optimize((folds - 1 / folds) * this.npoints,
-        training_data, this.initParams())
-      val metrics = this.evaluateFold(tempparams)(test_data)(this.task)
-      val res: DenseVector[Double] = metrics.kpi() / folds.toDouble
-      res
-    }.reduce(_+_)
-
-    (avg_metrics(0),
-      avg_metrics(1),
-      avg_metrics(2))
-  }
-
-  def evaluateFold(params: T)
-                  (test_data_set: L)
-                  (task: String): Metrics[Double]
-
-  def applyFeatureMap: Unit
-
-
-
-}
-
-object KernelizedModel {
-  def getOptimizedModel[G, H, M <: KernelizedModel[G, H, DenseVector[Double],
-    DenseVector[Double], Double, Int, Int]](model: M, globalOptMethod: String,
-                                            kernel: String, prototypes: Int, grid: Int,
-                                            step: Double, logscale: Boolean = true,
-                                            csaIt: Int = 5) = {
-    val gs = globalOptMethod match {
-      case "gs" => new GridSearch[model.type](model).setGridSize(grid)
-        .setStepSize(step).setLogScale(logscale)
-
-      case "csa" => new CoupledSimulatedAnnealing[model.type](model).setGridSize(grid)
-        .setStepSize(step).setLogScale(logscale).setMaxIterations(csaIt)
-    }
-
-    kernel match {
-      case "RBF" => gs.optimize(Map("bandwidth" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "RBF", "subset" -> prototypes.toString))
-
-      case "Polynomial" => gs.optimize(Map("degree" -> 1.0, "offset" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "Polynomial", "subset" -> prototypes.toString))
-
-      case "Exponential" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "Exponential", "subset" -> prototypes.toString))
-
-      case "Laplacian" => gs.optimize(Map("beta" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "Laplacian", "subset" -> prototypes.toString))
-
-      case "Cauchy" => gs.optimize(Map("sigma" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "Cauchy", "subset" -> prototypes.toString))
-
-      case "RationalQuadratic" => gs.optimize(Map("c" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "RationalQuadratic", "subset" -> prototypes.toString))
-
-      case "Wave" => gs.optimize(Map("theta" -> 1.0, "RegParam" -> 0.5),
-        Map("kernel" -> "Wave", "subset" -> prototypes.toString))
-
-      case "Linear" => gs.optimize(Map("RegParam" -> 0.5))
-    }
-  }
-}
-
-trait SubsampledDualLSSVM[G, L] extends
-KernelizedModel[G, L, DenseVector[Double], DenseVector[Double],
-  Double, Int, Int]{
-
-  var kernel :SVMKernel[DenseMatrix[Double]] = null
-
-  var (feature_a, b): (DenseMatrix[Double], DenseVector[Double]) = (null, null)
-
-  protected var effectivedims:Int
-
-  override def applyKernel(kern: SVMKernel[DenseMatrix[Double]],
-                           M: Int = this.points.length):Unit = {
-    if(M != this.points.length) {
-      this.optimumSubset(M)
-    }
-    this.params = DenseVector.fill(M+1)(1.0)
-    effectivedims = M+1
-    kernel = kern
-  }
-
-  override def applyFeatureMap: Unit = {}
-
-  override def learn(): Unit = {
-    this.params =ConjugateGradient.runCG(feature_a, b,
-      this.initParams(), 0.0001,
-      this.params.length)
-  }
 
 }
