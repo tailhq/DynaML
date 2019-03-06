@@ -21,7 +21,6 @@ package io.github.mandar2812.dynaml.optimization
 import breeze.linalg._
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
-import io.github.mandar2812.dynaml.models.svm.LSSVMSparkModel
 
 import scala.util.Random
 
@@ -32,6 +31,33 @@ class ConjugateGradientSpark extends RegularizedOptimizer[DenseVector[Double],
   DenseVector[Double], Double, RDD[LabeledPoint]]{
 
   def getRegParam = this.regParam
+
+  def getFeatureMatrix(nPoints: Long,
+    ParamOutEdges: RDD[LabeledPoint],
+    initialP: DenseVector[Double],
+    frac: Double, regParam: Double) = {
+    val dims = initialP.length
+    //Cast as problem of form A.w = b
+    //A = Phi^T . Phi + I_dims*regParam
+    //b = Phi^T . Y
+    val (a,b): (DenseMatrix[Double], DenseVector[Double]) =
+    ParamOutEdges.filter((_) => Random.nextDouble() <= frac)
+      .mapPartitions((edges) => {
+        Seq(edges.map((edge) => {
+          val phi = DenseVector(edge.features.toArray)
+          val label = edge.label
+          val phiY: DenseVector[Double] = phi * label
+          (phi*phi.t, phiY)
+        }).reduce((couple1, couple2) => {
+          (couple1._1+couple2._1, couple1._2+couple2._2)
+        })).toIterator
+      }).reduce((couple1, couple2) => {
+      (couple1._1+couple2._1, couple1._2+couple2._2)
+    })
+
+    (a,b)
+  }
+
 
   /**
    * Find the optimum value of the parameters using
@@ -51,7 +77,7 @@ class ConjugateGradientSpark extends RegularizedOptimizer[DenseVector[Double],
   override def optimize(nPoints: Long,
                         ParamOutEdges: RDD[LabeledPoint],
                         initialP: DenseVector[Double]): DenseVector[Double] = {
-    val (a,b) = LSSVMSparkModel.getFeatureMatrix(nPoints, ParamOutEdges,
+    val (a,b) = getFeatureMatrix(nPoints, ParamOutEdges,
       initialP, this.miniBatchFraction, this.regParam)
     val smoother:DenseMatrix[Double] = DenseMatrix.eye[Double](initialP.length)/this.regParam
     smoother(-1,-1) = 0.0

@@ -92,6 +92,22 @@ private[dynaml] class DynamicalSystem(
       tf.learn.Mean[Float]("Loss/Mean") >>
       tf.learn.ScalarSummary[Float]("Loss/Summary", "Loss")
 
+  /**
+    * Train a neural net based approximation for the
+    * dynamical system.
+    *
+    * @param data Training data, a sequence of supervised/labeled data
+    *             sets the length of the sequence must equal the number
+    *             of governing equations.
+    *
+    * @param trainConfig Training configuration, of type [[TFModel.Config]]
+    *
+    * @param data_processing TensorFlow data operation pipeline, instance of [[TFModel.Ops]]
+    *
+    * @param inMemory Set to true if model is to be kept entirely in memory, defaults to false.
+    *
+    * @return A [[DynamicalSystem.Model]] which encapsulates a predictive model of type [[TFModel]]
+    * */
   def solve(
     data: Seq[SupervisedDataSet[Tensor[Float], Tensor[Float]]],
     trainConfig: TFModel.Config,
@@ -105,7 +121,6 @@ private[dynaml] class DynamicalSystem(
       DynamicalSystem.ModelOutputsT,
       (Seq[FLOAT32], Seq[Map[String, FLOAT32]]),
       (Seq[Shape], Seq[Map[String, Shape]])](
-      dtfdata.supervised_dataset.collect(data),
       model_architecture,
       (Seq.fill(quantities.size)(FLOAT32), Seq.fill(quantities.size)(input_shape)),
       (Seq.fill(quantities.size)(FLOAT32), target_shape),
@@ -113,7 +128,7 @@ private[dynaml] class DynamicalSystem(
       data_processing, inMemory,
       graphInstance, Some(data_handles))
 
-    model.train()
+    model.train(dtfdata.supervised_dataset.collect(data).map(p => (p._1, p._2)))
 
     DynamicalSystem.model(
       model,

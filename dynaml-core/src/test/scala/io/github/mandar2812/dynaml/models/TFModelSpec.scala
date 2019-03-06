@@ -67,7 +67,6 @@ class TFModelSpec extends FlatSpec with Matchers {
       Tensor[Double], FLOAT64, Shape,
       Tensor[Double], FLOAT64, Shape,
       Tensor[Double], FLOAT64, Shape](
-      tf_dataset.training_dataset,
       arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
       loss,
       dtflearn.model.trainConfig(
@@ -83,7 +82,7 @@ class TFModelSpec extends FlatSpec with Matchers {
       dtflearn.model.data_ops(5000, 16, 10)
     )
 
-    regression_model.train()
+    regression_model.train(tf_dataset.training_dataset)
 
     val test_pred = regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1))).scalar
 

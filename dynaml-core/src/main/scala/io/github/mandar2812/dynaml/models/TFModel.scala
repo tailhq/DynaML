@@ -78,7 +78,6 @@ Loss: TF : IsFloatOrDouble,
 IT, ID, IS,
 TT, TD, TS,
 ITT, IDD, ISS](
-  override val g: DataSet[(IT, TT)],
   val architecture: Layer[In, ArchOut],
   val input: (ID, IS),
   val target: (TD, TS),
@@ -112,55 +111,76 @@ ITT, IDD, ISS](
   ev: Estimator.SupportedInferInput[In, IT, ITT, IT, ITT],
   // This implicit helps the Scala 2.11 compiler.
   evOutputToTensorInOut: OutputToTensor.Aux[(In, ArchOut), (IT, ITT)])
-  extends Model[DataSet[(IT, TT)], IT, ITT] {
+  extends Predictor[IT, ITT] {
 
-  type ModelPair = dtflearn.SupModelPair[In, Out, ArchOut, ArchOut, Loss, (ArchOut, (In, Out))]
+  type UnderlyingModel = (
+    Option[dtflearn.SupervisedModel[In, Out, ArchOut, ArchOut, Loss]],
+      Option[dtflearn.SupEstimatorTF[In, Out, ArchOut, ArchOut, Loss, (ArchOut, (In, Out))]])
 
-  private lazy val tf_dataset: Dataset[(In, Out)] = g.build(
-    identityPipe[(IT, TT)],
-    (input._1, target._1),
-    (input._2, target._2))
-    .repeat()
-    .shuffle(data_processing.shuffleBuffer)
-    .batch(data_processing.batchSize)
-    .prefetch(data_processing.prefetchSize)
 
   private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
 
-  lazy val (input_handle, target_handle): TFModel.DataHandles[In, Out] =
-    if(data_handles.isDefined) data_handles.get
-    else (
-      tf.learn.Input[In, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
-      tf.learn.Input[Out, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
 
   private val graphInstance = if(existingGraph.isDefined) {
     println("Using existing provided TensorFlow graph")
     existingGraph.get
   } else Graph()
 
-  val (model, estimator): ModelPair = tf.createWith(graph = graphInstance) {
+  var (model, estimator): UnderlyingModel = (None, None)
 
-    val m = tf.learn.Model.simpleSupervised[In, Out, ArchOut, ArchOut, Loss](
-      input_handle,
-      target_handle,
-      architecture,
-      loss, optimizer)
 
-    val train_hooks = trainHooks match {
-      case Some(hooks) => hooks
-      case None => if(inMemory) Set[Hook]() else TFModel._train_hooks(summary_dir = summaryDir)
+  def train(data: DataSet[(IT, TT)]): Unit = {
+
+    val tf_dataset: Dataset[(In, Out)] = data.build(
+      identityPipe[(IT, TT)],
+      (input._1, target._1),
+      (input._2, target._2))
+      .repeat()
+      .shuffle(data_processing.shuffleBuffer)
+      .batch(data_processing.batchSize)
+      .prefetch(data_processing.prefetchSize)
+
+    val (input_handle, target_handle): TFModel.DataHandles[In, Out] =
+      if(data_handles.isDefined) data_handles.get
+      else (
+        tf.learn.Input[In, ID, IS](input._1, tf_dataset.outputShapes._1, "Input"),
+        tf.learn.Input[Out, TD, TS](target._1, tf_dataset.outputShapes._2, "Target"))
+
+    val underlying_tf_pair = tf.createWith(graph = graphInstance) {
+
+      val m = tf.learn.Model.simpleSupervised[In, Out, ArchOut, ArchOut, Loss](
+        input_handle,
+        target_handle,
+        architecture,
+        loss, optimizer)
+
+      val train_hooks = trainHooks match {
+        case Some(hooks) => hooks
+        case None => if(inMemory) Set[Hook]() else TFModel._train_hooks(summary_dir = summaryDir)
+      }
+
+      val config = tf.learn.Configuration(Some(summaryDir.toNIO))
+
+      val e =
+        if (inMemory) tf.learn.InMemoryEstimator(m, config, stopCriteria, train_hooks)
+        else tf.learn.FileBasedEstimator(m, config, stopCriteria, train_hooks)
+
+      (Some(m), Some(e))
     }
 
-    val config = tf.learn.Configuration(Some(summaryDir.toNIO))
+    model     = underlying_tf_pair._1
+    estimator = underlying_tf_pair._2
 
-    val e =
-      if (inMemory) tf.learn.InMemoryEstimator(m, config, stopCriteria, train_hooks)
-      else tf.learn.FileBasedEstimator(m, config, stopCriteria, train_hooks)
-
-    (m, e)
+    estimator.get.train[(ID, TD), (IS, TS)](() => tf_dataset)
   }
 
-  def train(): Unit = estimator.train[(ID, TD), (IS, TS)](() => tf_dataset)
+  protected def check_underlying_estimator(): Unit =
+    require(
+      estimator.isDefined,
+      "Underlying TensorFlow Estimator is undefined! Either \\n " +
+        "1. Model training probably threw an Exception or error. \\n " +
+        "2. Model has been closed via close() method."
+    )
 
   /**
     * Generate predictions for a data set.
@@ -174,8 +194,10 @@ ITT, IDD, ISS](
     *
     *
     * */
-  override def predict(point: IT): ITT =
-    estimator.infer[IT, ID, IS, ITT, IDD, ISS, IT, ITT](() => point)
+  override def predict(point: IT): ITT = {
+    check_underlying_estimator()
+    estimator.get.infer[IT, ID, IS, ITT, IDD, ISS, IT, ITT](() => point)
+  }
 
   /**
     * Generate predictions for a data set.
@@ -201,7 +223,7 @@ ITT, IDD, ISS](
     ev: Estimator.SupportedInferInput[In, InV, OutV, InferIn, InferOut],
     // This implicit helps the Scala 2.11 compiler.
     evOutputToTensorInOut: OutputToTensor.Aux[(In, ArchOut), (InV, OutV)]): InferOut =
-    estimator.infer(() => input_data)
+    estimator.get.infer(() => input_data)
 
   /**
     * Generate predictions for a DynaML data set.
@@ -209,15 +231,19 @@ ITT, IDD, ISS](
     * @param input_data_set The data set containing input patterns
     * @return A DynaML data set of input-prediction tuples.
     * */
-  def infer_coll(input_data_set: DataSet[IT]): Either[ITT, DataSet[ITT]] = concatOpI match {
+  def infer_coll(input_data_set: DataSet[IT]): Either[ITT, DataSet[ITT]] = {
+    check_underlying_estimator()
+    concatOpI match {
 
     case None => Right(input_data_set.map((pattern: IT) => infer(pattern)))
 
     case Some(concatFunc) => Left(infer(concatFunc(input_data_set.data)))
-
+    }
   }
 
   def infer_batch(input_data_set: DataSet[IT]): Either[ITT, DataSet[ITT]] = {
+
+    check_underlying_estimator()
 
     val prediction_collection = concatOpI match {
 
@@ -239,7 +265,11 @@ ITT, IDD, ISS](
   /**
     * Close the underlying tensorflow graph.
     * */
-  def close(): Unit = graphInstance.close()
+  def close(): Unit = {
+    model = None
+    estimator = None
+    graphInstance.close()
+  }
 
 
 }
@@ -341,7 +371,6 @@ object TFModel {
   IT, ID, IS,
   TT, TD, TS,
   ITT, IDD, ISS](
-    g: DataSet[(IT, TT)],
     architecture: Layer[In, ArchOut],
     input: (ID, IS),
     target: (TD, TS),
@@ -380,7 +409,7 @@ object TFModel {
       IT, ID, IS,
       TT, TD, TS,
       ITT, IDD, ISS](
-      g, architecture, input, target, loss,
+      architecture, input, target, loss,
       trainConfig, data_processing, inMemory, existingGraph,
       data_handles, concatOpI, concatOpT, concatOpO
     )

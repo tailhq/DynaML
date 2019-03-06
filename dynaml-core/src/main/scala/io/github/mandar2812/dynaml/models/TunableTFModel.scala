@@ -139,12 +139,12 @@ class TunableTFModel[In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, ID, IS, T
 
 
     //Get the model instance.
-    val model_instance = modelFunction(h)(train_split)
+    val model_instance = modelFunction(h)
 
     //Compute the model fitness, guard against weird exceptions
     val (fitness, comment) = try {
       //Train the model instance
-      model_instance.train()
+      model_instance.train(train_split)
 
       val predictions = model_instance.infer_batch(validation_inputs)
 
@@ -198,9 +198,8 @@ object TunableTFModel {
     * and return an instantiated TensorFlow Model [[TFModel]].
     *
     * */
-  type ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = MetaPipe[
+  type ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = DataPipe[
     HyperParams,
-    DataSet[(IT, TT)],
     TFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS]
     ]
 
@@ -329,22 +328,19 @@ object TunableTFModel {
       evOutputToTensorInOut: OutputToTensor.Aux[(In, ArchOut), (IT, ITT)])
     : ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
 
-      MetaPipe(
-        (h: TunableTFModel.HyperParams) =>
-          (data: DataSet[(IT, TT)]) => {
+      DataPipe(
+        (h: TunableTFModel.HyperParams) => {
+          val loss = loss_gen(h)
 
+          val model_training_config = get_training_config(h)
 
-            val loss = loss_gen(h)
-
-            val model_training_config = get_training_config(h)
-
-            TFModel(
-              data, architecture, input, target, loss,
-              model_training_config,
-              data_processing, inMemory, existingGraph,
-              data_handles, concatOpI, concatOpT, concatOpO
-            )
-          }
+          TFModel(
+            architecture, input, target, loss,
+            model_training_config,
+            data_processing, inMemory, existingGraph,
+            data_handles, concatOpI, concatOpT, concatOpO
+          )
+        }
       )
     }
 
@@ -411,16 +407,15 @@ object TunableTFModel {
       evOutputToTensorInOut: OutputToTensor.Aux[(In, ArchOut), (IT, ITT)])
     : ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
 
-      MetaPipe(
-        (h: TunableTFModel.HyperParams) =>
-          (data: DataSet[(IT, TT)]) => {
+      DataPipe(
+        (h: TunableTFModel.HyperParams) => {
 
             val (architecture, loss) = arch_loss_gen(h)
 
             val model_training_config = get_training_config(h)
 
             TFModel(
-              data, architecture, input, target, loss,
+              architecture, input, target, loss,
               model_training_config,
               data_processing, inMemory, existingGraph,
               data_handles, concatOpI, concatOpT, concatOpO
@@ -495,24 +490,23 @@ object TunableTFModel {
       evOutputToTensorInOut: OutputToTensor.Aux[(In, ArchOut), (IT, ITT)])
     : ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
 
-      MetaPipe(
-        (h: TunableTFModel.HyperParams) =>
-          (data: DataSet[(IT, TT)]) => {
+      DataPipe(
+        (h: TunableTFModel.HyperParams) => {
 
             val architecture = arch_generator(h)
 
-            val model_training_config = get_training_config(h)
+                val model_training_config = get_training_config(h)
 
-            TFModel(
-              data, architecture, input, target, loss,
-              model_training_config,
-              data_processing, inMemory, existingGraph,
-              data_handles, concatOpI, concatOpT, concatOpO
-            )
-          }
-      )
+                TFModel(
+                  architecture, input, target, loss,
+                  model_training_config,
+                  data_processing, inMemory, existingGraph,
+                  data_handles, concatOpI, concatOpT, concatOpO
+                )
+              }
+          )
 
-    }
+        }
 
   }
 
