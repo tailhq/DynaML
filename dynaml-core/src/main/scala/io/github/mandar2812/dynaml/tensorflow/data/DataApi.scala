@@ -28,10 +28,9 @@ import org.platanios.tensorflow.api.core.types.UByte
 
 private[tensorflow] object DataApi {
 
-  val dataset: DataSet.type = DataSet
-
-
+  val dataset: DataSet.type                      = DataSet
   val supervised_dataset: SupervisedDataSet.type = SupervisedDataSet
+  val tf_dataset: TFDataSet.type                 = TFDataSet
 
   /**
     * Create a tensor from a collection of image data,

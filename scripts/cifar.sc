@@ -1,55 +1,39 @@
 {
-  import ammonite.ops._
-  import io.github.mandar2812.dynaml.pipes.DataPipe
-  import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
-  import io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils}
-  import io.github.mandar2812.dynaml.tensorflow.implicits._
-  import org.platanios.tensorflow.api._
-  //import org.platanios.tensorflow.api.implicits.helpers._
-  import org.platanios.tensorflow.api.learn.layers.Activation
-  import org.platanios.tensorflow.data.image.CIFARLoader
-  import java.nio.file.Paths
+  import _root_.ammonite.ops._
+  import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
+  import _root_.io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils, dtfdata}
+  import _root_.org.platanios.tensorflow.api._
+  import _root_.org.platanios.tensorflow.api.learn.layers.Activation
+  import _root_.org.platanios.tensorflow.data.image.CIFARLoader
+  import _root_.java.nio.file.Paths
 
-
-  // Implicit helpers for Scala 2.11.
-  //implicit val evOutputStructureFloatLong : OutputStructure[(Output[Float], Output[Long])]  = OutputStructure[(Output[Float], Output[Long])]
-  //implicit val evOutputToDataTypeFloatLong: OutputToDataType[(Output[Float], Output[Long])] = OutputToDataType[(Output[Float], Output[Long])]
-  //implicit val evOutputToShapeFloatLong   : OutputToShape[(Output[Float], Output[Long])]    = OutputToShape[(Output[Float], Output[Long])]
 
 
   val tempdir = home/"tmp"
 
   val dataSet = CIFARLoader.load(Paths.get(tempdir.toString()), CIFARLoader.CIFAR_10)
-  val tf_dataset = AbstractDataSet(
-    dataSet.trainImages, dataSet.trainLabels.castTo[Long], dataSet.trainLabels.shape(0),
-    dataSet.testImages, dataSet.testLabels.castTo[Long], dataSet.testLabels.shape(0))
 
-  val trainData = 
-    tf_dataset.training_data
-      .repeat()
-      .shuffle(10000)
-      .batch[(UINT8, INT64), (Shape, Shape)](128)
-      .prefetch(10)
-
-
-  println("Building the model.")
-  val input = tf.learn.Input(
-    UINT8,
-    Shape(-1) ++ dataSet.trainImages.shape(1::)
+  val dtf_cifar_data = dtfdata.tf_dataset(
+    dtfdata.supervised_dataset(
+      dataSet.trainImages.unstack(axis = 0),
+      dataSet.trainLabels.castTo[Long].unstack(axis = -1)),
+    dtfdata.supervised_dataset(
+      dataSet.testImages.unstack(axis = 0),
+      dataSet.testLabels.castTo[Long].unstack(axis = -1))
   )
 
-  val trainInput = tf.learn.Input(INT64, Shape(-1))
+  println("Building the model.")
 
   val relu_act = DataPipe[String, Activation[Float]](tf.learn.ReLU(_))
 
   val architecture =
     tf.learn.Cast[UByte, Float]("Input/Cast") >>
-    dtflearn.inception_unit(channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>
-    dtflearn.inception_unit(channels = 40, Seq.fill(4)(5),  relu_act)(layer_index = 2) >>
-    tf.learn.Flatten("Layer_3/Flatten") >>
-    dtflearn.feedforward(256)(id = 4) >>
-    tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>
-    dtflearn.feedforward(10)(id = 5)
+      dtflearn.inception_unit(channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>
+      dtflearn.inception_unit(channels = 40, Seq.fill(4)(5),  relu_act)(layer_index = 2) >>
+      tf.learn.Flatten("Layer_3/Flatten") >>
+      dtflearn.feedforward(256)(id = 4) >>
+      tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>
+      dtflearn.feedforward(10)(id = 5)
 
   val loss = tf.learn.SparseSoftmaxCrossEntropy[Float, Long, Float]("Loss/CrossEntropy") >>
     tf.learn.Mean("Loss/Mean") >>
@@ -57,15 +41,36 @@
 
   val optimizer = tf.train.Adam(0.1f)
 
-  val summariesDir = java.nio.file.Paths.get((tempdir/"cifar_summaries").toString())
+  def concatOp[T: TF] = DataPipe[Iterable[Tensor[T]], Tensor[T]](s => tfi.concatenate[T](s.toSeq))
+  def stackOp[T: TF]  = DataPipe[Iterable[Tensor[T]], Tensor[T]](s => tfi.stack[T](s.toSeq))
 
-  val (model, estimator) = dtflearn.build_tf_model[
-    Output[UByte], Output[Long], Output[Float], Output[Float],
-    Float, (Output[Float], Output[Long]),
-    UINT8, Shape, INT64, Shape](
-    architecture, input, trainInput,
-    loss, optimizer, summariesDir, dtflearn.max_iter_stop(500),
-    100, 100, 100)(trainData, false)
+  val cifar_model = dtflearn.model[
+    Output[UByte], Output[Long], Output[Float], Float,
+    Tensor[UByte], UINT8, Shape,
+    Tensor[Long], INT64, Shape,
+    Tensor[Float], FLOAT32, Shape](
+    architecture,
+    (UINT8, dataSet.trainImages.shape(1::)),
+    (INT64, Shape()),
+    loss,
+    dtflearn.model.trainConfig(
+      tempdir/"cifar_summaries",
+      optimizer,
+      dtflearn.rel_loss_change_stop(0.05, 500),
+      Some(
+        dtflearn.model._train_hooks(
+          tempdir/"cifar_summaries",
+          stepRateFreq = 100,
+          summarySaveFreq = 100,
+          checkPointFreq = 100)
+      )),
+    dtflearn.model.data_ops(5000, 16, 10),
+    concatOpI = Some(stackOp[UByte]),
+    concatOpT = Some(concatOp[Long]),
+    concatOpO = Some(stackOp[Float])
+  )
+
+  cifar_model.train(dtf_cifar_data.training_dataset)
 
   def accuracy(predictions: Tensor[Long], labels: Tensor[Long]): Float =
     tfi.equal(predictions.argmax[Long](1), labels)
@@ -74,21 +79,14 @@
       .scalar
       .asInstanceOf[Float]
 
-  val (trainingPreds, testPreds): (Option[Tensor[Float]], Option[Tensor[Float]]) =
-    dtfutils.predict_data[
-      Output[UByte], Output[Long],
-      Output[Float], Output[Float], Float,
-      Tensor[UByte], UINT8, Shape,
-      Tensor[Float], FLOAT32, Shape,
-      Tensor[Long], Tensor[Float]](
-      predictiveModel = estimator, data = tf_dataset,
-      pred_flags = (true, true),
-      buff_size = 20000
-    )
+  val (trainingPreds, testPreds): (Tensor[Float], Tensor[Float]) = (
+    cifar_model.infer_batch(dtf_cifar_data.training_dataset.map(p => p._1)).left.get,
+    cifar_model.infer_batch(dtf_cifar_data.test_dataset.map(p => p._1)).left.get
+  )
 
   val (trainAccuracy, testAccuracy) = (
-    accuracy(trainingPreds.get.castTo[Long], dataSet.trainLabels.castTo[Long]),
-    accuracy(testPreds.get.castTo[Long], dataSet.testLabels.castTo[Long]))
+    accuracy(trainingPreds.castTo[Long], dataSet.trainLabels.castTo[Long]),
+    accuracy(testPreds.castTo[Long], dataSet.testLabels.castTo[Long]))
 
   print("Train accuracy = ")
   pprint.pprintln(trainAccuracy)
