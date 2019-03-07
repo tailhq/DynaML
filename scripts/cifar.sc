@@ -64,7 +64,11 @@
           summarySaveFreq = 100,
           checkPointFreq = 100)
       )),
-    dtflearn.model.data_ops(5000, 16, 10),
+    dtflearn.model.data_ops(
+      shuffleBuffer = 5000,
+      batchSize = 128,
+      prefetchSize = 10
+    ),
     concatOpI = Some(stackOp[UByte]),
     concatOpT = Some(concatOp[Long]),
     concatOpO = Some(stackOp[Float])
