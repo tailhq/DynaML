@@ -51,7 +51,7 @@
     dtflearn.model.trainConfig(
       tempdir/"fashion_mnist_summaries",
       optimizer,
-      dtflearn.rel_loss_change_stop(0.05, 500),
+      dtflearn.rel_loss_change_stop(0.05, 1000),
       Some(
         dtflearn.model._train_hooks(
           tempdir/"fashion_mnist_summaries",
