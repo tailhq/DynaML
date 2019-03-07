@@ -1,68 +1,96 @@
 {
-  import io.github.mandar2812.dynaml.tensorflow.dtflearn
+  import _root_.java.nio.file.Paths
+  import _root_.io.github.mandar2812.dynaml.pipes._
+  import _root_.io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfdata}
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.data.image.MNISTLoader
-  import ammonite.ops._
-
-  val tempdir = home/"tmp"
+  import _root_.ammonite.ops._
 
   // Load and batch data using pre-fetching.
-  val dataSet = MNISTLoader.load(java.nio.file.Paths.get(tempdir.toString()))
-  val trainImages = tf.data.TensorSlicesDataset(dataSet.trainImages)
-  val trainLabels = tf.data.TensorSlicesDataset(dataSet.trainLabels)
-  val trainData =
-    trainImages.zip(trainLabels)
-      .repeat()
-      .shuffle(10000)
-      .batch(256)
-      .prefetch(10)
+  val tempdir = home/"tmp"
 
-  // Create the MLP model.
-  val input = tf.learn.Input(UINT8, Shape(-1, dataSet.trainImages.shape(1), dataSet.trainImages.shape(2)))
+  val dataSet = MNISTLoader.load(Paths.get(tempdir.toString()), MNISTLoader.MNIST)
 
-  val trainInput = tf.learn.Input(UINT8, Shape(-1))
+  val dtf_cifar_data = dtfdata.tf_dataset(
+    dtfdata.supervised_dataset(
+      dataSet.trainImages.unstack(axis = 0),
+      dataSet.trainLabels.castTo[Long].unstack(axis = -1)),
+    dtfdata.supervised_dataset(
+      dataSet.testImages.unstack(axis = 0),
+      dataSet.testLabels.castTo[Long].unstack(axis = -1))
+  )
 
-  val architecture = tf.learn.Flatten("Input/Flatten") >>
-    tf.learn.Cast("Input/Cast", FLOAT32) >>
-    tf.learn.Linear("Layer_0/Linear", 128) >>
-    tf.learn.ReLU("Layer_0/ReLU", 0.1f) >>
-    tf.learn.Linear("Layer_1/Linear", 64) >>
-    tf.learn.ReLU("Layer_1/ReLU", 0.1f) >>
-    tf.learn.Linear("Layer_2/Linear", 32) >>
-    tf.learn.ReLU("Layer_2/ReLU", 0.1f) >>
-    tf.learn.Linear("OutputLayer/Linear", 10)
+  val architecture = tf.learn.Cast[UByte, Float]("Input/Cast") >>
+    tf.learn.Flatten[Float]("Input/Flatten") >>
+    tf.learn.Linear[Float]("Layer_0/Linear", 128) >>
+    tf.learn.ReLU[Float]("Layer_0/ReLU", 0.1f) >>
+    tf.learn.Linear[Float]("Layer_1/Linear", 64) >>
+    tf.learn.ReLU[Float]("Layer_1/ReLU", 0.1f) >>
+    tf.learn.Linear[Float]("Layer_2/Linear", 32) >>
+    tf.learn.ReLU[Float]("Layer_2/ReLU", 0.1f) >>
+    tf.learn.Linear[Float]("OutputLayer/Linear", 10)
 
-  val trainingInputLayer = tf.learn.Cast("TrainInput/Cast", INT64)
-
-  val loss =
-    tf.learn.SparseSoftmaxCrossEntropy("Loss/CrossEntropy") >>
+  val loss = tf.learn.SparseSoftmaxCrossEntropy[Float, Long, Float]("Loss/CrossEntropy") >>
     tf.learn.Mean("Loss/Mean") >>
     tf.learn.ScalarSummary("Loss/Summary", "Loss")
 
-  val optimizer = tf.train.AdaGrad(0.1f)
+  val optimizer = tf.train.Adam(0.1f)
 
-  // Directory in which to save summaries and checkpoints
-  val summariesDir = java.nio.file.Paths.get((tempdir/"mnist_summaries").toString())
+  def concatOp[T: TF] = DataPipe[Iterable[Tensor[T]], Tensor[T]](s => tfi.concatenate[T](s.toSeq))
+  def stackOp[T: TF]  = DataPipe[Iterable[Tensor[T]], Tensor[T]](s => tfi.stack[T](s.toSeq))
 
+  val cifar_model = dtflearn.model[
+    Output[UByte], Output[Long], Output[Float], Float,
+    Tensor[UByte], UINT8, Shape,
+    Tensor[Long], INT64, Shape,
+    Tensor[Float], FLOAT32, Shape](
+    architecture,
+    (UINT8, dataSet.trainImages.shape(1::)),
+    (INT64, Shape()),
+    loss,
+    dtflearn.model.trainConfig(
+      tempdir/"cifar_summaries",
+      optimizer,
+      dtflearn.rel_loss_change_stop(0.05, 500),
+      Some(
+        dtflearn.model._train_hooks(
+          tempdir/"cifar_summaries",
+          stepRateFreq = 100,
+          summarySaveFreq = 100,
+          checkPointFreq = 100)
+      )),
+    dtflearn.model.data_ops(
+      shuffleBuffer = 5000,
+      batchSize = 128,
+      prefetchSize = 10
+    ),
+    concatOpI = Some(stackOp[UByte]),
+    concatOpT = Some(concatOp[Long]),
+    concatOpO = Some(concatOp[Float])
+  )
 
-  val (model, estimator) = dtflearn.build_tf_model(
-    architecture, input, trainInput, trainingInputLayer,
-    loss, optimizer, summariesDir, dtflearn.max_iter_stop(1000),
-    100, 100, 100)(trainData)
+  cifar_model.train(dtf_cifar_data.training_dataset)
 
-  def accuracy(images: Tensor, labels: Tensor): Float = {
-    val predictions = estimator.infer(() => images)
-    predictions.argmax(1).cast(UINT8).equal(labels).cast(FLOAT32).mean().scalar.asInstanceOf[Float]
-  }
+  def accuracy(predictions: Tensor[Long], labels: Tensor[Long]): Float =
+    tfi.equal(predictions.argmax[Long](1), labels)
+      .castTo[Float]
+      .mean()
+      .scalar
+      .asInstanceOf[Float]
 
+  val (trainingPreds, testPreds): (Tensor[Float], Tensor[Float]) = (
+    cifar_model.infer_batch(dtf_cifar_data.training_dataset.map(p => p._1)).left.get,
+    cifar_model.infer_batch(dtf_cifar_data.test_dataset.map(p => p._1)).left.get
+  )
 
   val (trainAccuracy, testAccuracy) = (
-    accuracy(dataSet.trainImages, dataSet.trainLabels),
-    accuracy(dataSet.testImages, dataSet.testLabels))
+    accuracy(trainingPreds.castTo[Long], dataSet.trainLabels.castTo[Long]),
+    accuracy(testPreds.castTo[Long], dataSet.testLabels.castTo[Long]))
 
   print("Train accuracy = ")
   pprint.pprintln(trainAccuracy)
 
   print("Test accuracy = ")
   pprint.pprintln(testAccuracy)
+
 }
