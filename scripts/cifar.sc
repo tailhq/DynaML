@@ -71,7 +71,7 @@
     ),
     concatOpI = Some(stackOp[UByte]),
     concatOpT = Some(concatOp[Long]),
-    concatOpO = Some(stackOp[Float])
+    concatOpO = Some(concatOp[Float])
   )
 
   cifar_model.train(dtf_cifar_data.training_dataset)
