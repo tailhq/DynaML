@@ -112,9 +112,9 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-Dlog4j.configuration=log4j.properties"),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
-      "-J-Xmx4096m",
+      "-J-Xmx6096m",
       "-J-Xms64m", 
-      "-XX:HeapBaseMinAddress=32G"
+      "-J-XX:HeapBaseMinAddress=32G"
     ),
     scalacOptions in Universal ++= Seq("-Xlog-implicits"),
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())""",

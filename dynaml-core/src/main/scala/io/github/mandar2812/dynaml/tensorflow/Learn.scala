@@ -42,7 +42,7 @@ private[tensorflow] object Learn {
     tf.learn.SupervisedTrainableModel[In, TrainIn, TrainOut, Out, Loss]
 
   type SupEstimatorTF[In, TrainIn, TrainOut, Out, Loss, EvalIn] =
-    tf.learn.Estimator[In, (In, TrainIn), TrainOut, Out, Loss, EvalIn]
+    tf.learn.Estimator[In, (In, TrainIn), Out, TrainOut, Loss, EvalIn]
 
   type SupModelPair[In, TrainIn, TrainOut, Out, Loss, EvalIn] = (
     SupervisedModel[In, TrainIn, TrainOut, Out, Loss],
@@ -439,9 +439,6 @@ private[tensorflow] object Learn {
     *                     a value of type [[Out]].
     * @param input The input meta data.
     * @param target The output label meta data
-    * @param processTarget A computation layer which converts
-    *                      the original target of type [[TrainIn]]
-    *                      into a type [[TrainOut]], usable by the Estimator API
     * @param loss The loss function to be optimized during training.
     * @param optimizer The optimization algorithm implementation.
     * @param summariesDir A filesystem path of type [[java.nio.file.Path]], which
@@ -468,7 +465,6 @@ private[tensorflow] object Learn {
     architecture: Layer[In, Out],
     input: Input[In],
     target: Input[TrainIn],
-    processTarget: Layer[TrainIn, TrainOut],
     loss: Layer[(Out, TrainIn), Output[Loss]],
     optimizer: Optimizer,
     summariesDir: java.nio.file.Path,
@@ -487,49 +483,44 @@ private[tensorflow] object Learn {
     evOutputToShape: OutputToShape.Aux[(In, TrainIn), (IS, TS)])
   : SupModelPair[In, TrainIn, Out, Out, Loss, (Out, (In, TrainIn))] = {
 
-    val (model, estimator): SupModelPair[In, TrainIn, Out, Out, Loss, (Out, (In, TrainIn))] =
-      tf.createWith(graph = Graph()) {
 
-        val model = tf.learn.Model.simpleSupervised[In, TrainIn, Out, TrainOut, Loss](
-          input, target, architecture,
-          loss, optimizer)
+    val model = tf.learn.Model.simpleSupervised[In, TrainIn, Out, TrainOut, Loss](
+      input, target, architecture,
+      loss, optimizer)
 
-        println("\nTraining model.\n")
+    println("\nTraining model.\n")
 
-        val estimator = if(inMemory) {
+    val estimator = if(inMemory) {
 
-          tf.learn.InMemoryEstimator(
-            model,
-            tf.learn.Configuration(Some(summariesDir)),
-            stopCriteria,
-            Set(
-              tf.learn.StepRateLogger(
-                log = false, summaryDir = summariesDir,
-                trigger = tf.learn.StepHookTrigger(stepRateFreq)),
-              tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
-              tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
-            tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+      tf.learn.InMemoryEstimator(
+        model,
+        tf.learn.Configuration(Some(summariesDir)),
+        stopCriteria,
+        Set(
+          tf.learn.StepRateLogger(
+            log = false, summaryDir = summariesDir,
+            trigger = tf.learn.StepHookTrigger(stepRateFreq)),
+          tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
+          tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
+        tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
 
-        } else {
+    } else {
 
-          tf.learn.FileBasedEstimator(
-            model,
-            tf.learn.Configuration(Some(summariesDir)),
-            stopCriteria,
-            Set(
-              tf.learn.StepRateLogger(
-                log = false, summaryDir = summariesDir,
-                trigger = tf.learn.StepHookTrigger(stepRateFreq)),
-              tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
-              tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
-            tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+      tf.learn.FileBasedEstimator(
+        model,
+        tf.learn.Configuration(Some(summariesDir)),
+        stopCriteria,
+        Set(
+          tf.learn.StepRateLogger(
+            log = false, summaryDir = summariesDir,
+            trigger = tf.learn.StepHookTrigger(stepRateFreq)),
+          tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
+          tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
+        tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
 
-        }
+    }
 
-        estimator.train(() => training_data)
-
-        (model, estimator)
-      }
+    estimator.train(() => training_data)
 
     (model, estimator)
   }
@@ -561,7 +552,7 @@ private[tensorflow] object Learn {
     *
     * @author mandar2812
     * */
-  def build_tf_model[In: OutputStructure, Out: OutputStructure, Loss: TF : IsFloatOrDouble](
+  def build_unsup_tf_model[In: OutputStructure, Out: OutputStructure, Loss: TF : IsFloatOrDouble](
     architecture: Layer[In, Out],
     input: Input[In],
     loss: Layer[(In, Out), Output[Loss]],

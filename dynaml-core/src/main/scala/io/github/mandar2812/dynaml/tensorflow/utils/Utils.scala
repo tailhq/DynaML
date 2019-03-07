@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.tensorflow.utils
 
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe12}
 import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
+import io.github.mandar2812.dynaml.tensorflow.Learn
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, IsNotQuantized, TF}
@@ -102,23 +103,23 @@ object Utils {
   def buffered_preds[
   In, TrainIn, TrainOut, Out,
   Loss: TF : IsFloatOrDouble,
-  IT, ID, IS, TT, TD, TS,
-  InferIn, InferOut](
-    predictiveModel: Estimator[In, TrainIn, TrainOut, Out, Loss, (Out, TrainOut)],
+  IT, ID, IS, ITT, ITD, ITS,
+  TT, InferIn, InferOut](
+    predictiveModel: Learn.SupEstimatorTF[In, TrainIn, TrainOut, Out, Loss, (Out, (In, TrainIn))],
     workingData: InferIn,
     buffer: Int, dataSize: Int)(
     implicit
     getSplitByIndex: MetaPipe12[InferIn, Int, Int, InferIn],
     concatenateSplits: DataPipe[Iterable[InferOut], InferOut],
     evOutputToDataTypeIn: OutputToDataType.Aux[In, ID],
-    evOutputToDataTypeOut: OutputToDataType.Aux[TrainOut, TD],
+    evOutputToDataTypeOut: OutputToDataType.Aux[Out, ITD],
     evOutputToShapeIn: OutputToShape.Aux[In, IS],
-    evOutputToShapeOut: OutputToShape.Aux[TrainOut, TS],
+    evOutputToShapeOut: OutputToShape.Aux[Out, ITS],
     evOutputToTensorIn: OutputToTensor.Aux[In, IT],
-    evOutputToTensorOut: OutputToTensor.Aux[TrainOut, TT],
-    ev: Estimator.SupportedInferInput[In, IT, TT, InferIn, InferOut],
+    evOutputToTensorOut: OutputToTensor.Aux[Out, ITT],
+    ev: Estimator.SupportedInferInput[In, IT, ITT, InferIn, InferOut],
     // This implicit helps the Scala 2.11 compiler.
-    evOutputToTensorInOut: OutputToTensor.Aux[(In, Out), (IT, TT)]
+    evOutputToTensorInOut: OutputToTensor.Aux[(In, Out), (IT, ITT)]
   ): InferOut = {
 
     val get_data_split = getSplitByIndex(workingData)
@@ -132,7 +133,7 @@ object Utils {
         print("Progress %:\t")
         pprint.pprintln(progress)
 
-        predictiveModel.infer[IT, ID, IS, TT, TD, TS, InferIn, InferOut](
+        predictiveModel.infer[IT, ID, IS, ITT, ITD, ITS, InferIn, InferOut](
           () => get_data_split(indices.head, indices.last))
       }).toIterable
 
@@ -142,9 +143,9 @@ object Utils {
   def predict_data[
   In, TrainIn, TrainOut, Out,
   Loss: TF : IsFloatOrDouble,
-  IT, ID, IS, TT, TD, TS,
-  InferOut](
-    predictiveModel: Estimator[In, TrainIn, TrainOut, Out, Loss, (Out, TrainOut)],
+  IT, ID, IS, ITT, ITD, ITS,
+  TT, InferOut](
+    predictiveModel: Learn.SupEstimatorTF[In, TrainIn, TrainOut, Out, Loss, (Out, (In, TrainIn))],
     data: AbstractDataSet[IT, TT],
     pred_flags: (Boolean, Boolean) = (false, true),
     buff_size: Int = 400)(
@@ -152,14 +153,14 @@ object Utils {
     getSplitByIndex: MetaPipe12[IT, Int, Int, IT],
     concatenateSplits: DataPipe[Iterable[InferOut], InferOut],
     evOutputToDataTypeIn: OutputToDataType.Aux[In, ID],
-    evOutputToDataTypeOut: OutputToDataType.Aux[TrainOut, TD],
+    evOutputToDataTypeOut: OutputToDataType.Aux[Out, ITD],
     evOutputToShapeIn: OutputToShape.Aux[In, IS],
-    evOutputToShapeOut: OutputToShape.Aux[TrainOut, TS],
+    evOutputToShapeOut: OutputToShape.Aux[Out, ITS],
     evOutputToTensorIn: OutputToTensor.Aux[In, IT],
-    evOutputToTensorOut: OutputToTensor.Aux[TrainOut, TT],
-    ev: Estimator.SupportedInferInput[In, IT, TT, IT, InferOut],
+    evOutputToTensorOut: OutputToTensor.Aux[Out, ITT],
+    ev: Estimator.SupportedInferInput[In, IT, ITT, IT, InferOut],
     // This implicit helps the Scala 2.11 compiler.
-    evOutputToTensorInOut: OutputToTensor.Aux[(In, Out), (IT, TT)]): (Option[InferOut], Option[InferOut]) = {
+    evOutputToTensorInOut: OutputToTensor.Aux[(In, Out), (IT, ITT)]): (Option[InferOut], Option[InferOut]) = {
 
     val train_preds: Option[InferOut] =
       if (pred_flags._1) {
@@ -168,8 +169,8 @@ object Utils {
 
         val predictions = buffered_preds[
           In, TrainIn, TrainOut, Out, Loss,
-          IT, ID, IS, TT, TD, TS,
-          IT, InferOut](
+          IT, ID, IS, ITT, ITD, ITS,
+          TT, IT, InferOut](
           predictiveModel,
           data.trainData,
           buff_size,
@@ -186,8 +187,8 @@ object Utils {
 
         val predictions = buffered_preds[
           In, TrainIn, TrainOut, Out, Loss,
-          IT, ID, IS, TT, TD, TS,
-          IT, InferOut](
+          IT, ID, IS, ITT, ITD, ITS,
+          TT, IT, InferOut](
           predictiveModel,
           data.testData,
           buff_size,
