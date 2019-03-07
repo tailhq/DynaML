@@ -72,7 +72,7 @@ import org.platanios.tensorflow.api.ops.data.Dataset
   * @param inMemory     Set to true if the estimator should be in-memory.
   * @author mandar2812 date 2018/09/11
   * */
-private[dynaml] class TFModel[
+class TFModel[
 In, Out, ArchOut,
 Loss: TF : IsFloatOrDouble,
 IT, ID, IS,
