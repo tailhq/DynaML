@@ -49,12 +49,12 @@
     (INT64, Shape()),
     loss,
     dtflearn.model.trainConfig(
-      tempdir/"mnist_summaries",
+      tempdir/"fashion_mnist_summaries",
       optimizer,
       dtflearn.rel_loss_change_stop(0.05, 500),
       Some(
         dtflearn.model._train_hooks(
-          tempdir/"mnist_summaries",
+          tempdir/"fashion_mnist_summaries",
           stepRateFreq = 100,
           summarySaveFreq = 100,
           checkPointFreq = 100)
