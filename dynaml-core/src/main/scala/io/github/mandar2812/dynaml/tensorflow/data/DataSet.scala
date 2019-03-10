@@ -20,9 +20,7 @@ package io.github.mandar2812.dynaml.tensorflow.data
 
 import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.core.types.TF
 import org.platanios.tensorflow.api.implicits.helpers._
-import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.data._
 
 /**
@@ -53,7 +51,7 @@ class DataSet[X](val data: Iterable[X]) {
   lazy val size: Int = data.toSeq.length
 
 
-  def filter(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filter(filterFn))
+  private def filter(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filter(filterFn))
 
   /**
     * Filter elements of this data set which satisfy
@@ -62,7 +60,7 @@ class DataSet[X](val data: Iterable[X]) {
   def filter(pipe: DataPipe[X, Boolean]): DataSet[X] = filter(pipe.run _)
 
 
-  def filterNot(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filterNot(filterFn))
+  private def filterNot(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filterNot(filterFn))
 
   /**
     * Filter elements of this data set which does not
@@ -73,23 +71,19 @@ class DataSet[X](val data: Iterable[X]) {
   /**
     * Creates a new data set of type [[Y]]
     * */
-  def map[Y](func: X => Y): DataSet[Y] = DataSet[Y](data.map(func))
+  private def map[Y](func: X => Y): DataSet[Y] = DataSet[Y](data.map(func))
 
   /**
     * Creates a new data set of type [[Y]]
     * */
   def map[Y](pipe: DataPipe[X, Y]): DataSet[Y] = map(pipe.run _)
 
-  def map[T: TF](func: X => Output[T]): OutputDataSet[T] = OutputDataSet(data.map(func))
-
-  def map[T: TF](pipe: DataPipe[X, Output[T]]): OutputDataSet[T] = OutputDataSet(data.map(pipe.run))
-
   /**
     * Maps each element into a collection of elements of type [[Y]],
     * and then concatenates each resulting collection into a single
     * data set.
     * */
-  def flatMap[Y](func: X => Iterable[Y]): DataSet[Y] = DataSet[Y](data.flatMap(func))
+  private def flatMap[Y](func: X => Iterable[Y]): DataSet[Y] = DataSet[Y](data.flatMap(func))
 
   /**
     * Maps each element into a collection of elements of type [[Y]],
@@ -107,9 +101,6 @@ class DataSet[X](val data: Iterable[X]) {
     * Join the current data collection with another collection
     * */
   def concatenate(other: DataSet[X]): DataSet[X] = DataSet[X](self.data ++ other.data)
-
-
-  def transform[Y](transformation: Iterable[X] => Iterable[Y]): DataSet[Y] = DataSet[Y](transformation(data))
 
   /**
     * Transform the underlying collection in a way that uses potentially all of its elements.
@@ -164,7 +155,6 @@ class DataSet[X](val data: Iterable[X]) {
     *
     * @tparam T The tensor type.
     * @tparam O Symbolic tensor (output) type.
-    * @tparam DA The type of the auxiliary data structure
     * @tparam D The type of the data type objects for each data element.
     * @tparam S The type of the object representing the shape of the data tensors.
     *

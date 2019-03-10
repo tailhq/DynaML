@@ -43,7 +43,7 @@ class DynamicalSystemsSpec extends FlatSpec with Matchers {
       tf.sin(input)
   }
 
-  "Dynamical systems API" /*ignore*/ should " learn canonical solution to the wave equation" in {
+   /*"Dynamical systems API"*/ ignore should " learn canonical solution to the wave equation" in {
 
     val session = Session()
 
