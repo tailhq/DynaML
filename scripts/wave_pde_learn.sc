@@ -111,7 +111,7 @@ def apply(num_data: Int = 100) = {
       )))
 
 
-  val velocity = constant[Output[Float], Float]("velocity", Tensor(1.0f))
+  val velocity = constant[Output[Float], Float]("velocity", Tensor(1.0f).reshape(Shape()))
 
 
   val wave_equation = d_t(d_t) - d_s(d_s)*velocity
@@ -132,7 +132,7 @@ def apply(num_data: Int = 100) = {
     Map("wave_displacement" -> function),
     Seq(wave_equation), input, output,
     tf.learn.L2Loss[Float, Float]("Loss/L2") >> tf.learn.Mean[Float]("L2/Mean"),
-    nodes_tensor, weights_tensor, Tensor(1.0f))
+    nodes_tensor, weights_tensor, Tensor(1.0f).reshape(Shape()))
 
 
   val wave_model1d = wave_system1d.solve(

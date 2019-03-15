@@ -88,7 +88,12 @@ abstract class TensorOperator[I, D: TF: IsNotQuantized](override val name: Strin
 
 
   override def -(other: DifferentialOperator[I, Output[D]]): DifferentialOperator[I, Output[D]] =
-    AddTensorOperator(self, MultTensorOperator[I, D](Constant[I, D]("-1", Tensor(-1).castTo[D]), other))
+    AddTensorOperator(
+      self,
+      MultTensorOperator[I, D](
+        Constant[I, D]("-1", Tensor(-1).reshape(Shape()).castTo[D]), other
+      )
+    )
 
   def *(const: Tensor[D]): DifferentialOperator[I, Output[D]] =
     MultTensorOperator(Constant[I, D](const.name, const), self)
