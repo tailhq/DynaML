@@ -138,15 +138,17 @@ private[tensorflow] object Learn {
     useBias: Boolean = true,
     weightsInitializer: Initializer = RandomNormalInitializer(),
     biasInitializer: Initializer = RandomNormalInitializer())(id: Int): Linear[T] =
-    tf.learn.Linear("Linear_"+id, num_units, useBias, weightsInitializer, biasInitializer)
+    tf.learn.Linear[T]("Linear_"+id, num_units, useBias, weightsInitializer, biasInitializer)
+
+
+  def activation_generator[T: TF](activations: Seq[String => Layer[Output[T], Output[T]]])
+  : Int => Layer[Output[T], Output[T]] = (i: Int) => activations(i % activations.length)(s"Act_$i")
 
   /**
     * Constructs a simple feed-forward stack of layers.
     *
     * @param get_act A function which given a layer index number,
     *                returns an activation function.
-    *
-    * @param dataType The data type of the layer weights/biases.
     *
     * @param layer_sizes A Sequence of layer sizes/dimensions/neuron counts.
     *
@@ -162,32 +164,14 @@ private[tensorflow] object Learn {
     starting_index: Int = 1,
     useBias: Boolean = true,
     weightsInitializer: Initializer = RandomNormalInitializer(),
-    biasInitializer: Initializer = RandomNormalInitializer()): Layer[Output[T], Output[T]] = {
-
-    def stack_ff_layers_rec(
-      ls: Seq[Int],
-      layer_acc: Layer[Output[T], Output[T]],
-      layer_index: Int): Layer[Output[T], Output[T]] = ls match {
-
-      case Seq() => layer_acc
-
-      case Seq(num_output_units) => layer_acc >> dtflearn.feedforward(num_output_units, useBias)(layer_index)
-
-      case _ => stack_ff_layers_rec(
-        ls.tail,
-        layer_acc >>
-          dtflearn.feedforward(
-            ls.head, useBias, weightsInitializer,
-            biasInitializer)(layer_index) >>
-          get_act(layer_index),
-        layer_index + 1)
-    }
-
-    stack_ff_layers_rec(
-      layer_sizes, tf.learn.Cast(s"Cast_$starting_index"),
-      starting_index)
-
-  }
+    biasInitializer: Initializer = RandomNormalInitializer()): Layer[Output[T], Output[T]] =
+    layer_sizes
+      .map(layer_size => dtflearn.feedforward[T](layer_size, useBias, weightsInitializer, biasInitializer) _)
+      .zipWithIndex
+      .map(li =>
+        if(li._2 < layer_sizes.length - 1) li._1(starting_index + li._2) >> get_act(starting_index + li._2)
+        else li._1(starting_index + li._2))
+      .reduceLeft(_ >> _)
 
   /**
     * Constructs a symmetric (square) convolutional layer from the provided dimensions.

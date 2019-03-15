@@ -1,17 +1,13 @@
 import ammonite.ops._
 import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.models._
 import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.tensorflow._
-import io.github.mandar2812.dynaml.tensorflow.data.DataSet
 import io.github.mandar2812.dynaml.tensorflow.layers.L2Regularization
 import org.joda.time.DateTime
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.types.DataType
 import _root_.spire.implicits._
 import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.DynaMLPipe
 import _root_.io.github.mandar2812.dynaml.analysis._
 import breeze.numerics.sigmoid
 
@@ -28,7 +24,7 @@ val data_size = 5000
 val rv = GaussianRV(0.0, 2.0).iid(data_size)
 
 val data = dtfdata.dataset(rv.draw).to_supervised(
-  DataPipe[Double, (Tensor, Tensor)](n => (
+  DataPipe[Double, (Tensor[Double], Tensor[Double])](n => (
     dtf.tensor_f64(1, 1)(n),
     dtf.tensor_f64(1)(n*weight + bias))
   )
@@ -37,30 +33,29 @@ val data = dtfdata.dataset(rv.draw).to_supervised(
 val train_fraction = 0.7
 
 val tf_dataset = data.partition(
-  DataPipe[(Tensor, Tensor), Boolean](_ => Random.nextDouble() <= train_fraction)
+  DataPipe[(Tensor[Double], Tensor[Double]), Boolean](_ => Random.nextDouble() <= train_fraction)
 )
 
-val architecture = dtflearn.feedforward(num_units = 1)(id = 1)
+val architecture = dtflearn.feedforward[Double](num_units = 1)(id = 1)
 
 val (net_layer_sizes, layer_shapes, layer_parameter_names, layer_datatypes) =
   dtfutils.get_ffstack_properties(d = 1, num_pred_dims = 1, Seq())
 
-val process_targets = dtflearn.identity[Output](name = "Id")
+val scope = dtfutils.get_scope(architecture) _
+
+val layer_scopes = layer_parameter_names.map(n => scope(n.split("/").last))
 
 val loss_func_generator = (h: Map[String, Double]) => {
-
-  val lossFunc = tf.learn.L2Loss("Loss/L2") >>
-    tf.learn.Mean("Loss/Mean")
-
-  lossFunc >>
-    L2Regularization(layer_parameter_names, layer_datatypes, layer_shapes, h("reg")) >>
+  tf.learn.L2Loss[Double, Double]("Loss/L2") >>
+    tf.learn.Mean("Loss/Mean") >>
+    L2Regularization[Double](layer_scopes, layer_parameter_names, layer_datatypes, layer_shapes, h("reg")) >>
     tf.learn.ScalarSummary("Loss", "ModelLoss")
 }
 
 val tuning_config_generator =
   dtflearn.tunable_tf_model.ModelFunction.hyper_params_to_dir >>
   DataPipe((p: Path) => dtflearn.model.trainConfig(
-    p, tf.train.Adam(0.1),
+    p, tf.train.Adam(0.1f),
     dtflearn.rel_loss_change_stop(0.005, 5000),
     Some(dtflearn.model._train_hooks(p))
   ))
@@ -98,19 +93,21 @@ val hyper_prior = Map(
   "reg" -> UniformRV(1E-4, math.pow(10, -2.5))
 )
 
-val fitness_function = DataPipe2[Tensor, Tensor, Double](
-  (p, t) => p.subtract(t).square.sum(axes = -1).mean().scalar.asInstanceOf[Double]
+val fitness_function = DataPipe2[Tensor[Double], Tensor[Double], Double](
+  (p, t) => p.subtract(t).square.sum(axes = -1).mean().scalar
 )
 
 
 val tf_data_ops = dtflearn.model.data_ops(10, 1000, 10, data_size/5)
 
-val stackOperationI = DataPipe[Iterable[Tensor], Tensor](bat => tfi.concatenate(bat.toSeq, axis = 0))
+val stackOperationI = DataPipe[Iterable[Tensor[Double]], Tensor[Double]](bat => tfi.concatenate(bat.toSeq, axis = 0))
 
 
 val tunableTFModel: TunableTFModel[
-  Tensor, Output, DataType.Aux[Double], DataType, Shape, Output, Tensor,
-  Tensor, Output, DataType.Aux[Double], DataType, Shape, Output] =
+  Output[Double], Output[Double], Output[Double], Double,
+  Tensor[Double], FLOAT64, Shape,
+  Tensor[Double], FLOAT64, Shape,
+  Tensor[Double], FLOAT64, Shape] =
   dtflearn.tunable_tf_model(
     loss_func_generator, hyper_parameters,
     tf_dataset.training_dataset,
@@ -118,9 +115,8 @@ val tunableTFModel: TunableTFModel[
     architecture,
     (FLOAT64, Shape(1, 1)),
     (FLOAT64, Shape(1)),
-    tf.learn.Cast("TrainInput", FLOAT64),
     tuning_config_generator(tf_summary_dir),
-    data_split_func = Some(DataPipe[(Tensor, Tensor), Boolean](_ => scala.util.Random.nextGaussian() <= 0.7)),
+    data_split_func = Some(DataPipe[(Tensor[Double], Tensor[Double]), Boolean](_ => scala.util.Random.nextGaussian() <= 0.7)),
     data_processing = tf_data_ops,
     inMemory = false,
     concatOpI = Some(stackOperationI),

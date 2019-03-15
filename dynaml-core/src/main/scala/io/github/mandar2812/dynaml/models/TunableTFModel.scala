@@ -133,8 +133,8 @@ class TunableTFModel[In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, ID, IS, T
 
     //Separate the validation data inputs and outputs
     val (validation_inputs, validation_targets) = (
-      validation_split.map((c: (IT, TT)) => c._1),
-      validation_split.map((c: (IT, TT)) => c._2)
+      validation_split.map(DataPipe((c: (IT, TT)) => c._1)),
+      validation_split.map(DataPipe((c: (IT, TT)) => c._2))
     )
 
 

@@ -1,13 +1,33 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+* */
 package io.github.mandar2812.dynaml.tensorflow.utils
 
 import io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe12}
 import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
 import io.github.mandar2812.dynaml.tensorflow.Learn
+import io.github.mandar2812.dynaml.tensorflow.layers._
 import org.platanios.tensorflow.api.learn.estimators.Estimator
-import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, IsNotQuantized, TF}
-import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.{Tensor, Shape, Output, tfi, tf}
 import org.platanios.tensorflow.api.implicits.helpers.{OutputToDataType, OutputToShape, OutputToTensor}
+import org.platanios.tensorflow.api.learn.layers.{Compose, Concatenate, Layer, Linear, Conv2D, Map => MapTF, MapSeq}
+
 
 
 object Utils {
@@ -22,6 +42,81 @@ object Utils {
     t.entriesIterator.map(x =>
       if(datatype == "FLOAT64") x.asInstanceOf[Double]
       else x.asInstanceOf[Float].toDouble)
+  }
+
+
+
+  /**
+    * Find out the name scope of a layer which is part
+    * of a larger architecture.
+    *
+    * @param architecture A Neural network architecture
+    * @param layer_name The constituent layer to search for
+    * @return The name scope for the layer
+    * */
+  def get_scope(
+    architecture: Layer[_, _])(
+    layer_name: String): String = {
+
+    def process_scope(s: String): String = if(s.isEmpty) "" else s"$s/"
+
+    def scope_search(lstack: Seq[Layer[_, _]], scopesAcc: Seq[String]): String = lstack match {
+
+      case Seq() => scopesAcc.headOption.getOrElse("")
+
+      case Linear(name, _, _, _, _) :: tail =>
+        if(name == layer_name) s"${scopesAcc.head}" else scope_search(tail, scopesAcc.tail)
+
+      case Conv2D(name, _, _, _, _, _, _, _, _) :: tail =>
+        if(name == layer_name) s"${scopesAcc.head}" else scope_search(tail, scopesAcc.tail)
+
+      case FiniteHorizonCTRNN(name, _, _, _, _, _, _, _) :: tail =>
+        if(name == layer_name) s"${scopesAcc.head}" else scope_search(tail, scopesAcc.tail)
+
+      case FiniteHorizonLinear(name, _, _, _, _) :: tail =>
+        if(name == layer_name) s"${scopesAcc.head}" else scope_search(tail, scopesAcc.tail)
+
+      case DynamicTimeStepCTRNN(name, _, _, _, _, _, _) :: tail =>
+        if(name == layer_name) s"${scopesAcc.head}" else scope_search(tail, scopesAcc.tail)
+
+      case Compose(name, l1, l2) :: tail =>
+        scope_search(Seq(l1, l2) ++ tail, Seq.fill(2)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case Concatenate(name, ls) :: tail =>
+        scope_search(ls ++ tail, Seq.fill(ls.length)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case MapTF(name, ls, _) :: tail =>
+        scope_search(Seq(ls) ++ tail, Seq(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case MapSeq(name, ls, l) :: tail =>
+        scope_search(Seq(ls, l) ++ tail, Seq.fill(2)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case SeqLayer(name, ls) :: tail =>
+        scope_search(ls ++ tail, Seq.fill(ls.length)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case ArrayLayer(name, ls) :: tail =>
+        scope_search(ls ++ tail, Seq.fill(ls.length)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case CombinedLayer(name, ls) :: tail =>
+        scope_search(ls ++ tail, Seq.fill(ls.length)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case CombinedArrayLayer(name, ls) :: tail =>
+        scope_search(ls ++ tail, Seq.fill(ls.length)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case MapLayer(name, ls) :: tail =>
+        scope_search(ls.values.toSeq ++ tail, Seq.fill(ls.size)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case BifurcationLayer(name, l1, l2) :: tail =>
+        scope_search(Seq(l1, l2) ++ tail, Seq.fill(2)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case Tuple2Layer(name, l1, l2) :: tail =>
+        scope_search(Seq(l1, l2) ++ tail, Seq.fill(2)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      case head :: tail =>
+        if(head.name == layer_name) s"${scopesAcc.head}" else scope_search(tail, scopesAcc.tail)
+    }
+
+    scope_search(Seq(architecture), Seq(""))
   }
 
 
@@ -200,18 +295,5 @@ object Utils {
     (train_preds, test_preds)
   }
 
-  /*def predict[
-  IT, IO, ID, IS, I,
-  TT, TO, TD, TS, EI,
-  ModelInferenceOutput](
-    predictiveModel: Estimator[IT, IO, ID, IS, I, (IT, TT), (IO, TO), (ID, TD), (IS, TS), (I, EI)],
-    data: DataSet[IT, IO, ID, IS])(
-    implicit evFetchableIO: Fetchable.Aux[IO, IT],
-    evFetchableI: Fetchable.Aux[I, ModelInferenceOutput],
-    evFetchableIIO: Fetchable.Aux[(IO, I), (IT, ModelInferenceOutput)],
-    ev: Estimator.SupportedInferInput[
-      Dataset[IT,IO,ID,IS], Iterator[(IT, ModelInferenceOutput)],
-      IT, IO, ID, IS, ModelInferenceOutput]
-  ): Iterator[(IT, ModelInferenceOutput)] = predictiveModel.infer(() => data.get)*/
 
 }
