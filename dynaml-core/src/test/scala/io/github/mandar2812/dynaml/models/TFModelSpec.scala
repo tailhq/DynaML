@@ -26,8 +26,6 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.joda.time.DateTime
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.layers.Layer
-import _root_.io.github.mandar2812.dynaml.tensorflow.implicits.concatTensorTup2Splits
-
 
 
 class TFModelSpec extends FlatSpec with Matchers {
@@ -44,8 +42,8 @@ class TFModelSpec extends FlatSpec with Matchers {
 
     val data = dtfdata.dataset(rv.draw).to_supervised(
       DataPipe[Double, (Tensor[Double], Tensor[Double])](n => (
-        dtf.tensor_f64(1)(n),
-        dtf.tensor_f64(1)(n*weight + bias)))
+        dtf.tensor_f64(1, 1)(n),
+        dtf.tensor_f64(1, 1)(n*weight + bias)))
     )
 
     val train_fraction = 0.7
@@ -61,6 +59,10 @@ class TFModelSpec extends FlatSpec with Matchers {
       tf.learn.L2Loss[Double, Double]("Loss/L2") >>
       tf.learn.Mean[Double]("Loss/Mean") >>
       tf.learn.ScalarSummary[Double]("Loss/ModelLoss", "ModelLoss")
+
+
+    val stackOperationI =
+      DataPipe[Iterable[Tensor[Double]], Tensor[Double]](bat => tfi.concatenate(bat.toSeq, axis = 0))
 
     val regression_model = dtflearn.model[
       Output[Double], Output[Double], Output[Double], Double,
@@ -79,7 +81,9 @@ class TFModelSpec extends FlatSpec with Matchers {
             summarySaveFreq = 1000,
             checkPointFreq = 1000)
         )),
-      dtflearn.model.data_ops(5000, 16, 10)
+      dtflearn.model.data_ops(5000, 16, 10),
+      concatOpI = Some(stackOperationI),
+      concatOpT = Some(stackOperationI)
     )
 
     regression_model.train(tf_dataset.training_dataset)

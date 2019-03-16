@@ -1,3 +1,4 @@
+import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
 import _root_.io.github.mandar2812.dynaml.analysis
 import _root_.io.github.mandar2812.dynaml.graphics.plot3d
 import _root_.io.github.mandar2812.dynaml.graphics.plot3d._
@@ -85,7 +86,7 @@ def apply(num_data: Int = 100) = {
 
   val input = Shape(2)
 
-  val output = Seq(Shape(1))
+  val output = Shape(1)
 
 
   val function  =
@@ -106,8 +107,8 @@ def apply(num_data: Int = 100) = {
   val training_data =
     dtfdata.supervised_dataset[Tensor[Float], Tensor[Float]](
       data = xs.flatMap(x => Seq(
-        (dtf.tensor_f32(input_dim)(0f, x.toFloat), dtf.tensor_f32(output_dim)(f1(x).toFloat)),
-        (dtf.tensor_f32(input_dim)(domain_size.toFloat/4, x.toFloat), dtf.tensor_f32(output_dim)(f2(x).toFloat))
+        (dtf.tensor_f32(1, input_dim)(0f, x.toFloat), dtf.tensor_f32(1, output_dim)(f1(x).toFloat)),
+        (dtf.tensor_f32(1, input_dim)(domain_size.toFloat/4, x.toFloat), dtf.tensor_f32(1, output_dim)(f2(x).toFloat))
       )))
 
 
@@ -128,15 +129,17 @@ def apply(num_data: Int = 100) = {
     utils.combine(Seq(weights.map(_.toFloat), weights.map(_.toFloat))).map(_.product):_*
   )
 
-  val wave_system1d = dtflearn.dynamical_system(
-    Map("wave_displacement" -> function),
-    Seq(wave_equation), input, output,
+  val wave_system1d = dtflearn.pde_system(
+    function,
+    wave_equation, input, output,
     tf.learn.L2Loss[Float, Float]("Loss/L2") >> tf.learn.Mean[Float]("L2/Mean"),
     nodes_tensor, weights_tensor, Tensor(1.0f).reshape(Shape()))
 
 
+  val stackOperation = DataPipe[Iterable[Tensor[Float]], Tensor[Float]](bat => tfi.concatenate(bat.toSeq, axis = 0))
+
   val wave_model1d = wave_system1d.solve(
-    Seq(training_data),
+    training_data,
     dtflearn.model.trainConfig(
       summary_dir,
       tf.train.Adam(0.001f),
@@ -147,14 +150,16 @@ def apply(num_data: Int = 100) = {
           summarySaveFreq = 1000,
           checkPointFreq = 1000)
       )),
-    dtflearn.model.data_ops(training_data.size/10, training_data.size, 10)
+    dtflearn.model.data_ops(training_data.size/10, training_data.size, 10),
+    concatOpI = Some(stackOperation),
+    concatOpT = Some(stackOperation)
   )
 
   print("Test Data Shapes: ")
   pprint.pprintln(test_data.shape)
   pprint.pprintln(test_targets.shape)
 
-  val predictions = wave_model1d.predict("wave_displacement")(test_data).head
+  val predictions = wave_model1d.predict("Output")(test_data).head
 
   val plot = plot_field(test_data, predictions)
 

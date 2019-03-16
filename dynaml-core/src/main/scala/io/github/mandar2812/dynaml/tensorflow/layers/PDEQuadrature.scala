@@ -24,17 +24,17 @@ import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
   * */
 case class PDEQuadrature[D: TF: IsNotQuantized](
   override val name: String,
-  f: Seq[Layer[Output[D], Output[D]]],
+  f: Layer[Output[D], Output[D]],
   quadrature_nodes: Tensor[D],
   weights: Tensor[D],
   loss_weightage: Tensor[D]) extends
   Layer[Output[D], Output[D]](name) {
 
   require(quadrature_nodes.shape(0) == weights.shape(0) && weights.rank == 1)
-  require(loss_weightage.rank == 0 || (loss_weightage.rank == 1 && loss_weightage.shape(0) == f.length))
+  require(loss_weightage.rank == 0)
 
 
-  override val layerType: String = s"QuadratureLoss[${f.map(_.layerType)}]"
+  override val layerType: String = s"QuadratureLoss[${f.layerType}]"
 
   override def forwardWithoutContext(input: Output[D])(implicit mode: Mode): Output[D] = {
 
@@ -44,26 +44,20 @@ case class PDEQuadrature[D: TF: IsNotQuantized](
       tf.constant[D](loss_weightage, loss_weightage.shape, "colocation_error_weight")
     )
 
-    val quadrature_loss =
-      tf.stack(
-        f.map(q => {
-          val output = q.forward(q_nodes)
+    val output = f.forward(q_nodes)
 
-          val rank_output = output.rank
-          val reduce_axes =
-            if(rank_output > 2) Tensor(1 until rank_output)
-            else if(rank_output == 2) Tensor(1)
-            else null
+    val rank_output = output.rank
+    val reduce_axes =
+      if(rank_output > 2) Tensor(1 until rank_output)
+      else if(rank_output == 2) Tensor(1)
+      else null
 
-          if(reduce_axes == null) {
-            output.square.multiply(q_weights).sum[Int]()
-          } else {
-            output.square.sum(reduce_axes).multiply(q_weights).sum[Int]()
-          }
-        }), axis = -1)
-        .multiply(importance)
-        .sum[Int]()
+    val quadrature_loss = if(reduce_axes == null) {
+      output.square.multiply(q_weights).sum[Int]()
+    } else {
+      output.square.sum(reduce_axes).multiply(q_weights).sum[Int]()
+    }
 
-    input.add(quadrature_loss)
+    input.add(quadrature_loss.multiply(importance).sum[Int]())
   }
 }

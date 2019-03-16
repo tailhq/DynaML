@@ -27,7 +27,7 @@ import org.platanios.tensorflow.api.ops.NN.SameConvPadding
 import org.platanios.tensorflow.api.ops.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api._
-import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.DynamicalSystem
+import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.PDESystem
 import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, IsHalfOrFloatOrDouble, IsNotQuantized, TF}
 import org.platanios.tensorflow.api.implicits.helpers.{OutputStructure, OutputToDataType, OutputToShape}
 import org.platanios.tensorflow.api.ops.Output
@@ -114,7 +114,7 @@ private[tensorflow] object Learn {
 
   val model: TFModel.type                    = TFModel
   val tunable_tf_model: TunableTFModel.type  = TunableTFModel
-  val dynamical_system: DynamicalSystem.type = DynamicalSystem
+  val pde_system: PDESystem.type       = PDESystem
 
   def constant[I, D: TF](name: String, t: Tensor[D]): Layer[I, Output[D]] = new Layer[I, Output[D]](name){
 
