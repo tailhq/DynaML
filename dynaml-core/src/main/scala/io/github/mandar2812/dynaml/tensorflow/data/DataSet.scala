@@ -176,7 +176,7 @@ class DataSet[X](val data: Iterable[X]) {
     evOutputStructure: OutputStructure[O]): Dataset[O] =
     tf.data.datasetFromGenerator[O, T, D, S](() => self.map(transformation).data, dataType, shape)
 
-  protected def build[T, O, D, S](
+  protected def build_output[T, O, D, S](
     transformation: DataPipe[Iterable[X], Iterable[O]],
     dataType: D, shape: S)(
     implicit
@@ -190,25 +190,45 @@ class DataSet[X](val data: Iterable[X]) {
       .reduceLeft[Dataset[O]](
       DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r)))
 
+  protected def build_tensor[T, O, D, S](
+    transformation: DataPipe[Iterable[X], Iterable[T]],
+    dataType: D, shape: S)(
+    implicit
+    evTensorToOutput: TensorToOutput.Aux[T, O],
+    evTensorToDataType: TensorToDataType.Aux[T, D],
+    evTensorToShape: TensorToShape.Aux[T, S],
+    evOutputStructure: OutputStructure[O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evOutputToShape: OutputToShape.Aux[O, S]
+  ): Dataset[O] =
+    self
+      .transform(transformation)
+      .map(DataPipe((batch: T) => tf.data.datasetFromTensorSlices(batch)))
+      .reduceLeft[Dataset[O]](
+      DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith[D, S](r)))
+
 
   def build_buffered[T, O, D, S](
     buffer_size: Int,
-    stackOp: DataPipe[Iterable[O], O],
+    convertToTensor: DataPipe[X, T],
+    stackOp: DataPipe[Iterable[T], T],
     dataType: D,
     shape: S = null)(
     implicit
-    convertToOutput: DataPipe[X, O],
+    evTensorToOutput: TensorToOutput.Aux[T, O],
+    evTensorToDataType: TensorToDataType.Aux[T, D],
+    evTensorToShape: TensorToShape.Aux[T, S],
     evOutputStructure: OutputStructure[O],
     evOutputToDataType: OutputToDataType.Aux[O, D],
     evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] = {
 
     val buffer_and_stack =
       DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
-        IterableDataPipe(IterableDataPipe(convertToOutput)) >
+        IterableDataPipe(IterableDataPipe(convertToTensor)) >
         IterableDataPipe(stackOp)
 
 
-    build(buffer_and_stack, dataType, shape)
+    build_tensor[T, O, D, S](buffer_and_stack, dataType, shape)
   }
 
 }

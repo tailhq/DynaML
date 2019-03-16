@@ -28,12 +28,12 @@ class DataSetSpec extends FlatSpec with Matchers {
     assert(odd_numbers.size == max/2 && odd_numbers.data.forall(_ % 2 == 1))
     assert(odd_num.size == max/2 && odd_num.data.forall(_ % 2 == 1))
 
-    val doubleofnumbers = numbers.map((i: Int) => 2*i)
+    val doubleofnumbers = numbers.map(DataPipe((i: Int) => 2*i))
 
-    val tripleofnumbers = numbers.map((i: Int) => 3*i)
+    val tripleofnumbers = numbers.map(DataPipe((i: Int) => 3*i))
 
     assert(
-      doubleofnumbers.data.forall(_ % 2 == 0) &&
+      doubleofnumbers.data.forall((p: Int) => p % 2 == 0) &&
         numbers.map(DataPipe((i: Int) => 2*i)).data.forall(_ % 2 == 0) &&
         numbers.zip(doubleofnumbers).data.forall(c => c._2 == c._1 * 2) &&
         ZipDataSet(numbers, doubleofnumbers).data.forall(c => c._2 == c._1 * 2) &&
@@ -50,7 +50,7 @@ class DataSetSpec extends FlatSpec with Matchers {
       numbers.reduce[Int](addPipe) == numbers.size*(numbers.size + 1)/2 &&
         numbers.reduce[Int](addPipe2) == numbers.size*(numbers.size + 1)/2)
 
-    assert(numbers.transform((d: Iterable[Int]) => d.map(2 * _)).data.forall(_ % 2 == 0))
+    assert(numbers.transform(DataPipe((d: Iterable[Int]) => d.map(2 * _))).data.forall(_ % 2 == 0))
 
     assert(numbers.reduceLeft[Int](addPipe) == numbers.size*(numbers.size + 1)/2)
 
@@ -120,8 +120,6 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     val numbers = dtfdata.dataset(1 to max)
 
-    implicit val convertToOutput: DataPipe[Int, Output[Int]] = DataPipe(Tensor(_).toOutput)
-
     val tf_data1 = numbers.build(
       DataPipe[Int, Tensor[Int]](i => Tensor(i).reshape(Shape(1))),
       INT32, Shape(1))
@@ -134,7 +132,8 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     val tf_data3 = numbers.build_buffered(
       2,
-      DataPipe[Iterable[Output[Int]], Output[Int]](s => tf.concatenate(s.toSeq, 0)),
+      DataPipe[Int, Tensor[Int]](Tensor(_)),
+      DataPipe[Iterable[Tensor[Int]], Tensor[Int]](s => tfi.concatenate(s.toSeq, 0)),
       INT32, Shape(-1)
     )
 

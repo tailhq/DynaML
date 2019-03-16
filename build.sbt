@@ -9,6 +9,8 @@ maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
 packageSummary := "Scala Library/REPL for Machine Learning Research"
 packageDescription := "DynaML is a Scala & JVM Machine Learning toolbox for research, education & industry."
 
+val heapSize = Option(System.getProperty("heap")).getOrElse("4096m")
+
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
 val baseSettings = Seq(
@@ -112,7 +114,7 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-Dlog4j.configuration=log4j.properties"),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
-      "-J-Xmx6096m",
+      s"-J-Xmx$heapSize",
       "-J-Xms64m", 
       "-J-XX:HeapBaseMinAddress=32G"
     ),

@@ -94,6 +94,8 @@ ITT, IDD, ISS](
   evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
   evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
   evTensorToOutput: TensorToOutput.Aux[(IT, TT), (In, Out)],
+  evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+  evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
   evOutputToDataTypeI: OutputToDataType.Aux[In, ID],
   evOutputToDataTypeT: OutputToDataType.Aux[Out, TD],
   evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
@@ -131,14 +133,38 @@ ITT, IDD, ISS](
 
   def train(data: DataSet[(IT, TT)]): Unit = {
 
-    val tf_dataset: Dataset[(In, Out)] = data.build(
-      identityPipe[(IT, TT)],
-      (input._1, target._1),
-      (input._2, target._2))
-      .repeat()
-      .shuffle(data_processing.shuffleBuffer)
-      .batch(data_processing.batchSize)
-      .prefetch(data_processing.prefetchSize)
+    val tf_dataset: Dataset[(In, Out)] = if(concatOpI.isDefined && concatOpT.isDefined) {
+
+      val (concatI, concatT) = (concatOpI.get, concatOpT.get)
+
+      val concatOp = DataPipe((batch: Iterable[(IT, TT)]) => {
+        val (xs, ys) = batch.unzip
+        (concatI(xs), concatT(ys))
+      })
+
+      data.build_buffered[(IT, TT), (In, Out), (ID, TD), (IS, TS)](
+        data_processing.batchSize,
+        identityPipe[(IT, TT)],
+        concatOp,
+        (input._1, target._1),
+        (input._2, target._2))
+        .repeat()
+        .shuffle(data_processing.shuffleBuffer)
+        .batch[(ID, TD), (IS, TS)](data_processing.batchSize)
+        .prefetch(data_processing.prefetchSize)
+    } else {
+      data.build(
+        identityPipe[(IT, TT)],
+        (input._1, target._1),
+        (input._2, target._2))
+        .repeat()
+        .shuffle(data_processing.shuffleBuffer)
+        .batch(data_processing.batchSize)
+        .prefetch(data_processing.prefetchSize)
+    }
+
+
+
 
     if(estimator.isEmpty) {
 
@@ -250,12 +276,12 @@ ITT, IDD, ISS](
 
     val prediction_collection = concatOpI match {
 
-      case None => input_data_set.map((pattern: IT) => infer(pattern))
+      case None => input_data_set.map(DataPipe((pattern: IT) => infer(pattern)))
 
       case Some(concatFunc) => input_data_set
         .grouped(data_processing.batchSize)
-        .map((batch: Seq[IT]) => concatFunc(batch))
-        .map((tensor_batch: IT) => infer(tensor_batch))
+        .map(DataPipe((batch: Seq[IT]) => concatFunc(batch)))
+        .map(DataPipe((tensor_batch: IT) => infer(tensor_batch)))
     }
 
     concatOpO match {
@@ -390,6 +416,8 @@ object TFModel {
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
     evTensorToOutput: TensorToOutput.Aux[(IT, TT), (In, Out)],
+    evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+    evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
     evOutputToDataTypeI: OutputToDataType.Aux[In, ID],
     evOutputToDataTypeT: OutputToDataType.Aux[Out, TD],
     evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],

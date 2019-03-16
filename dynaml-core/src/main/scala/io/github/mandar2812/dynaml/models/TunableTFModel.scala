@@ -274,8 +274,6 @@ object TunableTFModel {
       *
       * @param target Data type and shape of the model outputs/training labels.
       *
-      * @param processTarget A layer which processes the labels/targets before using
-      *                      them for training.
       *
       * @param get_training_config A data pipe which generates a [[TFModel.Config]]
       *                            object from some hyper-parameter assignment.
@@ -309,6 +307,8 @@ object TunableTFModel {
       evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
       evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
       evTensorToOutput: TensorToOutput.Aux[(IT, TT), (In, Out)],
+      evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+      evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
       evOutputToDataTypeI: OutputToDataType.Aux[In, ID],
       evOutputToDataTypeT: OutputToDataType.Aux[Out, TD],
       evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
@@ -354,8 +354,6 @@ object TunableTFModel {
       *
       * @param target Data type and shape of the model outputs/training labels.
       *
-      * @param processTarget A layer which processes the labels/targets before using
-      *                      them for training.
       *
       * @param get_training_config A data pipe which generates a [[TFModel.Config]]
       *                            object from some hyper-parameter assignment.
@@ -388,6 +386,8 @@ object TunableTFModel {
       evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
       evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
       evTensorToOutput: TensorToOutput.Aux[(IT, TT), (In, Out)],
+      evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+      evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
       evOutputToDataTypeI: OutputToDataType.Aux[In, ID],
       evOutputToDataTypeT: OutputToDataType.Aux[Out, TD],
       evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
@@ -436,8 +436,6 @@ object TunableTFModel {
       *
       * @param target Data type and shape of the model outputs/training labels.
       *
-      * @param processTarget A layer which processes the labels/targets before using
-      *                      them for training.
       *
       * @param get_training_config A data pipe which generates a [[TFModel.Config]]
       *                            object from some hyper-parameter assignment.
@@ -474,6 +472,8 @@ object TunableTFModel {
       evOutputToDataTypeI: OutputToDataType.Aux[In, ID],
       evOutputToDataTypeT: OutputToDataType.Aux[Out, TD],
       evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
+      evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+      evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
       evDataTypeToShape: DataTypeToShape.Aux[(ID, TD), (IS, TS)],
       evOutputToShapeI: OutputToShape.Aux[In, IS],
       evOutputToShapeT: OutputToShape.Aux[Out, TS],
@@ -531,6 +531,8 @@ object TunableTFModel {
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
     evTensorToOutput: TensorToOutput.Aux[(IT, TT), (In, Out)],
+    evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+    evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
     evOutputToDataTypeI: OutputToDataType.Aux[In, ID],
     evOutputToDataTypeT: OutputToDataType.Aux[Out, TD],
     evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
@@ -588,6 +590,8 @@ object TunableTFModel {
     evOutputToDataTypeI: OutputToDataType.Aux[In, ID],
     evOutputToDataTypeT: OutputToDataType.Aux[Out, TD],
     evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
+    evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+    evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
     evDataTypeToShape: DataTypeToShape.Aux[(ID, TD), (IS, TS)],
     evOutputToShapeI: OutputToShape.Aux[In, IS],
     evOutputToShapeT: OutputToShape.Aux[Out, TS],
@@ -640,6 +644,8 @@ object TunableTFModel {
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
     evTensorToOutput: TensorToOutput.Aux[(IT, TT), (In, Out)],
+    evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+    evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
     evOutputToDataTypeI: OutputToDataType.Aux[In, ID],
     evOutputToDataTypeT: OutputToDataType.Aux[Out, TD],
     evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
