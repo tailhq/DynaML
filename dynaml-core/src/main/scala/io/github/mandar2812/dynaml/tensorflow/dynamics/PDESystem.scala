@@ -28,54 +28,57 @@ import org.platanios.tensorflow.api._
   * @param graphInstance An optional TensorFlow graph instance to create model in.
   *
   * */
-private[dynaml] class PDESystem(
-  val quantities: Layer[Output[Float], Output[Float]],
-  val dynamics: DifferentialOperator[Output[Float], Output[Float]],
+private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFloatOrDouble](
+  val quantities: Layer[Output[T], Output[U]],
+  val dynamics: DifferentialOperator[Output[T], Output[U]],
   val input_shape: Shape,
   val target_shape: Shape,
-  val data_loss: Layer[(Output[Float], Output[Float]), Output[Float]],
-  quadrature_nodes: Tensor[Float],
-  quadrature_weights: Tensor[Float],
-  quadrature_loss_weightage: Tensor[Float],
+  val data_loss: Layer[(Output[U], Output[U]), Output[L]],
+  quadrature_nodes: Tensor[T],
+  quadrature_weights: Tensor[U],
+  quadrature_loss_weightage: Tensor[U],
   graphInstance: Option[Graph],
   name: String = "Output") {
 
-  protected val observational_error: Layer[(Output[Float], Output[Float]), Output[Float]] =
-    PDESystem.error("ExtObsError", data_loss)
+  protected val observational_error: Layer[(Output[U], Output[U]), Output[L]] =
+    PDESystem.error[U, L]("ExtObsError", data_loss)
 
-  protected val projection = PDESystem.projectOutputs("ProjectOutputs")
+  protected val projection = PDESystem.projectOutputs[U]("ProjectOutputs")
 
-  val system_outputs: Layer[Output[Float], Output[Float]] = quantities
+  val system_outputs: Layer[Output[T], Output[U]] = quantities
 
-  protected val quadrature: PDEQuadrature[Float] =
+  protected val quadrature: PDEQuadrature[T, U, L] =
     PDEQuadrature(
       "ColocationError",
       dynamics(system_outputs),
       quadrature_nodes, quadrature_weights,
       quadrature_loss_weightage)
 
-  val system_variables: Map[String, DifferentialOperator[Output[Float], Output[Float]]] =
+  val system_variables: Map[String, DifferentialOperator[Output[T], Output[U]]] =
     dynamics.variables
 
+  private val dTypeTag = TF[T]
+  private val dTypeTagO = TF[U]
+
   private val data_handles = (
-    tf.learn.Input[Output[Float], FLOAT32, Shape](FLOAT32, Shape(-1) ++ input_shape,  name = "Input"),
-    tf.learn.Input[Output[Float], FLOAT32, Shape](FLOAT32, Shape(-1) ++ target_shape, name = "Outputs")
+    tf.learn.Input[Output[T], DataType[T], Shape](dTypeTag.dataType, Shape(-1) ++ input_shape,  name = "Input"),
+    tf.learn.Input[Output[U], DataType[U], Shape](dTypeTagO.dataType, Shape(-1) ++ target_shape, name = "Outputs")
   )
 
-  val system_variables_mapping: Layer[Output[Float], Map[String, Output[Float]]] =
+  val system_variables_mapping: Layer[Output[T], Map[String, Output[U]]] =
     dtflearn.map_layer("MapVars", system_variables.map(kv => (kv._1, kv._2(system_outputs))))
 
-  protected val output_mapping: Layer[Output[Float], Output[Float]] = system_outputs
+  protected val output_mapping: Layer[Output[T], Output[U]] = system_outputs
 
-  val model_architecture: Layer[Output[Float], PDESystem.ModelOutputs] =
+  val model_architecture: Layer[Output[T], PDESystem.ModelOutputs[U]] =
     dtflearn.bifurcation_layer("CombineOutputsAndVars", output_mapping, system_variables_mapping)
 
-  protected val system_loss: Layer[(PDESystem.ModelOutputs, Output[Float]), Output[Float]] =
+  protected val system_loss: Layer[(PDESystem.ModelOutputs[U], Output[U]), Output[L]] =
     projection >>
       observational_error >>
       quadrature >>
-      tf.learn.Mean[Float]("Loss/Mean") >>
-      tf.learn.ScalarSummary[Float]("Loss/Summary", "Loss")
+      tf.learn.Mean[L]("Loss/Mean") >>
+      tf.learn.ScalarSummary[L]("Loss/Summary", "Loss")
 
   /**
     * Train a neural net based approximation for the
@@ -90,25 +93,25 @@ private[dynaml] class PDESystem(
     * @return A [[PDESystem.Model]] which encapsulates a predictive model of type [[TFModel]]
     * */
   def solve(
-    data: SupervisedDataSet[Tensor[Float], Tensor[Float]],
+    data: SupervisedDataSet[Tensor[T], Tensor[U]],
     trainConfig: TFModel.Config,
     data_processing: TFModel.Ops = TFModel.data_ops(10000, 16, 10),
     inMemory: Boolean = false,
-    concatOpI: Option[DataPipe[Iterable[Tensor[Float]], Tensor[Float]]] = None,
-    concatOpT: Option[DataPipe[Iterable[Tensor[Float]], Tensor[Float]]] = None,
-    concatOpO: Option[DataPipe[Iterable[PDESystem.ModelOutputsT], PDESystem.ModelOutputsT]] = None)
-  : PDESystem.Model = {
+    concatOpI: Option[DataPipe[Iterable[Tensor[T]], Tensor[T]]] = None,
+    concatOpT: Option[DataPipe[Iterable[Tensor[U]], Tensor[U]]] = None,
+    concatOpO: Option[DataPipe[Iterable[PDESystem.ModelOutputsT[U]], PDESystem.ModelOutputsT[U]]] = None)
+  : PDESystem.Model[T, U, L] = {
 
     val model = dtflearn.model[
-      Output[Float], Output[Float], PDESystem.ModelOutputs, Float,
-      Tensor[Float], FLOAT32, Shape,
-      Tensor[Float], FLOAT32, Shape,
-      PDESystem.ModelOutputsT,
-      (FLOAT32, Map[String, FLOAT32]),
+      Output[T], Output[U], PDESystem.ModelOutputs[U], L,
+      Tensor[T], DataType[T], Shape,
+      Tensor[U], DataType[U], Shape,
+      PDESystem.ModelOutputsT[U],
+      (DataType[U], Map[String, DataType[U]]),
       (Shape, Map[String, Shape])](
       model_architecture,
-      (FLOAT32, input_shape),
-      (FLOAT32, target_shape),
+      (dTypeTag.dataType, input_shape),
+      (dTypeTagO.dataType, target_shape),
       system_loss, trainConfig,
       data_processing, inMemory,
       graphInstance, Some(data_handles),
@@ -124,30 +127,29 @@ private[dynaml] class PDESystem(
 
 object PDESystem {
 
-  type ModelOutputs = (Output[Float], Map[String, Output[Float]])
-  type ModelOutputsT = (Tensor[Float], Map[String, Tensor[Float]])
+  type ModelOutputs[T]  = (Output[T], Map[String, Output[T]])
+  type ModelOutputsT[T] = (Tensor[T], Map[String, Tensor[T]])
 
-  protected case class ObservationalError(
+  protected case class ObservationalError[T: TF: IsDecimal, L: TF: IsFloatOrDouble](
     override val name: String,
-    error_measure: Layer[(Output[Float], Output[Float]), Output[Float]]) extends
-    Layer[(Output[Float], Output[Float]), Output[Float]](name) {
+    error_measure: Layer[(Output[T], Output[T]), Output[L]]) extends
+    Layer[(Output[T], Output[T]), Output[L]](name) {
 
     override val layerType: String = "ObservationalError"
 
     override def forwardWithoutContext(
-      input: (Output[Float], Output[Float]))(
-      implicit mode: Mode): Output[Float] = error_measure.forwardWithoutContext(input._1, input._2)
+      input: (Output[T], Output[T]))(
+      implicit mode: Mode): Output[L] = error_measure.forwardWithoutContext(input._1, input._2)
   }
 
-  protected case class ProjectOutputs(override val name: String)
-    extends Layer[
-      ((Output[Float], Map[String, Output[Float]]), Output[Float]),
-      (Output[Float], Output[Float])] {
+  protected case class ProjectOutputs[T: TF: IsDecimal](override val name: String)
+    extends Layer[(ModelOutputs[T], Output[T]), (Output[T], Output[T])] {
+
     override val layerType: String = "ProjectOutputs"
 
     override def forwardWithoutContext(
-      input: ((Output[Float], Map[String, Output[Float]]), Output[Float]))(
-      implicit mode: Mode): (Output[Float], Output[Float]) =
+      input: (ModelOutputs[T], Output[T]))(
+      implicit mode: Mode): (Output[T], Output[T]) =
       (input._1._1, input._2)
   }
 
@@ -162,27 +164,27 @@ object PDESystem {
     * @param variables The unobserved quantities of the system.
     *
     * */
-  case class Model(
+  case class Model[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFloatOrDouble](
     tfModel: TFModel[
-      Output[Float], Output[Float], PDESystem.ModelOutputs, Float,
-      Tensor[Float], FLOAT32, Shape,
-      Tensor[Float], FLOAT32, Shape,
-      PDESystem.ModelOutputsT,
-      (FLOAT32, Map[String, FLOAT32]),
+      Output[T], Output[U], PDESystem.ModelOutputs[U], L,
+      Tensor[T], DataType[T], Shape,
+      Tensor[U], DataType[U], Shape,
+      PDESystem.ModelOutputsT[U],
+      (DataType[U], Map[String, DataType[U]]),
       (Shape, Map[String, Shape])],
     outputs: String,
     variables: Seq[String]) {
 
     private val model_quantities = Seq(outputs) ++ variables
 
-    protected def predict(input: Tensor[Float]): Map[String, Tensor[Float]] = {
+    protected def predict(input: Tensor[T]): Map[String, Tensor[U]] = {
 
       val model_preds = tfModel.predict(input)
 
       Map(outputs -> model_preds._1) ++ model_preds._2
     }
 
-    def predict(quantities: String*)(input: Tensor[Float]): Seq[Tensor[Float]] = {
+    def predict(quantities: String*)(input: Tensor[T]): Seq[Tensor[U]] = {
       require(
         quantities.forall(model_quantities.contains),
         "Each provided quantity should be in the list of model quantities,"+
@@ -200,17 +202,18 @@ object PDESystem {
   val model: Model.type                   = Model
   val projectOutputs: ProjectOutputs.type = ProjectOutputs
 
-  def apply(
-    quantities: Layer[Output[Float], Output[Float]],
-    dynamics: DifferentialOperator[Output[Float], Output[Float]],
+  def apply[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFloatOrDouble](
+    quantities: Layer[Output[T], Output[U]],
+    dynamics: DifferentialOperator[Output[T], Output[U]],
     input: Shape,
     target: Shape,
-    data_loss: Layer[(Output[Float], Output[Float]), Output[Float]],
-    quadrature_nodes: Tensor[Float],
-    weights: Tensor[Float],
-    loss_weightage: Tensor[Float],
-    graphInstance: Option[Graph] = None): PDESystem =
-    new PDESystem(
+    data_loss: Layer[(Output[U], Output[U]), Output[L]],
+    quadrature_nodes: Tensor[T],
+    weights: Tensor[U],
+    loss_weightage: Tensor[U],
+    graphInstance: Option[Graph] = None,
+    name: String = "Output"): PDESystem[T, U, L] =
+    new PDESystem[T, U, L](
       quantities,
       dynamics,
       input,
@@ -219,7 +222,8 @@ object PDESystem {
       quadrature_nodes,
       weights,
       loss_weightage,
-      graphInstance
+      graphInstance,
+      name
     )
   
 }

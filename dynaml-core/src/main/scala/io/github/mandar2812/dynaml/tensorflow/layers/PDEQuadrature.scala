@@ -4,7 +4,6 @@ import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics._
-import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 
 /**
   * <h3>Quadrature for PDE Systems</h3>
@@ -22,13 +21,13 @@ import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
   *                       element of [[f]].
   *
   * */
-case class PDEQuadrature[D: TF: IsNotQuantized](
+case class PDEQuadrature[D: TF: IsNotQuantized, U: TF: IsDecimal, L: TF: IsFloatOrDouble](
   override val name: String,
-  f: Layer[Output[D], Output[D]],
+  f: Layer[Output[D], Output[U]],
   quadrature_nodes: Tensor[D],
-  weights: Tensor[D],
-  loss_weightage: Tensor[D]) extends
-  Layer[Output[D], Output[D]](name) {
+  weights: Tensor[U],
+  loss_weightage: Tensor[U]) extends
+  Layer[Output[L], Output[L]](name) {
 
   require(quadrature_nodes.shape(0) == weights.shape(0) && weights.rank == 1)
   require(loss_weightage.rank == 0)
@@ -36,15 +35,15 @@ case class PDEQuadrature[D: TF: IsNotQuantized](
 
   override val layerType: String = s"QuadratureLoss[${f.layerType}]"
 
-  override def forwardWithoutContext(input: Output[D])(implicit mode: Mode): Output[D] = {
+  override def forwardWithoutContext(input: Output[L])(implicit mode: Mode): Output[L] = {
 
     val (q_nodes, q_weights, importance) = (
       tf.constant[D](quadrature_nodes, quadrature_nodes.shape, "quadrature_nodes"),
-      tf.constant[D](weights, weights.shape, "quadrature_nodal_weights"),
-      tf.constant[D](loss_weightage, loss_weightage.shape, "colocation_error_weight")
+      tf.constant[U](weights, weights.shape, "quadrature_nodal_weights"),
+      tf.constant[U](loss_weightage, loss_weightage.shape, "colocation_error_weight")
     )
 
-    val output = f.forward(q_nodes)
+    val output = f.forwardWithoutContext(q_nodes)
 
     val rank_output = output.rank
     val reduce_axes =
@@ -58,6 +57,6 @@ case class PDEQuadrature[D: TF: IsNotQuantized](
       output.square.sum(reduce_axes).multiply(q_weights).sum[Int]()
     }
 
-    input.add(quadrature_loss.multiply(importance).sum[Int]())
+    input.add(quadrature_loss.multiply(importance).sum[Int]().castTo[L])
   }
 }

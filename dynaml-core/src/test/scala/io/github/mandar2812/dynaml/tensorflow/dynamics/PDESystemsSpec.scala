@@ -116,7 +116,7 @@ class PDESystemsSpec extends FlatSpec with Matchers {
       utils.combine(Seq(weights.map(_.toFloat), weights.map(_.toFloat))).map(_.product):_*
     )
 
-    val wave_system1d = dtflearn.pde_system(
+    val wave_system1d = dtflearn.pde_system[Float, Float, Float](
       function,
       wave_equation, input, output,
       tf.learn.L2Loss[Float, Float]("Loss/L2") >> tf.learn.Mean[Float]("L2/Mean"),
