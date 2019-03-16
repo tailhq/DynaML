@@ -264,7 +264,7 @@ ITT, IDD, ISS](
     check_underlying_estimator()
     concatOpI match {
 
-    case None => Right(input_data_set.map((pattern: IT) => infer(pattern)))
+    case None => Right(input_data_set.map(DataPipe((pattern: IT) => infer(pattern))))
 
     case Some(concatFunc) => Left(infer(concatFunc(input_data_set.data)))
     }

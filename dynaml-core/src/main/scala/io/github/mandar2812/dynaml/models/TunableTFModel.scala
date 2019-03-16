@@ -526,7 +526,8 @@ object TunableTFModel {
     existingGraph: Option[Graph] = None,
     data_handles: Option[TFModel.DataHandles[In, Out]] = None,
     concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
-    concatOpT: Option[DataPipe[Iterable[TT], TT]] = None)(
+    concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
+    concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -557,7 +558,7 @@ object TunableTFModel {
       get_training_config,
       data_processing, inMemory,
       existingGraph, data_handles,
-      concatOpI, concatOpT
+      concatOpI, concatOpT, concatOpO
     )
 
     new TunableTFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](
@@ -582,7 +583,8 @@ object TunableTFModel {
     existingGraph: Option[Graph],
     data_handles: Option[TFModel.DataHandles[In, Out]],
     concatOpI: Option[DataPipe[Iterable[IT], IT]],
-    concatOpT: Option[DataPipe[Iterable[TT], TT]])(
+    concatOpT: Option[DataPipe[Iterable[TT], TT]],
+    concatOpO: Option[DataPipe[Iterable[ITT], ITT]])(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -613,7 +615,7 @@ object TunableTFModel {
       get_training_config,
       data_processing, inMemory,
       existingGraph, data_handles,
-      concatOpI, concatOpT
+      concatOpI, concatOpT, concatOpO
     )
 
     new TunableTFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](
@@ -639,7 +641,8 @@ object TunableTFModel {
     existingGraph: Option[Graph],
     data_handles: Option[TFModel.DataHandles[In, Out]],
     concatOpI: Option[DataPipe[Iterable[IT], IT]],
-    concatOpT: Option[DataPipe[Iterable[TT], TT]])(
+    concatOpT: Option[DataPipe[Iterable[TT], TT]],
+    concatOpO: Option[DataPipe[Iterable[ITT], ITT]])(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -670,7 +673,7 @@ object TunableTFModel {
       get_training_config,
       data_processing, inMemory,
       existingGraph, data_handles,
-      concatOpI, concatOpT
+      concatOpI, concatOpT, concatOpO
     )
 
     new TunableTFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](
