@@ -173,7 +173,7 @@ def apply(
           summarySaveFreq = 5000,
           checkPointFreq = 5000)
       )),
-    dtflearn.model.data_ops(training_data.size/10, training_data.size, 10),
+    dtflearn.model.data_ops(training_data.size/10, training_data.size/4, 10),
     concatOpI = Some(stackOperation),
     concatOpT = Some(stackOperation)
   )
