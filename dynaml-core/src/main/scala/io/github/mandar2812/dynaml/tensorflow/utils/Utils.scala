@@ -23,7 +23,7 @@ import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
 import io.github.mandar2812.dynaml.tensorflow.Learn
 import io.github.mandar2812.dynaml.tensorflow.layers._
 import org.platanios.tensorflow.api.learn.estimators.Estimator
-import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, IsNotQuantized, TF}
+import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, IsReal, IsNotQuantized, TF}
 import org.platanios.tensorflow.api.{Tensor, Shape, Output, tfi, tf}
 import org.platanios.tensorflow.api.implicits.helpers.{OutputToDataType, OutputToShape, OutputToTensor}
 import org.platanios.tensorflow.api.learn.layers.{Compose, Concatenate, Layer, Linear, Conv2D, Map => MapTF, MapSeq}
@@ -37,12 +37,7 @@ object Utils {
   /**
     * Convert a float tensor to a Sequence.
     * */
-  def toDoubleSeq[D : TF: IsNotQuantized](t: Tensor[D]): Iterator[Double] = {
-    val datatype = t.dataType.toString()
-    t.entriesIterator.map(x =>
-      if(datatype == "FLOAT64") x.asInstanceOf[Double]
-      else x.asInstanceOf[Float].toDouble)
-  }
+  def toDoubleSeq[D : TF: IsReal](t: Tensor[D]): Iterator[Double] = t.castTo[Double].entriesIterator
 
 
 

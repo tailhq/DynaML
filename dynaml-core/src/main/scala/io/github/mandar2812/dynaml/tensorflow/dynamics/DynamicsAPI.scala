@@ -58,7 +58,7 @@ private[tensorflow] trait DynamicsAPI {
         override val layerType: String = "Quantity"
 
         override def forwardWithoutContext(input: I)(implicit mode: Mode): Output[D] = {
-          val quantity = tf.variable(name = "value", shape, initializer)
+          val quantity = getParameter(name = "value", shape, initializer)
           quantity
         }
       })

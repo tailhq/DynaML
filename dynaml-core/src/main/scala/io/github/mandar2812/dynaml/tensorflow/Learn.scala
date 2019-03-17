@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow
 
-import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
+import _root_.io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
 import _root_.io.github.mandar2812.dynaml.models.{TFModel, TunableTFModel}
 import io.github.mandar2812.dynaml.tensorflow.layers.{DynamicTimeStepCTRNN, FiniteHorizonCTRNN, FiniteHorizonLinear}
 import org.platanios.tensorflow.api.learn.{Mode, StopCriteria}
@@ -121,6 +121,12 @@ private[tensorflow] object Learn {
     override val layerType: String = "Const"
 
     override def forwardWithoutContext(input: I)(implicit mode: Mode): Output[D] = t
+  }
+
+  def layer[I, J](name: String, pipe: MetaPipe[Mode, I, J]): Layer[I, J] = new Layer[I, J](name) {
+    override val layerType: String = name
+
+    override def forwardWithoutContext(input: I)(implicit mode: Mode): J = pipe(mode)(input)
   }
 
   /**
