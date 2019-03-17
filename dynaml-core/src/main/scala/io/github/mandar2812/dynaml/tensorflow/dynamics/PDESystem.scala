@@ -68,10 +68,8 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
   val system_variables_mapping: Layer[Output[T], Map[String, Output[U]]] =
     dtflearn.map_layer("MapVars", system_variables.map(kv => (kv._1, kv._2(system_outputs))))
 
-  protected val output_mapping: Layer[Output[T], Output[U]] = system_outputs
-
   val model_architecture: Layer[Output[T], PDESystem.ModelOutputs[U]] =
-    dtflearn.bifurcation_layer("CombineOutputsAndVars", output_mapping, system_variables_mapping)
+    dtflearn.bifurcation_layer("CombineOutputsAndVars", system_outputs, system_variables_mapping)
 
   protected val system_loss: Layer[(PDESystem.ModelOutputs[U], Output[U]), Output[L]] =
     projection >>

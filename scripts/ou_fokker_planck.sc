@@ -31,8 +31,8 @@ def batch(
   val targets = points.map(func)
 
   (
-    dtf.tensor_from[Float](Seq.fill(dim)(gridSize + 1).product, dim)(points.flatten.map(_.toFloat)),
-    dtf.tensor_from[Float](Seq.fill(dim)(gridSize + 1).product, 1)(targets)
+    dtf.tensor_f32(Seq.fill(dim)(gridSize + 1).product, dim)(points.flatten.map(_.toFloat):_*),
+    dtf.tensor_f32(Seq.fill(dim)(gridSize + 1).product, 1)(targets:_*)
   )
 }
 
@@ -75,7 +75,7 @@ def apply(
 
   val domain = (-5.0, 5.0)
 
-  val domain_size = domain._2 - domain._1
+  val time_domain = (0d, 10d)
 
   val input_dim: Int = 2
 
@@ -83,7 +83,7 @@ def apply(
 
 
   val diff = 1.5
-  val x0   = domain._2
+  val x0   = domain._2 - 1.5d
   val th   = 0.25
 
   val ground_truth = (tl: Seq[Double]) => {
@@ -98,9 +98,9 @@ def apply(
 
   val (test_data, test_targets) = batch(
     input_dim,
-    Seq(0d, domain._1),
-    Seq(domain._2, domain._2),
-    gridSize = 10,
+    Seq(time_domain._1, domain._1),
+    Seq(time_domain._2, domain._2),
+    gridSize = 20,
     ground_truth)
 
   val input = Shape(2)
@@ -114,7 +114,7 @@ def apply(
   val xs = utils.range(domain._1, domain._2, num_data) ++ Seq(domain._2)
 
 
-  val rv = UniformRV(0d, domain._2)
+  val rv = UniformRV(time_domain._1, time_domain._2)
 
   val training_data =
     dtfdata.supervised_dataset[Tensor[Float], Tensor[Float]](
@@ -129,18 +129,17 @@ def apply(
       }))
 
 
-  val theta = variable[Output[Float], Float]("theta", Shape(), tf.OnesInitializer)
-  val D     = variable[Output[Float], Float]("D", Shape(),     tf.OnesInitializer)
-  val x     = q[Output[Float], Float](
-    name = "X",
-    dtflearn.layer(name = "X", MetaPipe[Mode, Output[Float], Output[Float]](m => xt => xt(---, 1::))),
-    isSystemVariable = false)
+  val x_layer = dtflearn.layer(name = "X", MetaPipe[Mode, Output[Float], Output[Float]](m => xt => xt(---, 1::)))
+
+  val theta = variable[Output[Float], Float](name = "theta", Shape(), tf.RandomTruncatedNormalInitializer(0.01f))
+  val D     = variable[Output[Float], Float](name = "D", Shape(),     tf.RandomTruncatedNormalInitializer(0.01f))
+  val x     = q[Output[Float], Float](name = "X", x_layer, isSystemVariable = false)
 
 
   val ornstein_ulhenbeck = d_t - theta*d_s(x) - D*d_s(d_s)
 
   val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
-  val analysis.GaussianQuadrature(nodes_t, weights_t) = analysis.eightPointGaussLegendre.scale(0d, domain._2)
+  val analysis.GaussianQuadrature(nodes_t, weights_t) = analysis.eightPointGaussLegendre.scale(time_domain._1, time_domain._2)
 
   val nodes_tensor: Tensor[Float] = dtf.tensor_f32(
     nodes.length*nodes_t.length, 2)(
@@ -167,12 +166,7 @@ def apply(
       summary_dir,
       optimizer,
       dtflearn.abs_loss_change_stop(0.001, iterations),
-      Some(
-        dtflearn.model._train_hooks(
-          summary_dir, stepRateFreq = 5000,
-          summarySaveFreq = 5000,
-          checkPointFreq = 5000)
-      )),
+      Some(dtflearn.model._train_hooks(summary_dir))),
     dtflearn.model.data_ops(training_data.size/10, training_data.size/4, 10),
     concatOpI = Some(stackOperation),
     concatOpT = Some(stackOperation)
