@@ -21,12 +21,12 @@ val random = new Random()
 
 def batch(
   dim: Int,
-  min: Double,
-  max: Double,
+  min: Seq[Double],
+  max: Seq[Double],
   gridSize: Int,
   func: Seq[Double] => Float): (Tensor[Float], Tensor[Float]) = {
 
-  val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize) :+ max))
+  val points = utils.combine(Seq.tabulate(dim)(i => utils.range(min(i), max(i), gridSize) :+ max(i)))
 
   val targets = points.map(func)
 
@@ -60,16 +60,20 @@ def plot_field(x: Tensor[Float], t: Tensor[Float]): DelauneySurface = {
 
 
 @main
-def apply(num_data: Int = 100, optimizer: Optimizer = tf.train.AdaDelta(0.01f)) = {
+def apply(
+  num_data: Int = 100,
+  num_neurons: Seq[Int] = Seq(5, 5),
+  optimizer: Optimizer = tf.train.Adam(0.01f),
+  iterations: Int = 50000) = {
 
   val session = Session()
 
 
   val tempdir = home/"tmp"
 
-  val summary_dir = tempdir/s"dtf_wave1d_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
+  val summary_dir = tempdir/s"dtf_fokker_planck_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
-  val domain = (0.0, 5.0)
+  val domain = (-5.0, 5.0)
 
   val domain_size = domain._2 - domain._1
 
@@ -78,9 +82,9 @@ def apply(num_data: Int = 100, optimizer: Optimizer = tf.train.AdaDelta(0.01f)) 
   val output_dim: Int = 1
 
 
-  val diff = 6.0
+  val diff = 1.5
   val x0   = domain._2
-  val th   = 3.0
+  val th   = 0.25
 
   val ground_truth = (tl: Seq[Double]) => {
     val (t, x) = (tl.head, tl.last)
@@ -90,26 +94,27 @@ def apply(num_data: Int = 100, optimizer: Optimizer = tf.train.AdaDelta(0.01f)) 
   }
 
   val f1 = (l: Double) => if(l == x0) 1d else 0d
-  val f2 = (l: Double) => math.cos(2*math.Pi*l/domain_size)
 
 
-  val (test_data, test_targets) = batch(input_dim, domain._1, domain._2, gridSize = 10, ground_truth)
+  val (test_data, test_targets) = batch(
+    input_dim,
+    Seq(0d, domain._1),
+    Seq(domain._2, domain._2),
+    gridSize = 10,
+    ground_truth)
 
   val input = Shape(2)
 
   val output = Shape(1)
 
 
-  val function  =
-    dtflearn.feedforward[Float](num_units = 5, useBias = true)(id = 1) >>
-      tf.learn.Sigmoid("Act_1") >>
-      dtflearn.feedforward[Float](num_units = 1, useBias = false)(id = 2)
+  val function  = dtflearn.feedforward_stack[Float]((i: Int) => tf.learn.Sigmoid(s"Act_$i"))(num_neurons ++ Seq(1))
 
 
   val xs = utils.range(domain._1, domain._2, num_data) ++ Seq(domain._2)
 
 
-  val rv = UniformRV(domain._1, domain._2)
+  val rv = UniformRV(0d, domain._2)
 
   val training_data =
     dtfdata.supervised_dataset[Tensor[Float], Tensor[Float]](
@@ -135,15 +140,16 @@ def apply(num_data: Int = 100, optimizer: Optimizer = tf.train.AdaDelta(0.01f)) 
   val ornstein_ulhenbeck = d_t - theta*d_s(x) - D*d_s(d_s)
 
   val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
+  val analysis.GaussianQuadrature(nodes_t, weights_t) = analysis.eightPointGaussLegendre.scale(0d, domain._2)
 
   val nodes_tensor: Tensor[Float] = dtf.tensor_f32(
-    nodes.length*nodes.length, 2)(
-    utils.combine(Seq(nodes.map(_.toFloat), nodes.map(_.toFloat))).flatten:_*
+    nodes.length*nodes_t.length, 2)(
+    utils.combine(Seq(nodes_t.map(_.toFloat), nodes.map(_.toFloat))).flatten:_*
   )
 
   val weights_tensor: Tensor[Float] = dtf.tensor_f32(
-    nodes.length*nodes.length)(
-    utils.combine(Seq(weights.map(_.toFloat), weights.map(_.toFloat))).map(_.product):_*
+    nodes.length*nodes_t.length)(
+    utils.combine(Seq(weights_t.map(_.toFloat), weights.map(_.toFloat))).map(_.product):_*
   )
 
   val wave_system1d = dtflearn.pde_system[Float, Float, Float](
@@ -160,7 +166,7 @@ def apply(num_data: Int = 100, optimizer: Optimizer = tf.train.AdaDelta(0.01f)) 
     dtflearn.model.trainConfig(
       summary_dir,
       optimizer,
-      dtflearn.abs_loss_change_stop(0.001, 20000),
+      dtflearn.abs_loss_change_stop(0.001, iterations),
       Some(
         dtflearn.model._train_hooks(
           summary_dir, stepRateFreq = 5000,
