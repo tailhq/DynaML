@@ -73,6 +73,7 @@ private[tensorflow] object Learn {
   val seq_layer: layers.SeqLayer.type                 = layers.SeqLayer
   val array_layer: layers.ArrayLayer.type             = layers.ArrayLayer
   val map_layer: layers.MapLayer.type                 = layers.MapLayer
+  val scoped_map_layer: layers.ScopedMapLayer.type    = layers.ScopedMapLayer
   val combined_layer: layers.CombinedLayer.type       = layers.CombinedLayer
   val combined_array_layer
   : layers.CombinedArrayLayer.type                    = layers.CombinedArrayLayer
@@ -143,8 +144,9 @@ private[tensorflow] object Learn {
     num_units: Int,
     useBias: Boolean = true,
     weightsInitializer: Initializer = RandomNormalInitializer(),
-    biasInitializer: Initializer = RandomNormalInitializer())(id: Int): Linear[T] =
-    tf.learn.Linear[T]("Linear_"+id, num_units, useBias, weightsInitializer, biasInitializer)
+    biasInitializer: Initializer = RandomNormalInitializer(),
+    tag: String = "Linear")(id: Int): Linear[T] =
+    tf.learn.Linear[T](name = s"${tag}_$id", num_units, useBias, weightsInitializer, biasInitializer)
 
 
   def activation_generator[T: TF](activations: Seq[String => Layer[Output[T], Output[T]]])
@@ -170,9 +172,10 @@ private[tensorflow] object Learn {
     starting_index: Int = 1,
     useBias: Boolean = true,
     weightsInitializer: Initializer = RandomNormalInitializer(),
-    biasInitializer: Initializer = RandomNormalInitializer()): Layer[Output[T], Output[T]] =
+    biasInitializer: Initializer = RandomNormalInitializer(),
+    tag: String = "Linear"): Layer[Output[T], Output[T]] =
     layer_sizes
-      .map(layer_size => dtflearn.feedforward[T](layer_size, useBias, weightsInitializer, biasInitializer) _)
+      .map(layer_size => dtflearn.feedforward[T](layer_size, useBias, weightsInitializer, biasInitializer, tag) _)
       .zipWithIndex
       .map(li =>
         if(li._2 < layer_sizes.length - 1) li._1(starting_index + li._2) >> get_act(starting_index + li._2)

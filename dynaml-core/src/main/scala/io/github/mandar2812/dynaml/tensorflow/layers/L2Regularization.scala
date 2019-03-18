@@ -24,7 +24,8 @@ import org.platanios.tensorflow.api.core.types.{IsNotQuantized, IsReal, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 
-
+sealed abstract class Regularization[D: TF: IsNotQuantized](override val name: String)
+  extends Layer[Output[D], Output[D]](name)
 
 case class L2Regularization[D: TF: IsNotQuantized](
   scopes: Seq[String],
@@ -33,7 +34,7 @@ case class L2Regularization[D: TF: IsNotQuantized](
   shapes: Seq[Shape],
   reg: Double = 0.01,
   override val name: String = "L2Reg") extends
-  Layer[Output[D], Output[D]](name) {
+  Regularization[D](name) {
 
   override val layerType: String = s"L2Reg[gamma:$reg]"
 
@@ -45,8 +46,7 @@ case class L2Regularization[D: TF: IsNotQuantized](
     val weights = names.zip(scopes).zip(dataTypes.zip(shapes)).map(n =>
       tf.updatedVariableScope(
         variableScope = tf.currentVariableScope.copy(name = n._1._2),
-        reuse = tf.ReuseExistingVariableOnly/*,
-        isPure = true*/) {
+        reuse = tf.ReuseExistingVariableOnly) {
         tf.variable[D](n._1._1, shape = n._2._2, reuse = tf.ReuseExistingVariableOnly)
       }
     )
@@ -68,8 +68,8 @@ case class L1Regularization[D: TF: IsNotQuantized: IsReal](
   dataTypes: Seq[String],
   shapes: Seq[Shape],
   reg: Double = 0.01,
-  override val name: String = "L2Reg") extends
-  Layer[Output[D], Output[D]](name) {
+  override val name: String = "L1Reg") extends
+  Regularization[D](name) {
 
   override val layerType: String = s"L1Reg[gamma:$reg]"
 
@@ -81,8 +81,7 @@ case class L1Regularization[D: TF: IsNotQuantized: IsReal](
     val weights = names.zip(scopes).zip(dataTypes.zip(shapes)).map(n =>
       tf.updatedVariableScope(
         variableScope = tf.currentVariableScope.copy(name = n._1._2),
-        reuse = tf.ReuseExistingVariableOnly,
-        isPure = true) {
+        reuse = tf.ReuseExistingVariableOnly) {
         tf.variable[D](n._1._1, shape = n._2._2, reuse = tf.ReuseExistingVariableOnly)
       }
     )

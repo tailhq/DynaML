@@ -91,7 +91,7 @@ abstract class TensorOperator[I, D: TF: IsNotQuantized](override val name: Strin
     AddTensorOperator(
       self,
       MultTensorOperator[I, D](
-        Constant[I, D]("-1", Tensor(-1).reshape(Shape()).castTo[D]), other
+        Constant[I, D](name = "-1", Tensor(-1).reshape(Shape()).castTo[D]), other
       )
     )
 
@@ -112,16 +112,16 @@ abstract class TensorOperator[I, D: TF: IsNotQuantized](override val name: Strin
 }
 
 
-private[dynamics] case class IdentityOperator[D: TF: IsNotQuantized](
-  override val name: String) extends
-  TensorOperator[Output[D], D](name) {
+private[dynamics] case class IdentityOperator[D: TF: IsNotQuantized, U: TF: IsNotQuantized](
+  override val name: String = "I") extends
+  TensorOperator[Output[D], U](name) {
 
   self =>
 
-  override protected[dynamics] def sources: Map[String, Option[DifferentialOperator[Output[D], Output[D]]]] =
+  override protected[dynamics] def sources: Map[String, Option[DifferentialOperator[Output[D], Output[U]]]] =
     Map(self.name -> None)
 
-  override def run(data: Layer[Output[D], Output[D]]): Layer[Output[D], Output[D]] = data
+  override def run(data: Layer[Output[D], Output[U]]): Layer[Output[D], Output[U]] = data
 }
 
 /**
@@ -182,13 +182,13 @@ private[dynamics] case class ComposedOperator[I, D: TF: IsNotQuantized](
 private[dynamics] case class MultTensorOperator[I, D: TF: IsNotQuantized](
   operator1: DifferentialOperator[I, Output[D]],
   operator2: DifferentialOperator[I, Output[D]]) extends
-  TensorOperator[I, D](s"Mult[${operator1.name}, ${operator2.name}]") {
+  TensorOperator[I, D](s"OpMult[${operator1.name}, ${operator2.name}]") {
 
   override def run(data: Layer[I, Output[D]]): Layer[I, Output[D]] = {
     val layer1 = operator1(data)
     val layer2 = operator2(data)
-    Learn.combined_layer(s"OperatorMult_${layer1.name}-${layer2.name}_", Seq(layer1, layer2)) >>
-      Learn.mult_seq(s"MultSeq_${layer1.name}-${layer2.name}_")
+    Learn.combined_layer(s"OpMult_${layer1.name}-${layer2.name}_", Seq(layer1, layer2)) >>
+      Learn.mult_seq(s"SeqProd_${layer1.name}-${layer2.name}_")
   }
 
   protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output[D]]]] =
@@ -205,7 +205,7 @@ private[dynamics] case class MultTensorOperator[I, D: TF: IsNotQuantized](
 private[dynamics] case class AddTensorOperator[I, D: TF: IsNotQuantized](
   operator1: DifferentialOperator[I, Output[D]],
   operator2: DifferentialOperator[I, Output[D]]) extends
-  TensorOperator[I, D](s"OperatorAdd[${operator1.name}, ${operator2.name}]") {
+  TensorOperator[I, D](s"OpAdd[${operator1.name}, ${operator2.name}]") {
 
   override def run(data: Layer[I, Output[D]]): Layer[I, Output[D]] = {
 
@@ -213,8 +213,8 @@ private[dynamics] case class AddTensorOperator[I, D: TF: IsNotQuantized](
 
     val layer2 = operator2(data)
 
-    Learn.combined_layer(s"OperatorAdd_${layer1.name}-${layer2.name}_", Seq(layer1, layer2)) >>
-      Learn.sum_seq(s"SumSeq_${layer1.name}-${layer2.name}_")
+    Learn.combined_layer(s"OpAdd_${layer1.name}-${layer2.name}_", Seq(layer1, layer2)) >>
+      Learn.sum_seq(s"SeqSum_${layer1.name}-${layer2.name}_")
   }
 
   protected[dynamics] override def sources: Map[String, Option[DifferentialOperator[I, Output[D]]]] =
@@ -225,7 +225,7 @@ private[dynamics] case class AddTensorOperator[I, D: TF: IsNotQuantized](
 private[dynamics] case class MatrixMultOperator[I, D: TF: IsNotQuantized](
   operator1: DifferentialOperator[I, Output[D]],
   operator2: DifferentialOperator[I, Output[D]])
-  extends TensorOperator[I, D](s"MatMul[${operator1.name}, ${operator2.name}]") {
+  extends TensorOperator[I, D](s"OpMatMul[${operator1.name}, ${operator2.name}]") {
 
   override protected[dynamics] def sources: Map[String, Option[DifferentialOperator[I, Output[D]]]] =
     operator1.sources ++ operator2.sources
@@ -236,7 +236,7 @@ private[dynamics] case class MatrixMultOperator[I, D: TF: IsNotQuantized](
     val layer2 = operator2(data)
 
     Learn.combined_layer(s"MatMul_${layer1.name}-${layer2.name}_", Seq(layer1, layer2)) >>
-      new Layer[Seq[Output[D]], Output[D]](s"MatMulOp_${layer1.name}_${layer2.name}_") {
+      new Layer[Seq[Output[D]], Output[D]](s"OpMatMul_${layer1.name}_${layer2.name}_") {
 
         override val layerType: String = "MatMul"
 
@@ -251,7 +251,7 @@ private[dynamics] case class TensorDotOperator[I, D: TF: IsNotQuantized](
   operator1: DifferentialOperator[I, Output[D]],
   operator2: DifferentialOperator[I, Output[D]],
   axes1: Seq[Int], axes2: Seq[Int]) extends
-  TensorOperator[I, D](s"TensorDot[(${operator1.name}, $axes1)," + s"(${operator2.name}, $axes2)]") {
+  TensorOperator[I, D](s"OpTDot[(${operator1.name}, $axes1)," + s"(${operator2.name}, $axes2)]") {
 
   override protected[dynamics] def sources: Map[String, Option[DifferentialOperator[I, Output[D]]]] =
     operator1.sources ++ operator2.sources
@@ -261,7 +261,7 @@ private[dynamics] case class TensorDotOperator[I, D: TF: IsNotQuantized](
     val (layer1, layer2) = (operator1(data), operator2(data))
 
     Learn.combined_layer(s"TensorDot_${layer1.name}-${layer2.name}_", Seq(layer1, layer2)) >>
-      new Layer[Seq[Output[D]], Output[D]](s"TensorDotOp_${layer1.name}_${layer2.name}_") {
+      new Layer[Seq[Output[D]], Output[D]](s"OpTDot_${layer1.name}_${layer2.name}_") {
         override val layerType: String = "TensorDot"
 
         override def forwardWithoutContext(input: Seq[Output[D]])(implicit mode: Mode): Output[D] =

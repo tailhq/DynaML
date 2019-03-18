@@ -141,11 +141,38 @@ case class MapLayer[K, T, R: ClassTag](
   layers: Map[K, Layer[T, R]]) extends
   Layer[T, Map[K, R]](name) {
 
+  /*require(
+    layers.nonEmpty,
+    "In a Map Layer, there must be atleast one key-value layer tuple.")*/
+
   override val layerType: String = s"Map[${layers.map(kv => (kv._1.toString, kv._2.layerType)).mkString(",")}]"
 
   override def forwardWithoutContext(input: T)(implicit mode: Mode): Map[K, R] =
     layers.map(c => (c._1, c._2.forwardWithoutContext(input)))
 }
+
+case class ScopedMapLayer[K, T, R: ClassTag](
+  override val name: String,
+  layers: Map[K, Layer[T, R]],
+  scopes: Seq[String]) extends
+  Layer[T, Map[K, R]](name) {
+
+  require(
+    scopes.length == layers.size,
+    "Number of scopes in a Scoped Map Layer must be equal to the number of layers")
+
+  override val layerType: String =
+    s"ScopedMap[${layers.map(kv => (kv._1.toString, kv._2.layerType)).mkString(",")}]"
+
+  override def forwardWithoutContext(input: T)(implicit mode: Mode): Map[K, R] =
+    layers.zip(scopes).map(c =>
+      tf.updatedVariableScope(
+        variableScope = tf.currentVariableScope.copy(name = c._2),
+        reuse = tf.ReuseExistingVariableOnly){
+        (c._1._1, c._1._2.forwardWithoutContext(input))
+      })
+}
+
 
 /**
   * Combine a collection of layers into a layer which maps

@@ -37,10 +37,13 @@ import org.platanios.tensorflow.api.ops.variables.Initializer
   * */
 private[tensorflow] trait DynamicsAPI {
 
-  val identityOperator: IdentityOperator.type       = IdentityOperator
+  type Operator[I, J]                               = DifferentialOperator[I, J]
+  type TensorOp[I, T]                               = TensorOperator[I, T]
+
+  val I: IdentityOperator.type                      = IdentityOperator
   val jacobian: Gradient[Float]                     = Gradient[Float]
   val ∇ : Gradient[Float]                           = Gradient[Float]
-  val hessian: TensorOperator[Output[Float], Float] = ∇(∇)
+  val hessian: TensorOp[Output[Float], Float]       = ∇(∇)
   val source: SourceOperator.type                   = SourceOperator
   val constant: Constant.type                       = Constant
 

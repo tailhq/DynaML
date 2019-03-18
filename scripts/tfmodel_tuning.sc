@@ -43,7 +43,7 @@ val (net_layer_sizes, layer_shapes, layer_parameter_names, layer_datatypes) =
 
 val scope = dtfutils.get_scope(architecture) _
 
-val layer_scopes = layer_parameter_names.map(n => scope(n.split("/").last))
+val layer_scopes = layer_parameter_names.map(n => scope(n.split("/").head))
 
 val loss_func_generator = (h: Map[String, Double]) => {
   tf.learn.L2Loss[Double, Double]("Loss/L2") >>

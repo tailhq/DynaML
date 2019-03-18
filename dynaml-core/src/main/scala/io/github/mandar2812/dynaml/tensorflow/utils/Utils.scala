@@ -41,6 +41,8 @@ object Utils {
 
 
 
+  def process_scope(s: String): String = if(s.isEmpty) "" else s"$s/"
+
   /**
     * Find out the name scope of a layer which is part
     * of a larger architecture.
@@ -52,8 +54,6 @@ object Utils {
   def get_scope(
     architecture: Layer[_, _])(
     layer_name: String): String = {
-
-    def process_scope(s: String): String = if(s.isEmpty) "" else s"$s/"
 
     def scope_search(lstack: Seq[Layer[_, _]], scopesAcc: Seq[String]): String = lstack match {
 
@@ -100,6 +100,10 @@ object Utils {
 
       case MapLayer(name, ls) :: tail =>
         scope_search(ls.values.toSeq ++ tail, Seq.fill(ls.size)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+
+      //TODO: Need to test this part!!
+      case ScopedMapLayer(name, ls, scopes) :: tail =>
+        scope_search(ls.values.toSeq ++ tail, scopes ++ scopesAcc.tail)
 
       case BifurcationLayer(name, l1, l2) :: tail =>
         scope_search(Seq(l1, l2) ++ tail, Seq.fill(2)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)

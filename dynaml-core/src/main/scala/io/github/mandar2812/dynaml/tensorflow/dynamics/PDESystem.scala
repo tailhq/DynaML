@@ -3,18 +3,19 @@ package io.github.mandar2812.dynaml.tensorflow.dynamics
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.models.TFModel
 import io.github.mandar2812.dynaml.tensorflow._
-import io.github.mandar2812.dynaml.tensorflow.layers.PDEQuadrature
+import io.github.mandar2812.dynaml.tensorflow.layers.{PDEQuadrature, Regularization, L2Regularization, L1Regularization}
 import io.github.mandar2812.dynaml.tensorflow.data._
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api._
 
+//TODO: Use variable contexts for accessing system sources/epistemic quantities
 /**
   *
   * <h3>Dynamical Systems</h3>
   * <h4>Forecasting, System Identification and Design</h4>
   *
-  * @param quantities A map containing quantity names and their associated function approximations.
+  * @param function A map containing quantity names and their associated function approximations.
   * @param dynamics A system of differential operators, representing the system dynamics
   * @param input_shape The data type and shape of the input tensor.
   * @param target_shape The data types and shapes of the outputs and the latent variables.
@@ -29,7 +30,7 @@ import org.platanios.tensorflow.api._
   *
   * */
 private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFloatOrDouble](
-  val quantities: Layer[Output[T], Output[U]],
+  val function: Layer[Output[T], Output[U]],
   val dynamics: DifferentialOperator[Output[T], Output[U]],
   val input_shape: Shape,
   val target_shape: Shape,
@@ -38,24 +39,39 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
   quadrature_weights: Tensor[U],
   quadrature_loss_weightage: Tensor[U],
   graphInstance: Option[Graph],
-  name: String = "Output") {
+  val reg_f: Option[Regularization[L]] = None,
+  val reg_v: Option[Regularization[L]] = None,
+  name: String = "Output",
+  system_name: Option[String] = None) {
 
   protected val observational_error: Layer[(Output[U], Output[U]), Output[L]] =
     PDESystem.error[U, L]("ExtObsError", data_loss)
 
-  protected val projection = PDESystem.projectOutputs[U]("ProjectOutputs")
+  protected val projection: Layer[(PDESystem.ModelOutputs[U], Output[U]), (Output[U], Output[U])] =
+    PDESystem.projectOutputs[U]("ProjectOutputs")
 
-  val system_outputs: Layer[Output[T], Output[U]] = quantities
+  val system_outputs: PDESystem.ModelLayer[T, U]   = function
+  val system_residuals: PDESystem.ModelLayer[T, U] = dynamics(system_outputs)
+  val system_variables: PDESystem.VarMap[T, U]     = dynamics.variables.map(kv => (kv._1, kv._2(system_outputs)))
+
+  private val var_scope =
+    DataPipe[String, String](dtfutils.get_scope(system_residuals)) >
+      DataPipe[String, String](dtfutils.process_scope)
+
+  val variable_scopes: Seq[String] =
+    system_variables
+      .values
+      .toSeq
+      .map(v => s"${var_scope(v.name)}${v.name}")
 
   protected val quadrature: PDEQuadrature[T, U, L] =
     PDEQuadrature(
       "ColocationError",
-      dynamics(system_outputs),
+      system_residuals,
       quadrature_nodes, quadrature_weights,
       quadrature_loss_weightage)
 
-  val system_variables: Map[String, DifferentialOperator[Output[T], Output[U]]] =
-    dynamics.variables
+
 
   private val dTypeTag = TF[T]
   private val dTypeTagO = TF[U]
@@ -66,17 +82,25 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
   )
 
   val system_variables_mapping: Layer[Output[T], Map[String, Output[U]]] =
-    dtflearn.map_layer("MapVars", system_variables.map(kv => (kv._1, kv._2(system_outputs))))
+    dtflearn.scoped_map_layer("MapVars", system_variables, variable_scopes)
 
   val model_architecture: Layer[Output[T], PDESystem.ModelOutputs[U]] =
-    dtflearn.bifurcation_layer("CombineOutputsAndVars", system_outputs, system_variables_mapping)
+    dtflearn.bifurcation_layer(
+      if(system_name.isDefined) system_name.get else "CombinedOutputsAndVars",
+      system_outputs,
+      system_variables_mapping)
+
+  private val primary_loss = projection >> observational_error >> quadrature
+
+  private val regularization_f = PDESystem.regularization(model_architecture, reg_f)
+  private val regularization_v = PDESystem.regularization(variable_scopes, reg_v)
 
   protected val system_loss: Layer[(PDESystem.ModelOutputs[U], Output[U]), Output[L]] =
-    projection >>
-      observational_error >>
-      quadrature >>
-      tf.learn.Mean[L]("Loss/Mean") >>
-      tf.learn.ScalarSummary[L]("Loss/Summary", "Loss")
+    primary_loss >>
+      regularization_f >>
+      regularization_v >>
+      tf.learn.Mean[L](name = "Loss/Mean") >>
+      tf.learn.ScalarSummary[L](name = "Loss/Summary", tag = "Loss")
 
   /**
     * Train a neural net based approximation for the
@@ -125,8 +149,48 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
 
 object PDESystem {
 
+  type ModelLayer[T, U] = Layer[Output[T], Output[U]]
+  type VarMap[T, U]     = Map[String, ModelLayer[T, U]]
   type ModelOutputs[T]  = (Output[T], Map[String, Output[T]])
   type ModelOutputsT[T] = (Tensor[T], Map[String, Tensor[T]])
+
+  def modify_reg[L: TF: IsFloatOrDouble](
+    model_architecture: Layer[_, _],
+    reg: Regularization[L]) = reg match {
+
+    case l2reg: L2Regularization[L] =>
+      l2reg.copy[L](
+        scopes = l2reg.names.map(n => dtfutils.get_scope(model_architecture)(n.split("/").head)))
+
+    case l1reg: L1Regularization[L] =>
+      l1reg.copy[L](
+        scopes = l1reg.names.map(n => dtfutils.get_scope(model_architecture)(n.split("/").head)))
+  }
+
+  def modify_reg[L: TF: IsFloatOrDouble](
+    scopes: Seq[String],
+    reg: Regularization[L]) = reg match {
+
+    case l2reg: L2Regularization[L] =>
+      l2reg.copy[L](scopes = scopes)
+
+    case l1reg: L1Regularization[L] =>
+      l1reg.copy[L](scopes = scopes)
+  }
+
+  def regularization[L: TF: IsFloatOrDouble](
+    s: Seq[String],
+    reg: Option[Regularization[L]]): Layer[Output[L], Output[L]] = reg match {
+    case None => dtflearn.identity[Output[L]]("Id")
+    case Some(r) => modify_reg(s, r)
+  }
+
+  def regularization[L: TF: IsFloatOrDouble](
+    arch: Layer[_, _],
+    reg: Option[Regularization[L]]): Layer[Output[L], Output[L]] = reg match {
+    case None => dtflearn.identity[Output[L]]("Id")
+    case Some(r) => modify_reg(arch, r)
+  }
 
   protected case class ObservationalError[T: TF: IsDecimal, L: TF: IsFloatOrDouble](
     override val name: String,
@@ -210,7 +274,10 @@ object PDESystem {
     weights: Tensor[U],
     loss_weightage: Tensor[U],
     graphInstance: Option[Graph] = None,
-    name: String = "Output"): PDESystem[T, U, L] =
+    reg_f: Option[Regularization[L]] = None,
+    reg_v: Option[Regularization[L]] = None,
+    name: String = "Output",
+    system_name: Option[String] = None): PDESystem[T, U, L] =
     new PDESystem[T, U, L](
       quantities,
       dynamics,
@@ -221,7 +288,8 @@ object PDESystem {
       weights,
       loss_weightage,
       graphInstance,
-      name
+      reg_f, reg_v,
+      name, system_name
     )
   
 }
