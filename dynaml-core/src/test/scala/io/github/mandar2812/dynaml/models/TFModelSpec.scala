@@ -60,33 +60,32 @@ class TFModelSpec extends FlatSpec with Matchers {
       tf.learn.Mean[Double]("Loss/Mean") >>
       tf.learn.ScalarSummary[Double]("Loss/ModelLoss", "ModelLoss")
 
-
-    val stackOperationI =
-      DataPipe[Iterable[Tensor[Double]], Tensor[Double]](bat => tfi.concatenate(bat.toSeq, axis = 0))
-
     val regression_model = dtflearn.model[
       Output[Double], Output[Double], Output[Double], Double,
       Tensor[Double], FLOAT64, Shape,
       Tensor[Double], FLOAT64, Shape,
-      Tensor[Double], FLOAT64, Shape](
-      arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)),
-      loss,
-      dtflearn.model.trainConfig(
-        summary_dir,
-        tf.train.Adam(0.1f),
-        dtflearn.rel_loss_change_stop(0.05, 5000),
-        Some(
-          dtflearn.model._train_hooks(
-            summary_dir, stepRateFreq = 1000,
-            summarySaveFreq = 1000,
-            checkPointFreq = 1000)
-        )),
-      dtflearn.model.data_ops(5000, 16, 10),
-      concatOpI = Some(stackOperationI),
-      concatOpT = Some(stackOperationI)
-    )
+      Tensor[Double], FLOAT64, Shape](arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)), loss)
 
-    regression_model.train(tf_dataset.training_dataset)
+    val train_config = dtflearn.model.trainConfig(
+      summary_dir,
+      dtflearn.model.data_ops(
+        shuffleBuffer = 5000,
+        batchSize = 16,
+        prefetchSize = 10,
+        concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
+        concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
+        concatOpO = Some(dtfpipe.EagerConcatenate[Double]())),
+      tf.train.Adam(0.1f),
+      dtflearn.rel_loss_change_stop(0.05, 5000),
+      Some(
+        dtflearn.model._train_hooks(
+          summary_dir, stepRateFreq = 1000,
+          summarySaveFreq = 1000,
+          checkPointFreq = 1000)
+      ))
+
+
+    regression_model.train(tf_dataset.training_dataset, train_config)
 
     val test_pred = regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1))).scalar
 

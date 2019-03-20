@@ -122,13 +122,14 @@ class PDESystemsSpec extends FlatSpec with Matchers {
       tf.learn.L2Loss[Float, Float]("Loss/L2") >> tf.learn.Mean[Float]("L2/Mean"),
       nodes_tensor, weights_tensor, Tensor(1.0f).reshape(Shape()))
 
-
-    val stackOperation = DataPipe[Iterable[Tensor[Float]], Tensor[Float]](bat => tfi.concatenate(bat.toSeq, axis = 0))
-
     val wave_model1d = wave_system1d.solve(
       training_data,
       dtflearn.model.trainConfig(
         summary_dir,
+        dtflearn.model.data_ops(
+          training_data.size/10, training_data.size, 10,
+          concatOpI = Some(dtfpipe.EagerConcatenate[Float]()),
+          concatOpT = Some(dtfpipe.EagerConcatenate[Float]())),
         tf.train.Adam(0.001f),
         dtflearn.abs_loss_change_stop(0.0001, 5000),
         Some(
@@ -136,10 +137,7 @@ class PDESystemsSpec extends FlatSpec with Matchers {
             summary_dir, stepRateFreq = 1000,
             summarySaveFreq = 1000,
             checkPointFreq = 1000)
-        )),
-      dtflearn.model.data_ops(training_data.size/10, training_data.size, 10),
-      concatOpI = Some(stackOperation),
-      concatOpT = Some(stackOperation)
+        ))
     )
 
     val predictions = wave_model1d.predict("Output")(test_data).head

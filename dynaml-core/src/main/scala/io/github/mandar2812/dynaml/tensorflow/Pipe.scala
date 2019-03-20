@@ -10,6 +10,22 @@ import org.platanios.tensorflow.api.ops.Image.DCTMethod
 
 private[tensorflow] object Pipe {
 
+  case class EagerStack[T: TF](axis: Int = 0) extends DataPipe[Iterable[Tensor[T]], Tensor[T]] {
+    override def run(data: Iterable[Tensor[T]]): Tensor[T] = tfi.stack(data.toSeq, axis)
+  }
+
+  case class EagerConcatenate[T: TF](axis: Int = 0) extends DataPipe[Iterable[Tensor[T]], Tensor[T]] {
+    override def run(data: Iterable[Tensor[T]]): Tensor[T] = tfi.concatenate(data.toSeq, axis)
+  }
+
+  case class LazyStack[T: TF](axis: Int = 0) extends DataPipe[Iterable[Output[T]], Output[T]] {
+    override def run(data: Iterable[Output[T]]): Output[T] = tf.stack(data.toSeq, axis)
+  }
+
+  case class LazyConcatenate[T: TF](axis: Int = 0) extends DataPipe[Iterable[Output[T]], Output[T]] {
+    override def run(data: Iterable[Output[T]]): Output[T] = tf.concatenate(data.toSeq, axis)
+  }
+
   /**
     * Read a file into a String Tensor
     * */

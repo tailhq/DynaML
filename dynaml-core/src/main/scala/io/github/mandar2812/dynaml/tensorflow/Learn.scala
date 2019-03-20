@@ -115,7 +115,7 @@ private[tensorflow] object Learn {
 
   val model: TFModel.type                    = TFModel
   val tunable_tf_model: TunableTFModel.type  = TunableTFModel
-  val pde_system: PDESystem.type       = PDESystem
+  val pde_system: PDESystem.type             = PDESystem
 
   def constant[I, D: TF](name: String, t: Tensor[D]): Layer[I, Output[D]] = new Layer[I, Output[D]](name){
 

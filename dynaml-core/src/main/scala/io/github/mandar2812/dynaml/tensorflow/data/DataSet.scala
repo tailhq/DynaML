@@ -231,6 +231,40 @@ class DataSet[X](val data: Iterable[X]) {
     build_tensor[T, O, D, S](buffer_and_stack, dataType, shape)
   }
 
+  def build_lazy[T, O, D, S](
+    transformation: DataPipe[X, O],
+    dataType: D, shape: S = null)(
+    implicit
+    evOutputStructure: OutputStructure[O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] =
+    self
+      .map(transformation)
+      .map(DataPipe((batch: O) => tf.data.datasetFromOutputs(batch)))
+      .reduceLeft[Dataset[O]](DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r)))
+
+
+
+  def build_buffered_lazy[T, O, D, S](
+    buffer_size: Int,
+    convertToSymbolicTensor: DataPipe[X, O],
+    stackOp: DataPipe[Iterable[O], O],
+    dataType: D,
+    shape: S = null)(
+    implicit
+    evOutputStructure: OutputStructure[O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] = {
+
+    val buffer_and_stack =
+      DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
+        IterableDataPipe(IterableDataPipe(convertToSymbolicTensor)) >
+        IterableDataPipe(stackOp)
+
+
+    build_output[T, O, D, S](buffer_and_stack, dataType, shape)
+  }
+
 }
 
 object DataSet {

@@ -1,7 +1,7 @@
 {
   import _root_.ammonite.ops._
   import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
-  import _root_.io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils, dtfdata}
+  import _root_.io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils, dtfdata, dtfpipe}
   import _root_.org.platanios.tensorflow.api._
   import _root_.org.platanios.tensorflow.api.learn.layers.Activation
   import _root_.org.platanios.tensorflow.data.image.CIFARLoader
@@ -52,29 +52,32 @@
     architecture,
     (UINT8, dataSet.trainImages.shape(1::)),
     (INT64, Shape()),
-    loss,
-    dtflearn.model.trainConfig(
-      tempdir/"cifar_summaries",
-      optimizer,
-      dtflearn.rel_loss_change_stop(0.05, 500),
-      Some(
-        dtflearn.model._train_hooks(
-          tempdir/"cifar_summaries",
-          stepRateFreq = 100,
-          summarySaveFreq = 100,
-          checkPointFreq = 100)
-      )),
-    dtflearn.model.data_ops(
-      shuffleBuffer = 5000,
-      batchSize = 128,
-      prefetchSize = 10
-    ),
-    concatOpI = Some(stackOp[UByte]),
-    concatOpT = Some(concatOp[Long]),
-    concatOpO = Some(concatOp[Float])
+    loss)
+
+
+  val data_ops = dtflearn.model.data_ops(
+    shuffleBuffer = 5000,
+    batchSize = 128,
+    prefetchSize = 10,
+    concatOpI = Some(dtfpipe.EagerStack[UByte]()),
+    concatOpT = Some(dtfpipe.EagerStack[Long]()),
+    concatOpO = Some(dtfpipe.EagerConcatenate[Float]())
   )
 
-  cifar_model.train(dtf_cifar_data.training_dataset)
+  val train_config = dtflearn.model.trainConfig(
+    tempdir/"cifar_summaries",
+    data_ops,
+    optimizer,
+    dtflearn.rel_loss_change_stop(0.05, 500),
+    Some(
+      dtflearn.model._train_hooks(
+        tempdir/"cifar_summaries",
+        stepRateFreq = 100,
+        summarySaveFreq = 100,
+        checkPointFreq = 100)
+    ))
+
+  cifar_model.train(dtf_cifar_data.training_dataset, train_config)
 
   def accuracy(predictions: Tensor[Long], labels: Tensor[Long]): Float =
     tfi.equal(predictions.argmax[Long](1), labels)

@@ -165,7 +165,7 @@ def apply(
 
 
   val ornstein_ulhenbeck: Operator[Output[Float], Output[Float]] = 
-    d_t - theta*d_s(x*I[Float, Float]()) - D*d_s(d_s)
+    d_t - theta*d_s(x*I[Float, Float]()) - d_s(D*d_s)
 
   val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
   val analysis.GaussianQuadrature(nodes_t, weights_t) = analysis.eightPointGaussLegendre.scale(time_domain._1, time_domain._2)
@@ -208,18 +208,18 @@ def apply(
     reg_f = Some(reg_y), reg_v = Some(reg_v))
 
 
-  val stackOperation = DataPipe[Iterable[Tensor[Float]], Tensor[Float]](bat => tfi.concatenate(bat.toSeq, axis = 0))
-
   val wave_model1d = wave_system1d.solve(
     training_data,
     dtflearn.model.trainConfig(
       summary_dir,
+      dtflearn.model.data_ops(
+        training_data.size/10, training_data.size/4, 10,
+        concatOpI = Some(dtfpipe.EagerConcatenate[Float]()),
+        concatOpT = Some(dtfpipe.EagerConcatenate[Float]())),
       optimizer,
       dtflearn.abs_loss_change_stop(0.001, iterations),
-      Some(dtflearn.model._train_hooks(summary_dir))),
-    dtflearn.model.data_ops(training_data.size/10, training_data.size/4, 10),
-    concatOpI = Some(stackOperation),
-    concatOpT = Some(stackOperation)
+      Some(dtflearn.model._train_hooks(summary_dir)))
+
   )
 
   print("Test Data Shapes: ")

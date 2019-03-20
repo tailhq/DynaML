@@ -82,14 +82,9 @@ ITT, IDD, ISS](
   val input: (ID, IS),
   val target: (TD, TS),
   val loss: Layer[(ArchOut, Out), Output[Loss]],
-  val trainConfig: TFModel.TrainConfig,
-  val data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
   val inMemory: Boolean = false,
   val existingGraph: Option[Graph] = None,
-  data_handles: Option[TFModel.DataHandles[In, Out]] = None,
-  val concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
-  val concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
-  val concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)(
+  data_handles: Option[TFModel.DataHandles[In, Out]] = None)(
   implicit
   evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
   evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -120,8 +115,6 @@ ITT, IDD, ISS](
       Option[dtflearn.SupEstimatorTF[In, Out, ArchOut, ArchOut, Loss, (ArchOut, (In, Out))]])
 
 
-  private val TFModel.TrainConfig(summaryDir, optimizer, stopCriteria, trainHooks) = trainConfig
-
 
   private val graphInstance = if(existingGraph.isDefined) {
     println("Using existing provided TensorFlow graph")
@@ -131,7 +124,11 @@ ITT, IDD, ISS](
   var (model, estimator): UnderlyingModel = (None, None)
 
 
-  def train(data: DataSet[(IT, TT)]): Unit = {
+  def train(data: DataSet[(IT, TT)], trainConfig: TFModel.TrainConfig[IT, TT, ITT]): Unit = {
+
+    val TFModel.TrainConfig(summaryDir, data_ops, optimizer, stopCriteria, trainHooks) = trainConfig
+
+    val (concatOpI, concatOpT, concatOpO) = (data_ops.concatOpI, data_ops.concatOpT, data_ops.concatOpO)
 
     val tf_dataset: Dataset[(In, Out)] = if(concatOpI.isDefined && concatOpT.isDefined) {
 
@@ -143,24 +140,24 @@ ITT, IDD, ISS](
       })
 
       data.build_buffered[(IT, TT), (In, Out), (ID, TD), (IS, TS)](
-        data_processing.batchSize,
+        data_ops.batchSize,
         identityPipe[(IT, TT)],
         concatOp,
         (input._1, target._1),
         (input._2, target._2))
         .repeat()
-        .shuffle(data_processing.shuffleBuffer)
-        .batch[(ID, TD), (IS, TS)](data_processing.batchSize)
-        .prefetch(data_processing.prefetchSize)
+        .shuffle(data_ops.shuffleBuffer)
+        .batch[(ID, TD), (IS, TS)](data_ops.batchSize)
+        .prefetch(data_ops.prefetchSize)
     } else {
       data.build(
         identityPipe[(IT, TT)],
         (input._1, target._1),
         (input._2, target._2))
         .repeat()
-        .shuffle(data_processing.shuffleBuffer)
-        .batch(data_processing.batchSize)
-        .prefetch(data_processing.prefetchSize)
+        .shuffle(data_ops.shuffleBuffer)
+        .batch(data_ops.batchSize)
+        .prefetch(data_ops.prefetchSize)
     }
 
 
@@ -260,17 +257,16 @@ ITT, IDD, ISS](
     * @param input_data_set The data set containing input patterns
     * @return A DynaML data set of input-prediction tuples.
     * */
-  def infer_coll(input_data_set: DataSet[IT]): Either[ITT, DataSet[ITT]] = {
+  def infer_coll(input_data_set: DataSet[IT]): DataSet[ITT] = {
     check_underlying_estimator()
-    concatOpI match {
-
-    case None => Right(input_data_set.map(DataPipe((pattern: IT) => infer(pattern))))
-
-    case Some(concatFunc) => Left(infer(concatFunc(input_data_set.data)))
-    }
+    input_data_set.map(DataPipe((pattern: IT) => infer(pattern)))
   }
 
-  def infer_batch(input_data_set: DataSet[IT]): Either[ITT, DataSet[ITT]] = {
+  def infer_batch(
+    input_data_set: DataSet[IT],
+    data_ops: TFModel.Ops[IT, TT, ITT] = TFModel.data_ops()): Either[ITT, DataSet[ITT]] = {
+
+    val (concatOpI, concatOpO) = (data_ops.concatOpI, data_ops.concatOpO)
 
     check_underlying_estimator()
 
@@ -279,7 +275,7 @@ ITT, IDD, ISS](
       case None => input_data_set.map(DataPipe((pattern: IT) => infer(pattern)))
 
       case Some(concatFunc) => input_data_set
-        .grouped(data_processing.batchSize)
+        .grouped(data_ops.batchSize)
         .map(DataPipe((batch: Seq[IT]) => concatFunc(batch)))
         .map(DataPipe((tensor_batch: IT) => infer(tensor_batch)))
     }
@@ -323,13 +319,16 @@ object TFModel {
     *                    use [[DataSet.build_buffered()]] instead
     *                    of the default [[DataSet.build()]].
     * */
-  protected case class DataOps(
-    shuffleBuffer: Int,
-    batchSize: Int,
-    prefetchSize: Int,
-    groupBuffer: Int = 0)
+  protected case class DataOps[IT, TT, ITT](
+    shuffleBuffer: Int = 10000,
+    batchSize: Int = 16,
+    prefetchSize: Int = 10,
+    groupBuffer: Int = 0,
+    concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
+    concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
+    concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)
 
-  type Ops = DataOps
+  type Ops[IT, TT, ITT] = DataOps[IT, TT, ITT]
 
   /**
     * A training configuration, contains information on
@@ -347,13 +346,14 @@ object TFModel {
     *                     summaries (audio, video, tensor) etc. See the `_train_hooks()` method
     *                     for setting some default training hooks.
     * */
-  protected case class TrainConfig(
+  protected case class TrainConfig[IT, TT, ITT](
     summaryDir: Path,
+    data_processing: Ops[IT, TT, ITT] = TFModel.data_ops(10000, 16, 10),
     optimizer: Optimizer = tf.train.Adam(0.01f),
     stopCriteria: StopCriteria = dtflearn.rel_loss_change_stop(0.05, 100000),
     trainHooks: Option[Set[Hook]] = None)
 
-  type Config = TrainConfig
+  type Config[IT, TT, ITT] = TrainConfig[IT, TT, ITT]
 
   /**
     * Creates a [[DataOps]] instance.
@@ -404,14 +404,9 @@ object TFModel {
     input: (ID, IS),
     target: (TD, TS),
     loss: Layer[(ArchOut, Out), Output[Loss]],
-    trainConfig: TFModel.TrainConfig,
-    data_processing: TFModel.DataOps = TFModel.data_ops(10000, 16, 10),
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
-    data_handles: Option[(Input[In], Input[Out])] = None,
-    concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
-    concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
-    concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)(
+    data_handles: Option[(Input[In], Input[Out])] = None)(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -441,8 +436,8 @@ object TFModel {
       TT, TD, TS,
       ITT, IDD, ISS](
       architecture, input, target, loss,
-      trainConfig, data_processing, inMemory, existingGraph,
-      data_handles, concatOpI, concatOpT, concatOpO
+      inMemory, existingGraph,
+      data_handles
     )
 
 }

@@ -1,7 +1,7 @@
 {
   import _root_.java.nio.file.Paths
   import _root_.io.github.mandar2812.dynaml.pipes._
-  import _root_.io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfdata}
+  import _root_.io.github.mandar2812.dynaml.tensorflow._
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.data.image.MNISTLoader
   import _root_.ammonite.ops._
@@ -36,10 +36,7 @@
 
   val optimizer = tf.train.Adam(0.1f)
 
-  def concatOp[T: TF] = DataPipe[Iterable[Tensor[T]], Tensor[T]](s => tfi.concatenate[T](s.toSeq))
-  def stackOp[T: TF]  = DataPipe[Iterable[Tensor[T]], Tensor[T]](s => tfi.stack[T](s.toSeq))
-
-  val cifar_model = dtflearn.model[
+  val fashion_mnist_model = dtflearn.model[
     Output[UByte], Output[Long], Output[Float], Float,
     Tensor[UByte], UINT8, Shape,
     Tensor[Long], INT64, Shape,
@@ -47,29 +44,32 @@
     architecture,
     (UINT8, dataSet.trainImages.shape(1::)),
     (INT64, Shape()),
-    loss,
-    dtflearn.model.trainConfig(
-      tempdir/"fashion_mnist_summaries",
-      optimizer,
-      dtflearn.rel_loss_change_stop(0.05, 1000),
-      Some(
-        dtflearn.model._train_hooks(
-          tempdir/"fashion_mnist_summaries",
-          stepRateFreq = 100,
-          summarySaveFreq = 100,
-          checkPointFreq = 100)
-      )),
-    dtflearn.model.data_ops(
-      shuffleBuffer = 5000,
-      batchSize = 128,
-      prefetchSize = 10
-    ),
-    concatOpI = Some(stackOp[UByte]),
-    concatOpT = Some(concatOp[Long]),
-    concatOpO = Some(concatOp[Float])
+    loss)
+
+
+  val data_ops = dtflearn.model.data_ops(
+    shuffleBuffer = 5000,
+    batchSize = 128,
+    prefetchSize = 10,
+    concatOpI = Some(dtfpipe.EagerStack[UByte]()),
+    concatOpT = Some(dtfpipe.EagerStack[Long]()),
+    concatOpO = Some(dtfpipe.EagerConcatenate[Float]())
   )
 
-  cifar_model.train(dtf_cifar_data.training_dataset)
+  val config = dtflearn.model.trainConfig(
+    tempdir/"fashion_mnist_summaries",
+    data_ops,
+    optimizer,
+    dtflearn.rel_loss_change_stop(0.05, 500),
+    Some(
+      dtflearn.model._train_hooks(
+        tempdir/"fashion_mnist_summaries",
+        stepRateFreq = 100,
+        summarySaveFreq = 100,
+        checkPointFreq = 100)
+    ))
+
+  fashion_mnist_model.train(dtf_cifar_data.training_dataset, config)
 
   def accuracy(predictions: Tensor[Long], labels: Tensor[Long]): Float =
     tfi.equal(predictions.argmax[Long](1), labels)
@@ -79,8 +79,8 @@
       .asInstanceOf[Float]
 
   val (trainingPreds, testPreds): (Tensor[Float], Tensor[Float]) = (
-    cifar_model.infer_batch(dtf_cifar_data.training_dataset.map(p => p._1)).left.get,
-    cifar_model.infer_batch(dtf_cifar_data.test_dataset.map(p => p._1)).left.get
+    fashion_mnist_model.infer_batch(dtf_cifar_data.training_dataset.map(p => p._1)).left.get,
+    fashion_mnist_model.infer_batch(dtf_cifar_data.test_dataset.map(p => p._1)).left.get
   )
 
   val (trainAccuracy, testAccuracy) = (

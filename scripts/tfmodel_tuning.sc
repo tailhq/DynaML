@@ -9,6 +9,7 @@ import org.platanios.tensorflow.api._
 import _root_.spire.implicits._
 import _root_.io.github.mandar2812.dynaml.probability._
 import _root_.io.github.mandar2812.dynaml.analysis._
+import _root_.io.github.mandar2812.dynaml.DynaMLPipe
 import breeze.numerics.sigmoid
 
 import scala.util.Random
@@ -54,8 +55,13 @@ val loss_func_generator = (h: Map[String, Double]) => {
 
 val tuning_config_generator =
   dtflearn.tunable_tf_model.ModelFunction.hyper_params_to_dir >>
-  DataPipe((p: Path) => dtflearn.model.trainConfig(
-    p, tf.train.Adam(0.1f),
+  DataPipe((p: Path) => dtflearn.model.trainConfig[Tensor[Double], Tensor[Double], Tensor[Double]](
+    p,
+    dtflearn.model.data_ops(
+      10, 1000, 10, data_size/5,
+      concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
+      concatOpT = Some(dtfpipe.EagerConcatenate[Double]())),
+    tf.train.Adam(0.1f),
     dtflearn.rel_loss_change_stop(0.005, 5000),
     Some(dtflearn.model._train_hooks(p))
   ))
@@ -97,31 +103,29 @@ val fitness_function = DataPipe2[Tensor[Double], Tensor[Double], Double](
   (p, t) => p.subtract(t).square.sum(axes = -1).mean().scalar
 )
 
-
-val tf_data_ops = dtflearn.model.data_ops(10, 1000, 10, data_size/5)
-
-val stackOperationI = DataPipe[Iterable[Tensor[Double]], Tensor[Double]](bat => tfi.concatenate(bat.toSeq, axis = 0))
+val convert_to_tensor = DynaMLPipe.identityPipe[(Tensor[Double], Tensor[Double])]
 
 
 val tunableTFModel: TunableTFModel[
+  (Tensor[Double], Tensor[Double]),
   Output[Double], Output[Double], Output[Double], Double,
   Tensor[Double], FLOAT64, Shape,
   Tensor[Double], FLOAT64, Shape,
   Tensor[Double], FLOAT64, Shape] =
   dtflearn.tunable_tf_model(
-    loss_func_generator, hyper_parameters,
+    loss_func_generator,
+    hyper_parameters,
     tf_dataset.training_dataset,
+    convert_to_tensor,
     fitness_function,
     architecture,
     (FLOAT64, Shape(1, 1)),
     (FLOAT64, Shape(1)),
     tuning_config_generator(tf_summary_dir),
-    data_split_func = Some(DataPipe[(Tensor[Double], Tensor[Double]), Boolean](_ => scala.util.Random.nextGaussian() <= 0.7)),
-    data_processing = tf_data_ops,
-    inMemory = false,
-    concatOpI = Some(stackOperationI),
-    concatOpT = Some(stackOperationI)
-  )
+    data_split_func = Some(DataPipe[(Tensor[Double], Tensor[Double]), Boolean](
+      _ => scala.util.Random.nextGaussian() <= 0.7)
+    ),
+    inMemory = false)
 
 
 val hyp_scaling = hyper_prior.map(p =>

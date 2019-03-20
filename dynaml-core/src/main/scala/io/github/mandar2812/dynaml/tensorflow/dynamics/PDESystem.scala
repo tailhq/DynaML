@@ -102,6 +102,10 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
       tf.learn.Mean[L](name = "Loss/Mean") >>
       tf.learn.ScalarSummary[L](name = "Loss/Summary", tag = "Loss")
 
+  private val tensors_to_symbolic = DataPipe[(Tensor[T], Tensor[U]), (Output[T], Output[U])](
+    c => (c._1.toOutput, c._2.toOutput)
+  )
+
   /**
     * Train a neural net based approximation for the
     * dynamical system.
@@ -116,12 +120,8 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
     * */
   def solve(
     data: SupervisedDataSet[Tensor[T], Tensor[U]],
-    trainConfig: TFModel.Config,
-    data_processing: TFModel.Ops = TFModel.data_ops(10000, 16, 10),
-    inMemory: Boolean = false,
-    concatOpI: Option[DataPipe[Iterable[Tensor[T]], Tensor[T]]] = None,
-    concatOpT: Option[DataPipe[Iterable[Tensor[U]], Tensor[U]]] = None,
-    concatOpO: Option[DataPipe[Iterable[PDESystem.ModelOutputsT[U]], PDESystem.ModelOutputsT[U]]] = None)
+    trainConfig: TFModel.Config[Tensor[T], Tensor[U], PDESystem.ModelOutputsT[U]],
+    inMemory: Boolean = false)
   : PDESystem.Model[T, U, L] = {
 
     val model = dtflearn.model[
@@ -134,12 +134,10 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
       model_architecture,
       (dTypeTag.dataType, input_shape),
       (dTypeTagO.dataType, target_shape),
-      system_loss, trainConfig,
-      data_processing, inMemory,
-      graphInstance, Some(data_handles),
-      concatOpI, concatOpT, concatOpO)
+      system_loss, inMemory,
+      graphInstance, Some(data_handles))
 
-    model.train(data)
+    model.train(data, trainConfig)
 
     PDESystem.model(model, name, system_variables.keys.toSeq)
   }
