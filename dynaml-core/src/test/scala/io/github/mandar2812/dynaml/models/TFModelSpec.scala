@@ -74,7 +74,7 @@ class TFModelSpec extends FlatSpec with Matchers {
 
     val train_config = dtflearn.model.trainConfig(
       summary_dir,
-      dtflearn.model.data_ops[Tensor[Double], Tensor[Double], Tensor[Double]](
+      dtflearn.model.data_ops[Tensor[Double], Tensor[Double], Tensor[Double], Output[Double], Output[Double]](
         shuffleBuffer = 5000,
         batchSize = 16,
         prefetchSize = 10,
@@ -101,7 +101,7 @@ class TFModelSpec extends FlatSpec with Matchers {
     val metrics = regression_model.evaluate(
       test_data, 
       Seq(dtflearn.mse[Output[Double], Double](), dtflearn.mae[Output[Double], Double]()),
-      dtflearn.model.data_ops[Tensor[Double], Tensor[Double], Tensor[Double]](
+      dtflearn.model.data_ops[Tensor[Double], Tensor[Double], Tensor[Double], Output[Double], Output[Double]](
         repeat = 0,
         shuffleBuffer = 0,
         batchSize = 16,

@@ -128,9 +128,13 @@ ITT, IDD, ISS](
     if(count != 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.repeat(count))
     else identityPipe[Dataset[(In, Out)]]
 
-  private def shuffle(buffer: Int) = 
-    if(buffer > 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.shuffle(buffer))
+  private def shuffle(buffer: Int, seed: Option[Int] = None) = 
+    if(buffer > 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.shuffle(buffer, seed))
     else identityPipe[Dataset[(In, Out)]]
+
+  private def shuffle_and_repeat(buffer: Int, count: Int, seed: Option[Int] = None) = 
+    if(buffer > 0 &&  count != 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.shuffleAndRepeat(buffer, count, seed))
+    else shuffle(buffer) > repeat(count)
 
   private def batch(batch_size: Int) = 
     if(batch_size > 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.batch[(ID, TD), (IS, TS)](batch_size))
@@ -140,11 +144,13 @@ ITT, IDD, ISS](
     if(buffer > 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.prefetch(buffer))
     else identityPipe[Dataset[(In, Out)]]
 
-  private def _get_tf_data(data: DataSet[(IT, TT)], data_ops: TFModel.Ops[IT, TT, ITT]): Dataset[(In, Out)] = {
+  private def _get_tf_data(data: DataSet[(IT, TT)], data_ops: TFModel.Ops[IT, TT, ITT, In, Out]): Dataset[(In, Out)] = {
 
     val (concatOpI, concatOpT, concatOpO) = (data_ops.concatOpI, data_ops.concatOpT, data_ops.concatOpO)
 
-    val process_pipe = repeat(data_ops.repeat) > shuffle(data_ops.shuffleBuffer) > batch(data_ops.batchSize) > prefetch(data_ops.prefetchSize)
+    val process_pipe = data_ops.custom_data_pipe.getOrElse(
+      shuffle_and_repeat(data_ops.shuffleBuffer, data_ops.repeat, data_ops.seed) > batch(data_ops.batchSize) > prefetch(data_ops.prefetchSize)
+    )
 
     val tf_dataset: Dataset[(In, Out)] = if(concatOpI.isDefined && concatOpT.isDefined) {
 
@@ -171,7 +177,7 @@ ITT, IDD, ISS](
     process_pipe(tf_dataset)
   }
 
-  def train(data: DataSet[(IT, TT)], trainConfig: TFModel.TrainConfig[IT, TT, ITT]): Unit = {
+  def train(data: DataSet[(IT, TT)], trainConfig: TFModel.TrainConfig[IT, TT, ITT, In, Out]): Unit = {
 
     val TFModel.TrainConfig(summaryDir, data_ops, optimizer, stopCriteria, trainHooks) = trainConfig
 
@@ -278,7 +284,7 @@ ITT, IDD, ISS](
 
   def infer_batch(
     input_data_set: DataSet[IT],
-    data_ops: TFModel.Ops[IT, TT, ITT] = TFModel.data_ops()): Either[ITT, DataSet[ITT]] = {
+    data_ops: TFModel.Ops[IT, TT, ITT, In, Out] = TFModel.data_ops()): Either[ITT, DataSet[ITT]] = {
 
     val (concatOpI, concatOpO) = (data_ops.concatOpI, data_ops.concatOpO)
 
@@ -304,7 +310,7 @@ ITT, IDD, ISS](
   def evaluate(
     test_data: DataSet[(IT, TT)], 
     metrics: Seq[tf.metrics.Metric[(ArchOut, (In, Out)), Output[Float]]],
-    evaluation_ops: TFModel.Ops[IT, TT, ITT] = TFModel.data_ops(), 
+    evaluation_ops: TFModel.Ops[IT, TT, ITT, In, Out] = TFModel.data_ops(), 
     maxSteps: Long = -1L,
     saveSummaries: Boolean = true,
     name: String = null): Seq[Tensor[Float]] = {
@@ -314,7 +320,7 @@ ITT, IDD, ISS](
 
       val tf_dataset: Dataset[(In, Out)] = _get_tf_data(test_data, evaluation_ops)
 
-      val max_steps: Long = if(maxSteps < 0L) test_data.size/evaluation_ops.batchSize else maxSteps
+      val max_steps: Long = if(maxSteps < 0L) math.ceil(test_data.size.toDouble/evaluation_ops.batchSize).toLong else maxSteps
 
       estimator.get.evaluate(() => tf_dataset, metrics, max_steps, saveSummaries, name)
     }
@@ -346,26 +352,23 @@ object TFModel {
     * @param batchSize Size of the mini batch.
     *
     * @param prefetchSize Number of elements to prefetch.
-    *
-    * @param groupBuffer If set to a value greater than 0,
-    *                    use [[DataSet.build_buffered()]] instead
-    *                    of the default [[DataSet.build()]].
     * 
     * @param repeat Decides how many times the tensorflow 
     *               data set is to be repeated. Defaults to -1
     *               which repeates it infinitely.
     * */
-  protected case class DataOps[IT, TT, ITT](
+  protected case class DataOps[IT, TT, ITT, In, Out](
     shuffleBuffer: Int = 10000,
     batchSize: Int = 16,
     prefetchSize: Int = 10,
-    groupBuffer: Int = 0,
     repeat: Int = -1,
+    seed: Option[Int] = None,
     concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
     concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
-    concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)
+    concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None, 
+    custom_data_pipe: Option[DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]]] = None)
 
-  type Ops[IT, TT, ITT] = DataOps[IT, TT, ITT]
+  type Ops[IT, TT, ITT, In, Out] = DataOps[IT, TT, ITT, In, Out]
 
   /**
     * A training configuration, contains information on
@@ -383,14 +386,14 @@ object TFModel {
     *                     summaries (audio, video, tensor) etc. See the `_train_hooks()` method
     *                     for setting some default training hooks.
     * */
-  protected case class TrainConfig[IT, TT, ITT](
+  protected case class TrainConfig[IT, TT, ITT, In, Out](
     summaryDir: Path,
-    data_processing: Ops[IT, TT, ITT] = TFModel.data_ops(10000, 16, 10),
+    data_processing: Ops[IT, TT, ITT, In, Out] = TFModel.data_ops(10000, 16, 10),
     optimizer: Optimizer = tf.train.Adam(0.01f),
     stopCriteria: StopCriteria = dtflearn.rel_loss_change_stop(0.05, 100000),
     trainHooks: Option[Set[Hook]] = None)
 
-  type Config[IT, TT, ITT] = TrainConfig[IT, TT, ITT]
+  type Config[IT, TT, ITT, In, Out] = TrainConfig[IT, TT, ITT, In, Out]
 
   /**
     * Creates a [[DataOps]] instance.

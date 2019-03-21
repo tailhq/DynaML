@@ -77,7 +77,7 @@ import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, TF}
   * */
 class TunableTFModel[Pattern, In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](
   val modelFunction: TunableTFModel.ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS],
-  val modelConfigFunc: TunableTFModel.ModelConfigFunc[IT, TT, ITT],
+  val modelConfigFunc: TunableTFModel.ModelConfigFunc[IT, TT, ITT, In, Out],
   val hyp_params: Seq[String],
   protected val training_data: DataSet[Pattern],
   val convert_to_tensor: DataPipe[Pattern, (IT, TT)],
@@ -149,10 +149,12 @@ class TunableTFModel[Pattern, In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, 
       //Train the model instance
       model_instance.train(train_split.map(convert_to_tensor), train_config)
 
+      //Dont shuffle and repeat the data set when performing validation 
       val computed_energy = model_instance.evaluate(
         validation_split.map(convert_to_tensor), 
         Seq(fitness_metric), 
-        train_config.data_processing).head.scalar.toDouble 
+        train_config.data_processing.copy(shuffleBuffer = 0, repeat = 0)
+      ).head.scalar.toDouble 
       
       //If all goes well, return the fitness and no comment.
       (computed_energy, None)
@@ -195,7 +197,7 @@ object TunableTFModel {
     TFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS]
     ]
 
-  type ModelConfigFunc[IT, TT, ITT] = DataPipe[HyperParams, TFModel.Config[IT, TT, ITT]]
+  type ModelConfigFunc[IT, TT, ITT, In, Out] = DataPipe[HyperParams, TFModel.Config[IT, TT, ITT, In, Out]]
 
 
   /**
@@ -447,7 +449,7 @@ object TunableTFModel {
     architecture: Layer[In, ArchOut],
     input: (ID, IS),
     target: (TD, TS),
-    get_training_config: ModelConfigFunc[IT, TT, ITT],
+    get_training_config: ModelConfigFunc[IT, TT, ITT, In, Out],
     validation_data: Option[DataSet[Pattern]] = None,
     data_split_func: Option[DataPipe[Pattern, Boolean]] = None,
     inMemory: Boolean = false,
@@ -502,7 +504,7 @@ object TunableTFModel {
     fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
     input: (ID, IS),
     target: (TD, TS),
-    get_training_config: ModelConfigFunc[IT, TT, ITT],
+    get_training_config: ModelConfigFunc[IT, TT, ITT, In, Out],
     validation_data: Option[DataSet[Pattern]],
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
@@ -558,7 +560,7 @@ object TunableTFModel {
     fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
     input: (ID, IS),
     target: (TD, TS),
-    get_training_config: ModelConfigFunc[IT, TT, ITT],
+    get_training_config: ModelConfigFunc[IT, TT, ITT, In, Out],
     validation_data: Option[DataSet[Pattern]],
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,

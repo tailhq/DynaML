@@ -120,7 +120,7 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
     * */
   def solve(
     data: SupervisedDataSet[Tensor[T], Tensor[U]],
-    trainConfig: TFModel.Config[Tensor[T], Tensor[U], PDESystem.ModelOutputsT[U]],
+    trainConfig: TFModel.Config[Tensor[T], Tensor[U], PDESystem.ModelOutputsT[U], Output[T], Output[U]],
     inMemory: Boolean = false)
   : PDESystem.Model[T, U, L] = {
 
