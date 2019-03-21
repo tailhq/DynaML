@@ -46,6 +46,12 @@ class TFModelSpec extends FlatSpec with Matchers {
         dtf.tensor_f64(1, 1)(n*weight + bias)))
     )
 
+    val test_data = dtfdata.dataset(rv.draw).to_supervised(
+      DataPipe[Double, (Tensor[Double], Tensor[Double])](n => (
+        dtf.tensor_f64(1, 1)(n),
+        dtf.tensor_f64(1, 1)(n*weight + bias)))
+    )
+
     val train_fraction = 0.7
 
     val tf_dataset = data.partition(
@@ -68,7 +74,7 @@ class TFModelSpec extends FlatSpec with Matchers {
 
     val train_config = dtflearn.model.trainConfig(
       summary_dir,
-      dtflearn.model.data_ops(
+      dtflearn.model.data_ops[Tensor[Double], Tensor[Double], Tensor[Double]](
         shuffleBuffer = 5000,
         batchSize = 16,
         prefetchSize = 10,
@@ -90,6 +96,23 @@ class TFModelSpec extends FlatSpec with Matchers {
     val test_pred = regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1))).scalar
 
     assert(test_pred == 4.0)
+
+
+    val metrics = regression_model.evaluate(
+      test_data, 
+      Seq(dtflearn.mse[Output[Double], Double](), dtflearn.mae[Output[Double], Double]()),
+      dtflearn.model.data_ops[Tensor[Double], Tensor[Double], Tensor[Double]](
+        repeat = 0,
+        shuffleBuffer = 0,
+        batchSize = 16,
+        prefetchSize = 10,
+        concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
+        concatOpT = Some(dtfpipe.EagerConcatenate[Double]())),
+    )
+
+    val epsilon = 1E-5
+
+    assert(metrics.forall(m => m.scalar.toDouble <= epsilon))
 
   }
 }

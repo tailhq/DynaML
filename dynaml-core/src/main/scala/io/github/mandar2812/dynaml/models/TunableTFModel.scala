@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.models
 
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.utils
+import io.github.mandar2812.dynaml.evaluation.Performance
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, MetaPipe}
 import io.github.mandar2812.dynaml.tensorflow.data.{DataSet, TFDataSet}
 import ammonite.ops._
@@ -80,7 +81,7 @@ class TunableTFModel[Pattern, In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, 
   val hyp_params: Seq[String],
   protected val training_data: DataSet[Pattern],
   val convert_to_tensor: DataPipe[Pattern, (IT, TT)],
-  val fitness_function: DataPipe2[ITT, TT, Double],
+  val fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
   protected val validation_data: Option[DataSet[Pattern]] = None,
   protected val data_split_func: Option[DataPipe[Pattern, Boolean]] = None)
   extends GloballyOptimizable {
@@ -139,39 +140,22 @@ class TunableTFModel[Pattern, In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, 
     val model_instance = modelFunction(h)
     val train_config   = modelConfigFunc(h)
 
+    val fitness_metric = Performance[(ArchOut, (In, Out))](
+      "Energy", DataPipe[(ArchOut, (In, Out)), Output[Float]](c => fitness_function(c._1, c._2._2))
+    )
+
     //Compute the model fitness, guard against weird exceptions
     val (fitness, comment) = try {
       //Train the model instance
       model_instance.train(train_split.map(convert_to_tensor), train_config)
 
-      val predictions = model_instance.infer_batch(
-        validation_inputs,
-        train_config.data_processing.copy(concatOpO = None))
-
-      val validation_splits =
-        if(train_config.data_processing.concatOpI.isEmpty || train_config.data_processing.concatOpT.isEmpty)
-          validation_targets
-        else
-          validation_targets
-            .grouped(train_config.data_processing.batchSize)
-            .map(DataPipe((s: Seq[TT]) => train_config.data_processing.concatOpT.get(s)))
-
-      predictions match {
-
-        case Left(pred_tensor) => (
-          fitness_function(pred_tensor, train_config.data_processing.concatOpT.get(validation_targets.data)),
-          None
-        )
-
-        case Right(pred_collection) => (
-          pred_collection
-            .zip(validation_splits)
-            .map(DataPipe((p: (ITT, TT)) => fitness_function(p._1, p._2)))
-            .reduce(DataPipe2[Double, Double, Double](_ + _))/validation_splits.size,
-          None
-        )
-
-      }
+      val computed_energy = model_instance.evaluate(
+        validation_split.map(convert_to_tensor), 
+        Seq(fitness_metric), 
+        train_config.data_processing).head.scalar.toDouble 
+      
+      //If all goes well, return the fitness and no comment.
+      (computed_energy, None)
     } catch {
       case e: java.lang.IllegalStateException => (Double.PositiveInfinity, Some(e.getMessage))
       case e: Throwable =>
@@ -213,42 +197,6 @@ object TunableTFModel {
 
   type ModelConfigFunc[IT, TT, ITT] = DataPipe[HyperParams, TFModel.Config[IT, TT, ITT]]
 
-
-
-  /**
-    * Type alias for "Fitness Functions"
-    *
-    * During hyper-parameter search, each model
-    * instance is trained and evaluated on a validation
-    * data set.
-    *
-    * After a model instance produces predictions for a
-    * validation data set, fitness functions compute the
-    * fitness from the predictions and data labels.
-    * */
-  type FitnessFunc[ITT, TT] = DataPipe[DataSet[(ITT, TT)], Double]
-
-  /**
-    * <h4>Fitness Function Utility</h4>
-    *
-    * Provides methods setting up fitness function computations.
-    * */
-  object FitnessFunction {
-
-    /**
-      * Create a fitness function using the Map-Reduce paradigm.
-      * This method assumes that the fitness function can be computed
-      * by applying an element-wise `map` operation followed by a
-      * `reduce` operation which computes the model's fitness function.
-      *
-      * @param map_func The element-wise map operation to apply to
-      * */
-    def apply[ITT, TT](
-      map_func: DataPipe[(ITT, TT), Double],
-      reduce_func: DataPipe2[Double, Double, Double]): FitnessFunc[ITT, TT] =
-      DataPipe((d: DataSet[(ITT, TT)]) => d.map(map_func).reduce(reduce_func))
-
-  }
 
   /**
     * <h4>Model Functions</h4>
@@ -495,7 +443,7 @@ object TunableTFModel {
     hyp: List[String],
     training_data: DataSet[Pattern],
     convert_to_tensor: DataPipe[Pattern, (IT, TT)],
-    fitness_function: DataPipe2[ITT, TT, Double],
+    fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
     architecture: Layer[In, ArchOut],
     input: (ID, IS),
     target: (TD, TS),
@@ -551,7 +499,7 @@ object TunableTFModel {
     hyp: List[String],
     training_data: DataSet[Pattern],
     convert_to_tensor: DataPipe[Pattern, (IT, TT)],
-    fitness_function: DataPipe2[ITT, TT, Double],
+    fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
     input: (ID, IS),
     target: (TD, TS),
     get_training_config: ModelConfigFunc[IT, TT, ITT],
@@ -607,7 +555,7 @@ object TunableTFModel {
     hyp: List[String],
     training_data: DataSet[Pattern],
     convert_to_tensor: DataPipe[Pattern, (IT, TT)],
-    fitness_function: DataPipe2[ITT, TT, Double],
+    fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
     input: (ID, IS),
     target: (TD, TS),
     get_training_config: ModelConfigFunc[IT, TT, ITT],

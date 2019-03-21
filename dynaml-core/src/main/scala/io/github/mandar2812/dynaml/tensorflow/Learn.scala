@@ -21,13 +21,14 @@ package io.github.mandar2812.dynaml.tensorflow
 import _root_.io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
 import _root_.io.github.mandar2812.dynaml.models.{TFModel, TunableTFModel}
 import io.github.mandar2812.dynaml.tensorflow.layers.{DynamicTimeStepCTRNN, FiniteHorizonCTRNN, FiniteHorizonLinear}
+import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.PDESystem
+import _root_.io.github.mandar2812.dynaml.evaluation.{Performance, MAE, MSE}
 import org.platanios.tensorflow.api.learn.{Mode, StopCriteria}
 import org.platanios.tensorflow.api.learn.layers.{Compose, Input, Layer, Linear}
 import org.platanios.tensorflow.api.ops.NN.SameConvPadding
 import org.platanios.tensorflow.api.ops.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api._
-import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.PDESystem
 import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, IsHalfOrFloatOrDouble, IsNotQuantized, TF}
 import org.platanios.tensorflow.api.implicits.helpers.{OutputStructure, OutputToDataType, OutputToShape}
 import org.platanios.tensorflow.api.ops.Output
@@ -115,6 +116,10 @@ private[tensorflow] object Learn {
 
   val model: TFModel.type                    = TFModel
   val tunable_tf_model: TunableTFModel.type  = TunableTFModel
+  val performance: Performance.type          = Performance
+  val mse: MSE.type                          = MSE
+  val mae: MAE.type                          = MAE
+
   val pde_system: PDESystem.type             = PDESystem
 
   def constant[I, D: TF](name: String, t: Tensor[D]): Layer[I, Output[D]] = new Layer[I, Output[D]](name){

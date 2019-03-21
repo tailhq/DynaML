@@ -124,11 +124,27 @@ ITT, IDD, ISS](
   var (model, estimator): UnderlyingModel = (None, None)
 
 
-  def train(data: DataSet[(IT, TT)], trainConfig: TFModel.TrainConfig[IT, TT, ITT]): Unit = {
+  private def repeat(count: Int) = 
+    if(count != 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.repeat(count))
+    else identityPipe[Dataset[(In, Out)]]
 
-    val TFModel.TrainConfig(summaryDir, data_ops, optimizer, stopCriteria, trainHooks) = trainConfig
+  private def shuffle(buffer: Int) = 
+    if(buffer > 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.shuffle(buffer))
+    else identityPipe[Dataset[(In, Out)]]
+
+  private def batch(batch_size: Int) = 
+    if(batch_size > 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.batch[(ID, TD), (IS, TS)](batch_size))
+    else identityPipe[Dataset[(In, Out)]]
+
+  private def prefetch(buffer: Int) = 
+    if(buffer > 0) DataPipe[Dataset[(In, Out)], Dataset[(In, Out)]](_.prefetch(buffer))
+    else identityPipe[Dataset[(In, Out)]]
+
+  private def _get_tf_data(data: DataSet[(IT, TT)], data_ops: TFModel.Ops[IT, TT, ITT]): Dataset[(In, Out)] = {
 
     val (concatOpI, concatOpT, concatOpO) = (data_ops.concatOpI, data_ops.concatOpT, data_ops.concatOpO)
+
+    val process_pipe = repeat(data_ops.repeat) > shuffle(data_ops.shuffleBuffer) > batch(data_ops.batchSize) > prefetch(data_ops.prefetchSize)
 
     val tf_dataset: Dataset[(In, Out)] = if(concatOpI.isDefined && concatOpT.isDefined) {
 
@@ -145,23 +161,21 @@ ITT, IDD, ISS](
         concatOp,
         (input._1, target._1),
         (input._2, target._2))
-        .repeat()
-        .shuffle(data_ops.shuffleBuffer)
-        .batch[(ID, TD), (IS, TS)](data_ops.batchSize)
-        .prefetch(data_ops.prefetchSize)
     } else {
       data.build(
         identityPipe[(IT, TT)],
         (input._1, target._1),
         (input._2, target._2))
-        .repeat()
-        .shuffle(data_ops.shuffleBuffer)
-        .batch(data_ops.batchSize)
-        .prefetch(data_ops.prefetchSize)
     }
 
+    process_pipe(tf_dataset)
+  }
 
+  def train(data: DataSet[(IT, TT)], trainConfig: TFModel.TrainConfig[IT, TT, ITT]): Unit = {
 
+    val TFModel.TrainConfig(summaryDir, data_ops, optimizer, stopCriteria, trainHooks) = trainConfig
+
+    val tf_dataset: Dataset[(In, Out)] = _get_tf_data(data, data_ops)
 
     if(estimator.isEmpty) {
 
@@ -287,6 +301,24 @@ ITT, IDD, ISS](
 
   }
 
+  def evaluate(
+    test_data: DataSet[(IT, TT)], 
+    metrics: Seq[tf.metrics.Metric[(ArchOut, (In, Out)), Output[Float]]],
+    evaluation_ops: TFModel.Ops[IT, TT, ITT] = TFModel.data_ops(), 
+    maxSteps: Long = -1L,
+    saveSummaries: Boolean = true,
+    name: String = null): Seq[Tensor[Float]] = {
+      check_underlying_estimator()
+
+      val (concatOpI, concatOpT, concatOpO) = (evaluation_ops.concatOpI, evaluation_ops.concatOpT, evaluation_ops.concatOpO)
+
+      val tf_dataset: Dataset[(In, Out)] = _get_tf_data(test_data, evaluation_ops)
+
+      val max_steps: Long = if(maxSteps < 0L) test_data.size/evaluation_ops.batchSize else maxSteps
+
+      estimator.get.evaluate(() => tf_dataset, metrics, max_steps, saveSummaries, name)
+    }
+
   /**
     * Close the underlying tensorflow graph.
     * */
@@ -318,12 +350,17 @@ object TFModel {
     * @param groupBuffer If set to a value greater than 0,
     *                    use [[DataSet.build_buffered()]] instead
     *                    of the default [[DataSet.build()]].
+    * 
+    * @param repeat Decides how many times the tensorflow 
+    *               data set is to be repeated. Defaults to -1
+    *               which repeates it infinitely.
     * */
   protected case class DataOps[IT, TT, ITT](
     shuffleBuffer: Int = 10000,
     batchSize: Int = 16,
     prefetchSize: Int = 10,
     groupBuffer: Int = 0,
+    repeat: Int = -1,
     concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
     concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
     concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)
