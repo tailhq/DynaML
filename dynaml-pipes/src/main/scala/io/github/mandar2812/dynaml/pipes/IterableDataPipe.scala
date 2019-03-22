@@ -147,4 +147,7 @@ class UnzipIterable[I, J] extends
   
 }
 
-object UnzipIterable
+object UnzipIterable {
+
+  def apply[I, J] = new UnzipIterable[I, J]
+}
