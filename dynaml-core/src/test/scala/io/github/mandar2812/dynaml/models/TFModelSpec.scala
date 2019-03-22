@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.models
 
 import ammonite.ops._
 import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.tensorflow._
 import org.scalatest.{FlatSpec, Matchers}
@@ -97,6 +98,18 @@ class TFModelSpec extends FlatSpec with Matchers {
 
     assert(test_pred == 4.0)
 
+    val epsilon = 1E-5
+
+    /* val eval_data_ops = dtflearn.model.input_data_ops[Tensor[Double], Output[Double]](
+      repeat = -1,
+      shuffleBuffer = 0,
+      batchSize = 16,
+      prefetchSize = 10)
+
+    val eval_preds = regression_model.infer_coll(test_data.features, eval_data_ops)
+
+    assert(eval_preds.zip(test_data.targets).map(DataPipe((c: (Tensor[Double], Tensor[Double])) => c._1.subtract(c._2).square.scalar)).data.reduce(_ + _)/test_data.size <= epsilon)
+ */
 
     val metrics = regression_model.evaluate(
       test_data, 
@@ -110,7 +123,7 @@ class TFModelSpec extends FlatSpec with Matchers {
         concatOpT = Some(dtfpipe.EagerConcatenate[Double]())),
     )
 
-    val epsilon = 1E-5
+    
 
     assert(metrics.forall(m => m.scalar.toDouble <= epsilon))
 

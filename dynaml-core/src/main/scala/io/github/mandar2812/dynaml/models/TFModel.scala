@@ -149,7 +149,9 @@ ITT, IDD, ISS](
     val (concatOpI, concatOpT, concatOpO) = (data_ops.concatOpI, data_ops.concatOpT, data_ops.concatOpO)
 
     val process_pipe = data_ops.custom_data_pipe.getOrElse(
-      shuffle_and_repeat(data_ops.shuffleBuffer, data_ops.repeat, data_ops.seed) > batch(data_ops.batchSize) > prefetch(data_ops.prefetchSize)
+      TFModel.Data.shuffle_and_repeat[(In, Out)](data_ops.shuffleBuffer, data_ops.repeat, data_ops.seed) > 
+      TFModel.Data.batch[(In, Out), (ID, TD), (IS, TS)](data_ops.batchSize) > 
+      TFModel.Data.prefetch[(In, Out)](data_ops.prefetchSize)
     )
 
     val tf_dataset: Dataset[(In, Out)] = if(concatOpI.isDefined && concatOpT.isDefined) {
@@ -172,6 +174,41 @@ ITT, IDD, ISS](
         identityPipe[(IT, TT)],
         (input._1, target._1),
         (input._2, target._2))
+    }
+
+    process_pipe(tf_dataset)
+  }
+
+  private def _get_tf_data_input(data: DataSet[IT], data_ops: TFModel.InputOps[IT, In])(
+    implicit 
+    evTensorToOutput: TensorToOutput.Aux[IT, In],
+    evTensorToDataType: TensorToDataType.Aux[IT, ID],
+    evTensorToShape: TensorToShape.Aux[IT, IS],
+    evDataTypeToShape: DataTypeToShape.Aux[ID, IS]): Dataset[In] = {
+
+    val concatOpI = data_ops.concatOpI
+
+    val process_pipe = data_ops.custom_data_pipe.getOrElse(
+      TFModel.Data.shuffle_and_repeat[In](data_ops.shuffleBuffer, data_ops.repeat, data_ops.seed) > 
+      TFModel.Data.batch[In, ID, IS](data_ops.batchSize) > 
+      TFModel.Data.prefetch[In](data_ops.prefetchSize)
+    )
+
+    val tf_dataset: Dataset[In] = if(concatOpI.isDefined) {
+
+      val concatI = concatOpI.get
+
+      data.build_buffered[IT, In, ID, IS](
+        data_ops.batchSize,
+        identityPipe[IT],
+        concatI,
+        input._1,
+        input._2)
+    } else {
+      data.build[IT, In, ID, IS](
+        identityPipe[IT],
+        input._1,
+        input._2)
     }
 
     process_pipe(tf_dataset)
@@ -275,11 +312,22 @@ ITT, IDD, ISS](
     * Generate predictions for a DynaML data set.
     *
     * @param input_data_set The data set containing input patterns
-    * @return A DynaML data set of input-prediction tuples.
+    * @return A DynaML data set of predictions.
     * */
-  def infer_coll(input_data_set: DataSet[IT]): DataSet[ITT] = {
+  def infer_coll(
+    input_data_set: DataSet[IT],
+    data_ops: TFModel.InputDataOps[IT, In] = TFModel.input_data_ops())(
+    implicit 
+    evTensorToOutput: TensorToOutput.Aux[IT, In],
+    evTensorToDataType: TensorToDataType.Aux[IT, ID],
+    evTensorToShape: TensorToShape.Aux[IT, IS],
+    evDataTypeToShape: DataTypeToShape.Aux[ID, IS]): Iterator[(IT, ITT)] = {
     check_underlying_estimator()
-    input_data_set.map(DataPipe((pattern: IT) => infer(pattern)))
+
+
+    val tf_dataset: Dataset[In] = _get_tf_data_input(input_data_set, data_ops)
+
+    infer(tf_dataset)
   }
 
   def infer_batch(
@@ -370,6 +418,42 @@ object TFModel {
 
   type Ops[IT, TT, ITT, In, Out] = DataOps[IT, TT, ITT, In, Out]
 
+  protected case class InputDataOps[IT, In](
+    shuffleBuffer: Int = 10000,
+    batchSize: Int = 16,
+    prefetchSize: Int = 10,
+    repeat: Int = -1,
+    seed: Option[Int] = None,
+    concatOpI: Option[DataPipe[Iterable[IT], IT]] = None, 
+    custom_data_pipe: Option[DataPipe[Dataset[In], Dataset[In]]] = None)
+
+  type InputOps[IT, In] = InputDataOps[IT, In]
+
+  object Data {
+    def repeat[T](count: Int) = 
+    if(count != 0) DataPipe[Dataset[T], Dataset[T]](_.repeat(count))
+    else identityPipe[Dataset[T]]
+
+    def shuffle[T](buffer: Int, seed: Option[Int] = None) = 
+    if(buffer > 0) DataPipe[Dataset[T], Dataset[T]](_.shuffle(buffer, seed))
+    else identityPipe[Dataset[T]]
+
+    def shuffle_and_repeat[T](buffer: Int, count: Int, seed: Option[Int] = None) = 
+    if(buffer > 0 &&  count != 0) DataPipe[Dataset[T], Dataset[T]](_.shuffleAndRepeat(buffer, count, seed))
+    else shuffle[T](buffer) > repeat[T](count)
+
+    def batch[T, D, S](batch_size: Int)(implicit
+    evOutputToDataType: OutputToDataType.Aux[T, D],
+    evOutputToShape: OutputToShape.Aux[T, S]) = 
+    if(batch_size > 0) DataPipe[Dataset[T], Dataset[T]](_.batch[D, S](batch_size))
+    else identityPipe[Dataset[T]]
+
+    def prefetch[T](buffer: Int) = 
+    if(buffer > 0) DataPipe[Dataset[T], Dataset[T]](_.prefetch(buffer))
+    else identityPipe[Dataset[T]]
+  }
+
+
   /**
     * A training configuration, contains information on
     * optimization method, convergence test etc.
@@ -400,6 +484,7 @@ object TFModel {
     * */
   val data_ops: DataOps.type        = DataOps
 
+  val input_data_ops: InputDataOps.type = InputDataOps
   /**
     * Creates a [[TrainConfig]] instance.
     * */
