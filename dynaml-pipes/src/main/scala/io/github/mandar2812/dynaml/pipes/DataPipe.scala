@@ -160,3 +160,15 @@ object BifurcationPipe {
 }
 
 trait ReducerPipe[I] extends DataPipe[Array[I], I]
+
+class Tuple2_1[I, J] extends DataPipe[(I, J), I] {
+  override def run(data: (I, J)) = data._1
+}
+
+object Tuple2_1
+
+class Tuple2_2[I, J] extends DataPipe[(I, J), J] {
+  override def run(data: (I, J)) = data._2
+}
+
+object Tuple2_2

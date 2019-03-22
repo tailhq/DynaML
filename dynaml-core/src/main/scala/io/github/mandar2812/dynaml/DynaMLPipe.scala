@@ -56,6 +56,11 @@ object DynaMLPipe {
     * */
   def identityPipe[T] = DataPipe(identity[T] _)
 
+  val unzip: UnzipIterable.type = UnzipIterable
+
+  val tup2_1: Tuple2_1.type = Tuple2_1
+
+  val tup2_2: Tuple2_2.type = Tuple2_2
 
   /**
     * Data pipe which takes a file name/path as a

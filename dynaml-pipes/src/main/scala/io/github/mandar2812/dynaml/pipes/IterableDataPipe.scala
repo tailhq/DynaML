@@ -137,3 +137,14 @@ object IterablePartitionPipe {
       val pipe = mapFunc.run _
     }
 }
+
+class UnzipIterable[I, J] extends 
+  IterableDataPipe[(I, J), (I, J), (Iterable[I], Iterable[J])] {
+  
+  val pipe = identity[(I, J)]
+
+  override def run(data: Iterable[(I, J)]):(Iterable[I], Iterable[J]) = data.unzip 
+  
+}
+
+object UnzipIterable
