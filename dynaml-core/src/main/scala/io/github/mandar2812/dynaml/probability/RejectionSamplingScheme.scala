@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.probability
 
 import breeze.stats.distributions.{Density, Rand}
-import io.github.mandar2812.dynaml.pipes.DataPipe
+import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.probability.distributions.GenericDistribution
 
 import scala.util.Random
@@ -34,25 +34,26 @@ abstract class RejectionSamplingScheme[
 ConditioningSet, Domain,
 Dist <: Density[ConditioningSet] with Rand[ConditioningSet],
 DistL <: Density[Domain] with Rand[Domain],
-JointDist <: Density[(ConditioningSet, Domain)] with Rand[(ConditioningSet, Domain)]](
+JointDist <: Density[(ConditioningSet, Domain)] with Rand[(ConditioningSet, Domain)],
+Likelihood <: RandomVarWithDistr[Domain, DistL]](
   p: RandomVarWithDistr[ConditioningSet, Dist],
-  c: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]])
+  c: DataPipe[ConditioningSet, Likelihood])
   extends RandomVarWithDistr[(ConditioningSet, Domain), JointDist]
     with BayesJointProbabilityScheme[
     ConditioningSet, Domain,
     RandomVarWithDistr[ConditioningSet, Dist],
-    RandomVarWithDistr[Domain, DistL]] { self =>
+    Likelihood] { self =>
 
   override val prior: RandomVarWithDistr[ConditioningSet, Dist] = p
 
-  override val likelihood: DataPipe[ConditioningSet, RandomVarWithDistr[Domain, DistL]] = c
+  override val likelihood: DataPipe[ConditioningSet, Likelihood] = c
 
   var Max_Candidates: Int = 1000
 
   var Max_Estimations: Int = 10000
 
   override val sample = prior.sample >
-    DataPipe[ConditioningSet, ConditioningSet, Domain](
+  BifurcationPipe[ConditioningSet, ConditioningSet, Domain](
       (c: ConditioningSet) => (c, likelihood(c).draw)
     )
 

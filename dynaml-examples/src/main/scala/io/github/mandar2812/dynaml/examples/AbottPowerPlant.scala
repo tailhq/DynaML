@@ -123,7 +123,7 @@ object AbottPowerPlant {
 
       val reScaleTargets = targetScales.i * targetScales.i
 
-      implicit val transform = DataPipe((d: Data) => d.toSeq)
+      implicit val transform = DataPipe[Data, Seq[(Features, Features)]]((d: Data) => d.toSeq)
 
       val multioutputTModel = MVStudentsTModel[Data, Features](kernel, noise, identityPipe[Features]) _
 

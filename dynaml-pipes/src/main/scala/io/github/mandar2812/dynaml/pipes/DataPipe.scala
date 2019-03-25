@@ -18,10 +18,17 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.pipes
 
-trait DataPipeConvertible[-Source, +Destination] {
+trait DataPipeConvertible[-Source, Destination] {
   def toPipe: Source => Destination
 }
 
+case class ComposedPipe[-Source, Intermediate, Destination](
+  val first: DataPipeConvertible[Source, Intermediate],
+  val second: DataPipeConvertible[Intermediate, Destination]) extends 
+  DataPipe[Source, Destination] {
+
+    override def run(data: Source): Destination = second.toPipe(first.toPipe(data))
+  }
 
 /**
   * Top level trait representing an
@@ -30,7 +37,7 @@ trait DataPipeConvertible[-Source, +Destination] {
   * @author mandar2812 on 18/11/15.
   *
   * */
-trait DataPipe[-Source, +Destination] extends DataPipeConvertible[Source, Destination] with Serializable {
+trait DataPipe[-Source, Destination] extends DataPipeConvertible[Source, Destination] with Serializable {
 
   self =>
 
@@ -50,8 +57,9 @@ trait DataPipe[-Source, +Destination] extends DataPipeConvertible[Source, Destin
     * [[Source]] -> [[Further]]
     *
     * */
-  def >[Further](that: DataPipeConvertible[Destination, Further]) =
-    DataPipe((d: Source) => that.toPipe(self.run(d)))
+  def >[Further](other: DataPipeConvertible[Destination, Further]) =
+    ComposedPipe(self, other)
+    //DataPipe((d: Source) => that.toPipe(self.run(d)))
 
   /*def >[Result1, Result2](that: BifurcationPipe[Destination, Result1, Result2])
   : BifurcationPipe[Source, Result1, Result2] = DataPipe((x: Source) => that.run(self.run(x)))*/
@@ -70,7 +78,7 @@ trait DataPipe[-Source, +Destination] extends DataPipeConvertible[Source, Destin
   def %>(that: Basis[Destination]): Basis[Source] = Basis((d: Source) => that.run(self.run(d)))
 
   def *[OtherSource, OtherDestination](that: DataPipe[OtherSource, OtherDestination])
-  :ParallelPipe[Source, Destination, OtherSource, OtherDestination] = ParallelPipe(self.run, that.run)
+  :ParallelPipe[Source, Destination, OtherSource, OtherDestination] = ParallelPipe(self, that)
 
   def >-<[OtherSource, OtherDestination](that: DataPipe[OtherSource, OtherDestination])
   :DataPipe2[Source, OtherSource, (Destination, OtherDestination)] =
@@ -93,14 +101,12 @@ object DataPipe {
   }
 
   def apply[S1, D1, S2, D2](pipe1: DataPipe[S1, D1], pipe2: DataPipe[S2, D2]): ParallelPipe[S1, D1, S2, D2] =
-    ParallelPipe(pipe1.run, pipe2.run)
+    ParallelPipe(pipe1, pipe2)
 
-  def apply[S, D1, D2](func: (S) => (D1, D2)):
-  BifurcationPipe[S, D1, D2] = {
-    new BifurcationPipe[S, D1, D2] {
-      def run(data: S) = func(data)
-    }
-  }
+  /* def apply[S, D1, D2](func: S => (D1, D2)):
+  DataPipe[S, (D1, D2)] = {
+    DataPipe[S, (D1, D2)](func)
+  } */
 
   def apply[S](func: S => Unit): SideEffectPipe[S] = {
     new SideEffectPipe[S] {
@@ -109,31 +115,21 @@ object DataPipe {
   }
 }
 
-trait ParallelPipe[-Source1, +Result1, -Source2, +Result2]
-  extends DataPipe[(Source1, Source2), (Result1, Result2)] {
-
-  val _1: DataPipe[Source1, Result1]
+case class ParallelPipe[-Source1, Result1, -Source2, Result2](
+  val _1: DataPipe[Source1, Result1],
   val _2: DataPipe[Source2, Result2]
+) extends DataPipe[(Source1, Source2), (Result1, Result2)] {
 
+  override def run(data: (Source1, Source2)): (Result1, Result2) = (_1(data._1), _2(data._2))
 }
 
-object ParallelPipe {
-  def apply[S1, D1, S2, D2](func1: S1 => D1, func2: S2 => D2): ParallelPipe[S1, D1, S2, D2] = {
-    new ParallelPipe[S1, D1, S2, D2] {
-
-      def run(data: (S1, S2)): (D1, D2) = (func1(data._1), func2(data._2))
-
-      override val _1 = DataPipe(func1)
-
-      override val _2 = DataPipe(func2)
-    }
-  }
-}
-
-trait BifurcationPipe[-Source, +Result1, +Result2]
-  extends DataPipe[Source, (Result1, Result2)] {
+case class BifurcationPipe[-Source, Result1, Result2](
+  val pipe_like: DataPipeConvertible[Source, (Result1, Result2)]
+) extends DataPipe[Source, (Result1, Result2)] {
 
   self =>
+
+  override def run(data: Source): (Result1, Result2) = pipe_like.toPipe(data)
 
   def >[FinalResult](other: DataPipe2[Result1, Result2, FinalResult]): DataPipe[Source, FinalResult] =
     DataPipe((input: Source) => {
@@ -149,13 +145,15 @@ trait SideEffectPipe[I] extends DataPipe[I, Unit] {
 
 object BifurcationPipe {
 
-  def apply[Source, Destination1, Destination2](f: Source => (Destination1, Destination2)) = DataPipe(f)
+  def apply[Source, Destination1, Destination2](
+    f: Source => (Destination1, Destination2))
+    : BifurcationPipe[Source, Destination1, Destination2] = BifurcationPipe(DataPipe(f))
 
   def apply[Source, Destination1, Destination2](
     pipe1: DataPipe[Source, Destination1],
     pipe2: DataPipe[Source, Destination2]):
   BifurcationPipe[Source, Destination1, Destination2] = {
-    DataPipe((x: Source) => (pipe1.run(x), pipe2.run(x)))
+    BifurcationPipe(DataPipe((x: Source) => (pipe1.run(x), pipe2.run(x))))
   }
 }
 

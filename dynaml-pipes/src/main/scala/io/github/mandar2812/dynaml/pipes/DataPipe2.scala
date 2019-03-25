@@ -23,7 +23,7 @@ package io.github.mandar2812.dynaml.pipes
   *
   * Data Pipes representing functions of 2 arguments
   */
-trait DataPipe2[-Source1, -Source2, +Result] extends
+trait DataPipe2[-Source1, -Source2, Result] extends
   DataPipeConvertible[(Source1, Source2), Result] with
   Serializable {
 
