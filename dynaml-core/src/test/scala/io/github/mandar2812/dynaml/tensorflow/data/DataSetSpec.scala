@@ -60,7 +60,7 @@ class DataSetSpec extends FlatSpec with Matchers {
 
     val run_sum = running_sum.data.toSeq
 
-    assert(numbers.flatMap(i => 1 to i).size == numbers.size*(numbers.size + 1)/2)
+    assert(numbers.flatMap(DataPipe[Int, Iterable[Int]](i => 1 to i)).size == numbers.size*(numbers.size + 1)/2)
     assert(numbers.flatMap(DataPipe[Int, Iterable[Int]](1 to _)).size == numbers.size*(numbers.size + 1)/2)
 
     assert(numbers.scan[Int](0)(addPipe).data.forall(run_sum.contains(_)))

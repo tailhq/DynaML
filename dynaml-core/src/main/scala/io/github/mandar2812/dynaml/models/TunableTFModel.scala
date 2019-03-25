@@ -29,6 +29,7 @@ import org.platanios.tensorflow.api.implicits.helpers._
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.{Function, Output}
+import org.platanios.tensorflow.api.ops.data.Dataset
 import org.json4s._
 import org.json4s.jackson.Serialization.{read => read_json, write => write_json}
 import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, TF}
@@ -77,7 +78,7 @@ import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, TF}
   * */
 class TunableTFModel[Pattern, In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](
   val modelFunction: TunableTFModel.ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS],
-  val modelConfigFunc: TunableTFModel.ModelConfigFunc[IT, TT, ITT, In, Out],
+  val modelConfigFunc: TunableTFModel.ModelConfigFunc[In, Out],
   val hyp_params: Seq[String],
   protected val training_data: DataSet[Pattern],
   val convert_to_tensor: DataPipe[Pattern, (IT, TT)],
@@ -93,16 +94,37 @@ class TunableTFModel[Pattern, In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, 
 
   override protected var current_state: TunableTFModel.HyperParams = Map()
 
-  protected def _data_splits: TFDataSet[Pattern] = {
+  protected def _data_splits: TFDataSet[(IT, TT)] = {
 
     require(
       validation_data.isDefined || data_split_func.isDefined,
       "If validation data is not explicitly provided, then data_split_func must be defined")
 
-    if(validation_data.isEmpty) training_data.partition(data_split_func.get)
-    else TFDataSet(training_data, validation_data.get)
+    val split_data = 
+      if(validation_data.isEmpty) training_data.partition(data_split_func.get)
+      else TFDataSet(training_data, validation_data.get)
 
+      split_data.copy[(IT, TT)](
+        training_dataset = split_data.training_dataset.map(convert_to_tensor),
+        test_dataset     = split_data.test_dataset.map(convert_to_tensor)
+      )
   }
+
+  
+  //Obtain training and validation data splits
+  val TFDataSet(train_split, validation_split) = _data_splits
+
+  val (train_data_tf, validation_data_tf): (Dataset[(In, Out)], Dataset[(In, Out)]) = {
+    
+    (
+      modelFunction.data_handle(train_split), 
+      modelFunction.data_handle(validation_split)
+    )
+  }
+
+  private val fitness_metric = Performance[(ArchOut, (In, Out))](
+      "Energy", DataPipe[(ArchOut, (In, Out)), Output[Float]](c => fitness_function(c._1, c._2._2))
+  )
 
   /**
     * Calculates the energy of the configuration,
@@ -126,34 +148,30 @@ class TunableTFModel[Pattern, In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, 
     //Set the current state to `h`
     current_state = h
 
-    //Obtain training and validation data splits
-    val TFDataSet(train_split, validation_split) = _data_splits
-
-    //Separate the validation data inputs and outputs
-    val (validation_inputs, validation_targets) = (
-      validation_split.map(convert_to_tensor).map(DataPipe((c: (IT, TT)) => c._1)),
-      validation_split.map(convert_to_tensor).map(DataPipe((c: (IT, TT)) => c._2))
-    )
-
-
     //Get the model instance.
     val model_instance = modelFunction(h)
     val train_config   = modelConfigFunc(h)
 
-    val fitness_metric = Performance[(ArchOut, (In, Out))](
-      "Energy", DataPipe[(ArchOut, (In, Out)), Output[Float]](c => fitness_function(c._1, c._2._2))
-    )
-
+    
     //Compute the model fitness, guard against weird exceptions
     val (fitness, comment) = try {
       //Train the model instance
-      model_instance.train(train_split.map(convert_to_tensor), train_config)
+      model_instance.train(
+        modelFunction._build_ops(
+          train_data_tf, 
+          train_config.data_processing), 
+        train_config)
 
       //Dont shuffle and repeat the data set when performing validation 
       val computed_energy = model_instance.evaluate(
-        validation_split.map(convert_to_tensor), 
-        Seq(fitness_metric), 
-        train_config.data_processing.copy(shuffleBuffer = 0, repeat = 0)
+        modelFunction._build_ops(
+          validation_data_tf, 
+          train_config.data_processing.copy(shuffleBuffer = 0, repeat = 0)
+        ), 
+        Seq(fitness_metric),
+        maxSteps = math.ceil(validation_split.size.toDouble/train_config.data_processing.batchSize).toLong, 
+        saveSummaries = true, 
+        name = null
       ).head.scalar.toDouble 
       
       //If all goes well, return the fitness and no comment.
@@ -179,6 +197,31 @@ class TunableTFModel[Pattern, In, Out, ArchOut, Loss: TF : IsFloatOrDouble, IT, 
     //Return the model fitness.
     fitness
   }
+
+  def train_model(
+    hyper_params: TunableTFModel.HyperParams, 
+    trainConfig: Option[TFModel.Config[In, Out]] = None)
+  : TFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
+
+    val model_instance = modelFunction(hyper_params)
+
+    val training_configuration = trainConfig match {
+      case None => modelConfigFunc(hyper_params)
+      case Some(config) => config
+    }
+
+    
+
+    model_instance.train(
+      modelFunction._build_ops(
+        modelFunction.data_handle(training_data.map(convert_to_tensor)), 
+        training_configuration.data_processing),
+        training_configuration
+    )
+
+    model_instance
+  }
+
 }
 
 object TunableTFModel {
@@ -192,13 +235,47 @@ object TunableTFModel {
     * and return an instantiated TensorFlow Model [[TFModel]].
     *
     * */
-  type ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = DataPipe[
-    HyperParams,
-    TFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS]
-    ]
+  type ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = 
+    ModelFunction[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS]
 
-  type ModelConfigFunc[IT, TT, ITT, In, Out] = DataPipe[HyperParams, TFModel.Config[IT, TT, ITT, In, Out]]
+  type ModelConfigFunc[In, Out] = DataPipe[HyperParams, TFModel.Config[In, Out]]
 
+
+  class ModelFunction[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](
+    val generator: DataPipe[
+      HyperParams,
+      TFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS]],
+    val input: (ID, IS),
+    val target: (TD, TS),
+    val tf_handle_ops: TFModel.HandleOps[IT, TT, ITT]  
+    )(
+    implicit
+    evTensorToOutput: TensorToOutput.Aux[(IT, TT), (In, Out)],
+    evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+    evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
+    evOutputStructure: OutputStructure[(In, Out)],
+    evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
+    evOutputToShape: OutputToShape.Aux[(In, Out), (IS, TS)],
+    evDataTypeToShape: DataTypeToShape.Aux[(ID, TD), (IS, TS)]) {
+
+
+    def apply(config: HyperParams): TFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = generator(config)
+
+    def data_handle(data: DataSet[(IT, TT)]): Dataset[(In, Out)] = {
+      TFModel.data._get_tf_data[IT, ID, IS, TT, TD, TS, ITT, In, Out](
+        data, input, target, 
+        tf_handle_ops = tf_handle_ops, 
+        createOnlyHandle = true)
+    }
+
+    
+    def _build_ops(
+      tf_dataset: Dataset[(In, Out)],
+      data_ops: TFModel.Ops[In, Out]): Dataset[(In, Out)] = {
+      TFModel.data._build_ops(tf_dataset, data_ops)
+    }
+
+  }
 
   /**
     * <h4>Model Functions</h4>
@@ -259,7 +336,8 @@ object TunableTFModel {
       target: (TD, TS),
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
-      data_handles: Option[TFModel.DataHandles[In, Out]] = None)(
+      data_handles: Option[TFModel.DataHandles[In, Out]] = None,
+      tf_handle_ops: TFModel.HandleOps[IT, TT, ITT] = TFModel.tf_data_ops[IT, TT, ITT]())(
       implicit
       evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
       evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -285,9 +363,12 @@ object TunableTFModel {
       evOutputToTensorInOut: OutputToTensor.Aux[(In, ArchOut), (IT, ITT)])
     : ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
 
-      DataPipe((h: TunableTFModel.HyperParams) => TFModel(
-        architecture, input, target, loss_gen(h),
-        inMemory, existingGraph, data_handles)
+      new ModelFunction(
+        DataPipe((h: TunableTFModel.HyperParams) => TFModel(
+          architecture, input, target, loss_gen(h),
+          inMemory, existingGraph, data_handles, 
+          tf_handle_ops)
+        ), input, target, tf_handle_ops
       )
     }
 
@@ -323,7 +404,8 @@ object TunableTFModel {
       target: (TD, TS),
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
-      data_handles: Option[TFModel.DataHandles[In, Out]] = None)(
+      data_handles: Option[TFModel.DataHandles[In, Out]] = None,
+      tf_handle_ops: TFModel.HandleOps[IT, TT, ITT] = TFModel.tf_data_ops())(
       implicit
       evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
       evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -349,15 +431,19 @@ object TunableTFModel {
       evOutputToTensorInOut: OutputToTensor.Aux[(In, ArchOut), (IT, ITT)])
     : ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
 
-      DataPipe(
+      new ModelFunction(
+        DataPipe(
         (h: TunableTFModel.HyperParams) => {
 
             val (architecture, loss) = arch_loss_gen(h)
 
             TFModel(
               architecture, input, target, loss,
-              inMemory, existingGraph, data_handles)
+              inMemory, existingGraph, data_handles, 
+              tf_handle_ops)
           }
+        ),
+        input, target, tf_handle_ops
       )
 
     }
@@ -396,7 +482,8 @@ object TunableTFModel {
       target: (TD, TS),
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
-      data_handles: Option[TFModel.DataHandles[In, Out]] = None)(
+      data_handles: Option[TFModel.DataHandles[In, Out]] = None,
+      tf_handle_ops: TFModel.HandleOps[IT, TT, ITT] = TFModel.tf_data_ops())(
       implicit
       evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
       evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -422,7 +509,9 @@ object TunableTFModel {
       evOutputToTensorInOut: OutputToTensor.Aux[(In, ArchOut), (IT, ITT)])
     : ModelFunc[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
 
-      DataPipe(
+      
+      new ModelFunction(
+        DataPipe(
         (h: TunableTFModel.HyperParams) => {
 
             val architecture = arch_generator(h)
@@ -431,12 +520,14 @@ object TunableTFModel {
 
                 TFModel(
                   architecture, input, target, loss,
-                  inMemory, existingGraph, data_handles
+                  inMemory, existingGraph, data_handles,
+                  tf_handle_ops
                 )
               }
-          )
-
-        }
+          ),
+        input, target, tf_handle_ops
+      )
+    }
 
   }
 
@@ -449,12 +540,13 @@ object TunableTFModel {
     architecture: Layer[In, ArchOut],
     input: (ID, IS),
     target: (TD, TS),
-    get_training_config: ModelConfigFunc[IT, TT, ITT, In, Out],
+    get_training_config: ModelConfigFunc[In, Out],
     validation_data: Option[DataSet[Pattern]] = None,
     data_split_func: Option[DataPipe[Pattern, Boolean]] = None,
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
-    data_handles: Option[TFModel.DataHandles[In, Out]] = None)(
+    data_handles: Option[TFModel.DataHandles[In, Out]] = None,
+    tf_handle_ops: TFModel.HandleOps[IT, TT, ITT] = TFModel.tf_data_ops())(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -482,7 +574,7 @@ object TunableTFModel {
 
     val modelFunc = ModelFunction.from_loss_generator(
       loss_func_gen, architecture, input, target, inMemory,
-      existingGraph, data_handles
+      existingGraph, data_handles, tf_handle_ops
     )
 
     new TunableTFModel[Pattern, In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](
@@ -504,12 +596,13 @@ object TunableTFModel {
     fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
     input: (ID, IS),
     target: (TD, TS),
-    get_training_config: ModelConfigFunc[IT, TT, ITT, In, Out],
+    get_training_config: ModelConfigFunc[In, Out],
     validation_data: Option[DataSet[Pattern]],
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
     existingGraph: Option[Graph],
-    data_handles: Option[TFModel.DataHandles[In, Out]])(
+    data_handles: Option[TFModel.DataHandles[In, Out]],
+    tf_handle_ops: TFModel.HandleOps[IT, TT, ITT])(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -537,7 +630,8 @@ object TunableTFModel {
 
     val modelFunc = ModelFunction.from_arch_loss_generator(
       arch_loss_gen, input, target,
-      inMemory, existingGraph, data_handles
+      inMemory, existingGraph, data_handles,
+      tf_handle_ops
     )
 
     new TunableTFModel[Pattern, In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](
@@ -560,12 +654,13 @@ object TunableTFModel {
     fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
     input: (ID, IS),
     target: (TD, TS),
-    get_training_config: ModelConfigFunc[IT, TT, ITT, In, Out],
+    get_training_config: ModelConfigFunc[In, Out],
     validation_data: Option[DataSet[Pattern]],
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
     existingGraph: Option[Graph],
-    data_handles: Option[TFModel.DataHandles[In, Out]])(
+    data_handles: Option[TFModel.DataHandles[In, Out]],
+    tf_handle_ops: TFModel.HandleOps[IT, TT, ITT])(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -593,7 +688,8 @@ object TunableTFModel {
 
     val modelFunc = ModelFunction.from_arch_generator(
       arch_gen, loss, input, target,
-      inMemory, existingGraph, data_handles
+      inMemory, existingGraph, data_handles,
+      tf_handle_ops
     )
 
     new TunableTFModel[Pattern, In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS](

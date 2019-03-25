@@ -71,17 +71,20 @@ class TFModelSpec extends FlatSpec with Matchers {
       Output[Double], Output[Double], Output[Double], Double,
       Tensor[Double], FLOAT64, Shape,
       Tensor[Double], FLOAT64, Shape,
-      Tensor[Double], FLOAT64, Shape](arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)), loss)
+      Tensor[Double], FLOAT64, Shape](
+        arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)), 
+        loss, tf_handle_ops = TFModel.tf_data_ops(
+          concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
+          concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
+          concatOpO = Some(dtfpipe.EagerConcatenate[Double]()))
+      )
 
     val train_config = dtflearn.model.trainConfig(
       summary_dir,
-      dtflearn.model.data_ops[Tensor[Double], Tensor[Double], Tensor[Double], Output[Double], Output[Double]](
+      dtflearn.model.data_ops[Output[Double], Output[Double]](
         shuffleBuffer = 5000,
         batchSize = 16,
-        prefetchSize = 10,
-        concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-        concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
-        concatOpO = Some(dtfpipe.EagerConcatenate[Double]())),
+        prefetchSize = 10),
       tf.train.Adam(0.1f),
       dtflearn.rel_loss_change_stop(0.05, 5000),
       Some(
@@ -114,13 +117,11 @@ class TFModelSpec extends FlatSpec with Matchers {
     val metrics = regression_model.evaluate(
       test_data, 
       Seq(dtflearn.mse[Output[Double], Double](), dtflearn.mae[Output[Double], Double]()),
-      dtflearn.model.data_ops[Tensor[Double], Tensor[Double], Tensor[Double], Output[Double], Output[Double]](
+      dtflearn.model.data_ops[Output[Double], Output[Double]](
         repeat = 0,
         shuffleBuffer = 0,
         batchSize = 16,
-        prefetchSize = 10,
-        concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-        concatOpT = Some(dtfpipe.EagerConcatenate[Double]())),
+        prefetchSize = 10),
     )
 
     

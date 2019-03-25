@@ -68,15 +68,13 @@ val tuning_config_generator =
     DataPipe(
       (p: Path) =>
         dtflearn.model
-          .trainConfig[Tensor[Double], Tensor[Double], Tensor[Double]](
+          .trainConfig[Output[Double], Output[Double]](
             p,
             dtflearn.model.data_ops(
               10,
               1000,
               10,
-              data_size / 5,
-              concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-              concatOpT = Some(dtfpipe.EagerConcatenate[Double]())
+              data_size / 5
             ),
             tf.train.Adam(0.1f),
             dtflearn.rel_loss_change_stop(0.005, 5000),
@@ -144,7 +142,11 @@ val tunableTFModel: TunableTFModel[
         _ => scala.util.Random.nextGaussian() <= 0.7
       )
     ),
-    inMemory = false
+    inMemory = false,
+    tf_handle_ops = dtflearn.model.tf_data_ops[Tensor[Double], Tensor[Double], Tensor[Double]](
+      concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
+      concatOpT = Some(dtfpipe.EagerConcatenate[Double]())
+    )
   )
 
 val hyp_scaling = hyper_prior.map(

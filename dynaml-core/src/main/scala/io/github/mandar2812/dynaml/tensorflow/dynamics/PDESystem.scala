@@ -120,7 +120,8 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
     * */
   def solve(
     data: SupervisedDataSet[Tensor[T], Tensor[U]],
-    trainConfig: TFModel.Config[Tensor[T], Tensor[U], PDESystem.ModelOutputsT[U], Output[T], Output[U]],
+    trainConfig: TFModel.Config[Output[T], Output[U]],
+    tf_handle_ops: TFModel.HandleOps[Tensor[T], Tensor[U], PDESystem.ModelOutputsT[U]] = TFModel.tf_data_ops[Tensor[T], Tensor[U], PDESystem.ModelOutputsT[U]](),
     inMemory: Boolean = false)
   : PDESystem.Model[T, U, L] = {
 
@@ -135,7 +136,8 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
       (dTypeTag.dataType, input_shape),
       (dTypeTagO.dataType, target_shape),
       system_loss, inMemory,
-      graphInstance, Some(data_handles))
+      graphInstance, Some(data_handles), 
+      tf_handle_ops)
 
     model.train(data, trainConfig)
 

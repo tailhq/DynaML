@@ -126,10 +126,7 @@ class PDESystemsSpec extends FlatSpec with Matchers {
       training_data,
       dtflearn.model.trainConfig(
         summary_dir,
-        dtflearn.model.data_ops(
-          training_data.size/10, training_data.size, 10,
-          concatOpI = Some(dtfpipe.EagerConcatenate[Float]()),
-          concatOpT = Some(dtfpipe.EagerConcatenate[Float]())),
+        dtflearn.model.data_ops(training_data.size/10, training_data.size, 10),
         tf.train.Adam(0.001f),
         dtflearn.abs_loss_change_stop(0.0001, 5000),
         Some(
@@ -137,7 +134,11 @@ class PDESystemsSpec extends FlatSpec with Matchers {
             summary_dir, stepRateFreq = 1000,
             summarySaveFreq = 1000,
             checkPointFreq = 1000)
-        ))
+        )),
+      dtflearn.model.tf_data_ops(
+        concatOpI = Some(dtfpipe.EagerConcatenate[Float]()),
+        concatOpT = Some(dtfpipe.EagerConcatenate[Float]())
+      )
     )
 
     val predictions = wave_model1d.predict("Output")(test_data).head
