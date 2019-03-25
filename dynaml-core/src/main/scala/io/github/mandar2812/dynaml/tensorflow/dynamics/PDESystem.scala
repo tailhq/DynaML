@@ -136,10 +136,9 @@ private[dynaml] class PDESystem[T: TF: IsDecimal, U: TF: IsDecimal, L: TF: IsFlo
       (dTypeTag.dataType, input_shape),
       (dTypeTagO.dataType, target_shape),
       system_loss, inMemory,
-      graphInstance, Some(data_handles), 
-      tf_handle_ops)
+      graphInstance, Some(data_handles))
 
-    model.train(data, trainConfig)
+    model.train(data, trainConfig, tf_handle_ops)
 
     PDESystem.model(model, name, system_variables.keys.toSeq)
   }

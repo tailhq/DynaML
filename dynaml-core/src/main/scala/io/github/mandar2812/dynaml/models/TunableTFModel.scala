@@ -366,8 +366,7 @@ object TunableTFModel {
       new ModelFunction(
         DataPipe((h: TunableTFModel.HyperParams) => TFModel(
           architecture, input, target, loss_gen(h),
-          inMemory, existingGraph, data_handles, 
-          tf_handle_ops)
+          inMemory, existingGraph, data_handles)
         ), input, target, tf_handle_ops
       )
     }
@@ -439,8 +438,7 @@ object TunableTFModel {
 
             TFModel(
               architecture, input, target, loss,
-              inMemory, existingGraph, data_handles, 
-              tf_handle_ops)
+              inMemory, existingGraph, data_handles)
           }
         ),
         input, target, tf_handle_ops
@@ -520,8 +518,7 @@ object TunableTFModel {
 
                 TFModel(
                   architecture, input, target, loss,
-                  inMemory, existingGraph, data_handles,
-                  tf_handle_ops
+                  inMemory, existingGraph, data_handles
                 )
               }
           ),

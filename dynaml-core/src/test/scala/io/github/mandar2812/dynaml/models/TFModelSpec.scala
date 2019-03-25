@@ -73,10 +73,7 @@ class TFModelSpec extends FlatSpec with Matchers {
       Tensor[Double], FLOAT64, Shape,
       Tensor[Double], FLOAT64, Shape](
         arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)), 
-        loss, tf_handle_ops = TFModel.tf_data_ops(
-          concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-          concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
-          concatOpO = Some(dtfpipe.EagerConcatenate[Double]()))
+        loss
       )
 
     val train_config = dtflearn.model.trainConfig(
@@ -94,8 +91,12 @@ class TFModelSpec extends FlatSpec with Matchers {
           checkPointFreq = 1000)
       ))
 
+    val tf_handle_ops = TFModel.tf_data_ops(
+      concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
+      concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
+      concatOpO = Some(dtfpipe.EagerConcatenate[Double]()))
 
-    regression_model.train(tf_dataset.training_dataset, train_config)
+    regression_model.train(tf_dataset.training_dataset, train_config, tf_handle_ops)
 
     val test_pred = regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1))).scalar
 
@@ -122,6 +123,7 @@ class TFModelSpec extends FlatSpec with Matchers {
         shuffleBuffer = 0,
         batchSize = 16,
         prefetchSize = 10),
+      tf_handle_ops
     )
 
     

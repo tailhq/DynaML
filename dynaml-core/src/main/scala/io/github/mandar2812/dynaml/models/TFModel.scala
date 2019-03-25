@@ -84,8 +84,7 @@ ITT, IDD, ISS](
   val loss: Layer[(ArchOut, Out), Output[Loss]],
   val inMemory: Boolean = false,
   val existingGraph: Option[Graph] = None,
-  data_handles: Option[TFModel.DataHandles[In, Out]] = None,
-  tf_handle_ops: TFModel.HandleOps[IT, TT, ITT] = TFModel.tf_data_ops[IT, TT, ITT]())(
+  data_handles: Option[TFModel.DataHandles[In, Out]] = None)(
   implicit
   evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
   evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -171,7 +170,8 @@ ITT, IDD, ISS](
 
   def train(
     data: DataSet[(IT, TT)], 
-    trainConfig: TFModel.TrainConfig[In, Out]): Unit = {
+    trainConfig: TFModel.TrainConfig[In, Out],
+    tf_handle_ops: TFModel.HandleOps[IT, TT, ITT] = TFModel.tf_data_ops[IT, TT, ITT]()): Unit = {
 
     val TFModel.TrainConfig(summaryDir, data_ops, optimizer, stopCriteria, trainHooks) = trainConfig
 
@@ -255,7 +255,8 @@ ITT, IDD, ISS](
 
   def infer_batch(
     input_data_set: DataSet[IT],
-    data_ops: TFModel.Ops[In, Out] = TFModel.data_ops()): Either[ITT, DataSet[ITT]] = {
+    data_ops: TFModel.Ops[In, Out] = TFModel.data_ops(),
+    tf_handle_ops: TFModel.HandleOps[IT, TT, ITT] = TFModel.tf_data_ops[IT, TT, ITT]()): Either[ITT, DataSet[ITT]] = {
 
     val (concatOpI, concatOpO) = (tf_handle_ops.concatOpI, tf_handle_ops.concatOpO)
 
@@ -292,7 +293,8 @@ ITT, IDD, ISS](
   def evaluate(
     test_data: DataSet[(IT, TT)], 
     metrics: Seq[tf.metrics.Metric[(ArchOut, (In, Out)), Output[Float]]],
-    evaluation_ops: TFModel.Ops[In, Out] = TFModel.data_ops(), 
+    evaluation_ops: TFModel.Ops[In, Out] = TFModel.data_ops(),
+    tf_handle_ops: TFModel.HandleOps[IT, TT, ITT] = TFModel.tf_data_ops[IT, TT, ITT](),
     maxSteps: Long = -1L,
     saveSummaries: Boolean = true,
     name: String = null): Seq[Tensor[Float]] = {
@@ -580,8 +582,7 @@ object TFModel {
     loss: Layer[(ArchOut, Out), Output[Loss]],
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
-    data_handles: Option[(Input[In], Input[Out])] = None,
-    tf_handle_ops: HandleOps[IT, TT, ITT] = TFModel.tf_data_ops())(
+    data_handles: Option[(Input[In], Input[Out])] = None)(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
     evDataTypeToOutputT: DataTypeToOutput.Aux[TD, Out],
@@ -612,7 +613,7 @@ object TFModel {
       ITT, IDD, ISS](
       architecture, input, target, loss,
       inMemory, existingGraph,
-      data_handles, tf_handle_ops
+      data_handles
     )
 
 }
