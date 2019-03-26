@@ -43,6 +43,10 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
     val f_tensor  = dtf.fill[Float](3, 2)(1f)
     val f_tensor2  = dtf.fill[Float](Shape(3, 2))(1f)
 
+    val f32tensor2 = dtf.tensor_from[Float](100, 100)((1 to 10000).map(_.toFloat))
+
+    val f64tensor2 = dtf.tensor_from[Double](Shape(100, 100))((1 to 10000).map(_.toDouble):_*)
+    
     val r_tensor = dtf.random[Double](3, 3)(GaussianRV(0.0, 1.0))
 
     val b_tensor = dtf.tensor_from_buffer[Int](Shape(5, 5))((0 until 100).map(_.toByte).toArray)
@@ -56,8 +60,9 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
     assert(int64tensor.dataType == INT64 && int64tensor.shape == Shape(2, 2))
     assert(f16tensor.dataType == FLOAT16 && f16tensor.shape == Shape(2, 2))
     assert(f32tensor.dataType == FLOAT32 && f32tensor.shape == Shape(2, 2))
+    assert(f32tensor2.dataType == FLOAT32 && f32tensor2.shape == Shape(100, 100))
     assert(f64tensor.dataType == FLOAT64 && f64tensor.shape == Shape(2, 2))
-
+    assert(f64tensor2.dataType == FLOAT64 && f64tensor2.shape == Shape(100, 100))
     assert(f_tensor.shape == Shape(3, 2) && f_tensor.dataType == FLOAT32)
     assert(f_tensor.entriesIterator.forall(_ == 1f))
 

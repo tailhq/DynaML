@@ -27,9 +27,9 @@ private[tensorflow] object Api {
     * <b>Usage</b> dtf.tensor_from[Int](Shape(1, 2, 3))(1, 2, 3, 4, 5, 6)
     *
     * */
-  def tensor_from[D: core.types.TF](shape: Shape)(buffer: D*): Tensor[D] = {
+  def tensor_from[D: TF](shape: Shape)(buffer: D*): Tensor[D] = {
     val t: Tensor[D] = Tensor(buffer)
-    t.reshape(shape.toTensor)
+    t.reshape(shape)
   }
 
   /**
@@ -48,9 +48,9 @@ private[tensorflow] object Api {
     * <b>Usage</b> dtf.tensor_from[Int](1, 2, 3)((1 to 6).toSeq)
     *
     * */
-  def tensor_from[D: core.types.TF](shape: Int*)(buffer: Seq[D]): Tensor[D] = {
+  def tensor_from[D: TF](shape: Int*)(buffer: Seq[D]): Tensor[D] = {
     val t: Tensor[D] = Tensor[D](buffer)
-    t.reshape(Shape(shape:_*).toTensor)
+    t.reshape(Shape(shape:_*))
   }
 
   /**
@@ -69,7 +69,7 @@ private[tensorflow] object Api {
     * <b>Usage</b> dtf.tensor_from_buffer(FLOAT32, 1, 1)((1 to 4).toArray.map(_.toByte))
     *
     * */
-  def tensor_from_buffer[D: core.types.TF](shape: Shape)(buffer: Array[Byte]): Tensor[D] = {
+  def tensor_from_buffer[D: TF](shape: Shape)(buffer: Array[Byte]): Tensor[D] = {
     Tensor.fromBuffer(shape, buffer.length.toLong, ByteBuffer.wrap(buffer))
   }
 
@@ -90,7 +90,7 @@ private[tensorflow] object Api {
     * <b>Usage</b> dtf.tensor_from_buffer("FLOAT32", 1, 1)((1 to 4).toArray.map(_.toByte))
     *
     * */
-  def tensor_from_buffer[D: core.types.TF](shape: Int*)(buffer: Array[Byte]): Tensor[D] =
+  def tensor_from_buffer[D: TF](shape: Int*)(buffer: Array[Byte]): Tensor[D] =
     Tensor.fromBuffer[D](Shape(shape:_*), buffer.length.toLong, ByteBuffer.wrap(buffer))
 
 
@@ -215,15 +215,15 @@ private[tensorflow] object Api {
     *
     * @return The larger stacked tensor.
     * */
-  def stack[D: core.types.TF](inputs: Seq[Tensor[D]], axis: Int = 0): Tensor[D] = tfi.stack(inputs, axis)
+  def stack[D: TF](inputs: Seq[Tensor[D]], axis: Int = 0): Tensor[D] = tfi.stack(inputs, axis)
 
   /**
     * Split a tensor into a list of tensors.
     * */
-  def unstack[D: core.types.TF](input: Tensor[D], number: Int = -1, axis: Int = 0): Seq[Tensor[D]] =
+  def unstack[D: TF](input: Tensor[D], number: Int = -1, axis: Int = 0): Seq[Tensor[D]] =
     tfi.unstack(input, number, axis)
 
-  def concatenate[D: core.types.TF](inputs: Seq[Tensor[D]], axis: Tensor[Int] = 0): Tensor[D] =
+  def concatenate[D: TF](inputs: Seq[Tensor[D]], axis: Tensor[Int] = 0): Tensor[D] =
     tfi.concatenate(inputs, axis)
 
   /**
@@ -231,7 +231,7 @@ private[tensorflow] object Api {
     * identically distributed elements drawn from a
     * [[RandomVariable]] instance.
     * */
-  def random[D: core.types.TF](shape: Int*)(
+  def random[D: TF](shape: Int*)(
     rv: RandomVariable[D]): Tensor[D] = {
     val buffer = rv.iid(shape.product).draw
     Tensor[D](buffer).reshape(Shape(shape:_*))
@@ -240,9 +240,9 @@ private[tensorflow] object Api {
   /**
     * Fill a tensor with a fixed value.
     * */
-  def fill[D: core.types.TF](shape: Int*)(value: D): Tensor[D] =
+  def fill[D: TF](shape: Int*)(value: D): Tensor[D] =
     Tensor.fill(Shape(shape:_*))(value)
 
-  def fill[D: core.types.TF](shape: Shape)(value: D): Tensor[D] =
+  def fill[D: TF](shape: Shape)(value: D): Tensor[D] =
     Tensor.fill(shape)(value)
 }
