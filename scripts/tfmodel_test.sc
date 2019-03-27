@@ -18,8 +18,12 @@ val rv        = GaussianRV(0.0, 2.0).iid(data_size)
 val data = dtfdata
   .dataset(rv.draw)
   .to_supervised(
-    DataPipe[Double, (Tensor[Double], Tensor[Double])](
-      n => (dtf.tensor_f64(1, 1)(n), dtf.tensor_f64(1, 1)(n * weight + bias))
+    DataPipe[Double, (Output[Double], Output[Double])](
+      n =>
+        (
+          dtf.sym_tensor_f64(1, 1)(n),
+          dtf.sym_tensor_f64(1, 1)(n * weight + bias)
+        )
     )
   )
 
@@ -34,7 +38,7 @@ val test_data = dtfdata
 val train_fraction = 0.7
 
 val tf_dataset = data.partition(
-  DataPipe[(Tensor[Double], Tensor[Double]), Boolean](
+  DataPipe[(Output[Double], Output[Double]), Boolean](
     _ => scala.util.Random.nextDouble() <= train_fraction
   )
 )
@@ -51,37 +55,45 @@ val regression_model = dtflearn.model[Output[Double], Output[Double], Output[
   Double
 ], Double, Tensor[Double], FLOAT64, Shape, Tensor[Double], FLOAT64, Shape, Tensor[
   Double
-], FLOAT64, Shape](arch, (FLOAT64, Shape(1)), (FLOAT64, Shape(1)), loss)
+], FLOAT64, Shape](
+  arch,
+  (FLOAT64, Shape(1)),
+  (FLOAT64, Shape(1)),
+  loss
+)
 
-val train_config = dtflearn
-  .model
-  .trainConfig(
-    summary_dir,
-    dtflearn
-      .model
-      .data_ops[Tensor[Double], Tensor[Double], Tensor[Double], Output[Double], Output[Double]](
-        shuffleBuffer = 5000,
-        batchSize = 16,
-        prefetchSize = 10,
-        concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-        concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
-        concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
-      ),
-    tf.train.Adam(0.1f),
-    dtflearn.rel_loss_change_stop(0.05, 5000),
-    Some(
-      dtflearn
-        .model
-        ._train_hooks(
-          summary_dir,
-          stepRateFreq = 1000,
-          summarySaveFreq = 1000,
-          checkPointFreq = 1000
-        )
+val train_config = dtflearn.model.trainConfig(
+  summary_dir,
+  dtflearn.model.data_ops[Output[Double], Output[Double]](
+    shuffleBuffer = 5000,
+    batchSize = 16,
+    prefetchSize = 10
+  ),
+  tf.train.Adam(0.1f),
+  dtflearn.rel_loss_change_stop(0.05, 5000),
+  Some(
+    dtflearn.model._train_hooks(
+      summary_dir,
+      stepRateFreq = 1000,
+      summarySaveFreq = 1000,
+      checkPointFreq = 1000
     )
   )
+)
 
-regression_model.train(tf_dataset.training_dataset, train_config)
+regression_model.train(
+  tf_dataset.training_dataset,
+  train_config,
+  dtflearn.model.tf_data_handle_ops(
+    //patternToTensor = Some(identityPipe[(Tensor[Double], Tensor[Double])]),
+    patternToSym = Some(identityPipe[(Output[Double], Output[Double])]),
+    concatOpIO = Some(dtfpipe.LazyConcatenate[Double]()),
+    concatOpTO = Some(dtfpipe.LazyConcatenate[Double]()),
+    concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
+    concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
+    concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
+  )
+)
 
 val test_pred =
   regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1))).scalar
@@ -92,27 +104,16 @@ val metrics = regression_model.evaluate(
     dtflearn.mse[Output[Double], Double](),
     dtflearn.mae[Output[Double], Double]()
   ),
-  dtflearn
-    .model
-    .data_ops[Tensor[Double], Tensor[Double], Tensor[Double], Output[Double], Output[Double]](
-      repeat = 0,
-      shuffleBuffer = 0,
-      batchSize = 16,
-      prefetchSize = 10,
-      concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-      concatOpT = Some(dtfpipe.EagerConcatenate[Double]())
-    )
-)
-
-val epsilon = 1e-5
-
-val eval_data_ops = dtflearn
-  .model
-  .input_data_ops[Tensor[Double], Output[Double]](
+  dtflearn.model.data_ops[Output[Double], Output[Double]](
     repeat = 0,
     shuffleBuffer = 0,
     batchSize = 16,
-    prefetchSize = 0
+    prefetchSize = 10
+  ),
+  dtflearn.model.tf_data_handle_ops(
+    patternToTensor = Some(identityPipe[(Tensor[Double], Tensor[Double])]),
+    concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
+    concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
+    concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
   )
-
-val eval_preds = regression_model.infer_coll(test_data.features, eval_data_ops)
+)

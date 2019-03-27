@@ -128,6 +128,9 @@ private[tensorflow] object Api {
   def tensor_i32(shape: Int*)(buffer: Int*): Tensor[Int] =
     Tensor[Int](buffer).reshape(Shape(shape:_*))
 
+  def sym_tensor_i32(shape: Int*)(buffer: Int*): Output[Int] =
+    Output[Int](buffer).reshape(Shape(shape:_*))
+
   /**
     * Construct an 64 bit integer tensor from a list of elements.
     *
@@ -146,6 +149,9 @@ private[tensorflow] object Api {
     val t: Tensor[Long] = Tensor[Long](buffer)
     t.reshape(Shape(shape:_*).toTensor)
   }
+
+  def sym_tensor_i64(shape: Int*)(buffer: Long*): Output[Long] =
+    Output[Long](buffer).reshape(Shape(shape:_*))
 
   /**
     * Construct an 16 bit floating point tensor from a list of elements.
@@ -186,6 +192,9 @@ private[tensorflow] object Api {
   def tensor_f32(shape: Int*)(buffer: Float*): Tensor[Float] =
     Tensor[Float](buffer).reshape(Shape(shape:_*))
 
+  def sym_tensor_f32(shape: Int*)(buffer: Float*): Output[Float] =
+    Output[Float](buffer).reshape(Shape(shape:_*))
+
   /**
     * Construct an 64 bit floating point tensor from a list of elements.
     *
@@ -202,6 +211,9 @@ private[tensorflow] object Api {
     * */
   def tensor_f64(shape: Int*)(buffer: Double*): Tensor[Double] =
     Tensor[Double](buffer).reshape(Shape(shape:_*))
+
+  def sym_tensor_f64(shape: Int*)(buffer: Double*): Output[Double] =
+    Output[Double](buffer).reshape(Shape(shape:_*))
 
 
   /**

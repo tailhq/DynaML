@@ -1,6 +1,7 @@
 package io.github.mandar2812.dynaml.tensorflow.dynamics
 
 import io.github.mandar2812.dynaml.pipes._
+import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.models.TFModel
 import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.tensorflow.layers.{
@@ -142,10 +143,11 @@ private[dynaml] class PDESystem[
   def solve(
     data: SupervisedDataSet[Tensor[T], Tensor[U]],
     trainConfig: TFModel.Config[Output[T], Output[U]],
-    tf_handle_ops: TFModel.TFDataHandleOps[
-      Tensor[T], 
-      Tensor[U], 
-      PDESystem.ModelOutputsT[U]] = TFModel.data_handle_ops(),
+    tf_handle_ops: TFModel.TFDataHandleOps[(Tensor[T], Tensor[U]), Tensor[T], Tensor[
+      U
+    ], PDESystem.ModelOutputsT[U], Output[T], Output[U]] =
+      TFModel.tf_data_handle_ops(patternToTensor =
+          Some(identityPipe[(Tensor[T], Tensor[U])])),
     inMemory: Boolean = false
   ): PDESystem.Model[T, U, L] = {
 

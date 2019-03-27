@@ -201,11 +201,10 @@ class TFModel[
     estimator.get.train[(ID, TD), (IS, TS)](() => tf_dataset)
   }
 
-  def train(
-    data: DataSet[(IT, TT)],
+  def train[Pattern](
+    data: DataSet[Pattern],
     trainConfig: TFModel.TrainConfig[In, Out],
-    tf_handle_ops: TFModel.TFDataHandleOps[IT, TT, ITT] =
-      TFModel.data_handle_ops[IT, TT, ITT]()
+    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out]
   ): Unit = {
 
     val TFModel.TrainConfig(
@@ -302,8 +301,8 @@ class TFModel[
   def infer_batch(
     input_data_set: DataSet[IT],
     data_ops: TFModel.Ops[In, Out] = TFModel.data_ops(),
-    tf_handle_ops: TFModel.TFDataHandleOps[IT, TT, ITT] =
-      TFModel.data_handle_ops[IT, TT, ITT]()
+    tf_handle_ops: TFModel.TFDataHandleOps[_, IT, TT, ITT, In, Out] =
+      TFModel.tf_data_handle_ops()
   ): Either[ITT, DataSet[ITT]] = {
 
     val (concatOpI, concatOpO) =
@@ -347,12 +346,12 @@ class TFModel[
     )
   }
 
-  def evaluate(
-    test_data: DataSet[(IT, TT)],
+  def evaluate[Pattern](
+    test_data: DataSet[Pattern],
     metrics: Seq[tf.metrics.Metric[(ArchOut, (In, Out)), Output[Float]]],
     evaluation_ops: TFModel.Ops[In, Out] = TFModel.data_ops(),
-    tf_handle_ops: TFModel.TFDataHandleOps[IT, TT, ITT] =
-      TFModel.data_handle_ops[IT, TT, ITT](),
+    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out] =
+      TFModel.tf_data_handle_ops(),
     maxSteps: Long = -1L,
     saveSummaries: Boolean = true,
     name: String = null
@@ -393,12 +392,17 @@ object TFModel {
 
   type DataHandles[IO, TO] = (Handle[IO], Handle[TO])
 
-  protected case class DataHandleOps[IT, TT, ITT](
+  protected case class DataHandleOps[Pattern, IT, TT, ITT, In, Out](
+    patternToSym: Option[DataPipe[Pattern, (In, Out)]] = None,
+    patternToTensor: Option[DataPipe[Pattern, (IT, TT)]] = None,
+    concatOpIO: Option[DataPipe[Iterable[In], In]] = None,
+    concatOpTO: Option[DataPipe[Iterable[Out], Out]] = None,
     concatOpI: Option[DataPipe[Iterable[IT], IT]] = None,
     concatOpT: Option[DataPipe[Iterable[TT], TT]] = None,
     concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None)
 
-  type TFDataHandleOps[IT, TT, ITT] = DataHandleOps[IT, TT, ITT]
+  type TFDataHandleOps[Pattern, IT, TT, ITT, In, Out] =
+    DataHandleOps[Pattern, IT, TT, ITT, In, Out]
 
   /**
     * Defines data operations to be performed using TensorFlow data API.
@@ -495,13 +499,12 @@ object TFModel {
       process_pipe(tf_dataset)
     }
 
-    def _get_tf_data[IT, ID, IS, TT, TD, TS, ITT, In, Out](
-      data: DataSet[(IT, TT)],
+    def _get_tf_data[Pattern, IT, ID, IS, TT, TD, TS, ITT, In, Out](
+      data: DataSet[Pattern],
       input: (ID, IS),
       target: (TD, TS),
       data_ops: TFModel.Ops[In, Out] = TFModel.data_ops[In, Out](),
-      tf_handle_ops: TFModel.DataHandleOps[IT, TT, ITT] =
-        TFModel.data_handle_ops[IT, TT, ITT](),
+      tf_handle_ops: TFModel.DataHandleOps[Pattern, IT, TT, ITT, In, Out],
       createOnlyHandle: Boolean = false
     )(
       implicit
@@ -514,13 +517,18 @@ object TFModel {
       evDataTypeToShape: DataTypeToShape.Aux[(ID, TD), (IS, TS)]
     ): Dataset[(In, Out)] = {
 
-      val (concatOpI, concatOpT, concatOpO) = (
-        tf_handle_ops.concatOpI,
-        tf_handle_ops.concatOpT,
-        tf_handle_ops.concatOpO
+      require(
+        tf_handle_ops.patternToTensor.isDefined || tf_handle_ops.patternToSym.isDefined,
+        "To create a tensorflow data set handle, either specify the mapping from data patterns to eager or lazy tensors"
       )
 
-      val tf_dataset: Dataset[(In, Out)] =
+      val create_eager_dataset_handle = () => {
+        val (concatOpI, concatOpT, concatOpO) = (
+          tf_handle_ops.concatOpI,
+          tf_handle_ops.concatOpT,
+          tf_handle_ops.concatOpO
+        )
+
         if (concatOpI.isDefined && concatOpT.isDefined) {
 
           val (concatI, concatT) = (concatOpI.get, concatOpT.get)
@@ -532,17 +540,52 @@ object TFModel {
 
           data.build_buffered[(IT, TT), (In, Out), (ID, TD), (IS, TS)](
             data_ops.batchSize,
-            identityPipe[(IT, TT)],
+            tf_handle_ops.patternToTensor.get,
             concatOp,
             (input._1, target._1),
             (input._2, target._2)
           )
         } else {
           data.build(
-            identityPipe[(IT, TT)],
+            tf_handle_ops.patternToTensor.get,
             (input._1, target._1),
             (input._2, target._2)
           )
+        }
+      }
+
+      val create_lazy_dataset_handle = () => {
+        val (concatOpIO, concatOpTO) = (
+          tf_handle_ops.concatOpIO,
+          tf_handle_ops.concatOpTO
+        )
+
+        if (concatOpIO.isDefined && concatOpTO.isDefined) {
+
+          val (concatI, concatT) = (concatOpIO.get, concatOpTO.get)
+
+          val concatOp = DataPipe((batch: Iterable[(In, Out)]) => {
+            val (xs, ys) = batch.unzip
+            (concatI(xs), concatT(ys))
+          })
+
+          data.build_buffered_lazy[(IT, TT), (In, Out), (ID, TD), (IS, TS)](
+            data_ops.batchSize,
+            tf_handle_ops.patternToSym.get,
+            concatOp
+          )
+        } else {
+          data.build_lazy(
+            tf_handle_ops.patternToSym.get
+          )
+        }
+      }
+
+      val tf_dataset: Dataset[(In, Out)] =
+        if (tf_handle_ops.patternToSym.isDefined) {
+          create_lazy_dataset_handle()
+        } else {
+          create_eager_dataset_handle()
         }
 
       if (createOnlyHandle) tf_dataset else _build_ops(tf_dataset, data_ops)
@@ -628,7 +671,7 @@ object TFModel {
 
   val input_data_ops: InputDataOps.type = InputDataOps
 
-  val data_handle_ops: DataHandleOps.type = DataHandleOps
+  val tf_data_handle_ops: DataHandleOps.type = DataHandleOps
 
   /**
     * Creates a [[TrainConfig]] instance.
