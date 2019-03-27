@@ -15,11 +15,12 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml
 
 import scala.collection.mutable.{MutableList => ML}
-import breeze.linalg.DenseVector
+import breeze.linalg.eig.Eig
+import breeze.linalg.{DenseMatrix, DenseVector, eig}
 import breeze.numerics.sqrt
 import breeze.stats.distributions.ContinuousDistr
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
@@ -28,9 +29,17 @@ import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
 import io.github.mandar2812.dynaml.models.sgp.ESGPModel
 import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.probability.{ContinuousDistrRV, ContinuousRVWithDistr}
+import io.github.mandar2812.dynaml.probability.{
+  ContinuousDistrRV,
+  ContinuousRVWithDistr
+}
 import io.github.mandar2812.dynaml.utils._
-import io.github.mandar2812.dynaml.wavelets.{GroupedHaarWaveletFilter, HaarWaveletFilter, InvGroupedHaarWaveletFilter, InverseHaarWaveletFilter}
+import io.github.mandar2812.dynaml.wavelets.{
+  GroupedHaarWaveletFilter,
+  HaarWaveletFilter,
+  InvGroupedHaarWaveletFilter,
+  InverseHaarWaveletFilter
+}
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 import org.renjin.script.RenjinScriptEngine
@@ -47,7 +56,6 @@ import scala.util.Random
   * pipes.
   */
 object DynaMLPipe {
-
 
   val logger = Logger.getLogger(this.getClass)
 
@@ -76,10 +84,20 @@ object DynaMLPipe {
     *         and returns a renjin [[ListVector]] instance and stores data frame
     *         in the variable nameed as df.
     * */
-  def csvToRDF(df: String, sep: Char)(implicit renjin: RenjinScriptEngine): DataPipe[String, ListVector] =
-    DataPipe((file: String) => renjin
-      .eval(df+""" <- read.csv(""""+file+"""", sep = '"""+sep+"""')""")
-      .asInstanceOf[ListVector])
+  def csvToRDF(
+    df: String,
+    sep: Char
+  )(
+    implicit renjin: RenjinScriptEngine
+  ): DataPipe[String, ListVector] =
+    DataPipe(
+      (file: String) =>
+        renjin
+          .eval(
+            df + """ <- read.csv("""" + file + """", sep = '""" + sep + """')"""
+          )
+          .asInstanceOf[ListVector]
+    )
 
   /**
     * Create a linear model from a R data frame.
@@ -91,10 +109,22 @@ object DynaMLPipe {
     *         Also stores the model in the variable given by modelName in the ongoing
     *         R session.
     * */
-  def rdfToGLM(modelName: String, y: String, xs: Array[String])(implicit renjin: RenjinScriptEngine)
-  : DataPipe[String, ListVector] = DataPipe((df: String) => renjin
-    .eval(modelName+" <- lm("+y+" ~ "+xs.mkString(" + ")+", "+df+")")
-    .asInstanceOf[ListVector])
+  def rdfToGLM(
+    modelName: String,
+    y: String,
+    xs: Array[String]
+  )(
+    implicit renjin: RenjinScriptEngine
+  ): DataPipe[String, ListVector] =
+    DataPipe(
+      (df: String) =>
+        renjin
+          .eval(
+            modelName + " <- lm(" + y + " ~ " + xs
+              .mkString(" + ") + ", " + df + ")"
+          )
+          .asInstanceOf[ListVector]
+    )
 
   /**
     * Writes a [[Stream]] of [[String]] to
@@ -102,8 +132,8 @@ object DynaMLPipe {
     *
     * Usage: DynaMLPipe.streamToFile("abc.csv")
     * */
-  val streamToFile = (fileName: String) => DataPipe(utils.writeToFile(fileName) _)
-
+  val streamToFile = (fileName: String) =>
+    DataPipe(utils.writeToFile(fileName) _)
 
   /**
     * Writes a [[Stream]] of [[AnyVal]] to
@@ -111,21 +141,23 @@ object DynaMLPipe {
     *
     * Usage: DynaMLPipe.valuesToFile("abc.csv")
     * */
-  val valuesToFile = (fileName: String) => DataPipe((stream: Stream[Seq[AnyVal]]) =>
-    utils.writeToFile(fileName)(stream.map(s => s.mkString(","))))
+  val valuesToFile = (fileName: String) =>
+    DataPipe(
+      (stream: Stream[Seq[AnyVal]]) =>
+        utils.writeToFile(fileName)(stream.map(s => s.mkString(",")))
+    )
 
   /**
     * Drop the first element of a [[Stream]] of [[String]]
     * */
-  val dropHead = DataPipe((s: Stream[String]) => s.tail)
-
+  val dropHead = DataPipe((s: Iterable[String]) => s.tail)
 
   /**
     * Data pipe to replace all occurrences of a regular expression or string in a [[Stream]]
     * of [[String]] with with a specified replacement string.
     * */
   val replace = (original: String, newString: String) =>
-    StreamDataPipe((s: String) => utils.replace(original)(newString)(s))
+  IterableDataPipe((s: String) => utils.replace(original)(newString)(s))
 
   /**
     * Data pipe to replace all white spaces in a [[Stream]]
@@ -137,20 +169,22 @@ object DynaMLPipe {
     * Trim white spaces from each line in a [[Stream]]
     * of [[String]]
     * */
-  val trimLines = StreamDataPipe((s: String) => s.trim())
+  val trimLines = IterableDataPipe((s: String) => s.trim())
 
-  val splitLine = StreamDataPipe((s: String) => s.split(","))
+  val splitLine = IterableDataPipe((s: String) => s.split(","))
 
   /**
     * Generate a numeric range by dividing an interval into bins.
     * */
   val numeric_range: MetaPipe21[Double, Double, Int, Seq[Double]] = MetaPipe21(
-    (lower: Double, upper: Double) => (bins: Int) =>
-      Seq.tabulate[Double](bins+1)(i =>
-        if(i == 0) lower
-        else if(i == bins) upper
-        else lower + i*(upper-lower)/bins
-      )
+    (lower: Double, upper: Double) =>
+      (bins: Int) =>
+        Seq.tabulate[Double](bins + 1)(
+          i =>
+            if (i == 0) lower
+            else if (i == bins) upper
+            else lower + i * (upper - lower) / bins
+        )
   )
 
   /**
@@ -168,11 +202,15 @@ object DynaMLPipe {
     * Usage: DynaMLPipe.extractTimeSeries(TFunc)
     * */
   val extractTimeSeries = (Tfunc: (Double, Double, Double) => Double) =>
-    DataPipe((lines: Stream[String]) => lines.map{line =>
-    val splits = line.split(",")
-    val timestamp = Tfunc(splits(0).toDouble, splits(1).toDouble, splits(2).toDouble)
-    (timestamp, splits(3).toDouble)
-  })
+    DataPipe(
+      (lines: Iterable[String]) =>
+        lines.map { line =>
+          val splits = line.split(",")
+          val timestamp =
+            Tfunc(splits(0).toDouble, splits(1).toDouble, splits(2).toDouble)
+          (timestamp, splits(3).toDouble)
+        }
+    )
 
   /**
     * This pipe is exactly similar to [[DynaMLPipe.extractTimeSeries]],
@@ -181,12 +219,16 @@ object DynaMLPipe {
     * a Vector of values.
     * */
   val extractTimeSeriesVec = (Tfunc: (Double, Double, Double) => Double) =>
-    DataPipe((lines: Stream[String]) => lines.map{line =>
-      val splits = line.split(",")
-      val timestamp = Tfunc(splits(0).toDouble, splits(1).toDouble, splits(2).toDouble)
-      val feat = DenseVector(splits.slice(3, splits.length).map(_.toDouble))
-      (timestamp, feat)
-    })
+    DataPipe(
+      (lines: Iterable[String]) =>
+        lines.map { line =>
+          val splits = line.split(",")
+          val timestamp =
+            Tfunc(splits(0).toDouble, splits(1).toDouble, splits(2).toDouble)
+          val feat = DenseVector(splits.slice(3, splits.length).map(_.toDouble))
+          (timestamp, feat)
+        }
+    )
 
   /**
     * Inorder to generate features for auto-regressive models,
@@ -209,55 +251,73 @@ object DynaMLPipe {
     *
     * */
   val deltaOperation = (deltaT: Int, timelag: Int) =>
-    DataPipe((lines: Stream[(Double, Double)]) =>
-      lines.toList.sliding(deltaT+timelag+1).map((history) => {
-        val features = DenseVector(history.take(deltaT).map(_._2).toArray)
-        (features, history.last._2)
-      }).toStream)
+    DataPipe(
+      (lines: Iterable[(Double, Double)]) =>
+        lines.toList
+          .sliding(deltaT + timelag + 1)
+          .map((history) => {
+            val features = DenseVector(history.take(deltaT).map(_._2).toArray)
+            (features, history.last._2)
+          })
+          .toStream
+    )
 
   /**
     * The vector version of [[DynaMLPipe.deltaOperation]]
     * */
   val deltaOperationVec = (deltaT: Int) =>
-    DataPipe((lines: Stream[(Double, DenseVector[Double])]) =>
-      lines.toList.sliding(deltaT+1).map((history) => {
-        val hist = history.take(history.length - 1).map(_._2)
-        val featuresAcc: ML[Double] = ML()
+    DataPipe(
+      (lines: Iterable[(Double, DenseVector[Double])]) =>
+        lines.toList
+          .sliding(deltaT + 1)
+          .map((history) => {
+            val hist                    = history.take(history.length - 1).map(_._2)
+            val featuresAcc: ML[Double] = ML()
 
-        (0 until hist.head.length).foreach((dimension) => {
-          //for each dimension/regressor take points t to t-order
-          featuresAcc ++= hist.map(vec => vec(dimension))
-        })
+            (0 until hist.head.length).foreach((dimension) => {
+              //for each dimension/regressor take points t to t-order
+              featuresAcc ++= hist.map(vec => vec(dimension))
+            })
 
-        val features = DenseVector(featuresAcc.toArray)
-        (features, history.last._2(0))
-      }).toStream)
+            val features = DenseVector(featuresAcc.toArray)
+            (features, history.last._2(0))
+          })
+          .toStream
+    )
 
   /**
     * The vector ARX version of [[DynaMLPipe.deltaOperation]]
     * */
   val deltaOperationARX = (deltaT: List[Int]) =>
-    DataPipe((lines: Stream[(Double, DenseVector[Double])]) =>
-      lines.toList.sliding(deltaT.max+1).map((history) => {
-        val hist = history.take(history.length - 1).map(_._2)
-        val featuresAcc: ML[Double] = ML()
+    DataPipe(
+      (lines: Iterable[(Double, DenseVector[Double])]) =>
+        lines.toList
+          .sliding(deltaT.max + 1)
+          .map((history) => {
+            val hist                    = history.take(history.length - 1).map(_._2)
+            val featuresAcc: ML[Double] = ML()
 
-        (0 until hist.head.length).foreach((dimension) => {
-          //for each dimension/regressor take points t to t-order
-          featuresAcc ++= hist.takeRight(deltaT(dimension))
-            .map(vec => vec(dimension))
-        })
+            (0 until hist.head.length).foreach((dimension) => {
+              //for each dimension/regressor take points t to t-order
+              featuresAcc ++= hist
+                .takeRight(deltaT(dimension))
+                .map(vec => vec(dimension))
+            })
 
-        val features = DenseVector(featuresAcc.toArray)
-        (features, history.last._2(0))
-      }).toStream)
+            val features = DenseVector(featuresAcc.toArray)
+            (features, history.last._2(0))
+          })
+          .toStream
+    )
 
   /**
     * From a [[Stream]] of [[String]] remove all records
     * which contain missing values, this pipe should be applied
     * after the application of [[DynaMLPipe.extractTrainingFeatures]].
     * */
-  val removeMissingLines = StreamDataPipe((line: String) => !line.contains("<NA>"))
+  val removeMissingLines = IterableDataPipe(
+    (line: String) => !line.contains("<NA>")
+  )
 
   /**
     * Take each line which is a comma separated string and extract
@@ -268,7 +328,7 @@ object DynaMLPipe {
     *
     * (Vector(features), value)
     * */
-  val splitFeaturesAndTargets = StreamDataPipe((line: String) => {
+  val splitFeaturesAndTargets = IterableDataPipe((line: String) => {
     val split = line.split(",")
     (DenseVector(split.tail.map(_.toDouble)), split.head.toDouble)
   })
@@ -279,32 +339,54 @@ object DynaMLPipe {
     *
     * (Stream(training data), Stream(test data))
     * */
-  @deprecated("*Standardization pipes are deprecated as of v1.4,"+
-    " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
-  val trainTestGaussianStandardization: DataPipe[(Stream[(DenseVector[Double], Double)],
-    Stream[(DenseVector[Double], Double)]),
-    ((Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-      (DenseVector[Double], DenseVector[Double]))] =
-    DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
-      Stream[(DenseVector[Double], Double)])) => {
+  @deprecated(
+    "*Standardization pipes are deprecated as of v1.4," +
+      " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead"
+  )
+  val trainTestGaussianStandardization: DataPipe[
+    (
+      Iterable[(DenseVector[Double], Double)],
+      Iterable[(DenseVector[Double], Double)]
+    ),
+    (
+      (
+        Iterable[(DenseVector[Double], Double)],
+        Iterable[(DenseVector[Double], Double)]
+      ),
+      (DenseVector[Double], DenseVector[Double])
+    )
+  ] =
+    DataPipe(
+      (trainTest: (
+        Iterable[(DenseVector[Double], Double)],
+        Iterable[(DenseVector[Double], Double)]
+      )) => {
 
-      val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
-        DenseVector(tup._1.toArray ++ Array(tup._2))).toList)
+        val (mean, variance) = utils.getStats(
+          trainTest._1
+            .map(tup => DenseVector(tup._1.toArray ++ Array(tup._2)))
+            .toList
+        )
 
-      val stdDev: DenseVector[Double] = sqrt(variance)
+        val stdDev: DenseVector[Double] = sqrt(variance)
 
-      val normalizationFunc = (point: (DenseVector[Double], Double)) => {
-        val extendedpoint = DenseVector(point._1.toArray ++ Array(point._2))
+        val normalizationFunc = (point: (DenseVector[Double], Double)) => {
+          val extendedpoint = DenseVector(point._1.toArray ++ Array(point._2))
 
-        val normPoint = (extendedpoint - mean) :/ stdDev
-        val length = normPoint.length
-        (normPoint(0 until length-1), normPoint(-1))
+          val normPoint = (extendedpoint - mean) :/ stdDev
+          val length    = normPoint.length
+          (normPoint(0 until length - 1), normPoint(-1))
+        }
+
+        (
+          (
+            trainTest._1.map(normalizationFunc),
+            trainTest._2.map(normalizationFunc)
+          ),
+          (mean, stdDev)
+        )
       }
-
-      ((trainTest._1.map(normalizationFunc),
-        trainTest._2.map(normalizationFunc)), (mean, stdDev))
-    })
-
+    )
 
   /**
     * Perform gaussian normalization on a data stream which
@@ -312,30 +394,48 @@ object DynaMLPipe {
     *
     * (Stream(training data), Stream(test data))
     * */
-  @deprecated("*Standardization pipes are deprecated as of v1.4,"+
-    " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
-  val featuresGaussianStandardization: DataPipe[(Stream[(DenseVector[Double], Double)],
-    Stream[(DenseVector[Double], Double)]),
-    ((Stream[(DenseVector[Double], Double)], Stream[(DenseVector[Double], Double)]),
-      (DenseVector[Double], DenseVector[Double]))] =
-    DataPipe((trainTest: (Stream[(DenseVector[Double], Double)],
-      Stream[(DenseVector[Double], Double)])) => {
+  @deprecated(
+    "*Standardization pipes are deprecated as of v1.4," +
+      " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead"
+  )
+  val featuresGaussianStandardization: DataPipe[
+    (
+      Iterable[(DenseVector[Double], Double)],
+      Iterable[(DenseVector[Double], Double)]
+    ),
+    (
+      (
+        Iterable[(DenseVector[Double], Double)],
+        Iterable[(DenseVector[Double], Double)]
+      ),
+      (DenseVector[Double], DenseVector[Double])
+    )
+  ] =
+    DataPipe(
+      (trainTest: (
+        Iterable[(DenseVector[Double], Double)],
+        Iterable[(DenseVector[Double], Double)]
+      )) => {
 
-      val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
-        tup._1).toList)
+        val (mean, variance) =
+          utils.getStats(trainTest._1.map(tup => tup._1).toList)
 
-      val stdDev: DenseVector[Double] = sqrt(variance)
+        val stdDev: DenseVector[Double] = sqrt(variance)
 
+        val normalizationFunc = (point: (DenseVector[Double], Double)) => {
+          val normPoint = (point._1 - mean) :/ stdDev
+          (normPoint, point._2)
+        }
 
-      val normalizationFunc = (point: (DenseVector[Double], Double)) => {
-        val normPoint = (point._1 - mean) :/ stdDev
-        (normPoint, point._2)
+        (
+          (
+            trainTest._1.map(normalizationFunc),
+            trainTest._2.map(normalizationFunc)
+          ),
+          (mean, stdDev)
+        )
       }
-
-      ((trainTest._1.map(normalizationFunc),
-        trainTest._2.map(normalizationFunc)), (mean, stdDev))
-    })
-
+    )
 
   /**
     * Perform gaussian normalization on a data stream which
@@ -343,62 +443,91 @@ object DynaMLPipe {
     *
     * (Stream(training data), Stream(test data))
     * */
-  @deprecated("*Standardization pipes are deprecated as of v1.4,"+
-    " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead")
+  @deprecated(
+    "*Standardization pipes are deprecated as of v1.4," +
+      " use pipes that output io.github.mandar2812.dynaml.pipes.Scaler objects instead"
+  )
   val trainTestGaussianStandardizationMO: DataPipe[
-    (Stream[(DenseVector[Double], DenseVector[Double])], Stream[(DenseVector[Double], DenseVector[Double])]),
-    ((Stream[(DenseVector[Double], DenseVector[Double])], Stream[(DenseVector[Double], DenseVector[Double])]),
-      (DenseVector[Double], DenseVector[Double]))] =
-    DataPipe((trainTest: (Stream[(DenseVector[Double], DenseVector[Double])],
-      Stream[(DenseVector[Double], DenseVector[Double])])) => {
+    (
+      Iterable[(DenseVector[Double], DenseVector[Double])],
+      Iterable[(DenseVector[Double], DenseVector[Double])]
+    ),
+    (
+      (
+        Iterable[(DenseVector[Double], DenseVector[Double])],
+        Iterable[(DenseVector[Double], DenseVector[Double])]
+      ),
+      (DenseVector[Double], DenseVector[Double])
+    )
+  ] =
+    DataPipe(
+      (trainTest: (
+        Iterable[(DenseVector[Double], DenseVector[Double])],
+        Iterable[(DenseVector[Double], DenseVector[Double])]
+      )) => {
 
-      val (mean, variance) = utils.getStats(trainTest._1.map(tup =>
-        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+        val (mean, variance) = utils.getStats(
+          trainTest._1
+            .map(tup => DenseVector(tup._1.toArray ++ tup._2.toArray))
+            .toList
+        )
 
-      val stdDev: DenseVector[Double] = sqrt(variance)
+        val stdDev: DenseVector[Double] = sqrt(variance)
 
+        val normalizationFunc =
+          (point: (DenseVector[Double], DenseVector[Double])) => {
+            val extendedpoint =
+              DenseVector(point._1.toArray ++ point._2.toArray)
 
-      val normalizationFunc = (point: (DenseVector[Double], DenseVector[Double])) => {
-        val extendedpoint = DenseVector(point._1.toArray ++ point._2.toArray)
+            val normPoint = (extendedpoint - mean) :/ stdDev
+            val length    = point._1.length
+            val outlength = point._2.length
 
-        val normPoint = (extendedpoint - mean) :/ stdDev
-        val length = point._1.length
-        val outlength = point._2.length
+            (
+              normPoint(0 until length),
+              normPoint(length until length + outlength)
+            )
+          }
 
-        (normPoint(0 until length),
-          normPoint(length until length+outlength))
+        (
+          (
+            trainTest._1.map(normalizationFunc),
+            trainTest._2.map(normalizationFunc)
+          ),
+          (mean, stdDev)
+        )
       }
-
-      ((trainTest._1.map(normalizationFunc),
-        trainTest._2.map(normalizationFunc)), (mean, stdDev))
-    })
-
+    )
 
   /**
     * Returns a pipe which takes a data set and calculates the mean and standard deviation of each dimension.
     * @param standardize Set to true if one wants the standardized data and false if one
     *                    does wants the original data with the [[GaussianScaler]] instances.
     * */
-  def calculateGaussianScales(standardize: Boolean = true): DataPipe[
-    Stream[(DenseVector[Double], DenseVector[Double])],
-    (Stream[(DenseVector[Double], DenseVector[Double])], (GaussianScaler, GaussianScaler))] =
-    DataPipe((data: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+  def calculateGaussianScales(standardize: Boolean = true): DataPipe[Iterable[
+    (DenseVector[Double], DenseVector[Double])
+  ], (Iterable[(DenseVector[Double], DenseVector[Double])], (GaussianScaler, GaussianScaler))] =
+    DataPipe((data: Iterable[(DenseVector[Double], DenseVector[Double])]) => {
 
-      val (num_features, num_targets) = (data.head._1.length, data.head._2.length)
+      val (num_features, num_targets) =
+        (data.head._1.length, data.head._2.length)
 
-      val (mean, variance) = utils.getStats(data.map(tup =>
-        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+      val (mean, variance) = utils.getStats(
+        data.map(tup => DenseVector(tup._1.toArray ++ tup._2.toArray)).toList
+      )
 
       val stdDev: DenseVector[Double] = sqrt(variance)
 
-
-      val featuresScaler = GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
+      val featuresScaler =
+        GaussianScaler(mean(0 until num_features), stdDev(0 until num_features))
 
       val targetsScaler = GaussianScaler(
         mean(num_features until num_features + num_targets),
-        stdDev(num_features until num_features + num_targets))
+        stdDev(num_features until num_features + num_targets)
+      )
 
-      val result = if(standardize) (featuresScaler * targetsScaler)(data) else data
+      val result =
+        if (standardize) (featuresScaler * targetsScaler)(data) else data
 
       (result, (featuresScaler, targetsScaler))
     })
@@ -408,50 +537,61 @@ object DynaMLPipe {
     * @param standardize Set to true if one wants the standardized data and false if one
     *                    does wants the original data with the [[MeanScaler]] instances.
     * */
-  def calculateMeanScales(standardize: Boolean = true): DataPipe[
-    Stream[(DenseVector[Double], DenseVector[Double])],
-    (Stream[(DenseVector[Double], DenseVector[Double])], (MeanScaler, MeanScaler))] =
-    DataPipe((data: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+  def calculateMeanScales(standardize: Boolean = true): DataPipe[Iterable[
+    (DenseVector[Double], DenseVector[Double])
+  ], (Iterable[(DenseVector[Double], DenseVector[Double])], (MeanScaler, MeanScaler))] =
+    DataPipe((data: Iterable[(DenseVector[Double], DenseVector[Double])]) => {
 
-      val (num_features, num_targets) = (data.head._1.length, data.head._2.length)
+      val (num_features, num_targets) =
+        (data.head._1.length, data.head._2.length)
 
-      val (mean, _) = utils.getStats(data.map(tup =>
-        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+      val (mean, _) = utils.getStats(
+        data.map(tup => DenseVector(tup._1.toArray ++ tup._2.toArray)).toList
+      )
 
       val featuresScaler = MeanScaler(mean(0 until num_features))
 
-      val targetsScaler = MeanScaler(mean(num_features until num_features + num_targets))
+      val targetsScaler =
+        MeanScaler(mean(num_features until num_features + num_targets))
 
-      val result = if(standardize) (featuresScaler * targetsScaler)(data) else data
+      val result =
+        if (standardize) (featuresScaler * targetsScaler)(data) else data
 
       (result, (featuresScaler, targetsScaler))
     })
-
 
   /**
     * Multivariate version of [[calculateGaussianScales]]
     * @param standardize Set to true if one wants the standardized data and false if one
     *                    does wants the original data with the [[MVGaussianScaler]] instances.
     * */
-  def calculateMVGaussianScales(standardize: Boolean = true): DataPipe[
-    Stream[(DenseVector[Double], DenseVector[Double])],
-    (Stream[(DenseVector[Double], DenseVector[Double])], (MVGaussianScaler, MVGaussianScaler))] =
-    DataPipe((data: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+  def calculateMVGaussianScales(standardize: Boolean = true): DataPipe[Iterable[
+    (DenseVector[Double], DenseVector[Double])
+  ], (Iterable[(DenseVector[Double], DenseVector[Double])], (MVGaussianScaler, MVGaussianScaler))] =
+    DataPipe((data: Iterable[(DenseVector[Double], DenseVector[Double])]) => {
 
-      val (num_features, num_targets) = (data.head._1.length, data.head._2.length)
+      val (num_features, num_targets) =
+        (data.head._1.length, data.head._2.length)
 
-      val (m, sigma) = utils.getStatsMult(data.map(tup =>
-        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+      val (m, sigma) = utils.getStatsMult(
+        data.map(tup => DenseVector(tup._1.toArray ++ tup._2.toArray)).toList
+      )
 
       val featuresScaler = MVGaussianScaler(
         m(0 until num_features),
-        sigma(0 until num_features, 0 until num_features))
+        sigma(0 until num_features, 0 until num_features)
+      )
 
       val targetsScaler = MVGaussianScaler(
         m(num_features until num_features + num_targets),
-        sigma(num_features until num_features + num_targets, num_features until num_features + num_targets))
+        sigma(
+          num_features until num_features + num_targets,
+          num_features until num_features + num_targets
+        )
+      )
 
-      val result = if(standardize) (featuresScaler * targetsScaler)(data) else data
+      val result =
+        if (standardize) (featuresScaler * targetsScaler)(data) else data
 
       (result, (featuresScaler, targetsScaler))
     })
@@ -462,24 +602,39 @@ object DynaMLPipe {
     *                    does wants the original data with the [[MVGaussianScaler]] instances.
     * */
   def calculatePCAScales(standardize: Boolean = true): DataPipe[
-    Stream[(DenseVector[Double], DenseVector[Double])],
-    (Stream[(DenseVector[Double], DenseVector[Double])], (PCAScaler, MVGaussianScaler))] =
-    DataPipe((data: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+    Iterable[(DenseVector[Double], DenseVector[Double])],
+    (
+      Iterable[(DenseVector[Double], DenseVector[Double])],
+      (PCAScaler, MVGaussianScaler)
+    )
+  ] =
+    DataPipe((data: Iterable[(DenseVector[Double], DenseVector[Double])]) => {
 
-      val (num_features, num_targets) = (data.head._1.length, data.head._2.length)
+      val (num_features, num_targets) =
+        (data.head._1.length, data.head._2.length)
 
-      val (m, sigma) = utils.getStatsMult(data.map(tup =>
-        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+      val (m, sigma) = utils.getStatsMult(
+        data.map(tup => DenseVector(tup._1.toArray ++ tup._2.toArray)).toList
+      )
+
+      val Eig(eigenvalues, _, eigenvectors) = eig(sigma(0 until num_features, 0 until num_features))
 
       val featuresScaler = PCAScaler(
         m(0 until num_features),
-        sigma(0 until num_features, 0 until num_features))
+        eigenvalues,
+        eigenvectors
+      )
 
       val targetsScaler = MVGaussianScaler(
         m(num_features until num_features + num_targets),
-        sigma(num_features until num_features + num_targets, num_features until num_features + num_targets))
+        sigma(
+          num_features until num_features + num_targets,
+          num_features until num_features + num_targets
+        )
+      )
 
-      val result = if(standardize) (featuresScaler * targetsScaler)(data) else data
+      val result =
+        if (standardize) (featuresScaler * targetsScaler)(data) else data
 
       (result, (featuresScaler, targetsScaler))
     })
@@ -490,15 +645,18 @@ object DynaMLPipe {
     *                    does wants the original data with the [[MVGaussianScaler]] instances.
     * */
   def calculatePCAScalesFeatures(standardize: Boolean = true): DataPipe[
-    Stream[DenseVector[Double]],
-    (Stream[DenseVector[Double]], PCAScaler)] =
-    DataPipe((data: Stream[DenseVector[Double]]) => {
+    Iterable[DenseVector[Double]],
+    (Iterable[DenseVector[Double]], PCAScaler)
+  ] =
+    DataPipe((data: Iterable[DenseVector[Double]]) => {
 
       val (m, sigma) = utils.getStatsMult(data.toList)
 
-      val featuresScaler = PCAScaler(m, sigma)
+      val Eig(eigenvalues, _, eigenvectors) = eig(sigma)
 
-      val result = if(standardize) featuresScaler(data) else data
+      val featuresScaler = PCAScaler(m, eigenvalues, eigenvectors)
+
+      val result = if (standardize) featuresScaler(data) else data
 
       (result, featuresScaler)
     })
@@ -509,36 +667,46 @@ object DynaMLPipe {
     *                    does wants the original data with the [[MinMaxScaler]] instances.
     * */
   def calculateMinMaxScales(standardize: Boolean = true): DataPipe[
-    Stream[(DenseVector[Double], DenseVector[Double])],
-    (Stream[(DenseVector[Double], DenseVector[Double])], (MinMaxScaler, MinMaxScaler))] =
-    DataPipe((data: Stream[(DenseVector[Double], DenseVector[Double])]) => {
+    Iterable[(DenseVector[Double], DenseVector[Double])],
+    (
+      Iterable[(DenseVector[Double], DenseVector[Double])],
+      (MinMaxScaler, MinMaxScaler)
+    )
+  ] =
+    DataPipe((data: Iterable[(DenseVector[Double], DenseVector[Double])]) => {
 
-      val (num_features, num_targets) = (data.head._1.length, data.head._2.length)
+      val (num_features, num_targets) =
+        (data.head._1.length, data.head._2.length)
 
-      val (min, max) = utils.getMinMax(data.map(tup =>
-        DenseVector(tup._1.toArray ++ tup._2.toArray)).toList)
+      val (min, max) = utils.getMinMax(
+        data.map(tup => DenseVector(tup._1.toArray ++ tup._2.toArray)).toList
+      )
 
-      val featuresScaler = MinMaxScaler(min(0 until num_features), max(0 until num_features))
+      val featuresScaler =
+        MinMaxScaler(min(0 until num_features), max(0 until num_features))
 
       val targetsScaler = MinMaxScaler(
         min(num_features until num_features + num_targets),
-        max(num_features until num_features + num_targets))
+        max(num_features until num_features + num_targets)
+      )
 
-      val result = if(standardize) (featuresScaler * targetsScaler)(data) else data
+      val result =
+        if (standardize) (featuresScaler * targetsScaler)(data) else data
 
       (result, (featuresScaler, targetsScaler))
     })
-
 
   /**
     * A helper method which takes a scaled data set and applies its scales to
     * a test set.
     * */
   private[dynaml] def scaleTestPipe[I, R <: ReversibleScaler[I]] = DataPipe(
-    (couple: ((
-      Stream[(I, I)], (R, R)),
-      Stream[(I, I)])
-    ) => (couple._1._1, (couple._1._2._1*couple._1._2._2)(couple._2), couple._1._2)
+    (couple: ((Iterable[(I, I)], (R, R)), Iterable[(I, I)])) =>
+      (
+        couple._1._1,
+        (couple._1._2._1 * couple._1._2._2)(couple._2),
+        couple._1._2
+      )
   )
 
   /**
@@ -549,8 +717,12 @@ object DynaMLPipe {
     *
     * */
   val gaussianScaling: DataPipe[
-    Stream[(DenseVector[Double], DenseVector[Double])],
-    (Stream[(DenseVector[Double], DenseVector[Double])], (GaussianScaler, GaussianScaler))] =
+    Iterable[(DenseVector[Double], DenseVector[Double])],
+    (
+      Iterable[(DenseVector[Double], DenseVector[Double])],
+      (GaussianScaler, GaussianScaler)
+    )
+  ] =
     calculateGaussianScales()
 
   /**
@@ -560,8 +732,12 @@ object DynaMLPipe {
     * data.
     * */
   val multivariateGaussianScaling: DataPipe[
-    Stream[(DenseVector[Double], DenseVector[Double])],
-    (Stream[(DenseVector[Double], DenseVector[Double])], (MVGaussianScaler, MVGaussianScaler))] =
+    Iterable[(DenseVector[Double], DenseVector[Double])],
+    (
+      Iterable[(DenseVector[Double], DenseVector[Double])],
+      (MVGaussianScaler, MVGaussianScaler)
+    )
+  ] =
     calculateMVGaussianScales()
 
   /**
@@ -571,11 +747,20 @@ object DynaMLPipe {
     * (Stream(training data), Stream(test data))
     * */
   val gaussianScalingTrainTest: DataPipe[
-    (Stream[(DenseVector[Double], DenseVector[Double])], Stream[(DenseVector[Double], DenseVector[Double])]),
-    (Stream[(DenseVector[Double], DenseVector[Double])], Stream[(DenseVector[Double], DenseVector[Double])],
-    (GaussianScaler, GaussianScaler))] =
-    (calculateGaussianScales()*identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]]) >
-    scaleTestPipe[DenseVector[Double], GaussianScaler]
+    (
+      Iterable[(DenseVector[Double], DenseVector[Double])],
+      Iterable[(DenseVector[Double], DenseVector[Double])]
+    ),
+    (
+      Iterable[(DenseVector[Double], DenseVector[Double])],
+      Iterable[(DenseVector[Double], DenseVector[Double])],
+      (GaussianScaler, GaussianScaler)
+    )
+  ] =
+    (calculateGaussianScales() * identityPipe[Iterable[
+      (DenseVector[Double], DenseVector[Double])
+    ]]) >
+      scaleTestPipe[DenseVector[Double], GaussianScaler]
 
   /**
     * Scale a data set which is stored as a [[Stream]],
@@ -584,7 +769,10 @@ object DynaMLPipe {
     * data.
     * */
   val multivariateGaussianScalingTrainTest =
-    (calculateMVGaussianScales()*identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]]) >
+    (
+      calculateMVGaussianScales() *
+        identityPipe[Iterable[(DenseVector[Double], DenseVector[Double])]]
+    ) >
       scaleTestPipe[DenseVector[Double], MVGaussianScaler]
 
   /**
@@ -605,9 +793,9 @@ object DynaMLPipe {
     * data.
     *
     * */
-  val minMaxScaling: DataPipe[
-    Stream[(DenseVector[Double], DenseVector[Double])],
-    (Stream[(DenseVector[Double], DenseVector[Double])], (MinMaxScaler, MinMaxScaler))] =
+  val minMaxScaling: DataPipe[Iterable[
+    (DenseVector[Double], DenseVector[Double])
+  ], (Iterable[(DenseVector[Double], DenseVector[Double])], (MinMaxScaler, MinMaxScaler))] =
     calculateMinMaxScales()
 
   /**
@@ -617,7 +805,9 @@ object DynaMLPipe {
     * (Stream(training data), Stream(test data))
     * */
   val minMaxScalingTrainTest =
-    (calculateMinMaxScales()*identityPipe[Stream[(DenseVector[Double], DenseVector[Double])]]) >
+    (calculateMinMaxScales() * identityPipe[Iterable[
+      (DenseVector[Double], DenseVector[Double])
+    ]]) >
       scaleTestPipe[DenseVector[Double], MinMaxScaler]
 
   /**
@@ -627,7 +817,7 @@ object DynaMLPipe {
     * Usage: DynaMLPipe.splitTrainingTest(num_training, num_test)
     * */
   def splitTrainingTest[P](num_training: Int, num_test: Int) =
-    DataPipe((data: (Stream[P], Stream[P])) => {
+    DataPipe((data: (Iterable[P], Iterable[P])) => {
       (data._1.take(num_training), data._2.takeRight(num_test))
     })
 
@@ -638,8 +828,8 @@ object DynaMLPipe {
     * Usage: DynaMLPipe.extractTrainingFeatures(List(1,2,3), Map(1 -> "N.A.", 2 -> "NA", 3 -> "na"))
     * */
   val extractTrainingFeatures =
-    (columns: List[Int], m: Map[Int, String]) => DataPipe((l: Stream[String]) =>
-    utils.extractColumns(l, ",", columns, m))
+    (columns: List[Int], m: Map[Int, String]) =>
+      DataPipe((l: Iterable[String]) => utils.extractColumns(l, ",", columns, m))
 
   /**
     * Returns a pipeline which performs a bagging based sub-sampling
@@ -648,15 +838,22 @@ object DynaMLPipe {
     * @param proportion The sampling proportion between 0 and 1
     * @param nBags The number of bags to generate.
     * */
-  def baggingStream[T](proportion: Double, nBags: Int) = {
-    require(proportion > 0.0 && proportion <= 1.0 && nBags > 0,
-      "Sampling proprotion must be between 0 and 1; "+
-        "Number of bags must be positive")
-    DataPipe((data: Stream[T]) =>{
-      val sizeOfBag: Int = (data.length*proportion).toInt
-      (1 to nBags).map(_ =>
-        Stream.tabulate[T](sizeOfBag)(_ => data(Random.nextInt(data.length)))
-      ).toStream
+  def baggingIterable[T](proportion: Double, nBags: Int) = {
+    require(
+      proportion > 0.0 && proportion <= 1.0 && nBags > 0,
+      "Sampling proprotion must be between 0 and 1; " +
+        "Number of bags must be positive"
+    )
+    DataPipe((data: Stream[T]) => {
+      val data_size = data.toSeq.length
+      val sizeOfBag: Int = (data_size * proportion).toInt
+      (1 to nBags)
+        .map(
+          _ =>
+            Stream
+              .tabulate[T](sizeOfBag)(_ => data(Random.nextInt(data_size)))
+        )
+        .toStream
     })
   }
 
@@ -668,10 +865,15 @@ object DynaMLPipe {
     * @param nBags The number of bags to generate.
     * */
   def baggingRDD[T](proportion: Double, nBags: Int) = {
-    require(proportion > 0.0 && proportion <= 1.0 && nBags > 0,
-      "Sampling proprotion must be between 0 and 1; "+
-        "Number of bags must be positive")
-    DataPipe((data: RDD[T]) => (1 to nBags).map(_ => data.sample(withReplacement = true, proportion)))
+    require(
+      proportion > 0.0 && proportion <= 1.0 && nBags > 0,
+      "Sampling proprotion must be between 0 and 1; " +
+        "Number of bags must be positive"
+    )
+    DataPipe(
+      (data: RDD[T]) =>
+        (1 to nBags).map(_ => data.sample(withReplacement = true, proportion))
+    )
   }
 
   /**
@@ -695,40 +897,60 @@ object DynaMLPipe {
     * */
   val invHaarWaveletFilter = (order: Int) => InverseHaarWaveletFilter(order)
 
-  val groupedHaarWaveletFilter = (orders: Array[Int]) => GroupedHaarWaveletFilter(orders)
+  val groupedHaarWaveletFilter = (orders: Array[Int]) =>
+    GroupedHaarWaveletFilter(orders)
 
-  val invGroupedHaarWaveletFilter = (orders: Array[Int]) => InvGroupedHaarWaveletFilter(orders)
+  val invGroupedHaarWaveletFilter = (orders: Array[Int]) =>
+    InvGroupedHaarWaveletFilter(orders)
 
-
-  def genericReplicationEncoder[I](n: Int)(implicit tag: ClassTag[I]): Encoder[I, Array[I]] =
-    Encoder[I, Array[I]](
-      (v: I) => {
-        Array.fill[I](n)(v)
-      },
-      (vs: Array[I]) => {
-        vs.head
-      })
+  def genericReplicationEncoder[I](
+    n: Int
+  )(
+    implicit tag: ClassTag[I]
+  ): Encoder[I, Array[I]] =
+    Encoder[I, Array[I]]((v: I) => {
+      Array.fill[I](n)(v)
+    }, (vs: Array[I]) => {
+      vs.head
+    })
 
   /**
     * Creates an [[Encoder]] which can split
     * [[DenseVector]] instances into uniform splits and
     * put them back together.
     * */
-  val breezeDVSplitEncoder = (n: Int) => Encoder(
-    (v: DenseVector[Double]) => Array.tabulate(v.length/n)(i => v(i*n until math.min((i+1)*n, v.length))),
-    (vs: Array[DenseVector[Double]]) => DenseVector(vs.map(_.toArray).reduceLeft((a,b) => a++b)))
+  val breezeDVSplitEncoder = (n: Int) =>
+    Encoder(
+      (v: DenseVector[Double]) =>
+        Array.tabulate(v.length / n)(
+          i => v(i * n until math.min((i + 1) * n, v.length))
+        ),
+      (vs: Array[DenseVector[Double]]) =>
+        DenseVector(vs.map(_.toArray).reduceLeft((a, b) => a ++ b))
+    )
 
   /**
     * Creates an [[Encoder]] which replicates a
     * [[DenseVector]] instance n times.
     * */
-  val breezeDVReplicationEncoder = (n: Int) => genericReplicationEncoder[DenseVector[Double]](n)
+  val breezeDVReplicationEncoder = (n: Int) =>
+    genericReplicationEncoder[DenseVector[Double]](n)
 
   def trainParametricModel[
-  G, T, Q, R, S, M <: ParameterizedLearner[G, T, Q, R, S]
-  ](regParameter: Double, step: Double = 0.05,
-    maxIt: Int = 50, mini: Double = 1.0) = DataPipe((model: M) => {
-      model.setLearningRate(step)
+    G,
+    T,
+    Q,
+    R,
+    S,
+    M <: ParameterizedLearner[G, T, Q, R, S]
+  ](regParameter: Double,
+    step: Double = 0.05,
+    maxIt: Int = 50,
+    mini: Double = 1.0
+  ) =
+    DataPipe((model: M) => {
+      model
+        .setLearningRate(step)
         .setMaxIterations(maxIt)
         .setBatchFraction(mini)
         .setRegParam(regParameter)
@@ -736,130 +958,169 @@ object DynaMLPipe {
       model
     })
 
-
   def modelTuning[M <: GloballyOptWithGrad](
     startingState: Map[String, Double],
     globalOpt: String = "GS",
-    grid: Int = 3, step: Double = 0.02) =
+    grid: Int = 3,
+    step: Double = 0.02
+  ) =
     DataPipe((model: M) => {
       val gs = globalOpt match {
-        case "GS" => new GridSearch[M](model)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setLogScale(false)
+        case "GS" =>
+          new GridSearch[M](model)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setLogScale(false)
 
         case "ML" => new GradBasedGlobalOptimizer[M](model)
 
-        case "CSA" => new CoupledSimulatedAnnealing(model)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setLogScale(false)
-          .setVariant(AbstractCSA.MwVC)
+        case "CSA" =>
+          new CoupledSimulatedAnnealing(model)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setLogScale(false)
+            .setVariant(AbstractCSA.MwVC)
       }
 
-      gs.optimize(startingState, Map("tolerance" -> "0.0001",
-        "step" -> step.toString,
-        "maxIterations" -> grid.toString))
+      gs.optimize(
+        startingState,
+        Map(
+          "tolerance"     -> "0.0001",
+          "step"          -> step.toString,
+          "maxIterations" -> grid.toString
+        )
+      )
     })
 
-  def gpTuning[T, I:ClassTag](
+  def gpTuning[T, I: ClassTag](
     startingState: Map[String, Double],
     globalOpt: String = "GS",
-    grid: Int = 3, step: Double = 0.02,
-    maxIt: Int = 20, policy: String = "GS",
-    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map()) =
+    grid: Int = 3,
+    step: Double = 0.02,
+    maxIt: Int = 20,
+    policy: String = "GS",
+    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] =
+      Map()
+  ) =
     DataPipe((model: AbstractGPRegressionModel[T, I]) => {
       val gs = globalOpt match {
-        case "GS" => new GridSearch(model)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setLogScale(false)
-          .setPrior(prior)
-          .setNumSamples(prior.size*grid)
+        case "GS" =>
+          new GridSearch(model)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setLogScale(false)
+            .setPrior(prior)
+            .setNumSamples(prior.size * grid)
 
         case "ML" => new GradBasedGlobalOptimizer(model)
 
-        case "CSA" => new CoupledSimulatedAnnealing(model)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setLogScale(false)
-          .setMaxIterations(maxIt)
-          .setVariant(AbstractCSA.MwVC)
-          .setPrior(prior)
-          .setNumSamples(prior.size*grid)
+        case "CSA" =>
+          new CoupledSimulatedAnnealing(model)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setLogScale(false)
+            .setMaxIterations(maxIt)
+            .setVariant(AbstractCSA.MwVC)
+            .setPrior(prior)
+            .setNumSamples(prior.size * grid)
 
-        case "GPC" => new ProbGPCommMachine(model)
-          .setPolicy(policy)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setMaxIterations(maxIt)
-          .setPrior(prior)
-          .setNumSamples(prior.size*grid)
+        case "GPC" =>
+          new ProbGPCommMachine(model)
+            .setPolicy(policy)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setMaxIterations(maxIt)
+            .setPrior(prior)
+            .setNumSamples(prior.size * grid)
       }
 
       gs.optimize(
         startingState,
         Map(
-          "tolerance" -> "0.0001",
-          "step" -> step.toString,
+          "tolerance"     -> "0.0001",
+          "step"          -> step.toString,
           "maxIterations" -> grid.toString,
-          "persist" -> "true"))
+          "persist"       -> "true"
+        )
+      )
     })
 
-  def sgpTuning[T, I:ClassTag](
-    startingState: Map[String, Double], globalOpt: String = "GS",
-    grid: Int = 3, step: Double = 0.02, maxIt: Int = 20,
-    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map()) =
+  def sgpTuning[T, I: ClassTag](
+    startingState: Map[String, Double],
+    globalOpt: String = "GS",
+    grid: Int = 3,
+    step: Double = 0.02,
+    maxIt: Int = 20,
+    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] =
+      Map()
+  ) =
     DataPipe((model: ESGPModel[T, I]) => {
       val gs = globalOpt match {
-        case "GS" => new GridSearch(model)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setLogScale(false)
-          .setPrior(prior)
-          .setNumSamples(prior.size*grid)
+        case "GS" =>
+          new GridSearch(model)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setLogScale(false)
+            .setPrior(prior)
+            .setNumSamples(prior.size * grid)
 
-        case "CSA" => new CoupledSimulatedAnnealing(model)
-          .setGridSize(grid)
-          .setStepSize(step)
-          .setLogScale(false)
-          .setMaxIterations(maxIt)
-          .setVariant(AbstractCSA.MwVC)
-          .setPrior(prior)
-          .setNumSamples(prior.size*grid)
+        case "CSA" =>
+          new CoupledSimulatedAnnealing(model)
+            .setGridSize(grid)
+            .setStepSize(step)
+            .setLogScale(false)
+            .setMaxIterations(maxIt)
+            .setVariant(AbstractCSA.MwVC)
+            .setPrior(prior)
+            .setNumSamples(prior.size * grid)
 
       }
 
       gs.optimize(
         startingState,
         Map(
-          "tolerance" -> "0.0001",
-          "step" -> step.toString,
+          "tolerance"     -> "0.0001",
+          "step"          -> step.toString,
           "maxIterations" -> grid.toString,
-          "persist" -> "true"))
+          "persist"       -> "true"
+        )
+      )
     })
 
-  def GPRegressionTest[T <: AbstractGPRegressionModel[
-    Seq[(DenseVector[Double], Double)],
-    DenseVector[Double]]](model:T) =
+  def GPRegressionTest[
+    T <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)], DenseVector[
+      Double
+    ]]
+  ](model: T
+  ) =
     DataPipe(
-    (trainTest: (Stream[(DenseVector[Double], Double)],
-      (DenseVector[Double], DenseVector[Double]))) => {
+      (trainTest: (
+        Iterable[(DenseVector[Double], Double)],
+        (DenseVector[Double], DenseVector[Double])
+      )) => {
 
-      val res = model.test(trainTest._1)
-      val scoresAndLabelsPipe =
-        DataPipe(
-          (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
-            res.map(i => (i._3, i._2)).toList) > DataPipe((list: List[(Double, Double)]) =>
-          list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
-            l._2*trainTest._2._2(-1) + trainTest._2._1(-1))})
+        val res = model.test(trainTest._1.toSeq)
+        val scoresAndLabelsPipe =
+          DataPipe(
+            (res: Seq[(DenseVector[Double], Double, Double, Double, Double)]) =>
+              res.map(i => (i._3, i._2)).toList
+          ) > DataPipe(
+            (list: List[(Double, Double)]) =>
+              list.map { l =>
+                (
+                  l._1 * trainTest._2._2(-1) + trainTest._2._1(-1),
+                  l._2 * trainTest._2._2(-1) + trainTest._2._1(-1)
+                )
+              }
+          )
 
-      val scoresAndLabels = scoresAndLabelsPipe.run(res)
+        val scoresAndLabels = scoresAndLabelsPipe.run(res)
 
-      val metrics = new RegressionMetrics(scoresAndLabels,
-        scoresAndLabels.length)
+        val metrics =
+          new RegressionMetrics(scoresAndLabels, scoresAndLabels.length)
 
-      metrics.print()
-      metrics.generatePlots()
-    })
+        metrics.print()
+        metrics.generatePlots()
+      }
+    )
 }

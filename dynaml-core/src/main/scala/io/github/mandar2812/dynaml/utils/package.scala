@@ -15,12 +15,19 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml
 
 import java.io.{BufferedWriter, File, FileWriter}
 
-import breeze.linalg.{DenseMatrix, DenseVector, Matrix, MatrixNotSquareException, MatrixNotSymmetricException, kron}
+import breeze.linalg.{
+  DenseMatrix,
+  DenseVector,
+  Matrix,
+  MatrixNotSquareException,
+  MatrixNotSymmetricException,
+  kron
+}
 import com.github.tototoshi.csv.{CSVReader, DefaultCSVFormat, QUOTE_NONNUMERIC}
 import org.renjin.script.{RenjinScriptEngine, RenjinScriptEngineFactory}
 import org.renjin.sexp.SEXP
@@ -47,7 +54,7 @@ import scala.util.Random
   * */
 package object utils {
 
-  val log1pExp: (Double) => Double = (x) => {x + math.log1p(math.exp(-x))}
+  val log1pExp: (Double) => Double = (x) => { x + math.log1p(math.exp(-x)) }
 
   val tokenGenerator = new BearerTokenGenerator
 
@@ -64,7 +71,7 @@ package object utils {
   def getCSVReader(file: String, delim: Char): CSVReader = {
     implicit object MyFormat extends DefaultCSVFormat {
       override val delimiter = delim
-      override val quoting = QUOTE_NONNUMERIC
+      override val quoting   = QUOTE_NONNUMERIC
     }
     CSVReader.open(new File(file))
   }
@@ -74,16 +81,19 @@ package object utils {
     * */
   def diagonal(m: DenseMatrix[Double]): DenseMatrix[Double] = {
     require(m.rows == m.cols, "Matrix must be square to extract diagonal")
-    m.mapPairs((index, value) => if(index._1 == index._2) value else 0.0)
+    m.mapPairs((index, value) => if (index._1 == index._2) value else 0.0)
   }
 
   /**
     * Extract the diagonal elements of a [[PartitionedMatrix]]
     * */
   def diagonal[M <: PartitionedMatrix](pm: M): PartitionedMatrix = {
-    require(pm.rows == pm.cols, "Blocked matrix must be square to extract diagonal")
+    require(
+      pm.rows == pm.cols,
+      "Blocked matrix must be square to extract diagonal"
+    )
     pm.map(pairs => {
-      if(pairs._1._1 == pairs._1._2) (pairs._1, diagonal(pairs._2))
+      if (pairs._1._1 == pairs._1._2) (pairs._1, diagonal(pairs._2))
       else (pairs._1, DenseMatrix.zeros[Double](pairs._2.rows, pairs._2.cols))
     })
   }
@@ -97,34 +107,39 @@ package object utils {
     *         and variance * n-1.
     *
     * */
-  def getStats(data: List[DenseVector[Double]]): (DenseVector[Double], DenseVector[Double]) = {
+  def getStats(
+    data: Iterable[DenseVector[Double]]
+  ): (DenseVector[Double], DenseVector[Double]) = {
 
-    def getStatsRec(d: List[DenseVector[Double]],
-                    m: DenseVector[Double],
-                    s: DenseVector[Double],
-                    i: Int):
-    (DenseVector[Double], DenseVector[Double]) = d match {
-      case Nil => (m, s)
+    def getStatsRec(
+      d: Iterable[DenseVector[Double]],
+      m: DenseVector[Double],
+      s: DenseVector[Double],
+      i: Int
+    ): (DenseVector[Double], DenseVector[Double], Int) = d match {
+      case Nil => (m, s, i)
       case x :: rest =>
-        val mnew = m + (x - m)/(i+1).toDouble
-        getStatsRec(rest, mnew,
-          s + (m*:*m) - (mnew*:*mnew) + ((x*:*x) - s - (m*:*m))/(i+1).toDouble,
-          i + 1)
+        val mnew = m + (x - m) / (i + 1).toDouble
+        getStatsRec(
+          rest,
+          mnew,
+          s + (m *:* m) - (mnew *:* mnew) + ((x *:* x) - s - (m *:* m)) / (i + 1).toDouble,
+          i + 1
+        )
 
     }
 
-
-    val n = data.length
-
-    require(n > 1, "To calculate stats size of data must be > 1")
-
-    val adjustment = n.toDouble/(n-1)
-    val (mean, biasedSigmaSq) = getStatsRec(
-      data.tail, data.head,
+    val (mean, biasedSigmaSq, len) = getStatsRec(
+      data.tail,
+      data.head,
       DenseVector.zeros[Double](data.head.length),
-      1)
+      1
+    )
 
-    (mean, biasedSigmaSq*adjustment)
+    require(len > 1, "To calculate stats size of data must be > 1")
+    val adjustment = len.toDouble / (len - 1)
+
+    (mean, biasedSigmaSq * adjustment)
   }
 
   /**
@@ -136,91 +151,109 @@ package object utils {
     *         and variance.
     *
     * */
-  def getStatsMult(data: List[DenseVector[Double]]): (DenseVector[Double], DenseMatrix[Double]) = {
+  def getStatsMult(
+    data: Iterable[DenseVector[Double]]
+  ): (DenseVector[Double], DenseMatrix[Double]) = {
 
     def getStatsRec(
-      d: List[DenseVector[Double]],
+      d: Iterable[DenseVector[Double]],
       m: DenseVector[Double],
       s: DenseMatrix[Double],
-      i: Int): (DenseVector[Double], DenseMatrix[Double]) = d match {
+      i: Int
+    ): (DenseVector[Double], DenseMatrix[Double], Int) = d match {
 
       case Nil =>
-        (m,s)
+        (m, s, i)
 
       case x :: rest =>
-        val mnew = m + (x - m)/(i+1).toDouble
-        getStatsRec(rest, mnew,
-          s + (m*m.t) - (mnew*mnew.t) + ((x*x.t) - s - (m*m.t))/(i+1).toDouble,
-          i + 1)
+        val mnew = m + (x - m) / (i + 1).toDouble
+        getStatsRec(
+          rest,
+          mnew,
+          s + (m * m.t) - (mnew * mnew.t) + ((x * x.t) - s - (m * m.t)) / (i + 1).toDouble,
+          i + 1
+        )
 
     }
 
-    val n = data.length
+    val (mean, biasedSigmaSq, len) =
+      getStatsRec(data.tail, data.head, data.head * data.head.t, 1)
 
-    require(n > 1, "To calculate stats size of data must be > 1")
+    require(len > 1, "To calculate stats size of data must be > 1")
 
-    val adjustment = n.toDouble/(n-1)
-    val (mean, biasedSigmaSq) = getStatsRec(
-      data.tail, data.head,
-      data.head * data.head.t,
-      1)
+    val adjustment = len.toDouble / (len - 1)
 
-    (mean, biasedSigmaSq*adjustment)
+    (mean, biasedSigmaSq * adjustment)
   }
 
-  def getMinMax(data: List[DenseVector[Double]]): (DenseVector[Double], DenseVector[Double]) = {
+  def getMinMax(
+    data: Iterable[DenseVector[Double]]
+  ): (DenseVector[Double], DenseVector[Double]) = {
 
     def getMinMaxRec(
-      d: List[DenseVector[Double]],
+      d: Iterable[DenseVector[Double]],
       m: DenseVector[Double],
-      s: DenseVector[Double],
-      i: Int): (DenseVector[Double], DenseVector[Double]) = d match {
+      s: DenseVector[Double]
+    ): (DenseVector[Double], DenseVector[Double]) = d match {
 
       case Nil => (m, s)
 
       case x :: rest =>
-        getMinMaxRec(rest,
+        getMinMaxRec(
+          rest,
           DenseVector((x.toArray zip m.toArray).map(c => math.min(c._1, c._2))),
-          DenseVector((x.toArray zip s.toArray).map(c => math.max(c._1, c._2))),
-          i - 1)
+          DenseVector((x.toArray zip s.toArray).map(c => math.max(c._1, c._2)))
+        )
 
     }
 
-    getMinMaxRec(
-      data.tail,
-      data.head,
-      data.head,
-      data.length)
+    getMinMaxRec(data.tail, data.head, data.head)
   }
-
 
   /**
     * Implementation of the quick-select algorithm.
     * */
   def quickselect(list: Stream[Double], k: Int): Double = {
 
-    require(k <= list.length && k > 0, "In quick-select, the search index must be between 1 and length of list")
+    require(
+      k <= list.length && k > 0,
+      "In quick-select, the search index must be between 1 and length of list"
+    )
     val random: (Int) => Int = Random.nextInt
 
-    def quickSelectRec(list_sample: Seq[Double], k: Int, pivot: Double): Double = {
+    def quickSelectRec(
+      list_sample: Seq[Double],
+      k: Int,
+      pivot: Double
+    ): Double = {
       val split_list = list_sample.partition(_ < pivot)
-      val s = split_list._1.length
+      val s          = split_list._1.length
 
-      if(s == k) {
+      if (s == k) {
         pivot
       } else if (s == 0 && list_sample.sum == pivot * list_sample.length) {
         pivot
-      } else if(s < k) {
-        quickSelectRec(split_list._2, k - s,
-          split_list._2(random(split_list._2.length)))
+      } else if (s < k) {
+        quickSelectRec(
+          split_list._2,
+          k - s,
+          split_list._2(random(split_list._2.length))
+        )
       } else {
-        quickSelectRec(split_list._1, k,
-          split_list._1(random(split_list._1.length)))
+        quickSelectRec(
+          split_list._1,
+          k,
+          split_list._1(random(split_list._1.length))
+        )
       }
     }
 
     val arrayStream = list.toArray
-    quickSelectRec(arrayStream, k-1, arrayStream(Random.nextInt(arrayStream.length)))
+    quickSelectRec(
+      arrayStream,
+      k - 1,
+      arrayStream(Random.nextInt(arrayStream.length))
+    )
   }
 
   def median(list: Stream[Double]): Double = {
@@ -228,27 +261,29 @@ package object utils {
 
     def medianK(list_sample: Seq[Double], k: Int, pivot: Double): Double = {
       val split_list = list_sample.partition(_ < pivot)
-      val s = split_list._1.length
+      val s          = split_list._1.length
 
-      if(s == k) {
+      if (s == k) {
         pivot
       } else if (s == 0 && list_sample.sum == pivot * list_sample.length) {
         pivot
-      } else if(s < k) {
-        medianK(split_list._2, k - s,
-          split_list._2(random(split_list._2.length)))
+      } else if (s < k) {
+        medianK(
+          split_list._2,
+          k - s,
+          split_list._2(random(split_list._2.length))
+        )
       } else {
-        medianK(split_list._1, k,
-          split_list._1(random(split_list._1.length)))
+        medianK(split_list._1, k, split_list._1(random(split_list._1.length)))
       }
     }
 
-    if(list.length % 2 == 0) {
-      val medA = medianK(list, list.length/2, list(random(list.length)))
-      val medB = medianK(list, list.length/2 - 1, list(random(list.length)))
-      (medA + medB)/2.0
+    if (list.length % 2 == 0) {
+      val medA = medianK(list, list.length / 2, list(random(list.length)))
+      val medB = medianK(list, list.length / 2 - 1, list(random(list.length)))
+      (medA + medB) / 2.0
     } else {
-      medianK(list, list.length/2, list(random(list.length)))
+      medianK(list, list.length / 2, list(random(list.length)))
     }
   }
 
@@ -257,7 +292,6 @@ package object utils {
     * over Map
     * */
   def getPriorMapDistr(d: Map[String, ContinuousDistr[Double]]) = {
-
 
     new ContinuousDistr[Map[String, Double]] {
 
@@ -273,7 +307,6 @@ package object utils {
 
   }
 
-
   /**
     * Calculates the Chebyshev polynomials of the first and second kind,
     * in a tail recursive manner, using their recurrence relations.
@@ -281,16 +314,17 @@ package object utils {
   def chebyshev(n: Int, x: Double, kind: Int = 1): Double = {
     require(
       kind >= 1 && kind <= 2,
-      "Chebyshev function can only be of the first or second kind")
+      "Chebyshev function can only be of the first or second kind"
+    )
 
     def chebyshev_T(k: Int, arg: Double, a: Double, b: Double): Double =
       k match {
         case 0 => a
         case 1 => b
-        case _ => chebyshev_T(k-1, arg, b, 2*arg*b - a)
+        case _ => chebyshev_T(k - 1, arg, b, 2 * arg * b - a)
       }
 
-    val c1 = if(kind == 1) x else 2*x
+    val c1 = if (kind == 1) x else 2 * x
 
     chebyshev_T(n, x, 1, c1)
   }
@@ -306,7 +340,7 @@ package object utils {
       k match {
         case 0 => a
         case 1 => b
-        case _ => hermiteHelper(k-1, x, b, x*b - (k-1)*a)
+        case _ => hermiteHelper(k - 1, x, b, x * b - (k - 1) * a)
       }
     hermiteHelper(n, x, 1, x)
   }
@@ -316,10 +350,23 @@ package object utils {
     * */
   def laguerre(n: Int, alpha: Double, x: Double): Double = {
 
-    def laguerreRec(k: Int, alphav: Double, xv: Double, a: Double, b: Double): Double = k match {
+    def laguerreRec(
+      k: Int,
+      alphav: Double,
+      xv: Double,
+      a: Double,
+      b: Double
+    ): Double = k match {
       case 0 => a
       case 1 => b
-      case _ => laguerreRec(k - 1, xv, alphav, ((2*k + 1 + alphav - xv)*a - (k + alphav)*b)/(k + 1), a)
+      case _ =>
+        laguerreRec(
+          k - 1,
+          xv,
+          alphav,
+          ((2 * k + 1 + alphav - xv) * a - (k + alphav) * b) / (k + 1),
+          a
+        )
     }
 
     laguerreRec(n, alpha, x, 1.0, 1.0 + alpha - x)
@@ -335,42 +382,52 @@ package object utils {
       k match {
         case 0 => a
         case 1 => b
-        case _ => legendreHelper(k-1, x, b, ((2*k - 1)*x*b - (k-1)*a)/k)
+        case _ =>
+          legendreHelper(k - 1, x, b, ((2 * k - 1) * x * b - (k - 1) * a) / k)
       }
 
     legendreHelper(n, x, 1, x)
   }
-
 
   /**
     * Calculates the Harmonic number function
     * for positive real arguments.
     * */
   def H(x: Double): Double = {
-    assert(x >= 0, "Harmonic number function in DynaML takes only non-negative arguments")
+    assert(
+      x >= 0,
+      "Harmonic number function in DynaML takes only non-negative arguments"
+    )
     def hRec(arg: Double, acc: Double): Double = math.floor(arg) match {
       case 0 => acc
-      case n => hRec(arg-1, acc + (1d/n))
+      case n => hRec(arg - 1, acc + (1d / n))
     }
     hRec(x, 0d)
   }
 
   @tailrec
   def factorial(n: Int, accumulator: Long = 1): Long = {
-    if(n == 0) accumulator else factorial(n - 1, accumulator*n)
+    if (n == 0) accumulator else factorial(n - 1, accumulator * n)
   }
 
   def getTypeTag[T: ru.TypeTag](obj: T): ru.TypeTag[T] = ru.typeTag[T]
 
   def combine[A](xs: Traversable[Traversable[A]]): Seq[Seq[A]] =
-    xs.foldLeft(Seq(Seq.empty[A])) {
-      (x, y) => for (a <- x.view; b <- y) yield a :+ b
+    xs.foldLeft(Seq(Seq.empty[A])) { (x, y) =>
+      for (a <- x.view; b <- y) yield a :+ b
 
     }
 
-  def range[I](min: I, max: I, steps: Int)(implicit field: InnerProductSpace[I, Double]): Stream[I] = {
+  def range[I](
+    min: I,
+    max: I,
+    steps: Int
+  )(
+    implicit field: InnerProductSpace[I, Double]
+  ): Stream[I] = {
     val step_size = field.divr(field.minus(max, min), steps)
-    (0 until steps).toStream.map(i => field.plus(min, field.timesr(step_size, i)))
+    (0 until steps).toStream
+      .map(i => field.plus(min, field.timesr(step_size, i)))
   }
 
   def downloadURL(url: String, saveAs: String): Unit =
@@ -384,37 +441,45 @@ package object utils {
   def textFileToStream(fileName: String): Stream[String] =
     Source.fromFile(new File(fileName)).getLines().toStream
 
-  def strReplace(fileName: String)(
-    findStringRegex: String,
-    replaceString: String): Stream[String] =
+  def strReplace(
+    fileName: String
+  )(findStringRegex: String,
+    replaceString: String
+  ): Stream[String] =
     textFileToStream(fileName).map(replace(findStringRegex)(replaceString))
-
 
   def writeToFile(destination: String)(lines: Stream[String]): Unit = {
     val writer = new BufferedWriter(new FileWriter(new File(destination)))
     lines.foreach(line => {
-      writer.write(line+"\n")
+      writer.write(line + "\n")
     })
     writer.close()
   }
 
-  def transformData(transform: (String) => String)(lines: Stream[String]): Stream[String] =
+  def transformData(
+    transform: (String) => String
+  )(lines: Iterable[String]
+  ): Iterable[String] =
     lines.map(transform)
 
   def extractColumns(
-    lines: Stream[String], sep: String,
-    columns: List[Int], naStrings:Map[Int, String]): Stream[String] = {
+    lines: Iterable[String],
+    sep: String,
+    columns: List[Int],
+    naStrings: Map[Int, String]
+  ): Iterable[String] = {
 
     val tFunc = (line: String) => {
       val fields = line.split(sep)
 
-      val newFields:List[String] = columns.map(col => {
-        if (!naStrings.contains(col) || fields(col) != naStrings(col)) fields(col)
+      val newFields: List[String] = columns.map(col => {
+        if (!naStrings.contains(col) || fields(col) != naStrings(col))
+          fields(col)
         else "<NA>"
       })
 
       val newLine = newFields.foldLeft("")(
-        (str1, str2) => str1+sep+str2
+        (str1, str2) => str1 + sep + str2
       )
 
       newLine.tail
@@ -432,14 +497,18 @@ package object utils {
     * */
   def haarMatrix(n: Int): DenseMatrix[Double] = {
 
-    val pos = DenseVector(1.0, 1.0).toDenseMatrix
-    val neg = DenseVector(1.0, -1.0).toDenseMatrix
+    val pos  = DenseVector(1.0, 1.0).toDenseMatrix
+    val neg  = DenseVector(1.0, -1.0).toDenseMatrix
     val hMat = DenseMatrix((1.0, 1.0), (1.0, -1.0))
 
-    def haarMatrixAcc(i: Int, hMatAcc: DenseMatrix[Double]): DenseMatrix[Double] = i match {
+    def haarMatrixAcc(
+      i: Int,
+      hMatAcc: DenseMatrix[Double]
+    ): DenseMatrix[Double] = i match {
       case `n` => hMatAcc
       case _ =>
-        haarMatrixAcc(i*2,
+        haarMatrixAcc(
+          i * 2,
           DenseMatrix.vertcat[Double](
             kron(hMatAcc, pos),
             kron(DenseMatrix.eye[Double](i), neg)
@@ -450,22 +519,43 @@ package object utils {
     haarMatrixAcc(2, hMat)
   }
 
-  def productField[Domain, Domain1](ev: Field[Domain], ev1: Field[Domain1])(
-    implicit eqq: Eq[Domain], eqq1: Eq[Domain1]): Field[(Domain, Domain1)] =
+  def productField[Domain, Domain1](
+    ev: Field[Domain],
+    ev1: Field[Domain1]
+  )(
+    implicit eqq: Eq[Domain],
+    eqq1: Eq[Domain1]
+  ): Field[(Domain, Domain1)] =
     new Field[(Domain, Domain1)] {
       /*override def gcd(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
         (ev.gcd(a._1, b._1), ev1.gcd(a._2, b._2))*/
 
-      override def gcd(a: (Domain, Domain1), b: (Domain, Domain1))(implicit eqq3: Eq[(Domain, Domain1)]) =
+      override def gcd(
+        a: (Domain, Domain1),
+        b: (Domain, Domain1)
+      )(
+        implicit eqq3: Eq[(Domain, Domain1)]
+      ) =
         (ev.gcd(a._1, b._1), ev1.gcd(a._2, b._2))
 
-      override def lcm(a: (Domain, Domain1), b: (Domain, Domain1))(implicit eqq3: Eq[(Domain, Domain1)]) =
+      override def lcm(
+        a: (Domain, Domain1),
+        b: (Domain, Domain1)
+      )(
+        implicit eqq3: Eq[(Domain, Domain1)]
+      ) =
         (ev.lcm(a._1, b._1), ev1.lcm(a._2, b._2))
 
-      override def quot(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
+      override def quot(
+        a: (Domain, Domain1),
+        b: (Domain, Domain1)
+      ): (Domain, Domain1) =
         (ev.quot(a._1, b._1), ev1.quot(a._2, b._2))
 
-      override def mod(a: (Domain, Domain1), b: (Domain, Domain1)): (Domain, Domain1) =
+      override def mod(
+        a: (Domain, Domain1),
+        b: (Domain, Domain1)
+      ): (Domain, Domain1) =
         (ev.mod(a._1, b._1), ev1.mod(a._2, b._2))
 
       override def negate(x: (Domain, Domain1)): (Domain, Domain1) =
@@ -475,16 +565,24 @@ package object utils {
 
       override def one: (Domain, Domain1) = (ev.one, ev1.one)
 
-      override def plus(x: (Domain, Domain1), y: (Domain, Domain1)): (Domain, Domain1) =
+      override def plus(
+        x: (Domain, Domain1),
+        y: (Domain, Domain1)
+      ): (Domain, Domain1) =
         (ev.plus(x._1, y._1), ev1.plus(x._2, y._2))
 
-      override def div(x: (Domain, Domain1), y: (Domain, Domain1)): (Domain, Domain1) =
+      override def div(
+        x: (Domain, Domain1),
+        y: (Domain, Domain1)
+      ): (Domain, Domain1) =
         (ev.div(x._1, y._1), ev1.div(x._2, y._2))
 
-      override def times(x: (Domain, Domain1), y: (Domain, Domain1)): (Domain, Domain1) =
+      override def times(
+        x: (Domain, Domain1),
+        y: (Domain, Domain1)
+      ): (Domain, Domain1) =
         (ev.times(x._1, y._1), ev1.times(x._2, y._2))
     }
-
 
   def isSquareMatrix[V](mat: Matrix[V]): Unit =
     if (mat.rows != mat.cols)
@@ -493,7 +591,7 @@ package object utils {
   def isSymmetricMatrix[V](mat: Matrix[V]): Unit = {
     isSquareMatrix(mat)
     for (i <- 0 until mat.rows; j <- 0 until i)
-      if (mat(i,j) != mat(j,i)) throw new MatrixNotSymmetricException
+      if (mat(i, j) != mat(j, i)) throw new MatrixNotSymmetricException
   }
 
   /**
@@ -510,6 +608,4 @@ package object utils {
     val R: java.io.File => Unit = (f: java.io.File) => renjin.eval(f)
   }
 
-
 }
-

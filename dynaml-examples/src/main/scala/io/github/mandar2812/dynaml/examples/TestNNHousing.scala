@@ -50,8 +50,8 @@ object TestNNHousing {
                     opt: Map[String, String]): Unit = {
 
     val modelTrainTest =
-      (trainTest: ((Stream[(DenseVector[Double], Double)],
-        Stream[(DenseVector[Double], Double)]),
+      (trainTest: ((Iterable[(DenseVector[Double], Double)],
+      Iterable[(DenseVector[Double], Double)]),
         (DenseVector[Double], DenseVector[Double]))) => {
 
         val gr = FFNeuralGraph(trainTest._1._1.head._1.length, 1, hidden,
@@ -60,7 +60,7 @@ object TestNNHousing {
         val transform = DataPipe((d: Stream[(DenseVector[Double], Double)]) =>
           d.map(el => (el._1, DenseVector(el._2))))
 
-        val model = new FeedForwardNetwork[Stream[(DenseVector[Double], Double)]](trainTest._1._1, gr)(transform)
+        val model = new FeedForwardNetwork[Stream[(DenseVector[Double], Double)]](trainTest._1._1.toStream, gr)(transform)
 
         model.setLearningRate(opt("step").toDouble)
           .setMaxIterations(opt("maxIterations").toInt)
@@ -69,7 +69,7 @@ object TestNNHousing {
           .setRegParam(opt("regularization").toDouble)
           .learn()
 
-        val res = model.test(trainTest._1._2)
+        val res = model.test(trainTest._1._2.toStream)
         val scoresAndLabelsPipe =
           DataPipe(
             (res: Seq[(DenseVector[Double], DenseVector[Double])]) =>

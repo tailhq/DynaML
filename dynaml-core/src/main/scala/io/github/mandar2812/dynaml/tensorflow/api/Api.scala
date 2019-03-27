@@ -2,8 +2,8 @@ package io.github.mandar2812.dynaml.tensorflow.api
 
 import java.nio.ByteBuffer
 
-import io.github.mandar2812.dynaml.probability.RandomVariable
-//import org.platanios.tensorflow.api.core.types.{Half, TF}
+import io.github.mandar2812.dynaml.probability._
+import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
 
 
@@ -245,4 +245,32 @@ private[tensorflow] object Api {
 
   def fill[D: TF](shape: Shape)(value: D): Tensor[D] =
     Tensor.fill(shape)(value)
+
+  /* def eig[D: TF: IsFloatOrDouble](matrices: Tensor[D]): Tensor[D] = {
+    require(
+      matrices.rank == 3 || matrices.rank == 2, 
+      "In an eigen decomposition, the inputs must be [?, n, n] or [n, n]")
+
+    val as = if(matrices.rank == 2) Seq(matrices) else matrices.unstack(axis = 0)
+
+    require(
+      as.head.shape(0) == as.head.shape(1), 
+      "Only square matrices when using eig()")
+
+    val s = as.head.shape(0).scalar
+    
+    def arnoldi(m: Tensor[D], n: Int): Tensor[D] = {
+      val eps = Tensor(1E-12).castTo[D]
+
+      val q0 = random[D](s)(GaussianRV(0.0, 1.0) > DataPipe[Double, D](_.asInstanceOf[D])).l2Normalize(axes = 0)
+
+      
+
+      m
+    }
+
+
+
+    matrices
+  } */
 }

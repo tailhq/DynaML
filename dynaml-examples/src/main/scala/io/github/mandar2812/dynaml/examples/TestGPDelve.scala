@@ -4,7 +4,7 @@ import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.analysis.VectorField
 import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
+import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe
 import io.github.mandar2812.dynaml.utils.GaussianScaler
@@ -16,7 +16,7 @@ import io.github.mandar2812.dynaml.examples._
 object TestGPDelve {
 
   type Features = DenseVector[Double]
-  type Data = Stream[(Features, Features)]
+  type Data = Iterable[(Features, Features)]
   type Scales = (GaussianScaler, GaussianScaler)
   type DataAndScales = (Data, Data, Scales)
 
@@ -47,11 +47,11 @@ object TestGPDelve {
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
 
-    val preScaling = StreamDataPipe(
+    val preScaling = IterableDataPipe(
       (pattern: (Features, Double)) => (pattern._1, DenseVector(pattern._2))
     )
 
-    val postScaling = StreamDataPipe(
+    val postScaling = IterableDataPipe(
       (pattern: (Features, Features)) => (pattern._1, pattern._2(0))
     )
 
@@ -63,10 +63,10 @@ object TestGPDelve {
 
     val modelTrainTest =
       (trainTest: DataAndScales) => {
-        val (training, test, scales) = trainTest
+        val (training, test, scales): DataAndScales = trainTest
 
         val model = modelPipe(training)
-        val res = model.test(postScaling(test)).map(t => (DenseVector(t._3), DenseVector(t._2)))
+        val res = model.test(postScaling.run(test).toSeq).map(t => (DenseVector(t._3), DenseVector(t._2)))
 
         val scoresAndLabels = (scales._2.i * scales._2.i)(res)
 
