@@ -157,7 +157,7 @@ object DynaMLPipe {
     * of [[String]] with with a specified replacement string.
     * */
   val replace = (original: String, newString: String) =>
-  IterableDataPipe((s: String) => utils.replace(original)(newString)(s))
+    IterableDataPipe((s: String) => utils.replace(original)(newString)(s))
 
   /**
     * Data pipe to replace all white spaces in a [[Stream]]
@@ -617,7 +617,8 @@ object DynaMLPipe {
         data.map(tup => DenseVector(tup._1.toArray ++ tup._2.toArray)).toList
       )
 
-      val Eig(eigenvalues, _, eigenvectors) = eig(sigma(0 until num_features, 0 until num_features))
+      val Eig(eigenvalues, _, eigenvectors) =
+        eig(sigma(0 until num_features, 0 until num_features))
 
       val featuresScaler = PCAScaler(
         m(0 until num_features),
@@ -660,6 +661,40 @@ object DynaMLPipe {
 
       (result, featuresScaler)
     })
+
+  def compressPCA(
+    fraction: Double = 0.8
+  ): DataPipe[PCAScaler, CompressedPCAScaler] = {
+
+    require(
+      fraction < 1.0 && fraction > 0.0,
+      "Fraction of retained variance must be in the interval (0, 1)"
+    )
+
+    DataPipe[PCAScaler, CompressedPCAScaler](sc => {
+      val eigenvalues = sc.eigenvalues
+      val total_var   = eigenvalues.sum.toDouble
+
+      val var_seq = (0 until eigenvalues.size)
+        .map(i => eigenvalues(0 to i).sum / total_var)
+        .toSeq
+
+      println("Compressing PCA: ")
+      print("Fraction of retained variance = ")
+      pprint.pprintln(fraction)
+
+      val total_dims = var_seq.length
+      val (_, chosen_dims) = var_seq.zipWithIndex
+        .find(c => c._1 > fraction)
+        .getOrElse((1.0, total_dims))
+
+      print("(Chosen dimensions, Total Dimensions): ")
+      pprint.pprintln((chosen_dims, total_dims))
+
+      sc(0 until chosen_dims)
+    })
+
+  }
 
   /**
     * Returns a pipe which takes a data set and calculates the minimum and maximum of each dimension.
@@ -829,7 +864,9 @@ object DynaMLPipe {
     * */
   val extractTrainingFeatures =
     (columns: List[Int], m: Map[Int, String]) =>
-      DataPipe((l: Iterable[String]) => utils.extractColumns(l, ",", columns, m))
+      DataPipe(
+        (l: Iterable[String]) => utils.extractColumns(l, ",", columns, m)
+      )
 
   /**
     * Returns a pipeline which performs a bagging based sub-sampling
@@ -845,7 +882,7 @@ object DynaMLPipe {
         "Number of bags must be positive"
     )
     DataPipe((data: Stream[T]) => {
-      val data_size = data.toSeq.length
+      val data_size      = data.toSeq.length
       val sizeOfBag: Int = (data_size * proportion).toInt
       (1 to nBags)
         .map(
