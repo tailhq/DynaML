@@ -253,13 +253,13 @@ object DynaMLPipe {
   val deltaOperation = (deltaT: Int, timelag: Int) =>
     DataPipe(
       (lines: Iterable[(Double, Double)]) =>
-        lines.toList
+        lines
           .sliding(deltaT + timelag + 1)
+          .toIterable
           .map((history) => {
             val features = DenseVector(history.take(deltaT).map(_._2).toArray)
             (features, history.last._2)
           })
-          .toStream
     )
 
   /**
@@ -268,10 +268,11 @@ object DynaMLPipe {
   val deltaOperationVec = (deltaT: Int) =>
     DataPipe(
       (lines: Iterable[(Double, DenseVector[Double])]) =>
-        lines.toList
+        lines
           .sliding(deltaT + 1)
+          .toIterable
           .map((history) => {
-            val hist                    = history.take(history.length - 1).map(_._2)
+            val hist                    = history.take(history.toSeq.length - 1).map(_._2)
             val featuresAcc: ML[Double] = ML()
 
             (0 until hist.head.length).foreach((dimension) => {
@@ -282,7 +283,6 @@ object DynaMLPipe {
             val features = DenseVector(featuresAcc.toArray)
             (features, history.last._2(0))
           })
-          .toStream
     )
 
   /**
@@ -291,10 +291,11 @@ object DynaMLPipe {
   val deltaOperationARX = (deltaT: List[Int]) =>
     DataPipe(
       (lines: Iterable[(Double, DenseVector[Double])]) =>
-        lines.toList
+        lines
           .sliding(deltaT.max + 1)
+          .toIterable
           .map((history) => {
-            val hist                    = history.take(history.length - 1).map(_._2)
+            val hist                    = history.take(history.toSeq.length - 1).map(_._2)
             val featuresAcc: ML[Double] = ML()
 
             (0 until hist.head.length).foreach((dimension) => {
@@ -307,7 +308,6 @@ object DynaMLPipe {
             val features = DenseVector(featuresAcc.toArray)
             (features, history.last._2(0))
           })
-          .toStream
     )
 
   /**

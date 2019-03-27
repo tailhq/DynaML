@@ -265,7 +265,7 @@ object AbottPowerPlant {
       deltaOperationVec(deltaT)
 
     val trainTestPipe = duplicate(preProcessPipe) >
-      splitTrainingTest(num_training, num_test) >
+      splitTrainingTest[(DenseVector[Double], Double)](num_training, num_test) >
       trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 

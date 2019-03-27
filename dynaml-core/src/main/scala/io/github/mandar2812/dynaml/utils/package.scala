@@ -438,14 +438,14 @@ package object utils {
     pattern.replaceAllIn(input, replace)
   }
 
-  def textFileToStream(fileName: String): Stream[String] =
-    Source.fromFile(new File(fileName)).getLines().toStream
+  def textFileToStream(fileName: String): Iterable[String] =
+    Source.fromFile(new File(fileName)).getLines().toIterable
 
   def strReplace(
     fileName: String
   )(findStringRegex: String,
     replaceString: String
-  ): Stream[String] =
+  ): Iterable[String] =
     textFileToStream(fileName).map(replace(findStringRegex)(replaceString))
 
   def writeToFile(destination: String)(lines: Stream[String]): Unit = {

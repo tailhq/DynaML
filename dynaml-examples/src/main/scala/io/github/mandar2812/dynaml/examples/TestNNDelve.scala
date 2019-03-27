@@ -67,7 +67,7 @@ object TestNNDelve {
     //pipe training data to model and then generate test predictions
     //create RegressionMetrics instance and produce plots
 
-    val extractTrainingFeatures = (l: Stream[String]) =>
+    val extractTrainingFeatures = (l: Iterable[String]) =>
       utils.extractColumns(l, ",", columns, Map())
 
     val normalizeData =
