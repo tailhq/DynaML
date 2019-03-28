@@ -686,12 +686,12 @@ object DynaMLPipe {
       val total_dims = var_seq.length
       val (_, chosen_dims) = var_seq.zipWithIndex
         .find(c => c._1 > fraction)
-        .getOrElse((1.0, total_dims))
+        .getOrElse((1.0, total_dims - 1))
 
       print("(Chosen dimensions, Total Dimensions): ")
       pprint.pprintln((chosen_dims, total_dims))
 
-      sc(0 until chosen_dims)
+      sc(0 to chosen_dims)
     })
 
   }

@@ -24,16 +24,21 @@ case class PCAScaler(
   override def run(data: DenseVector[Double]) = eigenvectors.t*(data-center)
 
   def apply(r: Range): CompressedPCAScaler = CompressedPCAScaler(
-    self.center(r), 
-    self.eigenvalues(r), 
-    self.eigenvectors(::,r))
+    r,
+    self.center, 
+    self.eigenvalues, 
+    self.eigenvectors)
 }
 
 case class CompressedPCAScaler(
+  r: Range,
   center: DenseVector[Double],
   eigenvalues: DenseVector[Double],
   eigenvectors: DenseMatrix[Double]
 ) extends Scaler[DenseVector[Double]] {
 
-  override def run(data: DenseVector[Double]) = eigenvectors.t*(data-center)
+  override def run(data: DenseVector[Double]) = {
+    val projections = eigenvectors.t*(data-center)
+    projections(r)
+  }
 }
