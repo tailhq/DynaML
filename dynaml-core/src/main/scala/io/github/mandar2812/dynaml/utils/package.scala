@@ -116,12 +116,12 @@ package object utils {
       m: DenseVector[Double],
       s: DenseVector[Double],
       i: Int
-    ): (DenseVector[Double], DenseVector[Double], Int) = d match {
-      case Nil => (m, s, i)
-      case x :: rest =>
+    ): (DenseVector[Double], DenseVector[Double], Int) = d.headOption match {
+      case None => (m, s, i)
+      case Some(x) =>
         val mnew = m + (x - m) / (i + 1).toDouble
         getStatsRec(
-          rest,
+          d.tail,
           mnew,
           s + (m *:* m) - (mnew *:* mnew) + ((x *:* x) - s - (m *:* m)) / (i + 1).toDouble,
           i + 1
@@ -160,15 +160,15 @@ package object utils {
       m: DenseVector[Double],
       s: DenseMatrix[Double],
       i: Int
-    ): (DenseVector[Double], DenseMatrix[Double], Int) = d match {
+    ): (DenseVector[Double], DenseMatrix[Double], Int) = d.headOption match {
 
-      case Nil =>
+      case None =>
         (m, s, i)
 
-      case x :: rest =>
+      case Some(x) =>
         val mnew = m + (x - m) / (i + 1).toDouble
         getStatsRec(
-          rest,
+          d.tail,
           mnew,
           s + (m * m.t) - (mnew * mnew.t) + ((x * x.t) - s - (m * m.t)) / (i + 1).toDouble,
           i + 1
@@ -194,13 +194,13 @@ package object utils {
       d: Iterable[DenseVector[Double]],
       m: DenseVector[Double],
       s: DenseVector[Double]
-    ): (DenseVector[Double], DenseVector[Double]) = d match {
+    ): (DenseVector[Double], DenseVector[Double]) = d.headOption match {
 
-      case Nil => (m, s)
+      case None => (m, s)
 
-      case x :: rest =>
+      case Some(x) =>
         getMinMaxRec(
-          rest,
+          d.tail,
           DenseVector((x.toArray zip m.toArray).map(c => math.min(c._1, c._2))),
           DenseVector((x.toArray zip s.toArray).map(c => math.max(c._1, c._2)))
         )
