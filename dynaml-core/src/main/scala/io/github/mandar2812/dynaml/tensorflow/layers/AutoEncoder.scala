@@ -37,7 +37,7 @@ case class AutoEncoder[I, J](
 
   override val layerType: String = s"Representation[${encoder.layerType}, ${decoder.layerType}]"
 
-  override protected def _forward(input: I)(implicit mode: Mode): (J, I) = {
+  override def forwardWithoutContext(input: I)(implicit mode: Mode): (J, I) = {
 
     val encoding = encoder(input)
 

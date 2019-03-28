@@ -44,7 +44,7 @@ class GenericContinuousMCMC[ConditioningSet, Domain](
   burnIn: Long = 1000L, dropCount: Int = 100)(implicit vectorSpace: Field[ConditioningSet])
   extends RejectionSamplingScheme[
     ConditioningSet, Domain, ContinuousDistr[ConditioningSet], ContinuousDistr[Domain],
-    AbstractContinuousDistr[(ConditioningSet, Domain)]](p, c) {
+    AbstractContinuousDistr[(ConditioningSet, Domain)], ContinuousRVWithDistr[Domain, ContinuousDistr[Domain]]](p, c) {
 
 
   override val underlyingDist = new AbstractContinuousDistr[(ConditioningSet, Domain)] {

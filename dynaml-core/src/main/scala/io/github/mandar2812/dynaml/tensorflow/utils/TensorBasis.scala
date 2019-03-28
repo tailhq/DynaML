@@ -20,18 +20,20 @@ package io.github.mandar2812.dynaml.tensorflow.utils
 
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import org.apache.spark.annotation.Experimental
-import org.platanios.tensorflow.api.Tensor
+import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 
 /**
   * A basis function expansion yielding a TF tensor.
   * */
 @Experimental
-case class TensorBasis[-I](f: (I) => Tensor) extends DataPipe[I, Tensor] {
+case class TensorBasis[-I, D: TF: IsNotQuantized](f: I => Tensor[D]) extends DataPipe[I, Tensor[D]] {
 
   self =>
 
-  override def run(data: I): Tensor = f(data)
+  override def run(data: I): Tensor[D] = f(data)
 
-  def >(other: DataPipe[Tensor, Tensor]): TensorBasis[I] = TensorBasis((x: I) => other.run(self.f(x)))
+  def >[D1: TF: IsNotQuantized](other: DataPipe[Tensor[D], Tensor[D1]]): TensorBasis[I, D1] =
+    TensorBasis((x: I) => other.run(self.f(x)))
 
 }

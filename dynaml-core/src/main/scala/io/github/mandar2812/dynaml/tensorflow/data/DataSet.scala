@@ -20,9 +20,8 @@ package io.github.mandar2812.dynaml.tensorflow.data
 
 import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.implicits.helpers.{DataTypeAuxToDataType, OutputToTensor}
-import org.platanios.tensorflow.api.ops.Function
-import org.platanios.tensorflow.api.ops.io.data._
+import org.platanios.tensorflow.api.implicits.helpers._
+import org.platanios.tensorflow.api.ops.data._
 
 /**
   * <h3>DynaML Data Set</h3>
@@ -52,7 +51,7 @@ class DataSet[X](val data: Iterable[X]) {
   lazy val size: Int = data.toSeq.length
 
 
-  def filter(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filter(filterFn))
+  private def filter(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filter(filterFn))
 
   /**
     * Filter elements of this data set which satisfy
@@ -61,7 +60,7 @@ class DataSet[X](val data: Iterable[X]) {
   def filter(pipe: DataPipe[X, Boolean]): DataSet[X] = filter(pipe.run _)
 
 
-  def filterNot(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filterNot(filterFn))
+  private def filterNot(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filterNot(filterFn))
 
   /**
     * Filter elements of this data set which does not
@@ -72,23 +71,19 @@ class DataSet[X](val data: Iterable[X]) {
   /**
     * Creates a new data set of type [[Y]]
     * */
-  def map[Y](func: X => Y): DataSet[Y] = DataSet[Y](data.map(func))
+  private def map[Y](func: X => Y): DataSet[Y] = DataSet[Y](data.map(func))
 
   /**
     * Creates a new data set of type [[Y]]
     * */
   def map[Y](pipe: DataPipe[X, Y]): DataSet[Y] = map(pipe.run _)
 
-  def map(func: X => Output): OutputDataSet = OutputDataSet(data.map(func))
-
-  def map(pipe: DataPipe[X, Output]): OutputDataSet = OutputDataSet(data.map(pipe.run))
-
   /**
     * Maps each element into a collection of elements of type [[Y]],
     * and then concatenates each resulting collection into a single
     * data set.
     * */
-  def flatMap[Y](func: X => Iterable[Y]): DataSet[Y] = DataSet[Y](data.flatMap(func))
+  private def flatMap[Y](func: X => Iterable[Y]): DataSet[Y] = DataSet[Y](data.flatMap(func))
 
   /**
     * Maps each element into a collection of elements of type [[Y]],
@@ -106,9 +101,6 @@ class DataSet[X](val data: Iterable[X]) {
     * Join the current data collection with another collection
     * */
   def concatenate(other: DataSet[X]): DataSet[X] = DataSet[X](self.data ++ other.data)
-
-
-  def transform[Y](transformation: Iterable[X] => Iterable[Y]): DataSet[Y] = DataSet[Y](transformation(data))
 
   /**
     * Transform the underlying collection in a way that uses potentially all of its elements.
@@ -163,62 +155,71 @@ class DataSet[X](val data: Iterable[X]) {
     *
     * @tparam T The tensor type.
     * @tparam O Symbolic tensor (output) type.
-    * @tparam DA The type of the auxiliary data structure
     * @tparam D The type of the data type objects for each data element.
     * @tparam S The type of the object representing the shape of the data tensors.
     *
-    * @param transformation Either a data pipe from [[X]] to [[T]] or from [[X]] to [[O]]
+    * @param transformation A data pipe from [[X]] to [[T]]
     * @param dataType The data type of the underlying patterns.
     * @param shape The shape of the data patterns, defaults to null, i.e. is
     *              inferred during run time.
     *
     * @return A TensorFlow data set handle.
     * */
-  def build[T, O, DA, D, S](
-    transformation: Either[DataPipe[X, T], DataPipe[X, O]],
-    dataType: DA, shape: S)(
+  def build[T, O, D, S](
+    transformation: DataPipe[X, T],
+    dataType: D, shape: S = null)(
     implicit
-    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
-    evData: Data.Aux[T, O, D, S],
-    evOToT: OutputToTensor.Aux[O, T],
-    evFunctionOutput: Function.ArgType[O]
-  ): Dataset[T, O, D, S] = transformation match {
-    case Left(pipe) => tf.data.fromGenerator(
-      () => self.data.map(pipe(_)),
-      dataType, shape)
-    case Right(pipe) => self.data
-      .map(x => tf.data.OutputDataset(pipe(x)))
-      .reduceLeft[Dataset[T, O, D, S]](
-      (a, b) => a.concatenate(b)
-    )
-  }
+    evTensorToOutput: TensorToOutput.Aux[T, O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evDataTypeToShape: DataTypeToShape.Aux[D, S],
+    evOutputToShape: OutputToShape.Aux[O, S],
+    evOutputStructure: OutputStructure[O]): Dataset[O] =
+    tf.data.datasetFromGenerator[O, T, D, S](() => self.map(transformation).data, dataType, shape)
 
-  protected def build[T, O, DA, D, S](
-    transformation: DataPipe[Iterable[X], Iterable[T]],
-    dataType: DA, shape: S)(
+  protected def build_output[T, O, D, S](
+    transformation: DataPipe[Iterable[X], Iterable[O]])(
     implicit
-    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
-    evData: Data.Aux[T, O, D, S],
-    evOToT: OutputToTensor.Aux[O, T],
-    evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] =
+    evOutputStructure: OutputStructure[O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evOutputToShape: OutputToShape.Aux[O, S]
+  ): Dataset[O] =
     self
       .transform(transformation)
-      .map(DataPipe((batch: T) => tf.data.TensorSlicesDataset[T, O, D, S](batch)))
-      .reduceLeft[Dataset[T, O, D, S]](
-      DataPipe2((l: Dataset[T, O, D, S], r: TensorSlicesDataset[T, O, D, S]) => l.concatenate(r)))
+      .map(DataPipe((batch: O) => tf.data.datasetFromOutputSlices(batch)))
+      .reduceLeft[Dataset[O]](
+      DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r)))
+
+  protected def build_tensor[T, O, D, S](
+    transformation: DataPipe[Iterable[X], Iterable[T]],
+    dataType: D, shape: S)(
+    implicit
+    evTensorToOutput: TensorToOutput.Aux[T, O],
+    evTensorToDataType: TensorToDataType.Aux[T, D],
+    evTensorToShape: TensorToShape.Aux[T, S],
+    evOutputStructure: OutputStructure[O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evOutputToShape: OutputToShape.Aux[O, S]
+  ): Dataset[O] =
+    self
+      .transform(transformation)
+      .map(DataPipe((batch: T) => tf.data.datasetFromTensorSlices(batch)))
+      .reduceLeft[Dataset[O]](
+      DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith[D, S](r)))
 
 
-  def build_buffered[T, O, DA, D, S](
-    convertToTensor: DataPipe[X, T],
+  def build_buffered[T, O, D, S](
     buffer_size: Int,
+    convertToTensor: DataPipe[X, T],
     stackOp: DataPipe[Iterable[T], T],
-    dataType: DA,
+    dataType: D,
     shape: S = null)(
     implicit
-    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
-    evData: Data.Aux[T, O, D, S],
-    evOToT: OutputToTensor.Aux[O, T],
-    evFunctionOutput: Function.ArgType[O]): Dataset[T, O, D, S] = {
+    evTensorToOutput: TensorToOutput.Aux[T, O],
+    evTensorToDataType: TensorToDataType.Aux[T, D],
+    evTensorToShape: TensorToShape.Aux[T, S],
+    evOutputStructure: OutputStructure[O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] = {
 
     val buffer_and_stack =
       DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
@@ -226,7 +227,37 @@ class DataSet[X](val data: Iterable[X]) {
         IterableDataPipe(stackOp)
 
 
-    build(buffer_and_stack, dataType, shape)
+    build_tensor[T, O, D, S](buffer_and_stack, dataType, shape)
+  }
+
+  def build_lazy[T, O, D, S](transformation: DataPipe[X, O])(
+    implicit
+    evOutputStructure: OutputStructure[O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] =
+    self
+      .map(transformation)
+      .map(DataPipe((batch: O) => tf.data.datasetFromOutputs(batch)))
+      .reduceLeft[Dataset[O]](DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r)))
+
+
+
+  def build_buffered_lazy[T, O, D, S](
+    buffer_size: Int,
+    convertToSymbolicTensor: DataPipe[X, O],
+    stackOp: DataPipe[Iterable[O], O])(
+    implicit
+    evOutputStructure: OutputStructure[O],
+    evOutputToDataType: OutputToDataType.Aux[O, D],
+    evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] = {
+
+    val buffer_and_stack =
+      DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
+        IterableDataPipe(IterableDataPipe(convertToSymbolicTensor)) >
+        IterableDataPipe(stackOp)
+
+
+    build_output[T, O, D, S](buffer_and_stack)
   }
 
 }
@@ -251,18 +282,12 @@ object DataSet {
 
 }
 
-case class OutputDataSet(override val data: Iterable[Output]) extends
-  DataSet[Output](data) {
+case class OutputDataSet[T: TF](override val data: Iterable[Output[T]]) extends
+  DataSet[Output[T]](data) {
 
   self =>
 
-  def build[T, DA, D, S](dataType: DA, shape: S)(
-    implicit
-    evDAToD: DataTypeAuxToDataType.Aux[DA, D],
-    evData: Data.Aux[T, Output, D, S],
-    evOToT: OutputToTensor.Aux[Output, T],
-    evFunctionOutput: Function.ArgType[Output]): Dataset[T, Output, D, S] =
-    tf.data.OutputSlicesDataset(tf.concatenate(self.data.toSeq))
+  def build(): Dataset[Output[T]] = tf.data.datasetFromOutputs(tf.concatenate(self.data.toSeq))
 
 
 }

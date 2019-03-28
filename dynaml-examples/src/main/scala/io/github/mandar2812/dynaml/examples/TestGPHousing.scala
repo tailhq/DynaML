@@ -24,7 +24,7 @@ import io.github.mandar2812.dynaml.evaluation.RegressionMetrics
 import io.github.mandar2812.dynaml.kernels._
 import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe
 import io.github.mandar2812.dynaml.models.gp.AbstractGPRegressionModel
-import io.github.mandar2812.dynaml.pipes.{BifurcationPipe, DataPipe, StreamDataPipe}
+import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils.GaussianScaler
 
 /**
@@ -40,7 +40,7 @@ object TestGPHousing {
   type Output = Double
   type Pattern = (Features, Output)
   type PatternAlt = (Features, Features)
-  type Data = Stream[Pattern]
+  type Data = Iterable[Pattern]
   type DataAlt = Seq[Pattern]
   type TTData = (Data, Data)
   type Kernel = LocalScalarKernel[Features]
@@ -49,11 +49,11 @@ object TestGPHousing {
   type PredictionsAndErrBars = Seq[(Features, Output, Output, Output, Output)]
   type PredictionsAndOutputs = List[(Output, Output)]
 
-  val preScaling = StreamDataPipe(
+  val preScaling = IterableDataPipe(
     (pattern: (Features, Double)) => (pattern._1, DenseVector(pattern._2))
   )
 
-  val postScaling = StreamDataPipe(
+  val postScaling = IterableDataPipe(
     (pattern: (Features, Features)) => (pattern._1, pattern._2(0))
   )
 
@@ -85,7 +85,7 @@ object TestGPHousing {
     val startConf = kernel.effective_state ++ noise.effective_state
 
     val modelpipe =
-      GPRegressionPipe[(Data, Data, Scales), Features]((tt: (Data, Data, Scales)) => tt._1, kernel, noise) >
+      GPRegressionPipe[(Data, Data, Scales), Features]((tt: (Data, Data, Scales)) => tt._1.toSeq, kernel, noise) >
       gpTuning[DataAlt, Features](startConf, globalOpt, grid, step, opt("maxIterations").toInt, pol) >
       DataPipe((modelCouple: (GPAlt, Map[String, Double])) => {
         modelCouple._1
@@ -93,7 +93,7 @@ object TestGPHousing {
 
     val testPipe = DataPipe((testSample: (GPAlt, (Data, Scales))) => {
       val (model, (data, scales)) = testSample
-      (model.test(data), scales)}) >
+      (model.test(data.toSeq), scales)}) >
       DataPipe((res: (PredictionsAndErrBars, Scales)) => {
         val rescaleOutputs = res._2._2(0).i
         (rescaleOutputs*rescaleOutputs)(res._1.toList.map(i => (i._3, i._2)))
@@ -124,8 +124,8 @@ object TestGPHousing {
       splitTrainingTest(num_training, 506-num_training) >
       duplicate(preScaling) >
       gaussianScalingTrainTest >
-      DataPipe((d: (Stream[PatternAlt], Stream[PatternAlt], Scales)) => {
-        val (dataTr, dataT): (Data, Data) = duplicate(postScaling)((d._1, d._2))
+      DataPipe((d: (Iterable[PatternAlt], Iterable[PatternAlt], Scales)) => {
+        val (dataTr, dataT): (Data, Data) = duplicate(postScaling).run((d._1, d._2))
         (dataTr, dataT, d._3)
       }) >
       BifurcationPipe(

@@ -8,7 +8,7 @@ object Dependencies {
 
   val scala = s"$scala_major.$scala_minor"
 
-  val crossScala = Seq("2.11.8", "2.12.4")
+  //val crossScala = Seq("2.11.8", "2.12.4")
 
   val platform: String = {
     // Determine platform name using code similar to javacpp
@@ -41,10 +41,12 @@ object Dependencies {
     platformName
   }
 
-  val tfscala_version = "0.2.4"
+  val tfscala_version = "0.4.2-SNAPSHOT"
 
+  private def process_flag(s: String) = if(s.toLowerCase == "true" || s == "1") true else false
+  
   //Set to true if, building with Nvidia GPU support.
-  val gpuFlag: Boolean = false
+  val gpuFlag: Boolean = process_flag(Option(System.getProperty("gpu")).getOrElse("false"))
 
   //Set to false if using self compiled tensorflow library
   val packagedTFFlag: Boolean = true

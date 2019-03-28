@@ -7,7 +7,7 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler}
 /**
   * Top level trait for Pipes returning ML models.
   */
-trait ModelPipe[-Source, T, Q, R, +M <: Model[T, Q, R]]
+trait ModelPipe[-Source, T, Q, R, M <: Model[T, Q, R]]
   extends DataPipe[Source, M] {
 
   val preProcess: (Source) => T
@@ -29,7 +29,7 @@ trait ModelPipe[-Source, T, Q, R, +M <: Model[T, Q, R]]
   * @param po Post-processing [[DataPipe]]
   *
   * */
-class ModelPredictionPipe[T, -P, Q, R, +S, M <: Model[T, Q, R]](
+class ModelPredictionPipe[T, -P, Q, R, S, M <: Model[T, Q, R]](
   pre: DataPipe[P, Q], m: M, po: DataPipe[R, S])
   extends DataPipe[P, S] {
 

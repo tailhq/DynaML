@@ -4,17 +4,19 @@ import Dependencies._
 import sbtbuildinfo.BuildInfoPlugin.autoImport._
 
 
-val mainVersion = "v2.0-SNAPSHOT"
+val mainVersion = "v2.0-beta.1"
 maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
 packageSummary := "Scala Library/REPL for Machine Learning Research"
 packageDescription := "DynaML is a Scala & JVM Machine Learning toolbox for research, education & industry."
+
+val heapSize = Option(System.getProperty("heap")).getOrElse("4096m")
 
 val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
 
 val baseSettings = Seq(
   organization := "io.github.transcendent-ai-labs",
   scalaVersion in ThisBuild := scala,
-  crossScalaVersions in ThisBuild := crossScala,
+  //crossScalaVersions in ThisBuild := crossScala,
   resolvers in ThisBuild ++= Seq(
     "jzy3d-releases" at "http://maven.jzy3d.org/releases",
     "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
@@ -112,9 +114,9 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
       "-Dlog4j.configuration=log4j.properties"),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
-      "-J-Xmx4096m",
+      s"-J-Xmx$heapSize",
       "-J-Xms64m", 
-      "-XX:HeapBaseMinAddress=32G"
+      "-J-XX:HeapBaseMinAddress=32G"
     ),
     scalacOptions in Universal ++= Seq("-Xlog-implicits"),
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())""",

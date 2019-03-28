@@ -19,6 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.layers
 
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsDecimal, IsNotQuantized, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, Regularizer}
@@ -32,44 +33,46 @@ import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInit
   *
   * @author mandar2812 date: 2018/03/06
   * */
-case class FiniteHorizonCTRNN(
+case class FiniteHorizonCTRNN[T: TF: IsNotQuantized](
   override val name: String,
   horizon: Int, timestep: Double,
   weightsInitializer: Initializer = RandomNormalInitializer(),
   biasInitializer: Initializer = RandomNormalInitializer(),
   gainInitializer: Initializer = RandomNormalInitializer(),
   timeConstantInitializer: Initializer = RandomNormalInitializer(),
-  regularization: Regularizer = L2Regularizer()) extends
-  Layer[Output, Output](name) {
+  regularization: Regularizer = null) extends
+  Layer[Output[T], Output[T]](name) {
 
   override val layerType: String = s"CTRNN[horizon:$horizon, deltaT:$timestep]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output[T])(implicit mode: Mode): Output[T] = {
 
     val units        = input.shape(-1)
 
-    val weights      = tf.variable(
-      "Weights", input.dataType, Shape(units, units),
+    val weights      = tf.variable[T](
+      "Weights", Shape(units, units),
       weightsInitializer, regularizer = regularization)
 
-    val timeconstant = tf.variable(
-      "TimeConstant", input.dataType, Shape(units, units),
+    val timeconstant = tf.variable[T](
+      "TimeConstant", Shape(units, units),
       timeConstantInitializer)
 
-    val gain         = tf.variable(
-      "Gain", input.dataType, Shape(units, units),
+    val gain         = tf.variable[T](
+      "Gain", Shape(units, units),
       timeConstantInitializer, regularizer = regularization)
 
-    val bias         = tf.variable(
-      "Bias", input.dataType, Shape(units),
+    val bias         = tf.variable[T](
+      "Bias", Shape(units),
       biasInitializer)
 
     tf.stack(
       (1 to horizon).scanLeft(input)((x, _) => {
-        val decay = x.tensorDot(timeconstant.multiply(-1d), Seq(1), Seq(0))
+        val decay = x.tensorDot(timeconstant.multiply(Tensor(-1).toOutput.castTo[T]), Seq(1), Seq(0))
         val interaction = x.tensorDot(gain, Seq(1), Seq(0)).add(bias).tanh.tensorDot(weights, Seq(1), Seq(0))
 
-        x.add(decay.multiply(timestep)).add(interaction.multiply(timestep))
+        x.add(
+          decay.multiply(Tensor(timestep).toOutput.castTo[T])).add(
+          interaction.multiply(Tensor(timestep).toOutput.castTo[T]))
       }).tail,
       axis = -1)
 

@@ -19,87 +19,90 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow
 
 import io.github.mandar2812.dynaml.pipes._
-import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.{DataType, _}
 import _root_.io.github.mandar2812.dynaml.DynaMLPipe
-import org.platanios.tensorflow.api.implicits.helpers.OutputToTensor
+import org.platanios.tensorflow.api.core.types.TF
 import org.platanios.tensorflow.api.learn.estimators.Estimator.SupportedInferInput
 import org.platanios.tensorflow.api.ops.Function
-import org.platanios.tensorflow.api.ops.io.data.{Data, Dataset}
-import shapeless.Lazy
+
+
 
 
 package object implicits {
 
-  implicit def singleOutputInferInput[T, O, D, S, I](
+  /*implicit def singleOutputInferInput[T, O, D, S, I](
     implicit
-    evOToT: OutputToTensor.Aux[O, T],
-    ev: Data.Aux[T, O, D, S],
+    evStructure: StructureFromOutput.Aux[T, O, D, S],
+    evData: Data.Aux[T, O, D, S],
     evFunctionInput: Function.ArgType[O]): SupportedInferInput[O, I, T, O, D, S, I] =
     new SupportedInferInput[O, I, T, O, D, S, I] {
       override def toDataset(value: O): Dataset[T, O, D, S] = tf.data.OutputDataset[T, O, D, S](value)
       override def convertFetched(iterator: Iterator[(T, I)]): I = iterator.next()._2
-    }
+    }*/
 
-  implicit val tensorSplit: MetaPipe12[Tensor, Int, Int, Tensor] = MetaPipe12(
-    (workingData: Tensor) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)
+  implicit def tensorSplit[D: TF]: MetaPipe12[Tensor[D], Int, Int, Tensor[D]] = MetaPipe12(
+    (workingData: Tensor[D]) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)
   )
 
-  implicit val tensorTup2Split: MetaPipe12[(Tensor, Tensor), Int, Int, (Tensor, Tensor)] = MetaPipe12(
-    (workingData: (Tensor, Tensor)) => (index_start: Int, index_end: Int) => (
+  implicit def tensorTup2Split[D: TF]:
+  MetaPipe12[(Tensor[D], Tensor[D]), Int, Int, (Tensor[D], Tensor[D])] = MetaPipe12(
+    (workingData: (Tensor[D], Tensor[D])) => (index_start: Int, index_end: Int) => (
       workingData._1(index_start::index_end + 1, ---),
       workingData._2(index_start::index_end + 1, ---)
     )
   )
 
-  implicit val outputSplit: MetaPipe12[Output, Int, Int, Output] = MetaPipe12(
-    (workingData: Output) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)
+  implicit def outputSplit[D: TF]: MetaPipe12[Output[D], Int, Int, Output[D]] = MetaPipe12(
+    (workingData: Output[D]) => (index_start: Int, index_end: Int) => workingData(index_start::index_end + 1, ---)
   )
 
-  implicit val concatTensorSplits: DataPipe[Iterable[Tensor], Tensor] =
-    DataPipe((ds: Iterable[Tensor]) => tfi.concatenate(ds.toSeq, axis = 0))
+  implicit def concatTensorSplits[D: TF]: DataPipe[Iterable[Tensor[D]], Tensor[D]] =
+    DataPipe((ds: Iterable[Tensor[D]]) => dtf.concatenate(ds.toSeq, axis = 0))
 
-  implicit val concatTensorTup2Splits: DataPipe[Iterable[(Tensor, Tensor)], (Tensor, Tensor)] = DataPipe(
-    (ds: Iterable[(Tensor, Tensor)]) => {
+  implicit def concatTensorTup2Splits[D: TF]:
+  DataPipe[Iterable[(Tensor[D], Tensor[D])], (Tensor[D], Tensor[D])] =
+    DataPipe((ds: Iterable[(Tensor[D], Tensor[D])]) => {
 
-      val separated_splits = ds.unzip
+      val separated_splits: (Iterable[Tensor[D]], Iterable[Tensor[D]]) = ds.unzip
+
 
       (
-        tfi.concatenate(separated_splits._1.toSeq, axis = 0),
-        tfi.concatenate(separated_splits._2.toSeq, axis = 0)
+        dtf.concatenate[D](separated_splits._1.toSeq, 0),
+        dtf.concatenate[D](separated_splits._2.toSeq, 0)
       )
 
     })
 
-  implicit val concatOutputTup2Splits: DataPipe[Iterable[(Output, Output)], (Output, Output)] = DataPipe(
-    (ds: Iterable[(Output, Output)]) => {
+  implicit def concatOutputTup2Splits[D: TF]: DataPipe[Iterable[(Output[D], Output[D])], (Output[D], Output[D])] =
+    DataPipe((ds: Iterable[(Output[D], Output[D])]) => {
 
       val separated_splits = ds.unzip
 
       (
-        tf.concatenate(separated_splits._1.toSeq).toOutput,
-        tf.concatenate(separated_splits._2.toSeq).toOutput
+        tf.concatenate(separated_splits._1.toSeq),
+        tf.concatenate(separated_splits._2.toSeq)
       )
 
     })
 
-  implicit val convOutputToOutput: DataPipe[Output, Output] = DynaMLPipe.identityPipe[Output]
+  implicit def convOutputToOutput[D: TF]: DataPipe[Output[D], Output[D]] = DynaMLPipe.identityPipe[Output[D]]
 
-  implicit val convTensorToOutput: DataPipe[Tensor, Output] = DataPipe((t: Tensor) => t.toOutput)
+  implicit def convTensorToOutput[D: TF]: DataPipe[Tensor[D], Output[D]] = DataPipe((t: Tensor[D]) => t.toOutput)
 
-  implicit val convOutputTensorToOutputTup: DataPipe[(Output, Tensor), (Output, Output)] =
-    convOutputToOutput * convTensorToOutput
+  implicit def convOutputTensorToOutputTup[D: TF]: DataPipe[(Output[D], Tensor[D]), (Output[D], Output[D])] =
+    convOutputToOutput[D] * convTensorToOutput[D]
 
-  implicit val convTensorOutputToOutputTup: DataPipe[(Tensor, Output), (Output, Output)] =
-    convTensorToOutput * convOutputToOutput
+  implicit def convTensorOutputToOutputTup[D: TF]: DataPipe[(Tensor[D], Output[D]), (Output[D], Output[D])] =
+    convTensorToOutput[D] * convOutputToOutput[D]
 
-  implicit val convTensorTupToOutputTup: DataPipe[(Tensor, Tensor), (Output, Output)] =
-    convTensorToOutput * convTensorToOutput
+  implicit def convTensorTupToOutputTup[D: TF]: DataPipe[(Tensor[D], Tensor[D]), (Output[D], Output[D])] =
+    convTensorToOutput[D] * convTensorToOutput[D]
 
-  implicit val convOutputTupToOutputTup: DataPipe[(Output, Output), (Output, Output)] =
+  implicit def convOutputTupToOutputTup[D: TF]: DataPipe[(Output[D], Output[D]), (Output[D], Output[D])] =
     convOutputToOutput * convOutputToOutput
 
 
-  implicit val nil: Function.ArgType[Nil.type] = new Function.ArgType[Nil.type] {
+  /*implicit val nil: Function.ArgType[Nil.type] = new Function.ArgType[Nil.type] {
     override def numOutputs: Int = 0
     override def outputs(arg: Nil.type): Seq[Output] = Seq.empty[Output]
     override def dataTypes(arg: Nil.type): Seq[DataType] = Seq.empty[DataType]
@@ -143,7 +146,7 @@ package object implicits {
         (Seq(decodedHead) ++ decodedTail, tail.flatten)
       }*/
     }
-
+*/
 
 
 }

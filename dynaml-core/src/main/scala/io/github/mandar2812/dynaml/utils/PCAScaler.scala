@@ -15,12 +15,25 @@ import io.github.mandar2812.dynaml.pipes.{ReversibleScaler, Scaler}
   * */
 case class PCAScaler(
   center: DenseVector[Double],
-  covmat: DenseMatrix[Double]) extends
-  ReversibleScaler[DenseVector[Double]] {
-
-  lazy val Eig(eigenvalues, _, eigenvectors) = eig(covmat)
+  eigenvalues: DenseVector[Double],
+  eigenvectors: DenseMatrix[Double]) extends
+  ReversibleScaler[DenseVector[Double]] { self =>
 
   override val i = Scaler((data: DenseVector[Double]) => (eigenvectors*data)+center)
+
+  override def run(data: DenseVector[Double]) = eigenvectors.t*(data-center)
+
+  def apply(r: Range): CompressedPCAScaler = CompressedPCAScaler(
+    self.center(r), 
+    self.eigenvalues(r), 
+    self.eigenvectors(::,r))
+}
+
+case class CompressedPCAScaler(
+  center: DenseVector[Double],
+  eigenvalues: DenseVector[Double],
+  eigenvectors: DenseMatrix[Double]
+) extends Scaler[DenseVector[Double]] {
 
   override def run(data: DenseVector[Double]) = eigenvectors.t*(data-center)
 }

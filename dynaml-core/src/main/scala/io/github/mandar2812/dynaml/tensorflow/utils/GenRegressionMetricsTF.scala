@@ -22,6 +22,7 @@ import io.github.mandar2812.dynaml.graphics.charts.Highcharts.{regression, title
 import io.github.mandar2812.dynaml.evaluation.RegressionMetricsTF
 import io.github.mandar2812.dynaml.tensorflow.dtf
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, IsReal, TF}
 
 /**
   * Generalisation of [[RegressionMetricsTF]] to more complex output structures, like
@@ -29,17 +30,18 @@ import org.platanios.tensorflow.api._
   *
   * @author mandar2812 date: 9/03/2018
   * */
-class GenRegressionMetricsTF(preds: Tensor, targets: Tensor) extends RegressionMetricsTF(preds, targets) {
-  private val num_outputs =
-    if (preds.shape.toTensor().size == 1) 1
-    else preds.shape.toTensor()(0 :: -1).prod().scalar.asInstanceOf[Int]
+class GenRegressionMetricsTF[D: TF: IsNotQuantized: IsReal](preds: Tensor[D], targets: Tensor[D]) extends
+  RegressionMetricsTF(preds, targets) {
+  private val num_outputs: Int =
+    if (preds.shape.toTensor.size == 1) 1
+    else preds.shape.toTensor(0 :: -1).prod[Int]().scalar.toInt
 
   private lazy val (_ , rmse , mae, corr) = GenRegressionMetricsTF.calculate(preds, targets)
 
   private lazy val modelyield =
     (preds.max(axes = 0) - preds.min(axes = 0)).divide(targets.max(axes = 0) - targets.min(axes = 0))
 
-  override protected def run(): Tensor = dtf.stack(Seq(rmse, mae, corr, modelyield), axis = -1)
+  override protected def run(): Tensor[D] = dtf.stack(Seq(rmse, mae, corr, modelyield), axis = -1)
 
   override def generatePlots(): Unit = {
     println("Generating Plot of Fit for each target")
@@ -69,12 +71,12 @@ class GenRegressionMetricsTF(preds: Tensor, targets: Tensor) extends RegressionM
 
 object GenRegressionMetricsTF {
 
-  protected def calculate(preds: Tensor, targets: Tensor): (Tensor, Tensor, Tensor, Tensor) = {
+  protected def calculate[D : TF: IsNotQuantized: IsReal](
+    preds: Tensor[D], targets: Tensor[D]): (Tensor[D], Tensor[D], Tensor[D], Tensor[D]) = {
     val error = targets.subtract(preds)
 
     println("Shape of error tensor: "+error.shape.toString()+"\n")
 
-    val num_instances = error.shape(0)
     val rmse = error.square.mean(axes = 0).sqrt
 
     val mae = error.abs.mean(axes = 0)

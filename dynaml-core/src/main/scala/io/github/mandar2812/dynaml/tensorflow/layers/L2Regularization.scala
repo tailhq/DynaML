@@ -19,48 +19,78 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow.layers
 
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.exception.{InvalidDataTypeException, ShapeMismatchException}
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, IsReal, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
-import org.platanios.tensorflow.api.ops.variables.{ReuseOrCreateNew, ReuseExistingOnly}
-import org.platanios.tensorflow.api.types.DataType
 
-case class L2Regularization(
+sealed abstract class Regularization[D: TF: IsNotQuantized](override val name: String)
+  extends Layer[Output[D], Output[D]](name)
+
+case class L2Regularization[D: TF: IsNotQuantized](
+  scopes: Seq[String],
   names: Seq[String],
   dataTypes: Seq[String],
   shapes: Seq[Shape],
-  reg: Double = 0.01) extends
-  Layer[Output, Output]("") {
+  reg: Double = 0.01,
+  override val name: String = "L2Reg") extends
+  Regularization[D](name) {
 
   override val layerType: String = s"L2Reg[gamma:$reg]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  @throws[IllegalArgumentException]
+  @throws[ShapeMismatchException]
+  @throws[InvalidDataTypeException]
+  override def forwardWithoutContext(input: Output[D])(implicit mode: Mode): Output[D] = {
 
-    val weights = names.zip(dataTypes.zip(shapes)).map(n =>
-      tf.variable(n._1, dataType = DataType.fromName(n._2._1), shape = n._2._2, reuse = ReuseExistingOnly)
+    val weights = names.zip(scopes).zip(dataTypes.zip(shapes)).map(n =>
+      tf.updatedVariableScope(
+        variableScope = tf.currentVariableScope.copy(name = n._1._2),
+        reuse = tf.ReuseExistingVariableOnly) {
+        tf.variable[D](n._1._1, shape = n._2._2, reuse = tf.ReuseExistingVariableOnly)
+      }
     )
 
-    val reg_term = weights.map(_.square.sum()).reduce(_.add(_)).multiply(0.5*reg)
+    val reg_term =
+      weights
+      .map(_.square.sum[Int]())
+      .reduce(_.add(_))
+      .multiply(Tensor(0.5*reg).reshape(Shape()).toOutput.castTo[D])
 
     input.add(reg_term)
   }
 }
 
-case class L1Regularization(
+
+case class L1Regularization[D: TF: IsNotQuantized: IsReal](
+  scopes: Seq[String],
   names: Seq[String],
   dataTypes: Seq[String],
   shapes: Seq[Shape],
-  reg: Double = 0.01) extends
-  Layer[Output, Output]("") {
+  reg: Double = 0.01,
+  override val name: String = "L1Reg") extends
+  Regularization[D](name) {
 
-  override val layerType: String = s"L2Reg[gamma:$reg]"
+  override val layerType: String = s"L1Reg[gamma:$reg]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  @throws[IllegalArgumentException]
+  @throws[ShapeMismatchException]
+  @throws[InvalidDataTypeException]
+  override def forwardWithoutContext(input: Output[D])(implicit mode: Mode): Output[D] = {
 
-    val weights = names.zip(dataTypes.zip(shapes)).map(n =>
-      tf.variable(n._1, dataType = DataType.fromName(n._2._1), shape = n._2._2, reuse = ReuseExistingOnly)
+    val weights = names.zip(scopes).zip(dataTypes.zip(shapes)).map(n =>
+      tf.updatedVariableScope(
+        variableScope = tf.currentVariableScope.copy(name = n._1._2),
+        reuse = tf.ReuseExistingVariableOnly) {
+        tf.variable[D](n._1._1, shape = n._2._2, reuse = tf.ReuseExistingVariableOnly)
+      }
     )
 
-    val reg_term = weights.map(_.abs.sum()).reduce(_.add(_)).multiply(reg)
+    val reg_term =
+      weights
+        .map(_.abs.sum[Int]())
+        .reduce(_.add(_))
+        .multiply(Tensor(reg).reshape(Shape()).toOutput.castTo[D])
 
     input.add(reg_term)
   }

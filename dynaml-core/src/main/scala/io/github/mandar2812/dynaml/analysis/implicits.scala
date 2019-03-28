@@ -25,6 +25,21 @@ object implicits {
     override def plus(x: Double, y: Double) = x + y
   }
 
+  implicit object innerProdFloat extends InnerProductSpace[Float, Double] {
+
+    override def dot(v: Float, w: Float) = v*w.toDouble
+
+    override implicit def scalar = Field[Double]
+
+    override def timesl(r: Double, v: Float) = r.toFloat*v
+
+    override def negate(x: Float) = -x
+
+    override def zero = 0f
+
+    override def plus(x: Float, y: Float) = x + y
+  }
+
   implicit object innerProdTuple2 extends InnerProductSpace[(Double, Double), Double] {
     
     override def dot(v: (Double, Double), w: (Double, Double)): Double = v._1*w._1 + v._2*w._2

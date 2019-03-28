@@ -18,20 +18,31 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
+import org.platanios.tensorflow.api.core.types.{IsDecimal, IsFloatOrDouble, IsNotQuantized, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Loss
-import org.platanios.tensorflow.api.ops.Output
+import org.platanios.tensorflow.api._
 
 /**
   * L2 loss for a time slice of a multivariate time series
   *
   * @author mandar2812 date 9/03/2018
   * */
-case class MVTimeSeriesLoss(override val name: String)
-  extends Loss[(Output, Output)](name) {
+case class MVTimeSeriesLoss[
+Predictions: TF : IsNotQuantized : IsFloatOrDouble,
+L: TF : IsFloatOrDouble](
+  override val name: String)
+  extends Loss[(Output[Predictions], Output[Predictions]), L](name) {
   override val layerType: String = "L2Loss"
 
-  override protected def _forward(input: (Output, Output))(implicit mode: Mode): Output = {
-    input._1.subtract(input._2).square.mean(axes = 0).sum()
-  }
+
+  override def forwardWithoutContext(
+    input: (Output[Predictions], Output[Predictions]))(
+    implicit mode: Mode): Output[L] =
+    tf.sum[Predictions, Int](
+      tf.mean[Predictions, Int](
+        tf.square(
+          tf.subtract(input._1, input._2)),
+        Tensor(0).toOutput)
+    ).castTo[L]
 }

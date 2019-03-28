@@ -21,48 +21,42 @@ import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics._
   *                       element of [[f]].
   *
   * */
-case class PDEQuadrature(
+case class PDEQuadrature[D: TF: IsNotQuantized, U: TF: IsDecimal, L: TF: IsFloatOrDouble](
   override val name: String,
-  f: Seq[Layer[Output, Output]],
-  quadrature_nodes: Tensor,
-  weights: Tensor,
-  loss_weightage: Tensor) extends
-  Layer[Output, Output](name) {
+  f: Layer[Output[D], Output[U]],
+  quadrature_nodes: Tensor[D],
+  weights: Tensor[U],
+  loss_weightage: Tensor[U]) extends
+  Layer[Output[L], Output[L]](name) {
 
   require(quadrature_nodes.shape(0) == weights.shape(0) && weights.rank == 1)
-  require(loss_weightage.rank == 0 || (loss_weightage.rank == 1 && loss_weightage.shape(0) == f.length))
+  require(loss_weightage.rank == 0)
 
 
-  override val layerType: String = s"QuadratureLoss[${f.map(_.layerType)}]"
+  override val layerType: String = s"QuadratureLoss[${f.layerType}]"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output[L])(implicit mode: Mode): Output[L] = {
 
     val (q_nodes, q_weights, importance) = (
-      tf.constant(quadrature_nodes, quadrature_nodes.dataType, quadrature_nodes.shape, "quadrature_nodes"),
-      tf.constant(weights, weights.dataType, weights.shape, "quadrature_nodal_weights"),
-      tf.constant(loss_weightage, loss_weightage.dataType, loss_weightage.shape, "colocation_error_weight")
+      tf.constant[D](quadrature_nodes, quadrature_nodes.shape, "quadrature_nodes"),
+      tf.constant[U](weights, weights.shape, "quadrature_nodal_weights"),
+      tf.constant[U](loss_weightage, loss_weightage.shape, "colocation_error_weight")
     )
 
-    val quadrature_loss =
-      tf.stack(
-        f.map(q => {
-          val output = q.forward(q_nodes)
+    val output = f.forwardWithoutContext(q_nodes)
 
-          val rank_output = output.rank
-          val reduce_axes =
-            if(rank_output > 2) Tensor(1 until rank_output)
-            else if(rank_output == 2) Tensor(1)
-            else null
+    val rank_output = output.rank
+    val reduce_axes =
+      if(rank_output > 2) Tensor(1 until rank_output)
+      else if(rank_output == 2) Tensor(1)
+      else null
 
-          if(reduce_axes == null) {
-            output.square.multiply(q_weights).sum()
-          } else {
-            output.square.sum(reduce_axes).multiply(q_weights).sum()
-          }
-        }), axis = -1)
-        .multiply(importance)
-        .sum()
+    val quadrature_loss = if(reduce_axes == null) {
+      output.square.multiply(q_weights).sum[Int]()
+    } else {
+      output.square.sum(reduce_axes).multiply(q_weights).sum[Int]()
+    }
 
-    input.add(quadrature_loss)
+    input.add(quadrature_loss.multiply(importance).sum[Int]().castTo[L])
   }
 }

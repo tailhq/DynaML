@@ -5,30 +5,28 @@ import _root_.io.github.mandar2812.dynaml.utils
 import _root_.io.github.mandar2812.dynaml.analysis.implicits._
 import _root_.io.github.mandar2812.dynaml.tensorflow._
 import _root_.io.github.mandar2812.dynaml.tensorflow.pde._
-import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
-import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
-
+import org.platanios.tensorflow.api._
 import scala.util.Random
 
 class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
 
   protected val random = new Random()
 
-  protected def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor = {
+  protected def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor[Float] = {
 
     val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize)))
 
 
-    dtf.tensor_f32(Seq.fill(dim)(gridSize).product, dim)(points.flatten:_*)
+    dtf.tensor_f32(Seq.fill(dim)(gridSize).product, dim)(points.flatten.map(_.toFloat):_*)
   }
 
-  protected val layer = new Layer[Output, Output]("Exp") {
+  protected val layer: Layer[Output[Float], Output[Float]] = new Layer[Output[Float], Output[Float]]("Exp") {
     override val layerType = "Exp"
 
-    override protected def _forward(input: Output)(implicit mode: Mode): Output =
-      input.sin
+    override def forwardWithoutContext(input: Output[Float])(implicit mode: Mode): Output[Float] =
+      tf.sin(input)
   }
 
 
@@ -42,19 +40,24 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
 
   protected val output_dim: Int = 1
 
-  protected val inputs = tf.placeholder(FLOAT32, Shape(-1, input_dim))
+  protected val inputs = tf.placeholder[Float](Shape(-1, input_dim))
 
-  protected val feedforward = new Layer[Output, Output]("Exp") {
+  protected val feedforward = new Layer[Output[Float], Output[Float]]("Exp") {
     override val layerType = "MatMul"
 
-    override protected def _forward(input: Output)(implicit mode: Mode): Output =
-      tf.matmul(
-        input,
-        dtf.tensor_f32(input.shape(1), output_dim)(
-          Seq.tabulate(input.shape(1), output_dim)(
-            (i, j) => if(i == j) math.Pi*2/domain_size else -math.Pi*2/domain_size).flatten:_*
-        )
-      ).reshape(Shape(input.shape(0)))
+    override def forwardWithoutContext(input: Output[Float])(implicit mode: Mode): Output[Float] =
+      tf.reshape[Float, Int](
+        tf.matmul(
+          input,
+          dtf.tensor_f32(input.shape(1), output_dim)(
+            Seq.tabulate[Float](
+              input.shape(1), output_dim)(
+              (i, j) => if(i == j) math.Pi.toFloat*2/domain_size.toFloat else -math.Pi.toFloat*2/domain_size.toFloat
+            ).flatten:_*
+          ).toOutput
+        ),
+        Shape(input.shape(0)).toOutput
+      )
   }
 
   protected val function  = feedforward >> layer
@@ -65,7 +68,10 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
 
   protected val df_ds     = d_s(d_s)(function)(inputs)
 
-  protected val velocity  = variable[Output]("wave_velocity", FLOAT32, Shape(), ConstantInitializer(1.0f))
+  protected val velocity  = variable[Output[Float], Float](
+    "wave_velocity",
+    Shape(),
+    tf.ConstantInitializer[Float](Tensor[Float](1.0f)))
 
   protected val wave_op   = d_t(d_t) - d_s(d_s)*velocity
 
@@ -73,11 +79,11 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
 
   protected var session: Session = _
 
-  protected var trainBatch: Tensor = _
+  protected var trainBatch: Tensor[Float] = _
 
-  protected var feeds: Map[Output, Tensor] = _
+  protected var feeds: Map[Output[Float], Tensor[Float]] = _
 
-  protected var results: (Tensor, Tensor, Tensor, Tensor) = _
+  protected var results: (Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float]) = _
 
   before {
 
@@ -109,7 +115,7 @@ class WavePDESpec extends FlatSpec with Matchers with BeforeAndAfter {
   }
 
   "Plane wave solution" should " satisfy the wave PDE operator exactly" in {
-    assert(results._2 == results._3 && results._4 == dtf.fill(FLOAT32, 10*10)(0f))
+    assert(results._2 == results._3 && results._4 == dtf.fill[Float](10*10)(0f))
   }
 
 

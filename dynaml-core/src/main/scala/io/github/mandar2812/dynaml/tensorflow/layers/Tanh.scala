@@ -18,16 +18,17 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.layers
 
+import org.platanios.tensorflow.api.core.types.{IsReal, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Activation
 import org.platanios.tensorflow.api.ops
 import org.platanios.tensorflow.api.ops.Output
 
-case class Tanh(override val name: String)
-  extends Activation(name) {
+case class Tanh[T: TF : IsReal](override val name: String)
+  extends Activation[T](name) {
   override val layerType: String = "Sigmoid"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
+  override def forwardWithoutContext(input: Output[T])(implicit mode: Mode): Output[T] = {
     ops.Math.tanh(input)
   }
 }

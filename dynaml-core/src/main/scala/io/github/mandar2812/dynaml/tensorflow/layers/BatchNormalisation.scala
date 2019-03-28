@@ -20,6 +20,7 @@ package io.github.mandar2812.dynaml.tensorflow.layers
 
 import io.github.mandar2812.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 import org.platanios.tensorflow.api.learn.{Mode, TRAINING}
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api.ops.Output
@@ -28,31 +29,31 @@ import org.platanios.tensorflow.api.ops.variables._
 /**
   * Implementation of the <a href="https://arxiv.org/pdf/1502.03167.pdf">Batch Normalization</a> layer.
   * */
-case class BatchNormalisation(override val name: String)
-  extends Layer[Output, Output](name) {
+case class BatchNormalisation[T: TF: IsNotQuantized](override val name: String)
+  extends Layer[Output[T], Output[T]](name) {
 
   override val layerType: String = s"BatchNorm"
 
-  private val EPSILON = 1E-5f
+  private val EPSILON = Tensor(1E-5f).toOutput.castTo[T]
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output = {
-    val gamma      = tf.variable(
-      "scaling", FLOAT32,
+  override def forwardWithoutContext(input: Output[T])(implicit mode: Mode): Output[T] = {
+    val gamma      = tf.variable[T](
+      "scaling", 
       input.shape(1::), OnesInitializer)
 
-    val beta       = tf.variable(
-      "offset",  FLOAT32,
+    val beta       = tf.variable[T](
+      "offset",  
       input.shape(1::), ZerosInitializer)
 
-    /*val running_mean      = tf.variable(
-      "popmean", FLOAT32,
+    /*val running_mean      = tf.variable[T](
+      "popmean", 
       input.shape(1::), ZerosInitializer)
 
-    val running_var       = tf.variable(
-      "popvar",  FLOAT32,
+    val running_var       = tf.variable[T](
+      "popvar",  
       input.shape(1::), ZerosInitializer)
 
-    val sample_count      = tf.variable(
+    val sample_count      = tf.variable[T](
       "samplecount",  INT32,
       Shape(), ZerosInitializer)*/
 
@@ -69,23 +70,23 @@ case class BatchNormalisation(override val name: String)
   /*mode match {
 
     case TRAINING => {
-      val gamma      = tf.variable(
-        "scaling", FLOAT32,
+      val gamma      = tf.variable[T](
+        "scaling", 
         input.shape(1::), RandomUniformInitializer())
 
-      val beta       = tf.variable(
-        "offset",  FLOAT32,
+      val beta       = tf.variable[T](
+        "offset",  
         input.shape(1::), RandomUniformInitializer())
 
-      val running_mean      = tf.variable(
-        "popmean", FLOAT32,
+      val running_mean      = tf.variable[T](
+        "popmean", 
         input.shape(1::), ZerosInitializer)
 
-      val running_var       = tf.variable(
-        "popvar",  FLOAT32,
+      val running_var       = tf.variable[T](
+        "popvar",  
         input.shape(1::), ZerosInitializer)
 
-      val sample_count      = tf.variable(
+      val sample_count      = tf.variable[T](
         "samplecount",  INT32,
         Shape(), ZerosInitializer)
 
@@ -102,27 +103,27 @@ case class BatchNormalisation(override val name: String)
     }
 
     case _ => {
-      val gamma      = tf.variable(
-        "scaling", FLOAT32,
+      val gamma      = tf.variable[T](
+        "scaling", 
         input.shape(1::), RandomUniformInitializer(),
         reuse = ReuseExistingOnly)
 
-      val beta       = tf.variable(
-        "offset",  FLOAT32,
+      val beta       = tf.variable[T](
+        "offset",  
         input.shape(1::), RandomUniformInitializer(),
         reuse = ReuseExistingOnly)
 
-      val running_mean      = tf.variable(
-        "popmean", FLOAT32,
+      val running_mean      = tf.variable[T](
+        "popmean", 
         input.shape(1::), ZerosInitializer,
         reuse = ReuseExistingOnly)
 
-      val running_var       = tf.variable(
-        "popvar",  FLOAT32,
+      val running_var       = tf.variable[T](
+        "popvar",  
         input.shape(1::), ZerosInitializer,
         reuse = ReuseExistingOnly)
 
-      val sample_count      = tf.variable(
+      val sample_count      = tf.variable[T](
         "samplecount",  INT32,
         Shape(), ZerosInitializer,
         reuse = ReuseExistingOnly)

@@ -18,29 +18,29 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.evaluation
 
+import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
 
 import org.json4s._
 import org.json4s.jackson.Serialization.{read => read_json, write => write_json}
 
 
-
 /**
-  * Top level class for metrics computed on Tensorflow objects.
+  * Top level class for metrics computed on (eager) Tensorflow objects.
   *
   * @param preds Predictions
   *
   * @param targets The actual output values.
   * */
-abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets: Tensor) {
+abstract class MetricsTF[D: TF](val names: Seq[String], val preds: Tensor[D], val targets: Tensor[D]) {
 
   implicit val formats = DefaultFormats
 
-  protected val scoresAndLabels: (Tensor, Tensor) = (preds, targets)
+  protected val scoresAndLabels: (Tensor[D], Tensor[D]) = (preds, targets)
 
   protected var name = "Target"
 
-  lazy val results: Tensor = run()
+  lazy val results: Tensor[D] = run()
 
   def _target_quantity: String = name
 
@@ -55,7 +55,7 @@ abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets:
 
     names.zipWithIndex.foreach(n => {
 
-      val value: Tensor = results(n._2, ---)
+      val value: Tensor[D] = results(n._2, ---)
 
       val metric = n._1
 
@@ -73,7 +73,7 @@ abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets:
     *
     * Implement this method in sub-classes.
     * */
-  protected def run(): Tensor
+  protected def run(): Tensor[D]
 
   def to_json: String = {
 
@@ -89,3 +89,112 @@ abstract class MetricsTF(val names: Seq[String], val preds: Tensor, val targets:
 
 
 }
+
+
+object MetricsTF {
+
+  def apply[EvalIn](
+    compute_batch: DataPipe3[EvalIn, Option[Output[Float]], String, Output[Float]], 
+    compute_streaming: DataPipe3[EvalIn, Option[Output[Float]], String, tf.metrics.Metric.StreamingInstance[Output[Float]]],
+    id: String = "performance"): tf.metrics.Metric[EvalIn, Output[Float]] = 
+    new ops.metrics.Metric[EvalIn, Output[Float]] {
+
+      override def name: String = id
+
+      override def compute(
+        values: EvalIn, 
+        weights: Option[Output[Float]], 
+        name: String = s"$name/Compute"): Output[Float] = compute_batch(values, weights, name)
+      
+      
+      override def streaming(
+        values: EvalIn, 
+        weights: Option[Output[Float]], 
+        name: String = s"$name/Streaming"): ops.metrics.Metric.StreamingInstance[Output[Float]] = compute_streaming(values, weights, name)
+
+    }
+
+  
+}
+
+
+class Performance[EvalIn](
+  val nameScope: String,
+  val compute: DataPipe[EvalIn, Output[Float]],
+  protected val defaultWeights: Option[Tensor[Float]] = None,
+  val variablesCollections: Set[Graph.Key[Variable[Any]]] = Set(tf.metrics.Metric.METRIC_VARIABLES),
+  val valuesCollections: Set[Graph.Key[Output[Any]]] = Set(tf.metrics.Metric.METRIC_VALUES),
+  val updatesCollections: Set[Graph.Key[Output[Any]]] = Set(tf.metrics.Metric.METRIC_UPDATES),
+  val resetsCollections: Set[Graph.Key[UntypedOp]] = Set(tf.metrics.Metric.METRIC_RESETS)) extends 
+  tf.metrics.Metric[EvalIn, Output[Float]] {
+    
+    override def name: String = nameScope
+
+    private[this] val meanMetric = {
+      tf.metrics.Mean(name, defaultWeights, variablesCollections, valuesCollections, updatesCollections, resetsCollections)
+    }
+
+    override def compute(
+      values: EvalIn, 
+      weights: Option[Output[Float]], 
+      name: String = s"$name/Compute"): Output[Float] = 
+      meanMetric.compute(compute(values), weights, name)
+      
+    
+    
+    override def streaming(
+      values: EvalIn, 
+      weights: Option[Output[Float]], 
+      name: String = s"$name/Streaming"): tf.metrics.Metric.StreamingInstance[Output[Float]] = 
+      meanMetric.streaming(compute(values), weights, name)
+
+  }
+
+  object Performance {
+
+    def apply[EvalIn](
+      nameScope: String,
+      compute: DataPipe[EvalIn, Output[Float]],
+      defaultWeights: Option[Tensor[Float]] = None,
+      variablesCollections: Set[Graph.Key[Variable[Any]]] = Set(tf.metrics.Metric.METRIC_VARIABLES),
+      valuesCollections: Set[Graph.Key[Output[Any]]] = Set(tf.metrics.Metric.METRIC_VALUES),
+      updatesCollections: Set[Graph.Key[Output[Any]]] = Set(tf.metrics.Metric.METRIC_UPDATES),
+      resetsCollections: Set[Graph.Key[UntypedOp]] = Set(tf.metrics.Metric.METRIC_RESETS)): Performance[EvalIn] = 
+      new Performance[EvalIn](
+        nameScope, compute, defaultWeights, 
+        variablesCollections, valuesCollections, 
+        updatesCollections, resetsCollections
+      )
+}
+
+case class MSE[I, T: TF: IsFloatOrDouble](
+  override val defaultWeights: Option[Tensor[Float]] = None,
+  override val variablesCollections: Set[Graph.Key[Variable[Any]]] = Set(tf.metrics.Metric.METRIC_VARIABLES),
+  override val valuesCollections: Set[Graph.Key[Output[Any]]] = Set(tf.metrics.Metric.METRIC_VALUES),
+  override val updatesCollections: Set[Graph.Key[Output[Any]]] = Set(tf.metrics.Metric.METRIC_UPDATES),
+  override val resetsCollections: Set[Graph.Key[UntypedOp]] = Set(tf.metrics.Metric.METRIC_RESETS)) extends 
+  Performance[(Output[T], (I, Output[T]))](
+    "MSE", 
+    DataPipe[(Output[T], (I, Output[T])), Output[Float]](c => c._1.subtract(c._2._2).square.castTo[Float]), 
+    defaultWeights, 
+    variablesCollections, 
+    valuesCollections, 
+    updatesCollections, 
+    resetsCollections
+  )
+
+case class MAE[I, T: TF: IsFloatOrDouble](
+  override val defaultWeights: Option[Tensor[Float]] = None,
+  override val variablesCollections: Set[Graph.Key[Variable[Any]]] = Set(tf.metrics.Metric.METRIC_VARIABLES),
+  override val valuesCollections: Set[Graph.Key[Output[Any]]] = Set(tf.metrics.Metric.METRIC_VALUES),
+  override val updatesCollections: Set[Graph.Key[Output[Any]]] = Set(tf.metrics.Metric.METRIC_UPDATES),
+  override val resetsCollections: Set[Graph.Key[UntypedOp]] = Set(tf.metrics.Metric.METRIC_RESETS)) extends 
+  Performance[(Output[T], (I, Output[T]))](
+    "MSE", 
+    DataPipe[(Output[T], (I, Output[T])), Output[Float]](c => c._1.subtract(c._2._2).abs.castTo[Float]), 
+    defaultWeights, 
+    variablesCollections, 
+    valuesCollections, 
+    updatesCollections, 
+    resetsCollections
+  )

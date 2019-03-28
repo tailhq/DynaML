@@ -20,11 +20,11 @@ package io.github.mandar2812.dynaml.tensorflow.dynamics
 
 import io.github.mandar2812.dynaml.tensorflow.api.Api
 import org.platanios.tensorflow.api._
+import org.platanios.tensorflow.api.core.types.{IsNotQuantized, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.ops.variables.Initializer
-import org.platanios.tensorflow.api.types.DataType
 
 /**
   * <h3>Differential Operators & PDEs</h3>
@@ -37,45 +37,55 @@ import org.platanios.tensorflow.api.types.DataType
   * */
 private[tensorflow] trait DynamicsAPI {
 
-  val identityOperator: IdentityOperator.type         = IdentityOperator
-  val jacobian: Gradient.type                         = Gradient
-  val ∇ : Gradient.type                               = Gradient
-  val hessian: TensorOperator[Output]                 = ∇(∇)
-  val source: SourceOperator.type                     = SourceOperator
-  val constant: Constant.type                         = Constant
-  def one[I](
-    dataType: DataType)(
-    shape: Shape): Constant[I]                        = constant[I]("One", Tensor.ones(dataType, shape))
+  type Operator[I, J]                               = DifferentialOperator[I, J]
+  type TensorOp[I, T]                               = TensorOperator[I, T]
 
-  def variable[I](
+  val I: IdentityOperator.type                      = IdentityOperator
+  val jacobian: Gradient[Float]                     = Gradient[Float]
+  val ∇ : Gradient[Float]                           = Gradient[Float]
+  val hessian: TensorOp[Output[Float], Float]       = ∇(∇)
+  val source: SourceOperator.type                   = SourceOperator
+  val constant: Constant.type                       = Constant
+
+
+  def one[I, D: TF: IsNotQuantized](shape: Shape): Constant[I, D] =
+    constant[I, D]("One", Tensor.ones[D](shape))
+
+  def variable[I, D: TF: IsNotQuantized](
     name: String,
-    dataType: DataType,
     shape: Shape,
-    initializer: Initializer = null): SourceOperator[I] =
+    initializer: Initializer = null): SourceOperator[I, D] =
     source(
       name,
-      new Layer[I, Output](name) {
+      new Layer[I, Output[D]](name) {
         override val layerType: String = "Quantity"
 
-        override protected def _forward(input: I)(implicit mode: Mode): Output = {
-          val quantity = tf.variable(name = "value", dataType, shape, initializer)
+        override def forwardWithoutContext(input: I)(implicit mode: Mode): Output[D] = {
+          val quantity = getParameter(name = "value", shape, initializer)
           quantity
         }
       })
 
-  def divergence(dim: Int, inputSlices: Seq[Indexer] = Seq(---)): TensorOperator[Output] = {
+  def divergence[D: TF: IsNotQuantized](
+    dim: Int, inputSlices: Seq[Indexer] = Seq(---)): TensorOperator[Output[D], D] = {
 
-    val Id = constant[Output](
+    val Id = constant[Output[D], D](
       s"IdentityMat($dim)",
       Api.tensor_i32(dim, dim)(
         Seq.tabulate[Int](dim, dim)((i, j) => if(i == j) 1 else 0).flatten:_*
-      )
+      ).castTo[D]
     )
 
-    TensorDotOperator[Output](Id, SlicedGradient(name = s"Grad")(inputSlices:_*)(---), Seq(0, 1), Seq(1, 2))
+    TensorDotOperator[Output[D], D](
+      Id,
+      SlicedGradient(
+        name = s"Grad")(
+        inputSlices:_*)(---),
+      Seq(0, 1),
+      Seq(1, 2))
   }
 
-  val div: TensorOperator[Output]                    = divergence(dim = 3, Seq(1::))
+  def div[D: TF: IsNotQuantized]: TensorOperator[Output[D], D] = divergence(dim = 3, Seq(1::))
 
 
   /**
@@ -87,23 +97,23 @@ private[tensorflow] trait DynamicsAPI {
     * @param input_slices Determines over which subset of the inputs to compute the gradient
     * @param output_slices Determines over which subset of the outputs to compute the gradient
     * */
-  def ∂(
+  def ∂[D: TF: IsNotQuantized](
     name: String)(
     input_slices: Indexer*)(
-    output_slices: Indexer*): SlicedGradient          = SlicedGradient(name)(input_slices:_*)(output_slices:_*)
+    output_slices: Indexer*): SlicedGradient[D] = SlicedGradient(name)(input_slices:_*)(output_slices:_*)
 
   /**
     * Time derivative (∂f/∂t) of a function f(t, s),
     * which accepts space-time vectors [t, s_1, s_2, ..., s_n]
     * as inputs
     * */
-  val d_t: SlicedGradient                             = ∂("D_t")(0)(---)
+  def d_t: SlicedGradient[Float]                = ∂("D_t")(0)(---)
 
   /**
     * Space derivative (∂f/∂s) of a function f(t, s),
     * which accepts space-time vectors [t, s_1, s_2, ..., s_n]
     * as inputs
     * */
-  val d_s: SlicedGradient                             = ∂("D_s")( 1 ::)(---)
+  def d_s: SlicedGradient[Float]                = ∂("D_s")( 1 ::)(---)
 
 }

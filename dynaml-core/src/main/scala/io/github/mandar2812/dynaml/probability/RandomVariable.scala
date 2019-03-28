@@ -62,6 +62,7 @@ abstract class RandomVariable[Domain] extends Serializable {
     RandomVariable(BifurcationPipe(sam, other.sample))
   }
 
+
   /**
     * Create an iid random variable from the current (this)
     * @param n The number of iid samples of the base random variable.

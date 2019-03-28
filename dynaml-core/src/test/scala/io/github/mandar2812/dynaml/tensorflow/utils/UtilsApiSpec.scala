@@ -10,14 +10,14 @@ class UtilsApiSpec extends FlatSpec with Matchers {
 
   "Regression Metrics on Tensors" should " compute the relevant metrics correctly" in {
 
-    val t = dtf.random(FLOAT64, 10)(GaussianRV(1.0, 1.0))
+    val t = dtf.random[Double](10)(GaussianRV(1.0, 1.0))
 
     val metricsTF = new GenRegressionMetricsTF(t, t)
 
     assert(
       tfi.abs(
         metricsTF.results - dtf.tensor_f64(4)(0d, 0d, 1d, 1d)
-      ).mean().scalar.asInstanceOf[Double] < 1E-7)
+      ).mean().scalar < 1E-7)
 
   }
 
@@ -25,12 +25,12 @@ class UtilsApiSpec extends FlatSpec with Matchers {
 
     val data = dtf.tensor_f64(2)(0d, 1d)
 
-    val sc_g = dtfpipe.gauss_std()(data)
-    val sc_m = dtfpipe.minmax_std()(data)
+    val sc_g = dtfpipe.gauss_std[Double]().run(data)
+    val sc_m = dtfpipe.minmax_std[Double]().run(data)
 
     assert(
       sc_g._2.mean.reshape(Shape(1)) == Tensor(0.5) &&
-        tfi.abs(sc_g._2.sigma.square.reshape(Shape(1)) - Tensor(0.5)).scalar.asInstanceOf[Double] < 1E-6)
+        tfi.abs(sc_g._2.sigma.square.reshape(Shape(1)) - Tensor(0.5)).scalar < 1E-6)
 
     assert(
       sc_m._2.min.reshape(Shape(1)) == Tensor(0d) &&

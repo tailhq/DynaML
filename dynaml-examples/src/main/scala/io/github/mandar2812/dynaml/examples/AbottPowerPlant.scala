@@ -26,7 +26,7 @@ import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GPNarXModel, GPRegression}
 import io.github.mandar2812.dynaml.models.stp.MVStudentsTModel
 import io.github.mandar2812.dynaml.optimization.{GlobalOptimizer, GradBasedGlobalOptimizer, GridSearch, ProbGPCommMachine}
-import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
+import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.utils.GaussianScaler
 
 import scala.collection.mutable.{MutableList => ML}
@@ -41,7 +41,7 @@ object AbottPowerPlant {
   type Scales = (GaussianScaler, GaussianScaler)
   type GPModel = AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)], DenseVector[Double]]
 
-  type Data = Stream[(Features, Features)]
+  type Data = Iterable[(Features, Features)]
 
   val names = Map(
     5 -> "Drum pressure PSI",
@@ -50,7 +50,7 @@ object AbottPowerPlant {
     8 -> "Steam Flow kg/s")
 
   val deltaOperationARXMultiOutput = (deltaT: List[Int], deltaTargets: List[Int]) =>
-    DataPipe((lines: Stream[(Double, DenseVector[Double])]) =>
+    DataPipe((lines: Iterable[(Double, DenseVector[Double])]) =>
       lines.toList.sliding(math.max(deltaT.max, deltaTargets.max) + 1).map((history) => {
 
         val hist = history.take(history.length - 1).map(_._2)
@@ -96,6 +96,7 @@ object AbottPowerPlant {
     opt: Map[String, String]) = {
 
 
+    
     val preProcessPipe = fileToStream >
       trimLines >
       replaceWhiteSpaces >
@@ -104,7 +105,7 @@ object AbottPowerPlant {
         Map()
       ) >
       removeMissingLines >
-      StreamDataPipe((line: String) => {
+      IterableDataPipe((line: String) => {
         val splits = line.split(",")
         val timestamp = splits.head.toDouble
         val data_vec = DenseVector(splits.tail.map(_.toDouble))
@@ -123,11 +124,11 @@ object AbottPowerPlant {
 
       val reScaleTargets = targetScales.i * targetScales.i
 
-      implicit val transform = DataPipe((d: Data) => d.toSeq)
+      implicit val transform = DataPipe[Data, Seq[(Features, Features)]]((d: Data) => d.toSeq)
 
       val multioutputTModel = MVStudentsTModel[Data, Features](kernel, noise, identityPipe[Features]) _
 
-      val model = multioutputTModel(training_data, training_data.length, training_data.head._2.length)
+      val model = multioutputTModel(training_data, training_data.toSeq.length, training_data.head._2.length)
 
       val gs = opt("globalOpt") match {
         case "GS" => new GridSearch[model.type](model)
@@ -173,10 +174,10 @@ object AbottPowerPlant {
     //create RegressionMetrics instance and produce plots
 
     val modelTrainTest =
-      (trainTest: ((Stream[(Features, Double)], Stream[(Features, Double)]), (Features, Features))) => {
+      (trainTest: ((Iterable[(Features, Double)], Iterable[(Features, Double)]), (Features, Features))) => {
 
         val model = new GPNarXModel(deltaT, 4, kernel,
-          noise, trainTest._1._1)
+          noise, trainTest._1._1.toSeq)
 
         val gs: GlobalOptimizer[GPModel] = opt("globalOpt") match {
           case "GS" => new GridSearch[GPModel](model)
@@ -199,7 +200,7 @@ object AbottPowerPlant {
 
         val (optModel, _): (GPModel, Map[String, Double]) = gs.optimize(startConf, opt)
 
-        val res = optModel.test(trainTest._1._2)
+        val res = optModel.test(trainTest._1._2.toSeq)
 
         val deNormalize = DataPipe((list: List[(Double, Double, Double, Double)]) =>
           list.map{l => (l._1*trainTest._2._2(-1) + trainTest._2._1(-1),
@@ -255,7 +256,7 @@ object AbottPowerPlant {
         Map()
       ) >
       removeMissingLines >
-      StreamDataPipe((line: String) => {
+      IterableDataPipe((line: String) => {
         val splits = line.split(",")
         val timestamp = splits.head.toDouble
         val feat = DenseVector(splits.tail.map(_.toDouble))
@@ -264,11 +265,12 @@ object AbottPowerPlant {
       deltaOperationVec(deltaT)
 
     val trainTestPipe = duplicate(preProcessPipe) >
-      splitTrainingTest(num_training, num_test) >
+      splitTrainingTest[(DenseVector[Double], Double)](num_training, num_test) >
       trainTestGaussianStandardization >
       DataPipe(modelTrainTest)
 
     val dataFile = dataDir+"/steamgen.csv"
     trainTestPipe((dataFile, dataFile))
   }
+
 }
