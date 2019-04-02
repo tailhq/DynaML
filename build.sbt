@@ -2,6 +2,7 @@ import sbt._
 import java.io.File
 import Dependencies._
 import sbtbuildinfo.BuildInfoPlugin.autoImport._
+import org.scoverage.coveralls.Imports.CoverallsKeys._
 
 
 val mainVersion = "v2.0-beta.1"
@@ -27,7 +28,8 @@ val baseSettings = Seq(
   publishTo := sonatypePublishTo.value,
   useGpg := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
-  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true)
+  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
+  coverallsTokenFile := Some(".coveralls.yml")
 )
 
 lazy val commonSettings = Seq(

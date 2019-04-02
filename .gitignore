@@ -50,3 +50,4 @@ test_output
 project/.bloop
 .metals
 .scalafmt.conf
+.coveralls.yml
