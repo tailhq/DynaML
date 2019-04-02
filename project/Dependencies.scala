@@ -76,7 +76,7 @@ object Dependencies {
     "com.github.scopt" %% "scopt" % "3.5.0",
     "org.scalameta" %% "scalameta" % "2.0.1",
     "javax.ws.rs" % "javax.ws.rs-api" % "2.0-m10",
-    "org.json4s" %% "json4s-jackson" % "3.6.2",
+    "org.json4s" %% "json4s-jackson" % "3.6.5",
     "ws.unfiltered" %% "unfiltered-filter" % "0.9.1",
     "ws.unfiltered" %% "unfiltered-jetty" % "0.9.1",
     "org.apache.commons" % "commons-math3" % "3.4.1",
@@ -87,8 +87,8 @@ object Dependencies {
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
     "org.apache.spark" %% "spark-core" % "2.4.0",
     "org.apache.spark" %% "spark-mllib" % "2.4.0",
-    "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.7")
+    "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.8",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.8")
     .map(_.withExclusions(
       Vector(
         "org.slf4j" %% "slf4j-log4j12", 

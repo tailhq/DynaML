@@ -10,14 +10,13 @@ matrix:
   include:
   # works on Precise and Trusty
   - os: linux
-    dist: xenial
+    dist: trusty
     addons:
       apt:
         sources:
         - ubuntu-toolchain-r-test
         packages:
         - g++-5
-        - sbt
     env:
     - MATRIX_EVAL="CC=gcc-5.4 && CXX=g++-5.4"
 
