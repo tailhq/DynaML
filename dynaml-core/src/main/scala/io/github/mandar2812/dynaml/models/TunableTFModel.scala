@@ -25,6 +25,7 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, MetaPipe}
 import io.github.mandar2812.dynaml.tensorflow.data.{DataSet, TFDataSet}
 import ammonite.ops._
 import org.platanios.tensorflow.api.Graph
+import org.platanios.tensorflow.api.Tensor
 import org.platanios.tensorflow.api.implicits.helpers._
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
@@ -118,6 +119,7 @@ class TunableTFModel[
     Out
   ],
   val fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
+  val fitness_to_scalar: DataPipe[Tensor[Float], Double] = DataPipe[Tensor[Float], Double](_.scalar.toDouble),
   protected val validation_data: Option[DataSet[Pattern]] = None,
   protected val data_split_func: Option[DataPipe[Pattern, Boolean]] = None)
     extends GloballyOptimizable {
@@ -200,7 +202,8 @@ class TunableTFModel[
       )
 
       //Dont shuffle and repeat the data set when performing validation
-      val computed_energy = model_instance
+      val computed_energy = fitness_to_scalar(
+        model_instance
         .evaluate(
           modelFunction._build_ops(
             validation_data_tf,
@@ -216,8 +219,7 @@ class TunableTFModel[
           name = null
         )
         .head
-        .scalar
-        .toDouble
+      )
 
       //If all goes well, return the fitness and no comment.
       (computed_energy, None)
@@ -738,6 +740,7 @@ object TunableTFModel {
     input: (ID, IS),
     target: (TD, TS),
     get_training_config: ModelConfigFunc[In, Out],
+    fitness_to_scalar: DataPipe[Tensor[Float], Double] = DataPipe[Tensor[Float], Double](_.scalar.toDouble),
     validation_data: Option[DataSet[Pattern]] = None,
     data_split_func: Option[DataPipe[Pattern, Boolean]] = None,
     inMemory: Boolean = false,
@@ -816,6 +819,7 @@ object TunableTFModel {
       training_data,
       tf_handle_ops,
       fitness_function,
+      fitness_to_scalar,
       validation_data,
       data_split_func
     )
@@ -846,6 +850,7 @@ object TunableTFModel {
     input: (ID, IS),
     target: (TD, TS),
     get_training_config: ModelConfigFunc[In, Out],
+    fitness_to_scalar: DataPipe[Tensor[Float], Double],
     validation_data: Option[DataSet[Pattern]],
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
@@ -923,6 +928,7 @@ object TunableTFModel {
       training_data,
       tf_handle_ops,
       fitness_function,
+      fitness_to_scalar,
       validation_data,
       data_split_func
     )
@@ -953,6 +959,7 @@ object TunableTFModel {
     input: (ID, IS),
     target: (TD, TS),
     get_training_config: ModelConfigFunc[In, Out],
+    fitness_to_scalar: DataPipe[Tensor[Float], Double],
     validation_data: Option[DataSet[Pattern]],
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
@@ -1031,6 +1038,7 @@ object TunableTFModel {
       training_data,
       tf_handle_ops,
       fitness_function,
+      fitness_to_scalar,
       validation_data,
       data_split_func
     )

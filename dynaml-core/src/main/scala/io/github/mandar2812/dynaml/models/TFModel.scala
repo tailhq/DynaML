@@ -335,7 +335,6 @@ class TFModel[
     saveSummaries: Boolean,
     name: String
   ): Seq[Tensor[Float]] = {
-    //check_underlying_estimator()
 
     estimator.get.evaluate(
       () => test_data,

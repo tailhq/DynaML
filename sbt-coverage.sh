@@ -1,0 +1,1 @@
+sbt clean coverage test coverageReport && sbt coverageAggregate && sbt coveralls
