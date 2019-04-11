@@ -24,6 +24,7 @@ import io.github.mandar2812.dynaml.tensorflow.data.DataSet
 import io.github.mandar2812.dynaml.tensorflow.Learn
 import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.mandar2812.dynaml.evaluation.Performance
 import org.platanios.tensorflow.api.learn.StopCriteria
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
@@ -714,6 +715,97 @@ object TFModel {
         tf.learn.StepHookTrigger(checkPointFreq)
       )
     )
+
+  private[models] def _eval_hook[In, Out, ArchOut, Loss, ID, TD, IS, TS](
+    datasets: Seq[(String, () => Dataset[(In, Out)])],
+    metrics: Seq[(String, DataPipe2[ArchOut, Out, Output[Float]])],
+    summaryDir: Path,
+    stepTrigger: Int,
+    log: Boolean
+  )(
+    implicit
+    evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
+    evOutputToShape: OutputToShape.Aux[(In, Out), (IS, TS)]
+  ): tf.learn.Evaluator[
+    In,
+    (In, Out),
+    Out,
+    ArchOut,
+    Loss,
+    (ArchOut, (In, Out)),
+    (ID, TD),
+    (IS, TS)
+  ] = {
+
+    tf.learn.Evaluator(
+      log = log,
+      summaryDir = summaryDir.toNIO,
+      datasets = datasets,
+      metrics.map(
+        kv =>
+          Performance(
+            kv._1,
+            DataPipe[(ArchOut, (In, Out)), Output[Float]](
+              v => kv._2(v._1, v._2._2)
+            )
+          )
+      ),
+      trigger = tf.learn.StepHookTrigger(stepTrigger)
+    )
+  }
+
+  def _eval_hook[Pattern, IT, TT, ITT, In, Out, ArchOut, Loss, ID, TD, IS, TS](
+    datasets: Seq[(String, DataSet[Pattern])],
+    input: (ID, IS),
+    target: (TD, TS),
+    metrics: Seq[(String, DataPipe2[ArchOut, Out, Output[Float]])],
+    summary_dir: Path,
+    data_ops: Ops[In, Out],
+    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out],
+    step_trigger: Int = 100,
+    log: Boolean = true
+  )(
+    implicit
+    evTensorToOutput: TensorToOutput.Aux[(IT, TT), (In, Out)],
+    evTensorToDataType: TensorToDataType.Aux[(IT, TT), (ID, TD)],
+    evTensorToShape: TensorToShape.Aux[(IT, TT), (IS, TS)],
+    evOutputStructure: OutputStructure[(In, Out)],
+    evOutputToDataType: OutputToDataType.Aux[(In, Out), (ID, TD)],
+    evOutputToShape: OutputToShape.Aux[(In, Out), (IS, TS)],
+    evDataTypeToShape: DataTypeToShape.Aux[(ID, TD), (IS, TS)]
+  ): tf.learn.Evaluator[
+    In,
+    (In, Out),
+    Out,
+    ArchOut,
+    Loss,
+    (ArchOut, (In, Out)),
+    (ID, TD),
+    (IS, TS)
+  ] = {
+    val tf_datasets = datasets.map(
+      kv =>
+        (
+          kv._1,
+          () =>
+            data._get_tf_data(
+              kv._2,
+              input,
+              target,
+              data_ops,
+              tf_handle_ops
+            )
+        )
+    )
+
+    _eval_hook(
+      tf_datasets,
+      metrics,
+      summary_dir,
+      step_trigger,
+      log
+    )
+  }
 
   def apply[
     In,

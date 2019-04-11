@@ -219,7 +219,7 @@ case class MSE[I, T: TF: IsFloatOrDouble](
     extends Performance[(Output[T], (I, Output[T]))](
       "MSE",
       DataPipe[(Output[T], (I, Output[T])), Output[Float]](
-        c => c._1.subtract(c._2._2).square.castTo[Float]
+        c => c._1.subtract(c._2._2).square.mean(axes = 1).castTo[Float]
       ),
       defaultWeights,
       variablesCollections,
@@ -244,7 +244,7 @@ case class MSE[I, T: TF: IsFloatOrDouble](
     extends Performance[(Output[T], (I, Output[T]))](
       "MSE",
       DataPipe[(Output[T], (I, Output[T])), Output[Float]](
-        c => c._1.subtract(c._2._2).abs.castTo[Float]
+        c => c._1.subtract(c._2._2).abs.mean(axes = 1).castTo[Float]
       ),
       defaultWeights,
       variablesCollections,

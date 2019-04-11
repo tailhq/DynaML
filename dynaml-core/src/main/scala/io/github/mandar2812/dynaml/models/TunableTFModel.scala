@@ -27,6 +27,7 @@ import ammonite.ops._
 import org.platanios.tensorflow.api.Graph
 import org.platanios.tensorflow.api.Tensor
 import org.platanios.tensorflow.api.implicits.helpers._
+import org.platanios.tensorflow.api.learn.hooks.Evaluator
 import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.{Function, Output}
@@ -118,8 +119,10 @@ class TunableTFModel[
     In,
     Out
   ],
-  val fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
-  val fitness_to_scalar: DataPipe[Tensor[Float], Double] = DataPipe[Tensor[Float], Double](_.scalar.toDouble),
+  val fitness_functions: Seq[DataPipe2[ArchOut, Out, Output[Float]]],
+  val fitness_to_scalar: DataPipe[Seq[Tensor[Float]], Double] =
+    DataPipe[Seq[Tensor[Float]], Double](m =>
+        m.map(_.scalar.toDouble).sum / m.length),
   protected val validation_data: Option[DataSet[Pattern]] = None,
   protected val data_split_func: Option[DataPipe[Pattern, Boolean]] = None)
     extends GloballyOptimizable {
@@ -156,12 +159,14 @@ class TunableTFModel[
     )
   }
 
-  private val fitness_metric = Performance[(ArchOut, (In, Out))](
-    "Energy",
-    DataPipe[(ArchOut, (In, Out)), Output[Float]](
-      c => fitness_function(c._1, c._2._2)
+  private val fitness_metrics = fitness_functions.map(fitness_function => {
+    Performance[(ArchOut, (In, Out))](
+      "Energy",
+      DataPipe[(ArchOut, (In, Out)), Output[Float]](
+        c => fitness_function(c._1, c._2._2)
+      )
     )
-  )
+  })
 
   /**
     * Calculates the energy of the configuration,
@@ -204,21 +209,20 @@ class TunableTFModel[
       //Dont shuffle and repeat the data set when performing validation
       val computed_energy = fitness_to_scalar(
         model_instance
-        .evaluate(
-          modelFunction._build_ops(
-            validation_data_tf,
-            train_config.data_processing.copy(shuffleBuffer = 0, repeat = 0)
-          ),
-          Seq(fitness_metric),
-          maxSteps = math
-            .ceil(
-              validation_split.size.toDouble / train_config.data_processing.batchSize
-            )
-            .toLong,
-          saveSummaries = true,
-          name = null
-        )
-        .head
+          .evaluate(
+            modelFunction._build_ops(
+              validation_data_tf,
+              train_config.data_processing.copy(shuffleBuffer = 0, repeat = 0)
+            ),
+            fitness_metrics,
+            maxSteps = math
+              .ceil(
+                validation_split.size.toDouble / train_config.data_processing.batchSize
+              )
+              .toLong,
+            saveSummaries = true,
+            name = null
+          )
       )
 
       //If all goes well, return the fitness and no comment.
@@ -248,7 +252,11 @@ class TunableTFModel[
 
   def train_model(
     hyper_params: TunableTFModel.HyperParams,
-    trainConfig: Option[TFModel.Config[In, Out]] = None
+    trainConfig: Option[TFModel.Config[In, Out]] = None,
+    evaluation_metrics: Option[
+      Seq[(String, DataPipe2[ArchOut, Out, Output[Float]])]
+    ] = None,
+    stepTrigger: Option[Int] = None
   ): TFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
 
     val model_instance = modelFunction(hyper_params)
@@ -258,13 +266,40 @@ class TunableTFModel[
       case Some(config) => config
     }
 
-    model_instance.train(
-      modelFunction._build_ops(
-        modelFunction.data_handle(training_data, tf_data_handle_ops),
-        training_configuration.data_processing
-      ),
-      training_configuration
-    )
+    if (evaluation_metrics.isDefined) {
+
+      val evalHook = modelFunction._eval_hook(
+        Seq(
+          (
+            "validation",
+            modelFunction._build_ops(
+              validation_data_tf,
+              training_configuration.data_processing
+                .copy(shuffleBuffer = 0, repeat = 0)
+            )
+          )
+        ),
+        evaluation_metrics.get,
+        training_configuration.summaryDir,
+        stepTrigger.getOrElse(100)
+      )
+
+      model_instance.train(
+        modelFunction
+          ._build_ops(train_data_tf, training_configuration.data_processing),
+        training_configuration.copy(
+          trainHooks = training_configuration.trainHooks.map(_ ++ Set(evalHook))
+        )
+      )
+    } else {
+      model_instance.train(
+        modelFunction._build_ops(
+          modelFunction.data_handle(training_data, tf_data_handle_ops),
+          training_configuration.data_processing
+        ),
+        training_configuration
+      )
+    }
 
     model_instance
   }
@@ -355,6 +390,30 @@ object TunableTFModel {
     ): Dataset[(In, Out)] = {
       TFModel.data._build_ops(tf_dataset, data_ops)
     }
+
+    private[models] def _eval_hook(
+      datasets: Seq[(String, Dataset[(In, Out)])],
+      evaluation_metrics: Seq[(String, DataPipe2[ArchOut, Out, Output[Float]])],
+      summary_dir: Path,
+      stepTrigger: Int = 100,
+      log: Boolean = true
+    ): Evaluator[
+      In,
+      (In, Out),
+      Out,
+      ArchOut,
+      Loss,
+      (ArchOut, (In, Out)),
+      (ID, TD),
+      (IS, TS)
+    ] =
+      TFModel._eval_hook(
+        datasets.map(kv => (kv._1, () => kv._2)),
+        evaluation_metrics,
+        summary_dir,
+        stepTrigger,
+        log
+      )
 
   }
 
@@ -735,12 +794,14 @@ object TunableTFModel {
     hyp: List[String],
     training_data: DataSet[Pattern],
     tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out],
-    fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
+    fitness_functions: Seq[DataPipe2[ArchOut, Out, Output[Float]]],
     architecture: Layer[In, ArchOut],
     input: (ID, IS),
     target: (TD, TS),
     get_training_config: ModelConfigFunc[In, Out],
-    fitness_to_scalar: DataPipe[Tensor[Float], Double] = DataPipe[Tensor[Float], Double](_.scalar.toDouble),
+    fitness_to_scalar: DataPipe[Seq[Tensor[Float]], Double] =
+      DataPipe[Seq[Tensor[Float]], Double](m =>
+          m.map(_.scalar.toDouble).sum / m.length),
     validation_data: Option[DataSet[Pattern]] = None,
     data_split_func: Option[DataPipe[Pattern, Boolean]] = None,
     inMemory: Boolean = false,
@@ -818,7 +879,7 @@ object TunableTFModel {
       hyp,
       training_data,
       tf_handle_ops,
-      fitness_function,
+      fitness_functions,
       fitness_to_scalar,
       validation_data,
       data_split_func
@@ -846,11 +907,11 @@ object TunableTFModel {
     hyp: List[String],
     training_data: DataSet[Pattern],
     tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out],
-    fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
+    fitness_functions: Seq[DataPipe2[ArchOut, Out, Output[Float]]],
     input: (ID, IS),
     target: (TD, TS),
     get_training_config: ModelConfigFunc[In, Out],
-    fitness_to_scalar: DataPipe[Tensor[Float], Double],
+    fitness_to_scalar: DataPipe[Seq[Tensor[Float]], Double],
     validation_data: Option[DataSet[Pattern]],
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
@@ -927,7 +988,7 @@ object TunableTFModel {
       hyp,
       training_data,
       tf_handle_ops,
-      fitness_function,
+      fitness_functions,
       fitness_to_scalar,
       validation_data,
       data_split_func
@@ -955,11 +1016,11 @@ object TunableTFModel {
     hyp: List[String],
     training_data: DataSet[Pattern],
     tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out],
-    fitness_function: DataPipe2[ArchOut, Out, Output[Float]],
+    fitness_functions: Seq[DataPipe2[ArchOut, Out, Output[Float]]],
     input: (ID, IS),
     target: (TD, TS),
     get_training_config: ModelConfigFunc[In, Out],
-    fitness_to_scalar: DataPipe[Tensor[Float], Double],
+    fitness_to_scalar: DataPipe[Seq[Tensor[Float]], Double],
     validation_data: Option[DataSet[Pattern]],
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
@@ -1037,7 +1098,7 @@ object TunableTFModel {
       hyp,
       training_data,
       tf_handle_ops,
-      fitness_function,
+      fitness_functions,
       fitness_to_scalar,
       validation_data,
       data_split_func
