@@ -164,11 +164,11 @@ class TunableTFModel[
     )
   }
 
-  private val fitness_metrics = fitness_functions.map(fitness_function => {
+  protected val fitness_metrics = fitness_functions.zipWithIndex.map(fitness_function => {
     Performance[(ArchOut, (In, Out))](
-      "Energy",
+      s"Energy_${fitness_function._2}",
       DataPipe[(ArchOut, (In, Out)), Output[Float]](
-        c => fitness_function(c._1, c._2._2)
+        c => fitness_function._1(c._1, c._2._2)
       )
     )
   })
