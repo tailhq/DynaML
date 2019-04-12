@@ -249,7 +249,7 @@ class TunableTFModel[
 
     //Write the configuration along with its fitness into the model
     //instance's summary directory
-    write.append(train_config.summaryDir / "state.json", hyp_config_json)
+    write.append(train_config.summaryDir / "state.json", hyp_config_json+"\n")
 
     //Return the model fitness.
     fitness

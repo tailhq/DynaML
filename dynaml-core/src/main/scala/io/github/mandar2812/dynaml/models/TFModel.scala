@@ -374,6 +374,29 @@ class TFModel[
     evaluate(tf_dataset, metrics, max_steps, saveSummaries, name)
   }
 
+  def evaluate(
+    test_data: Dataset[(In, Out)],
+    test_data_size: Int,
+    metrics: Seq[tf.metrics.Metric[(ArchOut, (In, Out)), Output[Float]]],
+    evaluation_ops: TFModel.Ops[In, Out],
+    saveSummaries: Boolean,
+    name: String
+  ): Seq[Tensor[Float]] = {
+
+    check_underlying_estimator()
+
+    val tf_dataset: Dataset[(In, Out)] = TFModel.data._build_ops(
+      test_data,
+      evaluation_ops
+    )
+
+    val max_steps: Long =
+      math.ceil(test_data_size.toDouble / evaluation_ops.batchSize).toLong
+    
+    
+    evaluate(tf_dataset, metrics, max_steps, saveSummaries, name)
+  }
+
   /**
     * Close the underlying tensorflow graph.
     * */
