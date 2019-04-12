@@ -23,6 +23,7 @@ import io.github.mandar2812.dynaml.utils
 import io.github.mandar2812.dynaml.evaluation.Performance
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, MetaPipe}
 import io.github.mandar2812.dynaml.tensorflow.data.{DataSet, TFDataSet}
+import io.github.mandar2812.dynaml.tensorflow.dtflearn
 import ammonite.ops._
 import org.platanios.tensorflow.api.Graph
 import org.platanios.tensorflow.api.Tensor
@@ -32,9 +33,13 @@ import org.platanios.tensorflow.api.learn.estimators.Estimator
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.{Function, Output}
 import org.platanios.tensorflow.api.ops.data.Dataset
+import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
+import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, TF}
+import org.platanios.tensorflow.api.learn.hooks.Hook
+import org.platanios.tensorflow.api.learn.StopCriteria
+import org.platanios.tensorflow.api._
 import org.json4s._
 import org.json4s.jackson.Serialization.{read => read_json, write => write_json}
-import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, TF}
 
 /**
   * <h4>Hyper-parameter based Tensorflow Model</h4>
@@ -244,7 +249,7 @@ class TunableTFModel[
 
     //Write the configuration along with its fitness into the model
     //instance's summary directory
-    write(train_config.summaryDir / "state.json", hyp_config_json)
+    write.append(train_config.summaryDir / "state.json", hyp_config_json)
 
     //Return the model fitness.
     fitness
@@ -336,6 +341,83 @@ object TunableTFModel {
 
   type ModelConfigFunc[In, Out] = DataPipe[HyperParams, TFModel.Config[In, Out]]
 
+  /**
+    * A configurable Pipeline for creating Tensorflow Model configurations
+    * from hyper-parameter maps.
+    *
+    * @param summaryDir A Pipe ([[DataPipe]]) which generates the summary directory
+    *                   given some hyper-parameters.
+    *
+    * @param data_processing A Pipe which creates the appropriate data handle
+    *                        transformations such as shuffle, mini-batching etc.
+    *
+    * @param optimizer Get the optimization algorithm based on the hyper-parameters.
+    *                  Note that if the tunable model using this (i.e. [[TunableTFModel]])
+    *                  uses previously stored checkpoints for some hyper-parameters, the mapping
+    *                  functions optimizer, and summaryDir must be <i>one is to one</i>.
+    *                  Defaults to Adam optimzer with learning rate 0.01.
+    *
+    * @param stopCriteria Get the stopping criterion for hyper-parameters.
+    *
+    * @param trainHooks Optional training hooks.
+    *
+    * */
+  class ModelConfigFunction[In, Out](
+    summaryDir: DataPipe[HyperParams, Path],
+    data_processing: DataPipe[HyperParams, TFModel.Ops[In, Out]] =
+      DataPipe[HyperParams, TFModel.Ops[In, Out]](_ =>
+          TFModel.data_ops(10000, 16, 10)),
+    optimizer: DataPipe[HyperParams, Optimizer] =
+      DataPipe[HyperParams, Optimizer](_ => tf.train.Adam(0.01f)),
+    stopCriteria: DataPipe[HyperParams, StopCriteria] =
+      DataPipe[HyperParams, StopCriteria](_ =>
+          dtflearn.rel_loss_change_stop(0.05, 100000)),
+    trainHooks: DataPipe[HyperParams, Option[Set[Hook]]] =
+      DataPipe[HyperParams, Option[Set[Hook]]](_ => None))
+      extends DataPipe[HyperParams, TFModel.Config[In, Out]] {
+
+    override def run(data: HyperParams): TFModel.Config[In, Out] =
+      TFModel.trainConfig(
+        summaryDir(data),
+        data_processing(data),
+        optimizer(data),
+        stopCriteria(data),
+        trainHooks(data)
+      )
+  }
+
+  object ModelConfigFunction {
+
+    def apply[In, Out](
+      summaryDir: DataPipe[HyperParams, Path],
+      data_processing: DataPipe[HyperParams, TFModel.Ops[In, Out]] =
+        DataPipe[HyperParams, TFModel.Ops[In, Out]](_ =>
+            TFModel.data_ops(10000, 16, 10)),
+      optimizer: DataPipe[HyperParams, Optimizer] =
+        DataPipe[HyperParams, Optimizer](_ => tf.train.Adam(0.01f)),
+      stopCriteria: DataPipe[HyperParams, StopCriteria] =
+        DataPipe[HyperParams, StopCriteria](_ =>
+            dtflearn.rel_loss_change_stop(0.05, 100000)),
+      trainHooks: DataPipe[HyperParams, Option[Set[Hook]]] =
+        DataPipe[HyperParams, Option[Set[Hook]]](_ => None)
+    ) = new ModelConfigFunction(
+      summaryDir,
+      data_processing,
+      optimizer,
+      stopCriteria,
+      trainHooks
+    )
+  }
+
+  /**
+    * A Model Function creates a TensorFlow model instance
+    * given some hyper-parameters.
+    *
+    * @param generator A model generator pipeline.
+    * @param input The input data-type and shape
+    * @param target The data-type and shape of the targets.
+    *
+    * */
   class ModelFunction[
     In,
     Out,
@@ -391,7 +473,7 @@ object TunableTFModel {
       TFModel.data._build_ops(tf_dataset, data_ops)
     }
 
-    private[models] def _eval_hook(
+    def _eval_hook(
       datasets: Seq[(String, Dataset[(In, Out)])],
       evaluation_metrics: Seq[(String, DataPipe2[ArchOut, Out, Output[Float]])],
       summary_dir: Path,
@@ -434,7 +516,7 @@ object TunableTFModel {
 
     val to_token = config_to_str > generate_token
 
-    private def get_summary_dir(
+    def get_summary_dir(
       top_dir: Path,
       h: HyperParams,
       create_working_dir: Option[DataPipe[HyperParams, String]] = Some(to_token)
