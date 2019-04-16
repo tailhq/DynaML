@@ -164,14 +164,15 @@ class TunableTFModel[
     )
   }
 
-  protected val fitness_metrics = fitness_functions.zipWithIndex.map(fitness_function => {
-    Performance[(ArchOut, (In, Out))](
-      s"Energy_${fitness_function._2}",
-      DataPipe[(ArchOut, (In, Out)), Output[Float]](
-        c => fitness_function._1(c._1, c._2._2)
+  protected val fitness_metrics =
+    fitness_functions.zipWithIndex.map(fitness_function => {
+      Performance[(ArchOut, (In, Out))](
+        s"Energy_${fitness_function._2}",
+        DataPipe[(ArchOut, (In, Out)), Output[Float]](
+          c => fitness_function._1(c._1, c._2._2)
+        )
       )
-    )
-  })
+    })
 
   /**
     * Calculates the energy of the configuration,
@@ -249,7 +250,7 @@ class TunableTFModel[
 
     //Write the configuration along with its fitness into the model
     //instance's summary directory
-    write.append(train_config.summaryDir / "state.json", hyp_config_json+"\n")
+    write.append(train_config.summaryDir / "state.json", hyp_config_json + "\n")
 
     //Return the model fitness.
     fitness
@@ -261,7 +262,8 @@ class TunableTFModel[
     evaluation_metrics: Option[
       Seq[(String, DataPipe2[ArchOut, Out, Output[Float]])]
     ] = None,
-    stepTrigger: Option[Int] = None
+    stepTrigger: Option[Int] = None,
+    evaluate_train: Boolean = false
   ): TFModel[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS] = {
 
     val model_instance = modelFunction(hyper_params)
@@ -273,7 +275,26 @@ class TunableTFModel[
 
     if (evaluation_metrics.isDefined) {
 
-      val evalHook = modelFunction._eval_hook(
+      val eval_datasets = if (evaluate_train) {
+        Seq(
+          (
+            "training",
+            modelFunction._build_ops(
+              train_data_tf,
+              training_configuration.data_processing
+                .copy(shuffleBuffer = 0, repeat = 0)
+            )
+          ),
+          (
+            "validation",
+            modelFunction._build_ops(
+              validation_data_tf,
+              training_configuration.data_processing
+                .copy(shuffleBuffer = 0, repeat = 0)
+            )
+          )
+        )
+      } else {
         Seq(
           (
             "validation",
@@ -283,7 +304,11 @@ class TunableTFModel[
                 .copy(shuffleBuffer = 0, repeat = 0)
             )
           )
-        ),
+        )
+      }
+
+      val evalHook = modelFunction._eval_hook(
+        eval_datasets,
         evaluation_metrics.get,
         training_configuration.summaryDir,
         stepTrigger.getOrElse(100)
