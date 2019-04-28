@@ -15,7 +15,7 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.tensorflow.data
 
 import io.github.mandar2812.dynaml.pipes._
@@ -50,8 +50,8 @@ class DataSet[X](val data: Iterable[X]) {
 
   lazy val size: Int = data.toSeq.length
 
-
-  private def filter(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filter(filterFn))
+  private def filter(filterFn: X => Boolean): DataSet[X] =
+    DataSet[X](data.filter(filterFn))
 
   /**
     * Filter elements of this data set which satisfy
@@ -59,8 +59,8 @@ class DataSet[X](val data: Iterable[X]) {
     * */
   def filter(pipe: DataPipe[X, Boolean]): DataSet[X] = filter(pipe.run _)
 
-
-  private def filterNot(filterFn: X => Boolean): DataSet[X] = DataSet[X](data.filterNot(filterFn))
+  private def filterNot(filterFn: X => Boolean): DataSet[X] =
+    DataSet[X](data.filterNot(filterFn))
 
   /**
     * Filter elements of this data set which does not
@@ -83,45 +83,64 @@ class DataSet[X](val data: Iterable[X]) {
     * and then concatenates each resulting collection into a single
     * data set.
     * */
-  private def flatMap[Y](func: X => Iterable[Y]): DataSet[Y] = DataSet[Y](data.flatMap(func))
+  private def flatMap[Y](func: X => Iterable[Y]): DataSet[Y] =
+    DataSet[Y](data.flatMap(func))
 
   /**
     * Maps each element into a collection of elements of type [[Y]],
     * and then concatenates each resulting collection into a single
     * data set.
     * */
-  def flatMap[Y](pipe: DataPipe[X, Iterable[Y]]): DataSet[Y] = flatMap(pipe.run _)
+  def flatMap[Y](pipe: DataPipe[X, Iterable[Y]]): DataSet[Y] =
+    flatMap(pipe.run _)
 
   /**
     * Create a data set consisting of ([[X]], [[Y]]) pairs.
     * */
-  def zip[Y](other: DataSet[Y]): ZipDataSet[X, Y] = ZipDataSet[X, Y](self, other)
+  def zip[Y](other: DataSet[Y]): ZipDataSet[X, Y] =
+    ZipDataSet[X, Y](self, other)
 
   /**
     * Join the current data collection with another collection
     * */
-  def concatenate(other: DataSet[X]): DataSet[X] = DataSet[X](self.data ++ other.data)
+  def concatenate(other: DataSet[X]): DataSet[X] =
+    DataSet[X](self.data ++ other.data)
 
   /**
     * Transform the underlying collection in a way that uses potentially all of its elements.
     * */
-  def transform[Y](transformation: DataPipe[Iterable[X], Iterable[Y]]): DataSet[Y] = DataSet[Y](transformation(data))
+  def transform[Y](
+    transformation: DataPipe[Iterable[X], Iterable[Y]]
+  ): DataSet[Y] = DataSet[Y](transformation(data))
 
+  /**
+    * Group consecutive elements
+    *
+    * */
   def grouped(num: Int): DataSet[Seq[X]] = transform(
     DataPipe((d: Iterable[X]) => d.grouped(num).toIterable.map(_.toSeq))
   )
 
-  def reduce[Y](transformation: DataPipe[Iterable[X], Y]): Y = transformation(data)
+  def reduce[Y](transformation: DataPipe[Iterable[X], Y]): Y =
+    transformation(data)
 
-  def reduce[Y >: X](reducePipe: DataPipe2[Y, Y, Y]): Y = data.reduce[Y](reducePipe(_, _))
+  def reduce[Y >: X](reducePipe: DataPipe2[Y, Y, Y]): Y =
+    data.reduce[Y](reducePipe(_, _))
 
-  def reduceLeft[Y >: X](reducePipe: DataPipe2[Y, X, Y]): Y = data.reduceLeft[Y](reducePipe(_, _))
+  def reduceLeft[Y >: X](reducePipe: DataPipe2[Y, X, Y]): Y =
+    data.reduceLeft[Y](reducePipe(_, _))
 
-  def scanLeft[Y](z: Y)(scanPipe: DataPipe2[Y, X, Y]): DataSet[Y] = DataSet(data.scanLeft(z)(scanPipe(_, _)))
+  def scanLeft[Y](z: Y)(scanPipe: DataPipe2[Y, X, Y]): DataSet[Y] =
+    DataSet(data.scanLeft(z)(scanPipe(_, _)))
 
-  def scanRight[Y](z: Y)(scanPipe: DataPipe2[X, Y, Y]): DataSet[Y] = DataSet(data.scanRight(z)(scanPipe(_, _)))
+  def scanRight[Y](z: Y)(scanPipe: DataPipe2[X, Y, Y]): DataSet[Y] =
+    DataSet(data.scanRight(z)(scanPipe(_, _)))
 
-  def scan[Y >: X](z: Y)(scanPipe: DataPipe2[Y, Y, Y]): DataSet[Y] = DataSet(data.scan(z)(scanPipe(_, _)))
+  def scan[Y >: X](z: Y)(scanPipe: DataPipe2[Y, Y, Y]): DataSet[Y] =
+    DataSet(data.scan(z)(scanPipe(_, _)))
+
+  def foreach(side_effect: DataPipe[X, Unit]): Unit =
+    data.foreach(side_effect(_))
 
   /**
     * Split the data collection into a train-test split.
@@ -146,7 +165,10 @@ class DataSet[X](val data: Iterable[X]) {
     * */
   def to_supervised[Y, Z](f: DataPipe[X, (Y, Z)]): SupervisedDataSet[Y, Z] = {
     val data_split = data.map(f(_)).unzip
-    SupervisedDataSet[Y, Z](DataSet[Y](data_split._1), DataSet[Z](data_split._2))
+    SupervisedDataSet[Y, Z](
+      DataSet[Y](data_split._1),
+      DataSet[Z](data_split._2)
+    )
   }
 
   /**
@@ -167,17 +189,25 @@ class DataSet[X](val data: Iterable[X]) {
     * */
   def build[T, O, D, S](
     transformation: DataPipe[X, T],
-    dataType: D, shape: S = null)(
+    dataType: D,
+    shape: S = null
+  )(
     implicit
     evTensorToOutput: TensorToOutput.Aux[T, O],
     evOutputToDataType: OutputToDataType.Aux[O, D],
     evDataTypeToShape: DataTypeToShape.Aux[D, S],
     evOutputToShape: OutputToShape.Aux[O, S],
-    evOutputStructure: OutputStructure[O]): Dataset[O] =
-    tf.data.datasetFromGenerator[O, T, D, S](() => self.map(transformation).data, dataType, shape)
+    evOutputStructure: OutputStructure[O]
+  ): Dataset[O] =
+    tf.data.datasetFromGenerator[O, T, D, S](
+      () => self.map(transformation).data,
+      dataType,
+      shape
+    )
 
   protected def build_output[T, O, D, S](
-    transformation: DataPipe[Iterable[X], Iterable[O]])(
+    transformation: DataPipe[Iterable[X], Iterable[O]]
+  )(
     implicit
     evOutputStructure: OutputStructure[O],
     evOutputToDataType: OutputToDataType.Aux[O, D],
@@ -187,11 +217,14 @@ class DataSet[X](val data: Iterable[X]) {
       .transform(transformation)
       .map(DataPipe((batch: O) => tf.data.datasetFromOutputSlices(batch)))
       .reduceLeft[Dataset[O]](
-      DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r)))
+        DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r))
+      )
 
   protected def build_tensor[T, O, D, S](
     transformation: DataPipe[Iterable[X], Iterable[T]],
-    dataType: D, shape: S)(
+    dataType: D,
+    shape: S
+  )(
     implicit
     evTensorToOutput: TensorToOutput.Aux[T, O],
     evTensorToDataType: TensorToDataType.Aux[T, D],
@@ -204,58 +237,63 @@ class DataSet[X](val data: Iterable[X]) {
       .transform(transformation)
       .map(DataPipe((batch: T) => tf.data.datasetFromTensorSlices(batch)))
       .reduceLeft[Dataset[O]](
-      DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith[D, S](r)))
-
+        DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith[D, S](r))
+      )
 
   def build_buffered[T, O, D, S](
     buffer_size: Int,
     convertToTensor: DataPipe[X, T],
     stackOp: DataPipe[Iterable[T], T],
     dataType: D,
-    shape: S = null)(
+    shape: S = null
+  )(
     implicit
     evTensorToOutput: TensorToOutput.Aux[T, O],
     evTensorToDataType: TensorToDataType.Aux[T, D],
     evTensorToShape: TensorToShape.Aux[T, S],
     evOutputStructure: OutputStructure[O],
     evOutputToDataType: OutputToDataType.Aux[O, D],
-    evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] = {
+    evOutputToShape: OutputToShape.Aux[O, S]
+  ): Dataset[O] = {
 
     val buffer_and_stack =
       DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
         IterableDataPipe(IterableDataPipe(convertToTensor)) >
         IterableDataPipe(stackOp)
 
-
     build_tensor[T, O, D, S](buffer_and_stack, dataType, shape)
   }
 
-  def build_lazy[T, O, D, S](transformation: DataPipe[X, O])(
+  def build_lazy[T, O, D, S](
+    transformation: DataPipe[X, O]
+  )(
     implicit
     evOutputStructure: OutputStructure[O],
     evOutputToDataType: OutputToDataType.Aux[O, D],
-    evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] =
+    evOutputToShape: OutputToShape.Aux[O, S]
+  ): Dataset[O] =
     self
       .map(transformation)
       .map(DataPipe((batch: O) => tf.data.datasetFromOutputs(batch)))
-      .reduceLeft[Dataset[O]](DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r)))
-
-
+      .reduceLeft[Dataset[O]](
+        DataPipe2((l: Dataset[O], r: Dataset[O]) => l.concatenateWith(r))
+      )
 
   def build_buffered_lazy[T, O, D, S](
     buffer_size: Int,
     convertToSymbolicTensor: DataPipe[X, O],
-    stackOp: DataPipe[Iterable[O], O])(
+    stackOp: DataPipe[Iterable[O], O]
+  )(
     implicit
     evOutputStructure: OutputStructure[O],
     evOutputToDataType: OutputToDataType.Aux[O, D],
-    evOutputToShape: OutputToShape.Aux[O, S]): Dataset[O] = {
+    evOutputToShape: OutputToShape.Aux[O, S]
+  ): Dataset[O] = {
 
     val buffer_and_stack =
       DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
         IterableDataPipe(IterableDataPipe(convertToSymbolicTensor)) >
         IterableDataPipe(stackOp)
-
 
     build_output[T, O, D, S](buffer_and_stack)
   }
@@ -275,30 +313,33 @@ object DataSet {
     * @return A [[DataSet]] over sequence of [[X]]
     * */
   def collect[X](datasets: Seq[DataSet[X]]): DataSet[Seq[X]] = {
-    require(datasets.map(_.size) == Seq.fill(datasets.length)(datasets.head.size))
+    require(
+      datasets.map(_.size) == Seq.fill(datasets.length)(datasets.head.size)
+    )
 
-    apply(Iterable.tabulate(datasets.head.size)(i => datasets.map(d => d.data.toSeq(i))))
+    apply(
+      Iterable
+        .tabulate(datasets.head.size)(i => datasets.map(d => d.data.toSeq(i)))
+    )
   }
 
 }
 
-case class OutputDataSet[T: TF](override val data: Iterable[Output[T]]) extends
-  DataSet[Output[T]](data) {
+case class OutputDataSet[T: TF](override val data: Iterable[Output[T]])
+    extends DataSet[Output[T]](data) {
 
   self =>
 
-  def build(): Dataset[Output[T]] = tf.data.datasetFromOutputs(tf.concatenate(self.data.toSeq))
-
+  def build(): Dataset[Output[T]] =
+    tf.data.datasetFromOutputs(tf.concatenate(self.data.toSeq))
 
 }
 
 /**
   * A data collection consisting of ([[X]], [[Y]]) pairs.
   * */
-class ZipDataSet[X, Y](
-  val dataset1: DataSet[X],
-  val dataset2: DataSet[Y]) extends
-  DataSet[(X, Y)](dataset1.data.zip(dataset2.data)) {
+class ZipDataSet[X, Y](val dataset1: DataSet[X], val dataset2: DataSet[Y])
+    extends DataSet[(X, Y)](dataset1.data.zip(dataset2.data)) {
 
   self =>
 
@@ -313,10 +354,13 @@ class ZipDataSet[X, Y](
 
     val otherMap = other.data.toMap
 
-    val joined_data = self.data.map(pattern => {
-      (pattern._1, (pattern._2, otherMap.get(pattern._1)))
-    }).filter(_._2._2.isDefined)
-      .map(p => (p._1, (p._2._1, p._2._2.get))).unzip
+    val joined_data = self.data
+      .map(pattern => {
+        (pattern._1, (pattern._2, otherMap.get(pattern._1)))
+      })
+      .filter(_._2._2.isDefined)
+      .map(p => (p._1, (p._2._1, p._2._2.get)))
+      .unzip
 
     ZipDataSet(joined_data._1, joined_data._2)
   }
@@ -327,12 +371,14 @@ object ZipDataSet {
 
   def apply[X, Y](
     dataset1: DataSet[X],
-    dataset2: DataSet[Y]): ZipDataSet[X, Y] =
+    dataset2: DataSet[Y]
+  ): ZipDataSet[X, Y] =
     new ZipDataSet(dataset1, dataset2)
 
   def apply[X, Y](
     dataset1: Iterable[X],
-    dataset2: Iterable[Y]): ZipDataSet[X, Y] =
+    dataset2: Iterable[Y]
+  ): ZipDataSet[X, Y] =
     new ZipDataSet(
       DataSet(dataset1),
       DataSet(dataset2)
@@ -347,12 +393,10 @@ object ZipDataSet {
   * tasks.
   *
   * */
-case class SupervisedDataSet[X, Y](
-  features: DataSet[X],
-  targets: DataSet[Y]) extends
-  ZipDataSet[X, Y](features, targets) {
+case class SupervisedDataSet[X, Y](features: DataSet[X], targets: DataSet[Y])
+    extends ZipDataSet[X, Y](features, targets) {
 
-  self  =>
+  self =>
 
   /**
     * Split into training and test sets.
@@ -362,19 +406,28 @@ case class SupervisedDataSet[X, Y](
 
     val (features_train, targets_train) = data_split._1.unzip
 
-    val (features_test, targets_test)   = data_split._2.unzip
+    val (features_test, targets_test) = data_split._2.unzip
 
     TFDataSet(
-      SupervisedDataSet(new DataSet[X](features_train), new DataSet[Y](targets_train)),
-      SupervisedDataSet(new DataSet[X](features_test),  new DataSet[Y](targets_test)))
+      SupervisedDataSet(
+        new DataSet[X](features_train),
+        new DataSet[Y](targets_train)
+      ),
+      SupervisedDataSet(
+        new DataSet[X](features_test),
+        new DataSet[Y](targets_test)
+      )
+    )
   }
-
 
 }
 
 object SupervisedDataSet {
 
-  def apply[X, Y](features: Iterable[X], targets: Iterable[Y]): SupervisedDataSet[X, Y] =
+  def apply[X, Y](
+    features: Iterable[X],
+    targets: Iterable[Y]
+  ): SupervisedDataSet[X, Y] =
     SupervisedDataSet(DataSet(features), DataSet(targets))
 
   def apply[X, Y](data: Iterable[(X, Y)]): SupervisedDataSet[X, Y] = {
@@ -393,17 +446,19 @@ object SupervisedDataSet {
     *
     * @return A [[SupervisedDataSet]] over sequences of [[X]] and  [[Y]] respectively.
     * */
-  def collect[X, Y](datasets: Seq[SupervisedDataSet[X, Y]]): SupervisedDataSet[Seq[X], Seq[Y]] = {
-    require(datasets.map(_.size) == Seq.fill(datasets.length)(datasets.head.size))
+  def collect[X, Y](
+    datasets: Seq[SupervisedDataSet[X, Y]]
+  ): SupervisedDataSet[Seq[X], Seq[Y]] = {
+    require(
+      datasets.map(_.size) == Seq.fill(datasets.length)(datasets.head.size)
+    )
 
     SupervisedDataSet(
       DataSet.collect[X](datasets.map(_.features)),
-      DataSet.collect[Y](datasets.map(_.targets)))
+      DataSet.collect[Y](datasets.map(_.targets))
+    )
   }
 
 }
 
-
-case class TFDataSet[T](
-  training_dataset: DataSet[T],
-  test_dataset: DataSet[T])
+case class TFDataSet[T](training_dataset: DataSet[T], test_dataset: DataSet[T])
