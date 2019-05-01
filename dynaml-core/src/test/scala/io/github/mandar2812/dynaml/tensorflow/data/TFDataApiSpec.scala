@@ -11,7 +11,7 @@ import org.platanios.tensorflow.api._
 class TFDataApiSpec extends FlatSpec with Matchers {
 
   private val image_paths =
-    ls! pwd/'docs/'images |? (s => s.segments.last.contains("histogram-"))
+    ls! pwd/'docs/'images |? (s => s.segments.toSeq.last.contains("histogram-"))
 
   "Image datasets" should " be loaded into tensors" in {
 
