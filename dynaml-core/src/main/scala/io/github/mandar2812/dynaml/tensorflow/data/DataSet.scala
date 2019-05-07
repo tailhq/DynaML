@@ -242,8 +242,7 @@ class DataSet[X](val data: Iterable[X]) {
 
   def build_buffered[T, O, D, S](
     buffer_size: Int,
-    convertToTensor: DataPipe[X, T],
-    stackOp: DataPipe[Iterable[T], T],
+    convertToTensor: DataPipe[Seq[X], T],
     dataType: D,
     shape: S = null
   )(
@@ -257,9 +256,8 @@ class DataSet[X](val data: Iterable[X]) {
   ): Dataset[O] = {
 
     val buffer_and_stack =
-      DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
-        IterableDataPipe(IterableDataPipe(convertToTensor)) >
-        IterableDataPipe(stackOp)
+      DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable.map(_.toSeq)) >
+        IterableDataPipe(convertToTensor)
 
     build_tensor[T, O, D, S](buffer_and_stack, dataType, shape)
   }
@@ -281,8 +279,7 @@ class DataSet[X](val data: Iterable[X]) {
 
   def build_buffered_lazy[T, O, D, S](
     buffer_size: Int,
-    convertToSymbolicTensor: DataPipe[X, O],
-    stackOp: DataPipe[Iterable[O], O]
+    convertToSymbolicTensor: DataPipe[Seq[X], O]
   )(
     implicit
     evOutputStructure: OutputStructure[O],
@@ -291,9 +288,8 @@ class DataSet[X](val data: Iterable[X]) {
   ): Dataset[O] = {
 
     val buffer_and_stack =
-      DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable) >
-        IterableDataPipe(IterableDataPipe(convertToSymbolicTensor)) >
-        IterableDataPipe(stackOp)
+      DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable.map(_.toSeq)) >
+        IterableDataPipe(convertToSymbolicTensor)
 
     build_output[T, O, D, S](buffer_and_stack)
   }

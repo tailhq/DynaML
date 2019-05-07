@@ -110,13 +110,13 @@ class PDESystemsSpec extends FlatSpec with Matchers {
           x =>
             Seq(
               (
-                dtf.tensor_f32(1, input_dim)(0f, x.toFloat),
-                dtf.tensor_f32(1, output_dim)(f1(x).toFloat)
+                dtf.tensor_f32(input_dim)(0f, x.toFloat),
+                dtf.tensor_f32(output_dim)(f1(x).toFloat)
               ),
               (
                 dtf
-                  .tensor_f32(1, input_dim)(domain_size.toFloat / 4, x.toFloat),
-                dtf.tensor_f32(1, output_dim)(f2(x).toFloat)
+                  .tensor_f32(input_dim)(domain_size.toFloat / 4, x.toFloat),
+                dtf.tensor_f32(output_dim)(f2(x).toFloat)
               )
             )
         )
@@ -172,11 +172,6 @@ class PDESystemsSpec extends FlatSpec with Matchers {
             checkPointFreq = 1000
           )
         )
-      ),
-      dtflearn.model.tf_data_handle_ops(
-        patternToTensor = Some(identityPipe[(Tensor[Float], Tensor[Float])]),
-        concatOpI = Some(dtfpipe.EagerConcatenate[Float]()),
-        concatOpT = Some(dtfpipe.EagerConcatenate[Float]())
       )
     )
 

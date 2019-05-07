@@ -137,12 +137,12 @@ def apply(
 
         Seq(
           (
-            dtf.tensor_f32(1, input_dim)(0f, x.toFloat),
-            dtf.tensor_f32(1, output_dim)(f1(x).toFloat)
+            dtf.tensor_f32(input_dim)(0f, x.toFloat),
+            dtf.tensor_f32(output_dim)(f1(x).toFloat)
           ),
           (
-            dtf.tensor_f32(1, input_dim)(rand_time, x.toFloat),
-            dtf.tensor_f32(1, output_dim)(
+            dtf.tensor_f32(input_dim)(rand_time, x.toFloat),
+            dtf.tensor_f32(output_dim)(
               ground_truth(Seq(rand_time.toFloat, x.toFloat))
             )
           )
@@ -150,9 +150,9 @@ def apply(
       })
     )
 
-  val input = Shape(2)
+  val input = Shape(input_dim)
 
-  val output = Shape(1)
+  val output = Shape(output_dim)
 
   val architecture =
     dtflearn.feedforward_stack[Float](
@@ -276,9 +276,8 @@ def apply(
       Some(dtflearn.model._train_hooks(summary_dir))
     ),
     dtflearn.model.tf_data_handle_ops(
-        patternToTensor = Some(identityPipe[(Tensor[Float], Tensor[Float])]),
-        concatOpI = Some(dtfpipe.EagerConcatenate[Float]()),
-        concatOpT = Some(dtfpipe.EagerConcatenate[Float]())
+        bufferSize = training_data.size / 10,
+        patternToTensor = Some(wave_system1d.pattern_to_tensor)
     )
   )
 

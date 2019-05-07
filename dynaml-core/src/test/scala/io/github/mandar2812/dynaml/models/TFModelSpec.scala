@@ -87,7 +87,7 @@ class TFModelSpec extends FlatSpec with Matchers {
 
     val train_config = dtflearn.model.trainConfig(
       summary_dir,
-      dtflearn.model.data_ops[Output[Double], Output[Double]](
+      dtflearn.model.data_ops[(Output[Double], Output[Double])](
         shuffleBuffer = 5000,
         batchSize = 16,
         prefetchSize = 10
@@ -104,22 +104,29 @@ class TFModelSpec extends FlatSpec with Matchers {
       )
     )
 
+    val pattern_to_tensor = DataPipe(
+      (ds: Seq[(Tensor[Double], Tensor[Double])]) => {
+        val (xs, ys) = ds.unzip
+  
+        (
+          dtfpipe.EagerStack[Double](axis = 0).run(xs),
+          dtfpipe.EagerStack[Double](axis = 0).run(ys)
+        )
+      }
+    )
+
     regression_model.train(
       tf_dataset.training_dataset,
       train_config,
       dtflearn.model.tf_data_handle_ops(
-        patternToTensor = Some(identityPipe[(Tensor[Double], Tensor[Double])]),
-        //patternToSym = Some(identityPipe[(Output[Double], Output[Double])]),
-        concatOpIO = Some(dtfpipe.LazyConcatenate[Double]()),
-        concatOpTO = Some(dtfpipe.LazyConcatenate[Double]()),
-        concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-        concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
+        bufferSize = 500,
+        patternToTensor = Some(pattern_to_tensor),
         concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
       )
     )
 
     val test_pred =
-      regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1))).scalar
+      regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1, 1))).scalar
 
     assert(test_pred == 4.0)
 
@@ -131,16 +138,15 @@ class TFModelSpec extends FlatSpec with Matchers {
         dtflearn.mse[Output[Double], Double](),
         dtflearn.mae[Output[Double], Double]()
       ),
-      dtflearn.model.data_ops[Output[Double], Output[Double]](
+      dtflearn.model.data_ops[(Output[Double], Output[Double])](
         repeat = 0,
         shuffleBuffer = 0,
         batchSize = 16,
         prefetchSize = 10
       ),
       dtflearn.model.tf_data_handle_ops(
-        patternToTensor = Some(identityPipe[(Tensor[Double], Tensor[Double])]),
-        concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-        concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
+        bufferSize = 500,
+        patternToTensor = Some(pattern_to_tensor),
         concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
       )
     )

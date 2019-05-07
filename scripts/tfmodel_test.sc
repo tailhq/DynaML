@@ -85,10 +85,10 @@ regression_model.train(
   tf_dataset.training_dataset,
   train_config,
   dtflearn.model.tf_data_handle_ops(
-    //patternToTensor = Some(identityPipe[(Tensor[Double], Tensor[Double])]),
-    patternToSym = Some(identityPipe[(Output[Double], Output[Double])]),
-    concatOpIO = Some(dtfpipe.LazyConcatenate[Double]()),
-    concatOpTO = Some(dtfpipe.LazyConcatenate[Double]()),
+    patternToTensor = Some(identityPipe[(Tensor[Double], Tensor[Double])]),
+    //patternToSym = Some(identityPipe[(Output[Double], Output[Double])]),
+    //concatOpIO = Some(dtfpipe.LazyConcatenate[Double]()),
+    //concatOpTO = Some(dtfpipe.LazyConcatenate[Double]()),
     concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
     concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
     concatOpO = Some(dtfpipe.EagerConcatenate[Double]())

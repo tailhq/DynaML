@@ -53,6 +53,16 @@ private[dynaml] class PDESystem[
   name: String = "Output",
   system_name: Option[String] = None) {
 
+  type P = (Tensor[T], Tensor[U])
+  type HandleOps[Patt] = TFModel.TFDataHandleOps[
+    Patt,
+    P,
+    PDESystem.ModelOutputsT[U],
+    (Output[T], Output[U])
+  ]
+
+  type Config = TFModel.Config[(Output[T], Output[U])]
+
   protected val observational_error: Layer[(Output[U], Output[U]), Output[L]] =
     PDESystem.error[U, L]("ExtObsError", data_loss)
 
@@ -128,6 +138,17 @@ private[dynaml] class PDESystem[
       c => (c._1.toOutput, c._2.toOutput)
     )
 
+  val pattern_to_tensor = DataPipe(
+    (ds: Seq[(Tensor[T], Tensor[U])]) => {
+      val (xs, ys) = ds.unzip
+
+      (
+        dtfpipe.EagerStack[T](axis = 0).run(xs),
+        dtfpipe.EagerStack[U](axis = 0).run(ys)
+      )
+    }
+  )
+
   /**
     * Train a neural net based approximation for the
     * dynamical system.
@@ -141,13 +162,10 @@ private[dynaml] class PDESystem[
     * @return A [[PDESystem.Model]] which encapsulates a predictive model of type [[TFModel]]
     * */
   def solve(
-    data: SupervisedDataSet[Tensor[T], Tensor[U]],
-    trainConfig: TFModel.Config[Output[T], Output[U]],
-    tf_handle_ops: TFModel.TFDataHandleOps[(Tensor[T], Tensor[U]), Tensor[T], Tensor[
-      U
-    ], PDESystem.ModelOutputsT[U], Output[T], Output[U]] =
-      TFModel.tf_data_handle_ops(patternToTensor =
-          Some(identityPipe[(Tensor[T], Tensor[U])])),
+    data: DataSet[P],
+    trainConfig: Config,
+    tf_handle_ops: HandleOps[P] = TFModel.tf_data_handle_ops(patternToTensor =
+        Some(pattern_to_tensor)),
     inMemory: Boolean = false
   ): PDESystem.Model[T, U, L] = {
 

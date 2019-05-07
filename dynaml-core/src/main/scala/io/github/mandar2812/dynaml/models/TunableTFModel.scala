@@ -118,11 +118,9 @@ class TunableTFModel[
   protected val training_data: DataSet[Pattern],
   val tf_data_handle_ops: TFModel.TFDataHandleOps[
     Pattern,
-    IT,
-    TT,
+    (IT, TT),
     ITT,
-    In,
-    Out
+    (In, Out)
   ],
   val fitness_functions: Seq[DataPipe2[ArchOut, Out, Output[Float]]],
   val fitness_to_scalar: DataPipe[Seq[Tensor[Float]], Double] =
@@ -258,7 +256,7 @@ class TunableTFModel[
 
   def train_model(
     hyper_params: TunableTFModel.HyperParams,
-    trainConfig: Option[TFModel.Config[In, Out]] = None,
+    trainConfig: Option[TFModel.Config[(In, Out)]] = None,
     evaluation_metrics: Option[
       Seq[(String, DataPipe2[ArchOut, Out, Output[Float]])]
     ] = None,
@@ -364,7 +362,8 @@ object TunableTFModel {
   ] =
     ModelFunction[In, Out, ArchOut, Loss, IT, ID, IS, TT, TD, TS, ITT, IDD, ISS]
 
-  type ModelConfigFunc[In, Out] = DataPipe[HyperParams, TFModel.Config[In, Out]]
+  type ModelConfigFunc[In, Out] =
+    DataPipe[HyperParams, TFModel.Config[(In, Out)]]
 
   /**
     * A configurable Pipeline for creating Tensorflow Model configurations
@@ -389,8 +388,8 @@ object TunableTFModel {
     * */
   class ModelConfigFunction[In, Out](
     summaryDir: DataPipe[HyperParams, Path],
-    data_processing: DataPipe[HyperParams, TFModel.Ops[In, Out]] =
-      DataPipe[HyperParams, TFModel.Ops[In, Out]](_ =>
+    data_processing: DataPipe[HyperParams, TFModel.Ops[(In, Out)]] =
+      DataPipe[HyperParams, TFModel.Ops[(In, Out)]](_ =>
           TFModel.data_ops(10000, 16, 10)),
     optimizer: DataPipe[HyperParams, Optimizer] =
       DataPipe[HyperParams, Optimizer](_ => tf.train.Adam(0.01f)),
@@ -399,9 +398,9 @@ object TunableTFModel {
           dtflearn.rel_loss_change_stop(0.05, 100000)),
     trainHooks: DataPipe[HyperParams, Option[Set[Hook]]] =
       DataPipe[HyperParams, Option[Set[Hook]]](_ => None))
-      extends DataPipe[HyperParams, TFModel.Config[In, Out]] {
+      extends DataPipe[HyperParams, TFModel.Config[(In, Out)]] {
 
-    override def run(data: HyperParams): TFModel.Config[In, Out] =
+    override def run(data: HyperParams): TFModel.Config[(In, Out)] =
       TFModel.trainConfig(
         summaryDir(data),
         data_processing(data),
@@ -415,8 +414,8 @@ object TunableTFModel {
 
     def apply[In, Out](
       summaryDir: DataPipe[HyperParams, Path],
-      data_processing: DataPipe[HyperParams, TFModel.Ops[In, Out]] =
-        DataPipe[HyperParams, TFModel.Ops[In, Out]](_ =>
+      data_processing: DataPipe[HyperParams, TFModel.Ops[(In, Out)]] =
+        DataPipe[HyperParams, TFModel.Ops[(In, Out)]](_ =>
             TFModel.data_ops(10000, 16, 10)),
       optimizer: DataPipe[HyperParams, Optimizer] =
         DataPipe[HyperParams, Optimizer](_ => tf.train.Adam(0.01f)),
@@ -480,20 +479,20 @@ object TunableTFModel {
 
     def data_handle[Pattern](
       data: DataSet[Pattern],
-      tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out]
+      tf_handle_ops: TFModel.TFDataHandleOps[Pattern, (IT, TT), ITT, (In, Out)]
     ): Dataset[(In, Out)] = {
-      TFModel.data._get_tf_data[Pattern, IT, ID, IS, TT, TD, TS, ITT, In, Out](
-        data,
-        input,
-        target,
-        tf_handle_ops = tf_handle_ops,
-        createOnlyHandle = true
-      )
+      TFModel.data
+        ._get_tf_data[Pattern, (IT, TT), (ID, TD), (IS, TS), ITT, (In, Out)](
+          data,
+          ((input._1, target._1), (input._2, target._2)),
+          tf_handle_ops = tf_handle_ops,
+          createOnlyHandle = true
+        )
     }
 
     def _build_ops(
       tf_dataset: Dataset[(In, Out)],
-      data_ops: TFModel.Ops[In, Out]
+      data_ops: TFModel.Ops[(In, Out)]
     ): Dataset[(In, Out)] = {
       TFModel.data._build_ops(tf_dataset, data_ops)
     }
@@ -602,7 +601,9 @@ object TunableTFModel {
       target: (TD, TS),
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
-      data_handles: Option[TFModel.DataHandles[In, Out]] = None
+      data_handles: Option[TFModel.DataHandles[In, Out]] = None,
+      clipGradients: tf.learn.ClipGradients = tf.learn.NoClipGradients,
+      colocateGradientsWithOps: Boolean = false
     )(
       implicit
       evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
@@ -653,7 +654,9 @@ object TunableTFModel {
               loss_gen(h),
               inMemory,
               existingGraph,
-              data_handles
+              data_handles,
+              clipGradients,
+              colocateGradientsWithOps
             )
         ),
         input,
@@ -707,7 +710,9 @@ object TunableTFModel {
       target: (TD, TS),
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
-      data_handles: Option[TFModel.DataHandles[In, Out]] = None
+      data_handles: Option[TFModel.DataHandles[In, Out]] = None,
+      clipGradients: tf.learn.ClipGradients = tf.learn.NoClipGradients,
+      colocateGradientsWithOps: Boolean = false
     )(
       implicit
       evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
@@ -761,7 +766,9 @@ object TunableTFModel {
               loss,
               inMemory,
               existingGraph,
-              data_handles
+              data_handles,
+              clipGradients,
+              colocateGradientsWithOps
             )
           }
         ),
@@ -817,7 +824,9 @@ object TunableTFModel {
       target: (TD, TS),
       inMemory: Boolean = false,
       existingGraph: Option[Graph] = None,
-      data_handles: Option[TFModel.DataHandles[In, Out]] = None
+      data_handles: Option[TFModel.DataHandles[In, Out]] = None,
+      clipGradients: tf.learn.ClipGradients = tf.learn.NoClipGradients,
+      colocateGradientsWithOps: Boolean = false
     )(
       implicit
       evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
@@ -871,7 +880,9 @@ object TunableTFModel {
               loss,
               inMemory,
               existingGraph,
-              data_handles
+              data_handles,
+              clipGradients,
+              colocateGradientsWithOps
             )
           }
         ),
@@ -900,7 +911,7 @@ object TunableTFModel {
   ](loss_func_gen: HyperParams => Layer[(ArchOut, Out), Output[Loss]],
     hyp: List[String],
     training_data: DataSet[Pattern],
-    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out],
+    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, (IT, TT), ITT, (In, Out)],
     fitness_functions: Seq[DataPipe2[ArchOut, Out, Output[Float]]],
     architecture: Layer[In, ArchOut],
     input: (ID, IS),
@@ -913,7 +924,9 @@ object TunableTFModel {
     data_split_func: Option[DataPipe[Pattern, Boolean]] = None,
     inMemory: Boolean = false,
     existingGraph: Option[Graph] = None,
-    data_handles: Option[TFModel.DataHandles[In, Out]] = None
+    data_handles: Option[TFModel.DataHandles[In, Out]] = None,
+    clipGradients: tf.learn.ClipGradients = tf.learn.NoClipGradients,
+    colocateGradientsWithOps: Boolean = false
   )(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
@@ -962,7 +975,9 @@ object TunableTFModel {
       target,
       inMemory,
       existingGraph,
-      data_handles
+      data_handles,
+      clipGradients,
+      colocateGradientsWithOps
     )
 
     new TunableTFModel[
@@ -1013,7 +1028,7 @@ object TunableTFModel {
       Layer[(ArchOut, Out), Output[Loss]]),
     hyp: List[String],
     training_data: DataSet[Pattern],
-    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out],
+    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, (IT, TT), ITT, (In, Out)],
     fitness_functions: Seq[DataPipe2[ArchOut, Out, Output[Float]]],
     input: (ID, IS),
     target: (TD, TS),
@@ -1023,7 +1038,9 @@ object TunableTFModel {
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
     existingGraph: Option[Graph],
-    data_handles: Option[TFModel.DataHandles[In, Out]]
+    data_handles: Option[TFModel.DataHandles[In, Out]],
+    clipGradients: tf.learn.ClipGradients,
+    colocateGradientsWithOps: Boolean
   )(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
@@ -1071,7 +1088,9 @@ object TunableTFModel {
       target,
       inMemory,
       existingGraph,
-      data_handles
+      data_handles,
+      clipGradients,
+      colocateGradientsWithOps
     )
 
     new TunableTFModel[
@@ -1122,7 +1141,7 @@ object TunableTFModel {
     loss: Layer[(ArchOut, Out), Output[Loss]],
     hyp: List[String],
     training_data: DataSet[Pattern],
-    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, IT, TT, ITT, In, Out],
+    tf_handle_ops: TFModel.TFDataHandleOps[Pattern, (IT, TT), ITT, (In, Out)],
     fitness_functions: Seq[DataPipe2[ArchOut, Out, Output[Float]]],
     input: (ID, IS),
     target: (TD, TS),
@@ -1132,7 +1151,9 @@ object TunableTFModel {
     data_split_func: Option[DataPipe[Pattern, Boolean]],
     inMemory: Boolean,
     existingGraph: Option[Graph],
-    data_handles: Option[TFModel.DataHandles[In, Out]]
+    data_handles: Option[TFModel.DataHandles[In, Out]],
+    clipGradients: tf.learn.ClipGradients,
+    colocateGradientsWithOps: Boolean
   )(
     implicit
     evDataTypeToOutputI: DataTypeToOutput.Aux[ID, In],
@@ -1181,7 +1202,9 @@ object TunableTFModel {
       target,
       inMemory,
       existingGraph,
-      data_handles
+      data_handles,
+      clipGradients,
+      colocateGradientsWithOps
     )
 
     new TunableTFModel[
