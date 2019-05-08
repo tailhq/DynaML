@@ -49,7 +49,7 @@ class TFApiSpec extends FlatSpec with Matchers with BeforeAndAfter {
     
     val r_tensor = dtf.random[Double](3, 3)(GaussianRV(0.0, 1.0))
 
-    val b_tensor = dtf.tensor_from_buffer[Int](Shape(5, 5))((0 until 100).map(_.toByte).toArray)
+    val b_tensor = dtf.tensor_from_buffer[Int](Shape(5, 5), (0 until 100).map(_.toByte).toArray)
 
     val b_tensor2 = dtf.tensor_from_buffer[Int](5, 5)((0 until 100).map(_.toByte).toArray)
 

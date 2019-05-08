@@ -1,11 +1,10 @@
 package io.github.mandar2812.dynaml.tensorflow.api
 
-import java.nio.ByteBuffer
+import java.nio.{ByteBuffer, ByteOrder}
 
 import io.github.mandar2812.dynaml.probability._
 import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
-
 
 private[tensorflow] object Api {
 
@@ -50,7 +49,7 @@ private[tensorflow] object Api {
     * */
   def tensor_from[D: TF](shape: Int*)(buffer: Seq[D]): Tensor[D] = {
     val t: Tensor[D] = Tensor[D](buffer)
-    t.reshape(Shape(shape:_*))
+    t.reshape(Shape(shape: _*))
   }
 
   /**
@@ -66,10 +65,13 @@ private[tensorflow] object Api {
     * @return A tensorflow [[Tensor]] of the appropriate data type
     *         and shape.
     *
-    * <b>Usage</b> dtf.tensor_from_buffer(FLOAT32, 1, 1)((1 to 4).toArray.map(_.toByte))
+    * <b>Usage</b> dtf.tensor_from_buffer[Float](Shape(1, 1), (1 to 4).toArray.map(_.toByte))
     *
     * */
-  def tensor_from_buffer[D: TF](shape: Shape)(buffer: Array[Byte]): Tensor[D] = {
+  def tensor_from_buffer[D: TF](
+    shape: Shape,
+    buffer: Array[Byte]
+  ): Tensor[D] = {
     Tensor.fromBuffer(shape, buffer.length.toLong, ByteBuffer.wrap(buffer))
   }
 
@@ -87,12 +89,15 @@ private[tensorflow] object Api {
     * @return A tensorflow [[Tensor]] of the appropriate data type
     *         and shape.
     *
-    * <b>Usage</b> dtf.tensor_from_buffer("FLOAT32", 1, 1)((1 to 4).toArray.map(_.toByte))
+    * <b>Usage</b> dtf.tensor_from_buffer[Float](1, 1)((1 to 4).toArray.map(_.toByte))
     *
     * */
   def tensor_from_buffer[D: TF](shape: Int*)(buffer: Array[Byte]): Tensor[D] =
-    Tensor.fromBuffer[D](Shape(shape:_*), buffer.length.toLong, ByteBuffer.wrap(buffer))
-
+    Tensor.fromBuffer[D](
+      Shape(shape: _*),
+      buffer.length.toLong,
+      ByteBuffer.wrap(buffer)
+    )
 
   /**
     * Construct an 16 bit integer tensor from a list of elements.
@@ -108,8 +113,8 @@ private[tensorflow] object Api {
     * <b>Usage</b> dtf.tensor_i16(1, 2, 3)(1, 2, 3, 4, 5, 6)
     *
     * */
-  def tensor_i16(shape: Int*)(buffer: Short*): Tensor[Short] = 
-    Tensor[Short](buffer).reshape(Shape(shape:_*))
+  def tensor_i16(shape: Int*)(buffer: Short*): Tensor[Short] =
+    Tensor[Short](buffer).reshape(Shape(shape: _*))
 
   /**
     * Construct an 32 bit integer tensor from a list of elements.
@@ -126,10 +131,19 @@ private[tensorflow] object Api {
     *
     * */
   def tensor_i32(shape: Int*)(buffer: Int*): Tensor[Int] =
-    Tensor[Int](buffer).reshape(Shape(shape:_*))
+    Tensor[Int](buffer).reshape(Shape(shape: _*))
+
+  def buffer_i32(shape: Shape, buffer: Array[Int]): Tensor[Int] = {
+    val byte_buff_size = 4 * buffer.length
+    val byte_buffer =
+      ByteBuffer.allocate(byte_buff_size).order(ByteOrder.nativeOrder())
+    buffer.foreach(byte_buffer putInt _)
+
+    tensor_from_buffer(shape, byte_buffer.array)
+  }
 
   def sym_tensor_i32(shape: Int*)(buffer: Int*): Output[Int] =
-    Output[Int](buffer).reshape(Shape(shape:_*))
+    Output[Int](buffer).reshape(Shape(shape: _*))
 
   /**
     * Construct an 64 bit integer tensor from a list of elements.
@@ -147,11 +161,20 @@ private[tensorflow] object Api {
     * */
   def tensor_i64(shape: Int*)(buffer: Long*): Tensor[Long] = {
     val t: Tensor[Long] = Tensor[Long](buffer)
-    t.reshape(Shape(shape:_*).toTensor)
+    t.reshape(Shape(shape: _*).toTensor)
+  }
+
+  def buffer_i64(shape: Shape, buffer: Array[Long]): Tensor[Long] = {
+    val byte_buff_size = 8 * buffer.length
+    val byte_buffer =
+      ByteBuffer.allocate(byte_buff_size).order(ByteOrder.nativeOrder())
+    buffer.foreach(byte_buffer putLong _)
+
+    tensor_from_buffer(shape, byte_buffer.array)
   }
 
   def sym_tensor_i64(shape: Int*)(buffer: Long*): Output[Long] =
-    Output[Long](buffer).reshape(Shape(shape:_*))
+    Output[Long](buffer).reshape(Shape(shape: _*))
 
   /**
     * Construct an 16 bit floating point tensor from a list of elements.
@@ -171,9 +194,8 @@ private[tensorflow] object Api {
 
     val t: Tensor[Float] = Tensor[Float](buffer)
 
-    t.reshape(Shape(shape:_*)).castTo[core.types.Half]
+    t.reshape(Shape(shape: _*)).castTo[core.types.Half]
   }
-
 
   /**
     * Construct an 32 bit floating point tensor from a list of elements.
@@ -190,10 +212,19 @@ private[tensorflow] object Api {
     *
     * */
   def tensor_f32(shape: Int*)(buffer: Float*): Tensor[Float] =
-    Tensor[Float](buffer).reshape(Shape(shape:_*))
+    Tensor[Float](buffer).reshape(Shape(shape: _*))
+
+  def buffer_f32(shape: Shape, buffer: Array[Float]): Tensor[Float] = {
+    val byte_buff_size = 4 * buffer.length
+    val byte_buffer =
+      ByteBuffer.allocate(byte_buff_size).order(ByteOrder.nativeOrder())
+    buffer.foreach(byte_buffer putFloat _)
+
+    tensor_from_buffer(shape, byte_buffer.array)
+  }
 
   def sym_tensor_f32(shape: Int*)(buffer: Float*): Output[Float] =
-    Output[Float](buffer).reshape(Shape(shape:_*))
+    Output[Float](buffer).reshape(Shape(shape: _*))
 
   /**
     * Construct an 64 bit floating point tensor from a list of elements.
@@ -210,11 +241,19 @@ private[tensorflow] object Api {
     *
     * */
   def tensor_f64(shape: Int*)(buffer: Double*): Tensor[Double] =
-    Tensor[Double](buffer).reshape(Shape(shape:_*))
+    Tensor[Double](buffer).reshape(Shape(shape: _*))
+
+  def buffer_f64(shape: Shape, buffer: Array[Double]): Tensor[Double] = {
+    val byte_buff_size = 8 * buffer.length
+    val byte_buffer =
+      ByteBuffer.allocate(byte_buff_size).order(ByteOrder.nativeOrder())
+    buffer.foreach(byte_buffer putDouble _)
+
+    tensor_from_buffer(shape, byte_buffer.array)
+  }
 
   def sym_tensor_f64(shape: Int*)(buffer: Double*): Output[Double] =
-    Output[Double](buffer).reshape(Shape(shape:_*))
-
+    Output[Double](buffer).reshape(Shape(shape: _*))
 
   /**
     * Stack a list of tensors, the use must ensure that
@@ -227,15 +266,23 @@ private[tensorflow] object Api {
     *
     * @return The larger stacked tensor.
     * */
-  def stack[D: TF](inputs: Seq[Tensor[D]], axis: Int = 0): Tensor[D] = tfi.stack(inputs, axis)
+  def stack[D: TF](inputs: Seq[Tensor[D]], axis: Int = 0): Tensor[D] =
+    tfi.stack(inputs, axis)
 
   /**
     * Split a tensor into a list of tensors.
     * */
-  def unstack[D: TF](input: Tensor[D], number: Int = -1, axis: Int = 0): Seq[Tensor[D]] =
+  def unstack[D: TF](
+    input: Tensor[D],
+    number: Int = -1,
+    axis: Int = 0
+  ): Seq[Tensor[D]] =
     tfi.unstack(input, number, axis)
 
-  def concatenate[D: TF](inputs: Seq[Tensor[D]], axis: Tensor[Int] = 0): Tensor[D] =
+  def concatenate[D: TF](
+    inputs: Seq[Tensor[D]],
+    axis: Tensor[Int] = 0
+  ): Tensor[D] =
     tfi.concatenate(inputs, axis)
 
   /**
@@ -243,46 +290,126 @@ private[tensorflow] object Api {
     * identically distributed elements drawn from a
     * [[RandomVariable]] instance.
     * */
-  def random[D: TF](shape: Int*)(
-    rv: RandomVariable[D]): Tensor[D] = {
+  def random[D: TF](shape: Int*)(rv: RandomVariable[D]): Tensor[D] = {
     val buffer = rv.iid(shape.product).draw
-    Tensor[D](buffer).reshape(Shape(shape:_*))
+    Tensor[D](buffer).reshape(Shape(shape: _*))
   }
 
   /**
     * Fill a tensor with a fixed value.
     * */
   def fill[D: TF](shape: Int*)(value: D): Tensor[D] =
-    Tensor.fill(Shape(shape:_*))(value)
+    Tensor.fill(Shape(shape: _*))(value)
 
   def fill[D: TF](shape: Shape)(value: D): Tensor[D] =
     Tensor.fill(shape)(value)
 
-  /* def eig[D: TF: IsFloatOrDouble](matrices: Tensor[D]): Tensor[D] = {
-    require(
-      matrices.rank == 3 || matrices.rank == 2, 
-      "In an eigen decomposition, the inputs must be [?, n, n] or [n, n]")
+  /**
+    * This TC helps map between types and byte arrays.
+    * It also keeps track of byte array sizes for various types.
+    * todo: implement ByteSize typeclass for all tf types.
+    */
+  trait ByteSize[T] {
+    def byteSize: Int
+    def toBytes(in: T): Array[Byte]
+  }
+  object ByteSize {
+    implicit val FloatByteSize: ByteSize[Float] = new ByteSize[Float] {
+      override def byteSize: Int = 4
 
-    val as = if(matrices.rank == 2) Seq(matrices) else matrices.unstack(axis = 0)
-
-    require(
-      as.head.shape(0) == as.head.shape(1), 
-      "Only square matrices when using eig()")
-
-    val s = as.head.shape(0).scalar
-    
-    def arnoldi(m: Tensor[D], n: Int): Tensor[D] = {
-      val eps = Tensor(1E-12).castTo[D]
-
-      val q0 = random[D](s)(GaussianRV(0.0, 1.0) > DataPipe[Double, D](_.asInstanceOf[D])).l2Normalize(axes = 0)
-
-      
-
-      m
+      override def toBytes(in: Float): Array[Byte] =
+        java.nio.ByteBuffer.allocate(4).putFloat(in).array()
     }
 
+    implicit val DoubleByteSize: ByteSize[Double] = new ByteSize[Double] {
+      override def byteSize: Int = 8
 
+      override def toBytes(in: Double): Array[Byte] =
+        java.nio.ByteBuffer.allocate(8).putDouble(in).array()
+    }
 
-    matrices
-  } */
+    implicit val IntByteSize: ByteSize[Int] = new ByteSize[Int] {
+      override def byteSize: Int = 4
+
+      override def toBytes(in: Int): Array[Byte] =
+        java.nio.ByteBuffer.allocate(4).putInt(in).array()
+    }
+
+    implicit val LongByteSize: ByteSize[Long] = new ByteSize[Long] {
+      override def byteSize: Int = 8
+
+      override def toBytes(in: Long): Array[Byte] =
+        java.nio.ByteBuffer.allocate(4).putLong(in).array()
+    }
+  }
+
+  /**
+    * This TC will help us determine whether a type is a nested array.
+    * @tparam T the type of the nested array. eg., Array[Array[Float]]
+    */
+  trait NestedArray[T] {
+    type DataType
+  }
+  object NestedArray extends NestedArrayLP {
+    trait Aux[T, InnerData] extends NestedArray[T] {
+      type DataType = InnerData
+    }
+    implicit def trivial[T] = new Aux[Array[T], T] {}
+  }
+  trait NestedArrayLP {
+    implicit def complex[T, InnerData](
+      implicit na: NestedArray.Aux[T, InnerData]
+    ) =
+      new NestedArray.Aux[Array[T], InnerData] {}
+  }
+
+  /**
+    * The main tc for traversing a nested array, getting its tf byte size and shape.
+    */
+  trait BytesWithShape[T] {
+    def bytesWithShape(in: T): (Array[Byte], Array[Int])
+  }
+  object BytesWithShape {
+    implicit def bytesWithShape[T](implicit b: ByteSize[T]) = {
+      new BytesWithShape[T] {
+        override def bytesWithShape(in: T): (Array[Byte], Array[Int]) =
+          (b.toBytes(in).reverse, Array()) //endianness
+      }
+    }
+
+    implicit def nestedBytesWithShape[T](implicit bws: BytesWithShape[T]) =
+      new BytesWithShape[Array[T]] {
+        override def bytesWithShape(in: Array[T]): (Array[Byte], Array[Int]) = {
+          val all = in.map(bws.bytesWithShape)
+          //we require all internal shapes are identical to stack them.
+          //todo: NAT support for compile time check.
+          require(
+            all.forall(_._2.sameElements(all.head._2)),
+            "illegal array to tensor. peer arrays must be of same dim: " + all
+              .map(_._2)
+              .mkString(",")
+          )
+          all.flatMap(_._1) -> (Array(in.length) ++ all.head._2)
+        }
+      }
+  }
+
+  /**
+    * Helper method to get tensors from nested array structures.
+    */
+  def toTensor[T, DataType](
+    in: T
+  )(
+    implicit byteSize: ByteSize[DataType],
+    na: NestedArray.Aux[T, DataType],
+    bytesWithShape: BytesWithShape[T],
+    ev: TF[DataType]
+  ) = {
+    val bws = bytesWithShape.bytesWithShape(in)
+    Tensor.fromBuffer[DataType](
+      Shape(bws._2),
+      bws._2.product * byteSize.byteSize,
+      ByteBuffer.wrap(bws._1)
+    )
+  }
 }
