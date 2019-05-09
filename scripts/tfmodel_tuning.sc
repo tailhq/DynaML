@@ -21,15 +21,18 @@ val tf_summary_dir = tempdir / s"dtf_model_test-${DateTime.now().toString("YYYY-
 val (weight, bias) = (2.5, 1.5)
 
 val data_size = 5000
-val rv = GaussianRV(0.0, 2.0).iid(data_size)
-val noise = GaussianRV(0.0, 1.5)
-
+val rv        = GaussianRV(0.0, 2.0).iid(data_size)
+val noise     = GaussianRV(0.0, 1.5)
 
 val data = dtfdata
   .dataset(rv.draw)
   .to_supervised(
     DataPipe[Double, (Tensor[Double], Tensor[Double])](
-      n => (dtf.tensor_f64(1, 1)(n), dtf.tensor_f64(1)(n * weight + bias + noise.draw))
+      n =>
+        (
+          dtf.tensor_f64(1, 1)(n),
+          dtf.tensor_f64(1)(n * weight + bias + noise.draw)
+        )
     )
   )
 
@@ -68,7 +71,7 @@ val tuning_config_generator =
     DataPipe(
       (p: Path) =>
         dtflearn.model
-          .trainConfig[Output[Double], Output[Double]](
+          .trainConfig[(Output[Double], Output[Double])](
             p,
             dtflearn.model.data_ops(
               10,
@@ -121,18 +124,34 @@ val fitness_function = DataPipe2[Output[Double], Output[Double], Output[Float]](
 val convert_to_tensor =
   DynaMLPipe.identityPipe[(Tensor[Double], Tensor[Double])]
 
-val tunableTFModel: TunableTFModel[
-  (Tensor[Double], Tensor[Double]), 
-  Output[Double], Output[Double], Output[Double], Double, 
-  Tensor[Double], FLOAT64, Shape, 
-  Tensor[Double], FLOAT64, Shape, 
-  Tensor[Double], FLOAT64, Shape] =
+val pattern_to_tensor = DataPipe(
+  (ds: Seq[(Tensor[Double], Tensor[Double])]) => {
+    val (xs, ys) = ds.unzip
+
+    (
+      dtfpipe.EagerStack[Double](axis = 0).run(xs),
+      dtfpipe.EagerStack[Double](axis = 0).run(ys)
+    )
+  }
+)
+
+val tunableTFModel: TunableTFModel[(Tensor[Double], Tensor[Double]), Output[
+  Double
+], Output[Double], Output[Double], Double, Tensor[Double], FLOAT64, Shape, Tensor[
+  Double
+], FLOAT64, Shape, Tensor[Double], FLOAT64, Shape] =
   dtflearn.tunable_tf_model(
     loss_func_generator,
     hyper_parameters,
     tf_dataset.training_dataset,
-    convert_to_tensor,
-    fitness_function,
+    dtflearn.model.tf_data_handle_ops(
+      bufferSize = 500,
+      //patternToSym = Some(pattern_to_sym),
+      patternToTensor = Some(pattern_to_tensor),
+      concatOpO = Some(dtfpipe.EagerConcatenate[Double]()),
+      caching_mode = dtflearn.model.data.FileCache(tf_summary_dir/"data_cache")
+    ),
+    Seq(fitness_function),
     architecture,
     (FLOAT64, Shape(1, 1)),
     (FLOAT64, Shape(1)),
@@ -142,11 +161,7 @@ val tunableTFModel: TunableTFModel[
         _ => scala.util.Random.nextGaussian() <= 0.7
       )
     ),
-    inMemory = false,
-    tf_handle_ops = dtflearn.model.tf_data_ops[Tensor[Double], Tensor[Double], Tensor[Double]](
-      concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-      concatOpT = Some(dtfpipe.EagerConcatenate[Double]())
-    )
+    inMemory = false
   )
 
 val hyp_scaling = hyper_prior.map(

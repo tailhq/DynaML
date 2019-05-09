@@ -151,14 +151,36 @@ class TunableTFModel[
   //Obtain training and validation data splits
   val TFDataSet(train_split, validation_split) = _data_splits
 
+  private val _caching_mode_train = tf_data_handle_ops.caching_mode match {
+    case TFModel.data.NoCache       => TFModel.data.NoCache
+    case TFModel.data.InMemoryCache => TFModel.data.InMemoryCache
+    case TFModel.data.FileCache(location) =>
+      if (! (exists ! location)) mkdir ! location
+      TFModel.data.FileCache(location / "train_split_data")
+  }
+
+  private val _caching_mode_val = tf_data_handle_ops.caching_mode match {
+    case TFModel.data.NoCache       => TFModel.data.NoCache
+    case TFModel.data.InMemoryCache => TFModel.data.InMemoryCache
+    case TFModel.data.FileCache(location) =>
+      if (! (exists ! location)) mkdir ! location
+      TFModel.data.FileCache(location / "validation_split_data")
+  }
+
   val (train_data_tf, validation_data_tf): (
     Dataset[(In, Out)],
     Dataset[(In, Out)]
   ) = {
 
     (
-      modelFunction.data_handle(train_split, tf_data_handle_ops),
-      modelFunction.data_handle(validation_split, tf_data_handle_ops)
+      modelFunction.data_handle(
+        train_split,
+        tf_data_handle_ops.copy(caching_mode = _caching_mode_train)
+      ),
+      modelFunction.data_handle(
+        validation_split,
+        tf_data_handle_ops.copy(caching_mode = _caching_mode_val)
+      )
     )
   }
 
@@ -278,7 +300,10 @@ class TunableTFModel[
           (
             "training",
             modelFunction._build_ops(
-              train_data_tf,
+              modelFunction.data_handle(
+                train_split,
+                tf_data_handle_ops.copy(caching_mode = TFModel.data.NoCache)
+              ),
               training_configuration.data_processing
                 .copy(shuffleBuffer = 0, repeat = 0)
             )
@@ -286,7 +311,10 @@ class TunableTFModel[
           (
             "validation",
             modelFunction._build_ops(
-              validation_data_tf,
+              modelFunction.data_handle(
+                validation_split,
+                tf_data_handle_ops.copy(caching_mode = TFModel.data.NoCache)
+              ),
               training_configuration.data_processing
                 .copy(shuffleBuffer = 0, repeat = 0)
             )
@@ -297,7 +325,10 @@ class TunableTFModel[
           (
             "validation",
             modelFunction._build_ops(
-              validation_data_tf,
+              modelFunction.data_handle(
+                validation_split,
+                tf_data_handle_ops.copy(caching_mode = TFModel.data.NoCache)
+              ),
               training_configuration.data_processing
                 .copy(shuffleBuffer = 0, repeat = 0)
             )

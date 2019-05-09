@@ -142,7 +142,8 @@ class TFModelSpec extends FlatSpec with Matchers {
         bufferSize = 500,
         //patternToSym = Some(pattern_to_sym),
         patternToTensor = Some(pattern_to_tensor),
-        concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
+        concatOpO = Some(dtfpipe.EagerConcatenate[Double]()),
+        caching_mode = dtflearn.model.data.FileCache(summary_dir/"data_cache")
       )
     )
 

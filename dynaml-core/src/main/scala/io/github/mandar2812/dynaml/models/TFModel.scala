@@ -647,6 +647,10 @@ object TFModel {
       tf.learn.CheckpointSaver(
         summary_dir.toNIO,
         tf.learn.StepHookTrigger(checkPointFreq)
+      ),
+      tf.learn.LossLogger(
+        summaryDir = summary_dir.toNIO,
+        trigger = tf.learn.StepHookTrigger(summarySaveFreq)
       )
     )
 
@@ -684,7 +688,8 @@ object TFModel {
             )
           )
       ),
-      trigger = tf.learn.StepHookTrigger(stepTrigger)
+      trigger = tf.learn.StepHookTrigger(stepTrigger),
+      triggerAtEnd = false
     )
   }
 
