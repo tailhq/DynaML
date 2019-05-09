@@ -44,8 +44,7 @@ class TFModelSpec extends FlatSpec with Matchers {
       .dataset(rv.draw)
       .to_supervised(
         DataPipe[Double, (Tensor[Double], Tensor[Double])](
-          n =>
-            (dtf.tensor_f64(1, 1)(n), dtf.tensor_f64(1, 1)(n * weight + bias))
+          n => (dtf.tensor_f64(1)(n), dtf.tensor_f64(1)(n * weight + bias))
         )
       )
 
@@ -53,8 +52,7 @@ class TFModelSpec extends FlatSpec with Matchers {
       .dataset(rv.draw)
       .to_supervised(
         DataPipe[Double, (Tensor[Double], Tensor[Double])](
-          n =>
-            (dtf.tensor_f64(1, 1)(n), dtf.tensor_f64(1, 1)(n * weight + bias))
+          n => (dtf.tensor_f64(1)(n), dtf.tensor_f64(1)(n * weight + bias))
         )
       )
 
@@ -74,16 +72,20 @@ class TFModelSpec extends FlatSpec with Matchers {
         tf.learn.Mean[Double]("Loss/Mean") >>
         tf.learn.ScalarSummary[Double]("Loss/ModelLoss", "ModelLoss")
 
-    val regression_model = dtflearn.model[Output[Double], Output[Double], Output[
-      Double
-    ], Double, Tensor[Double], FLOAT64, Shape, Tensor[Double], FLOAT64, Shape, Tensor[
-      Double
-    ], FLOAT64, Shape](
-      arch,
-      (FLOAT64, Shape(1)),
-      (FLOAT64, Shape(1)),
-      loss
-    )
+    val graphInstance = Graph()
+
+    val regression_model =
+      dtflearn.model[Output[Double], Output[Double], Output[
+        Double
+      ], Double, Tensor[Double], FLOAT64, Shape, Tensor[Double], FLOAT64, Shape, Tensor[
+        Double
+      ], FLOAT64, Shape](
+        arch,
+        (FLOAT64, Shape(1)),
+        (FLOAT64, Shape(1)),
+        loss,
+        existingGraph = Some(graphInstance)
+      )
 
     val train_config = dtflearn.model.trainConfig(
       summary_dir,
@@ -107,7 +109,7 @@ class TFModelSpec extends FlatSpec with Matchers {
     val pattern_to_tensor = DataPipe(
       (ds: Seq[(Tensor[Double], Tensor[Double])]) => {
         val (xs, ys) = ds.unzip
-  
+
         (
           dtfpipe.EagerStack[Double](axis = 0).run(xs),
           dtfpipe.EagerStack[Double](axis = 0).run(ys)
@@ -115,18 +117,37 @@ class TFModelSpec extends FlatSpec with Matchers {
       }
     )
 
+    val pattern_to_sym = 
+      DataPipe(
+        (ds: Seq[(Tensor[Double], Tensor[Double])]) => {
+          val (xs, ys)   = ds.unzip
+          val batch_size = ds.length
+          val (xt, yt) = (
+            dtfpipe.LazyStack[Double](axis = 0).run(xs.map(_.toOutput)),
+            dtfpipe.LazyStack[Double](axis = 0).run(ys.map(_.toOutput))
+          )
+
+          (
+            xt,
+            yt
+          )
+
+        }
+      )
+
     regression_model.train(
       tf_dataset.training_dataset,
       train_config,
       dtflearn.model.tf_data_handle_ops(
         bufferSize = 500,
+        //patternToSym = Some(pattern_to_sym),
         patternToTensor = Some(pattern_to_tensor),
         concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
       )
     )
 
     val test_pred =
-      regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1, 1))).scalar
+      regression_model.predict(Tensor[Double](1.0d).reshape(Shape(1, 1))).scalar
 
     assert(test_pred == 4.0)
 

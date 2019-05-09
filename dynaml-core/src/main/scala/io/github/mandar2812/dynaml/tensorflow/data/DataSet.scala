@@ -22,6 +22,7 @@ import io.github.mandar2812.dynaml.pipes._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.implicits.helpers._
 import org.platanios.tensorflow.api.ops.data._
+//import org.platanios.tensorflow.api.implicits.helpers._
 
 /**
   * <h3>DynaML Data Set</h3>
@@ -221,9 +222,7 @@ class DataSet[X](val data: Iterable[X]) {
       )
 
   protected def build_tensor[T, O, D, S](
-    transformation: DataPipe[Iterable[X], Iterable[T]],
-    dataType: D,
-    shape: S
+    transformation: DataPipe[Iterable[X], Iterable[T]]
   )(
     implicit
     evTensorToOutput: TensorToOutput.Aux[T, O],
@@ -242,9 +241,7 @@ class DataSet[X](val data: Iterable[X]) {
 
   def build_buffered[T, O, D, S](
     buffer_size: Int,
-    convertToTensor: DataPipe[Seq[X], T],
-    dataType: D,
-    shape: S = null
+    convertToTensor: DataPipe[Seq[X], T]
   )(
     implicit
     evTensorToOutput: TensorToOutput.Aux[T, O],
@@ -256,10 +253,12 @@ class DataSet[X](val data: Iterable[X]) {
   ): Dataset[O] = {
 
     val buffer_and_stack =
-      DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable.map(_.toSeq)) >
+      DataPipe(
+        (d: Iterable[X]) => d.grouped(buffer_size).toIterable.map(_.toSeq)
+      ) >
         IterableDataPipe(convertToTensor)
 
-    build_tensor[T, O, D, S](buffer_and_stack, dataType, shape)
+    build_tensor[T, O, D, S](buffer_and_stack)
   }
 
   def build_lazy[T, O, D, S](
@@ -288,7 +287,9 @@ class DataSet[X](val data: Iterable[X]) {
   ): Dataset[O] = {
 
     val buffer_and_stack =
-      DataPipe((d: Iterable[X]) => d.grouped(buffer_size).toIterable.map(_.toSeq)) >
+      DataPipe(
+        (d: Iterable[X]) => d.grouped(buffer_size).toIterable.map(_.toSeq)
+      ) >
         IterableDataPipe(convertToSymbolicTensor)
 
     build_output[T, O, D, S](buffer_and_stack)
@@ -317,6 +318,67 @@ object DataSet {
       Iterable
         .tabulate(datasets.head.size)(i => datasets.map(d => d.data.toSeq(i)))
     )
+  }
+
+  /** Creates a dataset with slices from the nested structure of tensors (i.e., a [[NestedStructure]]-supported type).
+    * The slices are taken along the first axis of each tensor in the nested structure.
+    *
+    * @param  data   Data representing the elements of this dataset.
+    * @param  name   Name for this dataset.
+    * @tparam T Tensor type of the element.
+    * @return Created dataset.
+    */
+  def datasetFromOutputSlices[T: OutputStructure](
+    data: T,
+    name: String = "TensorSlicesDataset"
+  ): Dataset[T] = {
+    val datasetName = name
+    new Dataset[T] {
+      override val name: String = datasetName
+
+      override def createHandle[D, S](
+      )(
+        implicit
+        evOutputToDataType: OutputToDataType.Aux[T, D],
+        evOutputToShape: OutputToShape.Aux[T, S]
+      ): Output[Variant] = {
+        val flatOutputs = OutputStructure[T].outputs(data)
+        Op.Builder[Seq[Output[Any]], Output[Variant]](
+            opType = "TensorSliceDataset",
+            name = name,
+            input = flatOutputs
+          )
+          .setAttribute(
+            "output_shapes",
+            evOutputToShape.shapeStructure.shapes(outputShapes).toArray
+          )
+          .build()
+          .output
+      }
+
+      override def outputDataTypes[D](
+        implicit evOutputToDataType: OutputToDataType.Aux[T, D]
+      ): D = {
+        evOutputToDataType.dataType(data)
+      }
+
+      override def outputShapes[S](
+        implicit evOutputToShape: OutputToShape.Aux[T, S]
+      ): S = {
+        val shape      = evOutputToShape.shape(data)
+        val flatShapes = evOutputToShape.shapeStructure.shapes(shape)
+        evOutputToShape.shapeStructure
+          .decodeShape(
+            shape,
+            flatShapes.map(
+              s =>
+                if (s.rank > 1) s(1 ::)
+                else Shape.scalar()
+            )
+          )
+          ._1
+      }
+    }
   }
 
 }

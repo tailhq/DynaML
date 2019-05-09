@@ -220,7 +220,12 @@ class TFModel[
     ) = trainConfig
 
     val tf_dataset: Dataset[(In, Out)] =
-      TFModel.data._get_tf_data(data, ((input._1, target._1), (input._2, target._2)), tf_handle_ops, data_ops)
+      TFModel.data._get_tf_data(
+        data,
+        ((input._1, target._1), (input._2, target._2)),
+        tf_handle_ops,
+        data_ops
+      )
 
     train(tf_dataset, trainConfig)
   }
@@ -413,7 +418,8 @@ object TFModel {
     patternToSym: Option[DataPipe[Seq[Pattern], In]] = None,
     patternToTensor: Option[DataPipe[Seq[Pattern], IT]] = None,
     concatOpO: Option[DataPipe[Iterable[ITT], ITT]] = None,
-    bufferSize: Int = 1)
+    bufferSize: Int = 1,
+    caching_mode: data.CacheMode = data.NoCache)
 
   type TFDataHandleOps[Pattern, IT, ITT, In] =
     DataHandleOps[Pattern, IT, ITT, In]
@@ -442,6 +448,14 @@ object TFModel {
 
   type Ops[I] = DataOps[I]
   object data {
+
+    sealed trait CacheMode
+
+    object NoCache extends CacheMode
+
+    object InMemoryCache extends CacheMode
+
+    case class FileCache(location: Path) extends CacheMode
 
     def repeat[T](count: Int) =
       if (count != 0) DataPipe[Dataset[T], Dataset[T]](_.repeat(count))
@@ -477,6 +491,14 @@ object TFModel {
       if (buffer > 0) DataPipe[Dataset[T], Dataset[T]](_.prefetch(buffer))
       else identityPipe[Dataset[T]]
 
+    def cache[I](mode: CacheMode): DataPipe[Dataset[I], Dataset[I]] =
+      mode match {
+        case NoCache       => identityPipe[Dataset[I]]
+        case InMemoryCache => DataPipe((ds: Dataset[I]) => ds.cache(""))
+        case FileCache(location) =>
+          DataPipe((ds: Dataset[I]) => ds.cache(location.toString))
+      }
+
     def _build_ops[I, ID, IS](
       tf_dataset: Dataset[I],
       data_ops: TFModel.Ops[I]
@@ -486,15 +508,16 @@ object TFModel {
       evOutputToShape: OutputToShape.Aux[I, IS]
     ): Dataset[I] = {
 
+      //Do either some user-defined custom pre-processing or
+      //standard operations specified in data_ops
       val process_pipe = data_ops.custom_data_pipe.getOrElse(
-        TFModel.data.shuffle_and_repeat[I](
+        shuffle_and_repeat[I](
           data_ops.shuffleBuffer,
           data_ops.repeat,
           data_ops.seed
         ) >
-          TFModel.data
-            .batch[I, ID, IS](data_ops.batchSize) >
-          TFModel.data.prefetch[I](data_ops.prefetchSize)
+          batch[I, ID, IS](data_ops.batchSize) >
+          prefetch[I](data_ops.prefetchSize)
       )
 
       process_pipe(tf_dataset)
@@ -526,9 +549,7 @@ object TFModel {
 
         data.build_buffered[IT, In, ID, IS](
           data_ops.batchSize,
-          tf_handle_ops.patternToTensor.get,
-          input._1,
-          input._2
+          tf_handle_ops.patternToTensor.get
         )
       }
 
@@ -539,12 +560,15 @@ object TFModel {
         )
       }
 
-      val tf_dataset: Dataset[In] =
+      val cache_pipe = cache[In](tf_handle_ops.caching_mode)
+
+      val tf_dataset: Dataset[In] = cache_pipe(
         if (tf_handle_ops.patternToSym.isDefined) {
           create_lazy_dataset_handle()
         } else {
           create_eager_dataset_handle()
         }
+      )
 
       if (createOnlyHandle) tf_dataset else _build_ops(tf_dataset, data_ops)
     }
