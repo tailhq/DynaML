@@ -15,12 +15,16 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.tensorflow
 
 import _root_.io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
 import _root_.io.github.mandar2812.dynaml.models.{TFModel, TunableTFModel}
-import io.github.mandar2812.dynaml.tensorflow.layers.{DynamicTimeStepCTRNN, FiniteHorizonCTRNN, FiniteHorizonLinear}
+import io.github.mandar2812.dynaml.tensorflow.layers.{
+  DynamicTimeStepCTRNN,
+  FiniteHorizonCTRNN,
+  FiniteHorizonLinear
+}
 import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.PDESystem
 import _root_.io.github.mandar2812.dynaml.evaluation.{Performance, MAE, MSE}
 import org.platanios.tensorflow.api.learn.{Mode, StopCriteria}
@@ -29,11 +33,22 @@ import org.platanios.tensorflow.api.ops.NN.SameConvPadding
 import org.platanios.tensorflow.api.ops.data.Dataset
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import org.platanios.tensorflow.api._
-import org.platanios.tensorflow.api.core.types.{IsFloatOrDouble, IsHalfOrFloatOrDouble, IsNotQuantized, TF}
-import org.platanios.tensorflow.api.implicits.helpers.{OutputStructure, OutputToDataType, OutputToShape}
+import org.platanios.tensorflow.api.core.types.{
+  IsFloatOrDouble,
+  IsHalfOrFloatOrDouble,
+  IsNotQuantized,
+  TF
+}
+import org.platanios.tensorflow.api.implicits.helpers.{
+  OutputStructure,
+  OutputToDataType,
+  OutputToShape
+}
 import org.platanios.tensorflow.api.ops.Output
-import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer}
-
+import org.platanios.tensorflow.api.ops.variables.{
+  Initializer,
+  RandomNormalInitializer
+}
 
 private[tensorflow] object Learn {
 
@@ -47,37 +62,37 @@ private[tensorflow] object Learn {
 
   type SupModelPair[In, TrainIn, TrainOut, Out, Loss, EvalIn] = (
     SupervisedModel[In, TrainIn, TrainOut, Out, Loss],
-      SupEstimatorTF[In, TrainIn, TrainOut, Out, Loss, EvalIn])
+    SupEstimatorTF[In, TrainIn, TrainOut, Out, Loss, EvalIn]
+  )
 
   type UnsupervisedModel[In, Out, Loss] =
     tf.learn.UnsupervisedTrainableModel[In, Out, Loss]
 
-  type UnsupEstimatorTF[In, Out, Loss] = tf.learn.Estimator[In, In, Out, Out, Loss, Out]
+  type UnsupEstimatorTF[In, Out, Loss] =
+    tf.learn.Estimator[In, In, Out, Out, Loss, Out]
 
+  type UnsupModelPair[In, Out, Loss] =
+    (UnsupervisedModel[In, Out, Loss], UnsupEstimatorTF[In, Out, Loss])
 
-  type UnsupModelPair[In, Out, Loss] = (
-    UnsupervisedModel[In, Out, Loss],
-    UnsupEstimatorTF[In, Out, Loss])
+  val Phi: layers.Phi.type   = layers.Phi
+  val Tanh: layers.Tanh.type = layers.Tanh
+  val GeneralizedLogistic: layers.GeneralizedLogistic.type =
+    layers.GeneralizedLogistic
 
-  val Phi: layers.Phi.type                            = layers.Phi
-  val Tanh: layers.Tanh.type                          = layers.Tanh
-  val GeneralizedLogistic
-  : layers.GeneralizedLogistic.type                   = layers.GeneralizedLogistic
-
-  val batch_norm: tf.learn.BatchNormalization.type    = tf.learn.BatchNormalization
-  val ctrnn: layers.FiniteHorizonCTRNN.type           = layers.FiniteHorizonCTRNN
-  val dctrnn: layers.DynamicTimeStepCTRNN.type        = layers.DynamicTimeStepCTRNN
-  val ts_linear: layers.FiniteHorizonLinear.type      = layers.FiniteHorizonLinear
-  val rbf_layer: layers.RBFLayer.type                 = layers.RBFLayer
-  val stack_outputs: layers.StackOutputs.type         = layers.StackOutputs
-  val concat_outputs: layers.ConcatenateOutputs.type  = layers.ConcatenateOutputs
-  val seq_layer: layers.SeqLayer.type                 = layers.SeqLayer
-  val array_layer: layers.ArrayLayer.type             = layers.ArrayLayer
-  val map_layer: layers.MapLayer.type                 = layers.MapLayer
-  val scoped_map_layer: layers.ScopedMapLayer.type    = layers.ScopedMapLayer
-  val combined_layer: layers.CombinedLayer.type       = layers.CombinedLayer
-  val combined_array_layer
-  : layers.CombinedArrayLayer.type                    = layers.CombinedArrayLayer
+  val batch_norm: tf.learn.BatchNormalization.type   = tf.learn.BatchNormalization
+  val ctrnn: layers.FiniteHorizonCTRNN.type          = layers.FiniteHorizonCTRNN
+  val dctrnn: layers.DynamicTimeStepCTRNN.type       = layers.DynamicTimeStepCTRNN
+  val ts_linear: layers.FiniteHorizonLinear.type     = layers.FiniteHorizonLinear
+  val rbf_layer: layers.RBFLayer.type                = layers.RBFLayer
+  val stack_outputs: layers.StackOutputs.type        = layers.StackOutputs
+  val concat_outputs: layers.ConcatenateOutputs.type = layers.ConcatenateOutputs
+  val seq_layer: layers.SeqLayer.type                = layers.SeqLayer
+  val array_layer: layers.ArrayLayer.type            = layers.ArrayLayer
+  val map_layer: layers.MapLayer.type                = layers.MapLayer
+  val scoped_map_layer: layers.ScopedMapLayer.type   = layers.ScopedMapLayer
+  val combined_layer: layers.CombinedLayer.type      = layers.CombinedLayer
+  val combined_array_layer: layers.CombinedArrayLayer.type =
+    layers.CombinedArrayLayer
   val unstack: layers.Unstack.type                    = layers.Unstack
   val identity: layers.IdentityLayer.type             = layers.IdentityLayer
   val bifurcation_layer: layers.BifurcationLayer.type = layers.BifurcationLayer
@@ -92,48 +107,70 @@ private[tensorflow] object Learn {
   /**
     * Stop after a specified maximum number of iterations has been reached.
     * */
-  val max_iter_stop: Long => StopCriteria           = (n: Long) => tf.learn.StopCriteria(maxSteps = Some(n))
-
+  def max_iter_stop(n: Long): StopCriteria =
+    tf.learn.StopCriteria(maxSteps = Some(n))
 
   /**
     * Stop after a specified maximum number of epochs has been reached.
     * */
-  val max_epochs_stop: Long => StopCriteria         = (n: Long) => tf.learn.StopCriteria(maxEpochs = Some(n))
+  def max_epochs_stop(n: Long): StopCriteria =
+    tf.learn.StopCriteria(maxEpochs = Some(n))
 
   /**
     * Stop after the change in the loss function falls below a specified threshold.
     * */
-  val abs_loss_change_stop: (Double, Long) => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
-    absLossChangeTol = Some(d),
-    maxSteps = Some(max_iter))
+  def abs_loss_change_stop(
+    d: Double,
+    max_iterations: Long,
+    max_epochs: Long = 0L
+  ): StopCriteria =
+    tf.learn.StopCriteria(
+      absLossChangeTol = Some(d),
+      maxSteps = if (max_iterations > 0L) Some(max_iterations) else None,
+      maxEpochs = if (max_epochs > 0L) Some(max_epochs) else None
+    )
 
   /**
     * Stop after the relative change in the loss function falls below a specified threshold.
     * */
-  val rel_loss_change_stop: (Double, Long) => StopCriteria  = (d: Double, max_iter: Long) => tf.learn.StopCriteria(
-    relLossChangeTol = Some(d),
-    maxSteps = Some(max_iter))
+  def rel_loss_change_stop(
+    d: Double,
+    max_iterations: Long,
+    max_epochs: Long = 0L
+  ): StopCriteria =
+    tf.learn.StopCriteria(
+      relLossChangeTol = Some(d),
+      maxSteps = if (max_iterations > 0L) Some(max_iterations) else None,
+      maxEpochs = if (max_epochs > 0L) Some(max_epochs) else None
+    )
 
-  val model: TFModel.type                    = TFModel
-  val tunable_tf_model: TunableTFModel.type  = TunableTFModel
-  val performance: Performance.type          = Performance
-  val mse: MSE.type                          = MSE
-  val mae: MAE.type                          = MAE
+  val model: TFModel.type                   = TFModel
+  val tunable_tf_model: TunableTFModel.type = TunableTFModel
+  val performance: Performance.type         = Performance
+  val mse: MSE.type                         = MSE
+  val mae: MAE.type                         = MAE
 
-  val pde_system: PDESystem.type             = PDESystem
+  val pde_system: PDESystem.type = PDESystem
 
-  def constant[I, D: TF](name: String, t: Tensor[D]): Layer[I, Output[D]] = new Layer[I, Output[D]](name){
+  def constant[I, D: TF](name: String, t: Tensor[D]): Layer[I, Output[D]] =
+    new Layer[I, Output[D]](name) {
 
-    override val layerType: String = "Const"
+      override val layerType: String = "Const"
 
-    override def forwardWithoutContext(input: I)(implicit mode: Mode): Output[D] = t
-  }
+      override def forwardWithoutContext(
+        input: I
+      )(
+        implicit mode: Mode
+      ): Output[D] = t
+    }
 
-  def layer[I, J](name: String, pipe: MetaPipe[Mode, I, J]): Layer[I, J] = new Layer[I, J](name) {
-    override val layerType: String = name
+  def layer[I, J](name: String, pipe: MetaPipe[Mode, I, J]): Layer[I, J] =
+    new Layer[I, J](name) {
+      override val layerType: String = name
 
-    override def forwardWithoutContext(input: I)(implicit mode: Mode): J = pipe(mode)(input)
-  }
+      override def forwardWithoutContext(input: I)(implicit mode: Mode): J =
+        pipe(mode)(input)
+    }
 
   /**
     * Constructs a feed-forward layer.
@@ -145,17 +182,26 @@ private[tensorflow] object Learn {
     * @param id A unique integer id for constructing the layer name.
     *
     * */
-  def feedforward[T: TF : IsNotQuantized](
+  def feedforward[T: TF: IsNotQuantized](
     num_units: Int,
     useBias: Boolean = true,
     weightsInitializer: Initializer = RandomNormalInitializer(),
     biasInitializer: Initializer = RandomNormalInitializer(),
-    tag: String = "Linear")(id: Int): Linear[T] =
-    tf.learn.Linear[T](name = s"${tag}_$id", num_units, useBias, weightsInitializer, biasInitializer)
+    tag: String = "Linear"
+  )(id: Int
+  ): Linear[T] =
+    tf.learn.Linear[T](
+      name = s"${tag}_$id",
+      num_units,
+      useBias,
+      weightsInitializer,
+      biasInitializer
+    )
 
-
-  def activation_generator[T: TF](activations: Seq[String => Layer[Output[T], Output[T]]])
-  : Int => Layer[Output[T], Output[T]] = (i: Int) => activations(i % activations.length)(s"Act_$i")
+  def activation_generator[T: TF](
+    activations: Seq[String => Layer[Output[T], Output[T]]]
+  ): Int => Layer[Output[T], Output[T]] =
+    (i: Int) => activations(i % activations.length)(s"Act_$i")
 
   /**
     * Constructs a simple feed-forward stack of layers.
@@ -171,20 +217,33 @@ private[tensorflow] object Learn {
     * @param weightsInitializer Initialization for the weights.
     * @param biasInitializer Initialization for the bias.
     * */
-  def feedforward_stack[T: TF : IsNotQuantized](
-    get_act: Int => Layer[Output[T], Output[T]])(
-    layer_sizes: Seq[Int],
+  def feedforward_stack[T: TF: IsNotQuantized](
+    get_act: Int => Layer[Output[T], Output[T]]
+  )(layer_sizes: Seq[Int],
     starting_index: Int = 1,
     useBias: Boolean = true,
     weightsInitializer: Initializer = RandomNormalInitializer(),
     biasInitializer: Initializer = RandomNormalInitializer(),
-    tag: String = "Linear"): Layer[Output[T], Output[T]] =
+    tag: String = "Linear"
+  ): Layer[Output[T], Output[T]] =
     layer_sizes
-      .map(layer_size => dtflearn.feedforward[T](layer_size, useBias, weightsInitializer, biasInitializer, tag) _)
+      .map(
+        layer_size =>
+          dtflearn.feedforward[T](
+            layer_size,
+            useBias,
+            weightsInitializer,
+            biasInitializer,
+            tag
+          ) _
+      )
       .zipWithIndex
-      .map(li =>
-        if(li._2 < layer_sizes.length - 1) li._1(starting_index + li._2) >> get_act(starting_index + li._2)
-        else li._1(starting_index + li._2))
+      .map(
+        li =>
+          if (li._2 < layer_sizes.length - 1)
+            li._1(starting_index + li._2) >> get_act(starting_index + li._2)
+          else li._1(starting_index + li._2)
+      )
       .reduceLeft(_ >> _)
 
   /**
@@ -198,36 +257,56 @@ private[tensorflow] object Learn {
     * @param strides A [[Tuple2]] with strides, for each direction i.e. breadth and height.
     * @param index The layer id or index, helps in creating a unique layer name
     * */
-  def conv2d[T: TF : IsDecimal](
+  def conv2d[T: TF: IsDecimal](
     size: Int,
     num_channels_input: Int,
     num_filters: Int,
-    strides: (Int, Int))(index: Int) =
+    strides: (Int, Int)
+  )(index: Int
+  ) =
     tf.learn.Conv2D(
-      "Conv2D_"+index,
+      "Conv2D_" + index,
       Shape(size, size, num_channels_input, num_filters),
-      strides._1, strides._2,
-      SameConvPadding)
+      strides._1,
+      strides._2,
+      SameConvPadding
+    )
 
   /**
     * Constructs a convolutional layer activated by a ReLU, with
     * an option of appending a dropout layer.
     *
     * */
-  def conv2d_unit[T: TF : IsDecimal: IsHalfOrFloatOrDouble](
-    shape: Shape, stride: (Int, Int) = (1, 1),
-    relu_param: Float = 0.1f, dropout: Boolean = true,
-    keep_prob: Float = 0.6f)(i: Int): Compose[Output[T], Output[T], Output[T]] =
-    if(dropout) {
-      tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SameConvPadding) >>
-        tf.learn.AddBias(name = "Bias_"+i) >>
-        tf.learn.ReLU("ReLU_"+i, relu_param) >>
-        tf.learn.Dropout("Dropout_"+i, keep_prob)
+  def conv2d_unit[T: TF: IsDecimal: IsHalfOrFloatOrDouble](
+    shape: Shape,
+    stride: (Int, Int) = (1, 1),
+    relu_param: Float = 0.1f,
+    dropout: Boolean = true,
+    keep_prob: Float = 0.6f
+  )(i: Int
+  ): Compose[Output[T], Output[T], Output[T]] =
+    if (dropout) {
+      tf.learn.Conv2D(
+        "Conv2D_" + i,
+        shape,
+        stride._1,
+        stride._2,
+        SameConvPadding
+      ) >>
+        tf.learn.AddBias(name = "Bias_" + i) >>
+        tf.learn.ReLU("ReLU_" + i, relu_param) >>
+        tf.learn.Dropout("Dropout_" + i, keep_prob)
     } else {
-      tf.learn.Conv2D("Conv2D_"+i, shape, stride._1, stride._2, SameConvPadding) >>
-        batch_norm(name = "BatchNorm_"+i) >>
-        tf.learn.ReLU("ReLU_"+i, relu_param) >>
-        tf.learn.Cast("Cast_"+i)
+      tf.learn.Conv2D(
+        "Conv2D_" + i,
+        shape,
+        stride._1,
+        stride._2,
+        SameConvPadding
+      ) >>
+        batch_norm(name = "BatchNorm_" + i) >>
+        tf.learn.ReLU("ReLU_" + i, relu_param) >>
+        tf.learn.Cast("Cast_" + i)
     }
 
   /**
@@ -255,31 +334,51 @@ private[tensorflow] object Learn {
     *
     * @param keep_prob If dropout is enabled, then this determines the retain probability.
     * */
-  def conv2d_pyramid[T: TF : IsDecimal: IsHalfOrFloatOrDouble](
-    size: Int, num_channels_input: Int)(
-    start_num_bits: Int, end_num_bits: Int)(
-    relu_param: Float = 0.1f, dropout: Boolean = true,
-    keep_prob: Float = 0.6f, starting_index: Int = 0): Compose[Output[T], Output[T], Output[T]] = {
+  def conv2d_pyramid[T: TF: IsDecimal: IsHalfOrFloatOrDouble](
+    size: Int,
+    num_channels_input: Int
+  )(start_num_bits: Int,
+    end_num_bits: Int
+  )(relu_param: Float = 0.1f,
+    dropout: Boolean = true,
+    keep_prob: Float = 0.6f,
+    starting_index: Int = 0
+  ): Compose[Output[T], Output[T], Output[T]] = {
 
     require(
       start_num_bits > end_num_bits,
-      "To construct a 2d-convolutional pyramid, you need to start_num_bits > end_num_bits")
+      "To construct a 2d-convolutional pyramid, you need to start_num_bits > end_num_bits"
+    )
 
     //Create the first layer segment.
     val head_segment = conv2d_unit[T](
       Shape(size, size, num_channels_input, math.pow(2, start_num_bits).toInt),
-      stride = (1, 1), relu_param, dropout, keep_prob)(starting_index)
+      stride = (1, 1),
+      relu_param,
+      dropout,
+      keep_prob
+    )(starting_index)
 
     //Create the rest of the pyramid
-    val tail_segments = (end_num_bits until start_num_bits).reverse.zipWithIndex.map(bitsAndIndices => {
-      val (bits, index) = bitsAndIndices
+    val tail_segments = (end_num_bits until start_num_bits).reverse.zipWithIndex
+      .map(bitsAndIndices => {
+        val (bits, index) = bitsAndIndices
 
-      conv2d_unit[T](
-        Shape(size, size, math.pow(2, bits+1).toInt, math.pow(2, bits).toInt),
-        stride = (math.pow(2, index+1).toInt, math.pow(2, index+1).toInt),
-        relu_param, dropout, keep_prob)(index+1+starting_index)
+        conv2d_unit[T](
+          Shape(
+            size,
+            size,
+            math.pow(2, bits + 1).toInt,
+            math.pow(2, bits).toInt
+          ),
+          stride = (math.pow(2, index + 1).toInt, math.pow(2, index + 1).toInt),
+          relu_param,
+          dropout,
+          keep_prob
+        )(index + 1 + starting_index)
 
-    }).reduceLeft((a,b) => a >> b)
+      })
+      .reduceLeft((a, b) => a >> b)
 
     //Join head to tail.
     head_segment >> tail_segments
@@ -322,21 +421,24 @@ private[tensorflow] object Learn {
     *                       of each convolution.
     *
     * */
-  def inception_unit[T: TF : IsDecimal](
+  def inception_unit[T: TF: IsDecimal](
     channels: Int,
     num_filters: Seq[Int],
     activation_generator: DataPipe[String, Layer[Output[T], Output[T]]],
-    use_batch_norm: Boolean = true)(
-    layer_index: Int): Layer[Output[T], Output[T]] = {
+    use_batch_norm: Boolean = true
+  )(layer_index: Int
+  ): Layer[Output[T], Output[T]] = {
 
-    require(num_filters.length == 4,
+    require(
+      num_filters.length == 4,
       s"Inception module has only 4 branches, but ${num_filters.length}" +
-        s" were assigned while setting num_filters variable")
+        s" were assigned while setting num_filters variable"
+    )
 
     val name = s"Inception_$layer_index"
 
     def get_post_conv_layer(b_index: Int, l_index: Int) =
-      if(use_batch_norm) {
+      if (use_batch_norm) {
         batch_norm(s"$name/B$b_index/BatchNorm_$l_index") >>
           activation_generator(s"$name/B$b_index/Act_$l_index")
       } else {
@@ -347,34 +449,100 @@ private[tensorflow] object Learn {
       tf.learn.Conv2D(
         s"$name/B1/Conv2D_1x1",
         Shape(1, 1, channels, num_filters.head),
-        1, 1, SameConvPadding) >>
+        1,
+        1,
+        SameConvPadding
+      ) >>
         get_post_conv_layer(1, 1)
 
     val branch2 =
-      tf.learn.Conv2D(s"$name/B2/Conv2D_1x1", Shape(1, 1, channels, num_filters(1)), 1, 1, SameConvPadding) >>
+      tf.learn.Conv2D(
+        s"$name/B2/Conv2D_1x1",
+        Shape(1, 1, channels, num_filters(1)),
+        1,
+        1,
+        SameConvPadding
+      ) >>
         get_post_conv_layer(2, 1) >>
-        tf.learn.Conv2D(s"$name/B2/Conv2D_1x3", Shape(1, 3, num_filters(1), num_filters(1)), 1, 1, SameConvPadding) >>
-        tf.learn.Conv2D(s"$name/B2/Conv2D_3x1", Shape(3, 1, num_filters(1), num_filters(1)), 1, 1, SameConvPadding) >>
+        tf.learn.Conv2D(
+          s"$name/B2/Conv2D_1x3",
+          Shape(1, 3, num_filters(1), num_filters(1)),
+          1,
+          1,
+          SameConvPadding
+        ) >>
+        tf.learn.Conv2D(
+          s"$name/B2/Conv2D_3x1",
+          Shape(3, 1, num_filters(1), num_filters(1)),
+          1,
+          1,
+          SameConvPadding
+        ) >>
         get_post_conv_layer(2, 2)
 
     val branch3 =
-      tf.learn.Conv2D(s"$name/B3/Conv2D_1x1", Shape(1, 1, channels, num_filters(2)), 1, 1, SameConvPadding) >>
-      get_post_conv_layer(3, 1) >>
-      tf.learn.Conv2D(s"$name/B3/Conv2D_1x3_1", Shape(1, 3, num_filters(2), num_filters(2)), 1, 1, SameConvPadding) >>
-      tf.learn.Conv2D(s"$name/B3/Conv2D_3x1_1", Shape(3, 1, num_filters(2), num_filters(2)), 1, 1, SameConvPadding) >>
-      tf.learn.Conv2D(s"$name/B3/Conv2D_1x3_2", Shape(1, 3, num_filters(2), num_filters(2)), 1, 1, SameConvPadding) >>
-      tf.learn.Conv2D(s"$name/B3/Conv2D_3x1_2", Shape(3, 1, num_filters(2), num_filters(2)), 1, 1, SameConvPadding) >>
-      get_post_conv_layer(3, 2)
+      tf.learn.Conv2D(
+        s"$name/B3/Conv2D_1x1",
+        Shape(1, 1, channels, num_filters(2)),
+        1,
+        1,
+        SameConvPadding
+      ) >>
+        get_post_conv_layer(3, 1) >>
+        tf.learn.Conv2D(
+          s"$name/B3/Conv2D_1x3_1",
+          Shape(1, 3, num_filters(2), num_filters(2)),
+          1,
+          1,
+          SameConvPadding
+        ) >>
+        tf.learn.Conv2D(
+          s"$name/B3/Conv2D_3x1_1",
+          Shape(3, 1, num_filters(2), num_filters(2)),
+          1,
+          1,
+          SameConvPadding
+        ) >>
+        tf.learn.Conv2D(
+          s"$name/B3/Conv2D_1x3_2",
+          Shape(1, 3, num_filters(2), num_filters(2)),
+          1,
+          1,
+          SameConvPadding
+        ) >>
+        tf.learn.Conv2D(
+          s"$name/B3/Conv2D_3x1_2",
+          Shape(3, 1, num_filters(2), num_filters(2)),
+          1,
+          1,
+          SameConvPadding
+        ) >>
+        get_post_conv_layer(3, 2)
 
-    val branch4 = tf.learn.MaxPool(s"$name/B4/MaxPool", Seq(1, 3, 3, 1), 1, 1, SameConvPadding) >>
-      tf.learn.Conv2D(s"$name/B4/Conv2D_1x1", Shape(1, 1, channels, num_filters(3)), 1, 1, SameConvPadding) >>
+    val branch4 = tf.learn.MaxPool(
+      s"$name/B4/MaxPool",
+      Seq(1, 3, 3, 1),
+      1,
+      1,
+      SameConvPadding
+    ) >>
+      tf.learn.Conv2D(
+        s"$name/B4/Conv2D_1x1",
+        Shape(1, 1, channels, num_filters(3)),
+        1,
+        1,
+        SameConvPadding
+      ) >>
       get_post_conv_layer(4, 1)
 
     val layers = Seq(
-      branch1, branch2, branch3, branch4
+      branch1,
+      branch2,
+      branch3,
+      branch4
     )
 
-    combined_layer(name, layers) >> concat_outputs(name+"/DepthConcat", -1)
+    combined_layer(name, layers) >> concat_outputs(name + "/DepthConcat", -1)
 
   }
 
@@ -386,22 +554,37 @@ private[tensorflow] object Learn {
     * @param starting_index The starting index of the stack. The stack is named in a consecutive manner,
     *                       i.e. Inception_i, Inception_i+1, ...
     * */
-  def inception_stack[T: TF : IsDecimal](
+  def inception_stack[T: TF: IsDecimal](
     num_channels_image: Int,
     num_filters: Seq[Seq[Int]],
     activation_generator: DataPipe[String, Layer[Output[T], Output[T]]],
-    use_batch_norm: Boolean)(
-    starting_index: Int): Layer[Output[T], Output[T]] = {
+    use_batch_norm: Boolean
+  )(starting_index: Int
+  ): Layer[Output[T], Output[T]] = {
 
-    val head = inception_unit(num_channels_image, num_filters.head, activation_generator)(starting_index)
+    val head = inception_unit(
+      num_channels_image,
+      num_filters.head,
+      activation_generator
+    )(starting_index)
 
-    val tail_section = num_filters.sliding(2)
-      .map(pair => inception_unit(pair.head.sum, pair.last, activation_generator, use_batch_norm) _)
+    val tail_section = num_filters
+      .sliding(2)
+      .map(
+        pair =>
+          inception_unit(
+            pair.head.sum,
+            pair.last,
+            activation_generator,
+            use_batch_norm
+          ) _
+      )
       .zipWithIndex
       .map(layer_fn_index_pair => {
         val (create_inception_layer, index) = layer_fn_index_pair
         create_inception_layer(index + starting_index + 1)
-      }).reduceLeft((l1, l2) => l1 >> l2)
+      })
+      .reduceLeft((l1, l2) => l1 >> l2)
 
     head >> tail_section
   }
@@ -416,9 +599,12 @@ private[tensorflow] object Learn {
     * @param horizon The number of steps in time to simulate the dynamical system
     * @param index The layer index, should be unique.
     * */
-  def ctrnn_block[T: TF : IsDecimal](
+  def ctrnn_block[T: TF: IsDecimal](
     observables: Int,
-    horizon: Int, timestep: Double = -1d)(index: Int): Layer[Output[T], Output[T]] =
+    horizon: Int,
+    timestep: Double = -1d
+  )(index: Int
+  ): Layer[Output[T], Output[T]] =
     if (timestep <= 0d) {
       DynamicTimeStepCTRNN(s"DFHctrnn_$index", horizon) >>
         FiniteHorizonLinear(s"FHlinear_$index", observables)
@@ -456,11 +642,17 @@ private[tensorflow] object Learn {
     * @author mandar2812
     * */
   def build_tf_model[
-  In: OutputStructure, TrainIn: OutputStructure,
-  TrainOut, Out: OutputStructure,
-  Loss: TF : IsFloatOrDouble,
-  EvalIn, ID, IS, TD, TS](
-    architecture: Layer[In, Out],
+    In: OutputStructure,
+    TrainIn: OutputStructure,
+    TrainOut,
+    Out: OutputStructure,
+    Loss: TF: IsFloatOrDouble,
+    EvalIn,
+    ID,
+    IS,
+    TD,
+    TS
+  ](architecture: Layer[In, Out],
     input: Input[In],
     target: Input[TrainIn],
     loss: Layer[(Out, TrainIn), Output[Loss]],
@@ -469,26 +661,31 @@ private[tensorflow] object Learn {
     stopCriteria: StopCriteria,
     stepRateFreq: Int = 5000,
     summarySaveFreq: Int = 5000,
-    checkPointFreq: Int = 5000)(
-    training_data: Dataset[(In, TrainIn)],
-    inMemory: Boolean = false)(
+    checkPointFreq: Int = 5000
+  )(training_data: Dataset[(In, TrainIn)],
+    inMemory: Boolean = false
+  )(
     implicit
     evOutputToDataTypeIn: OutputToDataType.Aux[In, _],
     evOutputToShapeIn: OutputToShape.Aux[In, _],
     evOutputToDataTypeTrainIn: OutputToDataType.Aux[TrainIn, _],
     evOutputToShapeTrainIn: OutputToShape.Aux[TrainIn, _],
     evOutputToDataType: OutputToDataType.Aux[(In, TrainIn), (ID, TD)],
-    evOutputToShape: OutputToShape.Aux[(In, TrainIn), (IS, TS)])
-  : SupModelPair[In, TrainIn, Out, Out, Loss, (Out, (In, TrainIn))] = {
+    evOutputToShape: OutputToShape.Aux[(In, TrainIn), (IS, TS)]
+  ): SupModelPair[In, TrainIn, Out, Out, Loss, (Out, (In, TrainIn))] = {
 
-
-    val model = tf.learn.Model.simpleSupervised[In, TrainIn, Out, TrainOut, Loss](
-      input, target, architecture,
-      loss, optimizer)
+    val model =
+      tf.learn.Model.simpleSupervised[In, TrainIn, Out, TrainOut, Loss](
+        input,
+        target,
+        architecture,
+        loss,
+        optimizer
+      )
 
     println("\nTraining model.\n")
 
-    val estimator = if(inMemory) {
+    val estimator = if (inMemory) {
 
       tf.learn.InMemoryEstimator(
         model,
@@ -496,11 +693,22 @@ private[tensorflow] object Learn {
         stopCriteria,
         Set(
           tf.learn.StepRateLogger(
-            log = false, summaryDir = summariesDir,
-            trigger = tf.learn.StepHookTrigger(stepRateFreq)),
-          tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
-          tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
-        tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+            log = false,
+            summaryDir = summariesDir,
+            trigger = tf.learn.StepHookTrigger(stepRateFreq)
+          ),
+          tf.learn.SummarySaver(
+            summariesDir,
+            tf.learn.StepHookTrigger(summarySaveFreq)
+          ),
+          tf.learn.CheckpointSaver(
+            summariesDir,
+            tf.learn.StepHookTrigger(checkPointFreq)
+          )
+        ),
+        tensorBoardConfig = tf.learn
+          .TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq)
+      )
 
     } else {
 
@@ -510,11 +718,22 @@ private[tensorflow] object Learn {
         stopCriteria,
         Set(
           tf.learn.StepRateLogger(
-            log = false, summaryDir = summariesDir,
-            trigger = tf.learn.StepHookTrigger(stepRateFreq)),
-          tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
-          tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
-        tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+            log = false,
+            summaryDir = summariesDir,
+            trigger = tf.learn.StepHookTrigger(stepRateFreq)
+          ),
+          tf.learn.SummarySaver(
+            summariesDir,
+            tf.learn.StepHookTrigger(summarySaveFreq)
+          ),
+          tf.learn.CheckpointSaver(
+            summariesDir,
+            tf.learn.StepHookTrigger(checkPointFreq)
+          )
+        ),
+        tensorBoardConfig = tf.learn
+          .TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq)
+      )
 
     }
 
@@ -550,8 +769,11 @@ private[tensorflow] object Learn {
     *
     * @author mandar2812
     * */
-  def build_unsup_tf_model[In: OutputStructure, Out: OutputStructure, Loss: TF : IsFloatOrDouble](
-    architecture: Layer[In, Out],
+  def build_unsup_tf_model[
+    In: OutputStructure,
+    Out: OutputStructure,
+    Loss: TF: IsFloatOrDouble
+  ](architecture: Layer[In, Out],
     input: Input[In],
     loss: Layer[(In, Out), Output[Loss]],
     optimizer: Optimizer,
@@ -559,53 +781,79 @@ private[tensorflow] object Learn {
     stopCriteria: StopCriteria,
     stepRateFreq: Int,
     summarySaveFreq: Int,
-    checkPointFreq: Int)(
-    training_data: Dataset[In],
-    inMemory: Boolean)(
+    checkPointFreq: Int
+  )(training_data: Dataset[In],
+    inMemory: Boolean
+  )(
     implicit
     evOutputToDataTypeIn: OutputToDataType.Aux[In, _],
-    evOutputToShapeIn: OutputToShape.Aux[In, _]): UnsupModelPair[In, Out, Loss] = {
+    evOutputToShapeIn: OutputToShape.Aux[In, _]
+  ): UnsupModelPair[In, Out, Loss] = {
 
-    val (model, estimator): UnsupModelPair[In, Out, Loss] = tf.createWith(graph = Graph()) {
+    val (model, estimator): UnsupModelPair[In, Out, Loss] =
+      tf.createWith(graph = Graph()) {
 
-      val model = tf.learn.Model.unsupervised(input, architecture, loss, optimizer)
+        val model =
+          tf.learn.Model.unsupervised(input, architecture, loss, optimizer)
 
-      println("\nTraining model.\n")
+        println("\nTraining model.\n")
 
-      val estimator = if(inMemory) {
+        val estimator = if (inMemory) {
 
-        tf.learn.InMemoryEstimator(
-          model,
-          tf.learn.Configuration(Some(summariesDir)),
-          stopCriteria,
-          Set(
-            tf.learn.StepRateLogger(
-              log = false, summaryDir = summariesDir,
-              trigger = tf.learn.StepHookTrigger(stepRateFreq)),
-            tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
-            tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
-          tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+          tf.learn.InMemoryEstimator(
+            model,
+            tf.learn.Configuration(Some(summariesDir)),
+            stopCriteria,
+            Set(
+              tf.learn.StepRateLogger(
+                log = false,
+                summaryDir = summariesDir,
+                trigger = tf.learn.StepHookTrigger(stepRateFreq)
+              ),
+              tf.learn.SummarySaver(
+                summariesDir,
+                tf.learn.StepHookTrigger(summarySaveFreq)
+              ),
+              tf.learn.CheckpointSaver(
+                summariesDir,
+                tf.learn.StepHookTrigger(checkPointFreq)
+              )
+            ),
+            tensorBoardConfig = tf.learn
+              .TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq)
+          )
 
-      } else {
+        } else {
 
-        tf.learn.FileBasedEstimator(
-          model,
-          tf.learn.Configuration(Some(summariesDir)),
-          stopCriteria,
-          Set(
-            tf.learn.StepRateLogger(
-              log = false, summaryDir = summariesDir,
-              trigger = tf.learn.StepHookTrigger(stepRateFreq)),
-            tf.learn.SummarySaver(summariesDir, tf.learn.StepHookTrigger(summarySaveFreq)),
-            tf.learn.CheckpointSaver(summariesDir, tf.learn.StepHookTrigger(checkPointFreq))),
-          tensorBoardConfig = tf.learn.TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq))
+          tf.learn.FileBasedEstimator(
+            model,
+            tf.learn.Configuration(Some(summariesDir)),
+            stopCriteria,
+            Set(
+              tf.learn.StepRateLogger(
+                log = false,
+                summaryDir = summariesDir,
+                trigger = tf.learn.StepHookTrigger(stepRateFreq)
+              ),
+              tf.learn.SummarySaver(
+                summariesDir,
+                tf.learn.StepHookTrigger(summarySaveFreq)
+              ),
+              tf.learn.CheckpointSaver(
+                summariesDir,
+                tf.learn.StepHookTrigger(checkPointFreq)
+              )
+            ),
+            tensorBoardConfig = tf.learn
+              .TensorBoardConfig(summariesDir, reloadInterval = checkPointFreq)
+          )
 
+        }
+
+        estimator.train(() => training_data)
+
+        (model, estimator)
       }
-
-      estimator.train(() => training_data)
-
-      (model, estimator)
-    }
 
     (model, estimator)
 

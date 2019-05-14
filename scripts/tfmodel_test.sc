@@ -12,18 +12,14 @@ val summary_dir = tempdir / s"dtf_model_test-${DateTime.now().toString("YYYY-MM-
 
 val (weight, bias) = (2.5, 1.5)
 
-val data_size = 100
+val data_size = 1000
 val rv        = GaussianRV(0.0, 2.0).iid(data_size)
 
 val data = dtfdata
   .dataset(rv.draw)
   .to_supervised(
-    DataPipe[Double, (Output[Double], Output[Double])](
-      n =>
-        (
-          dtf.sym_tensor_f64(1, 1)(n),
-          dtf.sym_tensor_f64(1, 1)(n * weight + bias)
-        )
+    DataPipe[Double, (Tensor[Double], Tensor[Double])](
+      n => (dtf.tensor_f64(1)(n), dtf.tensor_f64(1)(n * weight + bias))
     )
   )
 
@@ -31,14 +27,14 @@ val test_data = dtfdata
   .dataset(rv.draw)
   .to_supervised(
     DataPipe[Double, (Tensor[Double], Tensor[Double])](
-      n => (dtf.tensor_f64(1, 1)(n), dtf.tensor_f64(1, 1)(n * weight + bias))
+      n => (dtf.tensor_f64(1)(n), dtf.tensor_f64(1)(n * weight + bias))
     )
   )
 
 val train_fraction = 0.7
 
 val tf_dataset = data.partition(
-  DataPipe[(Output[Double], Output[Double]), Boolean](
+  DataPipe[(Tensor[Double], Tensor[Double]), Boolean](
     _ => scala.util.Random.nextDouble() <= train_fraction
   )
 )
@@ -51,47 +47,82 @@ val loss: Layer[(Output[Double], Output[Double]), Output[Double]] =
     tf.learn.Mean[Double]("Loss/Mean") >>
     tf.learn.ScalarSummary[Double]("Loss/ModelLoss", "ModelLoss")
 
-val regression_model = dtflearn.model[Output[Double], Output[Double], Output[
-  Double
-], Double, Tensor[Double], FLOAT64, Shape, Tensor[Double], FLOAT64, Shape, Tensor[
-  Double
-], FLOAT64, Shape](
-  arch,
-  (FLOAT64, Shape(1)),
-  (FLOAT64, Shape(1)),
-  loss
-)
+val graphInstance = Graph()
+
+val regression_model =
+  dtflearn.model[Output[Double], Output[Double], Output[
+    Double
+  ], Double, Tensor[Double], FLOAT64, Shape, Tensor[Double], FLOAT64, Shape, Tensor[
+    Double
+  ], FLOAT64, Shape](
+    arch,
+    (FLOAT64, Shape(1)),
+    (FLOAT64, Shape(1)),
+    loss,
+    existingGraph = Some(graphInstance)
+  )
+
+val batch_size = 10  
+val num_epochs = 10L
+val iterations_per_epoch = (data_size.toDouble / batch_size).toInt
 
 val train_config = dtflearn.model.trainConfig(
   summary_dir,
-  dtflearn.model.data_ops[Output[Double], Output[Double]](
+  dtflearn.model.data_ops[(Output[Double], Output[Double])](
     shuffleBuffer = 5000,
-    batchSize = 16,
+    batchSize = batch_size,
     prefetchSize = 10
   ),
   tf.train.Adam(0.1f),
-  dtflearn.rel_loss_change_stop(0.05, 5000),
+  dtflearn.rel_loss_change_stop(0.05, num_epochs*iterations_per_epoch, num_epochs),
   Some(
     dtflearn.model._train_hooks(
       summary_dir,
-      stepRateFreq = 1000,
-      summarySaveFreq = 1000,
-      checkPointFreq = 1000
+      stepRateFreq = iterations_per_epoch,
+      summarySaveFreq = iterations_per_epoch,
+      checkPointFreq = iterations_per_epoch
     )
   )
 )
+
+val pattern_to_tensor = DataPipe(
+  (ds: Seq[(Tensor[Double], Tensor[Double])]) => {
+    val (xs, ys) = ds.unzip
+
+    (
+      dtfpipe.EagerStack[Double](axis = 0).run(xs),
+      dtfpipe.EagerStack[Double](axis = 0).run(ys)
+    )
+  }
+)
+
+val pattern_to_sym =
+  DataPipe(
+    (ds: Seq[(Tensor[Double], Tensor[Double])]) => {
+      val (xs, ys)   = ds.unzip
+      //val batch_size = ds.length
+      val (xt, yt) = (
+        dtfpipe.LazyStack[Double](axis = 0).run(xs.map(_.toOutput)),
+        dtfpipe.LazyStack[Double](axis = 0).run(ys.map(_.toOutput))
+      )
+
+      (
+        xt,
+        yt
+      )
+
+    }
+  )
 
 regression_model.train(
   tf_dataset.training_dataset,
   train_config,
   dtflearn.model.tf_data_handle_ops(
-    patternToTensor = Some(identityPipe[(Tensor[Double], Tensor[Double])]),
-    //patternToSym = Some(identityPipe[(Output[Double], Output[Double])]),
-    //concatOpIO = Some(dtfpipe.LazyConcatenate[Double]()),
-    //concatOpTO = Some(dtfpipe.LazyConcatenate[Double]()),
-    concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-    concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
-    concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
+    bufferSize = 500,
+    //patternToSym = Some(pattern_to_sym),
+    patternToTensor = Some(pattern_to_tensor),
+    concatOpO = Some(dtfpipe.EagerConcatenate[Double]()),
+    caching_mode = dtflearn.model.data.FileCache(summary_dir / "data_cache")
   )
 )
 
@@ -104,16 +135,16 @@ val metrics = regression_model.evaluate(
     dtflearn.mse[Output[Double], Double](),
     dtflearn.mae[Output[Double], Double]()
   ),
-  dtflearn.model.data_ops[Output[Double], Output[Double]](
+  dtflearn.model.data_ops[(Output[Double], Output[Double])](
     repeat = 0,
     shuffleBuffer = 0,
     batchSize = 16,
     prefetchSize = 10
   ),
   dtflearn.model.tf_data_handle_ops(
-    patternToTensor = Some(identityPipe[(Tensor[Double], Tensor[Double])]),
-    concatOpI = Some(dtfpipe.EagerConcatenate[Double]()),
-    concatOpT = Some(dtfpipe.EagerConcatenate[Double]()),
-    concatOpO = Some(dtfpipe.EagerConcatenate[Double]())
+    bufferSize = 500,
+    //patternToSym = Some(pattern_to_sym),
+    patternToTensor = Some(pattern_to_tensor),
+    concatOpO = Some(dtfpipe.EagerConcatenate[Double]()),
   )
 )
