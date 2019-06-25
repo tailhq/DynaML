@@ -24,6 +24,8 @@ import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.{Logger, Priority}
 import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 import io.github.mandar2812.dynaml.algebra.square
+import org.json4s._
+import org.json4s.jackson.Serialization.{read => read_json, write => write_json}
 
 /**
  * Class implementing the calculation
@@ -36,7 +38,11 @@ class RegressionMetrics(
     override protected val scoresAndLabels: List[(Double, Double)],
     val len: Int) extends Metrics[Double] {
 
+  implicit val formats = DefaultFormats
+
   val length: Int = len
+
+  val names = Seq("RMSE", "MAE", "Rsq", "Pearson Corr.", "Spearman Corr.", "Yield")
 
   val rmse: Double = math.sqrt(scoresAndLabels.map((p) =>
     math.pow(p._1 - p._2, 2)/length).sum)
@@ -95,7 +101,7 @@ class RegressionMetrics(
     pprint.pprintln(sigma)
   }
 
-  override def kpi() = DenseVector(mae, rmse, Rsq, corr, sp_corr)
+  override def kpi() = DenseVector(mae, rmse, Rsq, corr, sp_corr, modelYield)
 
   override def generatePlots(): Unit = {
     println("Generating Plot of Residuals")
@@ -124,6 +130,17 @@ class RegressionMetrics(
     new RegressionMetrics(
       this.scoresAndLabels ++ otherMetrics.scoresAndLabels,
       this.length + otherMetrics.length).setName(this.name)
+  }
+
+  def to_json: String = {
+
+    val metrics = kpi()
+
+    val results: Map[String, Any] =
+      names.zip(metrics.toArray).toMap ++
+        Map("quantity" -> name)
+
+    write_json(results)
   }
 }
 
