@@ -608,4 +608,57 @@ package object utils {
     val R: java.io.File => Unit = (f: java.io.File) => renjin.eval(f)
   }
 
+
+
+  private final val MAXDUB: Double = Double.MaxValue
+
+  /**
+   * Inverse of the Error Function
+   * 
+  */
+  def inv_erf(x: Double): Double = {
+    val ax = math.abs(x)
+
+  /* This approximation, taken from Table 10 of Blair et al., is valid
+     for |x|<=0.75 and has a maximum relative error of 4.47 x 10^-8. */
+  
+    if( ax <= 0.75 ) {
+  
+      val p = Array(-13.0959967422,26.785225760,-9.289057635)
+      val q = Array(-12.0749426297,30.960614529,-17.149977991,1.00000000)
+  
+      val t = x*x-0.75*0.75
+      
+      x*(p(0)+t*(p(1)+t*p(2)))/(q(0)+t*(q(1)+t*(q(2)+t*q(3))))
+  
+    } else if( ax >= 0.75 && ax <= 0.9375 ) {
+      val p = Array(-.12402565221,1.0688059574,-1.9594556078,.4230581357)
+      val q = Array(-.08827697997,.8900743359,-2.1757031196,1.0000000000)
+  
+  /* This approximation, taken from Table 29 of Blair et al., is valid
+     for .75<=|x|<=.9375 and has a maximum relative error of 4.17 x 10^-8. */
+  
+      val t = x*x - 0.9375*0.9375
+
+      x*(p(0)+t*(p(1)+t*(p(2)+t*p(3))))/
+           (q(0)+t*(q(1)+t*(q(2)+t*q(3))))
+  
+    } else if( ax >= 0.9375 && ax <= (1.0-1.0e-100) ) {
+      val p = Array(.1550470003116,1.382719649631,.690969348887,
+         -1.128081391617, .680544246825,-.16444156791)
+      val q = Array(.155024849822,1.385228141995,1.000000000000)
+  
+  /* This approximation, taken from Table 50 of Blair et al., is valid
+     for .9375<=|x|<=1-10^-100 and has a maximum relative error of 2.45 x 10^-8. */
+  
+      val t=1.0/math.sqrt(-math.log(1.0-ax))
+      math.signum(x)*(p(0)/t+p(1)+t*(p(2)+t*(p(3)+t*(p(4)+t*p(5)))))/
+            (q(0)+t*(q(1)+t*(q(2))))
+      } else {
+        MAXDUB
+      }
+  }
+
+  def probit(x: Double): Double = math.sqrt(2d)*inv_erf(2.0*x - 1d)
+
 }
