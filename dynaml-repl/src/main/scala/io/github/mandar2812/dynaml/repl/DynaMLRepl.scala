@@ -24,7 +24,7 @@ import java.nio.file.NoSuchFileException
 import coursier.core.{ModuleName, Organization}
 import ammonite.interp.{CodeWrapper, Interpreter, Parsers, Preprocessor}
 import ammonite.repl.Repl
-import ammonite.runtime.Evaluator.AmmoniteExit
+import ammonite.interp.api.AmmoniteExit
 import ammonite.runtime.Storage
 import ammonite.util.Util.CodeSource
 import ammonite.util.Name._
@@ -39,26 +39,36 @@ import scala.language.experimental.macros
 //import scala.reflect.macros.blackbox.Context
 import sourcecode.Compat.Context
 
+import ammonite.runtime.ImportHook
 /**
   * Customised version of the Ammonite REPL
   * @author mandar2812 date 1/6/16.
   * */
 class DynaMLRepl(
-  input: InputStream, output: OutputStream,
-  error: OutputStream, storage: Storage,
-  basePredefs: Seq[PredefInfo], customPredefs: Seq[PredefInfo],
-  wd: ammonite.ops.Path, welcomeBanner: Option[String],
+  input: InputStream,
+  output: OutputStream,
+  error: OutputStream,
+  storage: Storage,
+  basePredefs: Seq[PredefInfo],
+  customPredefs: Seq[PredefInfo],
+  wd: os.Path,
+  welcomeBanner: Option[String],
   replArgs: IndexedSeq[Bind[_]] = Vector.empty,
   initialColors: Colors = Colors.Default,
   replCodeWrapper: CodeWrapper,
   scriptCodeWrapper: CodeWrapper,
-  alreadyLoadedDependencies: Seq[coursier.Dependency])
+  alreadyLoadedDependencies: Seq[coursier.Dependency],
+  importHooks: Map[Seq[String], ImportHook],
+  initialClassLoader: ClassLoader = 
+    classOf[ammonite.repl.api.ReplAPI].getClassLoader,
+  classPathWhitelist: Set[Seq[String]])
   extends Repl(
     input, output, error, storage,
     basePredefs, customPredefs, wd, welcomeBanner,
     replArgs, initialColors,
     replCodeWrapper, scriptCodeWrapper, 
-    alreadyLoadedDependencies) { repl =>
+    alreadyLoadedDependencies, importHooks, 
+    initialClassLoader, classPathWhitelist) { repl =>
 
   override val prompt = Ref("DynaML>")
 
@@ -88,63 +98,63 @@ object Defaults {
   }
 
 
-    // Need to import stuff from ammonite.ops manually, rather than from the
+   // Need to import stuff from ammonite.ops manually, rather than from the
   // ammonite.ops.Extensions bundle, because otherwise they result in ambiguous
   // imports if someone else imports maunally
   val predefString = s"""
-    |import ammonite.ops.{
-    |  PipeableImplicit,
-    |  FilterMapExtImplicit,
-    |  FilterMapArraysImplicit,
-    |  FilterMapIteratorsImplicit,
-    |  FilterMapGeneratorsImplicit,
-    |  SeqFactoryFunc,
-    |  RegexContextMaker,
-    |  Callable1Implicit
-    |}
-    |import ammonite.runtime.tools._
-    |import ammonite.repl.tools._
-    |import ammonite.runtime.tools.IvyConstructor.{ArtifactIdExt, GroupIdExt}
-    |import ammonite.interp.InterpBridge.value.exit
-    |""".stripMargin
+  |import ammonite.ops.{
+  |  PipeableImplicit,
+  |  FilterMapExtImplicit,
+  |  FilterMapArraysImplicit,
+  |  FilterMapIteratorsImplicit,
+  |  FilterMapGeneratorsImplicit,
+  |  SeqFactoryFunc,
+  |  RegexContextMaker,
+  |  Callable1Implicit
+  |}
+  |import ammonite.runtime.tools._
+  |import ammonite.repl.tools._
+  |import ammonite.interp.api.IvyConstructor.{ArtifactIdExt, GroupIdExt}
+  |import ammonite.interp.api.InterpBridge.value.exit
+  |""".stripMargin
 
-  val replPredef = """
-    |import ammonite.repl.ReplBridge.value.{
-    |  codeColorsImplicit,
-    |  tprintColorsImplicit,
-    |  pprinterImplicit,
-    |  show,
-    |  typeOf
-    |}
-  """.stripMargin
+val replPredef = """
+  |import ammonite.repl.ReplBridge.value.{
+  |  codeColorsImplicit,
+  |  tprintColorsImplicit,
+  |  pprinterImplicit,
+  |  show,
+  |  typeOf
+  |}
+""".stripMargin
 
-  def ammoniteHome = os.Path(System.getProperty("user.home"))/".ammonite"
+def ammoniteHome = os.Path(System.getProperty("user.home"))/".ammonite"
 
-  def alreadyLoadedDependencies(
-    resourceName: String = "amm-dependencies.txt"
-  ): Seq[coursier.Dependency] = {
+def alreadyLoadedDependencies(
+  resourceName: String = "amm-dependencies.txt"
+): Seq[coursier.Dependency] = {
 
-    var is: InputStream = null
+  var is: InputStream = null
 
-    try {
-      is = Thread.currentThread().getContextClassLoader.getResourceAsStream(resourceName)
-      if (is == null)
-        throw new Exception(s"Resource $resourceName not found")
-      scala.io.Source.fromInputStream(is)(Codec.UTF8)
-        .mkString
-        .split('\n')
-        .filter(_.nonEmpty)
-        .map(l => l.split(':') match {
-          case Array(org, name, ver) =>
-            coursier.Dependency(coursier.Module(Organization(org), ModuleName(name)), ver)
-          case other =>
-            throw new Exception(s"Cannot parse line '$other' from resource $resourceName")
-        })
-    } finally {
-      if (is != null)
-        is.close()
-    }
+  try {
+    is = Thread.currentThread().getContextClassLoader.getResourceAsStream(resourceName)
+    if (is == null)
+      throw new Exception(s"Resource $resourceName not found")
+    scala.io.Source.fromInputStream(is)(Codec.UTF8)
+      .mkString
+      .split('\n')
+      .filter(_.nonEmpty)
+      .map(l => l.split(':') match {
+        case Array(org, name, ver) =>
+          coursier.Dependency(coursier.Module(Organization(org), ModuleName(name)), ver)
+        case other =>
+          throw new Exception(s"Cannot parse line '$other' from resource $resourceName")
+      })
+  } finally {
+    if (is != null)
+      is.close()
   }
+}
 
   def dynaMlPredef = Source.fromFile(root_dir+"/conf/DynaMLInit.scala").getLines.mkString("\n")
 
@@ -164,14 +174,17 @@ object Compat{
 }
 
 object Cli{
-  case class Arg[T, V](name: String,
+  case class Arg[T, V](
+    name: String,
     shortName: Option[Char],
     doc: String,
-    action: (T, V) => T)
-    (implicit val reader: scopt.Read[V]){
+    action: (T, V) => T)(
+    implicit val reader: scopt.Read[V]) {
+    
     def runAction(t: T, s: String) = action(t, reader.reads(s))
   }
-  case class Config(predefCode: String = "",
+  case class Config(
+    predefCode: String = "",
     defaultPredef: Boolean = true,
     homePredef: Boolean = true,
     wd: os.Path = os.pwd,
@@ -184,11 +197,11 @@ object Cli{
     predefFile: Option[os.Path] = None,
     help: Boolean = false,
     colored: Option[Boolean] = None,
-    classBased: Boolean = false)
+    classBased: Boolean = false,
+    thin: Boolean = false)
 
 
-  import Scripts.pathScoptRead
-
+  import ammonite.repl.tools.Util.pathScoptRead
   val genericSignature = Seq(
     Arg[Config, String](
       "predef-code", None,
@@ -251,6 +264,14 @@ object Cli{
       "watch", Some('w'),
       "Watch and re-run your scripts when they change",
       (c, v) => c.copy(watch = true)
+    ),
+    Arg[Config, Unit](
+      "thin", None,
+      """Hide parts of the core of Ammonite and some of its dependencies. By default, the core of
+        |Ammonite and all of its dependencies can be seen by users from the Ammonite session. This
+        |option mitigates that via class loader isolation.
+        |""".stripMargin,
+      (c, v) => c.copy(thin=true)
     )
   )
   val replSignature = Seq(
@@ -285,7 +306,7 @@ object Cli{
 
     for(arg <- args) yield {
       showArg(arg).padTo(leftMargin, ' ').mkString +
-        Predef.augmentString(arg.doc).lines.mkString(Util.newLine + " " * leftMargin)
+      Predef.augmentString(arg.doc).lines.mkString(Util.newLine + " " * leftMargin)
     }
   }
   def ammoniteHelp = {
@@ -303,15 +324,16 @@ object Cli{
   }
 
   def groupArgs[T](flatArgs: List[String],
-    args: Seq[Arg[T, _]],
-    initial: T): Either[String, (T, List[String])] = {
+                   args: Seq[Arg[T, _]],
+                   initial: T): Either[String, (T, List[String])] = {
 
     val argsMap0: Seq[(String, Arg[T, _])] = args
       .flatMap{x => Seq(x.name -> x) ++ x.shortName.map(_.toString -> x)}
 
     val argsMap = argsMap0.toMap
 
-    @tailrec def rec(keywordTokens: List[String], current: T): Either[String, (T, List[String])] = {
+    @tailrec def rec(keywordTokens: List[String],
+                     current: T): Either[String, (T, List[String])] = {
       keywordTokens match{
         case head :: rest if head(0) == '-' =>
           val realName = if(head(1) == '-') head.drop(2) else head.drop(1)
@@ -335,7 +357,6 @@ object Cli{
     rec(flatArgs, initial)
   }
 }
-
 /**
   * More or less a minimal version of Autowire's Server that lets you generate
   * a set of "routes" from the methods defined in an object, and call them
@@ -1075,11 +1096,6 @@ class Router [C <: Context](val c: C) {
           Util.newLine + name + " // " + doc
       }.mkString
     }
-  
-    /**
-      * Additional [[scopt.Read]] instance to teach it how to read Ammonite paths
-      */
-    implicit def pathScoptRead: scopt.Read[os.Path] = scopt.Read.stringRead.map(os.Path(_, os.pwd))
   
   }
 

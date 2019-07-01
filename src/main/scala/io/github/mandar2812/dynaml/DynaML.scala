@@ -20,17 +20,18 @@ package io.github.mandar2812.dynaml
 
 import java.io.{InputStream, OutputStream, PrintStream}
 import java.nio.file.NoSuchFileException
-
+import java.net.URLClassLoader
 import ammonite.interp.{
   CodeClassWrapper,
   CodeWrapper,
   Interpreter,
   Preprocessor
 }
-import ammonite.repl.Repl
+import ammonite.repl.{FrontEndAPIImpl, Repl, SourceAPIImpl}
 import ammonite.runtime.{Frame, Storage}
 import ammonite.util.Util.newLine
 import ammonite.util._
+import ammonite.runtime.ImportHook
 import io.github.mandar2812.dynaml.repl._
 
 import scala.annotation.tailrec
@@ -90,7 +91,9 @@ case class DynaML(
   replCodeWrapper: CodeWrapper = CodeWrapper,
   scriptCodeWrapper: CodeWrapper = CodeWrapper,
   alreadyLoadedDependencies: Seq[coursier.Dependency] =
-    Defaults.alreadyLoadedDependencies()) {
+    Defaults.alreadyLoadedDependencies(),
+  importHooks: Map[Seq[String], ImportHook] = ImportHook.defaults,
+  classPathWhitelist: Set[Seq[String]] = Set.empty) {
 
   def loadedPredefFile = predefFile match {
     case Some(path) =>
@@ -106,6 +109,11 @@ case class DynaML(
     case None => Right(None)
   }
 
+  def initialClassLoader: ClassLoader = {
+    val contextClassLoader = Thread.currentThread().getContextClassLoader
+    new DynaML.WhiteListClassLoader(classPathWhitelist, contextClassLoader)
+  }
+
   /**
     * Instantiates an ammonite.Repl using the configuration
     */
@@ -114,7 +122,7 @@ case class DynaML(
     loadedPredefFile.right.map { predefFileInfoOpt =>
       val augmentedPredef = DynaML.maybeDefaultPredef(
         defaultPredef,
-        Defaults.replPredef + Defaults.predefString + Defaults.dynaMlPredef
+        Defaults.replPredef + Defaults.predefString + DynaML.extraPredefString + Defaults.dynaMlPredef
       )
 
       val argString = replArgs.zipWithIndex
@@ -156,7 +164,10 @@ case class DynaML(
         initialColors = colors,
         replCodeWrapper = replCodeWrapper,
         scriptCodeWrapper = scriptCodeWrapper,
-        alreadyLoadedDependencies = alreadyLoadedDependencies
+        alreadyLoadedDependencies = alreadyLoadedDependencies,
+        importHooks = importHooks,
+        initialClassLoader = initialClassLoader,
+        classPathWhitelist = classPathWhitelist
       )
     }
 
@@ -186,15 +197,29 @@ case class DynaML(
         predefFileInfoOpt.toSeq ++ Seq(
           PredefInfo(Name("CodePredef"), predefCode, false, None)
         ),
-        Vector.empty,
+        Seq(
+          (
+            "ammonite.repl.api.SourceBridge",
+            "source",
+            new SourceAPIImpl {}
+          ),
+          (
+            "ammonite.repl.api.FrontEndBridge",
+            "frontEnd",
+            new FrontEndAPIImpl {}
+          )
+        ),
         wd,
         colorsRef,
         verboseOutput,
         () => frame,
         () => throw new Exception("session loading / saving not possible here"),
+        initialClassLoader = initialClassLoader,
         replCodeWrapper,
         scriptCodeWrapper,
-        alreadyLoadedDependencies = alreadyLoadedDependencies
+        alreadyLoadedDependencies = alreadyLoadedDependencies,
+        importHooks = importHooks,
+        classPathWhitelist = classPathWhitelist
       )
       interp.initializePredef() match {
         case None           => Right(interp)
@@ -272,14 +297,22 @@ object DynaML {
     * delegating to [[Main.run]]
     */
   def main(args0: Array[String]): Unit = {
-    // set proxy properties from env
-    // Not in `main0`, since `main0` should be able to be run as part of the
-    // test suite without mangling the global properties of the JVM process
-    ProxyFromEnv.setPropProxyFromEnv()
 
-    val success = main0(args0.toList, System.in, System.out, System.err)
-    if (success) sys.exit(0)
-    else sys.exit(1)
+    if (!args0.isEmpty && args0.head.contains("--server")) {
+      DynaServe.main(Array.empty[String])
+    } else {
+
+      // set proxy properties from env
+      // Not in `main0`, since `main0` should be able to be run as part of the
+      // test suite without mangling the global properties of the JVM process
+      ProxyFromEnv.setPropProxyFromEnv()
+
+      val success = main0(args0.toList, System.in, System.out, System.err)
+      if (success) sys.exit(0)
+      else sys.exit(1)
+
+    }
+
   }
 
   /**
@@ -349,8 +382,29 @@ object DynaML {
 
   val extraPredefString = s"""
       |import _root_.io.github.mandar2812.dynaml.repl.Router.{doc, main}
-      |import _root_.io.github.mandar2812.dynaml.repl.Scripts.pathScoptRead
+      |import _root_.ammonite.repl.tools.Util.pathScoptRead
       |""".stripMargin
+
+  class WhiteListClassLoader(whitelist: Set[Seq[String]], parent: ClassLoader)
+      extends URLClassLoader(Array(), parent) {
+    override def loadClass(name: String, resolve: Boolean) = {
+      val tokens = name.split('.')
+      if (Util.lookupWhiteList(
+            whitelist,
+            tokens.init ++ Seq(tokens.last + ".class")
+          )) {
+        super.loadClass(name, resolve)
+      } else {
+        throw new ClassNotFoundException(name)
+      }
+
+    }
+    override def getResource(name: String) = {
+      if (Util.lookupWhiteList(whitelist, name.split('/')))
+        super.getResource(name)
+      else null
+    }
+  }
 
 }
 
@@ -471,8 +525,12 @@ class MainRunner(
       remoteLogging = cliConfig.remoteLogging,
       colors = colors,
       replCodeWrapper = codeWrapper,
-      scriptCodeWrapper = codeWrapper
+      scriptCodeWrapper = codeWrapper,
+      alreadyLoadedDependencies =
+        if (cliConfig.thin) Nil else Defaults.alreadyLoadedDependencies(),
+      classPathWhitelist =
+        ammonite.repl.Repl.getClassPathWhitelist(cliConfig.thin)
     )
-
   }
+
 }
