@@ -13,7 +13,7 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml
 
 import java.io.{InputStream, OutputStream, PrintStream}
@@ -23,7 +23,6 @@ import ammonite.runtime.Storage
 import ammonite.sshd.{SshServer, SshServerConfig}
 import ammonite.sshd.util.Environment
 import ammonite.util.{Bind, Colors}
-
 
 /**
   * An ssh server which serves ammonite repl as it's shell channel.
@@ -38,12 +37,12 @@ import ammonite.util.{Bind, Colors}
   * @param classLoader classloader for ammonite to use
   */
 class DynaMLSSH(
-                 sshConfig: SshServerConfig,
-                 predef: String = "",
-                 defaultPredef: Boolean = true,
-                 wd: Path = ammonite.ops.pwd,
-                 replArgs: Seq[Bind[_]] = Nil,
-                 classLoader: ClassLoader = DynaMLSSH.getClass.getClassLoader) {
+  sshConfig: SshServerConfig,
+  predef: String = "",
+  defaultPredef: Boolean = true,
+  wd: os.Path = os.pwd,
+  replArgs: Seq[Bind[_]] = Nil,
+  classLoader: ClassLoader = DynaMLSSH.getClass.getClassLoader) {
   private lazy val sshd = SshServer(
     sshConfig,
     shellServer = DynaMLSSH.runRepl(
@@ -56,23 +55,24 @@ class DynaMLSSH(
     )
   )
 
-  def port = sshd.getPort
-  def start(): Unit = sshd.start()
-  def stop(): Unit = sshd.stop()
+  def port                    = sshd.getPort
+  def start(): Unit           = sshd.start()
+  def stop(): Unit            = sshd.stop()
   def stopImmediately(): Unit = sshd.stop(true)
 }
-
 
 object DynaMLSSH {
   // Actually runs a repl inside of session serving a remote user shell.
   private def runRepl(
-                       homePath: Path,
-                       predefCode: String,
-                       defaultPredef: Boolean,
-                       wd: Path,
-                       replArgs: Seq[Bind[_]],
-                       replServerClassLoader: ClassLoader)(
-                       in: InputStream, out: OutputStream): Unit = {
+    homePath: os.Path,
+    predefCode: String,
+    defaultPredef: Boolean,
+    wd: os.Path,
+    replArgs: Seq[Bind[_]],
+    replServerClassLoader: ClassLoader
+  )(in: InputStream,
+    out: OutputStream
+  ): Unit = {
     // since sshd server has it's own customised environment,
     // where things like System.out will output to the
     // server's console, we need to prepare individual environment
@@ -92,11 +92,13 @@ object DynaMLSSH {
           verboseOutput = false,
           remoteLogging = false,
           colors = Colors.Default
-        ).run(replArgs:_*)
+        ).run(replArgs: _*)
       } catch {
         case any: Throwable =>
           val sshClientOutput = new PrintStream(out)
-          sshClientOutput.println("What a terrible failure, DynaML just blew up!")
+          sshClientOutput.println(
+            "What a terrible failure, DynaML just blew up!"
+          )
           any.printStackTrace(sshClientOutput)
       }
     }
