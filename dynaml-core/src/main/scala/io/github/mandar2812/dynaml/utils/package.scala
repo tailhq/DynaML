@@ -612,6 +612,9 @@ package object utils {
 
   private final val MAXDUB: Double = Double.MaxValue
 
+  private final val MINDUB: Double = Double.MinValue
+
+
   /**
    * Inverse of the Error Function
    * 
@@ -659,6 +662,19 @@ package object utils {
       }
   }
 
-  def probit(x: Double): Double = math.sqrt(2d)*inv_erf(2.0*x - 1d)
+  def probit(x: Double): Double = {
+
+    require(x <= 1d && x >= 0d, "For the Probit function, the input must be in [0,1]")
+
+    if(x == 1d) MAXDUB
+    else if(x == 0d) MINDUB
+    else {
+      val erf_i = inv_erf(2.0*x - 1d)
+
+      if(erf_i == MAXDUB) MAXDUB
+      else math.sqrt(2d)*erf_i
+    }
+    
+  }
 
 }
