@@ -666,15 +666,11 @@ package object utils {
 
     require(x <= 1d && x >= 0d, "For the Probit function, the input must be in [0,1]")
 
-    if(x == 1d) MAXDUB
-    else if(x == 0d) MINDUB
-    else {
-      val erf_i = inv_erf(2.0*x - 1d)
-
-      if(erf_i == MAXDUB) MAXDUB
-      else math.sqrt(2d)*erf_i
-    }
     
+    val erf_i = inv_erf(2.0*x - 1d)
+
+    if(erf_i == MAXDUB) MAXDUB
+    else math.sqrt(2d)*erf_i
   }
 
 }
