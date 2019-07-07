@@ -42,8 +42,6 @@ class RegressionMetrics(
 
   val length: Int = len
 
-  val names = Seq("RMSE", "MAE", "Rsq", "Pearson Corr.", "Spearman Corr.", "Yield")
-
   val rmse: Double = math.sqrt(scoresAndLabels.map((p) =>
     math.pow(p._1 - p._2, 2)/length).sum)
 
@@ -100,6 +98,8 @@ class RegressionMetrics(
     scala.Predef.print("Std Dev of Residuals = ")
     pprint.pprintln(sigma)
   }
+
+  val names = Seq("MAE", "RMSE", "Rsq", "Pearson Corr.", "Spearman Corr.", "Yield")
 
   override def kpi() = DenseVector(mae, rmse, Rsq, corr, sp_corr, modelYield)
 
