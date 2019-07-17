@@ -28,7 +28,7 @@ import org.apache.spark.rdd.RDD
 /**
   * Created by mandar2812 on 15/6/16.
   */
-class GLMPipe[T, Source](pre: (Source) => Stream[(DenseVector[Double], Double)],
+class GLMPipe[T, Source](pre: DataPipe[Source, Stream[(DenseVector[Double], Double)]],
                          map: (DenseVector[Double]) => (DenseVector[Double]) = identity _,
                          task: String = "regression", modelType: String = "") extends
   ModelPipe[Source, Stream[(DenseVector[Double], Double)],

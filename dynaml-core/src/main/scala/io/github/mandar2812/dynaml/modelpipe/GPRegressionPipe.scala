@@ -54,16 +54,15 @@ import scala.reflect.ClassTag
   * @author mandar2812 on 15/6/16.
   * */
 class GPRegressionPipe[Source, IndexSet: ClassTag](
-  pre: (Source) => Seq[(IndexSet, Double)],
+  pre: DataPipe[Source, Seq[(IndexSet, Double)]],
   cov: LocalScalarKernel[IndexSet],
   n: LocalScalarKernel[IndexSet],
-  order: Int = 0, ex: Int = 0,
   meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0))
   extends ModelPipe[
     Source, Seq[(IndexSet, Double)], IndexSet, Double,
     AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet]] {
 
-  override val preProcess: (Source) => Seq[(IndexSet, Double)] = pre
+  override val preProcess: DataPipe[Source, Seq[(IndexSet, Double)]] = pre
 
   implicit val transform = identityPipe[Seq[(IndexSet, Double)]]
 
@@ -103,7 +102,7 @@ class GPRegressionPipe[Source, IndexSet: ClassTag](
   * @author mandar2812 date 2017/08/09
   * */
 class GPBasisFuncRegressionPipe[Source, IndexSet: ClassTag](
-  pre: (Source) => Seq[(IndexSet, Double)],
+  pre: DataPipe[Source, Seq[(IndexSet, Double)]],
   cov: LocalScalarKernel[IndexSet],
   n: LocalScalarKernel[IndexSet],
   basisFunc: DataPipe[IndexSet, DenseVector[Double]],
@@ -112,7 +111,7 @@ class GPBasisFuncRegressionPipe[Source, IndexSet: ClassTag](
     Source, Seq[(IndexSet, Double)], IndexSet, Double,
     GPBasisFuncRegressionModel[Seq[(IndexSet, Double)], IndexSet]] {
 
-  override val preProcess: (Source) => Seq[(IndexSet, Double)] = pre
+  override val preProcess: DataPipe[Source, Seq[(IndexSet, Double)]] = pre
 
   implicit val transform = identityPipe[Seq[(IndexSet, Double)]]
 
@@ -128,11 +127,10 @@ object GPRegressionPipe {
     * Convenience method for creating [[GPRegressionPipe]] instances
     * */
   def apply[Source, IndexSet: ClassTag](
-    pre: (Source) => Seq[(IndexSet, Double)],
+    pre: DataPipe[Source, Seq[(IndexSet, Double)]],
     cov: LocalScalarKernel[IndexSet], n: LocalScalarKernel[IndexSet],
-    order: Int = 0, ex: Int = 0,
     meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0)) =
-    new GPRegressionPipe[Source, IndexSet](pre, cov, n, order, ex, meanFunc)
+    new GPRegressionPipe[Source, IndexSet](pre, cov, n, meanFunc)
 }
 
 

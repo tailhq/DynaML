@@ -10,7 +10,7 @@ import io.github.mandar2812.dynaml.pipes.{DataPipe, ReversibleScaler}
 trait ModelPipe[-Source, T, Q, R, M <: Model[T, Q, R]]
   extends DataPipe[Source, M] {
 
-  val preProcess: (Source) => T
+  val preProcess: DataPipe[Source, T]
 
   override def run(data: Source): M
 }

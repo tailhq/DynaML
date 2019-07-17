@@ -18,6 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.modelpipe
 
+import io.github.mandar2812.dynaml.pipes.DataPipe
 import breeze.linalg.DenseVector
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.models.svm.DLSSVM
@@ -25,7 +26,7 @@ import io.github.mandar2812.dynaml.models.svm.DLSSVM
 /**
   * Created by mandar on 15/6/16.
   */
-class DLSSVMPipe[Source](pre: (Source) => Stream[(DenseVector[Double], Double)],
+class DLSSVMPipe[Source](pre: DataPipe[Source, Stream[(DenseVector[Double], Double)]],
                          cov: LocalScalarKernel[DenseVector[Double]],
                          task: String = "regression") extends
   ModelPipe[Source, Stream[(DenseVector[Double], Double)],

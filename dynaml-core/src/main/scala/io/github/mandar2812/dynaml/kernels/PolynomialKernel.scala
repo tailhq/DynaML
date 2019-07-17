@@ -39,3 +39,36 @@ class PolynomialKernel(
     this
   }
 }
+
+class Polynomial1dKernel(
+    private var degree: Int = 2,
+    private var offset: Double = 1.0)
+  extends LocalSVMKernel[Double]
+  with Serializable {
+
+  override val hyper_parameters = List("degree", "offset")
+
+  state = Map("degree" -> degree, "offset" -> offset)
+
+  def setdegree(d: Int): Unit = {
+    this.degree = d
+    state += ("degree" -> d.toDouble)
+  }
+
+  def setoffset(o: Double): Unit = {
+    this.offset = o
+    state += ("offset" -> o)
+  }
+
+  override def evaluateAt(config: Map[String, Double])(
+    x: Double,
+    y: Double): Double =
+    math.pow((x * y) + config("offset"), config("degree").toInt)
+
+  override def setHyperParameters(h: Map[String, Double]) = {
+    super.setHyperParameters(h)
+    if(h contains "offset")
+      state += ("offset" -> math.abs(h("offset")))
+    this
+  }
+}
