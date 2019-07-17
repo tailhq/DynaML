@@ -55,17 +55,17 @@
   
     val n = new MAKernel(1.0)
     
-    val linear_trend = (-0.75, 0.2d)
-    val quadratic_trend = (0d, 0.25, 0d)
+    val linear_trend = (0.25, 0d)
+    val quadratic_trend = (-0.01d, 0.25, 0d)
 
-    val brownian_motion = GaussianProcessPrior[Double, (Double, Double)](
-      fbm,
-      new MAKernel(0.001),
+    val gp_rbf = GaussianProcessPrior[Double, (Double, Double)](
+      rbfc,
+      n,
       MetaPipe((p: (Double, Double)) => (x: Double) => p._1 * x + p._2),
       trendEncoder,
       (0d, 0d)
     )
-    brownian_motion.hyperPrior_(hyp_prior)
+    gp_rbf.hyperPrior_(hyp_prior)
 
     val gp_prior = GaussianProcessPrior[Double, (Double, Double, Double)](
       mlpKernel + stKernel,
@@ -87,7 +87,7 @@
     val xs = Seq.tabulate[Double](50)(1d * _)
   
     val ys: MultGaussianPRV = gp_prior.priorDistribution(xs)
-    val yb: MultGaussianPRV = brownian_motion.priorDistribution(xs)
+    val yb: MultGaussianPRV = gp_rbf.priorDistribution(xs)
   
     val y0 = RandomVariable(UnivariateGaussian(0.0, 1.0))
     val ys_ar: RandomVariable[Seq[Double]] =
@@ -130,32 +130,23 @@
     hold()
     samples.tail.foreach((s: Seq[Double]) => spline(xs, s))
     unhold()
-    title("GP Explicit Time")
+    title(s"GP Explicit Time: ${gp_prior.covariance}")
   
     spline(xs, samples_ar.head)
     hold()
     samples_ar.tail.foreach((s: Seq[Double]) => spline(xs, s))
     unhold()
-    title("GP-AR")
+    title(s"GP-AR: ${gp_prior.covariance}")
 
     spline(xs, samples_ar2.head)
     hold()
     samples_ar2.tail.foreach((s: Seq[Double]) => spline(xs, s))
     unhold()
-    title("GP-AR Recurrent")
+    title(s"GP-AR Recurrent: ${gpModelPipe.covariance}")
 
     spline(xs, samples_br.head)
     hold()
     samples_br.tail.foreach((s: Seq[Double]) => spline(xs, s))
     unhold()
-    title("Brownian Motion")
-
-    /* val phase_space_traj = samples_ar2.map(xs => xs.sliding(2).toSeq.map(h => (h.head, h.last)))
-    
-    line(phase_space_traj.head.map(_._1), phase_space_traj.head.map(_._2))
-    hold()
-    phase_space_traj.tail.foreach((s: Seq[(Double, Double)]) => line(s.map(_._1), s.map(_._2)))
-    unhold()
-    title("Gaussian Process AR Phase Space Trajectories") */
-
+    title(s"GP RBF Explicit Time: ${gp_rbf.covariance}")
 }
