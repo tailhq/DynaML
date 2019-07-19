@@ -26,7 +26,7 @@ import spire.algebra.Field
   * T-Student Kernel
   * K(x,y) = 1/(1 + ||x - y||<sup>d</sup>)
   */
-class TStudentKernel(private var d: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
+class TStudentKernel(degree: Double = 1.0)(implicit ev: Field[DenseVector[Double]])
   extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
     with SVMKernel[DenseMatrix[Double]]
     with LocalScalarKernel[DenseVector[Double]]
@@ -34,12 +34,12 @@ class TStudentKernel(private var d: Double = 1.0)(implicit ev: Field[DenseVector
 
   override val hyper_parameters = List("d")
 
-  state = Map("d" -> d)
+  state = Map("d" -> degree)
 
   override def evalAt(config: Map[String, Double])(x: DenseVector[Double]): Double =
     1.0/(1.0 + math.pow(norm(x, 2), config("d")))
 
-  def getD: Double = state("d")
+  def d: Double = state("d")
 
   override def gradientAt(
     config: Map[String, Double])(
@@ -54,7 +54,7 @@ class TStudentKernel(private var d: Double = 1.0)(implicit ev: Field[DenseVector
 
 }
 
-class TStudentCovFunc(private var d: Double) extends LocalSVMKernel[Double] {
+class TStudentCovFunc(d: Double) extends LocalSVMKernel[Double] {
   override val hyper_parameters: List[String] = List("d")
 
   state = Map("d" -> d)
@@ -90,5 +90,5 @@ class CoRegTStudentKernel(bandwidth: Double) extends LocalSVMKernel[Int] {
     if(dist > 0.0) Map("CoRegD" -> -dist_d*math.log(dist)/math.pow(1.0 + dist_d, 2.0)) else Map("CoRegD" -> 0.0)
   }
 
-  def getD: Double = state("CoRegD")
+  def d: Double = state("CoRegD")
 }

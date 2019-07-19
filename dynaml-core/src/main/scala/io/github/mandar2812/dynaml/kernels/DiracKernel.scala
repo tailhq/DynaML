@@ -27,7 +27,7 @@ import breeze.linalg.{DenseMatrix, DenseVector, norm}
   *
   * K(x,y) = noise*DiracDelta(x,y)
   */
-class DiracKernel(private var noiseLevel: Double = 1.0)
+class DiracKernel(noiseLevel: Double = 1.0)
   extends SVMKernel[DenseMatrix[Double]]
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable {
@@ -38,7 +38,6 @@ class DiracKernel(private var noiseLevel: Double = 1.0)
 
   def setNoiseLevel(d: Double): Unit = {
     this.state += ("noiseLevel" -> d)
-    this.noiseLevel = d
   }
 
   override def evaluateAt(
@@ -60,7 +59,7 @@ class DiracKernel(private var noiseLevel: Double = 1.0)
 
 }
 
-class MAKernel(private var noiseLevel: Double = 1.0)
+class MAKernel(noiseLevel: Double = 1.0)
   extends LocalSVMKernel[Double]
   with Serializable {
   override val hyper_parameters = List("noiseLevel")
@@ -69,7 +68,6 @@ class MAKernel(private var noiseLevel: Double = 1.0)
 
   def setNoiseLevel(d: Double): Unit = {
     this.state += ("noiseLevel" -> d)
-    this.noiseLevel = d
   }
 
   override def evaluateAt(

@@ -26,7 +26,7 @@ import spire.algebra.{Field, InnerProductSpace}
  * K(x,y) = exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
  * */
 
-class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
+class GenericRBFKernel[T](bandwidth: Double = 1.0)(
   implicit val ev: Field[T] with InnerProductSpace[T, Double])
   extends StationaryKernel[T, Double, DenseMatrix[Double]]
     with LocalScalarKernel[T] with Serializable { self =>
@@ -37,7 +37,6 @@ class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
 
   def setbandwidth(d: Double): Unit = {
     this.state += ("bandwidth" -> d)
-    this.bandwidth = d
   }
 
   override def evalAt(config: Map[String, Double])(x: T): Double =
@@ -57,7 +56,7 @@ class GenericRBFKernel[T](private var bandwidth: Double = 1.0)(
 
 }
 
-class RBFKernel(private var bandwidth: Double = 1.0)(
+class RBFKernel(bandwidth: Double = 1.0)(
   implicit ev: Field[DenseVector[Double]] with InnerProductSpace[DenseVector[Double], Double])
   extends GenericRBFKernel[DenseVector[Double]](bandwidth)(ev)
   with SVMKernel[DenseMatrix[Double]]
@@ -69,7 +68,7 @@ class RBFKernel(private var bandwidth: Double = 1.0)(
   * Squared Exponential Kernel is a generalized RBF Kernel
   * K(x,y) = h<sup>2</sup>*exp(-||x - y||<sup>2</sup>/2 &#215; l<sup>2</sup>)
   */
-class SEKernel(private var band: Double = 1.0, private var h: Double = 2.0)(
+class SEKernel(band: Double = 1.0, h: Double = 2.0)(
   implicit ev: Field[DenseVector[Double]] with InnerProductSpace[DenseVector[Double], Double])
   extends RBFKernel(band) {
 
@@ -99,7 +98,7 @@ class SEKernel(private var band: Double = 1.0, private var h: Double = 2.0)(
   * positive semi-definite matrix M is assumed to
   * be diagonal.
   */
-class MahalanobisKernel(private var band: DenseVector[Double], private var h: Double = 2.0)
+class MahalanobisKernel(band: DenseVector[Double], h: Double = 2.0)
   extends SVMKernel[DenseMatrix[Double]]
   with LocalSVMKernel[DenseVector[Double]]
   with Serializable  {
@@ -147,7 +146,7 @@ class MahalanobisKernel(private var band: DenseVector[Double], private var h: Do
 }
 
 
-class RBFCovFunc(private var bandwidth: Double)
+class RBFCovFunc(bandwidth: Double)
   extends LocalScalarKernel[Double] {
 
   override val hyper_parameters: List[String] = List("bandwidth")
@@ -163,7 +162,7 @@ class RBFCovFunc(private var bandwidth: Double)
     Map("bandwidth" -> evaluateAt(config)(x,y)*math.pow(x-y,2)/math.pow(math.abs(config("bandwidth")), 3))
 }
 
-class SECovFunc(private var band: Double = 1.0, private var h: Double = 2.0)
+class SECovFunc(band: Double = 1.0, h: Double = 2.0)
   extends RBFCovFunc(band) {
 
   state = Map("bandwidth" -> band, "amplitude" -> h)

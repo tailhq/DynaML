@@ -6,72 +6,66 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   * @author mandar2812
   * Annova Kernel
   */
-class AnovaKernel(si: Double = 1.0,
-                  exp: Double = 4.0,
-                  d: Double = 2.0)
-  extends SVMKernel[DenseMatrix[Double]]
-  with LocalSVMKernel[DenseVector[Double]]
-  with Serializable {
+class AnovaKernel(si: Double = 1.0, exp: Double = 4.0, d: Double = 2.0)
+    extends SVMKernel[DenseMatrix[Double]]
+    with LocalSVMKernel[DenseVector[Double]]
+    with Serializable {
   override val hyper_parameters = List("sigma", "k", "degree")
 
   state = Map("sigma" -> si, "k" -> exp, "degree" -> d)
 
-  private var sigma: Double = si
-
-  private var k = exp
-
-  private var degree = d
-
   def setsigma(b: Double): Unit = {
-    this.sigma = b
     state += ("sigma" -> b)
   }
 
   def setk(kl: Double) = {
-    this.k = kl
     state += ("k" -> kl)
   }
 
   override def evaluateAt(
-    config: Map[String, Double])(
-    x: DenseVector[Double],
-    y: DenseVector[Double]): Double = {
+    config: Map[String, Double]
+  )(x: DenseVector[Double],
+    y: DenseVector[Double]
+  ): Double = {
     x.toArray
       .zip(y.toArray)
-      .map{couple =>
-        math.exp(-1.0*config("degree")*config("sigma")*math.pow(math.pow(couple._1, config("k")) -
-          math.pow(couple._2, config("k")),2))
-      }.sum
+      .map { couple =>
+        math.exp(
+          -1.0 * config("degree") * config("sigma") * math.pow(
+            math.pow(couple._1, config("k")) -
+              math.pow(couple._2, config("k")),
+            2
+          )
+        )
+      }
+      .sum
   }
-
-
 }
 
-class AnovaCovFunc(si: Double = 1.0,
-                   exp: Double = 2.0,
-                   d: Double = 2.0)
-  extends LocalSVMKernel[Double] {
+class AnovaCovFunc(si: Double = 1.0, exp: Double = 2.0, d: Double = 2.0)
+    extends LocalSVMKernel[Double] {
   override val hyper_parameters = List("sigma", "k", "degree")
 
   state = Map("sigma" -> si, "k" -> exp, "degree" -> d)
 
-  private var sigma: Double = si
-
-  private var k = exp
-
-  private var degree = d
-
   def setsigma(b: Double): Unit = {
-    this.sigma = b
     state += ("sigma" -> b)
   }
 
   def setk(kl: Double) = {
-    this.k = kl
     state += ("k" -> kl)
   }
 
-  override def evaluateAt(config: Map[String, Double])(x: Double, y: Double): Double =
-    math.exp(-1.0*config("d")*config("sigma")*math.pow(math.pow(x, config("k")) -
-      math.pow(y, config("k")),2))
+  override def evaluateAt(
+    config: Map[String, Double]
+  )(x: Double,
+    y: Double
+  ): Double =
+    math.exp(
+      -1.0 * config("d") * config("sigma") * math.pow(
+        math.pow(x, config("k")) -
+          math.pow(y, config("k")),
+        2
+      )
+    )
 }

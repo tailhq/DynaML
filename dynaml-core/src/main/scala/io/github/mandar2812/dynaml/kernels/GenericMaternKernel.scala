@@ -34,7 +34,7 @@ import io.github.mandar2812.dynaml.utils._
   *
   *
   * */
-class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
+class GenericMaternKernel[T](l: Double, p: Int = 2)(
   implicit evInner: InnerProductSpace[T, Double], evField: Field[T])
   extends StationaryKernel[T, Double, DenseMatrix[Double]]
     with LocalScalarKernel[T] with Serializable { self =>
@@ -106,7 +106,7 @@ class GenericMaternKernel[T](private var l: Double, p: Int = 2)(
   *
   *
   * */
-abstract class GenericMaternARDKernel[T](private var l: T, private var p: Int = 3)(
+abstract class GenericMaternARDKernel[T](l: T, p: Int = 3)(
   implicit evInner: InnerProductSpace[T, Double], evField: Field[T]) extends
   StationaryKernel[T, Double, DenseMatrix[Double]] with
   LocalScalarKernel[T] with

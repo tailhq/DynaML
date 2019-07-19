@@ -24,7 +24,7 @@ import spire.algebra.Field
 /**
   * @author mandar2812 date: 24/11/15.
   */
-class WaveletKernel(func: (Double) => Double)(private var scale: Double)(implicit ev: Field[DenseVector[Double]])
+class WaveletKernel(func: (Double) => Double)(scale: Double)(implicit ev: Field[DenseVector[Double]])
   extends StationaryKernel[DenseVector[Double], Double, DenseMatrix[Double]]
     with SVMKernel[DenseMatrix[Double]]
     with LocalSVMKernel[DenseVector[Double]]
@@ -37,7 +37,6 @@ class WaveletKernel(func: (Double) => Double)(private var scale: Double)(implici
   val mother: (Double) => Double = func
 
   def setscale(d: Double): Unit = {
-    this.scale = d
     state += ("scale" -> d)
   }
 
@@ -49,7 +48,7 @@ class WaveletKernel(func: (Double) => Double)(private var scale: Double)(implici
 
 }
 
-class WaveletCovFunc(func: (Double) => Double)(private var scale: Double)
+class WaveletCovFunc(func: (Double) => Double)(scale: Double)
   extends LocalSVMKernel[Double] {
   override val hyper_parameters: List[String] = List("scale")
 

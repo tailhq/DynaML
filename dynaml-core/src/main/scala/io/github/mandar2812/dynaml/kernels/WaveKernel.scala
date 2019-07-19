@@ -15,11 +15,8 @@ class WaveKernel(th: Double = 1.0)
 
   state = Map("theta" -> th)
 
-  private var theta: Double = th
-
-  def setc(b: Double): Unit = {
-    state += ("theta" -> b)
-    this.theta = b
+  def set_theta(t: Double): Unit = {
+    state += ("theta" -> t)
   }
 
   override def evaluateAt(
@@ -37,9 +34,11 @@ class WaveKernel(th: Double = 1.0)
     Map("theta" -> (-1.0*math.cos(diff/config("theta")) + math.sin(diff/config("theta"))/diff))
   }
 
+  def theta: Double = this.state("theta")
+
 }
 
-class WaveCovFunc(private var theta: Double)
+class WaveCovFunc(theta: Double)
   extends LocalSVMKernel[Double] {
   override val hyper_parameters: List[String] = List("theta")
 
