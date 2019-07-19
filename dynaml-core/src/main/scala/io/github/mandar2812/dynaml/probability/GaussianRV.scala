@@ -57,6 +57,8 @@ case class MultGaussianRV(
 
   override val underlyingDist = MVGaussian(mu, covariance)
 
+  def apply(r: Range): MultGaussianRV = MultGaussianRV(mu(r), covariance(r,r))
+
 }
 
 object MultGaussianRV {
