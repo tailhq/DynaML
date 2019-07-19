@@ -17,7 +17,7 @@
   import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
   import spire.implicits._
 
-  val p = 4
+  val p = 3
   val num_sample_paths = 10
   val len = 100
 
@@ -27,11 +27,17 @@
 
   val y0 = RandomVariable(UnivariateGaussian(0.0, 1.0))
 
-  val urv = UniformRV(-0.75, 0.25)
+  val urv = UniformRV(-1.0, 1.0)
 
-  val coeff_gen = (order: Int) => DenseVector.tabulate(order)(_ => urv.draw)
+  val coeff_gen = 
+    (order: Int) => MultGaussianRV(
+      DenseVector.tabulate[Double](order*(order+1))(i => if(i == 0) 0d else -0.01d),//DenseVector.zeros[Double](order), 
+      diag(DenseVector.tabulate[Double](order*(order+1))(i => if(i < order) 0.01d else 0.001))
+    )
 
-  val w = coeff_gen(p)
+  val w_prior = coeff_gen(p)
+
+  val w = w_prior.draw
 
   val rbfc      = new SEKernel(1d, 2.0)
   val mlpKernel = new MLPKernel(0.5, 0.5d)
@@ -48,8 +54,21 @@
   //Define the trend functions. One a linear trend
   //and the other a parabola.
 
+  val basis_func_mapping = DataPipe(
+    (x: DenseVector[Double]) => 
+      (x * DenseVector.vertcat(DenseVector(1d), x).t).toDenseVector
+  )
+
   val linear_vec_trend = MetaPipe(
-    (p: DenseVector[Double]) => (x: DenseVector[Double]) => p dot x
+    (p: DenseVector[Double]) => (x: DenseVector[Double]) => {
+      p dot x
+    }
+  )
+
+  val quadratic_vec_trend = MetaPipe(
+    (p: DenseVector[Double]) => (x: DenseVector[Double]) => {
+      p dot basis_func_mapping(x)
+    }
   )
 
   val linear_trend_mean = MetaPipe(
@@ -97,23 +116,20 @@
 
   //Define a gaussian process for GP Time Series models.
   val gp_prior = GaussianProcessPrior[DenseVector[Double], DenseVector[Double]](
-    (mlpKernel + stKernel)*0.5,
+    rbfc > rbfc,//(mlpKernel + stKernel),
     noise,
     linear_vec_trend,
     linear_vec_trend_encoder,
-    w
+    w(0 until p)
   )
 
   val gpModelPipe = 
     new GPBasisFuncRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[Double]](
       identityPipe[Seq[(DenseVector[Double], Double)]],
-      rbfc,//(mlpKernel + stKernel)*0.5,
+      rbfc > rbfc,//(mlpKernel + stKernel),
       noise,
       identityPipe[DenseVector[Double]],
-      MultGaussianRV(
-        DenseVector.zeros[Double](p), 
-        diag(DenseVector.fill[Double](p)(0.01d))
-      )
+      w_prior(0 until p)
     )
     /* GPRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[Double]](
       identityPipe[Seq[(DenseVector[Double], Double)]],
@@ -157,7 +173,7 @@
         .scanLeft(
           u0
         )((y: DenseVector[Double], _) => {
-          val y_new: Double = linear_vec_trend(w)(y) + y0.draw
+          val y_new: Double = quadratic_vec_trend(w)(y) + y0.draw
           DenseVector(Array(y_new) ++ y(0 to -2).toArray)
         })
         .toSeq
@@ -194,7 +210,7 @@
   samples_markov.tail.foreach((s: Seq[Double]) => spline(xs, s))
   unhold()
   title(
-    s"""AR($p): y(t) = ${markov_formula} + noise"""
+    s"""AR($p): y(t) = F[y(t), ..., y(t-${p})] + noise"""
   )
 
   spline(xs, samples_ar_rec.head)
