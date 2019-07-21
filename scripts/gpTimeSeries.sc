@@ -17,36 +17,56 @@
   import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
   import spire.implicits._
 
-  val p = 3
+  //For p order auto-regressive dynamics
+  val p                = 3
   val num_sample_paths = 10
+  //Simulation time of the time series models.
   val len = 100
 
   val xs = Seq.tabulate[Double](len)(1d * _)
 
-  implicit val ev = VectorField(p)
+  implicit val ev = VectorField(p * (p + 1))
 
   val y0 = RandomVariable(UnivariateGaussian(0.0, 1.0))
 
   val urv = UniformRV(-1.0, 1.0)
 
-  val coeff_gen = 
-    (order: Int) => MultGaussianRV(
-      DenseVector.tabulate[Double](order*(order+1))(i => if(i == 0) 0d else -0.01d),//DenseVector.zeros[Double](order), 
-      diag(DenseVector.tabulate[Double](order*(order+1))(i => if(i < order) 0.01d else 0.001))
-    )
+  val coeff_gen =
+    (order: Int) =>
+      MultGaussianRV(
+        DenseVector.tabulate[Double](order * (order + 1))(
+          i => if (i == 0) 0d else -0.01d
+        ),
+        diag(
+          DenseVector.tabulate[Double](order * (order + 1))(
+            i =>
+              if (i < order) 0.01d
+              else 0.001
+          )
+        )
+      )
 
   val w_prior = coeff_gen(p)
 
+  //Draw the AR(p) coefficients from the prior distribution w_prior
   val w = w_prior.draw
 
+  //Define some kernels for use later.
   val rbfc      = new SEKernel(1d, 2.0)
-  val mlpKernel = new MLPKernel(0.5, 0.5d)
+  val mlpKernel = new MLPKernel(1d, 0.5d)
   val fbm       = new FBMCovFunction(0.5)
-  val stKernel  = new TStudentKernel(0.2)
+  val stKernel  = new TStudentKernel(0.5)
+
   val perKernel = new PeriodicCovFunc(2d, 1.5d, 0.1d)
   val arpKernel = new GenericMaternKernel[Double](2.5, p)
   val n         = new MAKernel(1.0)
   val noise     = new DiracKernel(0.5d)
+
+  val gsmKernel = GaussianSpectralKernel(
+    DenseVector.zeros[Double](p),
+    DenseVector.ones[Double](p),
+    GaussianSpectralKernel.getEncoderforBreezeDV(p)
+  )
 
   val linear_coeff    = (0d, 0d)
   val quadratic_coeff = (-0.01d, -0.75d, 0d)
@@ -54,21 +74,23 @@
   //Define the trend functions. One a linear trend
   //and the other a parabola.
 
+  val linear_vec_trend = MetaPipe(
+    (p: DenseVector[Double]) =>
+      (x: DenseVector[Double]) => {
+        p dot x
+      }
+  )
+
   val basis_func_mapping = DataPipe(
-    (x: DenseVector[Double]) => 
+    (x: DenseVector[Double]) =>
       (x * DenseVector.vertcat(DenseVector(1d), x).t).toDenseVector
   )
 
-  val linear_vec_trend = MetaPipe(
-    (p: DenseVector[Double]) => (x: DenseVector[Double]) => {
-      p dot x
-    }
-  )
-
   val quadratic_vec_trend = MetaPipe(
-    (p: DenseVector[Double]) => (x: DenseVector[Double]) => {
-      p dot basis_func_mapping(x)
-    }
+    (p: DenseVector[Double]) =>
+      (x: DenseVector[Double]) => {
+        p dot basis_func_mapping(x)
+      }
   )
 
   val linear_trend_mean = MetaPipe(
@@ -105,7 +127,7 @@
     (conf: Map[String, Double]) => (conf("a"), conf("b"), conf("d"))
   )
 
-  //Define a RBF covariance based gaussian process
+  //Define a Matern(p + 1/2) covariance based gaussian process
   val gp_explicit = GaussianProcessPrior[Double, (Double, Double)](
     arpKernel,
     new MAKernel(0.5d),
@@ -116,35 +138,37 @@
 
   //Define a gaussian process for GP Time Series models.
   val gp_prior = GaussianProcessPrior[DenseVector[Double], DenseVector[Double]](
-    rbfc > rbfc,//(mlpKernel + stKernel),
+    gsmKernel + mlpKernel,
     noise,
     linear_vec_trend,
     linear_vec_trend_encoder,
     w(0 until p)
   )
 
-  val gpModelPipe = 
-    new GPBasisFuncRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[Double]](
+  val gpModelPipe =
+    new GPBasisFuncRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[
+      Double
+    ]](
       identityPipe[Seq[(DenseVector[Double], Double)]],
-      rbfc > rbfc,//(mlpKernel + stKernel),
+      gsmKernel + mlpKernel,
       noise,
       identityPipe[DenseVector[Double]],
       w_prior(0 until p)
     )
-    /* GPRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[Double]](
+  /* GPRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[Double]](
       identityPipe[Seq[(DenseVector[Double], Double)]],
-      mlpKernel + stKernel,
+      gsmKernel + mlpKernel,
       noise,
-      linear_vec_trend(w)
+      linear_vec_trend(w(0 until p))
     ) */
-
-  
 
   val y_explicit: MultGaussianPRV = gp_explicit.priorDistribution(xs)
 
+  //Generate samples for GP process on explicit time. Matern(p + 1/2)
   val samples_gp_explicit =
     y_explicit.iid(10).draw.map(s => s.toBreezeVector.toArray.toSeq).toSeq
 
+  //Generate samples for GP-NAR process in a recursive manner
   val ys_ar_rec = RandomVariable[Seq[Double]](() => {
     // Generate y0 and y1
     val u0: DenseVector[Double] = DenseVector.tabulate(p)(_ => y0.draw)
@@ -166,6 +190,8 @@
     u0.toArray.toSeq ++ xsamples.map(_(0))
   })
 
+  //Generate samples from a conventional AR(p) process
+  //with coefficients given by w
   val markov_process = (n: Int) =>
     RandomVariable[Seq[Double]](() => {
       val u0 = DenseVector.tabulate(p)(_ => y0.draw)
@@ -186,6 +212,9 @@
 
   val samples_markov = markov_process(xs.length).iid(10).draw.toSeq
 
+  val plot_legend_labels =
+    (1 to num_sample_paths).map(i => s"Path $i").toSeq
+
   spline(xs, samples_gp_explicit.head)
   hold()
   samples_gp_explicit.tail.foreach((s: Seq[Double]) => spline(xs, s))
@@ -195,6 +224,7 @@
       .split("\\.")
       .last}"""
   )
+  legend(plot_legend_labels)
 
   val markov_formula = w.toArray.toSeq.zipWithIndex
     .map(
@@ -212,6 +242,7 @@
   title(
     s"""AR($p): y(t) = F[y(t), ..., y(t-${p})] + noise"""
   )
+  legend(plot_legend_labels)
 
   spline(xs, samples_ar_rec.head)
   hold()
@@ -220,6 +251,7 @@
   title(
     s"""GP-AR Recurrent: ${gpModelPipe.covariance.toString.split("\\.").last}"""
   )
+  legend(plot_legend_labels)
 
   println(s"Linear coefficients: ${w.toArray.toSeq}")
 
