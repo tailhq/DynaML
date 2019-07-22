@@ -15,8 +15,9 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.pipes
+import scalaz.Compose
 
 /**
   * A deterministic and reversible encoding
@@ -29,6 +30,8 @@ package io.github.mandar2812.dynaml.pipes
   *
   * */
 trait Encoder[S, D] extends DataPipe[S, D] {
+
+  self =>
 
   /**
     * Represents the decoding operation.
@@ -44,20 +47,11 @@ trait Encoder[S, D] extends DataPipe[S, D] {
     * [[S]] -> [[Further]]
     *
     * */
-  def >[Further](that: Encoder[D, Further]): Encoder[S, Further] = {
-    val fPipe1 = DataPipe(this.run _)
+  def >[Further](that: Encoder[D, Further]): Encoder[S, Further] =
+    ComposedEncoder(self, that)
 
-    val rPipe1 = this.i
-
-    val fPipe2 = DataPipe(that.run _)
-
-    val rPipe2 = that.i
-
-    val fPipe = fPipe1 > fPipe2
-    val rPipe = rPipe2 > rPipe1
-
-    Encoder(fPipe, rPipe)
-  }
+  def *[S2, D2](that: Encoder[S2, D2]): EncoderTuple[S, S2, D, D2] =
+    EncoderTuple(self, that)
 }
 
 object Encoder {
@@ -82,4 +76,22 @@ object Encoder {
       override def run(data: S) = forwardPipe(data)
 
     }
+}
+
+case class EncoderTuple[I, J, K, L](
+  val _1: Encoder[I, K],
+  val _2: Encoder[J, L])
+    extends Encoder[(I, J), (K, L)] {
+
+  override val i: DataPipe[(K, L), (I, J)] = _1.i * _2.i
+
+  override def run(data: (I, J)): (K, L) = (_1(data._1), _2(data._2))
+}
+
+case class ComposedEncoder[I, J, K](_1: Encoder[I, J], _2: Encoder[J, K])
+    extends Encoder[I, K] {
+
+  override val i: DataPipe[K, I] = _2.i > _1.i
+
+  override def run(data: I): K = _2(_1(data))
 }

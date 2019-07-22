@@ -15,7 +15,7 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.pipes
 import com.fasterxml.jackson.module.scala.deser.`package`.overrides
 
@@ -25,14 +25,15 @@ import com.fasterxml.jackson.module.scala.deser.`package`.overrides
   * Top level trait; represents the scaling operation, used
   * heavily in data processing tasks.
   */
-trait Scaler[S] extends DataPipe[S, S]{
+trait Scaler[S] extends DataPipe[S, S] {
   override def apply[T <: Traversable[S]](data: T) =
     data.map(run).asInstanceOf[T]
 
   def *[T](that: Scaler[T]) = {
     val firstRun = this.run _
-    new Scaler[(S,T)] {
-      override def run(data: (S, T)): (S, T) = (firstRun(data._1), that(data._2))
+    new Scaler[(S, T)] {
+      override def run(data: (S, T)): (S, T) =
+        (firstRun(data._1), that(data._2))
     }
   }
 
@@ -54,14 +55,15 @@ object Scaler {
     }
 
   def apply[S](f: DataPipe[S, S]): Scaler[S] = apply(f.run _)
-  
-  def apply[I](f: DataPipe[I, I], r: DataPipe[I, I]): ReversibleScaler[I] = new ReversibleScaler[I] {
 
-    override val i: Scaler[I] = Scaler(r)
+  def apply[I](f: DataPipe[I, I], r: DataPipe[I, I]): ReversibleScaler[I] =
+    new ReversibleScaler[I] {
 
-    override def run(data: I): I = f(data)
+      override val i: Scaler[I] = Scaler(r)
 
-  }
+      override def run(data: I): I = f(data)
+
+    }
 }
 
 /**
@@ -69,7 +71,7 @@ object Scaler {
   *
   * @author mandar2812 17/6/16
   * */
-trait ReversibleScaler[S] extends Scaler[S] with Encoder[S, S]{
+trait ReversibleScaler[S] extends Scaler[S] with Encoder[S, S] {
 
   self =>
 
@@ -79,31 +81,32 @@ trait ReversibleScaler[S] extends Scaler[S] with Encoder[S, S]{
     * */
   override val i: Scaler[S]
 
-  override def apply[T<: Traversable[S]](data: T):T =
+  override def apply[T <: Traversable[S]](data: T): T =
     data.map(run).asInstanceOf[T]
 
   def *[T](other: ReversibleScaler[T]) = ReversibleScalerTuple(
-    self, other
+    self,
+    other
   )
 
-  def >(other: ReversibleScaler[S]): ReversibleScaler[S] = ComposedReversibleScaler(self, other)
+  def >(other: ReversibleScaler[S]): ReversibleScaler[S] =
+    ComposedReversibleScaler(self, other)
 }
-
 
 case class ReversibleScalerTuple[I, J](
   val _1: ReversibleScaler[I],
-  val _2: ReversibleScaler[J]) extends 
-  ReversibleScaler[(I, J)] {
+  val _2: ReversibleScaler[J])
+    extends ReversibleScaler[(I, J)] {
 
-    override val i: Scaler[(I, J)] = _1.i * _2.i
+  override val i: Scaler[(I, J)] = _1.i * _2.i
 
-    override def run(data: (I, J)): (I, J) = (_1(data._1), _2(data._2))
-  }
+  override def run(data: (I, J)): (I, J) = (_1(data._1), _2(data._2))
+}
 
 case class ComposedReversibleScaler[I](
   _1: ReversibleScaler[I],
-  _2: ReversibleScaler[I]
-) extends ReversibleScaler[I] {
+  _2: ReversibleScaler[I])
+    extends ReversibleScaler[I] {
 
   override val i: Scaler[I] = _2.i > _1.i
 
