@@ -15,14 +15,17 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.modelpipe
 
 import breeze.linalg._
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.kernels.LocalScalarKernel
 import io.github.mandar2812.dynaml.probability.MultGaussianRV
-import io.github.mandar2812.dynaml.models.gp.{AbstractGPRegressionModel, GPBasisFuncRegressionModel}
+import io.github.mandar2812.dynaml.models.gp.{
+  AbstractGPRegressionModel,
+  GPBasisFuncRegressionModel
+}
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 
 import scala.reflect.ClassTag
@@ -58,15 +61,18 @@ class GPRegressionPipe[Source, IndexSet: ClassTag](
   val covariance: LocalScalarKernel[IndexSet],
   val noise: LocalScalarKernel[IndexSet],
   meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0))
-  extends ModelPipe[
-    Source, Seq[(IndexSet, Double)], IndexSet, Double,
-    AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet]] {
+    extends ModelPipe[Source, Seq[(IndexSet, Double)], IndexSet, Double, AbstractGPRegressionModel[
+      Seq[(IndexSet, Double)],
+      IndexSet
+    ]] {
 
   override val preProcess: DataPipe[Source, Seq[(IndexSet, Double)]] = pre
 
   implicit val transform = identityPipe[Seq[(IndexSet, Double)]]
 
-  override def run(data: Source): AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet] =
+  override def run(
+    data: Source
+  ): AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet] =
     AbstractGPRegressionModel(covariance, noise, meanFunc)(preProcess(data), 0)
 
 }
@@ -93,7 +99,7 @@ class GPRegressionPipe[Source, IndexSet: ClassTag](
   * @param ex Size of the auto-regressive time lag of the exogenous inputs
   *           that is used to create the training data. Ignore if not working
   *           with GP-NARX models.
-  * 
+  *
   * @param basisFunc A basis function representation for the input features,
   *                  represented as a [[DataPipe]].
   *
@@ -107,19 +113,24 @@ class GPBasisFuncRegressionPipe[Source, IndexSet: ClassTag](
   val noise: LocalScalarKernel[IndexSet],
   basisFunc: DataPipe[IndexSet, DenseVector[Double]],
   basis_param_prior: MultGaussianRV)
-  extends ModelPipe[
-    Source, Seq[(IndexSet, Double)], IndexSet, Double,
-    GPBasisFuncRegressionModel[Seq[(IndexSet, Double)], IndexSet]] {
+    extends ModelPipe[Source, Seq[(IndexSet, Double)], IndexSet, Double, GPBasisFuncRegressionModel[
+      Seq[(IndexSet, Double)],
+      IndexSet
+    ]] {
 
   override val preProcess: DataPipe[Source, Seq[(IndexSet, Double)]] = pre
 
   implicit val transform = identityPipe[Seq[(IndexSet, Double)]]
 
-  override def run(data: Source): GPBasisFuncRegressionModel[Seq[(IndexSet, Double)], IndexSet] =
-    AbstractGPRegressionModel(covariance, noise, basisFunc, basis_param_prior)(preProcess(data), 0)
+  override def run(
+    data: Source
+  ): GPBasisFuncRegressionModel[Seq[(IndexSet, Double)], IndexSet] =
+    AbstractGPRegressionModel(covariance, noise, basisFunc, basis_param_prior)(
+      preProcess(data),
+      0
+    )
 
 }
-
 
 object GPRegressionPipe {
 
@@ -128,11 +139,27 @@ object GPRegressionPipe {
     * */
   def apply[Source, IndexSet: ClassTag](
     pre: DataPipe[Source, Seq[(IndexSet, Double)]],
-    covariance: LocalScalarKernel[IndexSet], noise: LocalScalarKernel[IndexSet],
-    meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0)) =
+    covariance: LocalScalarKernel[IndexSet],
+    noise: LocalScalarKernel[IndexSet],
+    meanFunc: DataPipe[IndexSet, Double] = DataPipe((_: IndexSet) => 0.0)
+  ) =
     new GPRegressionPipe[Source, IndexSet](pre, covariance, noise, meanFunc)
-}
 
+  def apply[Source, IndexSet: ClassTag](
+    pre: DataPipe[Source, Seq[(IndexSet, Double)]],
+    covariance: LocalScalarKernel[IndexSet],
+    noise: LocalScalarKernel[IndexSet],
+    basisFunc: DataPipe[IndexSet, DenseVector[Double]],
+    basis_param_prior: MultGaussianRV
+  ) =
+    new GPBasisFuncRegressionPipe[Source, IndexSet](
+      pre,
+      covariance,
+      noise,
+      basisFunc,
+      basis_param_prior
+    )
+}
 
 /**
   * <h3>GP Pipes: Alternate</h3>
@@ -149,16 +176,20 @@ object GPRegressionPipe {
   * */
 class GPRegressionPipe2[IndexSet: ClassTag](
   val covariance: LocalScalarKernel[IndexSet],
-  val noise: LocalScalarKernel[IndexSet]) extends DataPipe2[
-  Seq[(IndexSet, Double)], DataPipe[IndexSet, Double],
-  AbstractGPRegressionModel[Seq[(IndexSet, Double)], IndexSet]] {
+  val noise: LocalScalarKernel[IndexSet])
+    extends DataPipe2[Seq[(IndexSet, Double)], DataPipe[IndexSet, Double], AbstractGPRegressionModel[
+      Seq[(IndexSet, Double)],
+      IndexSet
+    ]] {
 
   implicit val transform = identityPipe[Seq[(IndexSet, Double)]]
 
-  override def run(data: Seq[(IndexSet, Double)], trend: DataPipe[IndexSet, Double]) =
+  override def run(
+    data: Seq[(IndexSet, Double)],
+    trend: DataPipe[IndexSet, Double]
+  ) =
     AbstractGPRegressionModel(covariance, noise, trend)(data, data.length)
 }
-
 
 object GPRegressionPipe2 {
 
@@ -167,6 +198,7 @@ object GPRegressionPipe2 {
     * */
   def apply[IndexSet: ClassTag](
     covariance: LocalScalarKernel[IndexSet],
-    noise: LocalScalarKernel[IndexSet]): GPRegressionPipe2[IndexSet] =
+    noise: LocalScalarKernel[IndexSet]
+  ): GPRegressionPipe2[IndexSet] =
     new GPRegressionPipe2(covariance, noise)
 }
