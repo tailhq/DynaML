@@ -15,7 +15,7 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
@@ -32,22 +32,42 @@ import scala.util.Random
 abstract class AbstractCSA[M <: GloballyOptimizable, M1](
   model: M,
   hyp_parameter_scaling: Option[Map[String, Encoder[Double, Double]]] = None)
-  extends AbstractGridSearch[M, M1](model: M) {
+    extends AbstractGridSearch[M, M1](model: M) {
 
-  private val process_hyp: Encoder[CMAES.HyperParams, CMAES.HyperParams] = hyp_parameter_scaling match {
-    case None => Encoder(
-      DynaMLPipe.identityPipe[CMAES.HyperParams],
-      DynaMLPipe.identityPipe[CMAES.HyperParams])
+  private val process_hyp: Encoder[CMAES.HyperParams, CMAES.HyperParams] =
+    hyp_parameter_scaling match {
+      case None =>
+        Encoder(
+          DynaMLPipe.identityPipe[CMAES.HyperParams],
+          DynaMLPipe.identityPipe[CMAES.HyperParams]
+        )
 
-    case Some(scaling) => Encoder[CMAES.HyperParams, CMAES.HyperParams](
-      DataPipe((config: CMAES.HyperParams) =>
-        config.map(kv => (kv._1, if(scaling.contains(kv._1)) scaling(kv._1)(kv._2) else kv._2))
-      ),
-      DataPipe((config: CMAES.HyperParams) =>
-        config.map(kv => (kv._1, if(scaling.contains(kv._1)) scaling(kv._1).i(kv._2) else kv._2))
-      )
-    )
-  }
+      case Some(scaling) =>
+        Encoder[CMAES.HyperParams, CMAES.HyperParams](
+          DataPipe(
+            (config: CMAES.HyperParams) =>
+              config.map(
+                kv =>
+                  (
+                    kv._1,
+                    if (scaling.contains(kv._1)) scaling(kv._1)(kv._2)
+                    else kv._2
+                  )
+              )
+          ),
+          DataPipe(
+            (config: CMAES.HyperParams) =>
+              config.map(
+                kv =>
+                  (
+                    kv._1,
+                    if (scaling.contains(kv._1)) scaling(kv._1).i(kv._2)
+                    else kv._2
+                  )
+              )
+          )
+        )
+    }
 
   protected var MAX_ITERATIONS: Int = 10
 
@@ -86,7 +106,8 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
 
   private def computeCouplingFactor = AbstractCSA.couplingFactor(variant) _
 
-  private def computeAcceptanceProb = AbstractCSA.acceptanceProbability(variant) _
+  private def computeAcceptanceProb =
+    AbstractCSA.acceptanceProbability(variant) _
 
   protected val mutate: (Map[String, Double], Double) => Map[String, Double] =
     (config: Map[String, Double], temperature: Double) => {
@@ -96,7 +117,7 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
       val mapped_config = process_hyp(config)
 
       val mutated_config = mapped_config.map(param => {
-        val dist = new CauchyDistribution(0.0, temperature)
+        val dist    = new CauchyDistribution(0.0, temperature)
         val mutated = param._2 + dist.sample()
         (param._1, math.abs(mutated))
       })
@@ -109,125 +130,150 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
     }
 
   def acceptanceTemperature(initialTemp: Double)(k: Int): Double =
-    initialTemp/math.log(k.toDouble+1.0)
+    initialTemp / math.log(k.toDouble + 1.0)
 
   def mutationTemperature(initialTemp: Double)(k: Int): Double =
-    initialTemp/k.toDouble
+    initialTemp / k.toDouble
 
   protected def performCSA(
     initialConfig: Map[String, Double],
-    options: Map[String, String] = Map()): List[(Double, Map[String, Double])] = {
+    options: Map[String, String] = Map()
+  ): List[(Double, Map[String, Double])] = {
 
-    println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
-    println("Coupled Simulated Annealing (CSA): "+AbstractCSA.algorithm(variant))
-    println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    println(
+      "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+    )
+    println(
+      "Coupled Simulated Annealing (CSA): " + AbstractCSA.algorithm(variant)
+    )
+    println(
+      "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+    )
     println()
 
-    var accTemp = iTemp
-    var mutTemp = iTemp
+    //var accTemp = iTemp
+    //var mutTemp = iTemp
 
     //Calculate desired variance
-    val sigmaD = computeDesiredVariance(math.pow(gridsize, initialConfig.size).toInt)
+    val sigmaD = computeDesiredVariance(
+      math.pow(gridsize, initialConfig.size).toInt
+    )
 
-    val initialEnergyLandscape = getEnergyLandscape(initialConfig, options, meanFieldPrior)
+    val initialEnergyLandscape =
+      getEnergyLandscape(initialConfig, options, meanFieldPrior)
 
-    val gamma_init = computeCouplingFactor(initialEnergyLandscape.map(_._1), accTemp)
+    val gamma_init =
+      computeCouplingFactor(initialEnergyLandscape.map(_._1), iTemp)
 
     var acceptanceProbs: List[Double] = initialEnergyLandscape.map(c => {
-      computeAcceptanceProb(c._1, c._1, gamma_init, accTemp)
+      computeAcceptanceProb(c._1, c._1, gamma_init, iTemp)
     })
 
     val hyp = initialConfig.keys
 
     val usePriorFlag: Boolean = hyp.forall(meanFieldPrior.contains)
 
-    def CSATRec(eLandscape: List[(Double, Map[String, Double])], it: Int): List[(Double, Map[String, Double])] =
+    def CSATRec(
+      eLandscape: List[(Double, Map[String, Double])],
+      it: Int,
+      accTempPrev: Double
+    ): List[(Double, Map[String, Double])] =
       it match {
         case 0 => eLandscape
         case _ =>
           println("**************************")
           print("CSA Iteration: ")
-          pprint.pprintln(MAX_ITERATIONS-it+1)
+          pprint.pprintln(MAX_ITERATIONS - it + 1)
           println()
           //mutate each element of the grid with
           //the generating distribution
           //and accept using the acceptance distribution
-          mutTemp = mutationTemperature(iTemp)(it)
-          accTemp = variant match {
+          val mutTemp = mutationTemperature(iTemp)(it)
+          val accTemp = variant match {
             case AbstractCSA.MwVC =>
-              val (_,variance) = utils.getStats(acceptanceProbs.map(DenseVector(_)))
+              val (_, variance) =
+                utils.getStats(acceptanceProbs.map(DenseVector(_)))
 
               if (variance(0) < sigmaD)
-                accTemp * (1-alpha)
-              else accTemp * (1+alpha)
+                accTempPrev * (1 - alpha)
+              else accTempPrev * (1 + alpha)
             case _ =>
               acceptanceTemperature(iTemp)(it)
           }
 
           val maxEnergy = eLandscape.map(_._1).max
 
-          val couplingFactor = computeCouplingFactor(eLandscape.map(t => t._1 - maxEnergy), accTemp)
+          val couplingFactor = computeCouplingFactor(
+            eLandscape.map(t => t._1 - maxEnergy),
+            accTemp
+          )
 
           //Now mutate each solution and accept/reject
           //according to the acceptance probability
-          val (newEnergyLandscape,probabilities) = eLandscape.map(config => {
-            //mutate this config
-            val new_config = mutate(config._2, mutTemp)
+          val (newEnergyLandscape, probabilities) = eLandscape
+            .map(config => {
+              //mutate this config
+              val new_config = mutate(config._2, mutTemp)
 
-            val priorEnergy =
-              if(usePriorFlag)
-                new_config.foldLeft(0.0)(
-                  (p_acc, keyValue) => p_acc - meanFieldPrior(keyValue._1).underlyingDist.logPdf(keyValue._2)
+              val priorEnergy =
+                if (usePriorFlag)
+                  new_config.foldLeft(0.0)(
+                    (p_acc, keyValue) =>
+                      p_acc - meanFieldPrior(keyValue._1).underlyingDist
+                        .logPdf(keyValue._2)
+                  )
+                else 0.0
+
+              val energy_proposed_config = system.energy(new_config, options)
+
+              val new_energy_net = energy_proposed_config + priorEnergy
+
+              print("\nEnergy = ")
+              pprint.pprintln(energy_proposed_config)
+
+              if (usePriorFlag) {
+
+                print("Energy due to Prior = ")
+                pprint.pprintln(priorEnergy)
+
+                print("Net Energy = ")
+                pprint.pprintln(new_energy_net)
+              }
+
+              //Calculate the acceptance probability
+              val acceptanceProbability =
+                computeAcceptanceProb(
+                  new_energy_net - maxEnergy,
+                  config._1 - maxEnergy,
+                  couplingFactor,
+                  accTemp
                 )
-              else 0.0
 
-            val energy_proposed_config = system.energy(new_config, options)
+              val ans = if (new_energy_net < config._1) {
 
-            val new_energy_net = energy_proposed_config + priorEnergy
-
-
-            print("\nEnergy = ")
-            pprint.pprintln(energy_proposed_config)
-
-            if(usePriorFlag) {
-
-              print("Energy due to Prior = ")
-              pprint.pprintln(priorEnergy)
-
-              print("Net Energy = ")
-              pprint.pprintln(new_energy_net)
-            }
-
-            //Calculate the acceptance probability
-            val acceptanceProbability =
-              computeAcceptanceProb(
-                new_energy_net - maxEnergy, config._1,
-                couplingFactor, accTemp)
-
-            val ans = if(new_energy_net < config._1) {
-
-              println("Status: Accepted\n")
-              ((new_energy_net, new_config), acceptanceProbability)
-
-            } else {
-
-              if(Random.nextDouble <= acceptanceProbability) {
                 println("Status: Accepted\n")
                 ((new_energy_net, new_config), acceptanceProbability)
-              } else {
-                println("Status: Rejected\n")
-                (config, acceptanceProbability)
-              }
-            }
 
-            ans
-          }).unzip
+              } else {
+
+                if (Random.nextDouble <= acceptanceProbability) {
+                  println("Status: Accepted\n")
+                  ((new_energy_net, new_config), acceptanceProbability)
+                } else {
+                  println("Status: Rejected\n")
+                  (config, acceptanceProbability)
+                }
+              }
+
+              ans
+            })
+            .unzip
 
           acceptanceProbs = probabilities
-          CSATRec(newEnergyLandscape, it-1)
+          CSATRec(newEnergyLandscape, it - 1, accTemp)
       }
 
-    CSATRec(initialEnergyLandscape, MAX_ITERATIONS)
+    CSATRec(initialEnergyLandscape, MAX_ITERATIONS, iTemp)
   }
 
 }
@@ -235,52 +281,58 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
 object AbstractCSA {
 
   val MuSA = "CSA-MuSA"
-  val BA = "CSA-BA"
-  val M = "CSA-M"
+  val BA   = "CSA-BA"
+  val M    = "CSA-M"
   val MwVC = "CSA-MwVC"
-  val SA = "SA"
+  val SA   = "SA"
 
   def algorithm(variant: String): String = variant match {
     case MuSA => "Multi-state Simulated Annealing"
-    case BA => "Blind Acceptance"
-    case M => "Modified CSA"
+    case BA   => "Blind Acceptance"
+    case M    => "Modified CSA"
     case MwVC => "Modified CSA with Variance Control"
   }
 
-  def couplingFactor(variant: String)(
-    landscape: Seq[Double],
-    Tacc: Double): Double = {
+  def couplingFactor(
+    variant: String
+  )(landscape: Seq[Double],
+    Tacc: Double
+  ): Double = {
 
-    if(variant == MuSA || variant == BA)
-      landscape.map(energy => math.exp(-1.0*energy/Tacc)).sum
+    if (variant == MuSA || variant == BA)
+      landscape.map(energy => math.exp(-1.0 * energy / Tacc)).sum
     else if (variant == M || variant == MwVC)
-      landscape.map(energy => math.exp(energy/Tacc)).sum
+      landscape.map(energy => math.exp(energy / Tacc)).sum
     else 1.0
 
   }
 
-  def acceptanceProbability(variant: String)(
-    energy: Double, oldEnergy: Double,
-    gamma: Double, temperature: Double) = {
+  def acceptanceProbability(
+    variant: String
+  )(energy: Double,
+    oldEnergy: Double,
+    gamma: Double,
+    temperature: Double
+  ) = {
 
-    if(variant == MuSA )
-      math.exp(-1.0*energy/temperature)/(math.exp(-1.0*energy/temperature)+gamma)
+    if (variant == MuSA)
+      math.exp(-1.0 * energy / temperature) / (math.exp(
+        -1.0 * energy / temperature
+      ) + gamma)
     else if (variant == BA)
-      1.0 - (math.exp(-1.0*oldEnergy/temperature)/gamma)
+      1.0 - (math.exp(-1.0 * oldEnergy / temperature) / gamma)
     else if (variant == M || variant == MwVC)
-      math.exp(oldEnergy/temperature)/gamma
-    else gamma/(1.0 + math.exp((energy - oldEnergy)/temperature))
+      math.exp(oldEnergy / temperature) / gamma
+    else gamma / (1.0 + math.exp((energy - oldEnergy) / temperature))
 
   }
 
-  def varianceDesired(variant: String)(m: Int):Double = {
-    if(variant == MuSA || variant == BA)
+  def varianceDesired(variant: String)(m: Int): Double = {
+    if (variant == MuSA || variant == BA)
       0.99
     else
-      0.99*(m-1)/math.pow(m, 2.0)
+      0.99 * (m - 1) / math.pow(m, 2.0)
 
   }
 
 }
-
-
