@@ -142,6 +142,10 @@ class DataSet[X](val data: Iterable[X]) {
   def foreach(side_effect: DataPipe[X, Unit]): Unit =
     data.foreach(side_effect(_))
 
+  def take(n: Int): DataSet[X] = self.transform(_.take(n))
+
+  def takeRight(n: Int): DataSet[X] = self.transform(_.takeRight(n))
+
   /**
     * Split the data collection into a train-test split.
     *
@@ -152,6 +156,41 @@ class DataSet[X](val data: Iterable[X]) {
     val data_split = data.partition(f(_))
 
     TFDataSet(DataSet(data_split._1), DataSet(data_split._2))
+  }
+
+  /**
+    * Partition continuous chunks of the data set into train and test splits.
+    *
+    * @param train_percent The training data fraction, in (0, 1)
+    *
+    * @param from_end If set to true, takes training fraction from the
+    *                 end of the data collection. Defaults to false.
+    *
+    *
+    */
+  def partition(
+    train_percent: Double,
+    from_end: Boolean = false
+  ): TFDataSet[X] = {
+    require(
+      (train_percent * size).toInt > 0 && (train_percent * size).toInt < size,
+      "Training data percent must be in (0, 1)"
+    )
+
+    val num_training_instaces = (train_percent * size).toInt
+    val num_test_instances    = size - num_training_instaces
+
+    if (from_end) {
+      TFDataSet(
+        DataSet(data.takeRight(num_training_instaces)),
+        DataSet(data.take(num_test_instances))
+      )
+    } else {
+      TFDataSet(
+        DataSet(data.take(num_training_instaces)),
+        DataSet(data.takeRight(num_test_instances))
+      )
+    }
   }
 
   def to_zip[Y, Z](f: DataPipe[X, (Y, Z)]): ZipDataSet[Y, Z] = {
