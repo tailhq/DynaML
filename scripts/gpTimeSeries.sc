@@ -13,7 +13,8 @@
   import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
   import io.github.mandar2812.dynaml.analysis.implicits._
   import io.github.mandar2812.dynaml.optimization.GPMixtureMachine
-  import io.github.mandar2812.dynaml.pipes.Encoder
+  import io.github.mandar2812.dynaml.pipes._
+  import io.github.mandar2812.dynaml.tensorflow.dtfdata
   import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
   import spire.implicits._
 
@@ -40,7 +41,7 @@
         diag(
           DenseVector.tabulate[Double](order * (order + 1))(
             i =>
-              if (i < order) 0.01d
+              if (i < order) 0.05d
               else 0.001
           )
         )
@@ -52,10 +53,12 @@
   val w = w_prior.draw
 
   //Define some kernels for use later.
-  val rbfc      = new SEKernel(1d, 2.0)
-  val mlpKernel = new MLPKernel(1d, 0.5d)
-  val fbm       = new FBMCovFunction(0.5)
-  val stKernel  = new TStudentKernel(0.5)
+  val rbfc         = new SEKernel(1d, 2.0)
+  val mlpKernel    = new MLPKernel(1d, 0.5d)
+  val polyKernel   = new PolynomialKernel(2, 0d)
+  val fbm          = new FBMCovFunction(0.5)
+  val stKernel     = new TStudentKernel(0.5)
+  val maternKernel = new GenericMaternKernel[DenseVector[Double]](2.5, p)
 
   val perKernel = new PeriodicCovFunc(2d, 1.5d, 0.1d)
   val arpKernel = new GenericMaternKernel[Double](2.5, p)
@@ -68,6 +71,7 @@
     GaussianSpectralKernel.getEncoderforBreezeDV(p)
   )
 
+  
   val linear_coeff    = (0d, 0d)
   val quadratic_coeff = (-0.01d, -0.75d, 0d)
 
@@ -136,9 +140,12 @@
     linear_coeff
   )
 
+
+  maternKernel.block("p")
+
   //Define a gaussian process for GP Time Series models.
   val gp_prior = GaussianProcessPrior[DenseVector[Double], DenseVector[Double]](
-    gsmKernel + mlpKernel,
+    rbfc,
     noise,
     linear_vec_trend,
     linear_vec_trend_encoder,
@@ -146,21 +153,12 @@
   )
 
   val gpModelPipe =
-    new GPBasisFuncRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[
-      Double
-    ]](
+    GPRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[Double]](
       identityPipe[Seq[(DenseVector[Double], Double)]],
-      gsmKernel + mlpKernel,
-      noise,
-      identityPipe[DenseVector[Double]],
-      w_prior(0 until p)
-    )
-  /* GPRegressionPipe[Seq[(DenseVector[Double], Double)], DenseVector[Double]](
-      identityPipe[Seq[(DenseVector[Double], Double)]],
-      gsmKernel + mlpKernel,
+      rbfc,
       noise,
       linear_vec_trend(w(0 until p))
-    ) */
+    )
 
   val y_explicit: MultGaussianPRV = gp_explicit.priorDistribution(xs)
 
@@ -199,7 +197,7 @@
         .scanLeft(
           u0
         )((y: DenseVector[Double], _) => {
-          val y_new: Double = quadratic_vec_trend(w)(y) + y0.draw
+          val y_new: Double = quadratic_vec_trend(w)(y) + math.sqrt(0.5)*y0.draw
           DenseVector(Array(y_new) ++ y(0 to -2).toArray)
         })
         .toSeq
@@ -226,12 +224,21 @@
   )
   legend(plot_legend_labels)
 
+  val tuple_encoder =
+    TupleIntegerEncoder(List(p, p + 1))
+
   val markov_formula = w.toArray.toSeq.zipWithIndex
     .map(
-      cp =>
-        if (cp._1 >= 0d && cp._2 == 0) f"${cp._1}%3.2f*y(t-${cp._2 + 1})"
-        else if (cp._1 >= 0d) f"+ ${cp._1}%3.2f*y(t-${cp._2 + 1})"
-        else f" ${cp._1}%3.2f*y(t-${cp._2 + 1})"
+      cp => {
+        val indices = tuple_encoder.i(cp._2)
+
+        if (cp._2 < p) {
+          if (cp._1 >= 0d && cp._2 != 0) f"+${cp._1}%3.2f*y(t-${cp._2 + 1})"
+          else f"${cp._1}%3.2f*y(t-${cp._2 + 1})"
+        } else if (cp._1 >= 0d)
+          f"+${cp._1}%3.2f*y(t-${indices.head + 1})*y(t-${indices.last + 1})"
+        else f"${cp._1}%3.2f*y(t-${indices.head + 1})*y(t-${indices.last + 1})"
+      }
     )
     .reduceLeft(_ ++ _)
 
@@ -240,7 +247,7 @@
   samples_markov.tail.foreach((s: Seq[Double]) => spline(xs, s))
   unhold()
   title(
-    s"""AR($p): y(t) = F[y(t), ..., y(t-${p})] + noise"""
+    s"""AR($p): y(t) = ${markov_formula} + noise"""
   )
   legend(plot_legend_labels)
 
@@ -254,5 +261,66 @@
   legend(plot_legend_labels)
 
   println(s"Linear coefficients: ${w.toArray.toSeq}")
+
+  //Now train a GP-AR model based on the non-linear time series data.
+  val train_split = 0.4
+  val markov_chain_train_data = dtfdata
+    .dataset(samples_markov.tail.flatMap(_.sliding(p + 1).toSeq))
+    .map(h => (DenseVector(h.take(p).toArray), h.last))
+    .to_supervised(identityPipe[(DenseVector[Double], Double)])
+
+  val markov_chain_first_sample = dtfdata
+    .dataset(samples_markov.head.sliding(p + 1).toSeq)
+    .map(h => (DenseVector(h.take(p).toArray), h.last))
+    .to_supervised(identityPipe[(DenseVector[Double], Double)])
+    .partition(train_split)
+
+  val markov_chain_samples = dtfdata.tf_dataset(
+    markov_chain_train_data.concatenate(markov_chain_first_sample.training_dataset),
+    markov_chain_first_sample.test_dataset
+  )
+
+  val test_split_size = markov_chain_samples.test_dataset.size
+
+  gp_prior.globalOptConfig_(
+    Map(
+      "gridStep"  -> "0.15",
+      "gridSize"  -> "2",
+      "globalOpt" -> "CSA",
+      "policy"    -> "GS",
+      "maxIt"     -> "3"
+    )
+  )
+
+  val gp_nar_model = gp_prior.posteriorModel(
+    markov_chain_samples.training_dataset.data.toSeq
+  )
+
+  val (test_preds, lower_bar, upper_bar) = gp_nar_model
+    .predictionWithErrorBars(
+      markov_chain_samples.test_dataset
+        .map(tup2_1[DenseVector[Double], Double])
+        .data
+        .toSeq,
+      3
+    )
+    .map(pattern => (pattern._2, pattern._3, pattern._4))
+    .unzip3
+
+  val last_train_sample_index = (train_split * samples_markov.head
+    .sliding(p + 1)
+    .toSeq
+    .length) - 1
+
+  spline(xs.zip(samples_markov.head))
+  hold()
+  spline(xs.takeRight(test_split_size).zip(test_preds))
+  spline(xs.takeRight(test_split_size).zip(lower_bar))
+  spline(xs.takeRight(test_split_size).zip(upper_bar))
+  unhold()
+  title("Time Series Prediction")
+  legend(
+    Seq("Time Series", "MAP Prediction", "Lower Error Bar", "Upper Error Bar")
+  )
 
 }
