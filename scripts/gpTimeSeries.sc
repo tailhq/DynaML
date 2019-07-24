@@ -18,6 +18,8 @@
   import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
   import spire.implicits._
 
+  val dump_dir = home / 'Manuscripts / "phd-thesis" / 'data
+
   //For p order auto-regressive dynamics
   val p                = 3
   val num_sample_paths = 10
@@ -71,7 +73,6 @@
     GaussianSpectralKernel.getEncoderforBreezeDV(p)
   )
 
-  
   val linear_coeff    = (0d, 0d)
   val quadratic_coeff = (-0.01d, -0.75d, 0d)
 
@@ -140,7 +141,6 @@
     linear_coeff
   )
 
-
   maternKernel.block("p")
 
   //Define a gaussian process for GP Time Series models.
@@ -164,7 +164,11 @@
 
   //Generate samples for GP process on explicit time. Matern(p + 1/2)
   val samples_gp_explicit =
-    y_explicit.iid(10).draw.map(s => s.toBreezeVector.toArray.toSeq).toSeq
+    y_explicit
+      .iid(num_sample_paths)
+      .draw
+      .map(s => s.toBreezeVector.toArray.toSeq)
+      .toSeq
 
   //Generate samples for GP-NAR process in a recursive manner
   val ys_ar_rec = RandomVariable[Seq[Double]](() => {
@@ -197,7 +201,8 @@
         .scanLeft(
           u0
         )((y: DenseVector[Double], _) => {
-          val y_new: Double = quadratic_vec_trend(w)(y) + math.sqrt(0.5)*y0.draw
+          val y_new: Double = quadratic_vec_trend(w)(y) + math
+            .sqrt(0.5) * y0.draw
           DenseVector(Array(y_new) ++ y(0 to -2).toArray)
         })
         .toSeq
@@ -236,8 +241,8 @@
           if (cp._1 >= 0d && cp._2 != 0) f"+${cp._1}%3.2f*y(t-${cp._2 + 1})"
           else f"${cp._1}%3.2f*y(t-${cp._2 + 1})"
         } else if (cp._1 >= 0d)
-          f"+${cp._1}%3.2f*y(t-${indices.head + 1})*y(t-${indices.last + 1})"
-        else f"${cp._1}%3.2f*y(t-${indices.head + 1})*y(t-${indices.last + 1})"
+          f"+${cp._1}%3.2f*y(t-${indices.head + 1})*y(t-${indices.last})"
+        else f"${cp._1}%3.2f*y(t-${indices.head + 1})*y(t-${indices.last})"
       }
     )
     .reduceLeft(_ ++ _)
@@ -276,7 +281,9 @@
     .partition(train_split)
 
   val markov_chain_samples = dtfdata.tf_dataset(
-    markov_chain_train_data.concatenate(markov_chain_first_sample.training_dataset),
+    markov_chain_train_data.concatenate(
+      markov_chain_first_sample.training_dataset
+    ),
     markov_chain_first_sample.test_dataset
   )
 
@@ -322,5 +329,48 @@
   legend(
     Seq("Time Series", "MAP Prediction", "Lower Error Bar", "Upper Error Bar")
   )
+
+  def dump_files(file_dump_dir: Path) = {
+
+    val predictions_file = file_dump_dir / "predictions.csv"
+
+    val map = xs
+      .takeRight(test_split_size)
+      .zip(test_preds)
+      .map(p => s"""${p._1},${p._2},"map"""")
+
+    val lb = xs
+      .takeRight(test_split_size)
+      .zip(lower_bar)
+      .map(p => s"""${p._1},${p._2},"lower"""")
+
+    val ub = xs
+      .takeRight(test_split_size)
+      .zip(upper_bar)
+      .map(p => s"""${p._1},${p._2},"upper"""")
+
+    write(predictions_file, (gt ++ map ++ lb ++ ub).mkString("\n"))
+
+    val arp_samples_lines = samples_markov.zipWithIndex.flatMap(
+      zs => xs.zip(zs._1).map(x => s"""${x._1},${x._2},"path_${zs._2 + 1}"""")
+    )
+    val arp_file = file_dump_dir / "narp_samples.csv"
+    write(arp_file, arp_samples_lines.mkString("\n"))
+
+    val gp_exp_lines = samples_gp_explicit.zipWithIndex.flatMap(
+      zs => xs.zip(zs._1).map(x => s"""${x._1},${x._2},"path_${zs._2 + 1}"""")
+    )
+
+    val gp_explicit_file = file_dump_dir / "gp_explicit_samples.csv"
+    write(gp_explicit_file, gp_exp_lines.mkString("\n"))
+
+    val gp_ar_lines = samples_ar_rec.zipWithIndex.flatMap(
+      zs => xs.zip(zs._1).map(x => s"""${x._1},${x._2},"path_${zs._2 + 1}"""")
+    )
+
+    val gp_ar_file = file_dump_dir / "gp_ar_samples.csv"
+    write(gp_ar_file, gp_ar_lines.mkString("\n"))
+
+  }
 
 }
