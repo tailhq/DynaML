@@ -17,7 +17,7 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.models.gp
 
 import breeze.linalg.{DenseMatrix, DenseVector, cholesky, trace}
@@ -26,7 +26,10 @@ import io.github.mandar2812.dynaml.algebra._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixOps._
 import io.github.mandar2812.dynaml.algebra.PartitionedMatrixSolvers._
 import io.github.mandar2812.dynaml.kernels._
-import io.github.mandar2812.dynaml.models.{ContinuousProcessModel, SecondOrderProcessModel}
+import io.github.mandar2812.dynaml.models.{
+  ContinuousProcessModel,
+  SecondOrderProcessModel
+}
 import io.github.mandar2812.dynaml.optimization.GloballyOptWithGrad
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.probability.{MultGaussianPRV, MultGaussianRV}
@@ -65,20 +68,23 @@ import scala.reflect.ClassTag
   *                 a [[DataPipe]] instance.
   * */
 abstract class AbstractGPRegressionModel[T, I: ClassTag](
-  cov: LocalScalarKernel[I], n: LocalScalarKernel[I],
-  data: T, num: Int, meanFunc: DataPipe[I, Double] = DataPipe((_:I) => 0.0))
-  extends ContinuousProcessModel[T, I, Double, MultGaussianPRV]
-  with SecondOrderProcessModel[T, I, Double, Double, DenseMatrix[Double], MultGaussianPRV]
-  with GloballyOptWithGrad {
+  cov: LocalScalarKernel[I],
+  n: LocalScalarKernel[I],
+  data: T,
+  num: Int,
+  meanFunc: DataPipe[I, Double] = DataPipe((_: I) => 0.0))
+    extends ContinuousProcessModel[T, I, Double, MultGaussianPRV]
+    with SecondOrderProcessModel[T, I, Double, Double, DenseMatrix[Double], MultGaussianPRV]
+    with GloballyOptWithGrad {
 
   private val logger = Logger.getLogger(this.getClass)
 
   /**
-   * The GP is taken to be zero mean, or centered.
-   * This is ensured by standardization of the data
-   * before being used for further processing.
-   *
-   * */
+    * The GP is taken to be zero mean, or centered.
+    * This is ensured by standardization of the data
+    * before being used for further processing.
+    *
+    * */
   override val mean: DataPipe[I, Double] = meanFunc
 
   override val covariance = cov
@@ -97,8 +103,8 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
   def _blockSize: Int = blockSize
 
-  protected var (caching, kernelMatrixCache)
-  : (Boolean, DenseMatrix[Double]) = (false, null)
+  protected var (caching, kernelMatrixCache): (Boolean, DenseMatrix[Double]) =
+    (false, null)
 
   protected var partitionedKernelMatrixCache: PartitionedPSDMatrix = _
 
@@ -131,21 +137,25 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
   protected lazy val trainingDataLabels = PartitionedVector(
     dataAsSeq(g).toStream.map(_._2),
-    trainingData.length.toLong, _blockSize
+    trainingData.length.toLong,
+    _blockSize
   )
 
   /**
     * Returns a [[DataPipe2]] which calculates the energy of data: [[T]].
     * See: [[energy]] below.
     * */
-  def calculateEnergyPipe(h: Map[String, Double], options: Map[String, String]) =
+  def calculateEnergyPipe(
+    h: Map[String, Double],
+    options: Map[String, String]
+  ) =
     DataPipe2((training: Seq[I], trainingLabels: PartitionedVector) => {
       setState(h)
 
-
       val trainingMean = PartitionedVector(
         training.toStream.map(mean(_)),
-        training.length.toLong, _blockSize
+        training.length.toLong,
+        _blockSize
       )
 
       //val effectiveTrainingKernel: LocalScalarKernel[I] = this.covariance + this.noiseModel
@@ -154,7 +164,8 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
       val kernelTraining: PartitionedPSDMatrix = getTrainKernelMatrix
 
-      AbstractGPRegressionModel.logLikelihood(trainingLabels - trainingMean, kernelTraining)
+      AbstractGPRegressionModel
+        .logLikelihood(trainingLabels - trainingMean, kernelTraining)
     })
 
   /**
@@ -171,7 +182,10 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     * In this particular case E(h) = -log p(Y|X,h)
     * also known as log likelihood.
     * */
-  override def energy(h: Map[String, Double], options: Map[String, String]): Double =
+  override def energy(
+    h: Map[String, Double],
+    options: Map[String, String]
+  ): Double =
     calculateEnergyPipe(h, options)(trainingData, trainingDataLabels)
 
   /**
@@ -187,39 +201,53 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
 
         val trainingMean = PartitionedVector(
           training.toStream.map(mean(_)),
-          training.length.toLong, _blockSize
+          training.length.toLong,
+          _blockSize
         )
 
-        val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
+        val effectiveTrainingKernel
+          : LocalScalarKernel[I] = covariance + noiseModel
 
         effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
         val hParams = effectiveTrainingKernel.effective_hyper_parameters
 
         val gradMatrices = SVMKernel.buildPartitionedKernelGradMatrix(
-          training, training.length, _blockSize, _blockSize,
-          hParams, (x: I, y: I) => effectiveTrainingKernel.evaluate(x,y),
-          (hy: String) => (x: I, y: I) => effectiveTrainingKernel.gradient(x,y)(hy))
+          training,
+          training.length,
+          _blockSize,
+          _blockSize,
+          hParams,
+          (x: I, y: I) => effectiveTrainingKernel.evaluate(x, y),
+          (hy: String) =>
+            (x: I, y: I) => effectiveTrainingKernel.gradient(x, y)(hy)
+        )
 
         val kernelTraining: PartitionedPSDMatrix = gradMatrices("kernel-matrix")
 
         val Lmat = bcholesky(kernelTraining)
 
-        val alpha = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
+        val alpha = Lmat.t \\ (Lmat \\ (trainingLabels - trainingMean))
 
-        hParams.map(h => {
-          //build kernel derivative matrix
-          val kernelDerivative: PartitionedMatrix = gradMatrices(h)
-          //Calculate gradient for the hyper parameter h
-          val grad: PartitionedMatrix =
-            alpha*alpha.t*kernelDerivative - (Lmat.t \\ (Lmat \\ kernelDerivative))
+        hParams
+          .map(h => {
+            //build kernel derivative matrix
+            val kernelDerivative: PartitionedMatrix = gradMatrices(h)
+            //Calculate gradient for the hyper parameter h
+            val grad: PartitionedMatrix =
+              alpha * alpha.t * kernelDerivative - (Lmat.t \\ (Lmat \\ kernelDerivative))
 
-          (h.split("/").tail.mkString("/"), btrace(grad))
-        }).toMap
+            (h.split("/").tail.mkString("/"), btrace(grad))
+          })
+          .toMap
 
       } catch {
         case _: breeze.linalg.NotConvergedException =>
-          covariance.effective_hyper_parameters.map(h => (h, Double.NaN)).toMap ++
-            noiseModel.effective_hyper_parameters.map(h => (h, Double.NaN)).toMap
+          covariance.effective_hyper_parameters
+            .map(h => (h, Double.NaN))
+            .toMap ++
+            noiseModel.effective_hyper_parameters
+              .map(h => (h, Double.NaN))
+              .toMap
       }
 
     })
@@ -238,77 +266,94 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
   override def gradEnergy(h: Map[String, Double]): Map[String, Double] =
     calculateGradEnergyPipe(h)(trainingData, trainingDataLabels)
 
-
   protected def getTrainKernelMatrix[U <: Seq[I]] = {
-    SVMKernel.buildPartitionedKernelMatrix(trainingData,
-        trainingData.length, _blockSize, _blockSize,
-        (x: I, y: I) => {covariance.evaluate(x, y) + noiseModel.evaluate(x, y)})
+    SVMKernel.buildPartitionedKernelMatrix(
+      trainingData,
+      trainingData.length,
+      _blockSize,
+      _blockSize,
+      (x: I, y: I) => covariance.evaluate(x, y) + noiseModel.evaluate(x, y)
+    )
   }
 
   protected def getCrossKernelMatrix[U <: Seq[I]](test: U) =
     SVMKernel.crossPartitonedKernelMatrix(
-      trainingData, test,
-      _blockSize, _blockSize,
-      covariance.evaluate)
+      trainingData,
+      test,
+      _blockSize,
+      _blockSize,
+      covariance.evaluate
+    )
 
   protected def getTestKernelMatrix[U <: Seq[I]](test: U) =
     SVMKernel.buildPartitionedKernelMatrix(
-      test, test.length.toLong,
-      _blockSize, _blockSize,
-      covariance.evaluate)
+      test,
+      test.length.toLong,
+      _blockSize,
+      _blockSize,
+      covariance.evaluate
+    )
 
   /**
-   * Calculates posterior predictive distribution for
-   * a particular set of test data points.
-   *
-   * @param test A Sequence or Sequence like data structure
-   *             storing the values of the input patters.
-   * */
-  override def predictiveDistribution[U <: Seq[I]](test: U):
-  MultGaussianPRV = {
-    println("\nGaussian Process Regression")
-    println("Calculating posterior predictive distribution")
+    * Calculates posterior predictive distribution for
+    * a particular set of test data points.
+    *
+    * @param test A Sequence or Sequence like data structure
+    *             storing the values of the input patters.
+    * */
+  override def predictiveDistribution[U <: Seq[I]](test: U): MultGaussianPRV = {
+    //println("\nGaussian Process Regression")
+    //println("Calculating posterior predictive distribution")
     //Calculate the kernel matrix on the training data
 
-
     val priorMeanTest = PartitionedVector(
-      test.map(mean(_))
+      test
+        .map(mean(_))
         .grouped(_blockSize)
-        .zipWithIndex.map(c => (c._2.toLong, DenseVector(c._1.toArray)))
+        .zipWithIndex
+        .map(c => (c._2.toLong, DenseVector(c._1.toArray)))
         .toStream,
-      test.length.toLong)
+      test.length.toLong
+    )
 
     val trainingMean = PartitionedVector(
       trainingData.map(mean(_)).toStream,
-      trainingData.length.toLong, _blockSize
+      trainingData.length.toLong,
+      _blockSize
     )
 
-    val smoothingMat = if(!caching) {
-      println("---------------------------------------------------------------")
-      println("Calculating covariance matrix for training points")
+    val smoothingMat = if (!caching) {
+      //println("---------------------------------------------------------------")
+      //println("Calculating covariance matrix for training points")
       getTrainKernelMatrix
     } else {
-      println("** Using cached training matrix **")
+      //println("** Using cached training matrix **")
       partitionedKernelMatrixCache
     }
 
-    println("---------------------------------------------------------------")
-    println("Calculating covariance matrix for test points")
+    //println("---------------------------------------------------------------")
+    //println("Calculating covariance matrix for test points")
     val kernelTest = getTestKernelMatrix(test)
 
-    println("---------------------------------------------------------------")
-    println("Calculating covariance matrix between training and test points")
+    //println("---------------------------------------------------------------")
+    //println("Calculating covariance matrix between training and test points")
     val crossKernel = getCrossKernelMatrix(test)
 
     //Calculate the predictive mean and co-variance
     val (postPredictiveMean, postPredictiveCovariance) =
       AbstractGPRegressionModel.solve(
-        trainingDataLabels, trainingMean, priorMeanTest,
-        smoothingMat, kernelTest, crossKernel)
+        trainingDataLabels,
+        trainingMean,
+        priorMeanTest,
+        smoothingMat,
+        kernelTest,
+        crossKernel
+      )
 
     MultGaussianPRV(test.length.toLong, _blockSize)(
       postPredictiveMean,
-      postPredictiveCovariance)
+      postPredictiveCovariance
+    )
   }
 
   /**
@@ -321,27 +366,31 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     * </ol>
     *
     **/
-  def predictionWithErrorBars[U <: Seq[I]](testData: U, sigma: Int):
-  Seq[(I, Double, Double, Double)] = {
+  def predictionWithErrorBars[U <: Seq[I]](
+    testData: U,
+    sigma: Int
+  ): Seq[(I, Double, Double, Double)] = {
 
     val posterior = predictiveDistribution(testData)
 
     val mean = posterior.mu.toStream
 
-    val (lower, upper) = posterior.underlyingDist.confidenceInterval(sigma.toDouble)
+    val (lower, upper) =
+      posterior.underlyingDist.confidenceInterval(sigma.toDouble)
 
     val lowerErrorBars = lower.toStream
     val upperErrorBars = upper.toStream
 
-    println("Generating error bars")
+    //println("Generating error bars")
 
-    val preds = mean.zip(lowerErrorBars.zip(upperErrorBars)).map(t => (t._1, t._2._1, t._2._2))
+    val preds = mean
+      .zip(lowerErrorBars.zip(upperErrorBars))
+      .map(t => (t._1, t._2._1, t._2._2))
     (testData zip preds).map(i => (i._1, i._2._1, i._2._2, i._2._3))
   }
 
-
-  override def predict(point: I): Double = predictionWithErrorBars(Seq(point), 1).head._2
-
+  override def predict(point: I): Double =
+    predictionWithErrorBars(Seq(point), 1).head._2
 
   /**
     * Cache the training kernel and noise matrices
@@ -352,9 +401,13 @@ abstract class AbstractGPRegressionModel[T, I: ClassTag](
     val effectiveTrainingKernel: LocalScalarKernel[I] = covariance + noiseModel
     effectiveTrainingKernel.setBlockSizes((blockSize, blockSize))
 
-    partitionedKernelMatrixCache = SVMKernel.buildPartitionedKernelMatrix(trainingData,
-      trainingData.length, _blockSize, _blockSize,
-      effectiveTrainingKernel.evaluate)
+    partitionedKernelMatrixCache = SVMKernel.buildPartitionedKernelMatrix(
+      trainingData,
+      trainingData.length,
+      _blockSize,
+      _blockSize,
+      effectiveTrainingKernel.evaluate
+    )
     caching = true
 
   }
@@ -384,26 +437,30 @@ object AbstractGPRegressionModel {
     priorMeanTest: PartitionedVector,
     smoothingMat: PartitionedPSDMatrix,
     kernelTest: PartitionedPSDMatrix,
-    crossKernel: PartitionedMatrix):
-  (PartitionedVector, PartitionedPSDMatrix) = {
+    crossKernel: PartitionedMatrix
+  ): (PartitionedVector, PartitionedPSDMatrix) = {
 
     val Lmat: LowerTriPartitionedMatrix = bcholesky(smoothingMat)
 
-    val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ (trainingLabels-trainingMean))
+    val alpha
+      : PartitionedVector = Lmat.t \\ (Lmat \\ (trainingLabels - trainingMean))
 
     val v: PartitionedMatrix = Lmat \\ crossKernel
 
     val varianceReducer: PartitionedMatrix = v.t * v
 
     //Ensure that the variance reduction is symmetric
-    val adjustedVarReducer: PartitionedMatrix = varianceReducer /*(varianceReducer.L + varianceReducer.L.t).map(bm =>
+    val adjustedVarReducer
+      : PartitionedMatrix = varianceReducer /*(varianceReducer.L + varianceReducer.L.t).map(bm =>
       if(bm._1._1 == bm._1._2) (bm._1, bm._2*(DenseMatrix.eye[Double](bm._2.rows)*0.5))
       else bm)*/
 
     val reducedVariance: PartitionedPSDMatrix =
       new PartitionedPSDMatrix(
         (kernelTest - adjustedVarReducer).filterBlocks(c => c._1 >= c._2),
-        kernelTest.rows, kernelTest.cols)
+        kernelTest.rows,
+        kernelTest.cols
+      )
 
     (priorMeanTest + crossKernel.t * alpha, reducedVariance)
   }
@@ -418,21 +475,25 @@ object AbstractGPRegressionModel {
     * @param kernelMatrix The kernel matrix of the training features
     *
     * */
-  def logLikelihood(trainingData: DenseVector[Double],
-                    kernelMatrix: DenseMatrix[Double]): Double = {
+  def logLikelihood(
+    trainingData: DenseVector[Double],
+    kernelMatrix: DenseMatrix[Double]
+  ): Double = {
 
     val smoothingMat = kernelMatrix
 
     try {
-      val Lmat = cholesky(smoothingMat)
+      val Lmat  = cholesky(smoothingMat)
       val alpha = Lmat.t \ (Lmat \ trainingData)
 
-      0.5*((trainingData dot alpha) +
+      0.5 * ((trainingData dot alpha) +
         trace(log(Lmat)) +
-        trainingData.length*math.log(2*math.Pi))
+        trainingData.length * math.log(2 * math.Pi))
     } catch {
       case _: breeze.linalg.NotConvergedException => {
-        logger.warn("Cholesky decomposition of kernel matrix not converged ... Returning +Inf")
+        logger.warn(
+          "Cholesky decomposition of kernel matrix not converged ... Returning +Inf"
+        )
         Double.PositiveInfinity
       }
       case _: breeze.linalg.MatrixNotSymmetricException => {
@@ -441,7 +502,6 @@ object AbstractGPRegressionModel {
       }
     }
   }
-
 
   /**
     * Calculate the marginal log likelihood
@@ -455,33 +515,40 @@ object AbstractGPRegressionModel {
     * */
   def logLikelihood(
     trainingData: PartitionedVector,
-    kernelMatrix: PartitionedPSDMatrix): Double = {
+    kernelMatrix: PartitionedPSDMatrix
+  ): Double = {
 
     val smoothingMat = kernelMatrix
 
     try {
-      val Lmat = bcholesky(smoothingMat)
+      val Lmat                     = bcholesky(smoothingMat)
       val alpha: PartitionedVector = Lmat.t \\ (Lmat \\ trainingData)
 
       val d: Double = trainingData dot alpha
 
-      0.5*(d + btrace(blog(Lmat)) + trainingData.rows*math.log(2*math.Pi))
+      0.5 * (d + btrace(blog(Lmat)) + trainingData.rows * math.log(2 * math.Pi))
     } catch {
       case _: breeze.linalg.NotConvergedException => Double.PositiveInfinity
-      case _: breeze.linalg.MatrixNotSymmetricException => Double.PositiveInfinity
+      case _: breeze.linalg.MatrixNotSymmetricException =>
+        Double.PositiveInfinity
     }
   }
 
-
-  def apply[M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)], DenseVector[Double]]](
-    data: Seq[(DenseVector[Double], Double)],
+  def apply[
+    M <: AbstractGPRegressionModel[Seq[(DenseVector[Double], Double)], DenseVector[
+      Double
+    ]]
+  ](data: Seq[(DenseVector[Double], Double)],
     cov: LocalScalarKernel[DenseVector[Double]],
     noise: LocalScalarKernel[DenseVector[Double]] = new DiracKernel(1.0),
-    order: Int = 0, ex: Int = 0,
-    meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)): M = {
+    order: Int = 0,
+    ex: Int = 0,
+    meanFunc: DataPipe[DenseVector[Double], Double] = DataPipe(_ => 0.0)
+  ): M = {
     assert(ex >= 0 && order >= 0, "Non Negative values for order and ex")
-    if(order == 0) new GPRegression(cov, noise, data).asInstanceOf[M]
-    else if(order > 0 && ex == 0) new GPNarModel(order, cov, noise, data).asInstanceOf[M]
+    if (order == 0) new GPRegression(cov, noise, data).asInstanceOf[M]
+    else if (order > 0 && ex == 0)
+      new GPNarModel(order, cov, noise, data).asInstanceOf[M]
     else new GPNarXModel(order, ex, cov, noise, data).asInstanceOf[M]
   }
 
@@ -501,13 +568,23 @@ object AbstractGPRegressionModel {
   def apply[T, I: ClassTag](
     cov: LocalScalarKernel[I],
     noise: LocalScalarKernel[I],
-    meanFunc: DataPipe[I, Double])(
-    trainingdata: T, num: Int)(
-    implicit transform: DataPipe[T, Seq[(I, Double)]]): AbstractGPRegressionModel[T, I] = {
+    meanFunc: DataPipe[I, Double]
+  )(trainingdata: T,
+    num: Int
+  )(
+    implicit transform: DataPipe[T, Seq[(I, Double)]]
+  ): AbstractGPRegressionModel[T, I] = {
 
-    val num_points = if(num > 0) num else transform(trainingdata).length
+    val num_points = if (num > 0) num else transform(trainingdata).length
 
-    new AbstractGPRegressionModel[T, I](cov, noise, trainingdata, num_points, meanFunc) {
+    new AbstractGPRegressionModel[T, I](
+      cov,
+      noise,
+      trainingdata,
+      num_points,
+      meanFunc
+    ) {
+
       /**
         * Convert from the underlying data structure to
         * Seq[(I, Y)] where I is the index set of the GP
@@ -537,13 +614,24 @@ object AbstractGPRegressionModel {
     cov: LocalScalarKernel[I],
     noise: LocalScalarKernel[I],
     basisFunc: DataPipe[I, DenseVector[Double]],
-    basis_param_prior: MultGaussianRV)(
-    trainingdata: T, num: Int)(
-    implicit transform: DataPipe[T, Seq[(I, Double)]]) = {
+    basis_param_prior: MultGaussianRV
+  )(trainingdata: T,
+    num: Int
+  )(
+    implicit transform: DataPipe[T, Seq[(I, Double)]]
+  ) = {
 
-    val num_points = if(num > 0) num else transform(trainingdata).length
+    val num_points = if (num > 0) num else transform(trainingdata).length
 
-    new GPBasisFuncRegressionModel[T, I](cov, noise, trainingdata, num_points, basisFunc, basis_param_prior) {
+    new GPBasisFuncRegressionModel[T, I](
+      cov,
+      noise,
+      trainingdata,
+      num_points,
+      basisFunc,
+      basis_param_prior
+    ) {
+
       /**
         * Convert from the underlying data structure to
         * Seq[(I, Y)] where I is the index set of the GP
@@ -554,10 +642,12 @@ object AbstractGPRegressionModel {
 
   }
 
-
 }
 
 abstract class KroneckerGPRegressionModel[T, I: ClassTag, J: ClassTag](
-  cov: KroneckerProductKernel[I, J], n: KroneckerProductKernel[I, J],
-  data: T, num: Int, meanFunc: DataPipe[(I, J), Double] = DataPipe((_:(I, J)) => 0.0))
-  extends AbstractGPRegressionModel[T, (I,J)](cov, n, data, num, meanFunc)
+  cov: KroneckerProductKernel[I, J],
+  n: KroneckerProductKernel[I, J],
+  data: T,
+  num: Int,
+  meanFunc: DataPipe[(I, J), Double] = DataPipe((_: (I, J)) => 0.0))
+    extends AbstractGPRegressionModel[T, (I, J)](cov, n, data, num, meanFunc)

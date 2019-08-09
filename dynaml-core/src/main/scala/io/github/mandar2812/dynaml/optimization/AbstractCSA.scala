@@ -111,8 +111,8 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
 
   protected val mutate: (Map[String, Double], Double) => Map[String, Double] =
     (config: Map[String, Double], temperature: Double) => {
-      println("Mutating configuration: ")
-      pprint.pprintln(config)
+      //println("Mutating configuration: ")
+      //pprint.pprintln(config)
 
       val mapped_config = process_hyp(config)
 
@@ -122,9 +122,9 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
         (param._1, math.abs(mutated))
       })
 
-      println("Proposed Configuration: ")
+      //println("Proposed Configuration: ")
       val proposal = process_hyp.i(mutated_config)
-      pprint.pprintln(proposal)
+      //pprint.pprintln(proposal)
 
       proposal
     }
@@ -181,8 +181,8 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
       it match {
         case 0 => eLandscape
         case _ =>
-          println("**************************")
-          print("CSA Iteration: ")
+          //println("**************************")
+          print("\nCSA Iteration: ")
           pprint.pprintln(MAX_ITERATIONS - it + 1)
           println()
           //mutate each element of the grid with
@@ -208,6 +208,7 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
             accTemp
           )
 
+          val pb = new utils.ProgressBar(eLandscape.length)
           //Now mutate each solution and accept/reject
           //according to the acceptance probability
           val (newEnergyLandscape, probabilities) = eLandscape
@@ -228,17 +229,17 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
 
               val new_energy_net = energy_proposed_config + priorEnergy
 
-              print("\nEnergy = ")
-              pprint.pprintln(energy_proposed_config)
+              //print("\nEnergy = ")
+              //pprint.pprintln(energy_proposed_config)
 
-              if (usePriorFlag) {
+              /* if (usePriorFlag) {
 
                 print("Energy due to Prior = ")
                 pprint.pprintln(priorEnergy)
 
                 print("Net Energy = ")
                 pprint.pprintln(new_energy_net)
-              }
+              } */
 
               //Calculate the acceptance probability
               val acceptanceProbability =
@@ -251,20 +252,20 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
 
               val ans = if (new_energy_net < config._1) {
 
-                println("Status: Accepted\n")
+                //println("Status: Accepted\n")
                 ((new_energy_net, new_config), acceptanceProbability)
 
               } else {
 
                 if (Random.nextDouble <= acceptanceProbability) {
-                  println("Status: Accepted\n")
+                  //println("Status: Accepted\n")
                   ((new_energy_net, new_config), acceptanceProbability)
                 } else {
-                  println("Status: Rejected\n")
+                  //println("Status: Rejected\n")
                   (config, acceptanceProbability)
                 }
               }
-
+              pb += 1
               ans
             })
             .unzip

@@ -15,12 +15,15 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.optimization
 
 import breeze.linalg.DenseVector
 import breeze.stats.distributions.ContinuousDistr
-import io.github.mandar2812.dynaml.probability.{ContinuousRVWithDistr, RandomVariable}
+import io.github.mandar2812.dynaml.probability.{
+  ContinuousRVWithDistr,
+  RandomVariable
+}
 import io.github.mandar2812.dynaml.utils
 import org.apache.log4j.Logger
 
@@ -42,9 +45,13 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
 
   protected var num_samples: Int = 20
 
-  protected var meanFieldPrior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map()
+  protected var meanFieldPrior
+    : Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] =
+    Map()
 
-  def setPrior(p: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]]): this.type = {
+  def setPrior(
+    p: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]]
+  ): this.type = {
     meanFieldPrior = p
     this
   }
@@ -74,24 +81,33 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
     val hyper_params = initialConfig.keys.toList
 
     def scaleFunc(param: String) =
-      if(logarithmicScale) (i: Int) => {initialConfig(param)/math.exp((i+1).toDouble*step)}
-      else (i: Int) => initialConfig(param) - (i+1).toDouble*step
+      if (logarithmicScale) (i: Int) => {
+        initialConfig(param) / math.exp((i + 1).toDouble * step)
+      } else (i: Int) => initialConfig(param) - (i + 1).toDouble * step
 
     //one list for each key in initialConfig
     val gridvecs = initialConfig.map(keyValue => {
       (keyValue._1, List.tabulate(gridsize)(scaleFunc(keyValue._1)))
     })
 
-    utils.combine(gridvecs.values).map(x => DenseVector(x.toArray)).map(config => {
-      List.tabulate(config.length){i => (hyper_params(i), config(i))}.toMap
-    })
+    utils
+      .combine(gridvecs.values)
+      .map(x => DenseVector(x.toArray))
+      .map(config => {
+        List
+          .tabulate(config.length) { i =>
+            (hyper_params(i), config(i))
+          }
+          .toMap
+      })
   }
 
   def getEnergyLandscape(
     initialConfig: Map[String, Double],
     options: Map[String, String] = Map(),
-    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] = Map())
-  : List[(Double, Map[String, Double])] = {
+    prior: Map[String, ContinuousRVWithDistr[Double, ContinuousDistr[Double]]] =
+      Map()
+  ): List[(Double, Map[String, Double])] = {
 
     //create grid
     val hyp = initialConfig.keys
@@ -99,7 +115,7 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
     val usePriorFlag: Boolean = hyp.forall(prior.contains)
 
     val priorRVAsMap =
-      if(usePriorFlag) {
+      if (usePriorFlag) {
         RandomVariable(() => {
           prior.map(kv => (kv._1, kv._2.sample()))
         })
@@ -108,43 +124,48 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
       }
 
     val grid: Seq[Map[String, Double]] =
-      if(usePriorFlag) priorRVAsMap.iid(num_samples).sample()
+      if (usePriorFlag) priorRVAsMap.iid(num_samples).sample()
       else getGrid(initialConfig)
 
-    grid.map(config => {
+    val pb = new utils.ProgressBar(grid.length)
+    grid
+      .map(config => {
 
-      val configMap = config
-      println("\nEvaluating Configuration: ")
-      pprint.pprintln(configMap)
+        val configMap = config
+        //println("\nEvaluating Configuration: ")
+        //pprint.pprintln(configMap)
 
-      val configEnergy = system.energy(configMap, options)
+        val configEnergy = system.energy(configMap, options)
 
-      val priorEnergy =
-        if(usePriorFlag)
-          configMap.foldLeft(0.0)((p_acc, keyValue) => p_acc - prior(keyValue._1).underlyingDist.logPdf(keyValue._2))
-        else 0.0
+        val priorEnergy =
+          if (usePriorFlag)
+            configMap.foldLeft(0.0)(
+              (p_acc, keyValue) =>
+                p_acc - prior(keyValue._1).underlyingDist.logPdf(keyValue._2)
+            )
+          else 0.0
 
+        val netEnergy = priorEnergy + configEnergy
 
-      val netEnergy = priorEnergy + configEnergy
+        //print("Energy = ")
+        //pprint.pprintln(configEnergy)
 
-      print("Energy = ")
-      pprint.pprintln(configEnergy)
-
-      if(usePriorFlag) {
+        /* if(usePriorFlag) {
         print("Energy due to Prior = ")
         pprint.pprintln(priorEnergy)
         print("Net Energy = ")
         pprint.pprintln(netEnergy)
-      }
-
-      (netEnergy, configMap)
-    }).toList
+      } */
+        pb += 1
+        (netEnergy, configMap)
+      })
+      .toList
 
   }
 
   def optimize(
     initialConfig: Map[String, Double],
-    options: Map[String, String] = Map()): (T1, Map[String, Double])
+    options: Map[String, String] = Map()
+  ): (T1, Map[String, Double])
 
 }
-

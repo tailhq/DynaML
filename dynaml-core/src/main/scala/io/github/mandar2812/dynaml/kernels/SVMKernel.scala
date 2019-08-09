@@ -85,7 +85,7 @@ object SVMKernel {
       (i, j) => if (i >= j) kernelIndex((i,j)) else kernelIndex((j,i))
     }
 
-    println("   Dimensions: " + kernel.rows + " x " + kernel.cols)
+    //println("   Dimensions: " + kernel.rows + " x " + kernel.cols)
     new SVMKernelMatrix(kernel, length)
   }
 
@@ -98,7 +98,7 @@ object SVMKernel {
         .map(s => ((s.head._2, s.last._2), eval(s.head._1, s.last._1)))
         .toMap
 
-    println("   Dimensions: " + data1.length + " x " + data2.length)
+    //println("   Dimensions: " + data1.length + " x " + data2.length)
     DenseMatrix.tabulate[Double](data1.length, data2.length){
       (i, j) => kernelIndex((i,j))
     }
@@ -112,8 +112,8 @@ object SVMKernel {
   Map[String, DenseMatrix[Double]] = {
 
     val (rows, cols) = (data1.length, data1.length)
-    println("Constructing Kernel/Grad Matrices")
-    println("   Dimensions: " + rows + " x " + cols)
+    //println("Constructing Kernel/Grad Matrices")
+    //println("   Dimensions: " + rows + " x " + cols)
 
     val keys = Seq("kernel-matrix") ++ hyper_parameters
 
@@ -125,8 +125,8 @@ object SVMKernel {
           else (k, ((s.head._2, s.last._2), evalGrad(k)(s.head._1, s.last._1))))
       }).groupBy(_._1).map(cl => {
 
-      if (cl._1 == "kernel-matrix") println("Constructing Kernel Matrix")
-      else println("Constructing Grad Matrix for: "+cl._1)
+      //if (cl._1 == "kernel-matrix") //println("Constructing Kernel Matrix")
+      //else //println("Constructing Grad Matrix for: "+cl._1)
 
       val kernelIndex = cl._2.map(_._2).toMap
 
@@ -152,8 +152,8 @@ object SVMKernel {
   Map[String, DenseMatrix[Double]] = {
 
     val (rows, cols) = (data1.length, data2.length)
-    println("Constructing Kernel/Grad Matrices")
-    println("   Dimensions: " + rows + " x " + cols)
+    //println("Constructing Kernel/Grad Matrices")
+    //println("   Dimensions: " + rows + " x " + cols)
 
     val keys = Seq("kernel-matrix") ++ hyper_parameters
 
@@ -164,8 +164,8 @@ object SVMKernel {
           else (k, ((s.head._2, s.last._2), evalGrad(k)(s.head._1, s.last._1))))
       }).groupBy(_._1).map(cl => {
 
-      if (cl._1 == "kernel-matrix") println("Constructing Kernel Matrix")
-      else println("Constructing Grad Matrix for: "+cl._1)
+      //if (cl._1 == "kernel-matrix") //println("Constructing Kernel Matrix")
+      //else //println("Constructing Grad Matrix for: "+cl._1)
 
       val kernelIndex = cl._2.map(_._2).toMap
 
@@ -187,25 +187,25 @@ object SVMKernel {
 
     val (rows, cols) = (length, length)
 
-    println("Constructing partitioned kernel matrix.")
-    println("Dimension: " + rows + " x " + cols)
+    //println("Constructing partitioned kernel matrix.")
+    //println("Dimension: " + rows + " x " + cols)
 
     val (num_R_blocks, num_C_blocks) = (
       math.ceil(rows.toDouble/numElementsPerRowBlock).toLong,
       math.ceil(cols.toDouble/numElementsPerColBlock).toLong)
 
-    println("Blocks: " + num_R_blocks + " x " + num_C_blocks)
+    //println("Blocks: " + num_R_blocks + " x " + num_C_blocks)
     val partitionedData = data.grouped(numElementsPerRowBlock).zipWithIndex.toStream
 
-    println("~~~~~~~~~~~~~~~~~~~~~~~")
-    println("Constructing Partitions")
+    //println("~~~~~~~~~~~~~~~~~~~~~~~")
+    //println("Constructing Partitions")
     new PartitionedPSDMatrix(
       utils.combine(Seq(partitionedData, partitionedData))
         .filter(c => c.head._2 >= c.last._2)
         .toStream.map(c => {
 
         val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
-        println(":- Partition: "+partitionIndex)
+        //println(":- Partition: "+partitionIndex)
 
         val matrix =
           if(partitionIndex._1 == partitionIndex._2)
@@ -226,22 +226,22 @@ object SVMKernel {
 
     val (rows, cols) = (data1.length, data2.length)
 
-    println("Constructing cross partitioned kernel matrix.")
-    println("Dimension: " + rows + " x " + cols)
+    //println("Constructing cross partitioned kernel matrix.")
+    //println("Dimension: " + rows + " x " + cols)
 
     val (num_R_blocks, num_C_blocks) = (
       math.ceil(rows.toDouble/numElementsPerRowBlock).toLong,
       math.ceil(cols.toDouble/numElementsPerColBlock).toLong)
 
-    println("Blocks: " + num_R_blocks + " x " + num_C_blocks)
-    println("~~~~~~~~~~~~~~~~~~~~~~~")
-    println("Constructing Partitions")
+    //println("Blocks: " + num_R_blocks + " x " + num_C_blocks)
+    //println("~~~~~~~~~~~~~~~~~~~~~~~")
+    //println("Constructing Partitions")
     new PartitionedMatrix(utils.combine(Seq(
       data1.grouped(numElementsPerRowBlock).zipWithIndex.toStream,
       data2.grouped(numElementsPerColBlock).zipWithIndex.toStream)
     ).toStream.map(c => {
       val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
-      println(":- Partition: "+partitionIndex)
+      //println(":- Partition: "+partitionIndex)
       val matrix = crossKernelMatrix(c.head._1, c.last._1, eval)
       (partitionIndex, matrix)
     }), rows, cols, num_R_blocks, num_C_blocks)
@@ -258,18 +258,18 @@ object SVMKernel {
 
     val (rows, cols) = (length, length)
 
-    println("Constructing partitioned kernel matrix and its derivatives")
-    println("Dimension: " + rows + " x " + cols)
+    //println("Constructing partitioned kernel matrix and its derivatives")
+    //println("Dimension: " + rows + " x " + cols)
 
     val (num_R_blocks, num_C_blocks) = (
       math.ceil(rows.toDouble/numElementsPerRowBlock).toLong,
       math.ceil(cols.toDouble/numElementsPerColBlock).toLong)
 
-    println("Blocks: " + num_R_blocks + " x " + num_C_blocks)
+    //println("Blocks: " + num_R_blocks + " x " + num_C_blocks)
     val partitionedData = data.grouped(numElementsPerRowBlock).zipWithIndex.toStream
 
-    println("~~~~~~~~~~~~~~~~~~~~~~~")
-    println("Constructing Partitions")
+    //println("~~~~~~~~~~~~~~~~~~~~~~~")
+    //println("Constructing Partitions")
 
 
     //Build the result using flatMap - reduce
@@ -278,7 +278,7 @@ object SVMKernel {
       .toStream.flatMap(c => {
       val partitionIndex = (c.head._2.toLong, c.last._2.toLong)
       print("\n")
-      println(":- Partition: "+partitionIndex)
+      //println(":- Partition: "+partitionIndex)
 
       if(partitionIndex._1 == partitionIndex._2) {
         SVMKernel.buildKernelGradMatrix(

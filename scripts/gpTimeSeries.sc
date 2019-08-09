@@ -334,6 +334,16 @@
 
     val predictions_file = file_dump_dir / "predictions.csv"
 
+    val gt = xs
+      .takeRight(test_split_size)
+      .zip(
+        markov_chain_samples.test_dataset
+          .map(tup2_2[DenseVector[Double], Double])
+          .data
+          .toSeq
+      )
+      .map(p => s"""${p._1},${p._2},"gt"""")
+
     val map = xs
       .takeRight(test_split_size)
       .zip(test_preds)
