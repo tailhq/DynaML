@@ -36,7 +36,7 @@ class CoRegGraphKernel(m: DenseMatrix[Double]) extends LocalSVMKernel[Int] {
   }
 
   def degreeMatrix(config: Map[String, Double]) =
-    DenseMatrix.eye[Double](dimensions) :*
+    DenseMatrix.eye[Double](dimensions) *:*
       ((adjecancyMatrix(config) * DenseMatrix.ones[Double](dimensions, dimensions)) + adjecancyMatrix(config))
 
   def l(config: Map[String, Double]): DenseMatrix[Double] = pinv(degreeMatrix(config) - adjecancyMatrix(config))

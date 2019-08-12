@@ -179,7 +179,7 @@ object ProbGPCommMachine {
 
     val alpha = if (h.length == 1) 1.0 else 1.0 / (h.length - 1)
 
-    val weights: DenseVector[Double] = h.map(p => 1.0 - (p / hTotal)) :* alpha
+    val weights: DenseVector[Double] = h.map(p => (1.0 - (p / hTotal))*alpha)
     val configurations = energyLandscape.map(_._2)
 
     weights.toArray.toSeq zip configurations
@@ -216,7 +216,7 @@ object ProbGPCommMachine {
       )
 
     val weights = maskMatrices.zipWithIndex.map(mask => {
-      1.0/sum(exp((mask._1*h) :* (-1.0/baseline)))
+      1.0/sum(exp((mask._1*h) *:* (-1.0/baseline)))
     })
 
     val configurations = energyLandscape.map(_._2)

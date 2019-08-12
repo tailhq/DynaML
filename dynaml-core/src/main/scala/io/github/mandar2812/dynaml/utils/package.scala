@@ -546,17 +546,17 @@ package object utils {
       ) =
         (ev.lcm(a._1, b._1), ev1.lcm(a._2, b._2))
 
-      override def quot(
+      override def equot(
         a: (Domain, Domain1),
         b: (Domain, Domain1)
       ): (Domain, Domain1) =
-        (ev.quot(a._1, b._1), ev1.quot(a._2, b._2))
+        (ev.equot(a._1, b._1), ev1.equot(a._2, b._2))
 
-      override def mod(
+      override def emod(
         a: (Domain, Domain1),
         b: (Domain, Domain1)
       ): (Domain, Domain1) =
-        (ev.mod(a._1, b._1), ev1.mod(a._2, b._2))
+        (ev.emod(a._1, b._1), ev1.emod(a._2, b._2))
 
       override def negate(x: (Domain, Domain1)): (Domain, Domain1) =
         (ev.negate(x._1), ev1.negate(x._2))

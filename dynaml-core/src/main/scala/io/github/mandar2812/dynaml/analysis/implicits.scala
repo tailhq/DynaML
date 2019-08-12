@@ -56,9 +56,9 @@ object implicits {
   }
 
   implicit object fieldTuple2 extends Field[(Double, Double)] {
-    override def quot(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1/b._1, a._2/b._2)
+    override def equot(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1/b._1, a._2/b._2)
 
-    override def mod(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1%b._1, a._2%b._2)
+    override def emod(a: (Double, Double), b: (Double, Double)): (Double, Double) = (a._1%b._1, a._2%b._2)
 
     override def gcd(a: (Double, Double), b: (Double, Double))(implicit ev: Eq[(Double, Double)]): (Double, Double) =
       (a._1%b._1, a._2%b._2)

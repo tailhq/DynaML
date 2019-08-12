@@ -88,7 +88,7 @@ object TestNNDelve {
         val normalizationFunc = (point: (BDV[Double], Double)) => {
           val extendedpoint = BDV(point._1.toArray ++ Array(point._2))
 
-          val normPoint = (extendedpoint - mean) :/ stdDev
+          val normPoint = (extendedpoint - mean) /:/ stdDev
           val length    = normPoint.length
           (normPoint(0 until length), normPoint(-1))
         }

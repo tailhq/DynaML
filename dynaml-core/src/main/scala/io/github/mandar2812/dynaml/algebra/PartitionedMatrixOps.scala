@@ -260,7 +260,7 @@ object PartitionedMatrixOps extends UFunc {
       require(a.rowBlocks == b.rowBlocks,
         "For element wise multiplication, partitioned vectors must have same number of blocks")
 
-      PartitionedVector(a._data.zip(b._data).map(c => (c._1._1, c._1._2 :* c._2._2)), a.rows)
+      PartitionedVector(a._data.zip(b._data).map(c => (c._1._1, c._1._2 *:* c._2._2)), a.rows)
     }
   }
 
@@ -367,7 +367,7 @@ object PartitionedMatrixOps extends UFunc {
       require(a.rowBlocks == b.rowBlocks,
         "For element wise division, partitioned vectors must have same number of blocks")
 
-      PartitionedVector(a._data.zip(b._data).map(c => (c._1._1, c._1._2 :/ c._2._2)), a.rows)
+      PartitionedVector(a._data.zip(b._data).map(c => (c._1._1, c._1._2 /:/ c._2._2)), a.rows)
     }
   }
 
@@ -380,7 +380,7 @@ object PartitionedMatrixOps extends UFunc {
       require(a.rowBlocks == b.rowBlocks && a.colBlocks == b.colBlocks,
         "For element wise division, partitioned matrices must have same number of blocks")
 
-      PartitionedMatrix(a._data.zip(b._data).map(c => (c._1._1, c._1._2 :/ c._2._2)), a.rows, a.cols)
+      PartitionedMatrix(a._data.zip(b._data).map(c => (c._1._1, c._1._2 /:/ c._2._2)), a.rows, a.cols)
     }
   }
 
@@ -392,7 +392,7 @@ object PartitionedMatrixOps extends UFunc {
       require(a.rowBlocks == b.rowBlocks,
         "For element wise modulo, partitioned vectors must have same number of blocks")
 
-      PartitionedVector(a._data.zip(b._data).map(c => (c._1._1, c._1._2 :% c._2._2)), a.rows)
+      PartitionedVector(a._data.zip(b._data).map(c => (c._1._1, c._1._2 %:% c._2._2)), a.rows)
     }
   }
 

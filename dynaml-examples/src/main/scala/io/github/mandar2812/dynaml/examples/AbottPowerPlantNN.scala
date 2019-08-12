@@ -124,7 +124,7 @@ object AbottPowerPlantNN {
 
         val scoresAndLabelsPipe1 = DataPipe(
           (res: Seq[(DenseVector[Double], DenseVector[Double])]) => {
-            res.map(r => ((r._1 :* stdDevs) + means, (r._2 :* stdDevs) + means))
+            res.map(r => ((r._1 *:* stdDevs) + means, (r._2 *:* stdDevs) + means))
           }
         ) >
           DataPipe((res: Seq[(DenseVector[Double], DenseVector[Double])]) => {

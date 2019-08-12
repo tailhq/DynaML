@@ -28,7 +28,7 @@ object bLU extends UFunc {
     Stream[((Long, Long), DenseMatrix[Double])]) = mat.colBlocks*mat.rowBlocks match {
     case 1L =>
       val l = LU(mat._data.head._2)
-      val (fL, fU) = (lowerTriangular(l._1), upperTriangular(l._1))
+      val (fL, fU) = (lowerTriangular(l.L), upperTriangular(l.U))
 
       (Lacc ++ Stream(((nAcc, nAcc), fL)), Uacc ++ Stream(((nAcc, nAcc), fU)))
     case _ =>
@@ -42,11 +42,11 @@ object bLU extends UFunc {
         PartitionedMatrix(
           Stream((
             (0L, 0L),
-            inv(lowerTriangular(l._1)
+            inv(lowerTriangular(l.L)
               .mapPairs((key, value) => if(key._1 == key._2) 1.0 else value)))
           ),
-          l._1.rows, l._1.cols),
-        PartitionedMatrix(Stream(((0L, 0L), inv(upperTriangular(l._1)))), l._1.rows, l._1.cols))
+          l.L.rows, l.L.cols),
+        PartitionedMatrix(Stream(((0L, 0L), inv(upperTriangular(l.U)))), l.U.rows, l.U.cols))
 
       val (l_rh, u_hr) = (a_rh*u_hh, l_hh*a_hr)
 
@@ -54,10 +54,10 @@ object bLU extends UFunc {
         A_rr - l_rh*u_hr, nAcc+1L,
         Lacc ++
           Stream(((nAcc, nAcc),
-            lowerTriangular(l._1).mapPairs((key, value) => if(key._1 == key._2) 1.0 else value))) ++
+            lowerTriangular(l.L).mapPairs((key, value) => if(key._1 == key._2) 1.0 else value))) ++
           l_rh._data.map(c => ((c._1._1 + nAcc + 1L, c._1._2 + nAcc), c._2)),
         Uacc ++
-          Stream(((nAcc, nAcc), upperTriangular(l._1))) ++
+          Stream(((nAcc, nAcc), upperTriangular(l.U))) ++
           u_hr._data.map(c => ((c._1._1 + nAcc, c._1._2 + nAcc + 1L), c._2))
       )
   }

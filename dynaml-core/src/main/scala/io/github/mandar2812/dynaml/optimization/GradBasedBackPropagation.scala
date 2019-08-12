@@ -234,7 +234,7 @@ class FFBackProp(stackF: NeuralStackFactory[(DenseMatrix[Double], DenseVector[Do
     **/
   override val backPropagate = MetaPipe(
     (p: (DenseMatrix[Double], DenseVector[Double])) => (s: Stream[(PatternType, PatternType)]) => {
-      s.map(c => (p._1.t*c._1):*c._2)
+      s.map(c => (p._1.t*c._1)*:*c._2)
     })
 
   /**

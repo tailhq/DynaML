@@ -16,9 +16,9 @@ class PartitionedVectorField(
 
   override def div(x: PartitionedVector, y: PartitionedVector): PartitionedVector = x /:/ y
 
-  override def quot(a: PartitionedVector, b: PartitionedVector): PartitionedVector = div(a, b) - mod(a, b)
+  override def equot(a: PartitionedVector, b: PartitionedVector): PartitionedVector = div(a, b) - emod(a, b)
 
-  override def mod(a: PartitionedVector, b: PartitionedVector): PartitionedVector = a %:% b
+  override def emod(a: PartitionedVector, b: PartitionedVector): PartitionedVector = a %:% b
 
   override def gcd(a: PartitionedVector, b: PartitionedVector)(implicit ev: Eq[PartitionedVector]) = a %:% b
 

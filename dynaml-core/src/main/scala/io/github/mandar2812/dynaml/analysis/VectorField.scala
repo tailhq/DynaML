@@ -12,9 +12,9 @@ class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
   with NRoot[DenseVector[Double]]
   with InnerProductSpace[DenseVector[Double], Double]
   with Serializable {
-  override def quot(a: DenseVector[Double],
+  override def equot(a: DenseVector[Double],
                     b: DenseVector[Double]): DenseVector[Double] =
-    div(a, b) - mod(a, b)
+    div(a, b) - emod(a, b)
 
   override def gcd(a: DenseVector[Double], b: DenseVector[Double])(implicit ev: Eq[DenseVector[Double]]) =
     DenseVector((a.toArray zip b.toArray).map(couple => couple._1 % couple._2))
@@ -22,7 +22,7 @@ class VectorField(num_dim: Int) extends Field[DenseVector[Double]]
   override def lcm(a: DenseVector[Double], b: DenseVector[Double])(implicit ev: Eq[DenseVector[Double]]) =
     DenseVector((a.toArray zip b.toArray).map(couple => couple._1 % couple._2))
 
-  override def mod(a: DenseVector[Double],
+  override def emod(a: DenseVector[Double],
                    b: DenseVector[Double]): DenseVector[Double] = a %:% b
 
   override def one: DenseVector[Double] = DenseVector.ones[Double](num_dim)

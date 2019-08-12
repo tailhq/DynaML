@@ -122,8 +122,8 @@ class UtilsSpec extends FlatSpec with Matchers {
         pf.negate(x) == (-1d, -2d) &&
         pf.zero == (f.zero, f.zero) &&
         pf.one == (f.one, f.one) &&
-        pf.mod(x, y) == (0d, 0d) &&
-        pf.quot(x, y) == (1d, 1d) &&
+        pf.emod(x, y) == (0d, 0d) &&
+        pf.equot(x, y) == (1d, 1d) &&
         pf.gcd(x, y) == (1d, 1d) &&
         pf.lcm(x, y) == (1d, 4d))
 

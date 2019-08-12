@@ -373,7 +373,7 @@ object DynaMLPipe {
         val normalizationFunc = (point: (DenseVector[Double], Double)) => {
           val extendedpoint = DenseVector(point._1.toArray ++ Array(point._2))
 
-          val normPoint = (extendedpoint - mean) :/ stdDev
+          val normPoint = (extendedpoint - mean) /:/ stdDev
           val length    = normPoint.length
           (normPoint(0 until length - 1), normPoint(-1))
         }
@@ -423,7 +423,7 @@ object DynaMLPipe {
         val stdDev: DenseVector[Double] = sqrt(variance)
 
         val normalizationFunc = (point: (DenseVector[Double], Double)) => {
-          val normPoint = (point._1 - mean) :/ stdDev
+          val normPoint = (point._1 - mean) /:/ stdDev
           (normPoint, point._2)
         }
 
@@ -479,7 +479,7 @@ object DynaMLPipe {
             val extendedpoint =
               DenseVector(point._1.toArray ++ point._2.toArray)
 
-            val normPoint = (extendedpoint - mean) :/ stdDev
+            val normPoint = (extendedpoint - mean) /:/ stdDev
             val length    = point._1.length
             val outlength = point._2.length
 

@@ -72,7 +72,7 @@ RegularizedOptimizer[DenseVector[Double],
       //In case of regression Omega(i,j)  = K(i, j)
       case "regression" => kernelMat
       //In case of classification Omega(i,j)  = y(j)y(j)K(i, j)
-      case "classification" => kernelMat :* (labels * labels.t)
+      case "classification" => kernelMat *:* (labels * labels.t)
     }
 
 

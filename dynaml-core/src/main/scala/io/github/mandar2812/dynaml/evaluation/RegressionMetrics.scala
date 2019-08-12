@@ -291,7 +291,7 @@ object MultiRegressionMetrics {
 
     val num_outputs = scoresAndLabels.head._2.length
     val mean: DenseVector[Double] =
-      scoresAndLabels.map{_._2}.reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/size
+      scoresAndLabels.map{_._2}.reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b)/:/size
 
     var SSres = DenseVector.zeros[Double](num_outputs)
     var SStot = DenseVector.zeros[Double](num_outputs)
@@ -301,7 +301,7 @@ object MultiRegressionMetrics {
       SStot :+= square(couple._2 - mean)
     })
 
-    DenseVector.ones[Double](num_outputs) - (SSres:/SStot)
+    DenseVector.ones[Double](num_outputs) - (SSres/:/SStot)
   }
 
   def computeCorr(scoresAndLabels: Iterable[(DenseVector[Double], DenseVector[Double])],
@@ -310,10 +310,10 @@ object MultiRegressionMetrics {
     val num_outputs = scoresAndLabels.head._2.length
 
     val meanLabel: DenseVector[Double] = scoresAndLabels.map{_._2}
-      .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/size
+      .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b)/:/size
 
     val meanScore = scoresAndLabels.map{_._1}
-      .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b):/size
+      .reduce((a: DenseVector[Double],b:DenseVector[Double]) => a+b)/:/size
 
     var SSLabel = DenseVector.zeros[Double](num_outputs)
     var SSPred = DenseVector.zeros[Double](num_outputs)
@@ -322,10 +322,10 @@ object MultiRegressionMetrics {
     scoresAndLabels.foreach((couple) => {
       SSLabel :+= square(couple._2 - meanLabel)
       SSPred :+= square(couple._1 - meanScore)
-      SSLabelPred :+= (couple._1 - meanScore) :* (couple._2 - meanLabel)
+      SSLabelPred :+= (couple._1 - meanScore) *:* (couple._2 - meanLabel)
     })
 
-    SSLabelPred:/(sqrt(SSPred):*sqrt(SSLabel))
+    SSLabelPred/:/(sqrt(SSPred)*:*sqrt(SSLabel))
   }
 
   def computeYield(scoresAndLabels: Iterable[(DenseVector[Double], DenseVector[Double])],
