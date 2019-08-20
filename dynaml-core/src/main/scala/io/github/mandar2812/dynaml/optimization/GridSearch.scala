@@ -15,25 +15,37 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
-* */
+ * */
 package io.github.mandar2812.dynaml.optimization
 
-
 /**
- * @author mandar2812 datum 24/6/15.
- *
- * An implementation of Grid Search
- * global optimization for Kernel Models
- */
-class GridSearch[M <: GloballyOptimizable](model: M) extends
-  AbstractGridSearch[M, M](model) with
-  GlobalOptimizer[M] {
+  * @author mandar2812 datum 24/6/15.
+  *
+  * An implementation of Grid Search
+  * global optimization for Kernel Models
+  */
+class GridSearch[M <: GloballyOptimizable](model: M)
+    extends AbstractGridSearch[M, M](model)
+    with GlobalOptimizer[M] {
 
   override def optimize(
     initialConfig: Map[String, Double],
-    options: Map[String, String] = Map()) = {
+    options: Map[String, String] = Map()
+  ) = {
 
-    val energyLandscape = getEnergyLandscape(initialConfig, options, meanFieldPrior).toMap
+    println(
+      "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+    )
+    println(
+      "Grid Search "
+    )
+    println(
+      "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+    )
+    println()
+
+    val energyLandscape =
+      getEnergyLandscape(initialConfig, options, meanFieldPrior).toMap
     val optimum = energyLandscape.keys.min
 
     print("Optimum value of energy is: ")
@@ -42,10 +54,11 @@ class GridSearch[M <: GloballyOptimizable](model: M) extends
     pprint.pprintln(energyLandscape(optimum))
 
     //Persist the current configuration to the model memory
-    if(options.contains("persist") && (options("persist") == "true" || options("persist") == "1"))
+    if (options.contains("persist") && (options("persist") == "true" || options(
+          "persist"
+        ) == "1"))
       system.persist(energyLandscape(optimum))
 
     (system, energyLandscape(optimum))
   }
 }
-

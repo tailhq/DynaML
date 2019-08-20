@@ -182,7 +182,7 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
         case 0 => eLandscape
         case _ =>
           //println("**************************")
-          print("\nCSA Iteration: ")
+          print("\n\nCSA Iteration: ")
           pprint.pprintln(MAX_ITERATIONS - it + 1)
           println()
           //mutate each element of the grid with
