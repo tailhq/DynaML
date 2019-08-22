@@ -75,6 +75,7 @@ def plot_field(x: Tensor[Float], t: Tensor[Float]): DelauneySurface = {
 
   plot3d.draw(data)
 }
+
 @main
 def apply(
   num_data: Int = 100,
