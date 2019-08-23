@@ -109,7 +109,8 @@ object Dependencies {
 
   val chartsDependencies = Seq(
     "com.github.wookietreiber" %% "scala-chart" % "0.5.1" % "compile",
-    "org.jzy3d" % "jzy3d-api" % "1.0.2" % "compile"
+    "org.jzy3d" % "jzy3d-api" % "1.0.2" % "compile",
+    "com.cibo" %% "evilplot" % "0.7.0" 
   )
 
   val replDependency = Seq(
@@ -159,4 +160,8 @@ object Dependencies {
     "org.platanios" %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
     "org.platanios" %% "tensorflow-data" % tfscala_version
   ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+
+  val scalaStan = Seq(
+    "com.cibo" %% "scalastan" % "0.8.3"
+  )
 }

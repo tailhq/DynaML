@@ -24,7 +24,8 @@ val baseSettings = Seq(
     "BeDataDriven" at "https://nexus.bedatadriven.com/content/groups/public",
     Resolver.sonatypeRepo("public"),
     Resolver.sonatypeRepo("snapshots"),
-    Resolver.typesafeIvyRepo("releases")),
+    Resolver.typesafeIvyRepo("releases"),
+    Resolver.bintrayRepo("cibotech", "public")),
   publishTo := sonatypePublishTo.value,
   useGpg := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
@@ -45,7 +46,8 @@ lazy val settingsCore = Seq(
         imageDependencies ++
         dataFormatDependencies ++
         tensorflowDependency ++
-        replDependency)
+        replDependency ++ 
+        scalaStan)
 )
 
 lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
