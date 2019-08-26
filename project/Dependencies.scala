@@ -137,7 +137,7 @@ object Dependencies {
   val rPackages = Seq(
     "org.renjin.cran" % "plyr" % "1.8.4-b107",
     "org.renjin.cran" % "abc" % "2.1-b295",
-    "org.renjin.cran" % "ggplot2" % "2.2.1-b113"
+    "org.renjin.cran" % "ggplot2" % "3.2.0-b8"
   )
 
   val dynaServeDependencies = Seq(
