@@ -102,7 +102,7 @@ object Dependencies {
   val loggingDependency = Seq("log4j" % "log4j" % "1.2.17" % "compile")
 
   val linearAlgebraDependencies = Seq(
-    "org.typelevel" %% "spire" % "0.14.1",
+    "org.typelevel" %% "spire" % "0.16.2",
     "org.scalanlp" %% "breeze" % "1.0" % "compile",
     "org.scalanlp" %% "breeze-natives" % "1.0" % "compile"
   ).map(_.withExclusions(Vector("org.spire-math" %% "spire")))
