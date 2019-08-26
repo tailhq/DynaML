@@ -87,19 +87,22 @@ object Dependencies {
 
   val apacheSparkDependency = Seq(
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
-    "org.apache.spark" %% "spark-core" % "2.4.0",
-    "org.apache.spark" %% "spark-mllib" % "2.4.0",
+    "org.apache.spark" %% "spark-core" % "2.4.3",
+    "org.apache.spark" %% "spark-mllib" % "2.4.3",
     "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.9.3",
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9")
     .map(_.withExclusions(
       Vector(
-        "org.slf4j" %% "slf4j-log4j12", 
+        "org.slf4j" % "slf4j-log4j12", 
+        "org.slf4j" % "jul-to-slf4j",
+        "org.slf4j" % "jcl-over-slf4j",
+        "log4j" % "log4j",
         "org.scalanlp" %% "breeze", 
         "javax.ws.rs" %% "javax.ws.rs-api"))
     )
     
 
-  val loggingDependency = Seq("log4j" % "log4j" % "1.2.17" % "compile")
+  val loggingDependency = Seq("log4j" % "log4j" % "1.2.17")
 
   val linearAlgebraDependencies = Seq(
     "org.typelevel" %% "spire" % "0.14.1",
@@ -166,7 +169,6 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "org.scalameta" %% "metabrowse-server" % "0.2.2",
     "io.get-coursier" %% "coursier" % "2.0.0-RC2-6",
     "io.get-coursier" % "interface" % "0.0.10"
   )
