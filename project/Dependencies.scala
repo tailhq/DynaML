@@ -70,7 +70,7 @@ object Dependencies {
     "com.github.tototoshi" %% "scala-csv" % "1.3.5" % "compile",
     "org.scala-lang" % "jline" % "2.11.0-M3" % "compile",
     "org.scalaforge" % "scalax" % "0.1" % "compile",
-    "org.scalaz" %% "scalaz-core" % "7.2.7",
+    "org.scalaz" %% "scalaz-core" % "7.2.28",
     "org.scala-graph" %% "graph-core" % "1.12.5",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "com.github.scopt" %% "scopt" % "3.5.0",
