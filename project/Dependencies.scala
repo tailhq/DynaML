@@ -93,7 +93,7 @@ object Dependencies {
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9")
     .map(_.withExclusions(
       Vector(
-        "org.slf4j" % "slf4j-log4j12", 
+        //"org.slf4j" % "slf4j-log4j12", 
         "org.slf4j" % "jul-to-slf4j",
         "org.slf4j" % "jcl-over-slf4j",
         "log4j" % "log4j",
