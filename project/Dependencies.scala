@@ -90,7 +90,7 @@ object Dependencies {
     "org.apache.spark" %% "spark-core" % "2.4.0",
     "org.apache.spark" %% "spark-mllib" % "2.4.0",
     "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.9.3",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.8")
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9")
     .map(_.withExclusions(
       Vector(
         "org.slf4j" %% "slf4j-log4j12", 
