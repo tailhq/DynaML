@@ -132,7 +132,7 @@ object Dependencies {
   )
 
   val rPackages = Seq(
-    "org.renjin.cran" % "plyr" % "1.8.4-b82",
+    "org.renjin.cran" % "plyr" % "1.8.4-b107",
     "org.renjin.cran" % "abc" % "2.1-b294",
     "org.renjin.cran" % "ggplot2" % "2.2.1-b112"
   )
