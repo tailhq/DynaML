@@ -120,7 +120,7 @@ object Dependencies {
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
 
-  val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")
+  val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.23")
 
   val tinkerpopDependency = Seq(
     "com.tinkerpop.gremlin" % "gremlin-java" % "2.6.0" % "compile",
