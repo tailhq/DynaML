@@ -76,7 +76,7 @@ object Dependencies {
     "com.github.scopt" %% "scopt" % "3.5.0",
     "org.scalameta" %% "scalameta" % "2.0.1",
     "javax.ws.rs" % "javax.ws.rs-api" % "2.0-m10",
-    "org.json4s" %% "json4s-jackson" % "3.6.5",
+    "org.json4s" %% "json4s-jackson" % "3.6.7",
     "ws.unfiltered" %% "unfiltered-filter" % "0.9.1",
     "ws.unfiltered" %% "unfiltered-jetty" % "0.9.1",
     "org.apache.commons" % "commons-math3" % "3.4.1",
