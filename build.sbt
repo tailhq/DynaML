@@ -97,7 +97,7 @@ lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(BuildInfo
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.jupyter",
     buildInfoUsePackageAsPath := true,
-    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps ++almond)
+    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps ++ almond ++ loggingDependency)
   )
 
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin)
