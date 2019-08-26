@@ -25,7 +25,8 @@ val baseSettings = Seq(
     Resolver.sonatypeRepo("public"),
     Resolver.sonatypeRepo("snapshots"),
     Resolver.typesafeIvyRepo("releases"),
-    Resolver.bintrayRepo("cibotech", "public")),
+    Resolver.bintrayRepo("cibotech", "public"),
+    "jitpack" at "https://jitpack.io"),
   publishTo := sonatypePublishTo.value,
   useGpg := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
@@ -84,7 +85,19 @@ lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin)
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
     buildInfoUsePackageAsPath := true,
-    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io)
+    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps)
+  )
+
+lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(BuildInfoPlugin)
+  .settings(baseSettings:_*)
+  .dependsOn(core, examples, pipes)
+  .settings(
+    name := "dynaml-notebook",
+    version := mainVersion,
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "io.github.mandar2812.dynaml.jupyter",
+    buildInfoUsePackageAsPath := true,
+    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps ++almond)
   )
 
 lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin)

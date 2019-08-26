@@ -22,6 +22,7 @@ import java.io.{InputStream, OutputStream}
 import java.nio.file.NoSuchFileException
 
 import coursier.core.{ModuleName, Organization}
+import coursierapi.Dependency
 import ammonite.interp.{CodeWrapper, Interpreter, Parsers, Preprocessor}
 import ammonite.repl.Repl
 import ammonite.interp.api.AmmoniteExit
@@ -57,7 +58,7 @@ class DynaMLRepl(
   initialColors: Colors = Colors.Default,
   replCodeWrapper: CodeWrapper,
   scriptCodeWrapper: CodeWrapper,
-  alreadyLoadedDependencies: Seq[coursier.Dependency],
+  alreadyLoadedDependencies: Seq[coursierapi.Dependency],
   importHooks: Map[Seq[String], ImportHook],
   initialClassLoader: ClassLoader = 
     classOf[ammonite.repl.api.ReplAPI].getClassLoader,
@@ -131,30 +132,30 @@ val replPredef = """
 def ammoniteHome = os.Path(System.getProperty("user.home"))/".ammonite"
 
 def alreadyLoadedDependencies(
-  resourceName: String = "amm-dependencies.txt"
-): Seq[coursier.Dependency] = {
+    resourceName: String = "amm-dependencies.txt"
+  ): Seq[Dependency] = {
 
-  var is: InputStream = null
+    var is: InputStream = null
 
-  try {
-    is = Thread.currentThread().getContextClassLoader.getResourceAsStream(resourceName)
-    if (is == null)
-      throw new Exception(s"Resource $resourceName not found")
-    scala.io.Source.fromInputStream(is)(Codec.UTF8)
-      .mkString
-      .split('\n')
-      .filter(_.nonEmpty)
-      .map(l => l.split(':') match {
-        case Array(org, name, ver) =>
-          coursier.Dependency(coursier.Module(Organization(org), ModuleName(name)), ver)
-        case other =>
-          throw new Exception(s"Cannot parse line '$other' from resource $resourceName")
-      })
-  } finally {
-    if (is != null)
-      is.close()
+    try {
+      is = Thread.currentThread().getContextClassLoader.getResourceAsStream(resourceName)
+      if (is == null)
+        throw new Exception(s"Resource $resourceName not found")
+      scala.io.Source.fromInputStream(is)(Codec.UTF8)
+        .mkString
+        .split('\n')
+        .filter(_.nonEmpty)
+        .map(l => l.split(':') match {
+          case Array(org, name, ver) =>
+            Dependency.of(org, name, ver)
+          case other =>
+            throw new Exception(s"Cannot parse line '$other' from resource $resourceName")
+        })
+    } finally {
+      if (is != null)
+        is.close()
+    }
   }
-}
 
   def dynaMlPredef = Source.fromFile(root_dir+"/conf/DynaMLInit.scala").getLines.mkString("\n")
 

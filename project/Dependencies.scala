@@ -114,8 +114,8 @@ object Dependencies {
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.6.9" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "1.6.9-15-6720d42" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9-15-6720d42" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -163,5 +163,18 @@ object Dependencies {
 
   val scalaStan = Seq(
     "com.cibo" %% "scalastan" % "0.8.3"
+  )
+
+  val coursier_deps = Seq(
+    "org.scalameta" %% "metabrowse-server" % "0.2.2",
+    "io.get-coursier" %% "coursier" % "2.0.0-RC2-6",
+    "io.get-coursier" % "interface" % "0.0.10"
+  )
+
+  val almond = Seq(
+    "sh.almond" %% "scala-interpreter" % "0.7.0" cross CrossVersion.full,
+    "sh.almond" %% "scala-kernel-api" % "0.7.0" cross CrossVersion.full,
+    "sh.almond" %% "kernel" % "0.7.0",
+    "com.github.alexarchambault" %% "case-app" % "2.0.0-M9"
   )
 }
