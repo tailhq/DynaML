@@ -162,6 +162,6 @@ object Dependencies {
   ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
 
   val scalaStan = Seq(
-    "com.cibo" %% "scalastan" % "0.8.3"
+    "com.cibo" %% "scalastan" % "0.9.0"
   )
 }
