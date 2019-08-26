@@ -153,7 +153,7 @@ object Dependencies {
   )
 
   val dataFormatDependencies = Seq(
-    "com.diffplug.matsim" % "matfilerw" % "3.0.0"
+    "com.diffplug.matsim" % "matfilerw" % "3.0.1"
   )
 
   val tensorflowDependency = Seq(
