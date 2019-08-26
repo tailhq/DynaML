@@ -89,7 +89,7 @@ object Dependencies {
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
     "org.apache.spark" %% "spark-core" % "2.4.0",
     "org.apache.spark" %% "spark-mllib" % "2.4.0",
-    "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.8",
+    "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.9.3",
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9")
     .map(_.withExclusions(
       Vector(
@@ -114,8 +114,8 @@ object Dependencies {
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.6.9" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "1.6.9-15-6720d42" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9-15-6720d42" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -128,13 +128,13 @@ object Dependencies {
   )
 
   val rejinDependency = Seq(
-    "org.renjin" % "renjin-script-engine" % "0.9.2643"
+    "org.renjin" % "renjin-script-engine" % "0.9.2726"
   )
 
   val rPackages = Seq(
-    "org.renjin.cran" % "plyr" % "1.8.4-b82",
-    "org.renjin.cran" % "abc" % "2.1-b294",
-    "org.renjin.cran" % "ggplot2" % "2.2.1-b112"
+    "org.renjin.cran" % "plyr" % "1.8.4-b107",
+    "org.renjin.cran" % "abc" % "2.1-b295",
+    "org.renjin.cran" % "ggplot2" % "2.2.1-b113"
   )
 
   val dynaServeDependencies = Seq(
@@ -153,7 +153,7 @@ object Dependencies {
   )
 
   val dataFormatDependencies = Seq(
-    "com.diffplug.matsim" % "matfilerw" % "3.0.0"
+    "com.diffplug.matsim" % "matfilerw" % "3.0.1"
   )
 
   val tensorflowDependency = Seq(
@@ -162,6 +162,19 @@ object Dependencies {
   ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
 
   val scalaStan = Seq(
-    "com.cibo" %% "scalastan" % "0.8.3"
+    "com.cibo" %% "scalastan" % "0.9.0"
+  )
+
+  val coursier_deps = Seq(
+    "org.scalameta" %% "metabrowse-server" % "0.2.2",
+    "io.get-coursier" %% "coursier" % "2.0.0-RC2-6",
+    "io.get-coursier" % "interface" % "0.0.10"
+  )
+
+  val almond = Seq(
+    "sh.almond" %% "scala-interpreter" % "0.7.0" cross CrossVersion.full,
+    "sh.almond" %% "scala-kernel-api" % "0.7.0" cross CrossVersion.full,
+    "sh.almond" %% "kernel" % "0.7.0",
+    "com.github.alexarchambault" %% "case-app" % "2.0.0-M9"
   )
 }
