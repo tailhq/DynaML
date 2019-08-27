@@ -163,7 +163,7 @@ class ParserTest extends FunSuite with Matchers {
     a.getStringValues should be (Map("x" -> "/blah/ooga:10 seconds,/foo/bar:1 hour"))
 
     val ex = the[IllegalArgumentException] thrownBy  {a.parse(Array("--x", "adfadfdfa"))}
-    ex.getCause.getMessage should include ("'adfadfdfa' cannot be parsed. Caused by: `:' expected but end of source found")
+    ex.getCause.getMessage should include ("'adfadfdfa' cannot be parsed. Caused by: ':' expected but end of source found")
   }
 
   test("map of Seq parser") {

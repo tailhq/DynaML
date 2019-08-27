@@ -229,18 +229,6 @@ abstract class AbstractCSA[M <: GloballyOptimizable, M1](
 
               val new_energy_net = energy_proposed_config + priorEnergy
 
-              //print("\nEnergy = ")
-              //pprint.pprintln(energy_proposed_config)
-
-              /* if (usePriorFlag) {
-
-                print("Energy due to Prior = ")
-                pprint.pprintln(priorEnergy)
-
-                print("Net Energy = ")
-                pprint.pprintln(new_energy_net)
-              } */
-
               //Calculate the acceptance probability
               val acceptanceProbability =
                 computeAcceptanceProb(

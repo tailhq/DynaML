@@ -67,39 +67,44 @@ object Dependencies {
   val baseDependencies = Seq(
     "com.typesafe" % "config" % "1.2.1" % "compile",
     "junit" % "junit" % "4.11",
-    "com.github.tototoshi" %% "scala-csv" % "1.3.5" % "compile",
+    "com.github.tototoshi" %% "scala-csv" % "1.3.6" % "compile",
     "org.scala-lang" % "jline" % "2.11.0-M3" % "compile",
     "org.scalaforge" % "scalax" % "0.1" % "compile",
     "org.scalaz" %% "scalaz-core" % "7.2.28",
     "org.scala-graph" %% "graph-core" % "1.12.5",
+    "org.scalaz" %% "scalaz-core" % "7.2.28",
+    "org.scala-graph" %% "graph-core" % "1.13.0",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "com.github.scopt" %% "scopt" % "3.5.0",
-    "org.scalameta" %% "scalameta" % "2.0.1",
+    "org.scalameta" %% "scalameta" % "2.1.8",
     "javax.ws.rs" % "javax.ws.rs-api" % "2.0-m10",
     "org.json4s" %% "json4s-jackson" % "3.6.5",
     "ws.unfiltered" %% "unfiltered-filter" % "0.9.1",
     "ws.unfiltered" %% "unfiltered-jetty" % "0.9.1",
-    "org.apache.commons" % "commons-math3" % "3.4.1",
-    "commons-io" % "commons-io" % "2.4",
+    "org.apache.commons" % "commons-math3" % "3.6.1",
+    "commons-io" % "commons-io" % "2.6",
     "com.github.nscala-time" %% "nscala-time" % "2.22.0",
     "jline" % "jline" % "2.13"
   )
 
   val apacheSparkDependency = Seq(
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
-    "org.apache.spark" %% "spark-core" % "2.4.0",
-    "org.apache.spark" %% "spark-mllib" % "2.4.0",
-    "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.8",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.8")
+    "org.apache.spark" %% "spark-core" % "2.4.3",
+    "org.apache.spark" %% "spark-mllib" % "2.4.3",
+    "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.9.3",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9")
     .map(_.withExclusions(
       Vector(
-        "org.slf4j" %% "slf4j-log4j12", 
+        //"org.slf4j" % "slf4j-log4j12", 
+        "org.slf4j" % "jul-to-slf4j",
+        "org.slf4j" % "jcl-over-slf4j",
+        "log4j" % "log4j",
         "org.scalanlp" %% "breeze", 
         "javax.ws.rs" %% "javax.ws.rs-api"))
     )
     
 
-  val loggingDependency = Seq("log4j" % "log4j" % "1.2.17" % "compile")
+  val loggingDependency = Seq("log4j" % "log4j" % "1.2.17")
 
   val linearAlgebraDependencies = Seq(
     "org.typelevel" %% "spire" % "0.14.1",
@@ -114,8 +119,8 @@ object Dependencies {
   )
 
   val replDependency = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.6.9" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "1.6.9-15-6720d42" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9-15-6720d42" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -128,13 +133,13 @@ object Dependencies {
   )
 
   val rejinDependency = Seq(
-    "org.renjin" % "renjin-script-engine" % "0.9.2643"
+    "org.renjin" % "renjin-script-engine" % "0.9.2726"
   )
 
   val rPackages = Seq(
-    "org.renjin.cran" % "plyr" % "1.8.4-b82",
-    "org.renjin.cran" % "abc" % "2.1-b294",
-    "org.renjin.cran" % "ggplot2" % "2.2.1-b112"
+    "org.renjin.cran" % "plyr" % "1.8.4-b107",
+    "org.renjin.cran" % "abc" % "2.1-b295",
+    "org.renjin.cran" % "ggplot2" % "3.2.0-b8"
   )
 
   val dynaServeDependencies = Seq(
@@ -153,7 +158,7 @@ object Dependencies {
   )
 
   val dataFormatDependencies = Seq(
-    "com.diffplug.matsim" % "matfilerw" % "3.0.0"
+    "com.diffplug.matsim" % "matfilerw" % "3.1.1"
   )
 
   val tensorflowDependency = Seq(
@@ -162,6 +167,18 @@ object Dependencies {
   ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
 
   val scalaStan = Seq(
-    "com.cibo" %% "scalastan" % "0.8.3"
+    "com.cibo" %% "scalastan" % "0.9.0"
+  )
+
+  val coursier_deps = Seq(
+    "io.get-coursier" %% "coursier" % "2.0.0-RC2-6",
+    "io.get-coursier" % "interface" % "0.0.12"
+  )
+
+  val almond = Seq(
+    "sh.almond" %% "scala-interpreter" % "0.7.0" cross CrossVersion.full,
+    "sh.almond" %% "scala-kernel-api" % "0.7.0" cross CrossVersion.full,
+    "sh.almond" %% "kernel" % "0.7.0",
+    "com.github.alexarchambault" %% "case-app" % "2.0.0-M9"
   )
 }
