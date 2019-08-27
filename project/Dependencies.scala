@@ -77,7 +77,7 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "com.github.scopt" %% "scopt" % "3.5.0",
     "org.scalameta" %% "scalameta" % "2.1.8",
-    "javax.ws.rs" % "javax.ws.rs-api" % "2.0-m10",
+    "javax.ws.rs" % "javax.ws.rs-api" % "2.0.1",
     "org.json4s" %% "json4s-jackson" % "3.6.5",
     "ws.unfiltered" %% "unfiltered-filter" % "0.9.1",
     "ws.unfiltered" %% "unfiltered-jetty" % "0.9.1",
