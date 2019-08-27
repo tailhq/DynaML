@@ -90,7 +90,7 @@ case class DynaML(
   colors: Colors = Colors.Default,
   replCodeWrapper: CodeWrapper = CodeWrapper,
   scriptCodeWrapper: CodeWrapper = CodeWrapper,
-  alreadyLoadedDependencies: Seq[coursier.Dependency] =
+  alreadyLoadedDependencies: Seq[coursierapi.Dependency] =
     Defaults.alreadyLoadedDependencies(),
   importHooks: Map[Seq[String], ImportHook] = ImportHook.defaults,
   classPathWhitelist: Set[Seq[String]] = Set.empty) {
