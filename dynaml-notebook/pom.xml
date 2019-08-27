@@ -2,40 +2,34 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.transcendent-ai-labs</groupId>
-    <artifactId>dynaml-repl_2.12</artifactId>
+    <artifactId>dynaml-notebook_2.12</artifactId>
     <packaging>jar</packaging>
-    <description>dynaml-repl</description>
-    <url>https://transcendent-ai-labs.github.io/DynaML/</url>
+    <description>dynaml-notebook</description>
     <version>v2.0-SNAPSHOT</version>
-    <licenses>
-        <license>
-            <name>APL2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <name>dynaml-repl</name>
+    <name>dynaml-notebook</name>
     <organization>
         <name>io.github.transcendent-ai-labs</name>
-        <url>https://transcendent-ai-labs.github.io/DynaML/</url>
     </organization>
-    <scm>
-        <url>https://github.com/transcendent-ai-labs/DynaML</url>
-        <connection>git@github.com:transcendent-ai-labs/DynaML.git</connection>
-    </scm>
-    <developers>
-        <developer>
-            <id>mandar2812</id>
-            <name>Mandar Chandorkar</name>
-            <email>mandar2812@gmail.com</email>
-            <url>http://mandar2812.github.io/</url>
-        </developer>
-    </developers>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>2.12.8</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.transcendent-ai-labs</groupId>
+            <artifactId>dynaml-core_2.12</artifactId>
+            <version>v2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.transcendent-ai-labs</groupId>
+            <artifactId>dynaml-examples_2.12</artifactId>
+            <version>v2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.transcendent-ai-labs</groupId>
+            <artifactId>dynaml-pipes_2.12</artifactId>
+            <version>v2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -152,6 +146,31 @@
             <groupId>io.get-coursier</groupId>
             <artifactId>interface</artifactId>
             <version>0.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>sh.almond</groupId>
+            <artifactId>scala-interpreter_2.12.8</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>sh.almond</groupId>
+            <artifactId>scala-kernel-api_2.12.8</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>sh.almond</groupId>
+            <artifactId>kernel_2.12</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.alexarchambault</groupId>
+            <artifactId>case-app_2.12</artifactId>
+            <version>2.0.0-M9</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
     </dependencies>
 </project>
