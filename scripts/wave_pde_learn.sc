@@ -185,16 +185,9 @@ def apply(
     dtflearn.model.tf_data_handle_ops(
       bufferSize = training_data.size / 10,
       patternToTensor = Some(
-        DataPipe(
-          (ds: Seq[(Tensor[Float], Tensor[Float])]) => {
-            val (xs, ys) = ds.unzip
-
-            (
-              dtfpipe.EagerConcatenate[Float](axis = 0).run(xs),
-              dtfpipe.EagerConcatenate[Float](axis = 0).run(ys)
-            )
-          }
-        )
+        dtfpipe
+          .EagerConcatenate[Float](axis = 0)
+          .zip(dtfpipe.EagerConcatenate[Float](axis = 0))
       )
     )
   )
