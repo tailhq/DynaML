@@ -71,7 +71,7 @@ object Dependencies {
     "org.scala-lang" % "jline" % "2.11.0-M3" % "compile",
     "org.scalaforge" % "scalax" % "0.1" % "compile",
     "org.scalaz" %% "scalaz-core" % "7.2.7",
-    "org.scala-graph" %% "graph-core" % "1.12.5",
+    "org.scala-graph" %% "graph-core" % "1.13.0",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "com.github.scopt" %% "scopt" % "3.5.0",
     "org.scalameta" %% "scalameta" % "2.0.1",
