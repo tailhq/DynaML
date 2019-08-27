@@ -1,6 +1,6 @@
 {
   import breeze.linalg.eig
-  import breeze.stats.distributions.{ContinuousDistr, Gamma}
+  import breeze.stats.distributions._
   import io.github.mandar2812.dynaml.kernels._
   import io.github.mandar2812.dynaml.models.bayes.{
     LinearTrendESGPrior,
@@ -289,13 +289,23 @@
 
   val test_split_size = markov_chain_samples.test_dataset.size
 
+  val hyper_prior = Map(
+    "bandwidth" -> UniformRV(0.1, 5d),
+    "amplitude" -> UniformRV(0.1, 5d),
+    "noiseLevel" -> UniformRV(0.1, 5d)
+  )
+
+  gp_prior.hyperPrior_(
+     hyper_prior
+  )
+
   gp_prior.globalOptConfig_(
     Map(
       "gridStep"  -> "0.15",
-      "gridSize"  -> "2",
-      "globalOpt" -> "CSA",
+      "gridSize"  -> "5",
+      "globalOpt" -> "GS",
       "policy"    -> "GS",
-      "maxIt"     -> "3"
+      "maxIt"     -> "2"
     )
   )
 
