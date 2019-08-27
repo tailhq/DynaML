@@ -4,7 +4,6 @@ import Dependencies._
 import sbtbuildinfo.BuildInfoPlugin.autoImport._
 import org.scoverage.coveralls.Imports.CoverallsKeys._
 
-
 val mainVersion = "v2.0-SNAPSHOT"
 maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
 packageSummary := "Scala Library/REPL for Machine Learning Research"
@@ -12,7 +11,9 @@ packageDescription := "DynaML is a Scala & JVM Machine Learning toolbox for rese
 
 val heapSize = Option(System.getProperty("heap")).getOrElse("4096m")
 
-val dataDirectory = settingKey[File]("The directory holding the data files for running example scripts")
+val dataDirectory = settingKey[File](
+  "The directory holding the data files for running example scripts"
+)
 
 val baseSettings = Seq(
   organization := "io.github.transcendent-ai-labs",
@@ -26,41 +27,48 @@ val baseSettings = Seq(
     Resolver.sonatypeRepo("snapshots"),
     Resolver.typesafeIvyRepo("releases"),
     Resolver.bintrayRepo("cibotech", "public"),
-    "jitpack" at "https://jitpack.io"),
+    "jitpack" at "https://jitpack.io"
+  ),
   publishTo := sonatypePublishTo.value,
   useGpg := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
-  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
+  publishLocalConfiguration := publishLocalConfiguration.value
+    .withOverwrite(true),
   coverallsTokenFile := Some(".coveralls.yml")
 )
 
 lazy val commonSettings = Seq(
-  libraryDependencies ++= (linearAlgebraDependencies ++ baseDependencies ++ loggingDependency ++ apacheSparkDependency)
+  libraryDependencies ++= (
+    linearAlgebraDependencies ++ 
+      baseDependencies ++ 
+      loggingDependency ++ 
+      apacheSparkDependency)
 )
 
 lazy val settingsCore = Seq(
-  libraryDependencies ++= (
-      chartsDependencies ++
-        tinkerpopDependency ++
-        openMLDependency ++
-        rejinDependency ++ rPackages ++
-        imageDependencies ++
-        dataFormatDependencies ++
-        tensorflowDependency ++
-        replDependency ++ 
-        scalaStan)
+  libraryDependencies ++= (chartsDependencies ++
+    tinkerpopDependency ++
+    openMLDependency ++
+    rejinDependency ++ rPackages ++
+    imageDependencies ++
+    dataFormatDependencies ++
+    tensorflowDependency ++
+    replDependency ++
+    scalaStan)
 )
 
-lazy val pipes = (project in file("dynaml-pipes")).settings(baseSettings:_*)
-  .settings(commonSettings:_*)
+lazy val pipes = (project in file("dynaml-pipes"))
+  .settings(baseSettings: _*)
+  .settings(commonSettings: _*)
   .settings(
     name := "dynaml-pipes",
     version := mainVersion
   )
 
-lazy val core = (project in file("dynaml-core")).settings(baseSettings)
-  .settings(commonSettings:_*)
-  .settings(settingsCore:_*)
+lazy val core = (project in file("dynaml-core"))
+  .settings(baseSettings)
+  .settings(commonSettings: _*)
+  .settings(settingsCore: _*)
   .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .dependsOn(pipes)
   .settings(
@@ -69,16 +77,17 @@ lazy val core = (project in file("dynaml-core")).settings(baseSettings)
   )
 
 lazy val examples = (project in file("dynaml-examples"))
-  .settings(baseSettings:_*)
-  .settings(commonSettings:_*)
+  .settings(baseSettings: _*)
+  .settings(commonSettings: _*)
   .settings(
     name := "dynaml-examples",
     version := mainVersion
-  ).dependsOn(pipes, core)
+  )
+  .dependsOn(pipes, core)
 
-
-lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin)
-  .settings(baseSettings:_*)
+lazy val repl = (project in file("dynaml-repl"))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(baseSettings: _*)
   .settings(
     name := "dynaml-repl",
     version := mainVersion,
@@ -88,8 +97,9 @@ lazy val repl = (project in file("dynaml-repl")).enablePlugins(BuildInfoPlugin)
     libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps)
   )
 
-lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(BuildInfoPlugin)
-  .settings(baseSettings:_*)
+lazy val notebook = (project in file("dynaml-notebook"))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(baseSettings: _*)
   .dependsOn(core, examples, pipes)
   .settings(
     name := "dynaml-notebook",
@@ -100,8 +110,9 @@ lazy val notebook = (project in file("dynaml-notebook")).enablePlugins(BuildInfo
     libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps ++ almond ++ loggingDependency)
   )
 
-lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin)
-  .settings(baseSettings:_*)
+lazy val DynaML = (project in file("."))
+  .enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin)
+  .settings(baseSettings: _*)
   .dependsOn(core, examples, pipes, repl)
   .settings(
     libraryDependencies ++= dynaServeDependencies,
@@ -114,32 +125,35 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
     buildInfoUsePackageAsPath := true,
     dataDirectory := new File("data"),
-    mappings in Universal ++= dataDirectory.value.listFiles().toSeq.map(p => p -> s"data/${p.getName}"),
+    mappings in Universal ++= dataDirectory.value
+      .listFiles()
+      .toSeq
+      .map(p => p -> s"data/${p.getName}"),
     mappings in Universal ++= Seq(
       {
         //Initialization script for the DynaML REPL
         val init = (resourceDirectory in Compile).value / "DynaMLInit.scala"
         init -> "conf/DynaMLInit.scala"
-      },
-      {
+      }, {
         val banner = (resourceDirectory in Compile).value / "dynamlBanner.txt"
         banner -> "conf/banner.txt"
       }
     ),
     javaOptions in test ++= Seq(
       "-Dlog4j.debug=true",
-      "-Dlog4j.configuration=log4j.properties"),
+      "-Dlog4j.configuration=log4j.properties"
+    ),
     javaOptions in Universal ++= Seq(
       // -J params will be added as jvm parameters
       s"-J-Xmx$heapSize",
-      "-J-Xms64m", 
+      "-J-Xms64m",
       "-J-XX:HeapBaseMinAddress=32G"
     ),
     scalacOptions in Universal ++= Seq("-Xlog-implicits"),
     initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())""",
     dockerfile in docker := {
       val appDir: File = stage.value
-      val targetDir = "/app"
+      val targetDir    = "/app"
 
       new Dockerfile {
         from("openjdk:8-jre")
@@ -150,7 +164,6 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
     imageNames in docker := Seq(
       // Sets the latest tag
       ImageName(s"mandar2812/${name.value.toLowerCase}:latest"),
-
       // Sets a name with a tag that contains the project version
       ImageName(
         namespace = Some("mandar2812"),
@@ -158,7 +171,6 @@ lazy val DynaML = (project in file(".")).enablePlugins(JavaAppPackaging, BuildIn
         tag = Some(version.value)
       )
     )
-  ).aggregate(core, pipes, examples, repl).settings(
-    aggregate in publishM2 := true,
-    aggregate in update := false)
-
+  )
+  .aggregate(core, pipes, examples, repl)
+  .settings(aggregate in publishM2 := true, aggregate in update := false)
