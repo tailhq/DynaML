@@ -87,6 +87,12 @@ object Dependencies {
     "jline" % "jline" % "2.14.6"
   )
 
+  val excludeSlf4jBindings = Seq(
+    ExclusionRule(organization = "org.slf4j", name = "slf4j-jdk14"),
+    ExclusionRule(organization = "ch.qos.logback", name = "logback-classic"),
+    ExclusionRule(organization = "ch.qos.logback", name = "logback-core")
+  )
+
   val apacheSparkDependency = Seq(
     "javax.servlet" % "javax.servlet-api" % "3.1.0" % "test",
     "org.apache.spark" %% "spark-core" % "2.4.3",
@@ -95,7 +101,6 @@ object Dependencies {
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9")
     .map(_.withExclusions(
       Vector(
-        //"org.slf4j" % "slf4j-log4j12", 
         "org.slf4j" % "jul-to-slf4j",
         "org.slf4j" % "jcl-over-slf4j",
         "log4j" % "log4j",

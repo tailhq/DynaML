@@ -38,11 +38,10 @@ val baseSettings = Seq(
 )
 
 lazy val commonSettings = Seq(
-  libraryDependencies ++= (
-    linearAlgebraDependencies ++ 
-      baseDependencies ++ 
-      loggingDependency ++ 
-      apacheSparkDependency)
+  libraryDependencies ++= (linearAlgebraDependencies ++
+    baseDependencies ++
+    loggingDependency ++
+    apacheSparkDependency)
 )
 
 lazy val settingsCore = Seq(
@@ -54,7 +53,7 @@ lazy val settingsCore = Seq(
     dataFormatDependencies ++
     tensorflowDependency ++
     replDependency ++
-    scalaStan)
+    scalaStan).map(_.excludeAll(excludeSlf4jBindings: _*))
 )
 
 lazy val pipes = (project in file("dynaml-pipes"))
@@ -108,6 +107,7 @@ lazy val notebook = (project in file("dynaml-notebook"))
     buildInfoPackage := "io.github.mandar2812.dynaml.jupyter",
     buildInfoUsePackageAsPath := true,
     libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps ++ almond ++ loggingDependency)
+      .map(_.excludeAll(excludeSlf4jBindings: _*))
   )
 
 lazy val DynaML = (project in file("."))
