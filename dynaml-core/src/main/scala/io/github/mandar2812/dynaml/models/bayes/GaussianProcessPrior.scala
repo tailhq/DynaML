@@ -88,8 +88,8 @@ abstract class GaussianProcessPrior[I: ClassTag, MeanFuncParams](
       globalOptConfig("globalOpt"),
       globalOptConfig("gridSize").toInt,
       globalOptConfig("gridStep").toDouble,
-      maxIt = globalOptConfig.getOrElse("gridSize", "4").toInt,
-      policy = globalOptConfig("policy"),
+      maxIt = globalOptConfig.getOrElse("maxIt", "4").toInt,
+      policy = globalOptConfig.getOrElse("policy", "GS"),
       prior = hyperPrior) >
     DataPipe((modelAndConf: (GPModel, Map[String, Double])) => modelAndConf._1)
 

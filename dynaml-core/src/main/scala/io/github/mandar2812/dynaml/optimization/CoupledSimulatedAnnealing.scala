@@ -40,7 +40,7 @@ class CoupledSimulatedAnnealing[M <: GloballyOptimizable](
     val landscape = performCSA(initialConfig, options).toMap
     val optimum = landscape.keys.min
 
-    print("Optimum value of energy is: ")
+    print("\nOptimum value of energy is: ")
     pprint.pprintln(optimum)
     println("Configuration: ")
     pprint.pprintln(landscape(optimum))
