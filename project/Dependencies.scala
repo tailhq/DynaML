@@ -65,8 +65,8 @@ object Dependencies {
   }
 
   val baseDependencies = Seq(
-    "com.typesafe" % "config" % "1.2.1" % "compile",
-    "junit" % "junit" % "4.12",
+    "com.typesafe" % "config" % "1.3.4" % "compile",
+    "junit" % "junit" % "4.11",
     "com.github.tototoshi" %% "scala-csv" % "1.3.6" % "compile",
     "org.scala-lang" % "jline" % "2.11.0-M3" % "compile",
     "org.scalaforge" % "scalax" % "0.1" % "compile",
@@ -78,13 +78,19 @@ object Dependencies {
     "com.github.scopt" %% "scopt" % "3.5.0",
     "org.scalameta" %% "scalameta" % "2.1.8",
     "javax.ws.rs" % "javax.ws.rs-api" % "2.0-m10",
-    "org.json4s" %% "json4s-jackson" % "3.6.5",
+    "org.json4s" %% "json4s-jackson" % "3.6.7",
     "ws.unfiltered" %% "unfiltered-filter" % "0.9.1",
     "ws.unfiltered" %% "unfiltered-jetty" % "0.9.1",
     "org.apache.commons" % "commons-math3" % "3.6.1",
     "commons-io" % "commons-io" % "2.6",
     "com.github.nscala-time" %% "nscala-time" % "2.22.0",
-    "jline" % "jline" % "2.13"
+    "jline" % "jline" % "2.14.6"
+  )
+
+  val excludeSlf4jBindings = Seq(
+    ExclusionRule(organization = "org.slf4j", name = "slf4j-jdk14"),
+    ExclusionRule(organization = "ch.qos.logback", name = "logback-classic"),
+    ExclusionRule(organization = "ch.qos.logback", name = "logback-core")
   )
 
   val apacheSparkDependency = Seq(
@@ -95,7 +101,6 @@ object Dependencies {
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9")
     .map(_.withExclusions(
       Vector(
-        //"org.slf4j" % "slf4j-log4j12", 
         "org.slf4j" % "jul-to-slf4j",
         "org.slf4j" % "jcl-over-slf4j",
         "log4j" % "log4j",
@@ -172,7 +177,7 @@ object Dependencies {
 
   val coursier_deps = Seq(
     "io.get-coursier" %% "coursier" % "2.0.0-RC2-6",
-    "io.get-coursier" % "interface" % "0.0.12"
+    "io.get-coursier" % "interface" % "0.0.10"
   )
 
   val almond = Seq(
