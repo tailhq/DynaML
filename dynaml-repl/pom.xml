@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <description>dynaml-repl</description>
     <url>https://transcendent-ai-labs.github.io/DynaML/</url>
-    <version>v2.0-beta.1</version>
+    <version>v2.0-SNAPSHOT</version>
     <licenses>
         <license>
             <name>APL2</name>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.12.4</version>
+            <version>2.12.8</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>com.github.tototoshi</groupId>
             <artifactId>scala-csv_2.12</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -65,12 +65,17 @@
         <dependency>
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-core_2.12</artifactId>
-            <version>7.2.7</version>
+            <version>7.2.28</version>
         </dependency>
         <dependency>
             <groupId>org.scala-graph</groupId>
             <artifactId>graph-core_2.12</artifactId>
             <version>1.12.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-graph</groupId>
+            <artifactId>graph-core_2.12</artifactId>
+            <version>1.13.0</version>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
@@ -86,7 +91,7 @@
         <dependency>
             <groupId>org.scalameta</groupId>
             <artifactId>scalameta_2.12</artifactId>
-            <version>2.0.1</version>
+            <version>2.1.8</version>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -111,27 +116,42 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lihaoyi</groupId>
-            <artifactId>ammonite-repl_2.12.4</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lihaoyi</groupId>
-            <artifactId>ammonite-sshd_2.12.4</artifactId>
-            <version>1.1.0</version>
+            <version>3.6.1</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.nscala-time</groupId>
+            <artifactId>nscala-time_2.12</artifactId>
+            <version>2.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>2.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lihaoyi</groupId>
+            <artifactId>ammonite-repl_2.12.8</artifactId>
+            <version>1.6.9-15-6720d42</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lihaoyi</groupId>
+            <artifactId>ammonite-sshd_2.12.8</artifactId>
+            <version>1.6.9-15-6720d42</version>
+        </dependency>
+        <dependency>
+            <groupId>io.get-coursier</groupId>
+            <artifactId>coursier_2.12</artifactId>
+            <version>2.0.0-RC2-6</version>
+        </dependency>
+        <dependency>
+            <groupId>io.get-coursier</groupId>
+            <artifactId>interface</artifactId>
+            <version>0.0.12</version>
         </dependency>
     </dependencies>
 </project>
