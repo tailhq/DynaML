@@ -106,8 +106,7 @@ lazy val notebook = (project in file("dynaml-notebook"))
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.jupyter",
     buildInfoUsePackageAsPath := true,
-    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps ++ almond ++ loggingDependency)
-      .map(_.excludeAll(excludeSlf4jBindings: _*))
+    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ almond ++ loggingDependency)
   )
 
 lazy val DynaML = (project in file("."))

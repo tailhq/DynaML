@@ -76,7 +76,7 @@ object Dependencies {
     "org.scala-graph" %% "graph-core" % "1.13.0",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "com.github.scopt" %% "scopt" % "3.5.0",
-    "org.scalameta" %% "scalameta" % "4.2.3",
+    "org.scalameta" %% "scalameta" % "2.1.8",
     "javax.ws.rs" % "javax.ws.rs-api" % "2.0-m10",
     "org.json4s" %% "json4s-jackson" % "3.6.7",
     "ws.unfiltered" %% "unfiltered-filter" % "0.9.1",
@@ -177,7 +177,7 @@ object Dependencies {
 
   val coursier_deps = Seq(
     "io.get-coursier" %% "coursier" % "2.0.0-RC2-6",
-    "io.get-coursier" % "interface" % "0.0.12"
+    "io.get-coursier" % "interface" % "0.0.10"
   )
 
   val almond = Seq(
