@@ -84,7 +84,7 @@ object Dependencies {
     "org.apache.commons" % "commons-math3" % "3.6.1",
     "commons-io" % "commons-io" % "2.6",
     "com.github.nscala-time" %% "nscala-time" % "2.22.0",
-    "jline" % "jline" % "2.13"
+    "jline" % "jline" % "2.14.6"
   )
 
   val apacheSparkDependency = Seq(
