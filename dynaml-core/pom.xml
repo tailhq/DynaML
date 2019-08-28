@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <description>dynaml-core</description>
     <url>https://transcendent-ai-labs.github.io/DynaML/</url>
-    <version>v2.0-beta.1</version>
+    <version>v2.0-SNAPSHOT</version>
     <licenses>
         <license>
             <name>APL2</name>
@@ -35,12 +35,12 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.12.4</version>
+            <version>2.12.8</version>
         </dependency>
         <dependency>
             <groupId>io.github.transcendent-ai-labs</groupId>
             <artifactId>dynaml-pipes_2.12</artifactId>
-            <version>v2.0-beta.1</version>
+            <version>v2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.typelevel</groupId>
@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.scalanlp</groupId>
             <artifactId>breeze_2.12</artifactId>
-            <version>0.13.2</version>
+            <version>1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.spire-math</groupId>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>org.scalanlp</groupId>
             <artifactId>breeze-natives_2.12</artifactId>
-            <version>0.13.2</version>
+            <version>1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.spire-math</groupId>
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>com.github.tototoshi</groupId>
             <artifactId>scala-csv_2.12</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -103,12 +103,17 @@
         <dependency>
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-core_2.12</artifactId>
-            <version>7.2.7</version>
+            <version>7.2.28</version>
         </dependency>
         <dependency>
             <groupId>org.scala-graph</groupId>
             <artifactId>graph-core_2.12</artifactId>
             <version>1.12.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-graph</groupId>
+            <artifactId>graph-core_2.12</artifactId>
+            <version>1.13.0</version>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
@@ -124,7 +129,7 @@
         <dependency>
             <groupId>org.scalameta</groupId>
             <artifactId>scalameta_2.12</artifactId>
-            <version>2.0.1</version>
+            <version>2.1.8</version>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -149,12 +154,22 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>3.4.1</version>
+            <version>3.6.1</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.nscala-time</groupId>
+            <artifactId>nscala-time_2.12</artifactId>
+            <version>2.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>2.13</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -169,7 +184,15 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12_2.12</artifactId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.scalanlp</groupId>
@@ -184,11 +207,19 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.12</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12_2.12</artifactId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.scalanlp</groupId>
@@ -203,11 +234,19 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_2.12</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12_2.12</artifactId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.scalanlp</groupId>
@@ -222,11 +261,19 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
+            <version>2.9.9.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12_2.12</artifactId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.scalanlp</groupId>
@@ -241,11 +288,19 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-scala_2.12</artifactId>
-            <version>2.9.8</version>
+            <version>2.9.9</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12_2.12</artifactId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.scalanlp</groupId>
@@ -268,6 +323,11 @@
             <version>1.0.2</version>
         </dependency>
         <dependency>
+            <groupId>com.cibo</groupId>
+            <artifactId>evilplot_2.12</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.tinkerpop.gremlin</groupId>
             <artifactId>gremlin-java</artifactId>
             <version>2.6.0</version>
@@ -285,22 +345,22 @@
         <dependency>
             <groupId>org.renjin</groupId>
             <artifactId>renjin-script-engine</artifactId>
-            <version>0.9.2643</version>
+            <version>0.9.2726</version>
         </dependency>
         <dependency>
             <groupId>org.renjin.cran</groupId>
             <artifactId>plyr</artifactId>
-            <version>1.8.4-b82</version>
+            <version>1.8.4-b107</version>
         </dependency>
         <dependency>
             <groupId>org.renjin.cran</groupId>
             <artifactId>abc</artifactId>
-            <version>2.1-b294</version>
+            <version>2.1-b295</version>
         </dependency>
         <dependency>
             <groupId>org.renjin.cran</groupId>
             <artifactId>ggplot2</artifactId>
-            <version>2.2.1-b112</version>
+            <version>3.2.0-b8</version>
         </dependency>
         <dependency>
             <groupId>com.sksamuel.scrimage</groupId>
@@ -320,7 +380,7 @@
         <dependency>
             <groupId>com.diffplug.matsim</groupId>
             <artifactId>matfilerw</artifactId>
-            <version>3.0.0</version>
+            <version>3.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.platanios</groupId>
@@ -347,13 +407,18 @@
         </dependency>
         <dependency>
             <groupId>com.lihaoyi</groupId>
-            <artifactId>ammonite-repl_2.12.4</artifactId>
-            <version>1.1.0</version>
+            <artifactId>ammonite-repl_2.12.8</artifactId>
+            <version>1.6.9-15-6720d42</version>
         </dependency>
         <dependency>
             <groupId>com.lihaoyi</groupId>
-            <artifactId>ammonite-sshd_2.12.4</artifactId>
-            <version>1.1.0</version>
+            <artifactId>ammonite-sshd_2.12.8</artifactId>
+            <version>1.6.9-15-6720d42</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cibo</groupId>
+            <artifactId>scalastan_2.12</artifactId>
+            <version>0.9.0</version>
         </dependency>
     </dependencies>
 </project>
