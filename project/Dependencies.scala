@@ -126,8 +126,8 @@ object Dependencies {
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.6.9-15-6720d42" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9-15-6720d42" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "1.6.9" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
