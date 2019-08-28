@@ -150,9 +150,9 @@ object Dependencies {
   )
 
   val dynaServeDependencies = Seq(
-    "com.typesafe.akka" %% "akka-actor"           % "2.5.16",
-    "com.typesafe.akka" %% "akka-stream"          % "2.5.16",
-    "com.typesafe.akka" %% "akka-testkit"         % "2.5.16",
+    "com.typesafe.akka" %% "akka-actor"           % "2.5.25",
+    "com.typesafe.akka" %% "akka-stream"          % "2.5.25",
+    "com.typesafe.akka" %% "akka-testkit"         % "2.5.25",
     "com.typesafe.akka" %% "akka-http"            % "10.0.9",
     "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.9",
     "com.typesafe.akka" %% "akka-http-testkit"    % "10.0.9"
