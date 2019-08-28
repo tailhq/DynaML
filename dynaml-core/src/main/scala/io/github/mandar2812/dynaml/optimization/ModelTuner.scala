@@ -147,15 +147,6 @@ trait ModelTuner[T <: GloballyOptimizable, T1] {
 
         val netEnergy = priorEnergy + configEnergy
 
-        //print("Energy = ")
-        //pprint.pprintln(configEnergy)
-
-        /* if(usePriorFlag) {
-        print("Energy due to Prior = ")
-        pprint.pprintln(priorEnergy)
-        print("Net Energy = ")
-        pprint.pprintln(netEnergy)
-      } */
         pb += 1
         (netEnergy, configMap)
       })
