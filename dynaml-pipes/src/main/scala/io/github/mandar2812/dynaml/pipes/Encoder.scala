@@ -17,7 +17,6 @@ specific language governing permissions and limitations
 under the License.
  * */
 package io.github.mandar2812.dynaml.pipes
-import scalaz.Compose
 
 /**
   * A deterministic and reversible encoding

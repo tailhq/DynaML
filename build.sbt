@@ -37,29 +37,9 @@ val baseSettings = Seq(
   coverallsTokenFile := Some(".coveralls.yml")
 )
 
-lazy val commonSettings = Seq(
-  libraryDependencies ++= (
-    linearAlgebraDependencies ++ 
-      baseDependencies ++ 
-      loggingDependency ++ 
-      apacheSparkDependency)
-)
-
-lazy val settingsCore = Seq(
-  libraryDependencies ++= (chartsDependencies ++
-    tinkerpopDependency ++
-    openMLDependency ++
-    rejinDependency ++ rPackages ++
-    imageDependencies ++
-    dataFormatDependencies ++
-    tensorflowDependency ++
-    replDependency ++
-    scalaStan)
-)
-
 lazy val pipes = (project in file("dynaml-pipes"))
   .settings(baseSettings: _*)
-  .settings(commonSettings: _*)
+  .settings(libraryDependencies ++= pipesDependencies)
   .settings(
     name := "dynaml-pipes",
     version := mainVersion
@@ -67,10 +47,9 @@ lazy val pipes = (project in file("dynaml-pipes"))
 
 lazy val core = (project in file("dynaml-core"))
   .settings(baseSettings)
-  .settings(commonSettings: _*)
-  .settings(settingsCore: _*)
-  .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .dependsOn(pipes)
+  .settings(libraryDependencies ++= coreDependencies)
+  .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .settings(
     name := "dynaml-core",
     version := mainVersion
@@ -78,12 +57,11 @@ lazy val core = (project in file("dynaml-core"))
 
 lazy val examples = (project in file("dynaml-examples"))
   .settings(baseSettings: _*)
-  .settings(commonSettings: _*)
+  .dependsOn(pipes, core)
   .settings(
     name := "dynaml-examples",
     version := mainVersion
   )
-  .dependsOn(pipes, core)
 
 lazy val repl = (project in file("dynaml-repl"))
   .enablePlugins(BuildInfoPlugin)
@@ -94,7 +72,7 @@ lazy val repl = (project in file("dynaml-repl"))
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.repl",
     buildInfoUsePackageAsPath := true,
-    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps)
+    libraryDependencies ++= replDependencies
   )
 
 lazy val notebook = (project in file("dynaml-notebook"))
@@ -107,7 +85,8 @@ lazy val notebook = (project in file("dynaml-notebook"))
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "io.github.mandar2812.dynaml.jupyter",
     buildInfoUsePackageAsPath := true,
-    libraryDependencies ++= (baseDependencies ++ replDependency ++ commons_io ++ coursier_deps ++ almond ++ loggingDependency)
+    libraryDependencies ++= notebookDepencencies
+      .map(_.excludeAll(excludeSlf4jBindings: _*))
   )
 
 lazy val DynaML = (project in file("."))
