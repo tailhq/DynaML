@@ -48,7 +48,7 @@ class GridSearch[M <: GloballyOptimizable](model: M)
       getEnergyLandscape(initialConfig, options, meanFieldPrior).toMap
     val optimum = energyLandscape.keys.min
 
-    print("Optimum value of energy is: ")
+    print("\nOptimum value of energy is: ")
     pprint.pprintln(optimum)
     println("Configuration: ")
     pprint.pprintln(energyLandscape(optimum))
