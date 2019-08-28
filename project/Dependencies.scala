@@ -75,7 +75,7 @@ object Dependencies {
     "com.github.tototoshi"   %% "scala-csv"         % "1.3.6" % "compile",
     "org.scalaz"             %% "scalaz-core"       % "7.2.28",
     "org.scalaz"             %% "scalaz-core"       % "7.2.28",
-    "org.scalatest"          %% "scalatest"         % "3.0.1" % "test",
+    "org.scalatest"          %% "scalatest"         % "3.0.8" % "test",
     "com.github.scopt"       %% "scopt"             % "3.5.0",
     "javax.ws.rs"            % "javax.ws.rs-api"    % "2.0-m10",
     "org.json4s"             %% "json4s-jackson"    % "3.6.7",
