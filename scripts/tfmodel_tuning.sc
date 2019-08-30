@@ -3,6 +3,7 @@ import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.models._
 import io.github.mandar2812.dynaml.optimization._
 import io.github.mandar2812.dynaml.tensorflow._
+import io.github.mandar2812.dynaml.tensorflow.models._
 import io.github.mandar2812.dynaml.tensorflow.layers.L2Regularization
 import org.joda.time.DateTime
 import org.platanios.tensorflow.api._
@@ -85,30 +86,6 @@ val tuning_config_generator =
           )
     )
 
-implicit val detImpl: DataPipe[Double, Double] = DataPipe(math.abs)
-
-val h: PushforwardMap[Double, Double, Double] = PushforwardMap(
-  DataPipe((x: Double) => math.exp(x)),
-  DifferentiableMap((x: Double) => math.log(x), (x: Double) => 1.0 / x)
-)
-
-val h10: PushforwardMap[Double, Double, Double] = PushforwardMap(
-  DataPipe((x: Double) => math.pow(10d, x)),
-  DifferentiableMap(
-    (x: Double) => math.log10(x),
-    (x: Double) => 1.0 / (x * math.log(10d))
-  )
-)
-
-val g1 = GaussianRV(0.0, 0.75)
-
-val g2 = GaussianRV(0.2, 0.75)
-
-val lg_p = h -> g1
-val lg_e = h -> g2
-
-val lu_reg = h10 -> UniformRV(-4d, -2.5d)
-
 val hyper_parameters = List(
   "reg"
 )
@@ -124,16 +101,8 @@ val fitness_function = DataPipe2[Output[Double], Output[Double], Output[Float]](
 val convert_to_tensor =
   DynaMLPipe.identityPipe[(Tensor[Double], Tensor[Double])]
 
-val pattern_to_tensor = DataPipe(
-  (ds: Seq[(Tensor[Double], Tensor[Double])]) => {
-    val (xs, ys) = ds.unzip
-
-    (
-      dtfpipe.EagerStack[Double](axis = 0).run(xs),
-      dtfpipe.EagerStack[Double](axis = 0).run(ys)
-    )
-  }
-)
+val pattern_to_tensor =
+  dtfpipe.EagerStack[Double]().zip(dtfpipe.EagerStack[Double]())
 
 val tunableTFModel: TunableTFModel[(Tensor[Double], Tensor[Double]), Output[
   Double
@@ -146,10 +115,10 @@ val tunableTFModel: TunableTFModel[(Tensor[Double], Tensor[Double]), Output[
     tf_dataset.training_dataset,
     dtflearn.model.tf_data_handle_ops(
       bufferSize = 500,
-      //patternToSym = Some(pattern_to_sym),
       patternToTensor = Some(pattern_to_tensor),
       concatOpO = Some(dtfpipe.EagerConcatenate[Double]()),
-      caching_mode = dtflearn.model.data.FileCache(tf_summary_dir/"data_cache")
+      caching_mode =
+        dtflearn.model.data.FileCache(tf_summary_dir / "data_cache")
     ),
     Seq(fitness_function),
     architecture,
@@ -187,11 +156,9 @@ val hyp_mapping = Some(
 )
 
 val gs = new CoupledSimulatedAnnealing(tunableTFModel, Some(hyp_scaling))
-
-gs.setPrior(hyper_prior)
-
-gs.setNumSamples(2)
-gs.setMaxIterations(2)
+  .setPrior(hyper_prior)
+  .setNumSamples(2)
+  .setMaxIterations(2)
 
 println("--------------------------------------------------------------------")
 println("Initiating model tuning")
@@ -204,5 +171,3 @@ println("Model tuning complete")
 println("Chosen configuration:")
 pprint.pprintln(config)
 println("--------------------------------------------------------------------")
-
-//println("Training final model based on chosen configuration")

@@ -13,7 +13,7 @@ import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics._
   *
   * @param name String identifier for this loss function
   * @param f A sequence of residual functions, obtained as a result of
-  *          applying some PDE operators (see [[DifferentialOperator]]).
+  *          applying some PDE operators (see [[dynamics.DifferentialOperator]]).
   * @param quadrature_nodes A set of nodal points in the domain of the system on which
   *                         the error should be computed.
   * @param weights Weights associated with each quadrature node.

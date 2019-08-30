@@ -19,14 +19,14 @@ under the License.
 package io.github.mandar2812.dynaml.tensorflow
 
 import _root_.io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
-import _root_.io.github.mandar2812.dynaml.models.{TFModel, TunableTFModel}
+import _root_.io.github.mandar2812.dynaml.tensorflow.models.{TFModel, TunableTFModel}
 import io.github.mandar2812.dynaml.tensorflow.layers.{
   DynamicTimeStepCTRNN,
   FiniteHorizonCTRNN,
   FiniteHorizonLinear
 }
 import _root_.io.github.mandar2812.dynaml.tensorflow.dynamics.PDESystem
-import _root_.io.github.mandar2812.dynaml.evaluation.{Performance, MAE, MSE}
+import _root_.io.github.mandar2812.dynaml.tensorflow.evaluation.{Performance, MAE, MSE}
 import org.platanios.tensorflow.api.learn.{Mode, StopCriteria}
 import org.platanios.tensorflow.api.learn.layers.{Compose, Input, Layer, Linear}
 import org.platanios.tensorflow.api.ops.NN.SameConvPadding
