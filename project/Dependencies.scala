@@ -86,7 +86,7 @@ object Dependencies {
   )
 
   val testSuiteDependencies = Seq(
-    "junit"         % "junit"      % "4.11"  % "test",
+    "junit"         % "junit"      % "4.12"  % "test",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test"
   )
 
