@@ -17,6 +17,7 @@ dynaml-examples/target/*
 dynaml-pipes/target/*
 dynaml-repl/target/*
 dynaml-notebook/target/*
+dynaml-tensorflow/target/*
 release.properties
 *.log
 data/results*
