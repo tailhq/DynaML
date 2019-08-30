@@ -2,6 +2,7 @@ package io.github.mandar2812.dynaml.tensorflow.utils
 
 import org.scalatest.{FlatSpec, Matchers}
 import io.github.mandar2812.dynaml.tensorflow._
+import io.github.mandar2812.dynaml.tensorflow.evaluation.GenRegressionMetricsTF
 import org.platanios.tensorflow.api._
 import _root_.io.github.mandar2812.dynaml.probability.GaussianRV
 

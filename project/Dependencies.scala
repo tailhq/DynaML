@@ -71,11 +71,9 @@ object Dependencies {
 
   val baseDependencies = Seq(
     "com.typesafe"           % "config"             % "1.3.4" % "compile",
-    "junit"                  % "junit"              % "4.12" % "test",
     "com.github.tototoshi"   %% "scala-csv"         % "1.3.6" % "compile",
     "org.scalaz"             %% "scalaz-core"       % "7.2.28",
     "org.scalaz"             %% "scalaz-core"       % "7.2.28",
-    "org.scalatest"          %% "scalatest"         % "3.0.1" % "test",
     "com.github.scopt"       %% "scopt"             % "3.5.0",
     "javax.ws.rs"            % "javax.ws.rs-api"    % "2.0-m10",
     "org.json4s"             %% "json4s-jackson"    % "3.6.7",
@@ -85,6 +83,11 @@ object Dependencies {
     "commons-io"             % "commons-io"         % "2.6",
     "com.github.nscala-time" %% "nscala-time"       % "2.22.0",
     "jline"                  % "jline"              % "2.14.6"
+  )
+
+  val testSuiteDependencies = Seq(
+    "junit"         % "junit"      % "4.11"  % "test",
+    "org.scalatest" %% "scalatest" % "3.0.1" % "test"
   )
 
   val excludeSlf4jBindings = Seq(
@@ -100,16 +103,16 @@ object Dependencies {
     "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.9.9.3",
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9"
   ).map(
-      _.withExclusions(
-        Vector(
-          "org.slf4j"    % "jul-to-slf4j",
-          "org.slf4j"    % "jcl-over-slf4j",
-          "log4j"        % "log4j",
-          "org.scalanlp" %% "breeze",
-          "javax.ws.rs"  %% "javax.ws.rs-api"
-        )
+    _.withExclusions(
+      Vector(
+        "org.slf4j"    % "jul-to-slf4j",
+        "org.slf4j"    % "jcl-over-slf4j",
+        "log4j"        % "log4j",
+        "org.scalanlp" %% "breeze",
+        "javax.ws.rs"  %% "javax.ws.rs-api"
       )
     )
+  )
 
   val loggingDependency = Seq("log4j" % "log4j" % "1.2.17")
 
@@ -171,7 +174,8 @@ object Dependencies {
   val tensorflowDependency = Seq(
     "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
     "org.platanios"                             %% "tensorflow-data" % tfscala_version
-  ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+  ).map(_.withExclusions(Vector("org.typelevel" %% "spire"))) ++
+    testSuiteDependencies
 
   val scalaStan = Seq(
     "com.cibo" %% "scalastan" % "0.9.0"
@@ -191,8 +195,9 @@ object Dependencies {
 
   val pipesDependencies = (
     linearAlgebraDependencies ++
-      apacheSparkDependency ++ 
-      loggingDependency
+      apacheSparkDependency ++
+      loggingDependency ++
+      testSuiteDependencies
   ).map(
     _.excludeAll(excludeSlf4jBindings: _*)
   )
@@ -209,14 +214,14 @@ object Dependencies {
       rPackages ++
       imageDependencies ++
       dataFormatDependencies ++
-      tensorflowDependency ++
       ammoniteDeps ++
-      scalaStan
+      scalaStan ++
+      testSuiteDependencies
   ).map(
     _.excludeAll(excludeSlf4jBindings: _*)
   )
 
-  val replDependencies = baseDependencies ++ ammoniteDeps ++ commons_io ++ coursier_deps
+  val replDependencies = baseDependencies ++ ammoniteDeps ++ commons_io ++ coursier_deps ++ testSuiteDependencies
 
   val notebookDepencencies =
     ammoniteDeps ++

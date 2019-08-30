@@ -16,8 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 * */
-package io.github.mandar2812.dynaml.evaluation
+package io.github.mandar2812.dynaml.tensorflow.evaluation
 
+import io.github.mandar2812.dynaml.evaluation._
 import io.github.mandar2812.dynaml.graphics.charts.Highcharts.{regression, title, xAxis, yAxis}
 import io.github.mandar2812.dynaml.tensorflow.{dtf, dtfutils}
 

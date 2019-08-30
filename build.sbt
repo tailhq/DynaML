@@ -75,10 +75,23 @@ lazy val repl = (project in file("dynaml-repl"))
     libraryDependencies ++= replDependencies
   )
 
+lazy val tensorflow = (project in file("dynaml-tensorflow"))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(baseSettings: _*)
+  .dependsOn(core, pipes)
+  .settings(
+    name := "dynaml-tensorflow",
+    version := mainVersion,
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "io.github.mandar2812.dynaml.tensorflow",
+    buildInfoUsePackageAsPath := true,
+    libraryDependencies ++= tensorflowDependency.map(_.excludeAll(excludeSlf4jBindings: _*))
+  )
+
 lazy val notebook = (project in file("dynaml-notebook"))
   .enablePlugins(BuildInfoPlugin)
   .settings(baseSettings: _*)
-  .dependsOn(core, examples, pipes)
+  .dependsOn(core, examples, pipes, tensorflow)
   .settings(
     name := "dynaml-notebook",
     version := mainVersion,
@@ -92,7 +105,7 @@ lazy val notebook = (project in file("dynaml-notebook"))
 lazy val DynaML = (project in file("."))
   .enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin)
   .settings(baseSettings: _*)
-  .dependsOn(core, examples, pipes, repl)
+  .dependsOn(core, examples, pipes, tensorflow, repl)
   .settings(
     libraryDependencies ++= dynaServeDependencies,
     name := "DynaML",
@@ -151,5 +164,5 @@ lazy val DynaML = (project in file("."))
       )
     )
   )
-  .aggregate(core, pipes, examples, repl)
+  .aggregate(core, pipes, examples, repl, tensorflow, notebook)
   .settings(aggregate in publishM2 := true, aggregate in update := false)
