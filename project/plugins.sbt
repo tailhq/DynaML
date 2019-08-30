@@ -17,7 +17,6 @@ addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.2.7")
 
 addSbtPlugin("com.dwijnand" % "sbt-compat" % "1.2.6")
 
-addSbtPlugin("org.ensime" % "sbt-ensime" % "2.6.1")
 //addSbtPlugin("ch.epfl.scala.index" % "sbt-scaladex" % "0.1.3")
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")

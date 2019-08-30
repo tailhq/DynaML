@@ -2,7 +2,7 @@ package io.github.mandar2812.dynaml.tensorflow.dynamics
 
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.DynaMLPipe._
-import io.github.mandar2812.dynaml.models.TFModel
+import io.github.mandar2812.dynaml.tensorflow.models.TFModel
 import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.tensorflow.layers.{
   PDEQuadrature,

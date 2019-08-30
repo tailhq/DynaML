@@ -16,14 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
  * */
-package io.github.mandar2812.dynaml.models
+package io.github.mandar2812.dynaml.tensorflow.models
 
 import ammonite.ops.Path
 import io.github.mandar2812.dynaml.pipes._
+import io.github.mandar2812.dynaml.models._
 import io.github.mandar2812.dynaml.tensorflow.data.DataSet
 import io.github.mandar2812.dynaml.tensorflow._
 import io.github.mandar2812.dynaml.DynaMLPipe._
-import io.github.mandar2812.dynaml.evaluation.Performance
+import io.github.mandar2812.dynaml.tensorflow.evaluation.Performance
 import org.platanios.tensorflow.api.learn.StopCriteria
 import org.platanios.tensorflow.api.learn.layers.{Input, Layer}
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer

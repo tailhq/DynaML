@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
  * */
-package io.github.mandar2812.dynaml.models
+package io.github.mandar2812.dynaml.tensorflow.models
 
 import ammonite.ops._
 import io.github.mandar2812.dynaml.pipes.DataPipe

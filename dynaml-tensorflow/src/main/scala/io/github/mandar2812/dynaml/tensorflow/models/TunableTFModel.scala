@@ -16,11 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
  * */
-package io.github.mandar2812.dynaml.models
+package io.github.mandar2812.dynaml.tensorflow.models
 
 import io.github.mandar2812.dynaml.optimization.GloballyOptimizable
 import io.github.mandar2812.dynaml.utils
-import io.github.mandar2812.dynaml.evaluation.Performance
+import io.github.mandar2812.dynaml.tensorflow.evaluation.Performance
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, MetaPipe}
 import io.github.mandar2812.dynaml.tensorflow.data.{DataSet, TFDataSet}
 import io.github.mandar2812.dynaml.tensorflow.dtflearn
