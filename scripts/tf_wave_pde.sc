@@ -6,24 +6,25 @@ import _root_.io.github.mandar2812.dynaml.graphics.plot3d
 import _root_.io.github.mandar2812.dynaml.graphics.plot3d.DelauneySurface
 import _root_.io.github.mandar2812.dynaml.tensorflow.dtf
 import _root_.io.github.mandar2812.dynaml.repl.Router.main
-import org.platanios.tensorflow.api.tf.SameConvPadding
+import org.platanios.tensorflow.api.ops.NN.SameConvPadding
 import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
 
 //Transform a 2d sequence into a tensor.
-def generate_kernel(k: Seq[Seq[Double]], id: String): Output = {
+def generate_kernel(k: Seq[Seq[Double]], id: String): Output[Float] = {
   val (rows, cols) = (k.length, k.head.length)
-  val tk = dtf.tensor_f32(rows, cols, 1, 1)(k.flatten:_*)
+  val tk = dtf.tensor_f32(rows, cols, 1, 1)(k.flatten.map(_.toFloat):_*)
   tf.constant(tk, name = id)
 }
 
 //A simplified 2D convolution operation
-def simple_conv(x: Output, kernel: Output): Output = {
+def simple_conv(x: Output[Float], kernel: Output[Float]): Output[Float] = {
   val expanded_x = tf.expandDims(tf.expandDims(x, 0), -1)
-  tf.conv2D(expanded_x, kernel, 1, 1, SameConvPadding)(0, ::, ::, 0)
+  val intermediate_result = tf.conv2D(expanded_x, kernel, 1, 1, SameConvPadding)
+  intermediate_result(0, ::, ::, 0)
 }
 
 //Compute the 2D laplacian of an array
-def laplace(x: Output): Output = {
+def laplace(x: Output[Float]): Output[Float] = {
   val laplace_k = generate_kernel(
     Seq(Seq(0.5, 1.0, 0.5), Seq(1.0, -6.0, 1.0), Seq(0.5, 1.0, 0.5)),
     "laplacian_op")
@@ -41,7 +42,7 @@ val gaussian = (sigma: Double) => (x: Double, y: Double) => {
 
 //Plot a snapshot of the solution as a 3d plot.
 def plot_field_snapshot(
-  t: Tensor,
+  t: Tensor[Float],
   xDomain: (Double, Double),
   yDomain: (Double, Double)): DelauneySurface = {
 
@@ -69,7 +70,7 @@ def plot_field_snapshot(
 }
 
 def plot_field(
-  solution: Seq[(Tensor, Tensor)])(
+  solution: Seq[(Tensor[Float], Tensor[Float])])(
   num_snapshots: Int,
   quantity: String = "displacement",
   xDomain: (Double, Double) = (-5.0, 5.0),
@@ -85,15 +86,15 @@ def plot_field(
 
 @main
 def apply(
-  size: Int = 500,
-  num_iterations: Int = 1000,
+  size: Int = 75,
+  num_iterations: Int = 500,
   eps: Float = 0.001f,
   damping: Float = 0.04f,
   xDomain: (Double, Double) = (-5.0, 5.0),
   yDomain: (Double, Double) = (-5.0, 5.0),
-  u_0: (Double, Double) => Double = mexican(1.0)): Seq[(Tensor, Tensor)] = {
+  u_0: (Double, Double) => Double = mexican(1.0)): Seq[(Tensor[Float], Tensor[Float])] = {
 
-  //Start Tensorflow session
+  //Start Tensor[Float]flow session
   val sess = Session()
 
   val (x_grid, y_grid) = (
@@ -120,17 +121,17 @@ def apply(
   * eps     -- time resolution
   * damping -- wave damping
   * */
-  val eps     = tf.placeholder(FLOAT32, Shape(), name = "dt")
-  val damping = tf.placeholder(FLOAT32, Shape(), name = "damping")
+  val eps     = tf.placeholder[Float](Shape(), name = "dt")
+  val damping = tf.placeholder[Float](Shape(), name = "damping")
 
   //Create variables for simulation state
-  val U  = tf.variable(
-    name = "u", FLOAT32,
-    initializer = ConstantInitializer(dtf.tensor_f32(size, size)(u_init:_*)))
+  val U  = tf.variable[Float](
+    name = "u", Shape(size, size),
+    initializer = ConstantInitializer(dtf.tensor_f32(size, size)(u_init.map(_.toFloat):_*)))
 
-  val Ut = tf.variable(
-    name = "ut", FLOAT32,
-    initializer = ConstantInitializer(dtf.tensor_f32(size, size)(ut_init:_*)))
+  val Ut = tf.variable[Float](
+    name = "ut", Shape(size, size),
+    initializer = ConstantInitializer(dtf.tensor_f32(size, size)(ut_init.map(_.toFloat):_*)))
 
   //Discretized PDE update rules
   val U_  = U + eps * Ut
@@ -143,24 +144,27 @@ def apply(
 
   sess.run(targets = tf.globalVariablesInitializer())
 
-  //Run 1000 steps of PDE
+  println(s"Solving wave PDE for ${num_iterations} time steps")
+  val pb = new utils.ProgressBar(num_iterations)
+  //Run num_iterations steps of PDE
   (1 to num_iterations).map(i => {
-    print("Iteration ")
-    pprint.pprintln(i)
+    //print("Iteration ")
+    //pprint.pprintln(i)
 
-    val step_output: (Tensor, Tensor) = sess.run(
-      feeds = Map(eps -> Tensor(0.001f), damping -> Tensor(0.04f)),
+    val step_output: (Tensor[Float], Tensor[Float]) = sess.run(
+      feeds = Map(eps -> Tensor[Float](0.01f), damping -> Tensor[Float](0.04f)),
       fetches = (U_, Ut_),
       targets = step)
 
-    print("Maximum Wave Displacement = ")
-    pprint.pprintln(step_output._1.max().scalar.asInstanceOf[Float])
-    println()
+    //print("Maximum Wave Displacement = ")
+    //pprint.pprintln(step_output._1.max().scalar.asInstanceOf[Float])
+    //println()
 
-    print("Maximum Wave Velocity = ")
-    pprint.pprintln(step_output._2.max().scalar.asInstanceOf[Float])
-    println()
+    //print("Maximum Wave Velocity = ")
+    //pprint.pprintln(step_output._2.max().scalar.asInstanceOf[Float])
+    //println()
 
+    pb += 1
     step_output
   })
 }
