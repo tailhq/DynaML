@@ -54,3 +54,4 @@ project/.bloop
 .coveralls.yml
 dynaml-kernel
 website/static/api
+website/build/*
