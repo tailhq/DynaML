@@ -53,3 +53,4 @@ project/.bloop
 .scalafmt.conf
 .coveralls.yml
 dynaml-kernel
+website/static/api
