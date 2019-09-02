@@ -148,21 +148,11 @@ def apply(
   val pb = new utils.ProgressBar(num_iterations)
   //Run num_iterations steps of PDE
   (1 to num_iterations).map(i => {
-    //print("Iteration ")
-    //pprint.pprintln(i)
 
     val step_output: (Tensor[Float], Tensor[Float]) = sess.run(
       feeds = Map(eps -> Tensor[Float](0.01f), damping -> Tensor[Float](0.04f)),
       fetches = (U_, Ut_),
       targets = step)
-
-    //print("Maximum Wave Displacement = ")
-    //pprint.pprintln(step_output._1.max().scalar.asInstanceOf[Float])
-    //println()
-
-    //print("Maximum Wave Velocity = ")
-    //pprint.pprintln(step_output._2.max().scalar.asInstanceOf[Float])
-    //println()
 
     pb += 1
     step_output
