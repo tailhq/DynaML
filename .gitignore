@@ -55,3 +55,4 @@ project/.bloop
 dynaml-kernel
 website/static/api
 website/build/*
+website/node_modules/*
