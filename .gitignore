@@ -51,7 +51,7 @@ test_output
 .bloop
 project/.bloop
 .metals
-.scalafmt.conf
+!.scalafmt.conf
 .coveralls.yml
 dynaml-kernel
 website/static/api

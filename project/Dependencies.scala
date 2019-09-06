@@ -54,7 +54,9 @@ object Dependencies {
   )
 
   //Set to false if using self compiled tensorflow library
-  val packagedTFFlag: Boolean = true
+  val packagedTFFlag: Boolean = process_flag(
+    Option(System.getProperty("packagedTF")).getOrElse("false")
+  )
 
   val tensorflow_classifier: String = {
     val platform_splits = platform.split("-")
@@ -171,11 +173,19 @@ object Dependencies {
     "com.diffplug.matsim" % "matfilerw" % "3.1.1"
   )
 
-  val tensorflowDependency = Seq(
-    "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
-    "org.platanios"                             %% "tensorflow-data" % tfscala_version
-  ).map(_.withExclusions(Vector("org.typelevel" %% "spire"))) ++
-    testSuiteDependencies
+  val tf_artifacts = if (packagedTFFlag) {
+    Seq(
+      "org.platanios"                             %% "tensorflow" % tfscala_version,
+      "org.platanios"                             %% "tensorflow-data" % tfscala_version
+    ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+  } else {
+    Seq(
+      "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
+      "org.platanios"                             %% "tensorflow-data" % tfscala_version
+    ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+  }
+
+  val tensorflowDependency = tf_artifacts ++ testSuiteDependencies
 
   val scalaStan = Seq(
     "com.cibo" %% "scalastan" % "0.9.0"
