@@ -58,6 +58,9 @@ object Dependencies {
     Option(System.getProperty("packagedTF")).getOrElse("false")
   )
 
+  if(packagedTFFlag) println("Using system compiled TF binaries (should be in LD_LIBRARY_PATH).")
+  else println("Using pre-compiled TF binaries.")
+
   val tensorflow_classifier: String = {
     val platform_splits = platform.split("-")
     val (os, arch)      = (platform_splits.head, platform_splits.last)
