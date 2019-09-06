@@ -8,6 +8,8 @@ import org.platanios.tensorflow.api._
 
 private[tensorflow] object Api {
 
+  val tensorflow_version: String = org.platanios.tensorflow.jni.TensorFlow.version
+
   /**
     * Construct a tensor from a list of elements.
     *
