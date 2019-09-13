@@ -293,7 +293,7 @@ private[tensorflow] object Api {
     * [[RandomVariable]] instance.
     * */
   def random[D: TF](shape: Int*)(rv: RandomVariable[D]): Tensor[D] = {
-    val buffer = rv.iid(shape.product).draw
+    val buffer = rv.iid(shape.product).draw.toSeq
     Tensor[D](buffer).reshape(Shape(shape: _*))
   }
 
