@@ -116,7 +116,14 @@ lazy val notebook = (project in file("dynaml-notebook"))
   )
 
 lazy val DynaML = (project in file("."))
-  .enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin, ScalaUnidocPlugin, JavaUnidocPlugin)
+  .enablePlugins(
+    JavaAppPackaging,
+    UniversalPlugin,
+    BuildInfoPlugin,
+    sbtdocker.DockerPlugin,
+    ScalaUnidocPlugin,
+    JavaUnidocPlugin
+  )
   .settings(baseSettings: _*)
   .dependsOn(core, examples, pipes, tensorflow, repl)
   .settings(
@@ -144,6 +151,7 @@ lazy val DynaML = (project in file("."))
         banner -> "conf/banner.txt"
       }
     ),
+    //mappings in Universal ++= directory("scripts"),
     javaOptions in test ++= Seq(
       "-Dlog4j.debug=true",
       "-Dlog4j.configuration=log4j.properties"
@@ -183,15 +191,32 @@ lazy val DynaML = (project in file("."))
 lazy val docs = project
   .in(file("dynaml-docs")) // important: it must not be docs/
   .dependsOn(DynaML)
-  .enablePlugins(MdocPlugin, DocusaurusPlugin, ScalaUnidocPlugin, JavaUnidocPlugin)
+  .enablePlugins(
+    MdocPlugin,
+    DocusaurusPlugin,
+    ScalaUnidocPlugin,
+    JavaUnidocPlugin
+  )
   .settings(
     mdocVariables := Map(
       "VERSION" -> version.value
     ),
     moduleName := "dynaml-docs",
-    unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(DynaML, core, pipes, examples, notebook, tensorflow, repl),
+    unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(
+      DynaML,
+      core,
+      pipes,
+      examples,
+      notebook,
+      tensorflow,
+      repl
+    ),
     target in (ScalaUnidoc, unidoc) := (baseDirectory in LocalRootProject).value / "website" / "static" / "api",
     cleanFiles += (target in (ScalaUnidoc, unidoc)).value,
-    docusaurusCreateSite := docusaurusCreateSite.dependsOn(unidoc in Compile).value,
-    docusaurusPublishGhpages := docusaurusPublishGhpages.dependsOn(unidoc in Compile).value
+    docusaurusCreateSite := docusaurusCreateSite
+      .dependsOn(unidoc in Compile)
+      .value,
+    docusaurusPublishGhpages := docusaurusPublishGhpages
+      .dependsOn(unidoc in Compile)
+      .value
   )
