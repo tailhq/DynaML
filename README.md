@@ -17,8 +17,8 @@ DynaML is a Scala & JVM Machine Learning toolbox for research, education & indus
 
 <table>
     <tr>
-        <th> <img src="docs/images/plot3dsmall.jpeg" alt="Plot3d"> </th> 
-        <th> <img src="docs/images/plots_small.png" alt="Plot2d"> </th>
+        <th> <img src="docs-old/images/plot3dsmall.jpeg" alt="Plot3d"> </th> 
+        <th> <img src="docs-old/images/plots_small.png" alt="Plot2d"> </th>
     </tr>
 </table>
 

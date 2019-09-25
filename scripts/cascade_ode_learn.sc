@@ -4,6 +4,10 @@ import _root_.io.github.mandar2812.dynaml.graphics.plot3d
 import _root_.io.github.mandar2812.dynaml.utils
 import _root_.io.github.mandar2812.dynaml.analysis.implicits._
 import _root_.io.github.mandar2812.dynaml.tensorflow._
+import _root_.io.github.mandar2812.dynaml.tensorflow.layers.{
+  L1Regularization,
+  L2Regularization
+}
 import _root_.io.github.mandar2812.dynaml.tensorflow.pde.{source => q, _}
 import _root_.org.platanios.tensorflow.api._
 import _root_.org.platanios.tensorflow.api.learn.Mode
@@ -14,34 +18,52 @@ import org.joda.time.DateTime
 import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
 import _root_.io.github.mandar2812.dynaml.tensorflow.implicits._
 import org.platanios.tensorflow.api.ops.Function
-import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, RandomUniformInitializer}
-
+import org.platanios.tensorflow.api.ops.variables.{
+  Initializer,
+  RandomNormalInitializer,
+  RandomUniformInitializer
+}
+import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 import scala.util.Random
-import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
-
+import _root_.io.github.mandar2812.dynaml.graphics.charts.Highcharts._
 
 val random = new Random()
 
-def batch(dim: Int, min: Double, max: Double, gridSize: Int, func: Seq[Double] => Seq[Double]): (Tensor, Tensor) = {
+def batch(
+  dim: Int,
+  min: Double,
+  max: Double,
+  gridSize: Int,
+  func: Seq[Double] => Seq[Double]
+): (Tensor[Float], Tensor[Float]) = {
 
-  val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize) :+ max))
+  val points =
+    utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize) :+ max))
 
   val targets = points.map(func)
 
   (
-    dtf.tensor_from("FLOAT64", Seq.fill(dim)(gridSize + 1).product, dim)(points.flatten),
-    dtf.tensor_from("FLOAT64", Seq.fill(dim)(gridSize + 1).product, 3)(targets)
+    dtf.tensor_from[Float](Seq.fill(dim)(gridSize + 1).product, dim)(
+      points.flatten.map(_.toFloat)
+    ),
+    dtf.tensor_from[Float](Seq.fill(dim)(gridSize + 1).product, 3)(
+      targets.flatten.map(_.toFloat)
+    )
   )
 }
 
-val layer = new Layer[Output, Output]("Sin") {
+val layer = new Layer[Output[Float], Output[Float]]("Sin") {
   override val layerType = "Exp"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output =
+  override def forwardWithoutContext(
+    input: Output[Float]
+  )(
+    implicit mode: Mode
+  ): Output[Float] =
     input.exp
 }
 
-def plot_outputs(x: Tensor, t: Tensor, titleS: String): Unit = {
+def plot_outputs(x: Tensor[Float], t: Tensor[Float], titleS: String): Unit = {
 
   val size = x.shape(0)
 
@@ -50,7 +72,8 @@ def plot_outputs(x: Tensor, t: Tensor, titleS: String): Unit = {
   val data = (0 until size).map(row => {
 
     val inputs = x(row).scalar.asInstanceOf[Double]
-    val outputs = (0 until num_outputs).map(i => t(row, i).scalar.asInstanceOf[Double])
+    val outputs =
+      (0 until num_outputs).map(i => t(row, i).scalar.asInstanceOf[Double])
 
     (inputs, outputs)
   })
@@ -66,7 +89,7 @@ def plot_outputs(x: Tensor, t: Tensor, titleS: String): Unit = {
   title(titleS)
 }
 
-def plot3d_outputs(x: Tensor, t: Tensor): LinePlot3D = {
+def plot3d_outputs(x: Tensor[Float], t: Tensor[Float]): LinePlot3D = {
   val size = x.shape(0)
 
   val num_outputs = t.shape(1)
@@ -74,7 +97,8 @@ def plot3d_outputs(x: Tensor, t: Tensor): LinePlot3D = {
   val data = (0 until size).map(row => {
 
     val inputs = x(row).scalar.asInstanceOf[Double]
-    val outputs = (0 until num_outputs).map(i => t(row, i).scalar.asInstanceOf[Double])
+    val outputs =
+      (0 until num_outputs).map(i => t(row, i).scalar.asInstanceOf[Double])
 
     (inputs, outputs)
   })
@@ -84,113 +108,169 @@ def plot3d_outputs(x: Tensor, t: Tensor): LinePlot3D = {
   plot3d.draw(trajectory, 2, true)
 
 }
-
-
 @main
-def apply(f1: Double, f2: Double, f3: Double) = {
+def apply(
+  f1: Double,
+  f2: Double,
+  f3: Double,
+  num_data: Int = 100,
+  num_colocation_points: Int = 10000,
+  num_neurons: Seq[Int] = Seq(5, 5),
+  optimizer: Optimizer = tf.train.Adam(0.01f),
+  iterations: Int = 50000,
+  reg: Double = 0.001,
+  pde_wt: Double = 1.5,
+  q_scheme: String = "GL",
+  tempdir: Path = home / "tmp"
+) = {
 
   val session = Session()
 
-
-  val tempdir = home/"tmp"
-
-  val summary_dir = tempdir/s"dtf_cascade_ode_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
+  val summary_dir = tempdir / s"dtf_cascade_ode_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
   val domain = (0.0, 10.0)
+
+  val rv = UniformRV(domain._1, domain._2)
 
   val input_dim: Int = 1
 
   val output_dim: Int = 3
-
 
   val ground_truth = (tl: Seq[Double]) => {
 
     val t = tl.head
 
     Seq(
-      f1*math.exp(-t/2),
-      -2*f1*math.exp(-t/2) + (f2 + 2*f1)*math.exp(-t/4),
-      3*f1*math.exp(-t/2)/2 - 3*(f2 + 2*f1)*math.exp(-t/4) + (f3 - 3*f1/2 + 3*(f2 + 2*f1))*math.exp(-t/6)
+      f1 * math.exp(-t / 2),
+      -2 * f1 * math.exp(-t / 2) + (f2 + 2 * f1) * math.exp(-t / 4),
+      3 * f1 * math.exp(-t / 2) / 2 - 3 * (f2 + 2 * f1) * math
+        .exp(-t / 4) + (f3 - 3 * f1 / 2 + 3 * (f2 + 2 * f1)) * math.exp(-t / 6)
     )
 
   }
 
+  val (test_data, test_targets) =
+    batch(input_dim, domain._1, domain._2, gridSize = 10, ground_truth)
 
-  val (test_data, test_targets) = batch(input_dim, domain._1, domain._2, gridSize = 10, ground_truth)
+  val input = Shape(input_dim)
 
-  val input = (FLOAT64, Shape(input_dim))
+  val output = Shape(output_dim)
 
-  val output = (Seq(FLOAT64), Seq(Shape(output_dim)))
+  val function =
+    dtflearn.feedforward_stack[Float](
+      (i: Int) =>
+        if (i == 1) tf.learn.ReLU(s"Act_$i") else tf.learn.Sigmoid(s"Act_$i")
+    )(num_neurons ++ Seq(output_dim)) >>
+      tf.learn.Sigmoid("Act_Output")
 
-
-  val function  =
-    dtflearn.feedforward(
-      num_units = output_dim, useBias = false,
-      RandomUniformInitializer(),
-      RandomUniformInitializer())(1) >>
-      layer >>
-      dtflearn.feedforward(
-        num_units = output_dim, useBias = false,
-        RandomUniformInitializer(),
-        RandomUniformInitializer())(2)
-
-
-
-  val training_data = dtfdata.supervised_dataset(
-    Iterable(
-      (
-        dtf.tensor_f64(1)(0.0),
-        dtf.tensor_f64(3)(f1, f2, f3)
-      )
+  val (_, layer_shapes, layer_parameter_names, layer_datatypes) =
+    dtfutils.get_ffstack_properties(
+      d = input_dim,
+      num_pred_dims = output_dim,
+      num_neurons
     )
+
+  val layer_scopes = layer_parameter_names
+
+  val reg_y = L2Regularization[Float](
+    layer_scopes,
+    layer_parameter_names,
+    layer_datatypes,
+    layer_shapes,
+    reg
   )
 
-  val gain = constant[Output](
+  val training_data = dtfdata.supervised_dataset[Tensor[Float], Tensor[Float]](
+    data =
+      Iterable(
+        (
+          dtf.tensor_f32(input_dim)(0.0f),
+          dtf.tensor_f32(output_dim)(f1.toFloat, f2.toFloat, f3.toFloat)
+        )
+      ) ++
+        rv.iid(num_data)
+          .draw
+          .toSeq
+          .toIterable
+          .map(x => {
+            (
+              dtf.tensor_f32(input_dim)(x.toFloat),
+              dtf.tensor_f32(output_dim)(
+                ground_truth(Seq(x)).map(_.toFloat): _*
+              )
+            )
+
+          })
+  )
+
+  val gain = constant[Output[Float], Float](
     name = "Gain",
-    Tensor(
-      -1.0/2,  0.0,    0.0,
-       1.0/2, -1.0/4,  0.0,
-       0.0,    1.0/4, -1.0/6).reshape(Shape(3, 3)).transpose()
+    Tensor[Float](
+      -1.0f / 2,
+      0.0f,
+      0.0f,
+      1.0f / 2,
+      -1.0f / 4,
+      0.0f,
+      0.0f,
+      1.0f / 4,
+      -1.0f / 6
+    ).reshape(Shape(3, 3))
+      .transpose()
   )
 
-  val current_state = q("state", function, isSystemVariable = false)
+  val cascade_ode = ∇ - (I[Float, Float]() x gain)
 
-  val cascade_ode = ∇ - (current_state x gain)
+  val quadrature = if (q_scheme == "MonteCarlo") {
+    analysis.monte_carlo_quadrature(
+      rv
+    )(math.sqrt(num_colocation_points).toInt)
+  } else {
+    analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
+  }
 
-  val analysis.GaussianQuadrature(nodes, weights) = analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
-
-  val nodes_tensor: Tensor = dtf.tensor_f64(
-    nodes.length, 1)(
-    nodes:_*
+  val nodes_tensor: Tensor[Float] = dtf.tensor_f32(quadrature.nodes.length, 1)(
+    quadrature.nodes.map(_.toFloat): _*
   )
 
-  val weights_tensor: Tensor = dtf.tensor_f64(
-    nodes.length)(
-    weights:_*
+  val weights_tensor: Tensor[Float] = dtf.tensor_f32(quadrature.nodes.length)(
+    quadrature.weights.map(_.toFloat): _*
   )
 
-  val cascade_system = dtflearn.dynamical_system[Double](
-    Map("water_levels" -> function),
-    Seq(cascade_ode), input, output,
-    tf.learn.L2Loss("Loss/L2") >> tf.learn.Mean("L2/Mean"),
-    nodes_tensor, weights_tensor, Tensor(1.0))
-
-
-  implicit val seqArgType: Function.ArgType[Seq[Output]] = seqFuncArgTypeConstructor(3)
+  val cascade_system = dtflearn.pde_system[Float, Float, Float](
+    function,
+    cascade_ode,
+    input,
+    output,
+    tf.learn.L2Loss[Float, Float]("Loss/L2") >> tf.learn.Mean[Float]("L2/Mean"),
+    nodes_tensor,
+    weights_tensor,
+    Tensor(pde_wt.toFloat).reshape(Shape()),
+    reg_f = Some(reg_y),
+    name = "water_levels"
+  )
 
   val brine_model = cascade_system.solve(
-    Seq(training_data),
+    training_data,
     dtflearn.model.trainConfig(
       summary_dir,
-      tf.train.RMSProp(0.01),
-      dtflearn.abs_loss_change_stop(0.0001, 50000),
+      dtflearn.model.data_ops(
+        training_data.size / 10,
+        training_data.size / 4,
+        50
+      ),
+      optimizer,
+      dtflearn.abs_loss_change_stop(0.0001, iterations),
       Some(
-        dtflearn.model._train_hooks(
-          summary_dir, stepRateFreq = 1000,
-          summarySaveFreq = 1000,
-          checkPointFreq = 1000)
-      )),
-    dtflearn.model.data_ops(training_data.size, training_data.size, 10)
+        dtflearn.model._train_hooks(summary_dir)
+      )
+    ),
+    dtflearn.model.tf_data_handle_ops(
+      bufferSize = 1,
+      patternToTensor = Some(
+        cascade_system.pattern_to_tensor
+      )
+    )
   )
 
   print("Test Data Shapes: ")
@@ -212,10 +292,13 @@ def apply(f1: Double, f2: Double, f3: Double) = {
 
   plot_outputs(test_data, test_targets, "Actual Targets")
 
-
-
-  (cascade_system, brine_model, training_data, mae,
+  (
+    cascade_system,
+    brine_model,
+    training_data,
+    mae,
     plot3d_outputs(test_data, predictions),
-    plot3d_outputs(test_data, test_targets))
+    plot3d_outputs(test_data, test_targets)
+  )
 
 }

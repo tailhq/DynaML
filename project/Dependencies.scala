@@ -54,7 +54,12 @@ object Dependencies {
   )
 
   //Set to false if using self compiled tensorflow library
-  val packagedTFFlag: Boolean = true
+  val packagedTFFlag: Boolean = process_flag(
+    Option(System.getProperty("packagedTF")).getOrElse("false")
+  )
+
+  if(packagedTFFlag) println("Using system compiled TF binaries (should be in LD_LIBRARY_PATH).")
+  else println("Using pre-compiled TF binaries.")
 
   val tensorflow_classifier: String = {
     val platform_splits = platform.split("-")
@@ -98,10 +103,10 @@ object Dependencies {
 
   val apacheSparkDependency = Seq(
     "javax.servlet"                % "javax.servlet-api"     % "3.1.0" % "test",
-    "org.apache.spark"             %% "spark-core"           % "2.4.4",
-    "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
-    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.9.9.3",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9"
+    "org.apache.spark"             %% "spark-core"           % "2.4.3",
+    "org.apache.spark"             %% "spark-mllib"          % "2.4.3",
+    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.9.10",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.10"
   ).map(
     _.withExclusions(
       Vector(
@@ -171,11 +176,19 @@ object Dependencies {
     "com.diffplug.matsim" % "matfilerw" % "3.1.1"
   )
 
-  val tensorflowDependency = Seq(
-    "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
-    "org.platanios"                             %% "tensorflow-data" % tfscala_version
-  ).map(_.withExclusions(Vector("org.typelevel" %% "spire"))) ++
-    testSuiteDependencies
+  val tf_artifacts = if (packagedTFFlag) {
+    Seq(
+      "org.platanios"                             %% "tensorflow" % tfscala_version,
+      "org.platanios"                             %% "tensorflow-data" % tfscala_version
+    ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+  } else {
+    Seq(
+      "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
+      "org.platanios"                             %% "tensorflow-data" % tfscala_version
+    ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+  }
+
+  val tensorflowDependency = tf_artifacts ++ testSuiteDependencies
 
   val scalaStan = Seq(
     "com.cibo" %% "scalastan" % "0.9.0"
@@ -187,9 +200,9 @@ object Dependencies {
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter" % "0.7.0" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"  % "0.7.0" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"            % "0.7.0",
+    "sh.almond"                  %% "scala-interpreter" % "0.8.1" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"  % "0.8.1" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"            % "0.8.1",
     "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9"
   )
 
