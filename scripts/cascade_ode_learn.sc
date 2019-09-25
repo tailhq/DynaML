@@ -4,6 +4,10 @@ import _root_.io.github.mandar2812.dynaml.graphics.plot3d
 import _root_.io.github.mandar2812.dynaml.utils
 import _root_.io.github.mandar2812.dynaml.analysis.implicits._
 import _root_.io.github.mandar2812.dynaml.tensorflow._
+import _root_.io.github.mandar2812.dynaml.tensorflow.layers.{
+  L1Regularization,
+  L2Regularization
+}
 import _root_.io.github.mandar2812.dynaml.tensorflow.pde.{source => q, _}
 import _root_.org.platanios.tensorflow.api._
 import _root_.org.platanios.tensorflow.api.learn.Mode
@@ -109,9 +113,12 @@ def apply(
   f1: Double,
   f2: Double,
   f3: Double,
+  num_data: Int = 100,
   num_neurons: Seq[Int] = Seq(5, 5),
   optimizer: Optimizer = tf.train.Adam(0.01f),
   iterations: Int = 50000,
+  reg: Double = 0.001,
+  pde_wt: Double = 1.5,
   q_scheme: String = "GL",
   tempdir: Path = home / "tmp"
 ) = {
@@ -123,6 +130,8 @@ def apply(
   val summary_dir = tempdir / s"dtf_cascade_ode_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
   val domain = (0.0, 10.0)
+
+  val rv = UniformRV(domain._1, domain._2)
 
   val input_dim: Int = 1
 
@@ -155,13 +164,44 @@ def apply(
     )(num_neurons ++ Seq(output_dim)) >>
       tf.learn.Sigmoid("Act_Output")
 
-  val training_data = dtfdata.supervised_dataset(
-    Iterable(
-      (
-        dtf.tensor_f32(input_dim)(0.0f),
-        dtf.tensor_f32(output_dim)(f1.toFloat, f2.toFloat, f3.toFloat)
-      )
+  val (_, layer_shapes, layer_parameter_names, layer_datatypes) =
+    dtfutils.get_ffstack_properties(
+      d = input_dim,
+      num_pred_dims = output_dim,
+      num_neurons
     )
+
+  val layer_scopes = layer_parameter_names
+
+  val reg_y = L2Regularization[Float](
+    layer_scopes,
+    layer_parameter_names,
+    layer_datatypes,
+    layer_shapes,
+    reg
+  )
+
+  val training_data = dtfdata.supervised_dataset[Tensor[Float], Tensor[Float]](
+    data =
+      Iterable(
+        (
+          dtf.tensor_f32(input_dim)(0.0f),
+          dtf.tensor_f32(output_dim)(f1.toFloat, f2.toFloat, f3.toFloat)
+        )
+      ) ++
+        rv.iid(num_data)
+          .draw
+          .toSeq
+          .toIterable
+          .map(x => {
+            (
+              dtf.tensor_f32(input_dim)(x.toFloat),
+              dtf.tensor_f32(output_dim)(
+                ground_truth(Seq(x)).map(_.toFloat):_*
+              )
+            )
+
+          })
   )
 
   val gain = constant[Output[Float], Float](
@@ -201,7 +241,8 @@ def apply(
     tf.learn.L2Loss[Float, Float]("Loss/L2") >> tf.learn.Mean[Float]("L2/Mean"),
     nodes_tensor,
     weights_tensor,
-    Tensor[Float](1.0f).reshape(Shape()),
+    Tensor(pde_wt.toFloat).reshape(Shape()),
+    reg_f = Some(reg_y),
     name = "water_levels"
   )
 
@@ -211,7 +252,7 @@ def apply(
       summary_dir,
       dtflearn.model.data_ops(
         training_data.size / 10,
-        training_data.size,
+        training_data.size / 4,
         50
       ),
       optimizer,
