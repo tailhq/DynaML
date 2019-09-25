@@ -125,8 +125,6 @@ def apply(
 
   val session = Session()
 
-  val tempdir = home / "tmp"
-
   val summary_dir = tempdir / s"dtf_cascade_ode_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
   val domain = (0.0, 10.0)
