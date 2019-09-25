@@ -114,6 +114,7 @@ def apply(
   f2: Double,
   f3: Double,
   num_data: Int = 100,
+  num_colocation_points: Int = 10000,
   num_neurons: Seq[Int] = Seq(5, 5),
   optimizer: Optimizer = tf.train.Adam(0.01f),
   iterations: Int = 50000,
@@ -195,7 +196,7 @@ def apply(
             (
               dtf.tensor_f32(input_dim)(x.toFloat),
               dtf.tensor_f32(output_dim)(
-                ground_truth(Seq(x)).map(_.toFloat):_*
+                ground_truth(Seq(x)).map(_.toFloat): _*
               )
             )
 
@@ -220,15 +221,20 @@ def apply(
 
   val cascade_ode = ∇ - (I[Float, Float]() x gain)
 
-  val analysis.GaussianQuadrature(nodes, weights) =
+  val quadrature = if (q_scheme == "MonteCarlo") {
+    analysis.monte_carlo_quadrature(
+      rv
+    )(math.sqrt(num_colocation_points).toInt)
+  } else {
     analysis.eightPointGaussLegendre.scale(domain._1, domain._2)
+  }
 
-  val nodes_tensor: Tensor[Float] = dtf.tensor_f32(nodes.length, 1)(
-    nodes.map(_.toFloat): _*
+  val nodes_tensor: Tensor[Float] = dtf.tensor_f32(quadrature.nodes.length, 1)(
+    quadrature.nodes.map(_.toFloat): _*
   )
 
-  val weights_tensor: Tensor[Float] = dtf.tensor_f32(nodes.length)(
-    weights.map(_.toFloat): _*
+  val weights_tensor: Tensor[Float] = dtf.tensor_f32(quadrature.nodes.length)(
+    quadrature.weights.map(_.toFloat): _*
   )
 
   val cascade_system = dtflearn.pde_system[Float, Float, Float](
