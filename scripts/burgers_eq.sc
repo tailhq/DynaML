@@ -257,7 +257,7 @@ def apply(
       dtflearn.model.data_ops(
         training_data.size / 10,
         training_data.size / 4,
-        10
+        50
       ),
       optimizer,
       dtflearn.abs_loss_change_stop(0.001, iterations),
@@ -369,17 +369,22 @@ def two_d(
   val output = Shape(output_dim)
 
   val architecture =
-    dtflearn.feedforward_stack[Float](
-      (i: Int) =>
-        if (i == 1) tf.learn.ReLU(s"Act_$i", 0.01f)
-        else tf.learn.Sigmoid(s"Act_$i")
-    )(num_neurons ++ Seq(1))
+    dtflearn.rbf_layer[Float](
+      "RBF",
+      num_neurons.head,
+      dtflearn.rbf_layer.InverseMultiQuadric
+    ) >>
+      dtflearn.feedforward_stack[Float](
+        (i: Int) =>
+          if (i == 1) tf.learn.ReLU(s"Act_$i", 0.01f)
+          else tf.learn.Sigmoid(s"Act_$i")
+      )(num_neurons.tail ++ Seq(1))
 
   val (_, layer_shapes, layer_parameter_names, layer_datatypes) =
     dtfutils.get_ffstack_properties(
-      d = input_dim,
+      d = num_neurons.head,
       num_pred_dims = 1,
-      num_neurons
+      num_neurons.tail
     )
 
   val scope = dtfutils.get_scope(architecture) _
