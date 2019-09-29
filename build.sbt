@@ -15,6 +15,10 @@ val dataDirectory = settingKey[File](
   "The directory holding the data files for running example scripts"
 )
 
+val scriptsDir = settingKey[File](
+  "The directory holding the example scripts"
+)
+
 val baseSettings = Seq(
   organization := "io.github.transcendent-ai-labs",
   scalaVersion in ThisBuild := scala,
@@ -141,6 +145,11 @@ lazy val DynaML = (project in file("."))
       .listFiles()
       .toSeq
       .map(p => p -> s"data/${p.getName}"),
+    scriptsDir := new File("scripts"),
+    mappings in Universal ++= scriptsDir.value
+      .listFiles()
+      .toSeq
+      .map(p => p -> s"scripts/${p.getName}"),
     mappings in Universal ++= Seq(
       {
         //Initialization script for the DynaML REPL
@@ -151,7 +160,6 @@ lazy val DynaML = (project in file("."))
         banner -> "conf/banner.txt"
       }
     ),
-    //mappings in Universal ++= directory("scripts"),
     javaOptions in test ++= Seq(
       "-Dlog4j.debug=true",
       "-Dlog4j.configuration=log4j.properties"
