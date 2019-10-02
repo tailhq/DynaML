@@ -102,7 +102,7 @@ object Dependencies {
   )
 
   val apacheSparkDependency = Seq(
-    "javax.servlet"                % "javax.servlet-api"     % "3.1.0" % "test",
+    "javax.servlet"                % "javax.servlet-api"     % "4.0.1" % "test",
     "org.apache.spark"             %% "spark-core"           % "2.4.4",
     "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
     "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.0",
