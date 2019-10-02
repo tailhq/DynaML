@@ -8,6 +8,8 @@ import org.platanios.tensorflow.api._
 
 private[tensorflow] object Api {
 
+  val tensorflow_version: String = org.platanios.tensorflow.jni.TensorFlow.version
+
   /**
     * Construct a tensor from a list of elements.
     *
@@ -291,7 +293,7 @@ private[tensorflow] object Api {
     * [[RandomVariable]] instance.
     * */
   def random[D: TF](shape: Int*)(rv: RandomVariable[D]): Tensor[D] = {
-    val buffer = rv.iid(shape.product).draw
+    val buffer = rv.iid(shape.product).draw.toSeq
     Tensor[D](buffer).reshape(Shape(shape: _*))
   }
 

@@ -6,7 +6,7 @@ resolvers ++= Seq(Resolver.sonatypeRepo("snapshots"))
 
 addSbtPlugin("io.get-coursier" % "sbt-coursier" % "2.0.0-RC3-3")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.11")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.0")
 
 addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.5.0")
 
@@ -23,3 +23,5 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
 
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.6")
+addSbtPlugin("org.scalameta" % "sbt-mdoc" % "1.3.2" )
+addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.2")
