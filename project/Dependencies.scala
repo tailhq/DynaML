@@ -195,14 +195,14 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC2-6",
+    "io.get-coursier" %% "coursier" % "2.0.0-RC3-4",
     "io.get-coursier" % "interface" % "0.0.10"
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter" % "0.8.1" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"  % "0.8.1" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"            % "0.8.1",
+    "sh.almond"                  %% "scala-interpreter" % "0.8.2" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"  % "0.8.2" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"            % "0.8.2",
     "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+31-4abd5c41-SNAPSHOT"
   )
 
