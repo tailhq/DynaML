@@ -54,7 +54,12 @@ object Dependencies {
   )
 
   //Set to false if using self compiled tensorflow library
-  val packagedTFFlag: Boolean = true
+  val packagedTFFlag: Boolean = process_flag(
+    Option(System.getProperty("packagedTF")).getOrElse("false")
+  )
+
+  if(packagedTFFlag) println("Using system compiled TF binaries (should be in LD_LIBRARY_PATH).")
+  else println("Using pre-compiled TF binaries.")
 
   val tensorflow_classifier: String = {
     val platform_splits = platform.split("-")
@@ -71,13 +76,11 @@ object Dependencies {
 
   val baseDependencies = Seq(
     "com.typesafe"           % "config"             % "1.3.4" % "compile",
-    "junit"                  % "junit"              % "4.11" % "test",
     "com.github.tototoshi"   %% "scala-csv"         % "1.3.6" % "compile",
     "org.scalaz"             %% "scalaz-core"       % "7.2.28",
     "org.scalaz"             %% "scalaz-core"       % "7.2.28",
-    "org.scalatest"          %% "scalatest"         % "3.0.1" % "test",
-    "com.github.scopt"       %% "scopt"             % "3.5.0",
-    "javax.ws.rs"            % "javax.ws.rs-api"    % "2.0-m10",
+    "com.github.scopt"       %% "scopt"             % "3.7.1",
+    "javax.ws.rs"            % "javax.ws.rs-api"    % "2.0.1",
     "org.json4s"             %% "json4s-jackson"    % "3.6.7",
     "ws.unfiltered"          %% "unfiltered-filter" % "0.9.1",
     "ws.unfiltered"          %% "unfiltered-jetty"  % "0.9.1",
@@ -85,6 +88,11 @@ object Dependencies {
     "commons-io"             % "commons-io"         % "2.6",
     "com.github.nscala-time" %% "nscala-time"       % "2.22.0",
     "jline"                  % "jline"              % "2.14.6"
+  )
+
+  val testSuiteDependencies = Seq(
+    "junit"         % "junit"      % "4.12"  % "test",
+    "org.scalatest" %% "scalatest" % "3.0.8" % "test"
   )
 
   val excludeSlf4jBindings = Seq(
@@ -95,26 +103,26 @@ object Dependencies {
 
   val apacheSparkDependency = Seq(
     "javax.servlet"                % "javax.servlet-api"     % "4.0.1" % "test",
-    "org.apache.spark"             %% "spark-core"           % "2.4.3",
-    "org.apache.spark"             %% "spark-mllib"          % "2.4.3",
-    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.9.9.3",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.9"
+    "org.apache.spark"             %% "spark-core"           % "2.4.4",
+    "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
+    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.0",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.0"
   ).map(
-      _.withExclusions(
-        Vector(
-          "org.slf4j"    % "jul-to-slf4j",
-          "org.slf4j"    % "jcl-over-slf4j",
-          "log4j"        % "log4j",
-          "org.scalanlp" %% "breeze",
-          "javax.ws.rs"  %% "javax.ws.rs-api"
-        )
+    _.withExclusions(
+      Vector(
+        "org.slf4j"    % "jul-to-slf4j",
+        "org.slf4j"    % "jcl-over-slf4j",
+        "log4j"        % "log4j",
+        "org.scalanlp" %% "breeze",
+        "javax.ws.rs"  %% "javax.ws.rs-api"
       )
     )
+  )
 
   val loggingDependency = Seq("log4j" % "log4j" % "1.2.17")
 
   val linearAlgebraDependencies = Seq(
-    "org.typelevel"                              %% "spire" % "0.14.1",
+    "org.typelevel"                              %% "spire" % "0.16.2",
     "org.scalanlp"                               %% "breeze" % "1.0" % "compile",
     "org.scalanlp"                               %% "breeze-natives" % "1.0" % "compile"
   ).map(_.withExclusions(Vector("org.spire-math" %% "spire")))
@@ -126,8 +134,8 @@ object Dependencies {
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.6.9-15-6720d42" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.6.9-15-6720d42" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "1.7.4" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "1.7.4" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -136,7 +144,7 @@ object Dependencies {
 
   val tinkerpopDependency = Seq(
     "com.tinkerpop.gremlin" % "gremlin-java" % "2.6.0" % "compile",
-    "com.tinkerpop"         % "frames"       % "2.5.0" % "compile"
+    "com.tinkerpop"         % "frames"       % "2.6.0" % "compile"
   )
 
   val rejinDependency = Seq(
@@ -150,12 +158,12 @@ object Dependencies {
   )
 
   val dynaServeDependencies = Seq(
-    "com.typesafe.akka" %% "akka-actor"           % "2.5.16",
-    "com.typesafe.akka" %% "akka-stream"          % "2.5.16",
-    "com.typesafe.akka" %% "akka-testkit"         % "2.5.16",
-    "com.typesafe.akka" %% "akka-http"            % "10.0.9",
-    "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.9",
-    "com.typesafe.akka" %% "akka-http-testkit"    % "10.0.9"
+    "com.typesafe.akka" %% "akka-actor"           % "2.5.25",
+    "com.typesafe.akka" %% "akka-stream"          % "2.5.25",
+    "com.typesafe.akka" %% "akka-testkit"         % "2.5.25",
+    "com.typesafe.akka" %% "akka-http"            % "10.0.15",
+    "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.15",
+    "com.typesafe.akka" %% "akka-http-testkit"    % "10.0.15"
   )
 
   val imageDependencies = Seq(
@@ -168,31 +176,41 @@ object Dependencies {
     "com.diffplug.matsim" % "matfilerw" % "3.1.1"
   )
 
-  val tensorflowDependency = Seq(
-    "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
-    "org.platanios"                             %% "tensorflow-data" % tfscala_version
-  ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+  val tf_artifacts = if (packagedTFFlag) {
+    Seq(
+      "org.platanios"                             %% "tensorflow" % tfscala_version,
+      "org.platanios"                             %% "tensorflow-data" % tfscala_version
+    ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+  } else {
+    Seq(
+      "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
+      "org.platanios"                             %% "tensorflow-data" % tfscala_version
+    ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
+  }
+
+  val tensorflowDependency = tf_artifacts ++ testSuiteDependencies
 
   val scalaStan = Seq(
     "com.cibo" %% "scalastan" % "0.9.0"
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC2-6",
+    "io.get-coursier" %% "coursier" % "2.0.0-RC3-4",
     "io.get-coursier" % "interface" % "0.0.10"
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter" % "0.7.0" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"  % "0.7.0" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"            % "0.7.0",
-    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9"
+    "sh.almond"                  %% "scala-interpreter" % "0.8.2" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"  % "0.8.2" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"            % "0.8.2",
+    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+31-4abd5c41-SNAPSHOT"
   )
 
   val pipesDependencies = (
     linearAlgebraDependencies ++
-      apacheSparkDependency ++ 
-      loggingDependency
+      apacheSparkDependency ++
+      loggingDependency ++
+      testSuiteDependencies
   ).map(
     _.excludeAll(excludeSlf4jBindings: _*)
   )
@@ -209,21 +227,21 @@ object Dependencies {
       rPackages ++
       imageDependencies ++
       dataFormatDependencies ++
-      tensorflowDependency ++
       ammoniteDeps ++
-      scalaStan
+      scalaStan ++
+      testSuiteDependencies
   ).map(
     _.excludeAll(excludeSlf4jBindings: _*)
   )
 
-  val replDependencies = baseDependencies ++ ammoniteDeps ++ commons_io ++ coursier_deps
+  val replDependencies = baseDependencies ++ ammoniteDeps ++ commons_io ++ coursier_deps ++ testSuiteDependencies
 
   val notebookDepencencies =
     ammoniteDeps ++
       almond ++
       loggingDependency ++
       Seq(
-        "org.slf4j" % "slf4j-api"     % "1.8.0-beta4",
-        "org.slf4j" % "slf4j-log4j12" % "1.8.0-beta4"
+        "org.slf4j" % "slf4j-api"     % "2.0.0-alpha1",
+        "org.slf4j" % "slf4j-log4j12" % "2.0.0-alpha1"
       )
 }
