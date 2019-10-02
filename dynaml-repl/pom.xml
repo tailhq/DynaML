@@ -100,17 +100,17 @@
         <dependency>
             <groupId>com.lihaoyi</groupId>
             <artifactId>ammonite-repl_2.12.8</artifactId>
-            <version>1.6.9-15-6720d42</version>
+            <version>1.7.4</version>
         </dependency>
         <dependency>
             <groupId>com.lihaoyi</groupId>
             <artifactId>ammonite-sshd_2.12.8</artifactId>
-            <version>1.6.9-15-6720d42</version>
+            <version>1.7.4</version>
         </dependency>
         <dependency>
             <groupId>io.get-coursier</groupId>
             <artifactId>coursier_2.12</artifactId>
-            <version>2.0.0-RC2-6</version>
+            <version>2.0.0-RC3-4</version>
         </dependency>
         <dependency>
             <groupId>io.get-coursier</groupId>
@@ -120,13 +120,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.12</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.8</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
