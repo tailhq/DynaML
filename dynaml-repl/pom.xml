@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.github.scopt</groupId>
             <artifactId>scopt_2.12</artifactId>
-            <version>3.5.0</version>
+            <version>3.7.1</version>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>

@@ -65,32 +65,32 @@
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor_2.12</artifactId>
-            <version>2.5.16</version>
+            <version>2.5.25</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-stream_2.12</artifactId>
-            <version>2.5.16</version>
+            <version>2.5.25</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-testkit_2.12</artifactId>
-            <version>2.5.16</version>
+            <version>2.5.25</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http_2.12</artifactId>
-            <version>10.0.9</version>
+            <version>10.0.15</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http-spray-json_2.12</artifactId>
-            <version>10.0.9</version>
+            <version>10.0.15</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http-testkit_2.12</artifactId>
-            <version>10.0.9</version>
+            <version>10.0.15</version>
         </dependency>
     </dependencies>
 </project>

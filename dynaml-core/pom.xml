@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.typelevel</groupId>
             <artifactId>spire_2.12</artifactId>
-            <version>0.14.1</version>
+            <version>0.16.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.spire-math</groupId>
@@ -171,7 +171,7 @@
         <dependency>
             <groupId>com.github.scopt</groupId>
             <artifactId>scopt_2.12</artifactId>
-            <version>3.5.0</version>
+            <version>3.7.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -401,7 +401,7 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.12</artifactId>
-            <version>2.4.3</version>
+            <version>2.4.4</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -440,7 +440,7 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_2.12</artifactId>
-            <version>2.4.3</version>
+            <version>2.4.4</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -633,7 +633,7 @@
         <dependency>
             <groupId>com.tinkerpop</groupId>
             <artifactId>frames</artifactId>
-            <version>2.5.0</version>
+            <version>2.6.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
