@@ -144,7 +144,7 @@ object Dependencies {
 
   val tinkerpopDependency = Seq(
     "com.tinkerpop.gremlin" % "gremlin-java" % "2.6.0" % "compile",
-    "com.tinkerpop"         % "frames"       % "2.5.0" % "compile"
+    "com.tinkerpop"         % "frames"       % "2.6.0" % "compile"
   )
 
   val rejinDependency = Seq(
