@@ -1,4 +1,4 @@
-![3dplot](docs/images/dynaml_logo3.png)
+![3dplot](docs-old/images/dynaml_logo3.png)
 
 # DynaML: ML + JVM + Scala
 
