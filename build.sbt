@@ -15,6 +15,10 @@ val dataDirectory = settingKey[File](
   "The directory holding the data files for running example scripts"
 )
 
+val scriptsDir = settingKey[File](
+  "The directory holding the example scripts"
+)
+
 val baseSettings = Seq(
   organization := "io.github.transcendent-ai-labs",
   scalaVersion in ThisBuild := scala,
@@ -34,32 +38,44 @@ val baseSettings = Seq(
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
   publishLocalConfiguration := publishLocalConfiguration.value
     .withOverwrite(true),
-  coverallsTokenFile := Some(".coveralls.yml")
+  coverallsTokenFile := Some(".coveralls.yml"),
+  autoAPIMappings := true
 )
 
 lazy val pipes = (project in file("dynaml-pipes"))
   .settings(baseSettings: _*)
   .settings(libraryDependencies ++= pipesDependencies)
+  .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "dynaml-pipes",
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "io.github.mandar2812.dynaml.pipes",
+    buildInfoUsePackageAsPath := true,
     version := mainVersion
   )
 
 lazy val core = (project in file("dynaml-core"))
-  .settings(baseSettings)
+  .settings(baseSettings: _*)
   .dependsOn(pipes)
   .settings(libraryDependencies ++= coreDependencies)
-  .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
+  .enablePlugins(JavaAppPackaging, BuildInfoPlugin, GenJavadocPlugin)
   .settings(
     name := "dynaml-core",
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "io.github.mandar2812.dynaml",
+    buildInfoUsePackageAsPath := true,
     version := mainVersion
   )
 
 lazy val examples = (project in file("dynaml-examples"))
   .settings(baseSettings: _*)
   .dependsOn(pipes, core)
+  .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "dynaml-examples",
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "io.github.mandar2812.dynaml.examples",
+    buildInfoUsePackageAsPath := true,
     version := mainVersion
   )
 
@@ -75,10 +91,24 @@ lazy val repl = (project in file("dynaml-repl"))
     libraryDependencies ++= replDependencies
   )
 
+lazy val tensorflow = (project in file("dynaml-tensorflow"))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(baseSettings: _*)
+  .dependsOn(core, pipes)
+  .settings(
+    name := "dynaml-tensorflow",
+    version := mainVersion,
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "io.github.mandar2812.dynaml.tensorflow",
+    buildInfoUsePackageAsPath := true,
+    libraryDependencies ++= tensorflowDependency
+      .map(_.excludeAll(excludeSlf4jBindings: _*))
+  )
+
 lazy val notebook = (project in file("dynaml-notebook"))
   .enablePlugins(BuildInfoPlugin)
   .settings(baseSettings: _*)
-  .dependsOn(core, examples, pipes)
+  .dependsOn(core, examples, pipes, tensorflow)
   .settings(
     name := "dynaml-notebook",
     version := mainVersion,
@@ -90,9 +120,16 @@ lazy val notebook = (project in file("dynaml-notebook"))
   )
 
 lazy val DynaML = (project in file("."))
-  .enablePlugins(JavaAppPackaging, BuildInfoPlugin, sbtdocker.DockerPlugin)
+  .enablePlugins(
+    JavaAppPackaging,
+    UniversalPlugin,
+    BuildInfoPlugin,
+    sbtdocker.DockerPlugin,
+    ScalaUnidocPlugin,
+    JavaUnidocPlugin
+  )
   .settings(baseSettings: _*)
-  .dependsOn(core, examples, pipes, repl)
+  .dependsOn(core, examples, pipes, tensorflow, repl)
   .settings(
     libraryDependencies ++= dynaServeDependencies,
     name := "DynaML",
@@ -101,13 +138,18 @@ lazy val DynaML = (project in file("."))
     fork in test := true,
     mainClass in Compile := Some("io.github.mandar2812.dynaml.DynaML"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "io.github.mandar2812.dynaml.repl",
+    buildInfoPackage := "io.github.mandar2812",
     buildInfoUsePackageAsPath := true,
     dataDirectory := new File("data"),
     mappings in Universal ++= dataDirectory.value
       .listFiles()
       .toSeq
       .map(p => p -> s"data/${p.getName}"),
+    scriptsDir := new File("scripts"),
+    mappings in Universal ++= scriptsDir.value
+      .listFiles()
+      .toSeq
+      .map(p => p -> s"scripts/${p.getName}"),
     mappings in Universal ++= Seq(
       {
         //Initialization script for the DynaML REPL
@@ -151,5 +193,38 @@ lazy val DynaML = (project in file("."))
       )
     )
   )
-  .aggregate(core, pipes, examples, repl)
+  .aggregate(core, pipes, examples, repl, tensorflow, notebook)
   .settings(aggregate in publishM2 := true, aggregate in update := false)
+
+lazy val docs = project
+  .in(file("dynaml-docs")) // important: it must not be docs/
+  .dependsOn(DynaML)
+  .enablePlugins(
+    MdocPlugin,
+    DocusaurusPlugin,
+    ScalaUnidocPlugin,
+    JavaUnidocPlugin
+  )
+  .settings(
+    mdocVariables := Map(
+      "VERSION" -> version.value
+    ),
+    moduleName := "dynaml-docs",
+    unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(
+      DynaML,
+      core,
+      pipes,
+      examples,
+      notebook,
+      tensorflow,
+      repl
+    ),
+    target in (ScalaUnidoc, unidoc) := (baseDirectory in LocalRootProject).value / "website" / "static" / "api",
+    cleanFiles += (target in (ScalaUnidoc, unidoc)).value,
+    docusaurusCreateSite := docusaurusCreateSite
+      .dependsOn(unidoc in Compile)
+      .value,
+    docusaurusPublishGhpages := docusaurusPublishGhpages
+      .dependsOn(unidoc in Compile)
+      .value
+  )

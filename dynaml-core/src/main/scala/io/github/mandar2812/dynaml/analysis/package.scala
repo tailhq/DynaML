@@ -184,7 +184,7 @@ package object analysis {
   }
 
   val monte_carlo_quadrature: MetaPipe[RandomVariable[Double], Int, MonteCarloQuadrature] =
-    MetaPipe((rv: RandomVariable[Double]) => (n: Int) => MonteCarloQuadrature(rv.iid(n).draw))
+    MetaPipe((rv: RandomVariable[Double]) => (n: Int) => MonteCarloQuadrature(rv.iid(n).draw.toSeq))
 
   case class GaussianQuadrature(
     override val nodes: Seq[Double],
