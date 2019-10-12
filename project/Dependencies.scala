@@ -75,7 +75,7 @@ object Dependencies {
   }
 
   val baseDependencies = Seq(
-    "com.typesafe"           % "config"             % "1.3.4" % "compile",
+    "com.typesafe"           % "config"             % "1.4.0" % "compile",
     "com.github.tototoshi"   %% "scala-csv"         % "1.3.6" % "compile",
     "org.scalaz"             %% "scalaz-core"       % "7.2.28",
     "org.scalaz"             %% "scalaz-core"       % "7.2.28",
