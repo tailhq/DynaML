@@ -75,7 +75,7 @@ object Dependencies {
   }
 
   val baseDependencies = Seq(
-    "com.typesafe"           % "config"             % "1.3.4" % "compile",
+    "com.typesafe"           % "config"             % "1.4.0" % "compile",
     "com.github.tototoshi"   %% "scala-csv"         % "1.3.6" % "compile",
     "org.scalaz"             %% "scalaz-core"       % "7.2.29",
     "org.scalaz"             %% "scalaz-core"       % "7.2.29",
@@ -134,8 +134,8 @@ object Dependencies {
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.7.4" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.7.4" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "1.8.1" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "1.8.1" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -195,7 +195,7 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC4",
+    "io.get-coursier" %% "coursier" % "2.0.0-RC4-1",
     "io.get-coursier" % "interface" % "0.0.13"
   )
 
