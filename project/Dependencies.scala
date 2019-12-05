@@ -134,8 +134,8 @@ object Dependencies {
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.8.1" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.8.1" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "1.8.2" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "1.8.2" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -195,8 +195,8 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC4-1",
-    "io.get-coursier" % "interface" % "0.0.15"
+    "io.get-coursier" %% "coursier" % "2.0.0-RC5-3",
+    "io.get-coursier" % "interface" % "0.0.13"
   )
 
   val almond = Seq(
