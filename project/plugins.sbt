@@ -21,7 +21,7 @@ addSbtPlugin("com.dwijnand" % "sbt-compat" % "1.2.6")
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
 
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1")
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.6")
 addSbtPlugin("org.scalameta" % "sbt-mdoc" % "1.3.2" )
 addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.2")
