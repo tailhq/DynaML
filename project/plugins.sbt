@@ -6,7 +6,7 @@ resolvers ++= Seq(Resolver.sonatypeRepo("snapshots"))
 
 addSbtPlugin("io.get-coursier" % "sbt-coursier" % "2.0.0-RC3-3")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.1")
 
 addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.5.0")
 
