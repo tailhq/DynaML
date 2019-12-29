@@ -134,8 +134,8 @@ object Dependencies {
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.9.9" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.9.9" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "2.0.1" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "2.0.1" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -200,9 +200,9 @@ object Dependencies {
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter" % "0.8.2" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"  % "0.8.2" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"            % "0.8.2",
+    "sh.almond"                  %% "scala-interpreter" % "0.8.3" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"  % "0.8.3" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"            % "0.8.3",
     "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+37-9565c694-SNAPSHOT"
   )
 
