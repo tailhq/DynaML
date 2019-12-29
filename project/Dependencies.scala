@@ -77,8 +77,8 @@ object Dependencies {
   val baseDependencies = Seq(
     "com.typesafe"           % "config"             % "1.4.0" % "compile",
     "com.github.tototoshi"   %% "scala-csv"         % "1.3.6" % "compile",
-    "org.scalaz"             %% "scalaz-core"       % "7.2.29",
-    "org.scalaz"             %% "scalaz-core"       % "7.2.29",
+    "org.scalaz"             %% "scalaz-core"       % "7.2.30",
+    "org.scalaz"             %% "scalaz-core"       % "7.2.30",
     "com.github.scopt"       %% "scopt"             % "3.7.1",
     "javax.ws.rs"            % "javax.ws.rs-api"    % "2.1.1",
     "org.json4s"             %% "json4s-jackson"    % "3.6.7",
@@ -105,7 +105,7 @@ object Dependencies {
     "javax.servlet"                % "javax.servlet-api"     % "4.0.1" % "test",
     "org.apache.spark"             %% "spark-core"           % "2.4.4",
     "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
-    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.0",
+    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.1",
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.1"
   ).map(
     _.withExclusions(
@@ -134,8 +134,8 @@ object Dependencies {
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "1.8.1" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "1.8.1" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "2.0.1" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "2.0.1" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -161,9 +161,9 @@ object Dependencies {
     "com.typesafe.akka" %% "akka-actor"           % "2.5.26",
     "com.typesafe.akka" %% "akka-stream"          % "2.5.26",
     "com.typesafe.akka" %% "akka-testkit"         % "2.5.26",
-    "com.typesafe.akka" %% "akka-http"            % "10.1.10",
-    "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.10",
-    "com.typesafe.akka" %% "akka-http-testkit"    % "10.1.10"
+    "com.typesafe.akka" %% "akka-http"            % "10.1.11",
+    "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.11",
+    "com.typesafe.akka" %% "akka-http-testkit"    % "10.1.11"
   )
 
   val imageDependencies = Seq(
@@ -195,15 +195,15 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC4-1",
-    "io.get-coursier" % "interface" % "0.0.13"
+    "io.get-coursier" %% "coursier" % "2.0.0-RC5-4",
+    "io.get-coursier" % "interface" % "0.0.16"
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter" % "0.8.2" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"  % "0.8.2" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"            % "0.8.2",
-    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+32-cf2d0d91-SNAPSHOT"
+    "sh.almond"                  %% "scala-interpreter" % "0.8.3" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"  % "0.8.3" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"            % "0.8.3",
+    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+36-9e0dfc7b-SNAPSHOT"
   )
 
   val pipesDependencies = (
