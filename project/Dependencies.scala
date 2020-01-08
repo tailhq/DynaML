@@ -203,7 +203,7 @@ object Dependencies {
     "sh.almond"                  %% "scala-interpreter" % "0.8.3" cross CrossVersion.full,
     "sh.almond"                  %% "scala-kernel-api"  % "0.8.3" cross CrossVersion.full,
     "sh.almond"                  %% "kernel"            % "0.8.3",
-    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+37-9565c694-SNAPSHOT"
+    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+38-3361a5bd-SNAPSHOT"
   )
 
   val pipesDependencies = (
