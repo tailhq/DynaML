@@ -134,8 +134,8 @@ object Dependencies {
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "2.0.1" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "2.0.1" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "2.0.3" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "2.0.3" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -195,7 +195,7 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC5-4",
+    "io.get-coursier" %% "coursier" % "2.0.0-RC5-6",
     "io.get-coursier" % "interface" % "0.0.16"
   )
 
@@ -203,7 +203,7 @@ object Dependencies {
     "sh.almond"                  %% "scala-interpreter" % "0.9.1" cross CrossVersion.full,
     "sh.almond"                  %% "scala-kernel-api"  % "0.9.1" cross CrossVersion.full,
     "sh.almond"                  %% "kernel"            % "0.9.1",
-    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+37-9565c694-SNAPSHOT"
+    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+38-3361a5bd-SNAPSHOT"
   )
 
   val pipesDependencies = (
