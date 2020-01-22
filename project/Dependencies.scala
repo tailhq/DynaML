@@ -106,7 +106,7 @@ object Dependencies {
     "org.apache.spark"             %% "spark-core"           % "2.4.4",
     "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
     "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.2",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.1"
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.2"
   ).map(
     _.withExclusions(
       Vector(
