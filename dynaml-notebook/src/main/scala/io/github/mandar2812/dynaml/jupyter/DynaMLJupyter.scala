@@ -39,7 +39,8 @@ import scala.util.control.NonFatal
 /** Holds bits of state for the interpreter, and implements [[almond.interpreter.Interpreter]]. */
 final class DynaMLJupyter(
   params: ScalaInterpreterParams = ScalaInterpreterParams(),
-  val logCtx: LoggerContext = LoggerContext.nop
+  val logCtx: LoggerContext = LoggerContext.nop,
+  val silent: Ref[Boolean] = Ref(false)
 ) extends Interpreter with AsyncInterpreterOps {
 
   private val log = logCtx(getClass)
@@ -70,7 +71,8 @@ final class DynaMLJupyter(
     storage,
     logCtx,
     params.updateBackgroundVariablesEcOpt,
-    commHandlerOpt
+    commHandlerOpt,
+    silent
   )
 
 
@@ -88,7 +90,7 @@ final class DynaMLJupyter(
       )
 
     val jupyterApi =
-      new JupyterApiImpl(execute0, commHandlerOpt, replApi)
+      new JupyterApiImpl(execute0, commHandlerOpt, replApi, silent)
 
     for (ec <- params.updateBackgroundVariablesEcOpt)
       UpdatableFuture.setup(replApi, jupyterApi, ec)
