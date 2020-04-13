@@ -50,6 +50,7 @@ temp/*
 test_output
 .bloop
 project/.bloop
+project/metals.sbt
 .metals
 !.scalafmt.conf
 .coveralls.yml
