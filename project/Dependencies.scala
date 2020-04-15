@@ -195,7 +195,7 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC6-11",
+    "io.get-coursier" %% "coursier" % "2.0.0-RC6-12",
     "io.get-coursier" % "interface" % "0.0.21"
   )
 
