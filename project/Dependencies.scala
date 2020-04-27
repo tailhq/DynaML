@@ -4,7 +4,7 @@ object Dependencies {
 
   val scala_major = 2.12
 
-  val scala_minor = 8
+  val scala_minor = 10
 
   val scala = s"$scala_major.$scala_minor"
 
