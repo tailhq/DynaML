@@ -202,9 +202,9 @@ object Dependencies {
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter" % "0.9.1" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"  % "0.9.1" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"            % "0.9.1",
+    "sh.almond"                  %% "scala-interpreter" % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"  % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"            % "0.9.1+67-7a26185d-SNAPSHOT",
     "com.github.alexarchambault" %% "case-app"          % "2.0.0-M16+8-da5c4065-SNAPSHOT"
   )
 
