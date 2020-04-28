@@ -88,7 +88,7 @@ object Dependencies {
     "commons-io"             % "commons-io"         % "2.6",
     "com.github.nscala-time" %% "nscala-time"       % "2.22.0",
     "jline"                  % "jline"              % "2.14.6",
-    "com.lihaoyi"            %% "pprint"            % "0.5.6",
+    "com.lihaoyi"            %% "pprint"            % "0.5.9",
     "com.lihaoyi"            %% "os-lib"            % "0.7.0"
   )
 
