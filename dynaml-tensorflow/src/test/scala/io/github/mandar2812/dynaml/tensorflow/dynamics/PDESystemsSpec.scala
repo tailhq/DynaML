@@ -10,7 +10,6 @@ import _root_.io.github.mandar2812.dynaml.tensorflow._
 import _root_.io.github.mandar2812.dynaml.tensorflow.pde._
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer
-import ammonite.ops.home
 import org.joda.time.DateTime
 import _root_.org.platanios.tensorflow.api._
 
@@ -58,7 +57,7 @@ class PDESystemsSpec extends FlatSpec with Matchers {
 
     val num_data = 50
 
-    val tempdir = home / "tmp"
+    val tempdir = os.home / "tmp"
 
     val summary_dir = tempdir / s"dtf_wave1d_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
