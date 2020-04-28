@@ -24,6 +24,7 @@ import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Layer
 
 import scala.reflect.ClassTag
+import org.platanios.tensorflow.api.learn.layers.Activation
 
 /**
   * Stacks output produced by a tensorflow concatenation layer
@@ -206,6 +207,14 @@ case class IdentityLayer[I](override val name: String) extends Layer[I, I](name)
   override val layerType: String = s"Identity"
 
   override def forwardWithoutContext(input: I)(implicit mode: Mode): I = input
+
+}
+
+case class IdentityAct[I: TF](override val name: String) extends Activation[I](name) {
+
+  override val layerType: String = s"Identity"
+
+  override def forwardWithoutContext(input: Output[I])(implicit mode: Mode): Output[I] = input
 
 }
 

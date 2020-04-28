@@ -18,7 +18,7 @@ under the License.
 * */
 package io.github.mandar2812.dynaml.tensorflow.data
 
-import ammonite.ops.Path
+import os.Path
 import com.sksamuel.scrimage.Image
 import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
 import io.github.mandar2812.dynaml.tensorflow.api.Api

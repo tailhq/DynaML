@@ -1,6 +1,5 @@
 package io.github.mandar2812.dynaml.tensorflow.data
 
-import ammonite.ops._
 import com.sksamuel.scrimage.Image
 import com.sksamuel.scrimage.filter.GrayscaleFilter
 import io.github.mandar2812.dynaml.pipes.DataPipe
@@ -11,7 +10,7 @@ import org.platanios.tensorflow.api._
 class TFDataApiSpec extends FlatSpec with Matchers {
 
   private val image_paths =
-    ls! pwd/"docs-old"/'images |? (s => s.segments.toSeq.last.contains("histogram-"))
+    os.list(os.pwd/"docs-old"/'images).filter(s => s.segments.toSeq.last.contains("histogram-"))
 
   "Image datasets" should " be loaded into tensors" in {
 

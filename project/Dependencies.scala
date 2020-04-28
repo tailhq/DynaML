@@ -87,7 +87,9 @@ object Dependencies {
     "org.apache.commons"     % "commons-math3"      % "3.6.1",
     "commons-io"             % "commons-io"         % "2.6",
     "com.github.nscala-time" %% "nscala-time"       % "2.22.0",
-    "jline"                  % "jline"              % "2.14.6"
+    "jline"                  % "jline"              % "2.14.6",
+    "com.lihaoyi"            %% "pprint"            % "0.5.6",
+    "com.lihaoyi"            %% "os-lib"            % "0.7.0"
   )
 
   val testSuiteDependencies = Seq(
@@ -227,7 +229,6 @@ object Dependencies {
       rPackages ++
       imageDependencies ++
       dataFormatDependencies ++
-      ammoniteDeps ++
       scalaStan ++
       testSuiteDependencies
   ).map(
@@ -237,8 +238,7 @@ object Dependencies {
   val replDependencies = baseDependencies ++ ammoniteDeps ++ commons_io ++ coursier_deps ++ testSuiteDependencies
 
   val notebookDepencencies =
-    ammoniteDeps ++
-      almond ++
+    almond ++
       loggingDependency ++
       Seq(
         "org.slf4j" % "slf4j-api"     % "2.0.0-alpha1",

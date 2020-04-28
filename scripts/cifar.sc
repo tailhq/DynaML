@@ -24,25 +24,22 @@
 
   println("Building the model.")
 
-  val relu_act = DataPipe[String, Activation[Float]](tf.learn.ReLU(_))
+  val relu_act = DataPipe[String, Activation[Float]]((x: String) => tf.learn.ReLU[Float](x))
 
   val architecture =
     tf.learn.Cast[UByte, Float]("Input/Cast") >>
-      dtflearn.inception_unit(channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>
-      dtflearn.inception_unit(channels = 40, Seq.fill(4)(5),  relu_act)(layer_index = 2) >>
-      tf.learn.Flatten("Layer_3/Flatten") >>
-      dtflearn.feedforward(256)(id = 4) >>
-      tf.learn.ReLU("Layer_4/ReLU", 0.1f) >>
-      dtflearn.feedforward(10)(id = 5)
+      dtflearn.inception_unit[Float](channels = 3,  Seq.fill(4)(10), relu_act)(layer_index = 1) >>
+      dtflearn.inception_unit[Float](channels = 40, Seq.fill(4)(5),  relu_act)(layer_index = 2) >>
+      tf.learn.Flatten[Float]("Layer_3/Flatten") >>
+      dtflearn.feedforward[Float](256)(id = 4) >>
+      tf.learn.ReLU[Float]("Layer_4/ReLU", 0.1f) >>
+      dtflearn.feedforward[Float](10)(id = 5)
 
   val loss = tf.learn.SparseSoftmaxCrossEntropy[Float, Long, Float]("Loss/CrossEntropy") >>
     tf.learn.Mean("Loss/Mean") >>
     tf.learn.ScalarSummary("Loss/Summary", "Loss")
 
   val optimizer = tf.train.Adam(0.1f)
-
-  def concatOp[T: TF] = DataPipe[Iterable[Tensor[T]], Tensor[T]](s => tfi.concatenate[T](s.toSeq))
-  def stackOp[T: TF]  = DataPipe[Iterable[Tensor[T]], Tensor[T]](s => tfi.stack[T](s.toSeq))
 
   val cifar_model = dtflearn.model[
     Output[UByte], Output[Long], Output[Float], Float,
@@ -55,13 +52,10 @@
     loss)
 
 
-  val data_ops = dtflearn.model.data_ops(
+  val data_ops = dtflearn.model.data_ops[(Output[UByte], Output[Long])](
     shuffleBuffer = 5000,
     batchSize = 128,
-    prefetchSize = 10,
-    concatOpI = Some(dtfpipe.EagerStack[UByte]()),
-    concatOpT = Some(dtfpipe.EagerStack[Long]()),
-    concatOpO = Some(dtfpipe.EagerConcatenate[Float]())
+    prefetchSize = 10
   )
 
   val train_config = dtflearn.model.trainConfig(
@@ -76,8 +70,45 @@
         summarySaveFreq = 100,
         checkPointFreq = 100)
     ))
+  
+  val pattern_to_tensor = DataPipe[
+    Seq[(Tensor[UByte], Tensor[Long])],
+    (Tensor[UByte], Tensor[Long])](
+      ds => {
+        val (xs, ys) = ds.unzip
 
-  cifar_model.train(dtf_cifar_data.training_dataset, train_config)
+        (
+          dtfpipe.EagerStack[UByte](axis = 0).run(xs),
+          dtfpipe.EagerStack[Long](axis = 0).run(ys)
+        )
+      }
+  )
+
+  val data_handle_ops = dtflearn.model.tf_data_handle_ops[
+    (Tensor[UByte], Tensor[Long]),
+    (Tensor[UByte], Tensor[Long]),
+    Tensor[Float],
+    (Output[UByte], Output[Long])](
+        bufferSize = 500,
+        patternToTensor = Some(pattern_to_tensor),
+        concatOpO = Some(dtfpipe.EagerConcatenate[Float]())
+  )
+
+  val data_handle_ops_infer = dtflearn.model.tf_data_handle_ops[
+    Tensor[UByte],
+    Tensor[UByte],
+    Tensor[Float],
+    Output[UByte]](
+        bufferSize = 500,
+        patternToTensor = Some(dtfpipe.EagerStack[UByte](axis = 0)),
+        concatOpO = Some(dtfpipe.EagerConcatenate[Float]())
+  )
+
+  cifar_model.train(
+    dtf_cifar_data.training_dataset,
+    train_config,
+    data_handle_ops
+  )
 
   def accuracy(predictions: Tensor[Long], labels: Tensor[Long]): Float =
     tfi.equal(predictions.argmax[Long](1), labels)
@@ -87,8 +118,8 @@
       .asInstanceOf[Float]
 
   val (trainingPreds, testPreds): (Tensor[Float], Tensor[Float]) = (
-    cifar_model.infer_batch(dtf_cifar_data.training_dataset.map(p => p._1)).left.get,
-    cifar_model.infer_batch(dtf_cifar_data.test_dataset.map(p => p._1)).left.get
+    cifar_model.infer_batch(dtf_cifar_data.training_dataset.map(p => p._1), data_handle_ops_infer).left.get,
+    cifar_model.infer_batch(dtf_cifar_data.test_dataset.map(p => p._1), data_handle_ops_infer).left.get
   )
 
   val (trainAccuracy, testAccuracy) = (

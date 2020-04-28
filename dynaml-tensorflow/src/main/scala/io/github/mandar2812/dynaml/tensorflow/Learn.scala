@@ -49,6 +49,7 @@ import org.platanios.tensorflow.api.ops.variables.{
   Initializer,
   RandomNormalInitializer
 }
+import org.platanios.tensorflow.api.learn.layers.Activation
 
 private[tensorflow] object Learn {
 
@@ -95,6 +96,7 @@ private[tensorflow] object Learn {
     layers.CombinedArrayLayer
   val unstack: layers.Unstack.type                    = layers.Unstack
   val identity: layers.IdentityLayer.type             = layers.IdentityLayer
+  val identity_act: layers.IdentityAct.type           = layers.IdentityAct
   val bifurcation_layer: layers.BifurcationLayer.type = layers.BifurcationLayer
   val tuple2_layer: layers.Tuple2Layer.type           = layers.Tuple2Layer
   val stack_tuple2: layers.StackTuple2.type           = layers.StackTuple2
@@ -424,7 +426,7 @@ private[tensorflow] object Learn {
   def inception_unit[T: TF: IsDecimal](
     channels: Int,
     num_filters: Seq[Int],
-    activation_generator: DataPipe[String, Layer[Output[T], Output[T]]],
+    activation_generator: DataPipe[String, Activation[T]],
     use_batch_norm: Boolean = true
   )(layer_index: Int
   ): Layer[Output[T], Output[T]] = {
@@ -557,7 +559,7 @@ private[tensorflow] object Learn {
   def inception_stack[T: TF: IsDecimal](
     num_channels_image: Int,
     num_filters: Seq[Seq[Int]],
-    activation_generator: DataPipe[String, Layer[Output[T], Output[T]]],
+    activation_generator: DataPipe[String, Activation[T]],
     use_batch_norm: Boolean
   )(starting_index: Int
   ): Layer[Output[T], Output[T]] = {

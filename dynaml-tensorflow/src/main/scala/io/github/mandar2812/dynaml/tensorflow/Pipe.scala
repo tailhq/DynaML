@@ -1,6 +1,6 @@
 package io.github.mandar2812.dynaml.tensorflow
 
-import ammonite.ops.Path
+import os.Path
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2}
 import io.github.mandar2812.dynaml.tensorflow.utils.{
   GaussianScalerTF,
