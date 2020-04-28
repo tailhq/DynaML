@@ -130,7 +130,7 @@ object Dependencies {
   val chartsDependencies = Seq(
     "com.github.wookietreiber" %% "scala-chart" % "0.5.1" % "compile",
     "org.jzy3d"                % "jzy3d-api"    % "1.0.2" % "compile",
-    "com.cibo"                 %% "evilplot"    % "0.7.0"
+    "com.cibo"                 %% "evilplot"    % "0.8.0"
   )
 
   val ammoniteDeps = Seq(
