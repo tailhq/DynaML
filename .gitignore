@@ -62,3 +62,4 @@ scripts/scratch.sc
 heapdump*
 javacore*
 Snap*
+.ipynb_checkpoints*
