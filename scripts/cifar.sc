@@ -99,7 +99,7 @@
     Tensor[UByte],
     Tensor[Float],
     Output[UByte]](
-        bufferSize = 500,
+        bufferSize = 1000,
         patternToTensor = Some(dtfpipe.EagerStack[UByte](axis = 0)),
         concatOpO = Some(dtfpipe.EagerConcatenate[Float]())
   )
