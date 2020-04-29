@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.12.8</version>
+            <version>2.12.10</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-core_2.12</artifactId>
-            <version>7.2.29</version>
+            <version>7.2.30</version>
         </dependency>
         <dependency>
             <groupId>com.github.scopt</groupId>
@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.github.nscala-time</groupId>
             <artifactId>nscala-time_2.12</artifactId>
-            <version>2.22.0</version>
+            <version>2.24.0</version>
         </dependency>
         <dependency>
             <groupId>jline</groupId>
@@ -99,34 +99,44 @@
         </dependency>
         <dependency>
             <groupId>com.lihaoyi</groupId>
-            <artifactId>ammonite-repl_2.12.8</artifactId>
-            <version>1.8.1</version>
+            <artifactId>pprint_2.12</artifactId>
+            <version>0.5.9</version>
         </dependency>
         <dependency>
             <groupId>com.lihaoyi</groupId>
-            <artifactId>ammonite-sshd_2.12.8</artifactId>
-            <version>1.8.1</version>
+            <artifactId>os-lib_2.12</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lihaoyi</groupId>
+            <artifactId>ammonite-repl_2.12.10</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lihaoyi</groupId>
+            <artifactId>ammonite-sshd_2.12.10</artifactId>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>io.get-coursier</groupId>
             <artifactId>coursier_2.12</artifactId>
-            <version>2.0.0-RC4-1</version>
+            <version>2.0.0-RC6-13</version>
         </dependency>
         <dependency>
             <groupId>io.get-coursier</groupId>
             <artifactId>interface</artifactId>
-            <version>0.0.13</version>
+            <version>0.0.22</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.12</artifactId>
-            <version>3.0.8</version>
+            <version>3.1.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
