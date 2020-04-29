@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.probability.stan
 
 import com.cibo.scalastan._
-import ammonite.ops._
+import os.Path
 
 class DynaStan extends StanModel {}
 

@@ -57,6 +57,8 @@ final class DynaMLJupyter(
 
   private val colors0: Ref[Colors] = Ref(params.initialColors)
 
+  private val silent0: Ref[Boolean] = Ref(false)
+
   private var commHandlerOpt = Option.empty[CommHandler]
 
   private val storage =
@@ -70,7 +72,8 @@ final class DynaMLJupyter(
     storage,
     logCtx,
     params.updateBackgroundVariablesEcOpt,
-    commHandlerOpt
+    commHandlerOpt,
+    silent0
   )
 
 
@@ -88,7 +91,7 @@ final class DynaMLJupyter(
       )
 
     val jupyterApi =
-      new JupyterApiImpl(execute0, commHandlerOpt, replApi)
+      new JupyterApiImpl(execute0, commHandlerOpt, replApi, silent0)
 
     for (ec <- params.updateBackgroundVariablesEcOpt)
       UpdatableFuture.setup(replApi, jupyterApi, ec)

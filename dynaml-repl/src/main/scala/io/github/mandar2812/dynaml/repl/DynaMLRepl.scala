@@ -181,25 +181,24 @@ object Cli{
     doc: String,
     action: (T, V) => T)(
     implicit val reader: scopt.Read[V]) {
-    
     def runAction(t: T, s: String) = action(t, reader.reads(s))
   }
-  case class Config(
-    predefCode: String = "",
-    defaultPredef: Boolean = true,
-    homePredef: Boolean = true,
-    wd: os.Path = os.pwd,
-    welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
-    verboseOutput: Boolean = true,
-    remoteLogging: Boolean = true,
-    watch: Boolean = false,
-    code: Option[String] = None,
-    home: os.Path = Defaults.ammoniteHome,
-    predefFile: Option[os.Path] = None,
-    help: Boolean = false,
-    colored: Option[Boolean] = None,
-    classBased: Boolean = false,
-    thin: Boolean = false)
+  case class Config(predefCode: String = "",
+                    defaultPredef: Boolean = true,
+                    homePredef: Boolean = true,
+                    wd: os.Path = os.pwd,
+                    welcomeBanner: Option[String] = Some(Defaults.welcomeBanner),
+                    verboseOutput: Boolean = true,
+                    remoteLogging: Boolean = true,
+                    watch: Boolean = false,
+                    bsp: Boolean = false,
+                    code: Option[String] = None,
+                    home: os.Path = Defaults.ammoniteHome,
+                    predefFile: Option[os.Path] = None,
+                    help: Boolean = false,
+                    colored: Option[Boolean] = None,
+                    classBased: Boolean = false,
+                    thin: Boolean = false)
 
 
   import ammonite.repl.tools.Util.pathScoptRead
@@ -265,6 +264,11 @@ object Cli{
       "watch", Some('w'),
       "Watch and re-run your scripts when they change",
       (c, v) => c.copy(watch = true)
+    ),
+    Arg[Config, Unit](
+      "bsp", None,
+      "Run a BSP server against the passed scripts",
+      (c, v) => c.copy(bsp = true)
     ),
     Arg[Config, Unit](
       "thin", None,
@@ -358,6 +362,7 @@ object Cli{
     rec(flatArgs, initial)
   }
 }
+
 /**
   * More or less a minimal version of Autowire's Server that lets you generate
   * a set of "routes" from the methods defined in an object, and call them

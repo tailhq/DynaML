@@ -24,7 +24,6 @@ import io.github.mandar2812.dynaml.tensorflow.evaluation.Performance
 import io.github.mandar2812.dynaml.pipes.{DataPipe, DataPipe2, MetaPipe}
 import io.github.mandar2812.dynaml.tensorflow.data.{DataSet, TFDataSet}
 import io.github.mandar2812.dynaml.tensorflow.dtflearn
-import ammonite.ops._
 import org.platanios.tensorflow.api.Graph
 import org.platanios.tensorflow.api.Tensor
 import org.platanios.tensorflow.api.implicits.helpers._
@@ -155,7 +154,7 @@ class TunableTFModel[
     case TFModel.data.NoCache       => TFModel.data.NoCache
     case TFModel.data.InMemoryCache => TFModel.data.InMemoryCache
     case TFModel.data.FileCache(location) =>
-      if (! (exists ! location)) mkdir ! location
+      if (!os.exists(location)) os.makeDir(location)
       TFModel.data.FileCache(location / "train_split_data")
   }
 
@@ -163,7 +162,7 @@ class TunableTFModel[
     case TFModel.data.NoCache       => TFModel.data.NoCache
     case TFModel.data.InMemoryCache => TFModel.data.InMemoryCache
     case TFModel.data.FileCache(location) =>
-      if (! (exists ! location)) mkdir ! location
+      if (!os.exists(location)) os.makeDir(location)
       TFModel.data.FileCache(location / "validation_split_data")
   }
 
@@ -270,7 +269,7 @@ class TunableTFModel[
 
     //Write the configuration along with its fitness into the model
     //instance's summary directory
-    write.append(
+    os.write.append(
       train_config.summaryDir / "state.json", 
       hyp_config_json + "\n", 
       createFolders = true)
@@ -421,7 +420,7 @@ object TunableTFModel {
     *
     * */
   class ModelConfigFunction[In, Out](
-    summaryDir: DataPipe[HyperParams, Path],
+    summaryDir: DataPipe[HyperParams, os.Path],
     data_processing: DataPipe[HyperParams, TFModel.Ops[(In, Out)]] =
       DataPipe[HyperParams, TFModel.Ops[(In, Out)]](_ =>
           TFModel.data_ops(10000, 16, 10)),
@@ -447,7 +446,7 @@ object TunableTFModel {
   object ModelConfigFunction {
 
     def apply[In, Out](
-      summaryDir: DataPipe[HyperParams, Path],
+      summaryDir: DataPipe[HyperParams, os.Path],
       data_processing: DataPipe[HyperParams, TFModel.Ops[(In, Out)]] =
         DataPipe[HyperParams, TFModel.Ops[(In, Out)]](_ =>
             TFModel.data_ops(10000, 16, 10)),
@@ -534,7 +533,7 @@ object TunableTFModel {
     def _eval_hook(
       datasets: Seq[(String, Dataset[(In, Out)])],
       evaluation_metrics: Seq[(String, DataPipe2[ArchOut, Out, Output[Float]])],
-      summary_dir: Path,
+      summary_dir: os.Path,
       stepTrigger: Int = 100,
       log: Boolean = true
     ): Evaluator[
@@ -575,15 +574,15 @@ object TunableTFModel {
     val to_token = config_to_str > generate_token
 
     def get_summary_dir(
-      top_dir: Path,
+      top_dir: os.Path,
       h: HyperParams,
       create_working_dir: Option[DataPipe[HyperParams, String]] = Some(to_token)
-    ): Path = create_working_dir match {
+    ): os.Path = create_working_dir match {
       case None                  => top_dir
       case Some(working_dir_gen) => top_dir / working_dir_gen(h)
     }
 
-    val hyper_params_to_dir: MetaPipe[Path, HyperParams, Path] = MetaPipe(
+    val hyper_params_to_dir: MetaPipe[os.Path, HyperParams, os.Path] = MetaPipe(
       top_dir => h => get_summary_dir(top_dir, h)
     )
 

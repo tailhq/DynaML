@@ -18,7 +18,6 @@ under the License.
  * */
 package io.github.mandar2812.dynaml.tensorflow.models
 
-import ammonite.ops._
 import io.github.mandar2812.dynaml.pipes.DataPipe
 import io.github.mandar2812.dynaml.DynaMLPipe._
 import io.github.mandar2812.dynaml.probability._
@@ -31,7 +30,7 @@ import org.platanios.tensorflow.api.learn.layers.Layer
 class TFModelSpec extends FlatSpec with Matchers {
   "DynaML TensorFlow model wrappers" should " train and predict as expected" in {
 
-    val tempdir = home / "tmp"
+    val tempdir = os.home / "tmp"
 
     val summary_dir = tempdir / s"dtf_model_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm")}"
 

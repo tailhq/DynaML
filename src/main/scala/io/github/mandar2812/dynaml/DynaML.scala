@@ -22,16 +22,20 @@ import java.io.{InputStream, OutputStream, PrintStream}
 import java.nio.file.NoSuchFileException
 import java.net.URLClassLoader
 import ammonite.interp.{
+  Watchable,
   CodeClassWrapper,
   CodeWrapper,
   Interpreter,
-  Preprocessor
+  Preprocessor,
+  PredefInitialization
 }
+import ammonite.interp.script.AmmoniteBuildServer
 import ammonite.repl.{FrontEndAPIImpl, Repl, SourceAPIImpl}
 import ammonite.runtime.{Frame, Storage}
 import ammonite.util.Util.newLine
 import ammonite.util._
 import ammonite.runtime.ImportHook
+import coursierapi.Dependency
 import io.github.mandar2812.dynaml.repl._
 
 import scala.annotation.tailrec
@@ -90,7 +94,7 @@ case class DynaML(
   colors: Colors = Colors.Default,
   replCodeWrapper: CodeWrapper = CodeWrapper,
   scriptCodeWrapper: CodeWrapper = CodeWrapper,
-  alreadyLoadedDependencies: Seq[coursierapi.Dependency] =
+  alreadyLoadedDependencies: Seq[Dependency] =
     Defaults.alreadyLoadedDependencies(),
   importHooks: Map[Seq[String], ImportHook] = ImportHook.defaults,
   classPathWhitelist: Set[Seq[String]] = Set.empty) {
@@ -103,7 +107,10 @@ case class DynaML(
       catch {
         case e: NoSuchFileException =>
           Left(
-            (Res.Failure("Unable to load predef file " + path), Seq(path -> 0L))
+            (
+              Res.Failure("Unable to load predef file " + path),
+              Seq((Watchable.Path(path), 0L))
+            )
           )
       }
     case None => Right(None)
@@ -122,7 +129,7 @@ case class DynaML(
     loadedPredefFile.right.map { predefFileInfoOpt =>
       val augmentedPredef = DynaML.maybeDefaultPredef(
         defaultPredef,
-        Defaults.replPredef + Defaults.predefString + DynaML.extraPredefString + Defaults.dynaMlPredef
+        Defaults.replPredef + Defaults.predefString + DynaML.extraPredefString
       )
 
       val argString = replArgs.zipWithIndex
@@ -186,29 +193,17 @@ case class DynaML(
         errorStream,
         verboseOutput
       )
-      val frame = Frame.createInitial()
+      val frame = Frame.createInitial(initialClassLoader)
 
-      val interp: Interpreter = new Interpreter(
+      val basePredefs = Seq(
+        PredefInfo(Name("DefaultPredef"), augmentedPredef, false, None)
+      )
+      val customPredefs = predefFileInfoOpt.toSeq ++ Seq(
+        PredefInfo(Name("CodePredef"), predefCode, false, None)
+      )
+      val interp = new Interpreter(
         printer,
         storageBackend,
-        basePredefs = Seq(
-          PredefInfo(Name("DefaultPredef"), augmentedPredef, false, None)
-        ),
-        predefFileInfoOpt.toSeq ++ Seq(
-          PredefInfo(Name("CodePredef"), predefCode, false, None)
-        ),
-        Seq(
-          (
-            "ammonite.repl.api.SourceBridge",
-            "source",
-            new SourceAPIImpl {}
-          ),
-          (
-            "ammonite.repl.api.FrontEndBridge",
-            "frontEnd",
-            new FrontEndAPIImpl {}
-          )
-        ),
         wd,
         colorsRef,
         verboseOutput,
@@ -221,7 +216,19 @@ case class DynaML(
         importHooks = importHooks,
         classPathWhitelist = classPathWhitelist
       )
-      interp.initializePredef() match {
+      val bridges = Seq(
+        (
+          "ammonite.repl.api.SourceBridge",
+          "source",
+          new SourceAPIImpl {}
+        ),
+        (
+          "ammonite.repl.api.FrontEndBridge",
+          "frontEnd",
+          new FrontEndAPIImpl {}
+        )
+      )
+      interp.initializePredef(basePredefs, customPredefs, bridges) match {
         case None           => Right(interp)
         case Some(problems) => Left(problems)
       }
@@ -237,7 +244,7 @@ case class DynaML(
     * a sequence of paths that were watched as a result of this REPL run, in
     * case you wish to re-start the REPL when any of them change.
     */
-  def run(replArgs: Bind[_]*): (Res[Any], Seq[(os.Path, Long)]) = {
+  def run(replArgs: Bind[_]*): (Res[Any], Seq[(Watchable, Long)]) = {
 
     instantiateRepl(replArgs.toIndexedSeq) match {
       case Left(missingPredefInfo) => missingPredefInfo
@@ -255,7 +262,7 @@ case class DynaML(
           warmupThread.start()
 
           val exitValue = Res.Success(repl.run())
-          (exitValue.map(repl.beforeExit), repl.interp.watchedFiles.toSeq)
+          (exitValue.map(repl.beforeExit), repl.interp.watchedValues.toSeq)
         }
     }
   }
@@ -267,12 +274,12 @@ case class DynaML(
   def runScript(
     path: os.Path,
     scriptArgs: Seq[(String, Option[String])]
-  ): (Res[Any], Seq[(os.Path, Long)]) = {
+  ): (Res[Any], Seq[(Watchable, Long)]) = {
 
     instantiateInterpreter() match {
       case Right(interp) =>
         val result = Scripts.runScript(wd, path, interp, scriptArgs)
-        (result, interp.watchedFiles.toSeq)
+        (result, interp.watchedValues.toSeq)
       case Left(problems) => problems
     }
   }
@@ -284,7 +291,7 @@ case class DynaML(
     instantiateInterpreter() match {
       case Right(interp) =>
         val res = interp.processExec(code, 0, () => ())
-        (res, interp.watchedFiles.toSeq)
+        (res, interp.watchedValues.toSeq)
       case Left(problems) => problems
     }
   }
@@ -294,25 +301,17 @@ object DynaML {
 
   /**
     * The command-line entry point, which does all the argument parsing before
-    * delegating to [[Main.run]]
+    * delegating to [[DynaML.run]]
     */
   def main(args0: Array[String]): Unit = {
+    // set proxy properties from env
+    // Not in `main0`, since `main0` should be able to be run as part of the
+    // test suite without mangling the global properties of the JVM process
+    ProxyFromEnv.setPropProxyFromEnv()
 
-    if (!args0.isEmpty && args0.head.contains("--server")) {
-      DynaServe.main(Array.empty[String])
-    } else {
-
-      // set proxy properties from env
-      // Not in `main0`, since `main0` should be able to be run as part of the
-      // test suite without mangling the global properties of the JVM process
-      ProxyFromEnv.setPropProxyFromEnv()
-
-      val success = main0(args0.toList, System.in, System.out, System.err)
-      if (success) sys.exit(0)
-      else sys.exit(1)
-
-    }
-
+    val success = main0(args0.toList, System.in, System.out, System.err)
+    if (success) sys.exit(0)
+    else sys.exit(1)
   }
 
   /**
@@ -338,6 +337,20 @@ object DynaML {
       case Right((cliConfig, leftoverArgs)) =>
         if (cliConfig.help) {
           printOut.println(Cli.ammoniteHelp)
+          true
+        } else if (cliConfig.bsp) {
+          val buildServer = new AmmoniteBuildServer(
+            initialScripts = leftoverArgs.map(os.Path(_)),
+            initialImports = PredefInitialization.initBridges(
+              Seq("ammonite.interp.api.InterpBridge" -> "interp")
+            )
+          )
+          val launcher = AmmoniteBuildServer.start(buildServer)
+          printErr.println("Starting BSP server")
+          val f = launcher.startListening()
+          f.get()
+          printErr.println("BSP server done")
+          // FIXME Doesn't exit for now
           true
         } else {
 
@@ -405,7 +418,6 @@ object DynaML {
       else null
     }
   }
-
 }
 
 /**
@@ -433,7 +445,7 @@ class MainRunner(
   @tailrec final def watchLoop[T](
     isRepl: Boolean,
     printing: Boolean,
-    run: DynaML => (Res[T], Seq[(os.Path, Long)])
+    run: DynaML => (Res[T], Seq[(Watchable, Long)])
   ): Boolean = {
     val (result, watched) = run(initMain(isRepl))
 
@@ -457,13 +469,13 @@ class MainRunner(
 
   def runRepl(): Unit = watchLoop(isRepl = true, printing = false, _.run())
 
-  def watchAndWait(watched: Seq[(os.Path, Long)]) = {
+  def watchAndWait(watched: Seq[(Watchable, Long)]) = {
     printInfo(
       s"Watching for changes to ${watched.length} files... (Ctrl-C to exit)"
     )
     def statAll() = watched.forall {
-      case (file, lastMTime) =>
-        Interpreter.pathSignature(file) == lastMTime
+      case (check, lastMTime) =>
+        check.poll() == lastMTime
     }
 
     while (statAll()) Thread.sleep(100)
@@ -526,8 +538,7 @@ class MainRunner(
       colors = colors,
       replCodeWrapper = codeWrapper,
       scriptCodeWrapper = codeWrapper,
-      alreadyLoadedDependencies =
-        if (cliConfig.thin) Nil else Defaults.alreadyLoadedDependencies(),
+      alreadyLoadedDependencies = Defaults.alreadyLoadedDependencies(),
       classPathWhitelist =
         ammonite.repl.Repl.getClassPathWhitelist(cliConfig.thin)
     )
