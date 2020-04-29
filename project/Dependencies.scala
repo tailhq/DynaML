@@ -94,7 +94,7 @@ object Dependencies {
 
   val testSuiteDependencies = Seq(
     "junit"         % "junit"      % "4.12"  % "test",
-    "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+    "org.scalatest" %% "scalatest" % "3.1.1" % "test"
   )
 
   val excludeSlf4jBindings = Seq(
@@ -107,7 +107,7 @@ object Dependencies {
     "javax.servlet"                % "javax.servlet-api"     % "4.0.1" % "test",
     "org.apache.spark"             %% "spark-core"           % "2.4.4",
     "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
-    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.2",
+    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.3",
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.3"
   ).map(
     _.withExclusions(
