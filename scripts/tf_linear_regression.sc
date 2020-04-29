@@ -8,7 +8,7 @@
 
   val weight = random.nextFloat()
 
-  def batch(batchSize: Int): (Tensor, Tensor) = {
+  def batch(batchSize: Int): (Tensor[Float], Tensor[Float]) = {
     val inputs = ArrayBuffer.empty[Float]
     val outputs = ArrayBuffer.empty[Float]
     var i = 0
@@ -22,12 +22,12 @@
   }
 
   print("Building linear regression model.")
-  val inputs = tf.placeholder(FLOAT32, Shape(-1, 1))
-  val outputs = tf.placeholder(FLOAT32, Shape(-1, 1))
-  val weights = tf.variable("weights", FLOAT32, Shape(1, 1), tf.ZerosInitializer)
+  val inputs = tf.placeholder[Float](Shape(-1, 1))
+  val outputs = tf.placeholder[Float](Shape(-1, 1))
+  val weights = tf.variable[Float]("weights", Shape(1, 1), tf.ZerosInitializer)
   val predictions = tf.matmul(inputs, weights)
   val loss = tf.sum(tf.square(predictions - outputs))
-  val trainOp = tf.train.AdaGrad(1.0).minimize(loss)
+  val trainOp = tf.train.AdaGrad(1.0f).minimize(loss)
 
   println("Training the linear regression model.")
   val session = Session()

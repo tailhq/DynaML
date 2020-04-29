@@ -48,12 +48,12 @@ class TFLayersSpec extends FlatSpec with Matchers {
 
     val inception = dtflearn.inception_unit[Float](
       4, Seq(1, 2, 3, 4),
-      DataPipe[String, Layer[Output[Float], Output[Float]]](dtflearn.identity[Output[Float]]),
+      DataPipe[String, Activation[Float]](dtflearn.identity_act[Float]),
       false)(0)
 
     val inception_stack = dtflearn.inception_stack[Float](
       4, Seq(Seq(1, 2, 3, 4), Seq(1, 1, 1, 1)),
-      DataPipe[String, Layer[Output[Float], Output[Float]]](dtflearn.identity[Output[Float]]),
+      DataPipe[String, Activation[Float]](dtflearn.identity_act[Float]),
       true)(10)
 
     val ctrnn_stack = dtflearn.ctrnn_block[Float](2, 3)(1)

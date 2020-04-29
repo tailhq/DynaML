@@ -15,22 +15,22 @@ import scala.util.Random
 
 val random = new Random()
 
-def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor = {
+def batch(dim: Int, min: Double, max: Double, gridSize: Int): Tensor[Float] = {
 
   val points = utils.combine(Seq.fill(dim)(utils.range(min, max, gridSize)))
 
 
-  dtf.tensor_f32(Seq.fill(dim)(gridSize).product, dim)(points.flatten:_*)
+  dtf.tensor_f32(Seq.fill(dim)(gridSize).product, dim)(points.flatten.map(_.toFloat):_*)
 }
 
-val layer = new Layer[Output, Output]("Exp") {
+val layer = new Layer[Output[Float], Output[Float]]("Exp") {
   override val layerType = "Exp"
 
-  override protected def _forward(input: Output)(implicit mode: Mode): Output =
+  override def forwardWithoutContext(input: Output[Float])(implicit mode: Mode): Output[Float] =
     input.sin
 }
 
-def plot_field(x: Tensor, t: Tensor): DelauneySurface = {
+def plot_field(x: Tensor[Float], t: Tensor[Float]): DelauneySurface = {
 
   val size = x.shape(0)
 
@@ -59,17 +59,17 @@ def apply(minibatch: Int = 4) = {
 
   val output_dim: Int = 1
 
-  val inputs = tf.placeholder(FLOAT32, Shape(-1, input_dim))
+  val inputs = tf.placeholder[Float](Shape(-1, input_dim))
 
-  val feedforward = new Layer[Output, Output]("Exp") {
+  val feedforward = new Layer[Output[Float], Output[Float]]("Exp") {
     override val layerType = "MatMul"
 
-    override protected def _forward(input: Output)(implicit mode: Mode): Output =
+    override def forwardWithoutContext(input: Output[Float])(implicit mode: Mode): Output[Float] =
       tf.matmul(
         input,
         dtf.tensor_f32(input.shape(1), output_dim)(
           Seq.tabulate(input.shape(1), output_dim)(
-            (i, j) => if(i == j) math.Pi*2/domain_size else -math.Pi*2/domain_size).flatten:_*
+            (i, j) => if(i == j) (math.Pi*2/domain_size).toFloat else (-math.Pi*2/domain_size).toFloat).flatten:_*
         )
       ).reshape(Shape(input.shape(0)))
   }
@@ -82,7 +82,7 @@ def apply(minibatch: Int = 4) = {
 
   val df_ds     = d_s(d_s)(function)(inputs)
 
-  val velocity  = variable[Output]("wave_velocity", FLOAT32, Shape(), ConstantInitializer(1.0f))
+  val velocity  = variable[Output[Float], Float]("wave_velocity", Shape(), ConstantInitializer(1.0f))
 
   val wave_op   = d_t(d_t) - d_s(d_s)*velocity
 
@@ -95,7 +95,7 @@ def apply(minibatch: Int = 4) = {
 
   val feeds = Map(inputs -> trainBatch)
 
-  val results: (Tensor, Tensor, Tensor, Tensor) =
+  val results: (Tensor[Float], Tensor[Float], Tensor[Float], Tensor[Float]) =
     session.run(feeds = feeds, fetches = (outputs, df_ds, df_dt, op_f))
 
   val plots = (
