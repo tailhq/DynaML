@@ -14,7 +14,7 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.12.8</version>
+            <version>2.12.10</version>
         </dependency>
         <dependency>
             <groupId>io.github.transcendent-ai-labs</groupId>
@@ -37,28 +37,9 @@
             <version>v2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.lihaoyi</groupId>
-            <artifactId>ammonite-repl_2.12.8</artifactId>
-            <version>1.8.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-jdk14</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.lihaoyi</groupId>
-            <artifactId>ammonite-sshd_2.12.8</artifactId>
-            <version>1.8.1</version>
+            <groupId>sh.almond</groupId>
+            <artifactId>scala-interpreter_2.12.10</artifactId>
+            <version>0.9.1+67-7a26185d-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -76,27 +57,8 @@
         </dependency>
         <dependency>
             <groupId>sh.almond</groupId>
-            <artifactId>scala-interpreter_2.12.8</artifactId>
-            <version>0.8.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-jdk14</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>sh.almond</groupId>
-            <artifactId>scala-kernel-api_2.12.8</artifactId>
-            <version>0.8.2</version>
+            <artifactId>scala-kernel-api_2.12.10</artifactId>
+            <version>0.9.1+67-7a26185d-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -115,7 +77,7 @@
         <dependency>
             <groupId>sh.almond</groupId>
             <artifactId>kernel_2.12</artifactId>
-            <version>0.8.2</version>
+            <version>0.9.1+67-7a26185d-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -134,7 +96,7 @@
         <dependency>
             <groupId>com.github.alexarchambault</groupId>
             <artifactId>case-app_2.12</artifactId>
-            <version>2.0.0-M9+32-cf2d0d91-SNAPSHOT</version>
+            <version>2.0.0-M16+8-da5c4065-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>

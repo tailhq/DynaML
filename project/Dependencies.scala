@@ -93,7 +93,7 @@ object Dependencies {
   )
 
   val testSuiteDependencies = Seq(
-    "junit"         % "junit"      % "4.12"  % "test",
+    "junit"         % "junit"      % "4.13"  % "test",
     "org.scalatest" %% "scalatest" % "3.1.1" % "test"
   )
 
@@ -105,10 +105,10 @@ object Dependencies {
 
   val apacheSparkDependency = Seq(
     "javax.servlet"                % "javax.servlet-api"     % "4.0.1" % "test",
-    "org.apache.spark"             %% "spark-core"           % "2.4.5",
-    "org.apache.spark"             %% "spark-mllib"          % "2.4.5",
-    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.3",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.3"
+    "org.apache.spark"             %% "spark-core"           % "2.4.4",
+    "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
+    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.11.0",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.11.0"
   ).map(
     _.withExclusions(
       Vector(

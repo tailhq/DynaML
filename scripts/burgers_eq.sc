@@ -35,10 +35,9 @@ def batch[T: TF: IsFloatOrDouble](
 ): (Tensor[T], Tensor[T]) = {
 
   val points = utils.combine(
-    Seq.tabulate(dim)(
-      i =>
-        if (min(i) != max(i)) utils.range(min(i), max(i), gridSize) :+ max(i)
-        else Stream(min(i))
+    Seq.tabulate(dim)(i =>
+      if (min(i) != max(i)) utils.range(min(i), max(i), gridSize) :+ max(i)
+      else Stream(min(i))
     )
   )
 
@@ -120,7 +119,8 @@ def solve_1d(
 
   val session = Session()
 
-  val summary_dir = tempdir / s"dtf_burgers_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
+  val summary_dir =
+    tempdir / s"dtf_burgers_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
   val domain = (-5.0, 5.0)
 
@@ -171,9 +171,9 @@ def solve_1d(
   val output = Shape(output_dim)
 
   val architecture =
-    dtflearn.feedforward_stack[Float](
-      (i: Int) => tf.learn.ReLU(s"Act_$i")
-        //if (i == 1) tf.learn.ReLU(s"Act_$i") else tf.learn.Sigmoid(s"Act_$i")
+    dtflearn.feedforward_stack[Float]((i: Int) =>
+      if (i == 1) tf.learn.ReLU(s"Act_$i")
+      else tf.learn.Sigmoid(s"Act_$i")
     )(num_neurons ++ Seq(1))
 
   val (_, layer_shapes, layer_parameter_names, layer_datatypes) =
@@ -191,7 +191,8 @@ def solve_1d(
   val viscosity =
     constant[Output[Float], Float]("viscosity", Tensor(nu).reshape(Shape()))
 
-  val burgers_equation = d_t + (d_s * I[Float, Float]()) - (d_s(d_s) * viscosity)
+  val burgers_equation =
+    d_t + (d_s * I[Float, Float]()) - (d_s(d_s) * viscosity)
 
   val (quadrature_space, quadrature_time) = if (q_scheme == "MonteCarlo") {
     (
@@ -308,7 +309,8 @@ def solve_2d(
 
   val session = Session()
 
-  val summary_dir = tempdir / s"dtf_burgers2d_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
+  val summary_dir =
+    tempdir / s"dtf_burgers2d_test-${DateTime.now().toString("YYYY-MM-dd-HH-mm-ss")}"
 
   val domain = (-5.0, 5.0)
 
@@ -375,10 +377,9 @@ def solve_2d(
       num_neurons.head,
       dtflearn.rbf_layer.InverseMultiQuadric
     ) >>
-      dtflearn.feedforward_stack[Float](
-        (i: Int) =>
-          if (i == 1) tf.learn.ReLU(s"Act_$i", 0.01f)
-          else tf.learn.Sigmoid(s"Act_$i")
+      dtflearn.feedforward_stack[Float]((i: Int) =>
+        if (i == 1) tf.learn.ReLU(s"Act_$i", 0.01f)
+        else tf.learn.Sigmoid(s"Act_$i")
       )(num_neurons.tail ++ Seq(1))
 
   val (_, layer_shapes, layer_parameter_names, layer_datatypes) =
@@ -399,7 +400,8 @@ def solve_2d(
   val d_x = ∂[Float]("D_x")(1)(---)
   val d_y = ∂[Float]("D_y")(2)(---)
 
-  val burgers_equation = d_t + (d_x * I[Float, Float]()) - (d_x(d_x) + d_y(d_y)) * viscosity
+  val burgers_equation =
+    d_t + (d_x * I[Float, Float]()) - (d_x(d_x) + d_y(d_y)) * viscosity
 
   val (quadrature_space, quadrature_time) = if (q_scheme == "MonteCarlo") {
     val time_n = UniformRV(time_domain._1, time_domain._2)
