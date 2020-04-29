@@ -4,7 +4,7 @@ object Dependencies {
 
   val scala_major = 2.12
 
-  val scala_minor = 8
+  val scala_minor = 10
 
   val scala = s"$scala_major.$scala_minor"
 
@@ -86,13 +86,15 @@ object Dependencies {
     "ws.unfiltered"          %% "unfiltered-jetty"  % "0.9.1",
     "org.apache.commons"     % "commons-math3"      % "3.6.1",
     "commons-io"             % "commons-io"         % "2.6",
-    "com.github.nscala-time" %% "nscala-time"       % "2.22.0",
-    "jline"                  % "jline"              % "2.14.6"
+    "com.github.nscala-time" %% "nscala-time"       % "2.24.0",
+    "jline"                  % "jline"              % "2.14.6",
+    "com.lihaoyi"            %% "pprint"            % "0.5.9",
+    "com.lihaoyi"            %% "os-lib"            % "0.7.0"
   )
 
   val testSuiteDependencies = Seq(
-    "junit"         % "junit"      % "4.13"  % "test",
-    "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+    "junit"         % "junit"      % "4.12"  % "test",
+    "org.scalatest" %% "scalatest" % "3.1.1" % "test"
   )
 
   val excludeSlf4jBindings = Seq(
@@ -105,8 +107,8 @@ object Dependencies {
     "javax.servlet"                % "javax.servlet-api"     % "4.0.1" % "test",
     "org.apache.spark"             %% "spark-core"           % "2.4.4",
     "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
-    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.1",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.1"
+    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.10.3",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.10.3"
   ).map(
     _.withExclusions(
       Vector(
@@ -130,12 +132,12 @@ object Dependencies {
   val chartsDependencies = Seq(
     "com.github.wookietreiber" %% "scala-chart" % "0.5.1" % "compile",
     "org.jzy3d"                % "jzy3d-api"    % "1.0.2" % "compile",
-    "com.cibo"                 %% "evilplot"    % "0.7.0"
+    "com.cibo"                 %% "evilplot"    % "0.8.0"
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "2.0.1" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "2.0.1" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "2.1.1" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "2.1.1" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.6")
@@ -158,9 +160,9 @@ object Dependencies {
   )
 
   val dynaServeDependencies = Seq(
-    "com.typesafe.akka" %% "akka-actor"           % "2.5.26",
-    "com.typesafe.akka" %% "akka-stream"          % "2.5.26",
-    "com.typesafe.akka" %% "akka-testkit"         % "2.5.26",
+    "com.typesafe.akka" %% "akka-actor"           % "2.6.1",
+    "com.typesafe.akka" %% "akka-stream"          % "2.6.1",
+    "com.typesafe.akka" %% "akka-testkit"         % "2.6.1",
     "com.typesafe.akka" %% "akka-http"            % "10.1.11",
     "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.11",
     "com.typesafe.akka" %% "akka-http-testkit"    % "10.1.11"
@@ -195,15 +197,15 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC5-4",
-    "io.get-coursier" % "interface" % "0.0.16"
+    "io.get-coursier" %% "coursier" % "2.0.0-RC6-13",
+    "io.get-coursier" % "interface" % "0.0.22"
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter" % "0.8.3" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"  % "0.8.3" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"            % "0.8.3",
-    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M9+37-9565c694-SNAPSHOT"
+    "sh.almond"                  %% "scala-interpreter" % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"  % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"            % "0.9.1+67-7a26185d-SNAPSHOT",
+    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M16+8-da5c4065-SNAPSHOT"
   )
 
   val pipesDependencies = (
@@ -227,7 +229,6 @@ object Dependencies {
       rPackages ++
       imageDependencies ++
       dataFormatDependencies ++
-      ammoniteDeps ++
       scalaStan ++
       testSuiteDependencies
   ).map(
@@ -237,8 +238,7 @@ object Dependencies {
   val replDependencies = baseDependencies ++ ammoniteDeps ++ commons_io ++ coursier_deps ++ testSuiteDependencies
 
   val notebookDepencencies =
-    ammoniteDeps ++
-      almond ++
+    almond ++
       loggingDependency ++
       Seq(
         "org.slf4j" % "slf4j-api"     % "2.0.0-alpha1",

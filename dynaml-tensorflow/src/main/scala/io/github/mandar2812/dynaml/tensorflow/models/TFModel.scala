@@ -18,7 +18,7 @@ under the License.
  * */
 package io.github.mandar2812.dynaml.tensorflow.models
 
-import ammonite.ops.Path
+import os.Path
 import io.github.mandar2812.dynaml.pipes._
 import io.github.mandar2812.dynaml.models._
 import io.github.mandar2812.dynaml.tensorflow.data.DataSet

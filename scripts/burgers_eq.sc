@@ -14,7 +14,7 @@ import _root_.io.github.mandar2812.dynaml.tensorflow.pde.{source => q, _}
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer
 import _root_.io.github.mandar2812.dynaml.repl.Router.main
-import ammonite.ops.home
+import ammonite.ops._
 import org.joda.time.DateTime
 import _root_.org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
@@ -102,8 +102,9 @@ def plot_field_snapshots(
     .sortBy(_._1)
 
 }
+
 @main
-def apply(
+def solve_1d(
   num_data: Int = 100,
   num_colocation_points: Int = 10000,
   num_neurons: Seq[Int] = Seq(5, 5),
@@ -171,8 +172,8 @@ def apply(
 
   val architecture =
     dtflearn.feedforward_stack[Float](
-      (i: Int) =>
-        if (i == 1) tf.learn.ReLU(s"Act_$i") else tf.learn.Sigmoid(s"Act_$i")
+      (i: Int) => tf.learn.ReLU(s"Act_$i")
+        //if (i == 1) tf.learn.ReLU(s"Act_$i") else tf.learn.Sigmoid(s"Act_$i")
     )(num_neurons ++ Seq(1))
 
   val (_, layer_shapes, layer_parameter_names, layer_datatypes) =
@@ -257,7 +258,7 @@ def apply(
       dtflearn.model.data_ops(
         training_data.size / 10,
         training_data.size / 4,
-        50
+        10
       ),
       optimizer,
       dtflearn.abs_loss_change_stop(0.001, iterations),
@@ -291,7 +292,7 @@ def apply(
 
 }
 
-def two_d(
+def solve_2d(
   num_data: Int = 100,
   num_colocation_points: Int = 10000,
   num_neurons: Seq[Int] = Seq(5, 5),
