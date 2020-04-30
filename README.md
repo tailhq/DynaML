@@ -50,7 +50,7 @@ DynaML is a Scala & JVM Machine Learning toolbox for research, education & indus
 
 Currently, only *nix and OSX platforms are supported.
 
-DynaML is compatible with Scala `2.11`
+DynaML is compatible with Scala `2.12`
 
 ### Installation
 
