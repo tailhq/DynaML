@@ -130,9 +130,10 @@ object Dependencies {
   ).map(_.withExclusions(Vector("org.spire-math" %% "spire")))
 
   val chartsDependencies = Seq(
-    "com.github.wookietreiber" %% "scala-chart" % "0.5.1" % "compile",
-    "org.jzy3d"                % "jzy3d-api"    % "1.0.2" % "compile",
-    "com.cibo"                 %% "evilplot"    % "0.8.0"
+    "com.github.wookietreiber" %% "scala-chart"   % "0.5.1" % "compile",
+    "org.jzy3d"                % "jzy3d-api"      % "1.0.2" % "compile",
+    "com.cibo"                 %% "evilplot"      % "0.8.0",
+    "com.cibo"                 %% "evilplot-repl" % "0.8.0"
   )
 
   val ammoniteDeps = Seq(
@@ -202,10 +203,11 @@ object Dependencies {
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter" % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"  % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"            % "0.9.1+67-7a26185d-SNAPSHOT",
-    "com.github.alexarchambault" %% "case-app"          % "2.0.0-M16+8-da5c4065-SNAPSHOT"
+    "sh.almond"                  %% "scala-interpreter"      % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"       % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"                 % "0.9.1+67-7a26185d-SNAPSHOT",
+    "com.github.alexarchambault" %% "case-app"               % "2.0.0-M16+8-da5c4065-SNAPSHOT",
+    "com.cibo"                   %% "evilplot-jupyter-scala" % "0.8.0"
   )
 
   val pipesDependencies = (
