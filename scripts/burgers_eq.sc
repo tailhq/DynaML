@@ -13,7 +13,6 @@ import _root_.io.github.mandar2812.dynaml.tensorflow.layers.{
 import _root_.io.github.mandar2812.dynaml.tensorflow.pde.{source => q, _}
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer
-import _root_.io.github.mandar2812.dynaml.repl.Router.main
 import ammonite.ops._
 import org.joda.time.DateTime
 import _root_.org.platanios.tensorflow.api._
@@ -102,7 +101,18 @@ def plot_field_snapshots(
 
 }
 
-@main
+def get_points(x: Tensor[Float], t: Tensor[Float]): Seq[Seq[Double]] =
+    (0 until x.shape(0)).map(row => {
+
+        val inputs = (
+          x(row, 0).scalar.asInstanceOf[Double],
+          x(row, 1).scalar.asInstanceOf[Double]
+        )
+        val output = t(row).scalar.asInstanceOf[Double]
+
+        Seq(inputs._1, inputs._2, output)
+    })
+
 def solve_1d(
   num_data: Int = 100,
   num_colocation_points: Int = 10000,
@@ -112,8 +122,8 @@ def solve_1d(
   reg: Double = 0.001,
   reg_sources: Double = 0.001,
   pde_wt: Double = 1.5,
-  vis: Double = 0.5,
-  q_scheme: String = "GL",
+  viscosity_param: Double = 0.5,
+  quadrature_scheme: String = "GL",
   tempdir: Path = home / "tmp"
 ) = {
 
@@ -130,7 +140,7 @@ def solve_1d(
 
   val output_dim: Int = 1
 
-  val nu = vis.toFloat
+  val nu = viscosity_param.toFloat
 
   val u = 2.5f
 
@@ -194,7 +204,7 @@ def solve_1d(
   val burgers_equation =
     d_t + (d_s * I[Float, Float]()) - (d_s(d_s) * viscosity)
 
-  val (quadrature_space, quadrature_time) = if (q_scheme == "MonteCarlo") {
+  val (quadrature_space, quadrature_time) = if (quadrature_scheme == "MonteCarlo") {
     (
       analysis.monte_carlo_quadrature(
         UniformRV(domain._1, domain._2)
@@ -302,8 +312,8 @@ def solve_2d(
   reg: Double = 0.001,
   reg_sources: Double = 0.001,
   pde_wt: Double = 1.5,
-  vis: Double = 0.5,
-  q_scheme: String = "GL",
+  viscosity_param: Double = 0.5,
+  quadrature_scheme: String = "GL",
   tempdir: Path = home / "tmp"
 ) = {
 
@@ -320,7 +330,7 @@ def solve_2d(
 
   val output_dim: Int = 1
 
-  val nu = vis.toFloat
+  val nu = viscosity_param.toFloat
 
   val u = 2.5f
 
@@ -403,7 +413,7 @@ def solve_2d(
   val burgers_equation =
     d_t + (d_x * I[Float, Float]()) - (d_x(d_x) + d_y(d_y)) * viscosity
 
-  val (quadrature_space, quadrature_time) = if (q_scheme == "MonteCarlo") {
+  val (quadrature_space, quadrature_time) = if (quadrature_scheme == "MonteCarlo") {
     val time_n = UniformRV(time_domain._1, time_domain._2)
       .iid(math.pow(num_colocation_points, 1d / input_dim).toInt)
       .draw

@@ -55,9 +55,11 @@
   val optimizer = tf.train.Adam(0.1f)
 
   val cifar_model =
-    dtflearn.model[Output[UByte], Output[Long], Output[Float], Float, Tensor[
-      UByte
-    ], UINT8, Shape, Tensor[Long], INT64, Shape, Tensor[Float], FLOAT32, Shape](
+    dtflearn.model[
+      Output[UByte], Output[Long], Output[Float], Float, 
+      Tensor[UByte], UINT8, Shape, 
+      Tensor[Long], INT64, Shape, 
+      Tensor[Float], FLOAT32, Shape](
       architecture,
       (UINT8, dataSet.trainImages.shape(1 ::)),
       (INT64, Shape()),
