@@ -206,7 +206,7 @@ object Dependencies {
     "sh.almond"                  %% "scala-interpreter"      % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
     "sh.almond"                  %% "scala-kernel-api"       % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
     "sh.almond"                  %% "kernel"                 % "0.9.1+67-7a26185d-SNAPSHOT",
-    "com.github.alexarchambault" %% "case-app"               % "2.0.0-M16+8-da5c4065-SNAPSHOT",
+    "com.github.alexarchambault" %% "case-app"               % "2.0.0-M16+14-35f9f50e-SNAPSHOT",
     "com.cibo"                   %% "evilplot-jupyter-scala" % "0.8.0"
   )
 
