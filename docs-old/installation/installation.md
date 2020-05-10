@@ -22,7 +22,7 @@ Currently DynaML installs and runs on \*nix platforms.
       * `sbt-shell.sh`: This starts the sbt shell, for build/compile/test workflows.
 
     ```shell
-    ./install.sh 8096m
+    $ ./install.sh 8096m
     ```
 
     `sbt-shell.sh` and `install.sh` both take three parameters.
@@ -59,11 +59,18 @@ Currently DynaML installs and runs on \*nix platforms.
 
 ## Steps
 
-1. Clone this repository
+1. Clone the repository.
+
+  ```shell
+  $ git clone https://github.com/transcendent-ai-labs/DynaML.git
+  ```
+
 2. Use the sbt shell launcher `sbt-shell.sh`:
 
     ```shell
-    ./sbt-shell.sh 8096m True True
+    # Build with GPU support and use user-built 
+    # Tensorflow binary (accessible in LD_LIBRARY_PATH)
+    $ ./sbt-shell.sh 8096m True True
     ```
 
     The sbt shell will open
@@ -85,7 +92,7 @@ Currently DynaML installs and runs on \*nix platforms.
 
 
     ```
-    ./target/universal/stage/bin/dynaml
+    $ ./target/universal/stage/bin/dynaml
     ```
 
     You should see the prompt.
