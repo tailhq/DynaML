@@ -2236,7 +2236,7 @@
 <li><code>install.sh</code>: This builds the binary and adds a symlink to the system path (sudo priviledges needed).</li>
 <li><code>sbt-shell.sh</code>: This starts the sbt shell, for build/compile/test workflows.</li>
 </ul>
-<div class="highlight"><pre><span></span><code>./install.sh 8096m
+<div class="highlight"><pre><span></span><code>$ ./install.sh 8096m
 </code></pre></div>
 
 <p><code>sbt-shell.sh</code> and <code>install.sh</code> both take three parameters.</p>
@@ -2274,10 +2274,15 @@ for your GPU to be actually utilised, you must ensure that:</p>
 </div>
 <h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Clone this repository</li>
+<li>Clone the repository.</li>
+</ol>
+<div class="highlight"><pre><span></span><code>$ git clone https://github.com/transcendent-ai-labs/DynaML.git
+</code></pre></div>
+
+<ol>
 <li>
 <p>Use the sbt shell launcher <code>sbt-shell.sh</code>:</p>
-<div class="highlight"><pre><span></span><code>./sbt-shell.sh 8096m True True
+<div class="highlight"><pre><span></span><code>$ ./sbt-shell.sh 8096m True True
 </code></pre></div>
 
 <p>The sbt shell will open</p>
@@ -2295,7 +2300,7 @@ sbt:DynaML&gt;
 </li>
 <li>
 <p>After the project builds, exit from the sbt console and execute the DynaML start script from the bash shell. Make sure you have execute permissions on the DynaML start script.</p>
-<div class="highlight"><pre><span></span><code>./target/universal/stage/bin/dynaml
+<div class="highlight"><pre><span></span><code>$ ./target/universal/stage/bin/dynaml
 </code></pre></div>
 
 <p>You should see the prompt.</p>
