@@ -94,7 +94,7 @@ object Dependencies {
 
   val testSuiteDependencies = Seq(
     "junit"         % "junit"      % "4.13"  % "test",
-    "org.scalatest" %% "scalatest" % "3.1.1" % "test"
+    "org.scalatest" %% "scalatest" % "3.1.2" % "test"
   )
 
   val excludeSlf4jBindings = Seq(
