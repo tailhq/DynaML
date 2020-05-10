@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -57,16 +57,45 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-59996358-2", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -79,24 +108,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -104,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#feed-forward-network" tabindex="1" class="md-skip">
+      <a href="#feed-forward-network" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,9 +125,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-header-nav__button md-logo">
+        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" aria-label="DynaML User Guide" class="md-header-nav__button md-logo">
           
-            <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
+            <img alt="logo" src="../../images/dynaml_logo3_small.png" width="24" height="24">
           
         </a>
       </div>
@@ -125,27 +137,26 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                DynaML User Guide
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              DynaML User Guide
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Old Neural Net API
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -163,7 +174,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -174,20 +184,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
           </div>
         </div>
       
@@ -200,7 +208,7 @@
         
       
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -211,7 +219,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-nav__button md-logo">
       
-        <img src="../../images/dynaml_logo3_small.png" width="48" height="48">
+        <img alt="logo" src="../../images/dynaml_logo3_small.png" width="48" height="48">
       
     </a>
     DynaML User Guide
@@ -223,20 +231,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -1338,7 +1344,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#feed-forward-network" title="Feed-forward Network" class="md-nav__link">
+  <a href="#feed-forward-network" class="md-nav__link">
     Feed-forward Network
   </a>
   
@@ -1346,14 +1352,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#network-graph" title="Network graph" class="md-nav__link">
+  <a href="#network-graph" class="md-nav__link">
     Network graph
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#model-building" title="Model Building" class="md-nav__link">
+  <a href="#model-building" class="md-nav__link">
     Model Building
   </a>
   
@@ -1365,7 +1371,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sparse-autoencoder" title="Sparse Autoencoder" class="md-nav__link">
+  <a href="#sparse-autoencoder" class="md-nav__link">
     Sparse Autoencoder
   </a>
   
@@ -1373,14 +1379,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#creation" title="Creation" class="md-nav__link">
+  <a href="#creation" class="md-nav__link">
     Creation
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#training" title="Training" class="md-nav__link">
+  <a href="#training" class="md-nav__link">
     Training
   </a>
   
@@ -1396,7 +1402,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2191,7 +2197,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#feed-forward-network" title="Feed-forward Network" class="md-nav__link">
+  <a href="#feed-forward-network" class="md-nav__link">
     Feed-forward Network
   </a>
   
@@ -2199,14 +2205,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#network-graph" title="Network graph" class="md-nav__link">
+  <a href="#network-graph" class="md-nav__link">
     Network graph
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#model-building" title="Model Building" class="md-nav__link">
+  <a href="#model-building" class="md-nav__link">
     Model Building
   </a>
   
@@ -2218,7 +2224,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sparse-autoencoder" title="Sparse Autoencoder" class="md-nav__link">
+  <a href="#sparse-autoencoder" class="md-nav__link">
     Sparse Autoencoder
   </a>
   
@@ -2226,14 +2232,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#creation" title="Creation" class="md-nav__link">
+  <a href="#creation" class="md-nav__link">
     Creation
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#training" title="Training" class="md-nav__link">
+  <a href="#training" class="md-nav__link">
     Training
   </a>
   
@@ -2249,7 +2255,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2284,89 +2290,59 @@
 </ul>
 <h3 id="network-graph">Network graph<a class="headerlink" href="#network-graph" title="Permanent link">&para;</a></h3>
 <p>A standard feedforward network can be created by first initializing the network architecture/graph.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">gr</span> <span class="k">=</span> <span class="nc">FFNeuralGraph</span><span class="o">(</span><span class="n">num_inputs</span> <span class="k">=</span> <span class="mi">3</span><span class="o">,</span> <span class="n">num_outputs</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">gr</span> <span class="k">=</span> <span class="nc">FFNeuralGraph</span><span class="o">(</span><span class="n">num_inputs</span> <span class="k">=</span> <span class="mi">3</span><span class="o">,</span> <span class="n">num_outputs</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
 <span class="n">hidden_layers</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="s">&quot;logsig&quot;</span><span class="o">,</span> <span class="s">&quot;linear&quot;</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <p>This creates a neural network graph with one hidden layer, 3 input nodes, 1 output node and assigns sigmoid activation in the hidden layer. It also creates 5 neurons in the hidden layer.</p>
 <p>Next we create a data transform pipe which converts instances of the data input-output patterns to <code>(DenseVector[Double], DenseVector[Double])</code>, this is required in many data processing applications where the data structure storing the training data is not a <a href="https://github.com/scalanlp/breeze">breeze</a> vector.</p>
 <p>Lets say we have data in the form <code>trainingdata: Stream[(DenseVector[Double], Double)]</code>, i.e. we have input features as breeze vectors and scalar output values which help the network learn an unknown function. We can write the transform as.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">transform</span> <span class="k">=</span> <span class="nc">DataPipe</span><span class="o">(</span>
-    <span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)])</span> <span class="k">=&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">transform</span> <span class="k">=</span> <span class="nc">DataPipe</span><span class="o">(</span>
+    <span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span><span class="p">,</span> <span class="kt">Double</span><span class="o">)])</span> <span class="k">=&gt;</span>
         <span class="n">d</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">el</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">el</span><span class="o">.</span><span class="n">_1</span><span class="o">,</span> <span class="nc">DenseVector</span><span class="o">(</span><span class="n">el</span><span class="o">.</span><span class="n">_2</span><span class="o">)))</span>
 <span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <h3 id="model-building">Model Building<a class="headerlink" href="#model-building" title="Permanent link">&para;</a></h3>
 <p>We are now in a position to initialize a feed forward neural network model.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">FeedForwardNetwork</span><span class="o">[</span>
-    <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">Double</span><span class="o">)]</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">FeedForwardNetwork</span><span class="o">[</span>
+    <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span><span class="p">,</span> <span class="kt">Double</span><span class="o">)]</span>
 <span class="o">](</span><span class="n">trainingdata</span><span class="o">,</span> <span class="n">gr</span><span class="o">,</span> <span class="n">transform</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <p>Here the variable <code>trainingdata</code> represents the training input output pairs, which must conform to the type argument given in square brackets (i.e. <code>Stream[(DenseVector[Double], Double)]</code>).</p>
 <p>Training the model using back propagation can be done as follows, you can set custom values for the backpropagation parameters like the learning rate, momentum factor, mini batch fraction, regularization and number of learning iterations.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">setLearningRate</span><span class="o">(</span><span class="mf">0.09</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">model</span><span class="o">.</span><span class="n">setLearningRate</span><span class="o">(</span><span class="mf">0.09</span><span class="o">)</span>
    <span class="o">.</span><span class="n">setMaxIterations</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span>
    <span class="o">.</span><span class="n">setBatchFraction</span><span class="o">(</span><span class="mf">0.85</span><span class="o">)</span>
    <span class="o">.</span><span class="n">setMomentum</span><span class="o">(</span><span class="mf">0.45</span><span class="o">)</span>
    <span class="o">.</span><span class="n">setRegParam</span><span class="o">(</span><span class="mf">0.0001</span><span class="o">)</span>
    <span class="o">.</span><span class="n">learn</span><span class="o">()</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <p>The trained model can now be used for prediction, by using either the <code>predict()</code> method or the <code>feedForward()</code> value member both of which are members of <code>FeedForwardNetwork</code> (refer to the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.FeedForwardNetwork">api</a> docs for more details).</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">pattern</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">(</span><span class="mf">2.0</span><span class="o">,</span> <span class="mf">3.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">pattern</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">(</span><span class="mf">2.0</span><span class="o">,</span> <span class="mf">3.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">prediction</span> <span class="k">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="o">(</span><span class="n">pattern</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <h2 id="sparse-autoencoder">Sparse Autoencoder<a class="headerlink" href="#sparse-autoencoder" title="Permanent link">&para;</a></h2>
 <p><a href="https://web.stanford.edu/class/cs294a/sparseAutoencoder.pdf">Sparse autoencoders</a> are a feedforward architecture that are useful for unsupervised feature learning. They learn a compressed (or expanded) vector representation of the original data features. This process is known by various terms like <em>feature learning</em>, <em>feature engineering</em>, <em>representation learning</em> etc. Autoencoders are amongst several models used for feature learning. Other notable examples include <em>convolutional neural networks</em> (CNN), <em>principal component analysis</em> (PCA), <em>Singular Value Decomposition</em> (PCA) (a variant of  PCA), <em>Discrete Wavelet Transform</em> (DWT), etc.</p>
 <h3 id="creation">Creation<a class="headerlink" href="#creation" title="Permanent link">&para;</a></h3>
 <p>Autoencoders can be created using the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder"><code>AutoEncoder</code></a> class. Its constructor has the following arguments.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.models.neuralnets._</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.models.neuralnets._</span>
 <span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._</span>
 <span class="k">import</span> <span class="nn">io.github.mandar2812.dynaml.optimization.BackPropagation</span>
 
 <span class="c1">//Cast the training data as a stream of (x,x),</span>
 <span class="c1">//where x are the DenseVector of features</span>
-<span class="k">val</span> <span class="n">trainingData</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>, <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]</span> <span class="k">=</span> <span class="o">...</span>
+<span class="k">val</span> <span class="n">trainingData</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span><span class="p">,</span> <span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])]</span> <span class="k">=</span> <span class="o">...</span>
 
 <span class="k">val</span> <span class="n">testData</span> <span class="k">=</span> <span class="o">...</span>
 
 <span class="k">val</span> <span class="n">enc</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AutoEncoder</span><span class="o">(</span>
     <span class="n">inDim</span> <span class="k">=</span> <span class="n">trainingData</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">_1</span><span class="o">.</span><span class="n">length</span><span class="o">,</span>
     <span class="n">outDim</span> <span class="k">=</span> <span class="mi">4</span><span class="o">,</span> <span class="n">acts</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">SIGMOID</span><span class="o">,</span> <span class="nc">LIN</span><span class="o">))</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <h3 id="training">Training<a class="headerlink" href="#training" title="Permanent link">&para;</a></h3>
 <p>The training algorithm used is a modified version of standard back-propagation. The objective function can be seen as an addition of three terms.</p>
@@ -2397,21 +2373,7 @@ KL(\hat{\rho}\ ||\ \rho) &= \sum_{i = 1}^{n_h} \rho log(\frac{\rho}{\hat{\rho}_i
 <p><span><span class="MathJax_Preview">KL(\hat{\rho} \| \rho)</span><script type="math/tex">KL(\hat{\rho} \| \rho)</script></span> is the <a href="https://en.wikipedia.org/wiki/Kullback–Leibler_divergence"><em>Kullback Leibler</em></a> divergence, between the average activation (over all data instances <span><span class="MathJax_Preview">x \in \mathbf{X}</span><script type="math/tex">x \in \mathbf{X}</script></span>) of each hidden node and a specified value <span><span class="MathJax_Preview">\rho \in [0,1]</span><script type="math/tex">\rho \in [0,1]</script></span> which is also known as the <em>sparsity weight</em>.</p>
 </li>
 </ul>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Set sparsity parameter for back propagation</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//Set sparsity parameter for back propagation</span>
 <span class="nc">BackPropagation</span><span class="o">.</span><span class="n">rho</span> <span class="k">=</span> <span class="mf">0.5</span>
 
 <span class="n">enc</span><span class="o">.</span><span class="n">optimizer</span>
@@ -2426,10 +2388,10 @@ KL(\hat{\rho}\ ||\ \rho) &= \sum_{i = 1}^{n_h} \rho log(\frac{\rho}{\hat{\rho}_i
 <span class="k">val</span> <span class="n">metrics</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MultiRegressionMetrics</span><span class="o">(</span>
     <span class="n">testData</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">c</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">enc</span><span class="o">.</span><span class="n">i</span><span class="o">(</span><span class="n">enc</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="n">_1</span><span class="o">)),</span> <span class="n">c</span><span class="o">.</span><span class="n">_2</span><span class="o">)).</span><span class="n">toList</span><span class="o">,</span>
     <span class="n">testData</span><span class="o">.</span><span class="n">length</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
                 
                   
+                
                 
               
               
@@ -2505,39 +2467,32 @@ KL(\hat{\rho}\ ||\ \rho) &= \sum_{i = 1}^{n_h} \rho log(\frac{\rho}{\hat{\rho}_i
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/transcendent-ai-labs" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/transcendent-ai-labs" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
-      <a href="https://twitter.com/dyna_ml" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/dyna_ml" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-59996358-2","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>

@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -57,16 +57,45 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-59996358-2", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -79,24 +108,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -104,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#model-classes" tabindex="1" class="md-skip">
+      <a href="#model-classes" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,9 +125,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-header-nav__button md-logo">
+        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" aria-label="DynaML User Guide" class="md-header-nav__button md-logo">
           
-            <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
+            <img alt="logo" src="../../images/dynaml_logo3_small.png" width="24" height="24">
           
         </a>
       </div>
@@ -125,27 +137,26 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                DynaML User Guide
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              DynaML User Guide
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Model Hierarchy
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -163,7 +174,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -174,20 +184,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
           </div>
         </div>
       
@@ -200,7 +208,7 @@
         
       
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -211,7 +219,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-nav__button md-logo">
       
-        <img src="../../images/dynaml_logo3_small.png" width="48" height="48">
+        <img alt="logo" src="../../images/dynaml_logo3_small.png" width="48" height="48">
       
     </a>
     DynaML User Guide
@@ -223,20 +231,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -1161,14 +1167,14 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#model-classes" title="Model Classes" class="md-nav__link">
+  <a href="#model-classes" class="md-nav__link">
     Model Classes
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#parameterized-models" title="Parameterized Models" class="md-nav__link">
+  <a href="#parameterized-models" class="md-nav__link">
     Parameterized Models
   </a>
   
@@ -1176,7 +1182,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#linear-models" title="Linear Models" class="md-nav__link">
+  <a href="#linear-models" class="md-nav__link">
     Linear Models
   </a>
   
@@ -1188,7 +1194,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#stochastic-processes" title="Stochastic Processes" class="md-nav__link">
+  <a href="#stochastic-processes" class="md-nav__link">
     Stochastic Processes
   </a>
   
@@ -1196,14 +1202,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#continuous-processes" title="Continuous Processes" class="md-nav__link">
+  <a href="#continuous-processes" class="md-nav__link">
     Continuous Processes
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#second-order-processes" title="Second Order Processes" class="md-nav__link">
+  <a href="#second-order-processes" class="md-nav__link">
     Second Order Processes
   </a>
   
@@ -1215,7 +1221,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#meta-modelsmodel-ensembles" title="Meta Models/Model Ensembles" class="md-nav__link">
+  <a href="#meta-modelsmodel-ensembles" class="md-nav__link">
     Meta Models/Model Ensembles
   </a>
   
@@ -1226,7 +1232,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2196,14 +2202,14 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#model-classes" title="Model Classes" class="md-nav__link">
+  <a href="#model-classes" class="md-nav__link">
     Model Classes
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#parameterized-models" title="Parameterized Models" class="md-nav__link">
+  <a href="#parameterized-models" class="md-nav__link">
     Parameterized Models
   </a>
   
@@ -2211,7 +2217,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#linear-models" title="Linear Models" class="md-nav__link">
+  <a href="#linear-models" class="md-nav__link">
     Linear Models
   </a>
   
@@ -2223,7 +2229,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#stochastic-processes" title="Stochastic Processes" class="md-nav__link">
+  <a href="#stochastic-processes" class="md-nav__link">
     Stochastic Processes
   </a>
   
@@ -2231,14 +2237,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#continuous-processes" title="Continuous Processes" class="md-nav__link">
+  <a href="#continuous-processes" class="md-nav__link">
     Continuous Processes
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#second-order-processes" title="Second Order Processes" class="md-nav__link">
+  <a href="#second-order-processes" class="md-nav__link">
     Second Order Processes
   </a>
   
@@ -2250,7 +2256,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#meta-modelsmodel-ensembles" title="Meta Models/Model Ensembles" class="md-nav__link">
+  <a href="#meta-modelsmodel-ensembles" class="md-nav__link">
     Meta Models/Model Ensembles
   </a>
   
@@ -2261,7 +2267,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2284,16 +2290,16 @@
                   <h1>Model Hierarchy</h1>
                 
                 <h2 id="model-classes">Model Classes<a class="headerlink" href="#model-classes" title="Permanent link">&para;</a></h2>
-<p>In DynaML all model implementations fit into a well defined class hierarchy. In fact every DynaML machine learning model is an extension of the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.Model"><code class="codehilite"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span>,<span class="kt">Q</span>,<span class="kt">R</span><span class="o">]</span></code></a> trait.</p>
+<p>In DynaML all model implementations fit into a well defined class hierarchy. In fact every DynaML machine learning model is an extension of the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.Model"><code class="highlight"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span><span class="p">,</span><span class="kt">Q</span><span class="p">,</span><span class="kt">R</span><span class="o">]</span></code></a> trait.</p>
 <div class="admonition note">
-<p class="admonition-title"><code class="codehilite"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span>,<span class="kt">Q</span>,<span class="kt">R</span><span class="o">]</span></code></p>
-<p>The <code class="codehilite"><span class="nc">Model</span></code> trait is quite bare bones: machine learning models are viewed as objects containing two parts or components.</p>
+<p class="admonition-title"><code class="highlight"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span><span class="p">,</span><span class="kt">Q</span><span class="p">,</span><span class="kt">R</span><span class="o">]</span></code></p>
+<p>The <code class="highlight"><span class="nc">Model</span></code> trait is quite bare bones: machine learning models are viewed as objects containing two parts or components.</p>
 <ol>
 <li>
-<p>A training data set (of type <code class="codehilite"><span class="n">T</span></code>).  </p>
+<p>A training data set (of type <code class="highlight"><span class="n">T</span></code>).  </p>
 </li>
 <li>
-<p>A method <code class="codehilite"><span class="n">predict</span><span class="o">(</span><span class="n">point</span><span class="k">:</span> <span class="kt">Q</span><span class="o">)</span><span class="k">:</span><span class="kt">R</span></code> to generate a prediction of type <code class="codehilite"><span class="n">R</span></code> given a data point of type <code class="codehilite"><span class="n">Q</span></code>.</p>
+<p>A method <code class="highlight"><span class="n">predict</span><span class="o">(</span><span class="n">point</span><span class="k">:</span> <span class="kt">Q</span><span class="o">)</span><span class="k">:</span><span class="kt">R</span></code> to generate a prediction of type <code class="highlight"><span class="n">R</span></code> given a data point of type <code class="highlight"><span class="n">Q</span></code>.</p>
 </li>
 </ol>
 </div>
@@ -2301,10 +2307,10 @@
 <p>Many predictive models calculate predictions by formulating an expression which includes a set of parameters which are used along with the data points to generate predictions, the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ParameterizedLearner"><code>ParameterizedLearner[G, T, Q, R, S]</code></a> class represents a skeleton for all parametric machine learning models such as <a href="../core_glm/"><em>Generalized Linear Models</em></a>, <a href="../core_ann/"><em>Neural Networks</em></a>, etc.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The defining characteristic of classes which extend <code class="codehilite"><span class="nc">ParameterizedLearner</span></code> is that they must contain a member variable <code>optimizer: RegularizedOptimizer[T, Q, R, S]</code> which represents a <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">regularization enabled optimizer</a> implementation along with a <code class="codehilite"><span class="n">learn</span><span class="o">()</span></code> method which uses the optimizer member to calculate approximate values of the model parameters given the training data.</p>
+<p>The defining characteristic of classes which extend <code class="highlight"><span class="nc">ParameterizedLearner</span></code> is that they must contain a member variable <code>optimizer: RegularizedOptimizer[T, Q, R, S]</code> which represents a <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.RegularizedOptimizer">regularization enabled optimizer</a> implementation along with a <code class="highlight"><span class="n">learn</span><span class="o">()</span></code> method which uses the optimizer member to calculate approximate values of the model parameters given the training data.</p>
 </div>
 <h3 id="linear-models">Linear Models<a class="headerlink" href="#linear-models" title="Permanent link">&para;</a></h3>
-<p>Linear models; represented by the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.LinearModel"><code class="codehilite"><span class="nc">LinearModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">P</span>, <span class="kt">Q</span> , <span class="kt">R</span>, <span class="kt">S</span><span class="o">]</span></code></a> trait are extensions of <code class="codehilite"><span class="nc">ParameterizedLearner</span></code>, this top level trait is extended to yield many useful linear prediction models.</p>
+<p>Linear models; represented by the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.LinearModel"><code class="highlight"><span class="nc">LinearModel</span><span class="o">[</span><span class="kt">T</span><span class="p">,</span> <span class="kt">P</span><span class="p">,</span> <span class="kt">Q</span> <span class="p">,</span> <span class="kt">R</span><span class="p">,</span> <span class="kt">S</span><span class="o">]</span></code></a> trait are extensions of <code class="highlight"><span class="nc">ParameterizedLearner</span></code>, this top level trait is extended to yield many useful linear prediction models.</p>
 <p><a href="../core_glm/"><em>Generalized Linear Models</em></a> which are linear in parameters expression for the predictions <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> given a vector of processed features <span><span class="MathJax_Preview">\phi(x)</span><script type="math/tex">\phi(x)</script></span> or basis functions.</p>
 <div>
 <div class="MathJax_Preview">
@@ -2322,16 +2328,16 @@
 <p>Stochastic processes (or random functions) are general probabilistic models which can be used to construct finite dimensional distributions over a set of sampled domain points. More specifically a stochastic process is a probabilistic function <span><span class="MathJax_Preview">f(.)</span><script type="math/tex">f(.)</script></span> defined on any <em>domain</em> or <em>index set</em> <span><span class="MathJax_Preview">\mathcal{X}</span><script type="math/tex">\mathcal{X}</script></span> such that for any finite collection <span><span class="MathJax_Preview">x_i \in \mathcal{X}, i = 1 \cdots N</span><script type="math/tex">x_i \in \mathcal{X}, i = 1 \cdots N</script></span>, the finite dimensional distribution <span><span class="MathJax_Preview">P(f(x_1), \cdots, f(x_N))</span><script type="math/tex">P(f(x_1), \cdots, f(x_N))</script></span> is coherently defined.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcessModel"><code class="codehilite"><span class="nc">StochasticProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> trait extends <code class="codehilite"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span><span class="o">]</span></code> and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution <code class="codehilite"><span class="n">predictiveDistribution</span><span class="o">()</span></code>.</p>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.StochasticProcessModel"><code class="highlight"><span class="nc">StochasticProcessModel</span><span class="o">[</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="p">,</span> <span class="kt">Y</span><span class="p">,</span> <span class="kt">W</span><span class="o">]</span></code></a> trait extends <code class="highlight"><span class="nc">Model</span><span class="o">[</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="p">,</span> <span class="kt">Y</span><span class="o">]</span></code> and is the top level trait for the implementation of general stochastic processes. In order to extend it, one must implement among others a function to output the posterior predictive distribution <code class="highlight"><span class="n">predictiveDistribution</span><span class="o">()</span></code>.</p>
 </div>
 <h3 id="continuous-processes">Continuous Processes<a class="headerlink" href="#continuous-processes" title="Permanent link">&para;</a></h3>
-<p>By continuous processes, we mean processes whose values lie on a continuous domain (such as <span><span class="MathJax_Preview">\mathbb{R}^d</span><script type="math/tex">\mathbb{R}^d</script></span>). The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel"><code class="codehilite"><span class="nc">ContinuousProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">W</span><span class="o">]</span></code></a> abstract class provides a template which can be extended to implement continuous random process models.</p>
+<p>By continuous processes, we mean processes whose values lie on a continuous domain (such as <span><span class="MathJax_Preview">\mathbb{R}^d</span><script type="math/tex">\mathbb{R}^d</script></span>). The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel"><code class="highlight"><span class="nc">ContinuousProcessModel</span><span class="o">[</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="p">,</span> <span class="kt">Y</span><span class="p">,</span> <span class="kt">W</span><span class="o">]</span></code></a> abstract class provides a template which can be extended to implement continuous random process models.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel"><code class="codehilite"><span class="nc">ContinuousProcessModel</span></code></a> class contains the method <code>predictionWithErrorBars()</code> which takes inputs test data and number of standard deviations, and generates predictions with upper and lower error bars around them. In order to create a sub-class of <code class="codehilite"><span class="nc">ContinuousProcessModel</span></code>, you must implement the method <code>predictionWithErrorBars()</code>.</p>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ContinuousProcessModel"><code class="highlight"><span class="nc">ContinuousProcessModel</span></code></a> class contains the method <code>predictionWithErrorBars()</code> which takes inputs test data and number of standard deviations, and generates predictions with upper and lower error bars around them. In order to create a sub-class of <code class="highlight"><span class="nc">ContinuousProcessModel</span></code>, you must implement the method <code>predictionWithErrorBars()</code>.</p>
 </div>
 <h3 id="second-order-processes">Second Order Processes<a class="headerlink" href="#second-order-processes" title="Permanent link">&para;</a></h3>
-<p>Second order stochastic processes can be described by specifying the <em>mean</em> (first order statistic) and <em>variance</em> (second order statistic) of their finite dimensional distribution. The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcessModel"><code class="codehilite"><span class="nc">SecondOrderProcessModel</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">I</span>, <span class="kt">Y</span>, <span class="kt">K</span>, <span class="kt">M</span>, <span class="kt">W</span><span class="o">]</span></code></a> trait is an abstract skeleton which describes what elements a second order process model must have i.e. the mean and covariance functions.</p>
+<p>Second order stochastic processes can be described by specifying the <em>mean</em> (first order statistic) and <em>variance</em> (second order statistic) of their finite dimensional distribution. The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.SecondOrderProcessModel"><code class="highlight"><span class="nc">SecondOrderProcessModel</span><span class="o">[</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="p">,</span> <span class="kt">Y</span><span class="p">,</span> <span class="kt">K</span><span class="p">,</span> <span class="kt">M</span><span class="p">,</span> <span class="kt">W</span><span class="o">]</span></code></a> trait is an abstract skeleton which describes what elements a second order process model must have i.e. the mean and covariance functions.</p>
 <h2 id="meta-modelsmodel-ensembles">Meta Models/Model Ensembles<a class="headerlink" href="#meta-modelsmodel-ensembles" title="Permanent link">&para;</a></h2>
 <p>Meta models use predictions from several candidate models and derive a prediction that is a meaningful combination of the individual predictions. This may be achieved in several ways some of which are.</p>
 <ul>
@@ -2342,8 +2348,8 @@
 <p>Currently the DynaML API has the following classes providing capabilities of meta models.</p>
 <p><em>Abstract Classes</em></p>
 <ul>
-<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.MetaModel"><code class="codehilite"><span class="nc">MetaModel</span><span class="o">[</span><span class="kt">D</span>, <span class="kt">D1</span>, <span class="kt">BaseModel</span><span class="o">]</span></code></a></li>
-<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.CommitteeModel"><code class="codehilite"><span class="nc">CommitteeModel</span><span class="o">[</span><span class="kt">D</span>, <span class="kt">D1</span>, <span class="kt">BaseModel</span><span class="o">]</span></code></a></li>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.MetaModel"><code class="highlight"><span class="nc">MetaModel</span><span class="o">[</span><span class="kt">D</span><span class="p">,</span> <span class="kt">D1</span><span class="p">,</span> <span class="kt">BaseModel</span><span class="o">]</span></code></a></li>
+<li><a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.ensemble.CommitteeModel"><code class="highlight"><span class="nc">CommitteeModel</span><span class="o">[</span><span class="kt">D</span><span class="p">,</span> <span class="kt">D1</span><span class="p">,</span> <span class="kt">BaseModel</span><span class="o">]</span></code></a></li>
 </ul>
 <p><em>Implementations</em></p>
 <ul>
@@ -2352,6 +2358,7 @@
 </ul>
                 
                   
+                
                 
               
               
@@ -2427,39 +2434,32 @@
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/transcendent-ai-labs" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/transcendent-ai-labs" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
-      <a href="https://twitter.com/dyna_ml" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/dyna_ml" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-59996358-2","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>

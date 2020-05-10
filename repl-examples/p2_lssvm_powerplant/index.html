@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -57,16 +57,45 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-59996358-2", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -79,24 +108,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -104,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#daisy-system-identification-database" tabindex="1" class="md-skip">
+      <a href="#daisy-system-identification-database" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,9 +125,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-header-nav__button md-logo">
+        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" aria-label="DynaML User Guide" class="md-header-nav__button md-logo">
           
-            <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
+            <img alt="logo" src="../../images/dynaml_logo3_small.png" width="24" height="24">
           
         </a>
       </div>
@@ -125,27 +137,26 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                DynaML User Guide
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              DynaML User Guide
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Pont-sur-Sambre Power Plant
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -163,7 +174,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -174,20 +184,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
           </div>
         </div>
       
@@ -200,7 +208,7 @@
         
       
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -211,7 +219,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-nav__button md-logo">
       
-        <img src="../../images/dynaml_logo3_small.png" width="48" height="48">
+        <img alt="logo" src="../../images/dynaml_logo3_small.png" width="48" height="48">
       
     </a>
     DynaML User Guide
@@ -223,20 +231,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -1944,14 +1950,14 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#daisy-system-identification-database" title="DaISy: System Identification Database" class="md-nav__link">
+  <a href="#daisy-system-identification-database" class="md-nav__link">
     DaISy: System Identification Database
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#system-identification-models" title="System Identification Models" class="md-nav__link">
+  <a href="#system-identification-models" class="md-nav__link">
     System Identification Models
   </a>
   
@@ -1959,14 +1965,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#nonlinear-autoregresive-nar" title="Nonlinear AutoRegresive (NAR)" class="md-nav__link">
+  <a href="#nonlinear-autoregresive-nar" class="md-nav__link">
     Nonlinear AutoRegresive (NAR)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#nonlinear-autoregressive-with-exogenous-inputs-narx" title="Nonlinear AutoRegressive with eXogenous inputs (NARX)" class="md-nav__link">
+  <a href="#nonlinear-autoregressive-with-exogenous-inputs-narx" class="md-nav__link">
     Nonlinear AutoRegressive with eXogenous inputs (NARX)
   </a>
   
@@ -1978,7 +1984,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pont-sur-sambre-power-plant-data" title="Pont-sur-Sambre Power Plant Data" class="md-nav__link">
+  <a href="#pont-sur-sambre-power-plant-data" class="md-nav__link">
     Pont-sur-Sambre Power Plant Data
   </a>
   
@@ -1986,7 +1992,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#data-attributes" title="Data Attributes" class="md-nav__link">
+  <a href="#data-attributes" class="md-nav__link">
     Data Attributes
   </a>
   
@@ -1998,7 +2004,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#system-model" title="System Model" class="md-nav__link">
+  <a href="#system-model" class="md-nav__link">
     System Model
   </a>
   
@@ -2006,7 +2012,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#choice-of-kernel-function" title="Choice of Kernel Function" class="md-nav__link">
+  <a href="#choice-of-kernel-function" class="md-nav__link">
     Choice of Kernel Function
   </a>
   
@@ -2018,28 +2024,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#syntax" title="Syntax" class="md-nav__link">
+  <a href="#syntax" class="md-nav__link">
     Syntax
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#steam-pressure" title="Steam Pressure" class="md-nav__link">
+  <a href="#steam-pressure" class="md-nav__link">
     Steam Pressure
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reheat-steam-temperature" title="Reheat Steam Temperature" class="md-nav__link">
+  <a href="#reheat-steam-temperature" class="md-nav__link">
     Reheat Steam Temperature
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#source-code" title="Source Code" class="md-nav__link">
+  <a href="#source-code" class="md-nav__link">
     Source Code
   </a>
   
@@ -2050,7 +2056,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2235,14 +2241,14 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#daisy-system-identification-database" title="DaISy: System Identification Database" class="md-nav__link">
+  <a href="#daisy-system-identification-database" class="md-nav__link">
     DaISy: System Identification Database
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#system-identification-models" title="System Identification Models" class="md-nav__link">
+  <a href="#system-identification-models" class="md-nav__link">
     System Identification Models
   </a>
   
@@ -2250,14 +2256,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#nonlinear-autoregresive-nar" title="Nonlinear AutoRegresive (NAR)" class="md-nav__link">
+  <a href="#nonlinear-autoregresive-nar" class="md-nav__link">
     Nonlinear AutoRegresive (NAR)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#nonlinear-autoregressive-with-exogenous-inputs-narx" title="Nonlinear AutoRegressive with eXogenous inputs (NARX)" class="md-nav__link">
+  <a href="#nonlinear-autoregressive-with-exogenous-inputs-narx" class="md-nav__link">
     Nonlinear AutoRegressive with eXogenous inputs (NARX)
   </a>
   
@@ -2269,7 +2275,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pont-sur-sambre-power-plant-data" title="Pont-sur-Sambre Power Plant Data" class="md-nav__link">
+  <a href="#pont-sur-sambre-power-plant-data" class="md-nav__link">
     Pont-sur-Sambre Power Plant Data
   </a>
   
@@ -2277,7 +2283,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#data-attributes" title="Data Attributes" class="md-nav__link">
+  <a href="#data-attributes" class="md-nav__link">
     Data Attributes
   </a>
   
@@ -2289,7 +2295,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#system-model" title="System Model" class="md-nav__link">
+  <a href="#system-model" class="md-nav__link">
     System Model
   </a>
   
@@ -2297,7 +2303,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#choice-of-kernel-function" title="Choice of Kernel Function" class="md-nav__link">
+  <a href="#choice-of-kernel-function" class="md-nav__link">
     Choice of Kernel Function
   </a>
   
@@ -2309,28 +2315,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#syntax" title="Syntax" class="md-nav__link">
+  <a href="#syntax" class="md-nav__link">
     Syntax
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#steam-pressure" title="Steam Pressure" class="md-nav__link">
+  <a href="#steam-pressure" class="md-nav__link">
     Steam Pressure
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reheat-steam-temperature" title="Reheat Steam Temperature" class="md-nav__link">
+  <a href="#reheat-steam-temperature" class="md-nav__link">
     Reheat Steam Temperature
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#source-code" title="Source Code" class="md-nav__link">
+  <a href="#source-code" class="md-nav__link">
     Source Code
   </a>
   
@@ -2341,7 +2347,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2485,37 +2491,24 @@
 </script>
 </div>
 <h2 id="syntax">Syntax<a class="headerlink" href="#syntax" title="Permanent link">&para;</a></h2>
-<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-examples/index.html#io.github.mandar2812.dynaml.examples.DaisyPowerPlant$"><code class="codehilite"><span class="nc">DaisyPowerPlant</span></code></a> program can be used to train and test LS-SVM models on the Pont Sur-Sambre power plant data.</p>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-examples/index.html#io.github.mandar2812.dynaml.examples.DaisyPowerPlant$"><code class="highlight"><span class="nc">DaisyPowerPlant</span></code></a> program can be used to train and test LS-SVM models on the Pont Sur-Sambre power plant data.</p>
 <p>Parameter | Type | Default value |Notes
 --------|-----------|-----------|------------|
-kernel | <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction"><code class="codehilite"><span class="nc">CovarianceFunction</span></code></a> | - | The kernel function driving the LS-SVM model.
-deltaT | <code class="codehilite"><span class="nc">Int</span></code> | 2 | Order of auto-regressive model i.e. number of steps in the past to look for input features.
-timelag | <code class="codehilite"><span class="nc">Int</span></code> | 0 | The number of steps in the past to start using inputs.
-num_training | <code class="codehilite"><span class="nc">Int</span></code> | 150 | Number of training data instances.
-column| <code class="codehilite"><span class="nc">Int</span></code> | 7 | The column number of the output variable (indexed from 0).<br />
-opt | <code class="codehilite"><span class="nc">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]</span></code>| - | Extra options for model selection routine.</p>
+kernel | <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction"><code class="highlight"><span class="nc">CovarianceFunction</span></code></a> | - | The kernel function driving the LS-SVM model.
+deltaT | <code class="highlight"><span class="nc">Int</span></code> | 2 | Order of auto-regressive model i.e. number of steps in the past to look for input features.
+timelag | <code class="highlight"><span class="nc">Int</span></code> | 0 | The number of steps in the past to start using inputs.
+num_training | <code class="highlight"><span class="nc">Int</span></code> | 150 | Number of training data instances.
+column| <code class="highlight"><span class="nc">Int</span></code> | 7 | The column number of the output variable (indexed from 0).<br />
+opt | <code class="highlight"><span class="nc">Map</span><span class="o">[</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Double</span><span class="o">]</span></code>| - | Extra options for model selection routine.</p>
 <h2 id="steam-pressure">Steam Pressure<a class="headerlink" href="#steam-pressure" title="Permanent link">&para;</a></h2>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">DynaML</span><span class="o">&gt;</span><span class="nc">DaisyPowerPlant</span><span class="o">(</span><span class="k">new</span> <span class="nc">PolynomialKernel</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">0.5</span><span class="o">),</span>
+<div class="highlight"><pre><span></span><code><span class="nc">DynaML</span><span class="o">&gt;</span><span class="nc">DaisyPowerPlant</span><span class="o">(</span><span class="k">new</span> <span class="nc">PolynomialKernel</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">0.5</span><span class="o">),</span>
 <span class="n">opt</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;regularization&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;2.5&quot;</span><span class="o">,</span> <span class="s">&quot;globalOpt&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;GS&quot;</span><span class="o">,</span>
 <span class="s">&quot;grid&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;4&quot;</span><span class="o">,</span> <span class="s">&quot;step&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;0.1&quot;</span><span class="o">),</span>
 <span class="n">num_training</span> <span class="k">=</span> <span class="mi">100</span><span class="o">,</span> <span class="n">deltaT</span> <span class="k">=</span> <span class="mi">2</span><span class="o">,</span>
 <span class="n">column</span> <span class="k">=</span> <span class="mi">6</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="m">16</span>/03/04 <span class="m">17</span>:13:43 INFO RegressionMetrics: Regression Model Performance: steam pressure
+<div class="highlight"><pre><span></span><code><span class="m">16</span>/03/04 <span class="m">17</span>:13:43 INFO RegressionMetrics: Regression Model Performance: steam pressure
 <span class="m">16</span>/03/04 <span class="m">17</span>:13:43 INFO RegressionMetrics: <span class="o">============================</span>
 <span class="m">16</span>/03/04 <span class="m">17</span>:13:43 INFO RegressionMetrics: MAE: <span class="m">82</span>.12740530161123
 <span class="m">16</span>/03/04 <span class="m">17</span>:13:43 INFO RegressionMetrics: RMSE: <span class="m">104</span>.39251587470388
@@ -2524,31 +2517,18 @@ opt | <code class="codehilite"><span class="nc">Map</span><span class="o">[</spa
 <span class="m">16</span>/03/04 <span class="m">17</span>:13:43 INFO RegressionMetrics: Corr. Coefficient: <span class="m">0</span>.9311734118932473
 <span class="m">16</span>/03/04 <span class="m">17</span>:13:43 INFO RegressionMetrics: Model Yield: <span class="m">0</span>.6288000962818303
 <span class="m">16</span>/03/04 <span class="m">17</span>:13:43 INFO RegressionMetrics: Std Dev of Residuals: <span class="m">87</span>.82754320038951
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <p><img alt="Steam Pressure" src="/images/steampressure.png" /></p>
 <p><img alt="Steam Pressure" src="/images/steampressure-fit.png" /></p>
 <h2 id="reheat-steam-temperature">Reheat Steam Temperature<a class="headerlink" href="#reheat-steam-temperature" title="Permanent link">&para;</a></h2>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nc">DaisyPowerPlant</span><span class="o">(</span><span class="k">new</span> <span class="nc">PolynomialKernel</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">1.5</span><span class="o">),</span>
+<div class="highlight"><pre><span></span><code><span class="nc">DaisyPowerPlant</span><span class="o">(</span><span class="k">new</span> <span class="nc">PolynomialKernel</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">1.5</span><span class="o">),</span>
 <span class="n">opt</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;regularization&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;2.5&quot;</span><span class="o">,</span> <span class="s">&quot;globalOpt&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;GS&quot;</span><span class="o">,</span>
 <span class="s">&quot;grid&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;4&quot;</span><span class="o">,</span> <span class="s">&quot;step&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;0.1&quot;</span><span class="o">),</span> <span class="n">num_training</span> <span class="k">=</span> <span class="mi">150</span><span class="o">,</span>
 <span class="n">deltaT</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">column</span> <span class="k">=</span> <span class="mi">8</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="m">16</span>/03/04 <span class="m">16</span>:50:42 INFO RegressionMetrics: Regression Model Performance: reheat steam temperature
+<div class="highlight"><pre><span></span><code><span class="m">16</span>/03/04 <span class="m">16</span>:50:42 INFO RegressionMetrics: Regression Model Performance: reheat steam temperature
 <span class="m">16</span>/03/04 <span class="m">16</span>:50:42 INFO RegressionMetrics: <span class="o">============================</span>
 <span class="m">16</span>/03/04 <span class="m">16</span>:50:42 INFO RegressionMetrics: MAE: <span class="m">124</span>.60921194767073
 <span class="m">16</span>/03/04 <span class="m">16</span>:50:42 INFO RegressionMetrics: RMSE: <span class="m">137</span>.33314302068544
@@ -2557,8 +2537,7 @@ opt | <code class="codehilite"><span class="nc">Map</span><span class="o">[</spa
 <span class="m">16</span>/03/04 <span class="m">16</span>:50:42 INFO RegressionMetrics: Corr. Coefficient: <span class="m">0</span>.9744133881055823
 <span class="m">16</span>/03/04 <span class="m">16</span>:50:42 INFO RegressionMetrics: Model Yield: <span class="m">0</span>.7871288689840381
 <span class="m">16</span>/03/04 <span class="m">16</span>:50:42 INFO RegressionMetrics: Std Dev of Residuals: <span class="m">111</span>.86852905896446
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <p><img alt="Steam Temp" src="/images/temperature.png" /></p>
 <p><img alt="Steam Temp" src="/images/temperature-fit.png" /></p>
@@ -2568,6 +2547,7 @@ opt | <code class="codehilite"><span class="nc">Map</span><span class="o">[</spa
 <script src="https://gist.github.com/mandar2812/eb23b47adad66deb2f65.js"></script>
                 
                   
+                
                 
               
               
@@ -2643,39 +2623,32 @@ opt | <code class="codehilite"><span class="nc">Map</span><span class="o">[</spa
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/transcendent-ai-labs" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/transcendent-ai-labs" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
-      <a href="https://twitter.com/dyna_ml" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/dyna_ml" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-59996358-2","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>

@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -57,16 +57,45 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-59996358-2", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -79,24 +108,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -104,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#stringfile-processing" tabindex="1" class="md-skip">
+      <a href="#stringfile-processing" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,9 +125,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-header-nav__button md-logo">
+        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" aria-label="DynaML User Guide" class="md-header-nav__button md-logo">
           
-            <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
+            <img alt="logo" src="../../images/dynaml_logo3_small.png" width="24" height="24">
           
         </a>
       </div>
@@ -125,27 +137,26 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                DynaML User Guide
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              DynaML User Guide
+            </span>
+            <span class="md-header-nav__topic">
+              
                 `utils` object
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -163,7 +174,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -174,20 +184,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
           </div>
         </div>
       
@@ -200,7 +208,7 @@
         
       
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -211,7 +219,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-nav__button md-logo">
       
-        <img src="../../images/dynaml_logo3_small.png" width="48" height="48">
+        <img alt="logo" src="../../images/dynaml_logo3_small.png" width="48" height="48">
       
     </a>
     DynaML User Guide
@@ -223,20 +231,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -1992,7 +1998,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stringfile-processing" title="String/File Processing" class="md-nav__link">
+  <a href="#stringfile-processing" class="md-nav__link">
     String/File Processing
   </a>
   
@@ -2000,28 +2006,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#load-file-into-a-stream" title="Load File into a Stream" class="md-nav__link">
+  <a href="#load-file-into-a-stream" class="md-nav__link">
     Load File into a Stream
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-replace" title="String Replace" class="md-nav__link">
+  <a href="#string-replace" class="md-nav__link">
     String Replace
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#url-download" title="URL download" class="md-nav__link">
+  <a href="#url-download" class="md-nav__link">
     URL download
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#write-to-file" title="Write to File" class="md-nav__link">
+  <a href="#write-to-file" class="md-nav__link">
     Write to File
   </a>
   
@@ -2033,7 +2039,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#numerics" title="Numerics" class="md-nav__link">
+  <a href="#numerics" class="md-nav__link">
     Numerics
   </a>
   
@@ -2041,49 +2047,49 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#log1p" title="log1p" class="md-nav__link">
+  <a href="#log1p" class="md-nav__link">
     log1p
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#haar-dwt-matrix" title="Haar DWT Matrix" class="md-nav__link">
+  <a href="#haar-dwt-matrix" class="md-nav__link">
     Haar DWT Matrix
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#hermite-polynomials" title="Hermite Polynomials" class="md-nav__link">
+  <a href="#hermite-polynomials" class="md-nav__link">
     Hermite Polynomials
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#chebyshev-polynomials" title="Chebyshev Polynomials" class="md-nav__link">
+  <a href="#chebyshev-polynomials" class="md-nav__link">
     Chebyshev Polynomials
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#quick-select" title="Quick Select" class="md-nav__link">
+  <a href="#quick-select" class="md-nav__link">
     Quick Select
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#median" title="Median" class="md-nav__link">
+  <a href="#median" class="md-nav__link">
     Median
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#sample-statistics" title="Sample Statistics" class="md-nav__link">
+  <a href="#sample-statistics" class="md-nav__link">
     Sample Statistics
   </a>
   
@@ -2099,7 +2105,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2236,7 +2242,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stringfile-processing" title="String/File Processing" class="md-nav__link">
+  <a href="#stringfile-processing" class="md-nav__link">
     String/File Processing
   </a>
   
@@ -2244,28 +2250,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#load-file-into-a-stream" title="Load File into a Stream" class="md-nav__link">
+  <a href="#load-file-into-a-stream" class="md-nav__link">
     Load File into a Stream
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-replace" title="String Replace" class="md-nav__link">
+  <a href="#string-replace" class="md-nav__link">
     String Replace
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#url-download" title="URL download" class="md-nav__link">
+  <a href="#url-download" class="md-nav__link">
     URL download
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#write-to-file" title="Write to File" class="md-nav__link">
+  <a href="#write-to-file" class="md-nav__link">
     Write to File
   </a>
   
@@ -2277,7 +2283,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#numerics" title="Numerics" class="md-nav__link">
+  <a href="#numerics" class="md-nav__link">
     Numerics
   </a>
   
@@ -2285,49 +2291,49 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#log1p" title="log1p" class="md-nav__link">
+  <a href="#log1p" class="md-nav__link">
     log1p
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#haar-dwt-matrix" title="Haar DWT Matrix" class="md-nav__link">
+  <a href="#haar-dwt-matrix" class="md-nav__link">
     Haar DWT Matrix
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#hermite-polynomials" title="Hermite Polynomials" class="md-nav__link">
+  <a href="#hermite-polynomials" class="md-nav__link">
     Hermite Polynomials
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#chebyshev-polynomials" title="Chebyshev Polynomials" class="md-nav__link">
+  <a href="#chebyshev-polynomials" class="md-nav__link">
     Chebyshev Polynomials
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#quick-select" title="Quick Select" class="md-nav__link">
+  <a href="#quick-select" class="md-nav__link">
     Quick Select
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#median" title="Median" class="md-nav__link">
+  <a href="#median" class="md-nav__link">
     Median
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#sample-statistics" title="Sample Statistics" class="md-nav__link">
+  <a href="#sample-statistics" class="md-nav__link">
     Sample Statistics
   </a>
   
@@ -2343,7 +2349,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2367,96 +2373,69 @@
                 
                 <div class="admonition summary">
 <p class="admonition-title">Summary</p>
-<p>The <code class="codehilite"><span class="n">utils</span></code> object contains some useful helper functions which are used by a number of API components of DynaML.</p>
+<p>The <code class="highlight"><span class="n">utils</span></code> object contains some useful helper functions which are used by a number of API components of DynaML.</p>
 </div>
 <h2 id="stringfile-processing">String/File Processing<a class="headerlink" href="#stringfile-processing" title="Permanent link">&para;</a></h2>
 <h3 id="load-file-into-a-stream">Load File into a Stream<a class="headerlink" href="#load-file-into-a-stream" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">content</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">textFileToStream</span><span class="o">(</span><span class="s">&quot;data.csv&quot;</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">content</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">textFileToStream</span><span class="o">(</span><span class="s">&quot;data.csv&quot;</span><span class="o">)</span>
+</code></pre></div>
 
 <h3 id="string-replace">String Replace<a class="headerlink" href="#string-replace" title="Permanent link">&para;</a></h3>
 <p>Replace all occurrences of a string (or regular expression) in a target string</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">new_str</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">replace</span><span class="o">(</span><span class="n">find</span> <span class="k">=</span> <span class="s">&quot;,&quot;</span><span class="o">)(</span><span class="n">replace</span> <span class="k">=</span> <span class="s">&quot;|&quot;</span><span class="o">)(</span><span class="n">input</span> <span class="k">=</span> <span class="s">&quot;1,2,3,4&quot;</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">new_str</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">replace</span><span class="o">(</span><span class="n">find</span> <span class="k">=</span> <span class="s">&quot;,&quot;</span><span class="o">)(</span><span class="n">replace</span> <span class="k">=</span> <span class="s">&quot;|&quot;</span><span class="o">)(</span><span class="n">input</span> <span class="k">=</span> <span class="s">&quot;1,2,3,4&quot;</span><span class="o">)</span>
+</code></pre></div>
 
 <h3 id="url-download">URL download<a class="headerlink" href="#url-download" title="Permanent link">&para;</a></h3>
 <p>Download the content of a url to a specified location on disk.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">utils</span><span class="o">.</span><span class="n">downloadURL</span><span class="o">(</span><span class="s">&quot;www.google.com&quot;</span><span class="o">,</span> <span class="s">&quot;google_home_page.html&quot;</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre><span></span><code><span class="n">utils</span><span class="o">.</span><span class="n">downloadURL</span><span class="o">(</span><span class="s">&quot;www.google.com&quot;</span><span class="o">,</span> <span class="s">&quot;google_home_page.html&quot;</span><span class="o">)</span>
+</code></pre></div>
 
 <h3 id="write-to-file">Write to File<a class="headerlink" href="#write-to-file" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">content</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">content</span><span class="k">:</span> <span class="kt">Stream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
 <span class="n">utils</span><span class="o">.</span><span class="n">writeToFile</span><span class="o">(</span><span class="s">&quot;foo.csv&quot;</span><span class="o">)(</span><span class="n">content</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <h2 id="numerics">Numerics<a class="headerlink" href="#numerics" title="Permanent link">&para;</a></h2>
-<h3 id="log1p"><code class="codehilite"><span class="n">log1p</span></code><a class="headerlink" href="#log1p" title="Permanent link">&para;</a></h3>
+<h3 id="log1p"><code class="highlight"><span class="n">log1p</span></code><a class="headerlink" href="#log1p" title="Permanent link">&para;</a></h3>
 <p>Calculates <span><span class="MathJax_Preview">log_{e}(1+x)</span><script type="math/tex">log_{e}(1+x)</script></span>.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">l</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">log1pExp</span><span class="o">(</span><span class="mf">0.02</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">l</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">log1pExp</span><span class="o">(</span><span class="mf">0.02</span><span class="o">)</span>
+</code></pre></div>
 
 <h3 id="haar-dwt-matrix">Haar DWT Matrix<a class="headerlink" href="#haar-dwt-matrix" title="Permanent link">&para;</a></h3>
 <p>Constructs the Haar <a href="https://en.wikipedia.org/wiki/Discrete_wavelet_transform">discrete wavelet transform</a> matrix for orders which are powers of two.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">dwt_mat</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">haarMatrix</span><span class="o">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">).</span><span class="n">toInt</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">dwt_mat</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">haarMatrix</span><span class="o">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">).</span><span class="n">toInt</span><span class="o">)</span>
+</code></pre></div>
 
 <h3 id="hermite-polynomials">Hermite Polynomials<a class="headerlink" href="#hermite-polynomials" title="Permanent link">&para;</a></h3>
 <p>The <a href="https://en.wikipedia.org/wiki/Hermite_polynomials">Hermite polynomials</a> are an important class of orthogonal polynomials used in numerical analysis. There are two definitions of the <em>Hermite</em> polynomials i.e. the probabilist and physicist definitions, which are equivalent up-to a scale factor. The the <code>utils</code> object, the probabilist polynomials are calculated.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Calculate the 3rd order Hermite polynomial</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//Calculate the 3rd order Hermite polynomial</span>
 
 <span class="k">val</span> <span class="n">h3</span> <span class="k">=</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">utils</span><span class="o">.</span><span class="n">hermite</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">x</span><span class="o">)</span>
 
 <span class="n">h3</span><span class="o">(</span><span class="mf">2.5</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <h3 id="chebyshev-polynomials">Chebyshev Polynomials<a class="headerlink" href="#chebyshev-polynomials" title="Permanent link">&para;</a></h3>
 <p><a href="https://en.wikipedia.org/wiki/Chebyshev_polynomials">Chebyshev polynomials</a> are another important class of orthogonal polynomials used in numerical analysis. There are two types, the <em>first kind</em> and <em>second kind</em>.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Calculate the Chebyshev polynomial of second kind order 3</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//Calculate the Chebyshev polynomial of second kind order 3</span>
 
 <span class="k">val</span> <span class="n">c23</span> <span class="k">=</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">utils</span><span class="o">.</span><span class="n">chebyshev</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">kind</span> <span class="k">=</span> <span class="mi">2</span><span class="o">)</span>
 
 <span class="n">c23</span><span class="o">(</span><span class="mf">2.5</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <h3 id="quick-select">Quick Select<a class="headerlink" href="#quick-select" title="Permanent link">&para;</a></h3>
 <p>The quick select aims to find the <span><span class="MathJax_Preview">k^{th}</span><script type="math/tex">k^{th}</script></span> smallest element of a list of numbers.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">second</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">quickselect</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">6</span><span class="o">),</span> <span class="mi">2</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">second</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">quickselect</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">6</span><span class="o">),</span> <span class="mi">2</span><span class="o">)</span>
+</code></pre></div>
 
 <h3 id="median">Median<a class="headerlink" href="#median" title="Permanent link">&para;</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">second</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">median</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">second</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">median</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
+</code></pre></div>
 
 <h3 id="sample-statistics">Sample Statistics<a class="headerlink" href="#sample-statistics" title="Permanent link">&para;</a></h3>
-<p>Calculate the mean and variance (or covariance), minimum, maximum of a list of <code class="codehilite"><span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span></code> instances.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">data</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+<p>Calculate the mean and variance (or covariance), minimum, maximum of a list of <code class="highlight"><span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span></code> instances.</p>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">data</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
 
 <span class="k">val</span> <span class="o">(</span><span class="n">mu</span><span class="o">,</span> <span class="n">vard</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">],</span> <span class="nc">DenseVector</span><span class="o">[</span><span class="kt">Double</span><span class="o">])</span> <span class="k">=</span>
   <span class="n">utils</span><span class="o">.</span><span class="n">getStats</span><span class="o">(</span><span class="n">data</span><span class="o">)</span>
@@ -2465,10 +2444,10 @@
   <span class="n">utils</span><span class="o">.</span><span class="n">getStatsMult</span><span class="o">(</span><span class="n">data</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="o">(</span><span class="n">min</span><span class="o">,</span> <span class="n">max</span><span class="o">)</span> <span class="k">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">getMinMax</span><span class="o">(</span><span class="n">data</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
                 
                   
+                
                 
               
               
@@ -2544,39 +2523,32 @@
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/transcendent-ai-labs" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/transcendent-ai-labs" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
-      <a href="https://twitter.com/dyna_ml" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/dyna_ml" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-59996358-2","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>

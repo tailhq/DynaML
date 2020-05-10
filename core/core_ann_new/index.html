@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -57,16 +57,45 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-59996358-2", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -79,24 +108,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -104,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#activation-functions" tabindex="1" class="md-skip">
+      <a href="#activation-functions" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,9 +125,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-header-nav__button md-logo">
+        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" aria-label="DynaML User Guide" class="md-header-nav__button md-logo">
           
-            <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
+            <img alt="logo" src="../../images/dynaml_logo3_small.png" width="24" height="24">
           
         </a>
       </div>
@@ -125,27 +137,26 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                DynaML User Guide
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              DynaML User Guide
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Neural Stack API
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -163,7 +174,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -174,20 +184,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
           </div>
         </div>
       
@@ -200,7 +208,7 @@
         
       
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -211,7 +219,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-nav__button md-logo">
       
-        <img src="../../images/dynaml_logo3_small.png" width="48" height="48">
+        <img alt="logo" src="../../images/dynaml_logo3_small.png" width="48" height="48">
       
     </a>
     DynaML User Guide
@@ -223,20 +231,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -1326,14 +1332,14 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#activation-functions" title="Activation Functions" class="md-nav__link">
+  <a href="#activation-functions" class="md-nav__link">
     Activation Functions
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#computational-layers" title="Computational Layers" class="md-nav__link">
+  <a href="#computational-layers" class="md-nav__link">
     Computational Layers
   </a>
   
@@ -1341,14 +1347,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#creating-layers" title="Creating Layers." class="md-nav__link">
+  <a href="#creating-layers" class="md-nav__link">
     Creating Layers.
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#layer-factories" title="Layer Factories." class="md-nav__link">
+  <a href="#layer-factories" class="md-nav__link">
     Layer Factories.
   </a>
   
@@ -1360,7 +1366,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#neural-stacks" title="Neural Stacks" class="md-nav__link">
+  <a href="#neural-stacks" class="md-nav__link">
     Neural Stacks
   </a>
   
@@ -1368,7 +1374,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#stack-factories" title="Stack Factories" class="md-nav__link">
+  <a href="#stack-factories" class="md-nav__link">
     Stack Factories
   </a>
   
@@ -1384,7 +1390,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2191,14 +2197,14 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#activation-functions" title="Activation Functions" class="md-nav__link">
+  <a href="#activation-functions" class="md-nav__link">
     Activation Functions
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#computational-layers" title="Computational Layers" class="md-nav__link">
+  <a href="#computational-layers" class="md-nav__link">
     Computational Layers
   </a>
   
@@ -2206,14 +2212,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#creating-layers" title="Creating Layers." class="md-nav__link">
+  <a href="#creating-layers" class="md-nav__link">
     Creating Layers.
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#layer-factories" title="Layer Factories." class="md-nav__link">
+  <a href="#layer-factories" class="md-nav__link">
     Layer Factories.
   </a>
   
@@ -2225,7 +2231,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#neural-stacks" title="Neural Stacks" class="md-nav__link">
+  <a href="#neural-stacks" class="md-nav__link">
     Neural Stacks
   </a>
   
@@ -2233,7 +2239,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#stack-factories" title="Stack Factories" class="md-nav__link">
+  <a href="#stack-factories" class="md-nav__link">
     Stack Factories
   </a>
   
@@ -2249,7 +2255,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2282,73 +2288,57 @@ construction of neural networks. The main idioms will be computational layers &a
 </div>
 <p>The neural stack API extends these abstract skeletons by defining two kinds of primitives.</p>
 <ul>
-<li>Computational layers: Defining how inputs are propagated forward; <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="codehilite"><span class="nc">NeuralLayer</span></code></a></li>
-<li>Activation functions: <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.Activation"><code class="codehilite"><span class="nc">Activation</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code></a></li>
-<li>Computational stacks: composed of a number of layers; <code class="codehilite"><span class="nc">GenericNeuralStack</span></code></li>
+<li>Computational layers: Defining how inputs are propagated forward; <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="highlight"><span class="nc">NeuralLayer</span></code></a></li>
+<li>Activation functions: <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.Activation"><code class="highlight"><span class="nc">Activation</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code></a></li>
+<li>Computational stacks: composed of a number of layers; <code class="highlight"><span class="nc">GenericNeuralStack</span></code></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The classes <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="codehilite"><span class="nc">NeuralLayer</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.GenericNeuralStack"><code class="codehilite"><span class="nc">GenericNeuralStack</span></code></a> define layers and stacks in an abstract manner, meaning that the parameters could be in principle of any type.</p>
+<p>The classes <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="highlight"><span class="nc">NeuralLayer</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.GenericNeuralStack"><code class="highlight"><span class="nc">GenericNeuralStack</span></code></a> define layers and stacks in an abstract manner, meaning that the parameters could be in principle of any type.</p>
 <p>The key point to understand is that once a layer or stack is defined, it is immutable i.e. the parameters defining its forward computation can't be changed.</p>
 <p>The API rather provides <em>factory</em> objects which can spawn a particular layer or stack with any parameter assignments.</p>
 </div>
 <h2 id="activation-functions">Activation Functions<a class="headerlink" href="#activation-functions" title="Permanent link">&para;</a></h2>
-<p>Activation functions are implemented using the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.Activation"><code class="codehilite"><span class="nc">Activation</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code></a> object, its <code class="codehilite"><span class="n">apply</span></code> method requires two
+<p>Activation functions are implemented using the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.Activation"><code class="highlight"><span class="nc">Activation</span><span class="o">[</span><span class="kt">I</span><span class="o">]</span></code></a> object, its <code class="highlight"><span class="n">apply</span></code> method requires two
 arguments.</p>
 <ol>
 <li>Implementation of the activation</li>
 <li>Implementation of the derivative of the activation.</li>
 </ol>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Define forward mapping</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//Define forward mapping</span>
 <span class="k">val</span> <span class="n">actFunc</span><span class="k">:</span> <span class="o">(</span><span class="kt">I</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">I</span> <span class="k">=</span> <span class="k">_</span>
 <span class="c1">//Define derivative of forward mapping</span>
 <span class="k">val</span> <span class="n">gradAct</span><span class="k">:</span> <span class="o">(</span><span class="kt">I</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">I</span> <span class="k">=</span> <span class="k">_</span>
 
 <span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">Activation</span><span class="o">(</span><span class="n">actFunc</span><span class="o">,</span> <span class="n">gradAct</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.package"><code>dynaml.models.neuralnets</code></a> package also contains implementation of the following activations.</p>
 <ul>
 <li>
 <p>Sigmoid <span><span class="MathJax_Preview">g(x) = \frac{1}{1 + exp(-x)}</span><script type="math/tex">g(x) = \frac{1}{1 + exp(-x)}</script></span></p>
-<p><code class="codehilite"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorSigmoid</span></code></p>
+<p><code class="highlight"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorSigmoid</span></code></p>
 </li>
 <li>
 <p>Tanh <span><span class="MathJax_Preview">g(x) = tanh(x)</span><script type="math/tex">g(x) = tanh(x)</script></span></p>
-<p><code class="codehilite"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorTansig</span></code></p>
+<p><code class="highlight"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorTansig</span></code></p>
 </li>
 <li>
 <p>Linear <span><span class="MathJax_Preview">g(x) = x</span><script type="math/tex">g(x) = x</script></span></p>
-<p><code class="codehilite"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorLinear</span></code></p>
+<p><code class="highlight"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorLinear</span></code></p>
 </li>
 <li>
 <p>Rectified Linear <span><span class="MathJax_Preview">g(x) = \begin{cases} x &amp; x \geq 0\\0 &amp; else\end{cases}</span><script type="math/tex">g(x) = \begin{cases} x & x \geq 0\\0 & else\end{cases}</script></span></p>
-<p><code class="codehilite"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorRecLin</span></code></p>
+<p><code class="highlight"><span class="k">val</span> <span class="n">act</span> <span class="k">=</span> <span class="nc">VectorRecLin</span></code></p>
 </li>
 </ul>
 <h2 id="computational-layers">Computational Layers<a class="headerlink" href="#computational-layers" title="Permanent link">&para;</a></h2>
 <p>Computational layers are the most basic unit of neural networks. They define transformations of their inputs and with that define the forward data flow.</p>
 <p>Every computational layer generally has a set of parameters describing how this transformation is going to be calculated given the inputs.</p>
-<p>In DynaML, the central component of the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="codehilite"><span class="nc">NeuralLayer</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code></a> trait is a <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/index.html#io.github.mandar2812.dynaml.pipes.MetaPipe"><code class="codehilite"><span class="nc">MetaPipe</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code></a> (<a href="/pipes/pipes_api/#meta-pipe">higher order pipe</a>) instance.</p>
+<p>In DynaML, the central component of the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer"><code class="highlight"><span class="nc">NeuralLayer</span><span class="o">[</span><span class="kt">Params</span><span class="p">,</span> <span class="kt">Input</span><span class="p">,</span> <span class="kt">Output</span><span class="o">]</span></code></a> trait is a <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-pipes/index.html#io.github.mandar2812.dynaml.pipes.MetaPipe"><code class="highlight"><span class="nc">MetaPipe</span><span class="o">[</span><span class="kt">Params</span><span class="p">,</span> <span class="kt">Input</span><span class="p">,</span> <span class="kt">Output</span><span class="o">]</span></code></a> (<a href="/pipes/pipes_api/#meta-pipe">higher order pipe</a>) instance.</p>
 <h3 id="creating-layers">Creating Layers.<a class="headerlink" href="#creating-layers" title="Permanent link">&para;</a></h3>
-<p>Creating an immutable computational layer can be done using the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer$"><code class="codehilite"><span class="nc">NeuralLayer</span></code></a> object.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">scala.math._</span>
+<p>Creating an immutable computational layer can be done using the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.NeuralLayer$"><code class="highlight"><span class="nc">NeuralLayer</span></code></a> object.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">scala.math._</span>
 
 <span class="k">val</span> <span class="n">compute</span> <span class="k">=</span> <span class="nc">MetaPipe</span><span class="o">(</span>
   <span class="o">(</span><span class="n">params</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="mi">2</span><span class="n">d</span><span class="o">*</span><span class="nc">Pi</span><span class="o">*</span><span class="n">params</span><span class="o">*</span><span class="n">x</span>
@@ -2359,8 +2349,7 @@ arguments.</p>
   <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">tanh</span><span class="o">(</span><span class="n">x</span><span class="o">)/(</span><span class="n">sinh</span><span class="o">(</span><span class="n">x</span><span class="o">)*</span><span class="n">cosh</span><span class="o">(</span><span class="n">x</span><span class="o">)))</span>
 
 <span class="k">val</span> <span class="n">layer</span> <span class="k">=</span> <span class="nc">NeuralLayer</span><span class="o">(</span><span class="n">compute</span><span class="o">,</span> <span class="n">act</span><span class="o">)(</span><span class="mf">0.5</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <div class="admonition seealso">
 <p class="admonition-title">Vector feed forward layers</p>
@@ -2370,72 +2359,47 @@ $$
 $$</p>
 </div>
 <h3 id="layer-factories">Layer Factories.<a class="headerlink" href="#layer-factories" title="Permanent link">&para;</a></h3>
-<p>Since the computation and activation are the only two relevant inputs required to spawn any computational layer, the <code class="codehilite"><span class="nc">NeuralLayerFactory</span><span class="o">[</span><span class="kt">Params</span>, <span class="kt">Input</span>, <span class="kt">Output</span><span class="o">]</span></code> class is the <em>factory</em> for creating layers on the fly. Layer factories are data pipes which take the layer parameters as input and create computational layers on demand.</p>
+<p>Since the computation and activation are the only two relevant inputs required to spawn any computational layer, the <code class="highlight"><span class="nc">NeuralLayerFactory</span><span class="o">[</span><span class="kt">Params</span><span class="p">,</span> <span class="kt">Input</span><span class="p">,</span> <span class="kt">Output</span><span class="o">]</span></code> class is the <em>factory</em> for creating layers on the fly. Layer factories are data pipes which take the layer parameters as input and create computational layers on demand.</p>
 <p>A layer factory can be created as follows.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">fact</span> <span class="k">=</span> <span class="nc">NeuralLayerFactory</span><span class="o">(</span><span class="n">compute</span><span class="o">,</span> <span class="n">act</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">fact</span> <span class="k">=</span> <span class="nc">NeuralLayerFactory</span><span class="o">(</span><span class="n">compute</span><span class="o">,</span> <span class="n">act</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">layer1</span> <span class="k">=</span> <span class="n">fact</span><span class="o">(</span><span class="mf">0.25</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <div class="admonition seealso">
 <p class="admonition-title">Vector layer factory</p>
-<p>Vector layers can be created using the <code class="codehilite"><span class="nc">Vec2VecLayerFactory</span></code></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">layerFactory</span> <span class="k">=</span>
+<p>Vector layers can be created using the <code class="highlight"><span class="nc">Vec2VecLayerFactory</span></code></p>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">layerFactory</span> <span class="k">=</span>
   <span class="k">new</span> <span class="nc">Vec2VecLayerFactory</span><span class="o">(</span><span class="nc">VectorTansig</span><span class="o">)(</span><span class="n">inDim</span> <span class="k">=</span> <span class="mi">4</span><span class="o">,</span> <span class="n">outDim</span> <span class="k">=</span> <span class="mi">5</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 </div>
 <h2 id="neural-stacks">Neural Stacks<a class="headerlink" href="#neural-stacks" title="Permanent link">&para;</a></h2>
-<p>A neural stack is a sequence of computational layers. Every layer represents some computation, so the neural stack is nothing but a sequence of computations or forward data flow. The top level class for neural stacks is <code class="codehilite"><span class="nc">GenericNeuralStack</span></code>. Extending the base class there are two stack implementations.</p>
+<p>A neural stack is a sequence of computational layers. Every layer represents some computation, so the neural stack is nothing but a sequence of computations or forward data flow. The top level class for neural stacks is <code class="highlight"><span class="nc">GenericNeuralStack</span></code>. Extending the base class there are two stack implementations.</p>
 <ul>
 <li>
 <p>Eagerly evaluated stack: Layers are spawned as soon as the stack is created.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">layers</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">NeuralLayer</span><span class="o">[</span><span class="kt">P</span>, <span class="kt">I</span>, <span class="kt">I</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">layers</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">NeuralLayer</span><span class="o">[</span><span class="kt">P</span><span class="p">,</span> <span class="kt">I</span><span class="p">,</span> <span class="kt">I</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
 
 <span class="c1">//Variable argument apply function</span>
 <span class="c1">//so the elements of the sequence</span>
 <span class="c1">//must be enumerated.</span>
 <span class="k">val</span> <span class="n">stack</span> <span class="k">=</span> <span class="nc">NeuralStack</span><span class="o">(</span><span class="n">layers</span><span class="k">:_</span><span class="kt">*</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 </li>
 <li>
 <p>Lazy stack: Layers are spawned only as needed, but once created they are <a href="https://en.wikipedia.org/wiki/Memoization"><em>memoized</em></a>.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">layers_func</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">NeuralLayer</span><span class="o">[</span><span class="kt">P</span>, <span class="kt">I</span>, <span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">layers_func</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">NeuralLayer</span><span class="o">[</span><span class="kt">P</span><span class="p">,</span> <span class="kt">I</span><span class="p">,</span> <span class="kt">I</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
 
 <span class="k">val</span> <span class="n">stack</span> <span class="k">=</span> <span class="nc">LazyNeuralStack</span><span class="o">(</span><span class="n">layers_func</span><span class="o">,</span> <span class="n">num_layers</span> <span class="k">=</span> <span class="mi">4</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 </li>
 </ul>
 <h3 id="stack-factories">Stack Factories<a class="headerlink" href="#stack-factories" title="Permanent link">&para;</a></h3>
 <p>Stack factories like layer factories are pipe lines, which take as input a sequence of layer parameters and return a neural stack of the spawned layers.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">layerFactories</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">NeuralLayerFactory</span><span class="o">[</span><span class="kt">P</span>, <span class="kt">I</span>, <span class="kt">I</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">layerFactories</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">NeuralLayerFactory</span><span class="o">[</span><span class="kt">P</span><span class="p">,</span> <span class="kt">I</span><span class="p">,</span> <span class="kt">I</span><span class="o">]]</span> <span class="k">=</span> <span class="k">_</span>
 <span class="c1">//Create a stack factory from a sequence of layer factories</span>
 <span class="k">val</span> <span class="n">stackFactory</span> <span class="k">=</span> <span class="nc">NeuralStackFactory</span><span class="o">(</span><span class="n">layerFactories</span><span class="k">:_</span><span class="kt">*</span><span class="o">)</span>
 
@@ -2447,10 +2411,10 @@ $$</p>
 <span class="k">val</span> <span class="n">num_units_by_layer</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">acts</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">VectorSigmoid</span><span class="o">,</span> <span class="nc">VectorTansig</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">breezeStackFactory</span> <span class="k">=</span> <span class="nc">NeuralStackFactory</span><span class="o">(</span><span class="n">num_units_by_layer</span><span class="o">)(</span><span class="n">acts</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
                 
                   
+                
                 
               
               
@@ -2526,39 +2490,32 @@ $$</p>
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/transcendent-ai-labs" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/transcendent-ai-labs" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
-      <a href="https://twitter.com/dyna_ml" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/dyna_ml" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-59996358-2","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>

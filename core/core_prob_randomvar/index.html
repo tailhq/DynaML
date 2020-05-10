@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -57,16 +57,45 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-59996358-2", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -79,24 +108,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -104,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#random-variable-api" tabindex="1" class="md-skip">
+      <a href="#random-variable-api" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,9 +125,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-header-nav__button md-logo">
+        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" aria-label="DynaML User Guide" class="md-header-nav__button md-logo">
           
-            <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
+            <img alt="logo" src="../../images/dynaml_logo3_small.png" width="24" height="24">
           
         </a>
       </div>
@@ -125,27 +137,26 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                DynaML User Guide
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              DynaML User Guide
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Random Variables
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -163,7 +174,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -174,20 +184,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
           </div>
         </div>
       
@@ -200,7 +208,7 @@
         
       
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -211,7 +219,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-nav__button md-logo">
       
-        <img src="../../images/dynaml_logo3_small.png" width="48" height="48">
+        <img alt="logo" src="../../images/dynaml_logo3_small.png" width="48" height="48">
       
     </a>
     DynaML User Guide
@@ -223,20 +231,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -1605,7 +1611,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#random-variable-api" title="Random Variable API" class="md-nav__link">
+  <a href="#random-variable-api" class="md-nav__link">
     Random Variable API
   </a>
   
@@ -1613,14 +1619,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#dynaml-random-variable" title="DynaML Random Variable" class="md-nav__link">
+  <a href="#dynaml-random-variable" class="md-nav__link">
     DynaML Random Variable
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#creating-random-variables" title="Creating Random Variables" class="md-nav__link">
+  <a href="#creating-random-variables" class="md-nav__link">
     Creating Random Variables
   </a>
   
@@ -1636,7 +1642,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2162,7 +2168,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#random-variable-api" title="Random Variable API" class="md-nav__link">
+  <a href="#random-variable-api" class="md-nav__link">
     Random Variable API
   </a>
   
@@ -2170,14 +2176,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#dynaml-random-variable" title="DynaML Random Variable" class="md-nav__link">
+  <a href="#dynaml-random-variable" class="md-nav__link">
     DynaML Random Variable
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#creating-random-variables" title="Creating Random Variables" class="md-nav__link">
+  <a href="#creating-random-variables" class="md-nav__link">
     Creating Random Variables
   </a>
   
@@ -2193,7 +2199,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2221,58 +2227,39 @@
 <p><br/></p>
 <div class="admonition summary">
 <p class="admonition-title">Summary</p>
-<p>Since version 1.4 a new package called <code class="codehilite"><span class="n">probability</span></code> has been added to the core api with an aim to aid in the modeling of random variables and measurable functions.</p>
+<p>Since version 1.4 a new package called <code class="highlight"><span class="n">probability</span></code> has been added to the core api with an aim to aid in the modeling of random variables and measurable functions.</p>
 </div>
 <p>Random variables and probability distributions form the bedrock of modern statistical based approaches to inference. Furthermore, analytically tractable inference is only possible for a small number of models while a wealth of interesting model structures don't yield themselves to analytical inference and approximate sampling based approaches are often employed.</p>
 <h2 id="random-variable-api">Random Variable API<a class="headerlink" href="#random-variable-api" title="Permanent link">&para;</a></h2>
 <p>Although both random variable with tractable and intractable distributions can be constructed, the emphasis is on the sampling capabilities of random variable objects.</p>
-<p>The <code class="codehilite"><span class="n">probability</span></code> package class hierarchy consists of classes and traits which represent continuous and discrete random variables along with ability to endow them with distributions.</p>
+<p>The <code class="highlight"><span class="n">probability</span></code> package class hierarchy consists of classes and traits which represent continuous and discrete random variables along with ability to endow them with distributions.</p>
 <h3 id="dynaml-random-variable">DynaML Random Variable<a class="headerlink" href="#dynaml-random-variable" title="Permanent link">&para;</a></h3>
-<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.RandomVariable"><code class="codehilite"><span class="nc">RandomVariable</span><span class="o">[</span><span class="kt">Domain</span><span class="o">]</span></code></a> forms the top of the class hierarchy in the <code class="codehilite"><span class="n">probability</span></code> package. It is a light weight trait which takes a form like so.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">abstract</span> <span class="k">class</span> <span class="nc">RandomVariable</span><span class="o">[</span><span class="kt">Domain</span><span class="o">]</span> <span class="o">{</span>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.RandomVariable"><code class="highlight"><span class="nc">RandomVariable</span><span class="o">[</span><span class="kt">Domain</span><span class="o">]</span></code></a> forms the top of the class hierarchy in the <code class="highlight"><span class="n">probability</span></code> package. It is a light weight trait which takes a form like so.</p>
+<div class="highlight"><pre><span></span><code><span class="k">abstract</span> <span class="k">class</span> <span class="nc">RandomVariable</span><span class="o">[</span><span class="kt">Domain</span><span class="o">]</span> <span class="o">{</span>
 
-  <span class="k">val</span> <span class="n">sample</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">Unit</span>, <span class="kt">Domain</span><span class="o">]</span>
+  <span class="k">val</span> <span class="n">sample</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">Unit</span><span class="p">,</span> <span class="kt">Domain</span><span class="o">]</span>
 
-  <span class="k">def</span> <span class="o">:*[</span><span class="kt">Domain1</span><span class="o">](</span><span class="n">other</span><span class="k">:</span> <span class="kt">RandomVariable</span><span class="o">[</span><span class="kt">Domain1</span><span class="o">])</span><span class="k">:</span> <span class="kt">RandomVariable</span><span class="o">[(</span><span class="kt">Domain</span>, <span class="kt">Domain1</span><span class="o">)]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="o">:*[</span><span class="kt">Domain1</span><span class="o">](</span><span class="n">other</span><span class="k">:</span> <span class="kt">RandomVariable</span><span class="o">[</span><span class="kt">Domain1</span><span class="o">])</span><span class="k">:</span> <span class="kt">RandomVariable</span><span class="o">[(</span><span class="kt">Domain</span><span class="p">,</span> <span class="kt">Domain1</span><span class="o">)]</span> <span class="k">=</span> <span class="o">{</span>
     <span class="k">val</span> <span class="n">sam</span> <span class="k">=</span> <span class="k">this</span><span class="o">.</span><span class="n">sample</span>
     <span class="nc">RandomVariable</span><span class="o">(</span><span class="nc">BifurcationPipe</span><span class="o">(</span><span class="n">sam</span><span class="o">,</span><span class="n">other</span><span class="o">.</span><span class="n">sample</span><span class="o">))</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
-<p>A <code class="codehilite"><span class="nc">RandomVariable</span></code> instance is defined by its type parameter <code class="codehilite"><span class="nc">Domain</span></code>, in Mathematics this is the underlying space (referred to as the <em>support</em>) over which the random variable is defined (<span><span class="MathJax_Preview">\mathbb{R}^p</span><script type="math/tex">\mathbb{R}^p</script></span> for continuos variables, <span><span class="MathJax_Preview">\mathbb{N}</span><script type="math/tex">\mathbb{N}</script></span> for discrete variables).</p>
+<p>A <code class="highlight"><span class="nc">RandomVariable</span></code> instance is defined by its type parameter <code class="highlight"><span class="nc">Domain</span></code>, in Mathematics this is the underlying space (referred to as the <em>support</em>) over which the random variable is defined (<span><span class="MathJax_Preview">\mathbb{R}^p</span><script type="math/tex">\mathbb{R}^p</script></span> for continuos variables, <span><span class="MathJax_Preview">\mathbb{N}</span><script type="math/tex">\mathbb{N}</script></span> for discrete variables).</p>
 <p>The two main functionalities are as follows.</p>
 <ul>
 <li>
-<p><code class="codehilite"><span class="n">sample</span></code> which is a data pipe having no input and outputs a sample from the random variables distribution whenever invoked.</p>
+<p><code class="highlight"><span class="n">sample</span></code> which is a data pipe having no input and outputs a sample from the random variables distribution whenever invoked.</p>
 </li>
 <li>
-<p><code>:*</code> the 'composition' operator between random variables, evaluating an expression like <code class="codehilite"><span class="n">randomVar1</span> <span class="o">:*</span> <span class="n">randomVar2</span></code> creates a new random variable whose domain is a cartesian product of the domains of <code class="codehilite"><span class="n">randomVar1</span></code> and <code class="codehilite"><span class="n">randomVar2</span></code>.</p>
+<p><code>:*</code> the 'composition' operator between random variables, evaluating an expression like <code class="highlight"><span class="n">randomVar1</span> <span class="o">:*</span> <span class="n">randomVar2</span></code> creates a new random variable whose domain is a cartesian product of the domains of <code class="highlight"><span class="n">randomVar1</span></code> and <code class="highlight"><span class="n">randomVar2</span></code>.</p>
 </li>
 </ul>
-<p>Continuous and discrete distribution random variables are implemented through the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.ContinuousDistrRV"><code class="codehilite"><span class="nc">ContinuousDistrRV</span><span class="o">[</span><span class="kt">Domain</span><span class="o">]</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.DiscreteDistrRV"><code class="codehilite"><span class="nc">DiscreteDistrRV</span><span class="o">[</span><span class="kt">Domain</span><span class="o">]</span></code></a> respectively.</p>
+<p>Continuous and discrete distribution random variables are implemented through the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.ContinuousDistrRV"><code class="highlight"><span class="nc">ContinuousDistrRV</span><span class="o">[</span><span class="kt">Domain</span><span class="o">]</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.DiscreteDistrRV"><code class="highlight"><span class="nc">DiscreteDistrRV</span><span class="o">[</span><span class="kt">Domain</span><span class="o">]</span></code></a> respectively.</p>
 <h3 id="creating-random-variables">Creating Random Variables<a class="headerlink" href="#creating-random-variables" title="Permanent link">&para;</a></h3>
 <p>Creating random variables can be created by a number of ways.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">import</span> <span class="nn">breeze.stats.distributions._</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">breeze.stats.distributions._</span>
 <span class="k">import</span> <span class="nn">spire.implicits._</span>
 
 
@@ -2281,26 +2268,25 @@
 <span class="k">val</span> <span class="n">rv</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="n">sampF</span><span class="o">)</span>
 
 <span class="c1">//Also works with a pipe</span>
-<span class="k">val</span> <span class="n">sampF</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">Unit</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+<span class="k">val</span> <span class="n">sampF</span><span class="k">:</span> <span class="kt">DataPipe</span><span class="o">[</span><span class="kt">Unit</span><span class="p">,</span> <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
 <span class="k">val</span> <span class="n">rv</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="n">sampF</span><span class="o">)</span>
-</pre></div>
-</td></tr></table>
+</code></pre></div>
 
 <div class="admonition note">
-<p>Sampling is the core functionality of the classes extending <code class="codehilite"><span class="nc">RandomVariable</span></code> but in some cases representing random variables having an underlying (tractable and known) distribution is a requirement, for that purpose there exists the  <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.RandomVarWithDistr"><code class="codehilite"><span class="nc">RandomVarWithDistr</span><span class="o">[</span><span class="kt">Domain</span>, <span class="kt">Dist</span><span class="o">]</span></code></a> trait which is a bare bones extension of <code class="codehilite"><span class="nc">RandomVariable</span></code>; it contains only one other member, <code class="codehilite"><span class="n">underlyingDist</span></code> which is of abstract type <code class="codehilite"><span class="nc">Dist</span></code>.</p>
-<p>The type <code class="codehilite"><span class="nc">Dist</span></code> can be any breeze distribution, which is either contained in the package <code class="codehilite"><span class="n">breeze</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distributions</span></code> or a user written extension of a breeze probability distribution.</p>
+<p>Sampling is the core functionality of the classes extending <code class="highlight"><span class="nc">RandomVariable</span></code> but in some cases representing random variables having an underlying (tractable and known) distribution is a requirement, for that purpose there exists the  <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.probability.RandomVarWithDistr"><code class="highlight"><span class="nc">RandomVarWithDistr</span><span class="o">[</span><span class="kt">Domain</span><span class="p">,</span> <span class="kt">Dist</span><span class="o">]</span></code></a> trait which is a bare bones extension of <code class="highlight"><span class="nc">RandomVariable</span></code>; it contains only one other member, <code class="highlight"><span class="n">underlyingDist</span></code> which is of abstract type <code class="highlight"><span class="nc">Dist</span></code>.</p>
+<p>The type <code class="highlight"><span class="nc">Dist</span></code> can be any breeze distribution, which is either contained in the package <code class="highlight"><span class="n">breeze</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distributions</span></code> or a user written extension of a breeze probability distribution.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Creating random variables from breeze distributions</p>
-<p>Creating a random variable backed by a breeze distribution is easy, simply pass the breeze distribution to the <code class="codehilite"><span class="nc">RandomVariable</span></code> companion object.</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">p</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="k">new</span> <span class="nc">Beta</span><span class="o">(</span><span class="mf">7.5</span><span class="o">,</span> <span class="mf">7.5</span><span class="o">))</span>
-</pre></div>
-</td></tr></table>
+<p>Creating a random variable backed by a breeze distribution is easy, simply pass the breeze distribution to the <code class="highlight"><span class="nc">RandomVariable</span></code> companion object.</p>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">p</span> <span class="k">=</span> <span class="nc">RandomVariable</span><span class="o">(</span><span class="k">new</span> <span class="nc">Beta</span><span class="o">(</span><span class="mf">7.5</span><span class="o">,</span> <span class="mf">7.5</span><span class="o">))</span>
+</code></pre></div>
 
-<p>The <code class="codehilite"><span class="nc">RandomVariable</span></code> object recognizes the breeze distribution passed to it and creates a continuous or discrete random variable accordingly.</p>
+<p>The <code class="highlight"><span class="nc">RandomVariable</span></code> object recognizes the breeze distribution passed to it and creates a continuous or discrete random variable accordingly.</p>
 </div>
                 
                   
+                
                 
               
               
@@ -2376,39 +2362,32 @@
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/transcendent-ai-labs" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/transcendent-ai-labs" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
-      <a href="https://twitter.com/dyna_ml" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/dyna_ml" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-59996358-2","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>

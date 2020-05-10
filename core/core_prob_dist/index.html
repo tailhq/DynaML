@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../images/dynaml_logo3.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -57,16 +57,45 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-59996358-2", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -79,24 +108,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -104,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#specifying-distributions" tabindex="1" class="md-skip">
+      <a href="#specifying-distributions" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,9 +125,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-header-nav__button md-logo">
+        <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" aria-label="DynaML User Guide" class="md-header-nav__button md-logo">
           
-            <img src="../../images/dynaml_logo3_small.png" width="24" height="24">
+            <img alt="logo" src="../../images/dynaml_logo3_small.png" width="24" height="24">
           
         </a>
       </div>
@@ -125,27 +137,26 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                DynaML User Guide
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              DynaML User Guide
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Probability Distributions
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -163,7 +174,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -174,20 +184,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
           </div>
         </div>
       
@@ -200,7 +208,7 @@
         
       
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -211,7 +219,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://transcendent-ai-labs.github.io/DynaML" title="DynaML User Guide" class="md-nav__button md-logo">
       
-        <img src="../../images/dynaml_logo3_small.png" width="48" height="48">
+        <img alt="logo" src="../../images/dynaml_logo3_small.png" width="48" height="48">
       
     </a>
     DynaML User Guide
@@ -223,20 +231,18 @@
 
   
 
-
-  <a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      transcendent-ai-labs/DynaML
+<a href="https://github.com/transcendent-ai-labs/DynaML/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    transcendent-ai-labs/DynaML
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -1629,7 +1635,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#specifying-distributions" title="Specifying Distributions" class="md-nav__link">
+  <a href="#specifying-distributions" class="md-nav__link">
     Specifying Distributions
   </a>
   
@@ -1637,7 +1643,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#describing-skewness" title="Describing Skewness" class="md-nav__link">
+  <a href="#describing-skewness" class="md-nav__link">
     Describing Skewness
   </a>
   
@@ -1649,14 +1655,14 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#distributions-api" title="Distributions API" class="md-nav__link">
+  <a href="#distributions-api" class="md-nav__link">
     Distributions API
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#distributions-library" title="Distributions Library" class="md-nav__link">
+  <a href="#distributions-library" class="md-nav__link">
     Distributions Library
   </a>
   
@@ -1664,35 +1670,35 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#multivariate-students-t" title="Multivariate Students T" class="md-nav__link">
+  <a href="#multivariate-students-t" class="md-nav__link">
     Multivariate Students T
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#matrix-t" title="Matrix T" class="md-nav__link">
+  <a href="#matrix-t" class="md-nav__link">
     Matrix T
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#matrix-normal" title="Matrix Normal" class="md-nav__link">
+  <a href="#matrix-normal" class="md-nav__link">
     Matrix Normal
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#truncated-normal" title="Truncated Normal" class="md-nav__link">
+  <a href="#truncated-normal" class="md-nav__link">
     Truncated Normal
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#skew-gaussian" title="Skew Gaussian" class="md-nav__link">
+  <a href="#skew-gaussian" class="md-nav__link">
     Skew Gaussian
   </a>
   
@@ -1700,14 +1706,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#univariate" title="Univariate" class="md-nav__link">
+  <a href="#univariate" class="md-nav__link">
     Univariate
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#multivariate" title="Multivariate" class="md-nav__link">
+  <a href="#multivariate" class="md-nav__link">
     Multivariate
   </a>
   
@@ -1719,7 +1725,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#extended-skew-gaussian" title="Extended Skew Gaussian" class="md-nav__link">
+  <a href="#extended-skew-gaussian" class="md-nav__link">
     Extended Skew Gaussian
   </a>
   
@@ -1727,14 +1733,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#univariate_1" title="Univariate" class="md-nav__link">
+  <a href="#univariate_1" class="md-nav__link">
     Univariate
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#multivariate_1" title="Multivariate" class="md-nav__link">
+  <a href="#multivariate_1" class="md-nav__link">
     Multivariate
   </a>
   
@@ -1746,7 +1752,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mesn" title="MESN" class="md-nav__link">
+  <a href="#mesn" class="md-nav__link">
     MESN
   </a>
   
@@ -1762,7 +1768,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2264,7 +2270,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#specifying-distributions" title="Specifying Distributions" class="md-nav__link">
+  <a href="#specifying-distributions" class="md-nav__link">
     Specifying Distributions
   </a>
   
@@ -2272,7 +2278,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#describing-skewness" title="Describing Skewness" class="md-nav__link">
+  <a href="#describing-skewness" class="md-nav__link">
     Describing Skewness
   </a>
   
@@ -2284,14 +2290,14 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#distributions-api" title="Distributions API" class="md-nav__link">
+  <a href="#distributions-api" class="md-nav__link">
     Distributions API
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#distributions-library" title="Distributions Library" class="md-nav__link">
+  <a href="#distributions-library" class="md-nav__link">
     Distributions Library
   </a>
   
@@ -2299,35 +2305,35 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#multivariate-students-t" title="Multivariate Students T" class="md-nav__link">
+  <a href="#multivariate-students-t" class="md-nav__link">
     Multivariate Students T
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#matrix-t" title="Matrix T" class="md-nav__link">
+  <a href="#matrix-t" class="md-nav__link">
     Matrix T
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#matrix-normal" title="Matrix Normal" class="md-nav__link">
+  <a href="#matrix-normal" class="md-nav__link">
     Matrix Normal
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#truncated-normal" title="Truncated Normal" class="md-nav__link">
+  <a href="#truncated-normal" class="md-nav__link">
     Truncated Normal
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#skew-gaussian" title="Skew Gaussian" class="md-nav__link">
+  <a href="#skew-gaussian" class="md-nav__link">
     Skew Gaussian
   </a>
   
@@ -2335,14 +2341,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#univariate" title="Univariate" class="md-nav__link">
+  <a href="#univariate" class="md-nav__link">
     Univariate
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#multivariate" title="Multivariate" class="md-nav__link">
+  <a href="#multivariate" class="md-nav__link">
     Multivariate
   </a>
   
@@ -2354,7 +2360,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#extended-skew-gaussian" title="Extended Skew Gaussian" class="md-nav__link">
+  <a href="#extended-skew-gaussian" class="md-nav__link">
     Extended Skew Gaussian
   </a>
   
@@ -2362,14 +2368,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#univariate_1" title="Univariate" class="md-nav__link">
+  <a href="#univariate_1" class="md-nav__link">
     Univariate
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#multivariate_1" title="Multivariate" class="md-nav__link">
+  <a href="#multivariate_1" class="md-nav__link">
     Multivariate
   </a>
   
@@ -2381,7 +2387,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mesn" title="MESN" class="md-nav__link">
+  <a href="#mesn" class="md-nav__link">
     MESN
   </a>
   
@@ -2397,7 +2403,7 @@
       
       
         <li class="md-nav__item">
-          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+          <a href="#__comments" class="md-nav__link md-nav__link--active">
             Comments
           </a>
         </li>
@@ -2442,64 +2448,51 @@
 </script>
 </div>
 <h2 id="distributions-api">Distributions API<a class="headerlink" href="#distributions-api" title="Permanent link">&para;</a></h2>
-<p>The <code class="codehilite"><span class="nc">Density</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code> and <code class="codehilite"><span class="nc">Rand</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code> traits form the API entry points for implementing probability distributions in breeze. In the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.probability.distributions.package"><code>dynaml.probability.distributions</code></a> package, these two traits are inherited by <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/io/github/mandar2812/dynaml/probability/distributions/GenericDistribution"><code class="codehilite"><span class="nc">GenericDistribution</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> which is extended by <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr"><code class="codehilite"><span class="nc">AbstractContinuousDistr</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/io/github/mandar2812/dynaml/probability/distributions/AbstractDiscreteDistr"><code class="codehilite"><span class="nc">AbstractDiscreteDistr</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> classes.</p>
+<p>The <code class="highlight"><span class="nc">Density</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code> and <code class="highlight"><span class="nc">Rand</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code> traits form the API entry points for implementing probability distributions in breeze. In the <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.probability.distributions.package"><code>dynaml.probability.distributions</code></a> package, these two traits are inherited by <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/io/github/mandar2812/dynaml/probability/distributions/GenericDistribution"><code class="highlight"><span class="nc">GenericDistribution</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> which is extended by <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.probability.distributions.AbstractContinuousDistr"><code class="highlight"><span class="nc">AbstractContinuousDistr</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> and <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/io/github/mandar2812/dynaml/probability/distributions/AbstractDiscreteDistr"><code class="highlight"><span class="nc">AbstractDiscreteDistr</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> classes.</p>
 <div class="admonition tip">
 <p class="admonition-title">Distributions which can produce confidence intervals</p>
-<p>The trait <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.probability.distributions.HasErrorBars"><code class="codehilite"><span class="nc">HasErrorBars</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> can be used as a mix in to provide the ability of producing error bars to distributions. To extend it, one has to implement the <code class="codehilite"><span class="n">confidenceInterval</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">T</span><span class="o">,</span> <span class="kt">T</span><span class="o">)</span></code> method.</p>
+<p>The trait <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.probability.distributions.HasErrorBars"><code class="highlight"><span class="nc">HasErrorBars</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> can be used as a mix in to provide the ability of producing error bars to distributions. To extend it, one has to implement the <code class="highlight"><span class="n">confidenceInterval</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">T</span><span class="o">,</span> <span class="kt">T</span><span class="o">)</span></code> method.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Skewness</p>
-<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/io/github/mandar2812/dynaml/probability/distributions/SkewSymmDistribution"><code class="codehilite"><span class="nc">SkewSymmDistribution</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> class is the generic base implementations for skew symmetric family of distributions in DynaML.</p>
+<p>The <a href="https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/io/github/mandar2812/dynaml/probability/distributions/SkewSymmDistribution"><code class="highlight"><span class="nc">SkewSymmDistribution</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span></code></a> class is the generic base implementations for skew symmetric family of distributions in DynaML.</p>
 </div>
 <h2 id="distributions-library">Distributions Library<a class="headerlink" href="#distributions-library" title="Permanent link">&para;</a></h2>
-<p>Apart from the distributions defined in the <code class="codehilite"><span class="n">breeze</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distributions</span></code>, users have access to the following distributions implemented in the <code class="codehilite"><span class="n">dynaml</span><span class="o">.</span><span class="n">probability</span><span class="o">.</span><span class="n">distributions</span></code>.</p>
+<p>Apart from the distributions defined in the <code class="highlight"><span class="n">breeze</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distributions</span></code>, users have access to the following distributions implemented in the <code class="highlight"><span class="n">dynaml</span><span class="o">.</span><span class="n">probability</span><span class="o">.</span><span class="n">distributions</span></code>.</p>
 <h3 id="multivariate-students-t">Multivariate Students T<a class="headerlink" href="#multivariate-students-t" title="Permanent link">&para;</a></h3>
 <p>Defines a <em>Students' T</em> distribution over the domain of finite dimensional vectors.</p>
 <p><span><span class="MathJax_Preview">\mathcal{X} \equiv  \mathbb{R}^{n}</span><script type="math/tex">\mathcal{X} \equiv  \mathbb{R}^{n}</script></span></p>
 <p><span><span class="MathJax_Preview">f(x) = \left[1+{\frac {1}{\nu }}({\mathbf {x} }-{\boldsymbol {\mu }})^{\rm {T}}{\boldsymbol {\Sigma }}^{-1}({\mathbf {x} }-{\boldsymbol {\mu }})\right]^{-(\nu +p)/2}</span><script type="math/tex">f(x) = \left[1+{\frac {1}{\nu }}({\mathbf {x} }-{\boldsymbol {\mu }})^{\rm {T}}{\boldsymbol {\Sigma }}^{-1}({\mathbf {x} }-{\boldsymbol {\mu }})\right]^{-(\nu +p)/2}</script></span>  </p>
 <p><span><span class="MathJax_Preview">Z = \frac{\Gamma \left[(\nu +p)/2\right]}{\Gamma (\nu /2)\nu ^{p/2}\pi ^{p/2}\left|{\boldsymbol {\Sigma }}\right|^{1/2}}</span><script type="math/tex">Z = \frac{\Gamma \left[(\nu +p)/2\right]}{\Gamma (\nu /2)\nu ^{p/2}\pi ^{p/2}\left|{\boldsymbol {\Sigma }}\right|^{1/2}}</script></span></p>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mu</span> <span class="k">=</span> <span class="mf">2.5</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">mu</span> <span class="k">=</span> <span class="mf">2.5</span>
 <span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">(</span><span class="mf">1.0</span><span class="o">,</span> <span class="mf">0.0</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">cov</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">((</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">0.5</span><span class="o">),</span> <span class="o">(</span><span class="mf">0.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">d</span> <span class="k">=</span> <span class="nc">MultivariateStudentsT</span><span class="o">(</span><span class="n">mu</span><span class="o">,</span> <span class="n">mean</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span>
-</pre></div>
-</td></tr></table></p>
+</code></pre></div></p>
 <h3 id="matrix-t">Matrix T<a class="headerlink" href="#matrix-t" title="Permanent link">&para;</a></h3>
 <p>Defines a <em>Students' T</em> distribution over the domain of matrices.</p>
 <p><span><span class="MathJax_Preview">\mathcal{X} \equiv  \mathbb{R}^{n \times p}</span><script type="math/tex">\mathcal{X} \equiv  \mathbb{R}^{n \times p}</script></span></p>
 <p><span><span class="MathJax_Preview">f(x) = \left|{\mathbf {I}}_{n}+{\boldsymbol \Sigma }^{{-1}}({\mathbf {X}}-{\mathbf {M}}){\boldsymbol \Omega }^{{-1}}({\mathbf {X}}-{\mathbf {M}})^{{{\rm {T}}}}\right|^{{-{\frac {\nu +n+p-1}{2}}}}</span><script type="math/tex">f(x) = \left|{\mathbf {I}}_{n}+{\boldsymbol \Sigma }^{{-1}}({\mathbf {X}}-{\mathbf {M}}){\boldsymbol \Omega }^{{-1}}({\mathbf {X}}-{\mathbf {M}})^{{{\rm {T}}}}\right|^{{-{\frac {\nu +n+p-1}{2}}}}</script></span>  </p>
 <p><span><span class="MathJax_Preview">Z = {\frac {\Gamma_{p}\left({\frac {\nu +n+p-1}{2}}\right)}{(\pi )^{{\frac {np}{2}}}\Gamma _{p}\left({\frac {\nu +p-1}{2}}\right)}}|{\boldsymbol \Omega }|^{{-{\frac {n}{2}}}}|{\boldsymbol \Sigma }|^{{-{\frac {p}{2}}}}</span><script type="math/tex">Z = {\frac {\Gamma_{p}\left({\frac {\nu +n+p-1}{2}}\right)}{(\pi )^{{\frac {np}{2}}}\Gamma _{p}\left({\frac {\nu +p-1}{2}}\right)}}|{\boldsymbol \Omega }|^{{-{\frac {n}{2}}}}|{\boldsymbol \Sigma }|^{{-{\frac {p}{2}}}}</script></span></p>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mu</span> <span class="k">=</span> <span class="mf">2.5</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">mu</span> <span class="k">=</span> <span class="mf">2.5</span>
 <span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">((-</span><span class="mf">1.5</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">),</span> <span class="o">(</span><span class="mf">3.5</span><span class="o">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">cov_rows</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">((</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">0.5</span><span class="o">),</span> <span class="o">(</span><span class="mf">0.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">cov_cols</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">((</span><span class="mf">0.5</span><span class="o">,</span> <span class="mf">0.1</span><span class="o">),</span> <span class="o">(</span><span class="mf">0.1</span><span class="o">,</span> <span class="mf">1.5</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">d</span> <span class="k">=</span> <span class="nc">MatrixT</span><span class="o">(</span><span class="n">mu</span><span class="o">,</span> <span class="n">mean</span><span class="o">,</span> <span class="n">cov_rows</span><span class="o">,</span> <span class="n">cov_cols</span><span class="o">)</span>
-</pre></div>
-</td></tr></table></p>
+</code></pre></div></p>
 <h3 id="matrix-normal">Matrix Normal<a class="headerlink" href="#matrix-normal" title="Permanent link">&para;</a></h3>
 <p>Defines a <em>Gaussian</em> distribution over the domain of matrices.</p>
 <p><span><span class="MathJax_Preview">\mathcal{X} \equiv  \mathbb{R}^{n \times p}</span><script type="math/tex">\mathcal{X} \equiv  \mathbb{R}^{n \times p}</script></span></p>
 <p><span><span class="MathJax_Preview">f(x) = \exp\left( -\frac{1}{2} \, \mathrm{tr}\left[ \mathbf{V}^{-1} (\mathbf{X} - \mathbf{M})^{T} \mathbf{U}^{-1} (\mathbf{X} - \mathbf{M}) \right] \right)</span><script type="math/tex">f(x) = \exp\left( -\frac{1}{2} \, \mathrm{tr}\left[ \mathbf{V}^{-1} (\mathbf{X} - \mathbf{M})^{T} \mathbf{U}^{-1} (\mathbf{X} - \mathbf{M}) \right] \right)</script></span>  </p>
 <p><span><span class="MathJax_Preview">Z = (2\pi)^{np/2} |\mathbf{V}|^{n/2} |\mathbf{U}|^{p/2}</span><script type="math/tex">Z = (2\pi)^{np/2} |\mathbf{V}|^{n/2} |\mathbf{U}|^{p/2}</script></span></p>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">((-</span><span class="mf">1.5</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">),</span> <span class="o">(</span><span class="mf">3.5</span><span class="o">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="o">))</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">((-</span><span class="mf">1.5</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">),</span> <span class="o">(</span><span class="mf">3.5</span><span class="o">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">cov_rows</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">((</span><span class="mf">1.5</span><span class="o">,</span> <span class="mf">0.5</span><span class="o">),</span> <span class="o">(</span><span class="mf">0.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">cov_cols</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">((</span><span class="mf">0.5</span><span class="o">,</span> <span class="mf">0.1</span><span class="o">),</span> <span class="o">(</span><span class="mf">0.1</span><span class="o">,</span> <span class="mf">1.5</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">d</span> <span class="k">=</span> <span class="nc">MatrixNormal</span><span class="o">(</span><span class="n">mean</span><span class="o">,</span> <span class="n">cov_rows</span><span class="o">,</span> <span class="n">cov_cols</span><span class="o">)</span>
-</pre></div>
-</td></tr></table></p>
+</code></pre></div></p>
 <h3 id="truncated-normal">Truncated Normal<a class="headerlink" href="#truncated-normal" title="Permanent link">&para;</a></h3>
 <p>Defines a univariate <em>Gaussian</em> distribution that is defined in a finite domain.</p>
 <p><span><span class="MathJax_Preview">\mathcal{X} \equiv  [a, b]</span><script type="math/tex">\mathcal{X} \equiv  [a, b]</script></span></p>
@@ -2507,15 +2500,11 @@
 <p><span><span class="MathJax_Preview">Z = \sigma \left(\Phi ({\frac {b-\mu }{\sigma }})-\Phi ({\frac {a-\mu }{\sigma }})\right)</span><script type="math/tex">Z = \sigma \left(\Phi ({\frac {b-\mu }{\sigma }})-\Phi ({\frac {a-\mu }{\sigma }})\right)</script></span></p>
 <p><span><span class="MathJax_Preview">\phi()</span><script type="math/tex">\phi()</script></span> and <span><span class="MathJax_Preview">\Phi()</span><script type="math/tex">\Phi()</script></span> being the gaussian density function and cumulative distribution function respectively</p>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
+<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">sigma</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">)</span> <span class="k">=</span> <span class="o">(-</span><span class="mf">0.5</span><span class="o">,</span> <span class="mf">2.5</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">d</span> <span class="k">=</span> <span class="nc">TruncatedGaussian</span><span class="o">(</span><span class="n">mean</span><span class="o">,</span> <span class="n">sigma</span><span class="o">,</span> <span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span>
-</pre></div>
-</td></tr></table></p>
+</code></pre></div></p>
 <h3 id="skew-gaussian">Skew Gaussian<a class="headerlink" href="#skew-gaussian" title="Permanent link">&para;</a></h3>
 <h4 id="univariate">Univariate<a class="headerlink" href="#univariate" title="Permanent link">&para;</a></h4>
 <p><span><span class="MathJax_Preview">\mathcal{X} \equiv  \mathbb{R}</span><script type="math/tex">\mathcal{X} \equiv  \mathbb{R}</script></span></p>
@@ -2532,17 +2521,7 @@
 <p>The parameter <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> determines the skewness of the distribution and its sign tells us in which direction the distribution has a fatter tail. In the univariate case the parameter <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> is a scalar, while in the multivariate case <span><span class="MathJax_Preview">\alpha \in \mathbb{R}^d</span><script type="math/tex">\alpha \in \mathbb{R}^d</script></span>, so for the multivariate skew gaussian distribution, there is a skewness value for each dimension.</p>
 </div>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Univariate</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//Univariate</span>
 <span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">sigma</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="o">-</span><span class="mf">0.5</span>
@@ -2553,8 +2532,7 @@
 <span class="k">val</span> <span class="n">alpha</span> <span class="k">=</span> <span class="nc">DenseVector</span><span class="o">.</span><span class="n">fill</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)(</span><span class="mf">1.2</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">cov</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">.</span><span class="n">eye</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)*</span><span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">md</span> <span class="k">=</span> <span class="nc">MultivariateSkewNormal</span><span class="o">(</span><span class="n">alpha</span><span class="o">,</span> <span class="n">mu</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span>
-</pre></div>
-</td></tr></table></p>
+</code></pre></div></p>
 <h3 id="extended-skew-gaussian">Extended Skew Gaussian<a class="headerlink" href="#extended-skew-gaussian" title="Permanent link">&para;</a></h3>
 <h4 id="univariate_1">Univariate<a class="headerlink" href="#univariate_1" title="Permanent link">&para;</a></h4>
 <p>The generalization of the univariate skew <em>Gaussian</em> distribution.</p>
@@ -2568,19 +2546,7 @@
 <p><span><span class="MathJax_Preview">Z = \Phi(\tau)</span><script type="math/tex">Z = \Phi(\tau)</script></span></p>
 <p><span><span class="MathJax_Preview">\phi_{d}(.; \mathbf{\mu}, {\Sigma})</span><script type="math/tex">\phi_{d}(.; \mathbf{\mu}, {\Sigma})</script></span> and <span><span class="MathJax_Preview">\Phi()</span><script type="math/tex">\Phi()</script></span> are the multivariate gaussian density function and standard gaussian univariate cumulative distribution function respectively and <span><span class="MathJax_Preview">L</span><script type="math/tex">L</script></span> is the lower triangular Cholesky decomposition of <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span>.</p>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Univariate</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//Univariate</span>
 <span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">sigma</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="o">-</span><span class="mf">0.5</span>
@@ -2593,8 +2559,7 @@
 <span class="k">val</span> <span class="n">cov</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">.</span><span class="n">eye</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)*</span><span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">tau</span> <span class="k">=</span> <span class="mf">0.2</span>
 <span class="k">val</span> <span class="n">md</span> <span class="k">=</span> <span class="nc">ExtendedMultivariateSkewNormal</span><span class="o">(</span><span class="n">tau</span><span class="o">,</span> <span class="n">alpha</span><span class="o">,</span> <span class="n">mu</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span>
-</pre></div>
-</td></tr></table></p>
+</code></pre></div></p>
 <div class="admonition warning">
 <p class="admonition-title">Confusing Nomenclature</p>
 <p>The following distribution has a very similar form and name to the <em>extended skew gaussian</em> distribution shown above. But despite its deceptively similar formula, it is a very different object.</p>
@@ -2607,19 +2572,7 @@
 <p><span><span class="MathJax_Preview">Z = \Phi(\tau)</span><script type="math/tex">Z = \Phi(\tau)</script></span></p>
 <p><span><span class="MathJax_Preview">\phi_{d}(.; \mathbf{\mu}, {\Sigma})</span><script type="math/tex">\phi_{d}(.; \mathbf{\mu}, {\Sigma})</script></span> and <span><span class="MathJax_Preview">\Phi()</span><script type="math/tex">\Phi()</script></span> are the multivariate gaussian density function and standard gaussian univariate cumulative distribution function respectively.</p>
 <p><em>Usage</em>:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">//Univariate</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//Univariate</span>
 <span class="k">val</span> <span class="n">mean</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">sigma</span> <span class="k">=</span> <span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="o">-</span><span class="mf">0.5</span>
@@ -2632,14 +2585,14 @@
 <span class="k">val</span> <span class="n">cov</span> <span class="k">=</span> <span class="nc">DenseMatrix</span><span class="o">.</span><span class="n">eye</span><span class="o">[</span><span class="kt">Double</span><span class="o">](</span><span class="mi">4</span><span class="o">)*</span><span class="mf">1.5</span>
 <span class="k">val</span> <span class="n">tau</span> <span class="k">=</span> <span class="mf">0.2</span>
 <span class="k">val</span> <span class="n">md</span> <span class="k">=</span> <span class="nc">MESN</span><span class="o">(</span><span class="n">tau</span><span class="o">,</span> <span class="n">alpha</span><span class="o">,</span> <span class="n">mu</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span>
-</pre></div>
-</td></tr></table></p>
+</code></pre></div></p>
 <div class="admonition seealso">
 <p class="admonition-title"><em>Extended Skew Gaussian Process</em> ESGP</p>
 <p>The MESN distribution is used to define the finite dimensional probabilities for the <a href="/core/core_esgp.md">ESGP</a> process.</p>
 </div>
                 
                   
+                
                 
               
               
@@ -2715,39 +2668,32 @@
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/transcendent-ai-labs" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/transcendent-ai-labs" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
-      <a href="https://twitter.com/dyna_ml" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/dyna_ml" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-59996358-2","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>
