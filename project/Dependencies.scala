@@ -85,7 +85,7 @@ object Dependencies {
     "ws.unfiltered"          %% "unfiltered-filter" % "0.9.1",
     "ws.unfiltered"          %% "unfiltered-jetty"  % "0.9.1",
     "org.apache.commons"     % "commons-math3"      % "3.6.1",
-    "commons-io"             % "commons-io"         % "2.6",
+    "commons-io"             % "commons-io"         % "2.7",
     "com.github.nscala-time" %% "nscala-time"       % "2.24.0",
     "jline"                  % "jline"              % "2.14.6",
     "com.lihaoyi"            %% "pprint"            % "0.5.9",
@@ -141,7 +141,7 @@ object Dependencies {
     "com.lihaoyi" %% "ammonite-sshd" % "2.1.1" cross CrossVersion.full
   )
 
-  val commons_io = Seq("commons-io" % "commons-io" % "2.6")
+  val commons_io = Seq("commons-io" % "commons-io" % "2.7")
 
   val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")
 
