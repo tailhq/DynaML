@@ -41,7 +41,7 @@ import io.github.mandar2812.dynaml.repl._
 import scala.annotation.tailrec
 
 /**
-  * Contains the various entry points to the Ammonite REPL.
+  * Contains the various entry points to the DynaML Ammonite REPL.
   *
   * Configuration of the basic REPL is done by passing in arguments when
   * constructing the [[DynaML]] instance, and the various entrypoints such
@@ -99,22 +99,23 @@ case class DynaML(
   importHooks: Map[Seq[String], ImportHook] = ImportHook.defaults,
   classPathWhitelist: Set[Seq[String]] = Set.empty) {
 
-  def loadedPredefFile = predefFile match {
-    case Some(path) =>
-      try Right(
-        Some(PredefInfo(Name("FilePredef"), os.read(path), false, Some(path)))
-      )
-      catch {
-        case e: NoSuchFileException =>
-          Left(
-            (
-              Res.Failure("Unable to load predef file " + path),
-              Seq((Watchable.Path(path), 0L))
+  def loadedPredefFile =
+    predefFile match {
+      case Some(path) =>
+        try Right(
+          Some(PredefInfo(Name("FilePredef"), os.read(path), false, Some(path)))
+        )
+        catch {
+          case e: NoSuchFileException =>
+            Left(
+              (
+                Res.Failure("Unable to load predef file " + path),
+                Seq((Watchable.Path(path), 0L))
+              )
             )
-          )
-      }
-    case None => Right(None)
-  }
+        }
+      case None => Right(None)
+    }
 
   def initialClassLoader: ClassLoader = {
     val contextClassLoader = Thread.currentThread().getContextClassLoader
@@ -127,10 +128,9 @@ case class DynaML(
   def instantiateRepl(replArgs: IndexedSeq[Bind[_]] = Vector.empty) = {
 
     loadedPredefFile.right.map { predefFileInfoOpt =>
-      val augmentedPredef = DynaML.maybeDefaultPredef(
-        defaultPredef,
-        Defaults.replPredef + Defaults.predefString + DynaML.extraPredefString
-      )
+      val augmentedImports =
+        if (defaultPredef) Defaults.replImports ++ Interpreter.predefImports
+        else Imports()
 
       val argString = replArgs.zipWithIndex
         .map {
@@ -153,8 +153,8 @@ case class DynaML(
         outputStream,
         errorStream,
         storage = storageBackend,
+        baseImports = augmentedImports,
         basePredefs = Seq(
-          PredefInfo(Name("DefaultPredef"), augmentedPredef, true, None),
           PredefInfo(Name("ArgsPredef"), argString, false, None)
         ),
         customPredefs = predefFileInfoOpt.toSeq ++ Seq(
@@ -182,10 +182,9 @@ case class DynaML(
 
   def instantiateInterpreter() = {
     loadedPredefFile.right.flatMap { predefFileInfoOpt =>
-      val augmentedPredef = DynaML.maybeDefaultPredef(
-        defaultPredef,
-        Defaults.predefString + DynaML.extraPredefString
-      )
+      val augmentedImports =
+        if (defaultPredef) Interpreter.predefImports
+        else Imports()
 
       val (colorsRef, printer) = Interpreter.initPrinters(
         colors,
@@ -195,9 +194,6 @@ case class DynaML(
       )
       val frame = Frame.createInitial(initialClassLoader)
 
-      val basePredefs = Seq(
-        PredefInfo(Name("DefaultPredef"), augmentedPredef, false, None)
-      )
       val customPredefs = predefFileInfoOpt.toSeq ++ Seq(
         PredefInfo(Name("CodePredef"), predefCode, false, None)
       )
@@ -228,7 +224,12 @@ case class DynaML(
           new FrontEndAPIImpl {}
         )
       )
-      interp.initializePredef(basePredefs, customPredefs, bridges) match {
+      interp.initializePredef(
+        Seq(),
+        customPredefs,
+        bridges,
+        augmentedImports
+      ) match {
         case None           => Right(interp)
         case Some(problems) => Left(problems)
       }
@@ -343,7 +344,7 @@ object DynaML {
             initialScripts = leftoverArgs.map(os.Path(_)),
             initialImports = PredefInitialization.initBridges(
               Seq("ammonite.interp.api.InterpBridge" -> "interp")
-            )
+            ) ++ AmmoniteBuildServer.defaultImports
           )
           val launcher = AmmoniteBuildServer.start(buildServer)
           printErr.println("Starting BSP server")
@@ -381,9 +382,6 @@ object DynaML {
     }
   }
 
-  def maybeDefaultPredef(enabled: Boolean, predef: String) =
-    if (enabled) predef else ""
-
   /**
     * Detects if the console is interactive; lets us make console-friendly output
     * (e.g. ansi color codes) if it is, and script-friendly output (no ansi codes)
@@ -393,19 +391,16 @@ object DynaML {
     */
   def isInteractive() = System.console() != null
 
-  val extraPredefString = s"""
-      |import _root_.io.github.mandar2812.dynaml.repl.Router.{doc, main}
-      |import _root_.ammonite.repl.tools.Util.pathScoptRead
-      |""".stripMargin
-
   class WhiteListClassLoader(whitelist: Set[Seq[String]], parent: ClassLoader)
       extends URLClassLoader(Array(), parent) {
     override def loadClass(name: String, resolve: Boolean) = {
       val tokens = name.split('.')
-      if (Util.lookupWhiteList(
-            whitelist,
-            tokens.init ++ Seq(tokens.last + ".class")
-          )) {
+      if (
+        Util.lookupWhiteList(
+          whitelist,
+          tokens.init ++ Seq(tokens.last + ".class")
+        )
+      ) {
         super.loadClass(name, resolve)
       } else {
         throw new ClassNotFoundException(name)
@@ -473,10 +468,11 @@ class MainRunner(
     printInfo(
       s"Watching for changes to ${watched.length} files... (Ctrl-C to exit)"
     )
-    def statAll() = watched.forall {
-      case (check, lastMTime) =>
-        check.poll() == lastMTime
-    }
+    def statAll() =
+      watched.forall {
+        case (check, lastMTime) =>
+          check.poll() == lastMTime
+      }
 
     while (statAll()) Thread.sleep(100)
   }
