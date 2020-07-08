@@ -199,7 +199,7 @@ object Dependencies {
 
   val coursier_deps = Seq(
     "io.get-coursier" %% "coursier" % "2.0.0-RC6-19",
-    "io.get-coursier" % "interface" % "0.0.22"
+    "io.get-coursier" % "interface" % "0.0.23"
   )
 
   val almond = Seq(
