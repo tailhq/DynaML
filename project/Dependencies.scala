@@ -89,7 +89,7 @@ object Dependencies {
     "com.github.nscala-time" %% "nscala-time"       % "2.24.0",
     "jline"                  % "jline"              % "2.14.6",
     "com.lihaoyi"            %% "pprint"            % "0.5.9",
-    "com.lihaoyi"            %% "os-lib"            % "0.7.0"
+    "com.lihaoyi"            %% "os-lib"            % "0.7.1"
   )
 
   val testSuiteDependencies = Seq(
