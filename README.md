@@ -3,7 +3,7 @@
 # DynaML: ML + JVM + Scala
 
 
-[![Join the chat at https://gitter.im/DynaML/Lobby](https://badges.gitter.im/DynaML/Lobby.svg)](https://gitter.im/DynaML/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/transcendent-ai-labs/DynaML.svg?branch=master)](https://travis-ci.org/transcendent-ai-labs/DynaML) [![](https://jitpack.io/v/transcendent-ai-labs/DynaML.svg)](https://jitpack.io/#transcendent-ai-labs/DynaML)
+[![Join the chat at https://gitter.im/DynaML/Lobby](https://badges.gitter.im/DynaML/Lobby.svg)](https://gitter.im/DynaML/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![Scala CI](https://github.com/transcendent-ai-labs/DynaML/workflows/Scala%20CI/badge.svg) [![](https://jitpack.io/v/transcendent-ai-labs/DynaML.svg)](https://jitpack.io/#transcendent-ai-labs/DynaML)
 [![Coverage Status](https://coveralls.io/repos/github/transcendent-ai-labs/DynaML/badge.svg)](https://coveralls.io/github/transcendent-ai-labs/DynaML)
 
 ------------------
