@@ -125,8 +125,8 @@ object Dependencies {
 
   val linearAlgebraDependencies = Seq(
     "org.typelevel"                              %% "spire" % "0.16.2",
-    "org.scalanlp"                               %% "breeze" % "1.0" % "compile",
-    "org.scalanlp"                               %% "breeze-natives" % "1.0" % "compile"
+    "org.scalanlp"                               %% "breeze" % "1.1" % "compile",
+    "org.scalanlp"                               %% "breeze-natives" % "1.1" % "compile"
   ).map(_.withExclusions(Vector("org.spire-math" %% "spire")))
 
   val chartsDependencies = Seq(
