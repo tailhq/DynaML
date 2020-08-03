@@ -85,11 +85,11 @@ object Dependencies {
     "ws.unfiltered"          %% "unfiltered-filter" % "0.9.1",
     "ws.unfiltered"          %% "unfiltered-jetty"  % "0.9.1",
     "org.apache.commons"     % "commons-math3"      % "3.6.1",
-    "commons-io"             % "commons-io"         % "2.6",
+    "commons-io"             % "commons-io"         % "2.7",
     "com.github.nscala-time" %% "nscala-time"       % "2.24.0",
     "jline"                  % "jline"              % "2.14.6",
-    "com.lihaoyi"            %% "pprint"            % "0.5.9",
-    "com.lihaoyi"            %% "os-lib"            % "0.7.0"
+    "com.lihaoyi"            %% "pprint"            % "0.6.0",
+    "com.lihaoyi"            %% "os-lib"            % "0.7.1"
   )
 
   val testSuiteDependencies = Seq(
@@ -105,10 +105,10 @@ object Dependencies {
 
   val apacheSparkDependency = Seq(
     "javax.servlet"                % "javax.servlet-api"     % "4.0.1" % "test",
-    "org.apache.spark"             %% "spark-core"           % "2.4.6",
-    "org.apache.spark"             %% "spark-mllib"          % "2.4.6",
-    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.11.0",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.11.0"
+    "org.apache.spark"             %% "spark-core"           % "2.4.4",
+    "org.apache.spark"             %% "spark-mllib"          % "2.4.4",
+    "com.fasterxml.jackson.core"   % "jackson-databind"      % "2.11.2",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.11.2"
   ).map(
     _.withExclusions(
       Vector(
@@ -141,7 +141,7 @@ object Dependencies {
     "com.lihaoyi" %% "ammonite-sshd" % "2.1.4" cross CrossVersion.full
   )
 
-  val commons_io = Seq("commons-io" % "commons-io" % "2.6")
+  val commons_io = Seq("commons-io" % "commons-io" % "2.7")
 
   val openMLDependency = Seq("org.openml" % "apiconnector" % "1.0.11")
 
@@ -199,13 +199,13 @@ object Dependencies {
 
   val coursier_deps = Seq(
     "io.get-coursier" %% "coursier" % "2.0.0-RC6-19",
-    "io.get-coursier" % "interface" % "0.0.22"
+    "io.get-coursier" % "interface" % "0.0.24"
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter"      % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"       % "0.9.1+67-7a26185d-SNAPSHOT" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"                 % "0.9.1+67-7a26185d-SNAPSHOT",
+    "sh.almond"                  %% "scala-interpreter"      % "0.10.4" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"       % "0.10.4" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"                 % "0.10.4",
     "com.github.alexarchambault" %% "case-app"               % "2.0.0",
     "com.cibo"                   %% "evilplot-jupyter-scala" % "0.8.0"
   )
