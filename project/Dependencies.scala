@@ -43,7 +43,7 @@ object Dependencies {
     platformName
   }
 
-  val tfscala_version = "0.5.4"
+  val tfscala_version = "0.5.5"
 
   private def process_flag(s: String) =
     if (s.toLowerCase == "true" || s == "1") true else false
