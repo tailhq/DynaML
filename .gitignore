@@ -63,3 +63,6 @@ heapdump*
 javacore*
 Snap*
 .ipynb_checkpoints*
+.ammonite
+.vscode
+.vscode/settings.json
