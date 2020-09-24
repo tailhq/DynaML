@@ -84,7 +84,7 @@ object Utils {
         scope_search(Seq(ls) ++ tail, Seq(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
 
       case MapSeq(name, ls, l) :: tail =>
-        scope_search(Seq(ls, l) ++ tail, Seq.fill(2)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
+        scope_search((ls :: tail), Seq.fill(2)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)
 
       case SeqLayer(name, ls) :: tail =>
         scope_search(ls ++ tail, Seq.fill(ls.length)(s"${process_scope(scopesAcc.head)}$name") ++ scopesAcc.tail)

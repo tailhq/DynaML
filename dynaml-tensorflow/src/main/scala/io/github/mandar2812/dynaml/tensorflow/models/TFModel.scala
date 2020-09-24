@@ -463,7 +463,7 @@ object TFModel {
       else identityPipe[Dataset[T]]
 
     def shuffle[T](buffer: Int, seed: Option[Int] = None) =
-      if (buffer > 0) DataPipe[Dataset[T], Dataset[T]](_.shuffle(buffer, seed))
+      if (buffer > 0) DataPipe[Dataset[T], Dataset[T]](_.shuffle(buffer, seed = seed))
       else identityPipe[Dataset[T]]
 
     def shuffle_and_repeat[T](

@@ -43,7 +43,7 @@ object Dependencies {
     platformName
   }
 
-  val tfscala_version = "0.4.2-SNAPSHOT"
+  val tfscala_version = "0.5.4"
 
   private def process_flag(s: String) =
     if (s.toLowerCase == "true" || s == "1") true else false
@@ -182,12 +182,14 @@ object Dependencies {
   val tf_artifacts = if (packagedTFFlag) {
     Seq(
       "org.platanios"                             %% "tensorflow" % tfscala_version,
-      "org.platanios"                             %% "tensorflow-data" % tfscala_version
+      "org.platanios"                             %% "tensorflow-data" % tfscala_version,
+      "org.platanios"                             %% "tensorflow-jni" % tfscala_version
     ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
   } else {
     Seq(
       "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
-      "org.platanios"                             %% "tensorflow-data" % tfscala_version
+      "org.platanios"                             %% "tensorflow-data" % tfscala_version,
+      "org.platanios"                             %% "tensorflow-jni" % tfscala_version
     ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
   }
 

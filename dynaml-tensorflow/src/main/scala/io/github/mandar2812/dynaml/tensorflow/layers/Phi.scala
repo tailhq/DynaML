@@ -22,6 +22,7 @@ import org.platanios.tensorflow.api.core.types.{IsReal, TF}
 import org.platanios.tensorflow.api.learn.Mode
 import org.platanios.tensorflow.api.learn.layers.Activation
 import org.platanios.tensorflow.api.ops
+import org.platanios.tensorflow.api.ops.math.Math
 import org.platanios.tensorflow.api.ops.Output
 import org.platanios.tensorflow.api.tensors.Tensor
 
@@ -34,7 +35,7 @@ case class Phi[T: TF : IsReal](override val name: String)
   override val layerType: String = "Phi"
 
   override def forwardWithoutContext(input: Output[T])(implicit mode: Mode): Output[T] =
-    ops.Math.erf(input.divide(Tensor(math.sqrt(2.0f)).toOutput.castTo[T]))
+    Math.erf(input.divide(Tensor(math.sqrt(2.0f)).toOutput.castTo[T]))
       .add(Tensor(1.0f).toOutput.castTo[T])
       .multiply(Tensor(0.5f).toOutput.castTo[T])
       .castTo[T]
