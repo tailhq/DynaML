@@ -58,7 +58,7 @@ lazy val core = (project in file("dynaml-core"))
   .settings(baseSettings: _*)
   .dependsOn(pipes)
   .settings(libraryDependencies ++= coreDependencies)
-  .enablePlugins(JavaAppPackaging, BuildInfoPlugin, GenJavadocPlugin)
+  .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
   .settings(
     name := "dynaml-core",
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),

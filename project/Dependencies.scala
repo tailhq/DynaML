@@ -4,7 +4,7 @@ object Dependencies {
 
   val scala_major = 2.12
 
-  val scala_minor = 10
+  val scala_minor = 12
 
   val scala = s"$scala_major.$scala_minor"
 
@@ -137,8 +137,8 @@ object Dependencies {
   )
 
   val ammoniteDeps = Seq(
-    "com.lihaoyi" %% "ammonite-repl" % "2.1.4" cross CrossVersion.full,
-    "com.lihaoyi" %% "ammonite-sshd" % "2.1.4" cross CrossVersion.full
+    "com.lihaoyi" %% "ammonite-repl" % "2.2.0" cross CrossVersion.full,
+    "com.lihaoyi" %% "ammonite-sshd" % "2.2.0" cross CrossVersion.full
   )
 
   val commons_io = Seq("commons-io" % "commons-io" % "2.7")
