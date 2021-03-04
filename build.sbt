@@ -20,7 +20,7 @@ val scriptsDir = settingKey[File](
 )
 
 val baseSettings = Seq(
-  organization := "io.github.transcendent-ai-labs",
+  organization := "io.github.tailhq",
   scalaVersion in ThisBuild := scala,
   //crossScalaVersions in ThisBuild := crossScala,
   resolvers in ThisBuild ++= Seq(
