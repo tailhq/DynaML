@@ -19,7 +19,7 @@ under the License.
 package io.github.mandar2812.dynaml.jupyter
 
 import almond.amm.AmmInterpreter
-import almond._
+import almond.{ScalaInterpreterParams, ReplApiImpl, Execute, JupyterApiImpl}
 import almond.internals._
 import almond.interpreter._
 import almond.interpreter.api.{CommHandler, OutputHandler}
@@ -91,7 +91,13 @@ final class DynaMLJupyter(
       )
 
     val jupyterApi =
-      new JupyterApiImpl(execute0, commHandlerOpt, replApi, silent0)
+      new JupyterApiImpl(
+        execute0,
+        commHandlerOpt,
+        replApi,
+        silent0,
+        params.allowVariableInspector
+      )
 
     for (ec <- params.updateBackgroundVariablesEcOpt)
       UpdatableFuture.setup(replApi, jupyterApi, ec)
@@ -113,7 +119,8 @@ final class DynaMLJupyter(
       params.autoUpdateLazyVals,
       params.autoUpdateVars,
       params.initialClassLoader,
-      logCtx
+      logCtx,
+      jupyterApi.VariableInspector.enabled
     )
   }
 
@@ -136,7 +143,7 @@ final class DynaMLJupyter(
     inputManager: Option[InputManager],
     outputHandler: Option[OutputHandler]
   ): ExecuteResult =
-    execute0(ammInterp, code, inputManager, outputHandler, colors0)
+    execute0(ammInterp, code, inputManager, outputHandler, colors0, storeHistory)
 
   def currentLine(): Int =
     execute0.currentLine
@@ -182,11 +189,11 @@ final class DynaMLJupyter(
       "scala",
       almond.api.Properties.version,
       KernelInfo.LanguageInfo(
-        "scala",
-        scala.util.Properties.versionNumberString,
-        "text/x-scala",
-        ".scala",
-        "script",
+        name = "scala",
+        version = scala.util.Properties.versionNumberString,
+        mimetype = "text/x-scala",
+        file_extension = ".sc",
+        nbconvert_exporter = "script",
         codemirror_mode = Some("text/x-scala")
       ),
       s"""Almond ${almond.api.Properties.version}

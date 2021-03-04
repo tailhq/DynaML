@@ -169,7 +169,10 @@ class TFModel[
             )
           )
 
-      val underlying_tf_pair = tf.createWith(graph = graphInstance) {
+      val underlying_tf_pair = tf.createWith(
+        graph = graphInstance,
+        attributes=Map("constant_folding" -> false)
+      ) {
 
         val m =
           tf.learn.Model.simpleSupervised[In, Out, ArchOut, ArchOut, Loss](

@@ -43,7 +43,7 @@ object Dependencies {
     platformName
   }
 
-  val tfscala_version = "0.5.5"
+  val tfscala_version = "0.5.10"
 
   private def process_flag(s: String) =
     if (s.toLowerCase == "true" || s == "1") true else false
@@ -58,8 +58,8 @@ object Dependencies {
     Option(System.getProperty("packagedTF")).getOrElse("false")
   )
 
-  if(packagedTFFlag) println("Using system compiled TF binaries (should be in LD_LIBRARY_PATH).")
-  else println("Using pre-compiled TF binaries.")
+  if(packagedTFFlag) println("Using pre-compiled TF binaries.")
+  else println("Using system compiled TF binaries (should be in LD_LIBRARY_PATH).")
 
   val tensorflow_classifier: String = {
     val platform_splits = platform.split("-")
@@ -68,7 +68,7 @@ object Dependencies {
     val tf_c =
       if (os.contains("macosx")) "darwin-cpu-" + arch
       else if (os.contains("linux")) {
-        if (gpuFlag) "linux-gpu-" + arch else "linux-cpu-" + arch
+        if (gpuFlag) "linux-gpu" /* + arch */ else "linux" // + arch
       } else ""
     println("Tensorflow-Scala Classifier: " + tf_c)
     tf_c
@@ -179,7 +179,7 @@ object Dependencies {
     "com.diffplug.matsim" % "matfilerw" % "3.1.1"
   )
 
-  val tf_artifacts = if (packagedTFFlag) {
+  val tf_artifacts = if (!packagedTFFlag) {
     Seq(
       "org.platanios"                             %% "tensorflow" % tfscala_version,
       "org.platanios"                             %% "tensorflow-data" % tfscala_version,
@@ -200,14 +200,14 @@ object Dependencies {
   )
 
   val coursier_deps = Seq(
-    "io.get-coursier" %% "coursier" % "2.0.0-RC6-19",
+    "io.get-coursier" %% "coursier" % "2.0.12",
     "io.get-coursier" % "interface" % "0.0.24"
   )
 
   val almond = Seq(
-    "sh.almond"                  %% "scala-interpreter"      % "0.10.4" cross CrossVersion.full,
-    "sh.almond"                  %% "scala-kernel-api"       % "0.10.4" cross CrossVersion.full,
-    "sh.almond"                  %% "kernel"                 % "0.10.4",
+    "sh.almond"                  %% "scala-interpreter"      % "0.10.9" cross CrossVersion.full,
+    "sh.almond"                  %% "scala-kernel-api"       % "0.10.9" cross CrossVersion.full,
+    "sh.almond"                  %% "kernel"                 % "0.10.9",
     "com.github.alexarchambault" %% "case-app"               % "2.0.0",
     "com.cibo"                   %% "evilplot-jupyter-scala" % "0.8.0"
   )
