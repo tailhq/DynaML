@@ -24,8 +24,8 @@ val baseSettings = Seq(
   scalaVersion in ThisBuild := scala,
   //crossScalaVersions in ThisBuild := crossScala,
   resolvers in ThisBuild ++= Seq(
-    "jzy3d-releases" at "http://maven.jzy3d.org/releases",
-    "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
+    "jzy3d-releases" at "https://maven.jzy3d.org/releases",
+    "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
     "BeDataDriven" at "https://nexus.bedatadriven.com/content/groups/public",
     Resolver.sonatypeRepo("public"),
     Resolver.sonatypeRepo("snapshots"),

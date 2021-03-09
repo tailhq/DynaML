@@ -67,3 +67,4 @@ Snap*
 .vscode
 .vscode/*
 *.gz
+.bsp
