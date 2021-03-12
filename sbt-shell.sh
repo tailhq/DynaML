@@ -8,4 +8,4 @@ heapSize=${1:-4096m}
 
 echo "Starting sbt shell with Build Executable Heap Size = $heapSize and GPU Flag = $gpuFlag"
 
-sbt -Dheap=${heapSize} -Dgpu=${gpuFlag} -DpackagedTF=${pTF}
+sbt -Dheap=${heapSize} -Dgpu=${gpuFlag} -DpackagedTF=${pTF} -J-XX:MaxDirectMemorySize=2g
