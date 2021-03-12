@@ -1,10 +1,10 @@
-import io.github.mandar2812.dynaml.DynaMLPipe._
-import io.github.mandar2812.dynaml.analysis.{DifferentiableMap, PushforwardMap}
-import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability.{E, GaussianRV, RandomVariable, OrderStats}
+import io.github.tailhq.dynaml.DynaMLPipe._
+import io.github.tailhq.dynaml.analysis.{DifferentiableMap, PushforwardMap}
+import io.github.tailhq.dynaml.pipes.DataPipe
+import io.github.tailhq.dynaml.probability.{E, GaussianRV, RandomVariable, OrderStats}
 import spire.implicits._
-import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
-import io.github.mandar2812.dynaml.probability.distributions.{SkewGaussian, UESN}
+import io.github.tailhq.dynaml.graphics.charts.Highcharts._
+import io.github.tailhq.dynaml.probability.distributions.{SkewGaussian, UESN}
 
 val g = GaussianRV(0.0, 0.5)
 val sg = RandomVariable(SkewGaussian(10.0, 0.0, 0.5))

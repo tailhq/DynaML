@@ -5,7 +5,7 @@ import sbtbuildinfo.BuildInfoPlugin.autoImport._
 import org.scoverage.coveralls.Imports.CoverallsKeys._
 
 val mainVersion = "v2.0-SNAPSHOT"
-maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
+maintainer := "Mandar Chandorkar <tailhq@gmail.com>"
 packageSummary := "Scala Library/REPL for Machine Learning Research"
 packageDescription := "DynaML is a Scala & JVM Machine Learning toolbox for research, education & industry."
 
@@ -49,7 +49,7 @@ lazy val pipes = (project in file("dynaml-pipes"))
   .settings(
     name := "dynaml-pipes",
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "io.github.mandar2812.dynaml.pipes",
+    buildInfoPackage := "io.github.tailhq.dynaml.pipes",
     buildInfoUsePackageAsPath := true,
     version := mainVersion
   )
@@ -62,7 +62,7 @@ lazy val core = (project in file("dynaml-core"))
   .settings(
     name := "dynaml-core",
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "io.github.mandar2812.dynaml",
+    buildInfoPackage := "io.github.tailhq.dynaml",
     buildInfoUsePackageAsPath := true,
     version := mainVersion
   )
@@ -74,7 +74,7 @@ lazy val examples = (project in file("dynaml-examples"))
   .settings(
     name := "dynaml-examples",
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "io.github.mandar2812.dynaml.examples",
+    buildInfoPackage := "io.github.tailhq.dynaml.examples",
     buildInfoUsePackageAsPath := true,
     version := mainVersion
   )
@@ -86,7 +86,7 @@ lazy val repl = (project in file("dynaml-repl"))
     name := "dynaml-repl",
     version := mainVersion,
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "io.github.mandar2812.dynaml.repl",
+    buildInfoPackage := "io.github.tailhq.dynaml.repl",
     buildInfoUsePackageAsPath := true,
     libraryDependencies ++= replDependencies
   )
@@ -99,7 +99,7 @@ lazy val tensorflow = (project in file("dynaml-tensorflow"))
     name := "dynaml-tensorflow",
     version := mainVersion,
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "io.github.mandar2812.dynaml.tensorflow",
+    buildInfoPackage := "io.github.tailhq.dynaml.tensorflow",
     buildInfoUsePackageAsPath := true,
     libraryDependencies ++= tensorflowDependency
       .map(_.excludeAll(excludeSlf4jBindings: _*))
@@ -113,7 +113,7 @@ lazy val notebook = (project in file("dynaml-notebook"))
     name := "dynaml-notebook",
     version := mainVersion,
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "io.github.mandar2812.dynaml.jupyter",
+    buildInfoPackage := "io.github.tailhq.dynaml.jupyter",
     buildInfoUsePackageAsPath := true,
     libraryDependencies ++= notebookDepencencies
       .map(_.excludeAll(excludeSlf4jBindings: _*))
@@ -136,9 +136,9 @@ lazy val DynaML = (project in file("."))
     version := mainVersion,
     fork in run := true,
     fork in test := true,
-    mainClass in Compile := Some("io.github.mandar2812.dynaml.DynaML"),
+    mainClass in Compile := Some("io.github.tailhq.dynaml.DynaML"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "io.github.mandar2812",
+    buildInfoPackage := "io.github.tailhq",
     buildInfoUsePackageAsPath := true,
     dataDirectory := new File("data"),
     mappings in Universal ++= dataDirectory.value
@@ -171,7 +171,7 @@ lazy val DynaML = (project in file("."))
       "-J-XX:HeapBaseMinAddress=32G"
     ),
     scalacOptions in Universal ++= Seq("-Xlog-implicits"),
-    initialCommands in console := """io.github.mandar2812.dynaml.DynaML.main(Array())""",
+    initialCommands in console := """io.github.tailhq.dynaml.DynaML.main(Array())""",
     dockerfile in docker := {
       val appDir: File = stage.value
       val targetDir    = "/app"
@@ -184,10 +184,10 @@ lazy val DynaML = (project in file("."))
     },
     imageNames in docker := Seq(
       // Sets the latest tag
-      ImageName(s"mandar2812/${name.value.toLowerCase}:latest"),
+      ImageName(s"tailhq/${name.value.toLowerCase}:latest"),
       // Sets a name with a tag that contains the project version
       ImageName(
-        namespace = Some("mandar2812"),
+        namespace = Some("tailhq"),
         repository = name.value.toLowerCase,
         tag = Some(version.value)
       )

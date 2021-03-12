@@ -1,18 +1,18 @@
 {
   import breeze.linalg.eig
   import breeze.stats.distributions.{ContinuousDistr, Gamma}
-  import io.github.mandar2812.dynaml.kernels._
-  import io.github.mandar2812.dynaml.models.bayes.{
+  import io.github.tailhq.dynaml.kernels._
+  import io.github.tailhq.dynaml.models.bayes.{
     LinearTrendESGPrior,
     LinearTrendGaussianPrior,
     GaussianProcessPrior
   }
-  import io.github.mandar2812.dynaml.probability._
-  import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
-  import io.github.mandar2812.dynaml.analysis.implicits._
-  import io.github.mandar2812.dynaml.optimization.GPMixtureMachine
-  import io.github.mandar2812.dynaml.pipes.Encoder
-  import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
+  import io.github.tailhq.dynaml.probability._
+  import io.github.tailhq.dynaml.graphics.charts.Highcharts._
+  import io.github.tailhq.dynaml.analysis.implicits._
+  import io.github.tailhq.dynaml.optimization.GPMixtureMachine
+  import io.github.tailhq.dynaml.pipes.Encoder
+  import io.github.tailhq.dynaml.probability.distributions.UnivariateGaussian
   import spire.implicits._
 
   val rbfc      = new SECovFunc(0.5, 1.0)

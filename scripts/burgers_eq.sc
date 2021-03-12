@@ -1,16 +1,16 @@
-import _root_.io.github.mandar2812.dynaml.pipes.{DataPipe, MetaPipe}
-import _root_.io.github.mandar2812.dynaml.analysis
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d._
-import _root_.io.github.mandar2812.dynaml.utils
-import _root_.io.github.mandar2812.dynaml.analysis.implicits._
-import _root_.io.github.mandar2812.dynaml.tensorflow._
-import _root_.io.github.mandar2812.dynaml.tensorflow.layers.{
+import _root_.io.github.tailhq.dynaml.pipes.{DataPipe, MetaPipe}
+import _root_.io.github.tailhq.dynaml.analysis
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.graphics.plot3d
+import _root_.io.github.tailhq.dynaml.graphics.plot3d._
+import _root_.io.github.tailhq.dynaml.utils
+import _root_.io.github.tailhq.dynaml.analysis.implicits._
+import _root_.io.github.tailhq.dynaml.tensorflow._
+import _root_.io.github.tailhq.dynaml.tensorflow.layers.{
   L1Regularization,
   L2Regularization
 }
-import _root_.io.github.mandar2812.dynaml.tensorflow.pde.{source => q, _}
+import _root_.io.github.tailhq.dynaml.tensorflow.pde.{source => q, _}
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer
 import ammonite.ops._

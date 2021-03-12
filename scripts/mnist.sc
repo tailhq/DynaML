@@ -1,7 +1,7 @@
 {
   import _root_.java.nio.file.Paths
-  import _root_.io.github.mandar2812.dynaml.pipes._
-  import _root_.io.github.mandar2812.dynaml.tensorflow._
+  import _root_.io.github.tailhq.dynaml.pipes._
+  import _root_.io.github.tailhq.dynaml.tensorflow._
   import org.platanios.tensorflow.api._
   import org.platanios.tensorflow.data.image.MNISTLoader
   import _root_.ammonite.ops._

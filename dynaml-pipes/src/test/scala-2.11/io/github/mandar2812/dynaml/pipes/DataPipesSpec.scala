@@ -1,4 +1,4 @@
-package io.github.mandar2812.dynaml.pipes
+package io.github.tailhq.dynaml.pipes
 
 import org.scalatest.{FlatSpec, Matchers}
 

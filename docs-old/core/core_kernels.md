@@ -1,6 +1,6 @@
 !!! summary ""
 
-    The [`dynaml.kernels`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.mandar2812.dynaml.kernels.package) package has a highly developed API for creating kernel functions for machine learning applications. Here
+    The [`dynaml.kernels`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/#io.github.tailhq.dynaml.kernels.package) package has a highly developed API for creating kernel functions for machine learning applications. Here
     we give the user an in-depth introduction to its capabilities.
 
 <br/>
@@ -35,7 +35,7 @@ This outlines only one key feature for kernel functions i.e. their evaluation fu
     <br/>
     For practical purposes, the [`#!scala  Kernel[T, V]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.Kernel) trait does not have enough functionality for usage in varied models like [_Gaussian Processes_](/core/core_gp.md), [_Student's T Processes_](/core/core_stp.md), [_LS-SVM_](core_lssvm.md) etc.
 
-    For this reason there is the [`#!scala  CovarianceFunction[T, V, M]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.kernels.CovarianceFunction) abstract class. It contains methods to construct kernel matrices, keep track of hyper-parameter assignments among other things.
+    For this reason there is the [`#!scala  CovarianceFunction[T, V, M]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.tailhq.dynaml.kernels.CovarianceFunction) abstract class. It contains methods to construct kernel matrices, keep track of hyper-parameter assignments among other things.
 
 ## Creating arbitrary kernel functions
 
@@ -178,8 +178,8 @@ In order to create a decomposable kernel you need three components.
 
 ```scala
 //Not required in REPL, already imported
-import io.github.mandar2812.dynaml.DynaMLPipe._
-import io.github.mandar2812.dynaml.pipes._
+import io.github.tailhq.dynaml.DynaMLPipe._
+import io.github.tailhq.dynaml.pipes._
 
 val kernel1: LocalScalarKernel[DenseVector[Double]] = _
 val kernel2: LocalScalarKernel[DenseVector[Double]] = _

@@ -1,19 +1,19 @@
 import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.{ContinuousDistr, Gamma}
-import io.github.mandar2812.dynaml.DynaMLPipe._
-import io.github.mandar2812.dynaml.analysis.VectorField
-import io.github.mandar2812.dynaml.kernels.{
+import io.github.tailhq.dynaml.DynaMLPipe._
+import io.github.tailhq.dynaml.analysis.VectorField
+import io.github.tailhq.dynaml.kernels.{
   DiracKernel,
   LaplacianKernel,
   SEKernel
 }
-import io.github.mandar2812.dynaml.modelpipe.GPRegressionPipe
-import io.github.mandar2812.dynaml.probability.mcmc.AdaptiveHyperParameterMCMC
-import io.github.mandar2812.dynaml.pipes.{DataPipe, StreamDataPipe}
-import io.github.mandar2812.dynaml.probability.MultGaussianRV
-import io.github.mandar2812.dynaml.probability.mcmc.HyperParameterMCMC
-import io.github.mandar2812.dynaml.utils.GaussianScaler
-import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
+import io.github.tailhq.dynaml.modelpipe.GPRegressionPipe
+import io.github.tailhq.dynaml.probability.mcmc.AdaptiveHyperParameterMCMC
+import io.github.tailhq.dynaml.pipes.{DataPipe, StreamDataPipe}
+import io.github.tailhq.dynaml.probability.MultGaussianRV
+import io.github.tailhq.dynaml.probability.mcmc.HyperParameterMCMC
+import io.github.tailhq.dynaml.utils.GaussianScaler
+import io.github.tailhq.dynaml.graphics.charts.Highcharts._
 
 val deltaT = 4
 

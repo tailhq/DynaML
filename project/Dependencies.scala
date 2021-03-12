@@ -66,7 +66,7 @@ object Dependencies {
     val (os, arch)      = (platform_splits.head, platform_splits.last)
 
     val tf_c =
-      if (os.contains("macosx")) "darwin-cpu-" + arch
+      if (os.contains("macosx")) "darwin-" + arch
       else if (os.contains("linux")) {
         if (gpuFlag) "linux-gpu" /* + arch */ else "linux" // + arch
       } else ""

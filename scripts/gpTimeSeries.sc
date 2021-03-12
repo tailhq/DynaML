@@ -1,21 +1,21 @@
 {
   import breeze.linalg.eig
   import breeze.stats.distributions._
-  import io.github.mandar2812.dynaml.kernels._
-  import io.github.mandar2812.dynaml.models.bayes.{
+  import io.github.tailhq.dynaml.kernels._
+  import io.github.tailhq.dynaml.models.bayes.{
     LinearTrendESGPrior,
     LinearTrendGaussianPrior,
     GaussianProcessPrior
   }
-  import io.github.mandar2812.dynaml.modelpipe._
-  import io.github.mandar2812.dynaml.probability._
-  import io.github.mandar2812.dynaml.DynaMLPipe._
-  import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
-  import io.github.mandar2812.dynaml.analysis.implicits._
-  import io.github.mandar2812.dynaml.optimization.GPMixtureMachine
-  import io.github.mandar2812.dynaml.pipes._
-  import io.github.mandar2812.dynaml.tensorflow.dtfdata
-  import io.github.mandar2812.dynaml.probability.distributions.UnivariateGaussian
+  import io.github.tailhq.dynaml.modelpipe._
+  import io.github.tailhq.dynaml.probability._
+  import io.github.tailhq.dynaml.DynaMLPipe._
+  import io.github.tailhq.dynaml.graphics.charts.Highcharts._
+  import io.github.tailhq.dynaml.analysis.implicits._
+  import io.github.tailhq.dynaml.optimization.GPMixtureMachine
+  import io.github.tailhq.dynaml.pipes._
+  import io.github.tailhq.dynaml.tensorflow.dtfdata
+  import io.github.tailhq.dynaml.probability.distributions.UnivariateGaussian
   import spire.implicits._
 
   val dump_dir = home / 'Manuscripts / "phd-thesis" / 'data

@@ -1,8 +1,8 @@
 {
   import breeze.linalg.DenseVector
-  import io.github.mandar2812.dynaml.analysis.VectorField
-  import io.github.mandar2812.dynaml.kernels._
-  import io.github.mandar2812.dynaml.examples.AbottPowerPlant
+  import io.github.tailhq.dynaml.analysis.VectorField
+  import io.github.tailhq.dynaml.kernels._
+  import io.github.tailhq.dynaml.examples.AbottPowerPlant
 
   implicit val ev = VectorField(24)
 

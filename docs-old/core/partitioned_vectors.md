@@ -6,7 +6,7 @@ Blocked vectors and dual vectors in the [`algebra`](https://transcendent-ai-labs
 each partition consists of an ordered index and the partition content which is in the form of a breeze vector.
 
 The relevant API endpoints are `#!scala PartitionedVector` and `#!scala PartitionedDualVector`. In order to access these
-objects, you must do `#!scala import io.github.mandar2812.dynaml.algebra._` (already loaded by default in the DynaML shell).
+objects, you must do `#!scala import io.github.tailhq.dynaml.algebra._` (already loaded by default in the DynaML shell).
 
 ## Creation
 

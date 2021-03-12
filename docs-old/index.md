@@ -69,10 +69,10 @@ image classification task.
 
 ```scala
 import ammonite.ops._
-import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.tensorflow.data.AbstractDataSet
-import io.github.mandar2812.dynaml.tensorflow.{dtflearn, dtfutils}
-import io.github.mandar2812.dynaml.tensorflow.implicits._
+import io.github.tailhq.dynaml.pipes.DataPipe
+import io.github.tailhq.dynaml.tensorflow.data.AbstractDataSet
+import io.github.tailhq.dynaml.tensorflow.{dtflearn, dtfutils}
+import io.github.tailhq.dynaml.tensorflow.implicits._
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.layers.Activation
 import org.platanios.tensorflow.data.image.CIFARLoader

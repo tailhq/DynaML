@@ -70,11 +70,10 @@ val prediction = model.predict(pattern)
 
 Autoencoders can be created using the [```AutoEncoder```](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.neuralnets.AutoEncoder) class. Its constructor has the following arguments.
 
-
 ```scala
-import io.github.mandar2812.dynaml.models.neuralnets._
-import io.github.mandar2812.dynaml.models.neuralnets.TransferFunctions._
-import io.github.mandar2812.dynaml.optimization.BackPropagation
+import io.github.tailhq.dynaml.models.neuralnets._
+import io.github.tailhq.dynaml.models.neuralnets.TransferFunctions._
+import io.github.tailhq.dynaml.optimization.BackPropagation
 
 //Cast the training data as a stream of (x,x),
 //where x are the DenseVector of features

@@ -9,11 +9,11 @@
 
 The `DataSet` family of classes helps the user to create and transform potentially large number of data instances. 
 Users can create and perform complex transformations on data sets, using the `DataPipe` API or simple Scala functions.
- 
+
 ```scala
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.tensorflow._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
+import io.github.tailhq.dynaml.tensorflow._
  
  
 val random_numbers = GaussianRV(0.0, 1.0) :* GaussianRV(1.0, 2.0) 
@@ -48,9 +48,9 @@ Find out more about the `DataSet` API and its capabilities in the [user guide](/
 to speed up training of deep neural nets.
  
 **Usage**
- 
+
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
   
 val bn = dtflearn.batch_norm("BatchNorm1")
  
@@ -80,10 +80,10 @@ Similarly the `5 x 5` convolutions can be expressed a combination of two `3 x 3`
 DynaML now offers the Inception cell as a computational layer. 
  
 **Usage**
- 
+
 ```scala
-import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.pipes._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
  
 //Create an RELU activation, given a string name/identifier.
@@ -131,7 +131,7 @@ Create common and simple training stop criteria such as.
 
 ```scala
  
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
  import org.platanios.tensorflow.api._
  import org.platanios.tensorflow.data.image.MNISTLoader
  import ammonite.ops._
@@ -201,7 +201,7 @@ val (model, estimator) = dtflearn.build_tf_model(
 
 ```scala
 
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 //Create a single feedforward layer

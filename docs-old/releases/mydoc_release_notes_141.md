@@ -85,8 +85,8 @@ This new package will house stochastic prior models, currently there is support 
  - Added `#!scala DecomposableCovariance`
 
 ```scala
-import io.github.mandar2812.dynaml.DynaMLPipe._
-import io.github.mandar2812.dynaml.kernels._
+import io.github.tailhq.dynaml.DynaMLPipe._
+import io.github.tailhq.dynaml.kernels._
 
 
 implicit val ev = VectorField(6)
@@ -130,7 +130,7 @@ Where A is assumed to be a symmetric positive semi-definite matrix
 Usage:
 
 ```scala
-import io.github.mandar2812.dynaml.algebra._
+import io.github.tailhq.dynaml.algebra._
 
 val x: DenseVector[Double] = ...
 val y: DenseVector[Double] = ...
@@ -173,14 +173,14 @@ Added the following:
  - `#!scala UESN` and `#!scala MESN` representing an alternative formulation of the skew gaussian family from Adcock and Shutes.
  - `#!scala TruncatedGaussian`: Truncated version of the Gaussian distribution.
  - [Matrix Normal Distribution](https://en.wikipedia.org/wiki/Matrix_normal_distribution)
- - Added _Expectation_ operator for `#!scala RandomVariable` implementations in the `#!scala io.github.mandar2812.dynaml.probability` package object. Usage example given below.
+ - Added _Expectation_ operator for `#!scala RandomVariable` implementations in the `#!scala io.github.tailhq.dynaml.probability` package object. Usage example given below.
  - `#!scala SkewGaussian`, `#!scala ExtendedSkewGaussian`: An breeze implementation of the SkewGaussian and extended Skew-Gaussian distributions respectively
  - `#!scala PushforwardMap`, `#!scala DifferentiableMap` added: `#!scala PushforwardMap` enables creating new random variables with defined density from base random variables.
 
 ``` scala
-import io.github.mandar2812.dynaml.analysis._
-import io.github.mandar2812.dynaml.probability._
-import io.github.mandar2812.dynaml.probability.distributions._
+import io.github.tailhq.dynaml.analysis._
+import io.github.tailhq.dynaml.probability._
+import io.github.tailhq.dynaml.probability.distributions._
 
 val g = GaussianRV(0.0, 0.25)
 val sg = RandomVariable(SkewGaussian(1.0, 0.0, 0.25))

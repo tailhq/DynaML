@@ -1,11 +1,11 @@
 import org.platanios.tensorflow.api._
-import _root_.io.github.mandar2812.dynaml.analysis.implicits._
-import _root_.io.github.mandar2812.dynaml.utils
-import _root_.io.github.mandar2812.dynaml.pipes.TupleIntegerEncoder
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d.DelauneySurface
-import _root_.io.github.mandar2812.dynaml.tensorflow.dtf
-import _root_.io.github.mandar2812.dynaml.repl.Router.main
+import _root_.io.github.tailhq.dynaml.analysis.implicits._
+import _root_.io.github.tailhq.dynaml.utils
+import _root_.io.github.tailhq.dynaml.pipes.TupleIntegerEncoder
+import _root_.io.github.tailhq.dynaml.graphics.plot3d
+import _root_.io.github.tailhq.dynaml.graphics.plot3d.DelauneySurface
+import _root_.io.github.tailhq.dynaml.tensorflow.dtf
+import _root_.io.github.tailhq.dynaml.repl.Router.main
 import org.platanios.tensorflow.api.ops.NN.SameConvPadding
 import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
 

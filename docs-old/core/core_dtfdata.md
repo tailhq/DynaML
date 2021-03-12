@@ -15,9 +15,9 @@ access to the underlying collection.
     object gives the user easy access to the `DataSet` API.
     
     ```scala
-    import _root_.io.github.mandar2812.dynaml.probability._
-    import _root_.io.github.mandar2812.dynaml.pipes._
-    import io.github.mandar2812.dynaml.tensorflow._
+    import _root_.io.github.tailhq.dynaml.probability._
+    import _root_.io.github.tailhq.dynaml.pipes._
+    import io.github.tailhq.dynaml.tensorflow._
      
      
     val random_numbers = GaussianRV(0.0, 1.0) :* GaussianRV(1.0, 2.0) 
@@ -38,9 +38,9 @@ DynaML data sets support several operations of the _map-reduce_ philosophy.
 Transform each element of type `X` into some other element of type `Y` (`Y` can possibly be the same as `X`).
 
 ```scala
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.tensorflow._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
+import io.github.tailhq.dynaml.tensorflow._
      
      
 val random_numbers = GaussianRV(0.0, 1.0)
@@ -67,10 +67,10 @@ Schematically, this process is
 `Iterable[X] -> Iterable[Iterable[Y]] -> Iterable[Y]`
 
 ```scala
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
 import scala.util.Random
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 
 val random_gaussian_dataset = dtfdata.dataset(
   GaussianRV(0.0, 1.0).iid(10000).draw
@@ -88,10 +88,10 @@ Collect only the elements which satisfy some predicate, i.e. a function which re
 elements to be selected (filtered) and `false` for the ones which should be discarded.
 
 ```scala
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
 import scala.util.Random
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 
 val gaussian_dataset = dtfdata.dataset(
   GaussianRV(0.0, 1.0).iid(10000).draw
@@ -122,10 +122,10 @@ x_t &= x_{t-1} + \epsilon \\
 $$
 
 ```scala
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
 import scala.util.Random
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 
 val gaussian_increments = dtfdata.dataset(
   GaussianRV(0.0, 1.0).iid(10000).draw
@@ -146,10 +146,10 @@ The `reduce()` and `reduceLeft()` methods help in computing summary values from 
 collection.
 
 ```scala
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
 import scala.util.Random
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 
 val gaussian_increments = dtfdata.dataset(
   GaussianRV(0.0, 1.0).iid(10000).draw
@@ -170,10 +170,10 @@ Some times transformations on data sets cannot be applied on each element indivi
 entire data collection is required for such a transformation.
 
 ```scala
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
 import scala.util.Random
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 
 val gaussian_data = dtfdata.dataset(
   GaussianRV(0.0, 1.0).iid(10000).draw
@@ -194,9 +194,9 @@ val resampled_data = gaussian_data.transform(resample)
     instance, it is possible to obtain a TensorFlow `Dataset`.
     
     ```scala
-    import _root_.io.github.mandar2812.dynaml.probability._
-    import _root_.io.github.mandar2812.dynaml.pipes._
-    import io.github.mandar2812.dynaml.tensorflow._
+    import _root_.io.github.tailhq.dynaml.probability._
+    import _root_.io.github.tailhq.dynaml.pipes._
+    import io.github.tailhq.dynaml.tensorflow._
     import org.platanios.tensorflow.api._
     import org.platanios.tensorflow.api.types._
      
@@ -225,11 +225,11 @@ The classes `ZipDataSet[X, Y]` and `SupervisedDataSet[X, Y]` both represent data
 The `zip()` method can be used to create data sets consisting of tuples.
 
 ```scala
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
 import scala.util.Random
 import _root_.breeze.stats.distributions._
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 
 val gaussian_data = dtfdata.dataset(
   GaussianRV(0.0, 1.0).iid(10000).draw
@@ -258,11 +258,11 @@ in the following ways.
 
 ```scala
 
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.pipes._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.pipes._
 import scala.util.Random
 import _root_.breeze.stats.distributions._
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 
 val gaussian_data = dtfdata.dataset(
   GaussianRV(0.0, 1.0).iid(10000).draw

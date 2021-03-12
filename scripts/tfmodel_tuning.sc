@@ -1,16 +1,16 @@
 import ammonite.ops._
-import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.models._
-import io.github.mandar2812.dynaml.optimization._
-import io.github.mandar2812.dynaml.tensorflow._
-import io.github.mandar2812.dynaml.tensorflow.models._
-import io.github.mandar2812.dynaml.tensorflow.layers.L2Regularization
+import io.github.tailhq.dynaml.pipes._
+import io.github.tailhq.dynaml.models._
+import io.github.tailhq.dynaml.optimization._
+import io.github.tailhq.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow.models._
+import io.github.tailhq.dynaml.tensorflow.layers.L2Regularization
 import org.joda.time.DateTime
 import org.platanios.tensorflow.api._
 import _root_.spire.implicits._
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.analysis._
-import _root_.io.github.mandar2812.dynaml.DynaMLPipe
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.analysis._
+import _root_.io.github.tailhq.dynaml.DynaMLPipe
 import breeze.numerics.sigmoid
 
 import scala.util.Random
