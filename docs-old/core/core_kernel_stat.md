@@ -11,7 +11,7 @@ Note that any norm may be used to quantify the distance between the two vectors 
 
 		```scala
 			import spire.algebra.Field
-			import io.github.mandar2812.dynaml.analysis.VectorField
+			import io.github.tailhq.dynaml.analysis.VectorField
 			//Calculate the number of input features
 			//and create a vector field of that dimension
 			val num_features: Int = ...

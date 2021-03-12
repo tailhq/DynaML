@@ -15,7 +15,7 @@
  - The [`dtf`](https://transcendent-ai-labs.github.io/api_docs/DynaML/v1.5.2/dynaml-core/#io.github.mandar2812.dynaml.tensorflow.package$$dtf$) package object houses utility functions related to tensorflow primitives. Currently supports creation of tensors from arrays.
  
    ```scala 
-   import io.github.mandar2812.dynaml.tensorflow._
+   import io.github.tailhq.dynaml.tensorflow._
    import org.platanios.tensorflow.api._
    //Create a FLOAT32 Tensor of shape (2, 2), i.e. a square matrix
    val mat = dtf.tensor_f32(2, 2)(1d, 2d, 3d, 4d)

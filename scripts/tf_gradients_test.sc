@@ -1,10 +1,10 @@
-import _root_.io.github.mandar2812.dynaml.tensorflow._
-import _root_.io.github.mandar2812.dynaml.tensorflow.pde._
+import _root_.io.github.tailhq.dynaml.tensorflow._
+import _root_.io.github.tailhq.dynaml.tensorflow.pde._
 import _root_.org.platanios.tensorflow.api._
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer
 import _root_.org.platanios.tensorflow.api.tensors.TensorLike
-import _root_.io.github.mandar2812.dynaml.repl.Router.main
+import _root_.io.github.tailhq.dynaml.repl.Router.main
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 

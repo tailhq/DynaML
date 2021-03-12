@@ -1,6 +1,6 @@
-import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.probability.stan._
-import io.github.mandar2812.dynaml.probability._
+import io.github.tailhq.dynaml.pipes._
+import io.github.tailhq.dynaml.probability.stan._
+import io.github.tailhq.dynaml.probability._
 import spire.implicits._
 import breeze.math._
 import breeze.numerics._

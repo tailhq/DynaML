@@ -22,7 +22,7 @@ The most common usage of `plot3d` is to visualise 3 dimensional surfaces, this c
 If the user can express the surface as a function of two arguments.
 
 ```scala
-import io.github.mandar2812.dynaml.graphics._
+import io.github.tailhq.dynaml.graphics._
 
 val mexican_hat = 
   (x: Double, y: Double) => 
@@ -42,8 +42,8 @@ If the surface is not determined completely, but only sampled over a discrete se
 it is still possible to visualise an approximation to the surface, using _Delauney triangulation_.
 
 ```scala
-import io.github.mandar2812.dynaml.graphics._
-import io.github.mandar2812.dynaml.probability._
+import io.github.tailhq.dynaml.graphics._
+import io.github.tailhq.dynaml.probability._
 
 //A function generating the surface need not be known,
 //as long as one has access to the sampled points.
@@ -66,9 +66,9 @@ The `plot3d` object also allows the user to visualise 3d histograms from collect
 points on the 2d plane, expressed as a collection of `(Double, Double)`.
 
 ```scala
-import io.github.mandar2812.dynaml.graphics._
-import io.github.mandar2812.dynaml.probability._
-import io.github.mandar2812.dynaml.probability.distributions._
+import io.github.tailhq.dynaml.graphics._
+import io.github.tailhq.dynaml.probability._
+import io.github.tailhq.dynaml.probability.distributions._
 
 //Create two different random variables to 
 //sample x and y coordinates.

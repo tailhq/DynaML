@@ -5,7 +5,7 @@
 To use DynaML's tensorflow API, import it in your code/script/DynaML shell session.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 ```
 
@@ -20,7 +20,7 @@ There is more than one way to instantiate a tensor.
 ### Enumeration of Values
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 //Create a float tensor
@@ -41,7 +41,7 @@ tensor_double.summarize()
 ### From a Scala Sequence
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 val float_seq = Seq(1f, 2f, 3f, 4f)
@@ -64,7 +64,7 @@ When dealing with binary data formats, such as images and other binary numerical
 it is useful to be able to instantiate tensors from buffers of raw bytes.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 val byte_buffer: Array[Byte] = _
@@ -77,7 +77,7 @@ val byte_tensor = dtf.tensor_from_buffer(INT32, shape)(byte_buffer)
 Apart from these functions, there are.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 //Double tensor
@@ -99,8 +99,8 @@ probability API.
 ```scala
 import breeze.stats.distributions._
 
-import io.github.mandar2812.dynaml.probability._
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.probability._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 val rv = RandomVariable(new LogNormal(0.0, 1.5))

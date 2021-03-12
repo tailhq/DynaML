@@ -1,15 +1,15 @@
 //Uncertainty Quantification Benchmarks
 import breeze.linalg.DenseVector
-import io.github.mandar2812.dynaml.analysis.VectorField
-import io.github.mandar2812.dynaml.models.gp.GPRegression
-import io.github.mandar2812.dynaml.optimization.{CoupledSimulatedAnnealing, GridSearch}
+import io.github.tailhq.dynaml.analysis.VectorField
+import io.github.tailhq.dynaml.models.gp.GPRegression
+import io.github.tailhq.dynaml.optimization.{CoupledSimulatedAnnealing, GridSearch}
 import breeze.stats.distributions.Uniform
-import io.github.mandar2812.dynaml.kernels.{DiracKernel, MLPKernel, PeriodicKernel, RBFKernel}
-import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability._
-import io.github.mandar2812.dynaml.probability.distributions.MultivariateUniform
+import io.github.tailhq.dynaml.kernels.{DiracKernel, MLPKernel, PeriodicKernel, RBFKernel}
+import io.github.tailhq.dynaml.pipes.DataPipe
+import io.github.tailhq.dynaml.probability._
+import io.github.tailhq.dynaml.probability.distributions.MultivariateUniform
 import spire.implicits._
-import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
+import io.github.tailhq.dynaml.graphics.charts.Highcharts._
 
 
 val num_features: Int = 1

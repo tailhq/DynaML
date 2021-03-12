@@ -1,7 +1,7 @@
 import ammonite.ops._
-import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability._
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.pipes.DataPipe
+import io.github.tailhq.dynaml.probability._
+import io.github.tailhq.dynaml.tensorflow._
 import org.joda.time.DateTime
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.learn.layers.Layer

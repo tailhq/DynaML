@@ -4,7 +4,7 @@ title: Pipes Library
 
 ## DynaML Library Pipes
 
-DynaML comes bundled with a set of data pipes which enable certain standard data processing tasks, they are defined in the ```DynaMLPipe``` object in the ```io.github.mandar2812.dynaml.pipes``` package and they can be invoked as ```DynaMLPipe.<pipe name>```.
+DynaML comes bundled with a set of data pipes which enable certain standard data processing tasks, they are defined in the ```DynaMLPipe``` object in the ```io.github.tailhq.dynaml.pipes``` package and they can be invoked as ```DynaMLPipe.<pipe name>```.
 
 
 ------
@@ -29,7 +29,7 @@ We can do this by 'composing' data flow pipes which achieve each of the sub task
 
 ```scala
 //Import the workflow library.
-import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.tailhq.dynaml.DynaMLPipe._
 
 val columns = List(0,3,5)
 val dataPipe =

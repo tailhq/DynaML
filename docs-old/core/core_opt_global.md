@@ -49,7 +49,7 @@ Coupled Simulated Annealing can be seen as an extension to the classical Simulat
 * An _annealing schedule_ $T_{k}^{ac}, k = 0, 1, \cdots$.
 
 <br/>
-The ```CoupledSimulatedAnnealing``` class has a companion [object](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.optimization.CoupledSimulatedAnnealing$) with the following available variants.
+The ```CoupledSimulatedAnnealing``` class has a companion [object](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.tailhq.dynaml.optimization.CoupledSimulatedAnnealing$) with the following available variants.
 <br/>
 
  Variant |Acceptance Probability | Coupling term $\gamma$

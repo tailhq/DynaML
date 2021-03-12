@@ -28,7 +28,7 @@ By duplicating a single pipe using [```DynaMLPipe.duplicate```](/pipes/pipes_mis
 //Already imported in DynaML repl
 //but should be imported when using DynaML API
 //outside of its provided repl environment.
-import io.github.mandar2812.dynaml.DynaMLPipe._
+import io.github.tailhq.dynaml.DynaMLPipe._
 
 val pipe1 = DataPipe((x: Double) => math.sin(2.0*x)*math.exp(-2.0*x))
 

@@ -108,7 +108,7 @@ $$
 
 !!! tip
 
-		You can use the [`#!scala MOGPRegressionModel[I]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.mandar2812.dynaml.models.gp.MOGPRegressionModel) class to create multi-output GP models.
+		You can use the [`#!scala MOGPRegressionModel[I]`](https://transcendent-ai-labs.github.io/api_docs/DynaML/recent/dynaml-core/index.html#io.github.tailhq.dynaml.models.gp.MOGPRegressionModel) class to create multi-output GP models.
 
 		```scala
 		val trainingdata: Stream[(DenseVector[Double], DenseVector[Double])] = _
@@ -172,10 +172,10 @@ In case you want to customize the implementation of _Gaussian Process_ models in
 
 ```scala
 import breeze.linalg._
-import io.github.mandar2812.dynaml.pipes._
-import io.github.mandar2812.dynaml.probability._
-import io.github.mandar2812.dynaml.models.gp._
-import io.github.mandar2812.dynaml.kernels._
+import io.github.tailhq.dynaml.pipes._
+import io.github.tailhq.dynaml.probability._
+import io.github.tailhq.dynaml.models.gp._
+import io.github.tailhq.dynaml.kernels._
  
  
 class MyGPRegressionModel[T, I](

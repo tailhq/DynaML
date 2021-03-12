@@ -1,5 +1,5 @@
-import _root_.io.github.mandar2812.dynaml.probability._
-import io.github.mandar2812.dynaml.tensorflow._
+import _root_.io.github.tailhq.dynaml.probability._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer

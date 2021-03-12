@@ -1,26 +1,26 @@
-import _root_.io.github.mandar2812.dynaml.analysis
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d.LinePlot3D
-import _root_.io.github.mandar2812.dynaml.graphics.plot3d
-import _root_.io.github.mandar2812.dynaml.utils
-import _root_.io.github.mandar2812.dynaml.analysis.implicits._
-import _root_.io.github.mandar2812.dynaml.probability._
-import _root_.io.github.mandar2812.dynaml.tensorflow._
-import _root_.io.github.mandar2812.dynaml.tensorflow.layers._
-import _root_.io.github.mandar2812.dynaml.tensorflow.pde.{source => q, _}
+import _root_.io.github.tailhq.dynaml.analysis
+import _root_.io.github.tailhq.dynaml.graphics.plot3d.LinePlot3D
+import _root_.io.github.tailhq.dynaml.graphics.plot3d
+import _root_.io.github.tailhq.dynaml.utils
+import _root_.io.github.tailhq.dynaml.analysis.implicits._
+import _root_.io.github.tailhq.dynaml.probability._
+import _root_.io.github.tailhq.dynaml.tensorflow._
+import _root_.io.github.tailhq.dynaml.tensorflow.layers._
+import _root_.io.github.tailhq.dynaml.tensorflow.pde.{source => q, _}
 import _root_.org.platanios.tensorflow.api._
 import _root_.org.platanios.tensorflow.api.learn.Mode
 import _root_.org.platanios.tensorflow.api.learn.layers.Layer
-import _root_.io.github.mandar2812.dynaml.repl.Router.main
+import _root_.io.github.tailhq.dynaml.repl.Router.main
 import ammonite.ops.home
 import org.joda.time.DateTime
 import org.platanios.tensorflow.api.ops.variables.ConstantInitializer
-import _root_.io.github.mandar2812.dynaml.tensorflow.implicits._
+import _root_.io.github.tailhq.dynaml.tensorflow.implicits._
 import breeze.stats.distributions.Uniform
 import org.platanios.tensorflow.api.ops.Function
 import org.platanios.tensorflow.api.ops.variables.{Initializer, RandomNormalInitializer, RandomUniformInitializer}
 
 import scala.util.Random
-import _root_.io.github.mandar2812.dynaml.graphics.charts.Highcharts._
+import _root_.io.github.tailhq.dynaml.graphics.charts.Highcharts._
 import org.platanios.tensorflow.api.ops.training.optimizers.Optimizer
 
 

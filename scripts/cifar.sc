@@ -1,7 +1,7 @@
 {
   import _root_.ammonite.ops._
-  import _root_.io.github.mandar2812.dynaml.pipes.DataPipe
-  import _root_.io.github.mandar2812.dynaml.tensorflow.{
+  import _root_.io.github.tailhq.dynaml.pipes.DataPipe
+  import _root_.io.github.tailhq.dynaml.tensorflow.{
     dtflearn,
     dtfutils,
     dtfdata,

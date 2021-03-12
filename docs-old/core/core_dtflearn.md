@@ -45,7 +45,7 @@ The RBF layer implementation in DynaML treats the node center positions $c_i$ an
 parameters to be learned via gradient based back-propagation.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 
 val rbf = dtflearn.rbf_layer(name = "rbf1", num_units = 10)
 ```
@@ -136,7 +136,7 @@ can choose from.
 When the integration time step $\Delta t$ is user defined and fixed.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._ 
 
 val ctrnn_layer = dtflearn.ctrnn(
@@ -150,7 +150,7 @@ When the integration time step $\Delta t$ is a parameter that can be learned dur
 training process.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._ 
 
 val dctrnn_layer = dtflearn.dctrnn(
@@ -169,7 +169,7 @@ Often one would need to combine inputs of previous layers in some manner, the fo
 This is a computational layer which performs the function of [`dtf.stack()`](/core/core_dtf/#stack).
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._ 
 
 val stk_layer = dtflearn.stack_outputs("StackTensors", axis = 1)
@@ -180,7 +180,7 @@ val stk_layer = dtflearn.stack_outputs("StackTensors", axis = 1)
 This is a computational layer which performs the function of [`dtf.concatenate()`](/core/core_dtf/#concatenate).
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._ 
 
 val concat_layer = dtflearn.stack_outputs("ConcatenateTensors", axis = 1)
@@ -192,7 +192,7 @@ val concat_layer = dtflearn.stack_outputs("ConcatenateTensors", axis = 1)
 A sequence of layers can be collected into a single layer which accepts a sequence of symbolic tensors.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._ 
 
 val layers = Seq(
@@ -213,7 +213,7 @@ val combined_layer = dtflearn.stack_layers("Collect", layers)
 To handle inputs consisting of pairs of elements, one can provide a separate layer for processing each of the elements.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 val sl = dtflearn.tuple2_layer(
@@ -225,7 +225,7 @@ val sl = dtflearn.tuple2_layer(
 Combining the elements of Tuple2 can be done as follows.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 //Stack elements of the tuple into one tensor
@@ -280,7 +280,7 @@ Currently two abstractions are offered for building large CNN based network stac
 A single CNN unit is expressed as a convolutional layer followed by a ReLU activation and proceeded by a dropout layer.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 //Learn 16 filters of shape (2, 2, 4), suitable for 4 channel jpeg images.
@@ -298,7 +298,7 @@ A CNN pyramid builds a stack of CNN units each with a stride multiplied by a fac
 by a factor of 2 with respect to the previous unit.
 
 ```scala
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 //Start with a CNN unit of shape (2, 2, 3, 16) stride (1, 1)
@@ -320,7 +320,7 @@ width and depth.
 
 ```scala
 
-import io.github.mandar2812.dynaml.tensorflow._
+import io.github.tailhq.dynaml.tensorflow._
 import org.platanios.tensorflow.api._
 
 val net_layer_sizes = Seq(10, 20, 13, 15)
@@ -337,10 +337,9 @@ After defining the key ingredients needed to build a tensorflow model, `dtflearn
 computational graph and creates a tensorflow model and estimator which is trained on the provided data. In the 
 following example, we bring together all the elements of model training: data, architecture, loss etc.
 
-
 ```scala
 import ammonite.ops._
-import io.github.mandar2812.dynaml.tensorflow.dtflearn
+import io.github.tailhq.dynaml.tensorflow.dtflearn
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.ops.NN.SamePadding
 import org.platanios.tensorflow.data.image.CIFARLoader

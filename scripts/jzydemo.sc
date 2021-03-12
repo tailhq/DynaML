@@ -11,7 +11,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality
 import org.jzy3d.maths
 import org.jzy3d.plot3d.builder.concrete.WaterfallTessellator
 
-import _root_.io.github.mandar2812.dynaml.repl.Router.main
+import _root_.io.github.tailhq.dynaml.repl.Router.main
 
 @main
 def main(func: (Double, Double) => Double, chart_type: String, wireFrame: Boolean = true) = chart_type match {

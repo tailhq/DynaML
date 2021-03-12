@@ -5,14 +5,14 @@
 import breeze.linalg.DenseVector
 import breeze.stats.distributions._
 import breeze.stats.mcmc.ThreadedBufferedRand
-import io.github.mandar2812.dynaml.kernels.PeriodicKernel
-import io.github.mandar2812.dynaml.models.gp.GPRegression
-import io.github.mandar2812.dynaml.optimization.GridSearch
-import io.github.mandar2812.dynaml.pipes.DataPipe
-import io.github.mandar2812.dynaml.probability._
+import io.github.tailhq.dynaml.kernels.PeriodicKernel
+import io.github.tailhq.dynaml.models.gp.GPRegression
+import io.github.tailhq.dynaml.optimization.GridSearch
+import io.github.tailhq.dynaml.pipes.DataPipe
+import io.github.tailhq.dynaml.probability._
 import spire.implicits._
-import io.github.mandar2812.dynaml.graphics.charts.Highcharts._
-import io.github.mandar2812.dynaml.utils
+import io.github.tailhq.dynaml.graphics.charts.Highcharts._
+import io.github.tailhq.dynaml.utils
 
 val data = new Gaussian(-2.0, 3.25).sample(2000).toStream
 

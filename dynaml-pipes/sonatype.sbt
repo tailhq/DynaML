@@ -23,8 +23,8 @@ scmInfo := Some(
 )
 developers := List(
   Developer(
-    id="mandar2812",
+    id="tailhq",
     name="Mandar Chandorkar",
-    email="mandar2812@gmail.com",
+    email="tailhq@gmail.com",
     url=url("http://mandar2812.github.io/"))
 )
