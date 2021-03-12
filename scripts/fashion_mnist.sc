@@ -7,20 +7,17 @@
   import _root_.ammonite.ops._
 
   // Load and batch data using pre-fetching.
-  val tempdir = home / "tmp"
+  val tempdir = home/"tmp"
 
-  val dataSet =
-    MNISTLoader.load(Paths.get(tempdir.toString()), MNISTLoader.FASHION_MNIST)
+  val dataSet = MNISTLoader.load(Paths.get(tempdir.toString()), MNISTLoader.FASHION_MNIST)
 
-  val dtf_cifar_data = dtfdata.tf_dataset(
+  val dtf_mnist_data = dtfdata.tf_dataset(
     dtfdata.supervised_dataset(
       dataSet.trainImages.unstack(axis = 0),
-      dataSet.trainLabels.castTo[Long].unstack(axis = -1)
-    ),
+      dataSet.trainLabels.castTo[Long].unstack(axis = -1)),
     dtfdata.supervised_dataset(
       dataSet.testImages.unstack(axis = 0),
-      dataSet.testLabels.castTo[Long].unstack(axis = -1)
-    )
+      dataSet.testLabels.castTo[Long].unstack(axis = -1))
   )
 
   val architecture = tf.learn.Cast[UByte, Float]("Input/Cast") >>
@@ -33,23 +30,22 @@
     tf.learn.ReLU[Float]("Layer_2/ReLU", 0.1f) >>
     tf.learn.Linear[Float]("OutputLayer/Linear", 10)
 
-  val loss = tf.learn.SparseSoftmaxCrossEntropy[Float, Long, Float](
-    "Loss/CrossEntropy"
-  ) >>
+  val loss = tf.learn.SparseSoftmaxCrossEntropy[Float, Long, Float]("Loss/CrossEntropy") >>
     tf.learn.Mean("Loss/Mean") >>
     tf.learn.ScalarSummary("Loss/Summary", "Loss")
 
   val optimizer = tf.train.Adam(0.1f)
 
-  val fashion_mnist_model =
-    dtflearn.model[Output[UByte], Output[Long], Output[Float], Float, Tensor[
-      UByte
-    ], UINT8, Shape, Tensor[Long], INT64, Shape, Tensor[Float], FLOAT32, Shape](
-      architecture,
-      (UINT8, dataSet.trainImages.shape(1 ::)),
-      (INT64, Shape()),
-      loss
-    )
+  val mnist_model = dtflearn.model[
+    Output[UByte], Output[Long], Output[Float], Float,
+    Tensor[UByte], UINT8, Shape,
+    Tensor[Long], INT64, Shape,
+    Tensor[Float], FLOAT32, Shape](
+    architecture,
+    (UINT8, dataSet.trainImages.shape(1::)),
+    (INT64, Shape()),
+    loss
+  )
 
   val data_ops = dtflearn.model.data_ops[(Output[UByte], Output[Long])](
     shuffleBuffer = 5000,
@@ -57,20 +53,18 @@
     prefetchSize = 10
   )
 
-  val config = dtflearn.model.trainConfig(
-    tempdir / "fashion_mnist_summaries",
+  val train_config = dtflearn.model.trainConfig(
+    tempdir/"mnist_summaries",
     data_ops,
     optimizer,
     dtflearn.rel_loss_change_stop(0.05, 500),
     Some(
       dtflearn.model._train_hooks(
-        tempdir / "fashion_mnist_summaries",
+        tempdir/"mnist_summaries",
         stepRateFreq = 100,
         summarySaveFreq = 100,
-        checkPointFreq = 100
-      )
-    )
-  )
+        checkPointFreq = 100)
+    ))
 
   val pattern_to_tensor =
     DataPipe[Seq[(Tensor[UByte], Tensor[Long])], (Tensor[UByte], Tensor[Long])](
@@ -104,31 +98,30 @@
       concatOpO = Some(dtfpipe.EagerConcatenate[Float]())
     )
 
-  fashion_mnist_model.train(
-    dtf_cifar_data.training_dataset,
-    config,
+  mnist_model.train(
+    dtf_mnist_data.training_dataset,
+    train_config,
     data_handle_ops
   )
 
   def accuracy(predictions: Tensor[Long], labels: Tensor[Long]): Float =
-    tfi
-      .equal(predictions.argmax[Long](1), labels)
+    tfi.equal(predictions.argmax[Long](1), labels)
       .castTo[Float]
       .mean()
       .scalar
       .asInstanceOf[Float]
 
   val (trainingPreds, testPreds): (Tensor[Float], Tensor[Float]) = (
-    fashion_mnist_model
+    mnist_model
       .infer_batch(
-        dtf_cifar_data.training_dataset.map(p => p._1),
+        dtf_mnist_data.training_dataset.map(p => p._1),
         data_handle_ops_infer
       )
       .left
       .get,
-    fashion_mnist_model
+    mnist_model
       .infer_batch(
-        dtf_cifar_data.test_dataset.map(p => p._1),
+        dtf_mnist_data.test_dataset.map(p => p._1),
         data_handle_ops_infer
       )
       .left
