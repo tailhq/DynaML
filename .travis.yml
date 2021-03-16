@@ -23,7 +23,7 @@ matrix:
 #  - eval "${MATRIX_EVAL}"
 
 script:
-  - sbt sbt -Dheap=4096m -Dgpu=false -DpackagedTF=true -J-XX:MaxDirectMemorySize=2gclean coverage test coverageReport && sbt coverageAggregate
+  - sbt -Dheap=4096m -Dgpu=false -DpackagedTF=true -J-XX:MaxDirectMemorySize=2gclean coverage test coverageReport && sbt coverageAggregate
 after_success:
   - sbt coveralls
 
