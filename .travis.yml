@@ -1,16 +1,15 @@
 language: scala
 
 scala:
-   - 2.12.8
+   - 2.12.12
 
 jdk:
-   - oraclejdk8
+   - oraclejdk11
 
 matrix:
   include:
-  # works on Precise and Trusty
   - os: linux
-    dist: trusty
+    dist: focal
     addons:
       apt:
         sources:
@@ -24,10 +23,9 @@ before_install:
   - eval "${MATRIX_EVAL}"
 
 script:
-  - sbt clean stage #clean coverage test coverageReport &&
-    #sbt coverageAggregate
-#after_success:
-#  - sbt coveralls
+  - sbt sbt -Dheap=4096m -Dgpu=false -DpackagedTF=true -J-XX:MaxDirectMemorySize=2gclean coverage test coverageReport && sbt coverageAggregate
+after_success:
+  - sbt coveralls
 
 notifications:
   webhooks:
