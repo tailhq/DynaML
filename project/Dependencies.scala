@@ -121,7 +121,11 @@ object Dependencies {
     )
   )
 
-  val loggingDependency = Seq("log4j" % "log4j" % "1.2.17")
+  val loggingDependency = Seq(
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
+    "ch.qos.logback" % "logback-classic" % "1.2.3",
+    //"log4j" % "log4j" % "1.2.17"
+  )
 
   val linearAlgebraDependencies = Seq(
     "org.typelevel"                              %% "spire" % "0.16.2",
