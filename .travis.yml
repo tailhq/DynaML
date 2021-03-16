@@ -14,13 +14,13 @@ matrix:
       apt:
         sources:
         - ubuntu-toolchain-r-test
-        packages:
-        - g++-5
-    env:
-    - MATRIX_EVAL="CC=gcc-5.5 && CXX=g++-5.5"
+        # packages:
+        # - g++-5
+    # env:
+    # - MATRIX_EVAL="CC=gcc-5.5 && CXX=g++-5.5"
 
-before_install:
-  - eval "${MATRIX_EVAL}"
+# before_install:
+#  - eval "${MATRIX_EVAL}"
 
 script:
   - sbt sbt -Dheap=4096m -Dgpu=false -DpackagedTF=true -J-XX:MaxDirectMemorySize=2gclean coverage test coverageReport && sbt coverageAggregate
