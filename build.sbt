@@ -5,7 +5,7 @@ import sbtbuildinfo.BuildInfoPlugin.autoImport._
 import org.scoverage.coveralls.Imports.CoverallsKeys._
 
 val mainVersion = "v2.0-SNAPSHOT"
-maintainer := "Mandar Chandorkar <tailhq@gmail.com>"
+maintainer := "Mandar Chandorkar <mandar2812@gmail.com>"
 packageSummary := "Scala Library/REPL for Machine Learning Research"
 packageDescription := "DynaML is a Scala & JVM Machine Learning toolbox for research, education & industry."
 
