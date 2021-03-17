@@ -1,35 +1,35 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.transcendent-ai-labs</groupId>
+    <groupId>io.github.tailhq</groupId>
     <artifactId>dynaml-tensorflow_2.12</artifactId>
     <packaging>jar</packaging>
     <description>dynaml-tensorflow</description>
     <version>v2.0-SNAPSHOT</version>
     <name>dynaml-tensorflow</name>
     <organization>
-        <name>io.github.transcendent-ai-labs</name>
+        <name>io.github.tailhq</name>
     </organization>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.12.10</version>
+            <version>2.12.12</version>
         </dependency>
         <dependency>
-            <groupId>io.github.transcendent-ai-labs</groupId>
+            <groupId>io.github.tailhq</groupId>
             <artifactId>dynaml-core_2.12</artifactId>
             <version>v2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>io.github.transcendent-ai-labs</groupId>
+            <groupId>io.github.tailhq</groupId>
             <artifactId>dynaml-pipes_2.12</artifactId>
             <version>v2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.platanios</groupId>
             <artifactId>tensorflow_2.12</artifactId>
-            <version>0.4.2-SNAPSHOT</version>
+            <version>0.6.0-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.typelevel</groupId>
@@ -52,7 +52,30 @@
         <dependency>
             <groupId>org.platanios</groupId>
             <artifactId>tensorflow-data_2.12</artifactId>
-            <version>0.4.2-SNAPSHOT</version>
+            <version>0.6.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.typelevel</groupId>
+                    <artifactId>spire_2.12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jdk14</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.platanios</groupId>
+            <artifactId>tensorflow-jni_2.12</artifactId>
+            <version>0.6.0-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.typelevel</groupId>
@@ -95,7 +118,7 @@
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.12</artifactId>
-            <version>3.1.1</version>
+            <version>3.1.2</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
