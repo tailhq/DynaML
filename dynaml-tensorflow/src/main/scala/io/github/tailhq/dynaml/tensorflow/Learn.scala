@@ -19,14 +19,21 @@ under the License.
 package io.github.tailhq.dynaml.tensorflow
 
 import _root_.io.github.tailhq.dynaml.pipes.{DataPipe, MetaPipe}
-import _root_.io.github.tailhq.dynaml.tensorflow.models.{TFModel, TunableTFModel}
+import _root_.io.github.tailhq.dynaml.tensorflow.models.{
+  TFModel,
+  TunableTFModel
+}
 import io.github.tailhq.dynaml.tensorflow.layers.{
   DynamicTimeStepCTRNN,
   FiniteHorizonCTRNN,
   FiniteHorizonLinear
 }
 import _root_.io.github.tailhq.dynaml.tensorflow.dynamics.PDESystem
-import _root_.io.github.tailhq.dynaml.tensorflow.evaluation.{Performance, MAE, MSE}
+import _root_.io.github.tailhq.dynaml.tensorflow.evaluation.{
+  Performance,
+  MAE,
+  MSE
+}
 import org.platanios.tensorflow.api.learn.{Mode, StopCriteria}
 import org.platanios.tensorflow.api.learn.layers.{Compose, Input, Layer, Linear}
 import org.platanios.tensorflow.api.ops.NN.SameConvPadding
@@ -106,21 +113,18 @@ private[tensorflow] object Learn {
   val mult_seq: layers.MultSeq.type                   = layers.MultSeq
   val multiply_const: layers.MultConstant.type        = layers.MultConstant
 
-  /**
-    * Stop after a specified maximum number of iterations has been reached.
-    * */
+  /** Stop after a specified maximum number of iterations has been reached.
+    */
   def max_iter_stop(n: Long): StopCriteria =
     tf.learn.StopCriteria(maxSteps = Some(n))
 
-  /**
-    * Stop after a specified maximum number of epochs has been reached.
-    * */
+  /** Stop after a specified maximum number of epochs has been reached.
+    */
   def max_epochs_stop(n: Long): StopCriteria =
     tf.learn.StopCriteria(maxEpochs = Some(n))
 
-  /**
-    * Stop after the change in the loss function falls below a specified threshold.
-    * */
+  /** Stop after the change in the loss function falls below a specified threshold.
+    */
   def abs_loss_change_stop(
     d: Double,
     max_iterations: Long,
@@ -132,9 +136,8 @@ private[tensorflow] object Learn {
       maxEpochs = if (max_epochs > 0L) Some(max_epochs) else None
     )
 
-  /**
-    * Stop after the relative change in the loss function falls below a specified threshold.
-    * */
+  /** Stop after the relative change in the loss function falls below a specified threshold.
+    */
   def rel_loss_change_stop(
     d: Double,
     max_iterations: Long,
@@ -174,16 +177,14 @@ private[tensorflow] object Learn {
         pipe(mode)(input)
     }
 
-  /**
-    * Constructs a feed-forward layer.
+  /** Constructs a feed-forward layer.
     *
     * @param num_units The number of neurons in the layer.
     * @param useBias Set to true if bias unit is to be included.
     * @param weightsInitializer Initialization for the weights.
     * @param biasInitializer Initialization for the bias.
     * @param id A unique integer id for constructing the layer name.
-    *
-    * */
+    */
   def feedforward[T: TF: IsNotQuantized](
     num_units: Int,
     useBias: Boolean = true,
@@ -205,8 +206,7 @@ private[tensorflow] object Learn {
   ): Int => Layer[Output[T], Output[T]] =
     (i: Int) => activations(i % activations.length)(s"Act_$i")
 
-  /**
-    * Constructs a simple feed-forward stack of layers.
+  /** Constructs a simple feed-forward stack of layers.
     *
     * @param get_act A function which given a layer index number,
     *                returns an activation function.
@@ -218,7 +218,7 @@ private[tensorflow] object Learn {
     * @param useBias Set to true if bias unit is to be included.
     * @param weightsInitializer Initialization for the weights.
     * @param biasInitializer Initialization for the bias.
-    * */
+    */
   def feedforward_stack[T: TF: IsNotQuantized](
     get_act: Int => Layer[Output[T], Output[T]]
   )(layer_sizes: Seq[Int],
@@ -229,27 +229,24 @@ private[tensorflow] object Learn {
     tag: String = "Linear"
   ): Layer[Output[T], Output[T]] =
     layer_sizes
-      .map(
-        layer_size =>
-          dtflearn.feedforward[T](
-            layer_size,
-            useBias,
-            weightsInitializer,
-            biasInitializer,
-            tag
-          ) _
+      .map(layer_size =>
+        dtflearn.feedforward[T](
+          layer_size,
+          useBias,
+          weightsInitializer,
+          biasInitializer,
+          tag
+        ) _
       )
       .zipWithIndex
-      .map(
-        li =>
-          if (li._2 < layer_sizes.length - 1)
-            li._1(starting_index + li._2) >> get_act(starting_index + li._2)
-          else li._1(starting_index + li._2)
+      .map(li =>
+        if (li._2 < layer_sizes.length - 1)
+          li._1(starting_index + li._2) >> get_act(starting_index + li._2)
+        else li._1(starting_index + li._2)
       )
       .reduceLeft(_ >> _)
 
-  /**
-    * Constructs a symmetric (square) convolutional layer from the provided dimensions.
+  /** Constructs a symmetric (square) convolutional layer from the provided dimensions.
     *
     * [[org.platanios.tensorflow.api.ops.NN.SameConvPadding]] is used as the padding mode.
     *
@@ -258,7 +255,7 @@ private[tensorflow] object Learn {
     * @param num_filters The number of channels in the layer output
     * @param strides A [[Tuple2]] with strides, for each direction i.e. breadth and height.
     * @param index The layer id or index, helps in creating a unique layer name
-    * */
+    */
   def conv2d[T: TF: IsDecimal](
     size: Int,
     num_channels_input: Int,
@@ -274,11 +271,9 @@ private[tensorflow] object Learn {
       SameConvPadding
     )
 
-  /**
-    * Constructs a convolutional layer activated by a ReLU, with
+  /** Constructs a convolutional layer activated by a ReLU, with
     * an option of appending a dropout layer.
-    *
-    * */
+    */
   def conv2d_unit[T: TF: IsDecimal: IsHalfOrFloatOrDouble](
     shape: Shape,
     stride: (Int, Int) = (1, 1),
@@ -311,8 +306,7 @@ private[tensorflow] object Learn {
         tf.learn.Cast("Cast_" + i)
     }
 
-  /**
-    * Constructs an inverted convolutional pyramid, consisting of
+  /** Constructs an inverted convolutional pyramid, consisting of
     * stacked versions of [Conv2d --> ReLU --> Dropout] layers.
     *
     * The number of filters learned in each Conv2d layer are
@@ -335,7 +329,7 @@ private[tensorflow] object Learn {
     *                Set to false, and batch normalisation layers shall be placed after each convolutional unit.
     *
     * @param keep_prob If dropout is enabled, then this determines the retain probability.
-    * */
+    */
   def conv2d_pyramid[T: TF: IsDecimal: IsHalfOrFloatOrDouble](
     size: Int,
     num_channels_input: Int
@@ -386,8 +380,7 @@ private[tensorflow] object Learn {
     head_segment >> tail_segments
   }
 
-  /**
-    * <h4>Inception Module</h4>
+  /** <h4>Inception Module</h4>
     *
     * Constructs an Inception v2 computational unit,
     * optionally with batch normalisation.
@@ -413,7 +406,6 @@ private[tensorflow] object Learn {
     * Each convolution is followed by a batch normalisation layer (if applicable)
     * followed by a Rectified Linear activation.
     *
-    *
     * @param channels The depth of the input.
     * @param num_filters The number of filters to learn in each branch of
     *                    the module, supplied as a sequence of integers.
@@ -421,8 +413,7 @@ private[tensorflow] object Learn {
     *                             and returns an activation.
     * @param use_batch_norm If true, apply batch normalisation at the end
     *                       of each convolution.
-    *
-    * */
+    */
   def inception_unit[T: TF: IsDecimal](
     channels: Int,
     num_filters: Seq[Int],
@@ -548,14 +539,13 @@ private[tensorflow] object Learn {
 
   }
 
-  /**
-    * Create a stack of Inception modules (See [[inception_unit()]] for more details).
+  /** Create a stack of Inception modules (See [[inception_unit()]] for more details).
     *
     * @param num_channels_image The depth, or number of colour channels in the image.
     * @param num_filters Specifies the number of filters for each branch of every inception module.
     * @param starting_index The starting index of the stack. The stack is named in a consecutive manner,
     *                       i.e. Inception_i, Inception_i+1, ...
-    * */
+    */
   def inception_stack[T: TF: IsDecimal](
     num_channels_image: Int,
     num_filters: Seq[Seq[Int]],
@@ -572,14 +562,13 @@ private[tensorflow] object Learn {
 
     val tail_section = num_filters
       .sliding(2)
-      .map(
-        pair =>
-          inception_unit(
-            pair.head.sum,
-            pair.last,
-            activation_generator,
-            use_batch_norm
-          ) _
+      .map(pair =>
+        inception_unit(
+          pair.head.sum,
+          pair.last,
+          activation_generator,
+          use_batch_norm
+        ) _
       )
       .zipWithIndex
       .map(layer_fn_index_pair => {
@@ -591,8 +580,7 @@ private[tensorflow] object Learn {
     head >> tail_section
   }
 
-  /**
-    * Constructs a Continuous Time Recurrent Neural Network (CTRNN) Layer, consisting
+  /** Constructs a Continuous Time Recurrent Neural Network (CTRNN) Layer, consisting
     * of some latent states, composed with a linear projection into the space of observables.
     *
     * @param observables The dimensionality of the output space.
@@ -600,7 +588,7 @@ private[tensorflow] object Learn {
     *                 value, create a [[DynamicTimeStepCTRNN]].
     * @param horizon The number of steps in time to simulate the dynamical system
     * @param index The layer index, should be unique.
-    * */
+    */
   def ctrnn_block[T: TF: IsDecimal](
     observables: Int,
     horizon: Int,
@@ -615,8 +603,7 @@ private[tensorflow] object Learn {
         FiniteHorizonLinear(s"FHlinear_$index", observables)
     }
 
-  /**
-    * <h4>Supervised Learning</h4>
+  /** <h4>Supervised Learning</h4>
     *
     * Trains a supervised tensorflow model/estimator.
     *
@@ -642,7 +629,7 @@ private[tensorflow] object Learn {
     * @return A [[Tuple2]] containing the model and estimator.
     *
     * @author tailhq
-    * */
+    */
   def build_tf_model[
     In: OutputStructure,
     TrainIn: OutputStructure,
@@ -744,8 +731,7 @@ private[tensorflow] object Learn {
     (model, estimator)
   }
 
-  /**
-    * <h4>Unsupervised Learning</h4>
+  /** <h4>Unsupervised Learning</h4>
     *
     * Trains an unsupervised tensorflow model/estimator.
     *
@@ -770,7 +756,7 @@ private[tensorflow] object Learn {
     * @return A [[Tuple2]] containing the model and estimator.
     *
     * @author tailhq
-    * */
+    */
   def build_unsup_tf_model[
     In: OutputStructure,
     Out: OutputStructure,

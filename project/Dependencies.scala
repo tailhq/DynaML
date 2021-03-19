@@ -68,7 +68,7 @@ object Dependencies {
     val tf_c =
       if (os.contains("macosx")) "darwin-" + arch
       else if (os.contains("linux")) {
-        if (gpuFlag) "linux-gpu" /* + arch */ else "linux" // + arch
+        if (gpuFlag) "linux" /* + arch */ else "linux" // + arch
       } else ""
     println("Tensorflow-Scala Classifier: " + tf_c)
     tf_c
@@ -187,13 +187,15 @@ object Dependencies {
     Seq(
       "org.platanios"                             %% "tensorflow" % tfscala_version,
       "org.platanios"                             %% "tensorflow-data" % tfscala_version,
-      "org.platanios"                             %% "tensorflow-jni" % tfscala_version
+      "org.platanios"                             %% "tensorflow-jni" % tfscala_version,
+      "org.platanios"                             %% "tensorflow-proto" % tfscala_version
     ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
   } else {
     Seq(
       "org.platanios"                             %% "tensorflow" % tfscala_version classifier tensorflow_classifier,
       "org.platanios"                             %% "tensorflow-data" % tfscala_version,
-      "org.platanios"                             %% "tensorflow-jni" % tfscala_version
+      "org.platanios"                             %% "tensorflow-jni" % tfscala_version,
+      "org.platanios"                             %% "tensorflow-proto" % tfscala_version
     ).map(_.withExclusions(Vector("org.typelevel" %% "spire")))
   }
 
@@ -220,10 +222,10 @@ object Dependencies {
     linearAlgebraDependencies ++
       apacheSparkDependency ++
       loggingDependency ++
-      testSuiteDependencies
-  ).map(
-    _.excludeAll(excludeSlf4jBindings: _*)
-  )
+      testSuiteDependencies)
+  // ).map(
+  //   _.excludeAll(excludeSlf4jBindings: _*)
+  // )
 
   val coreDependencies = (
     linearAlgebraDependencies ++
@@ -238,10 +240,10 @@ object Dependencies {
       imageDependencies ++
       dataFormatDependencies ++
       scalaStan ++
-      testSuiteDependencies
-  ).map(
-    _.excludeAll(excludeSlf4jBindings: _*)
-  )
+      testSuiteDependencies)
+  // ).map(
+  //   _.excludeAll(excludeSlf4jBindings: _*)
+  // )
 
   val replDependencies = baseDependencies ++ ammoniteDeps ++ commons_io ++ coursier_deps ++ testSuiteDependencies
 

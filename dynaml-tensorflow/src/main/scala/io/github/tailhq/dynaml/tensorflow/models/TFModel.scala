@@ -36,8 +36,7 @@ import org.platanios.tensorflow.api.ops.data.Dataset
 import org.platanios.tensorflow.api._
 import org.platanios.tensorflow.api.ops.data.Dataset
 
-/**
-  * <h4>Supervised Learning</h4>
+/** <h4>Supervised Learning</h4>
   *
   * @tparam IT The type representing input tensors,
   *            e.g. `Tensor`, `(Tensor, Tensor)`, `Seq[Tensor]`  etc.
@@ -69,7 +68,7 @@ import org.platanios.tensorflow.api.ops.data.Dataset
   *                        See [[_root_.io.github.tailhq.dynaml.models.TFModel.DataOps]]
   * @param inMemory        Set to true if the estimator should be in-memory.
   * @author tailhq date 2018/09/11
-  * */
+  */
 class TFModel[
   In,
   Out,
@@ -166,38 +165,40 @@ class TFModel[
             )
           )
 
-      val underlying_tf_pair = tf.createWith(
-        graph = graphInstance,
-        attributes=Map("constant_folding" -> false)
-      ) {
+      val underlying_tf_pair =
+        tf.createWith(
+          graph = graphInstance,
+          attributes = Map("constant_folding" -> false)
+        ) {
 
-        val m =
-          tf.learn.Model.simpleSupervised[In, Out, ArchOut, ArchOut, Loss](
-            input_handle,
-            target_handle,
-            architecture,
-            loss,
-            optimizer,
-            clipGradients,
-            colocateGradientsWithOps
-          )
+          val m =
+            tf.learn.Model.simpleSupervised[In, Out, ArchOut, ArchOut, Loss](
+              input_handle,
+              target_handle,
+              architecture,
+              loss,
+              optimizer,
+              clipGradients,
+              colocateGradientsWithOps
+            )
 
-        val train_hooks = trainHooks match {
-          case Some(hooks) => hooks
-          case None =>
-            if (inMemory) Set[Hook]()
-            else TFModel._train_hooks(summary_dir = summaryDir)
+          val train_hooks = trainHooks match {
+            case Some(hooks) => hooks
+            case None =>
+              if (inMemory) Set[Hook]()
+              else TFModel._train_hooks(summary_dir = summaryDir)
+          }
+
+          val config = tf.learn.Configuration(Some(summaryDir.toNIO))
+
+          val e =
+            if (inMemory)
+              tf.learn.InMemoryEstimator(m, config, stopCriteria, train_hooks)
+            else
+              tf.learn.FileBasedEstimator(m, config, stopCriteria, train_hooks)
+
+          (Some(m), Some(e))
         }
-
-        val config = tf.learn.Configuration(Some(summaryDir.toNIO))
-
-        val e =
-          if (inMemory)
-            tf.learn.InMemoryEstimator(m, config, stopCriteria, train_hooks)
-          else tf.learn.FileBasedEstimator(m, config, stopCriteria, train_hooks)
-
-        (Some(m), Some(e))
-      }
 
       model = underlying_tf_pair._1
       estimator = underlying_tf_pair._2
@@ -239,8 +240,7 @@ class TFModel[
         "2. Model has been closed via close() method."
     )
 
-  /**
-    * Generate predictions for a data set.
+  /** Generate predictions for a data set.
     *
     * Here `input_data` can be of one of the following types:
     *
@@ -248,16 +248,13 @@ class TFModel[
     *     each element in the dataset. Note that the predictions are computed lazily in this case, whenever an element
     *     is requested from the returned iterator.
     *   - A single input of type [[IT]], in which case this method returns a prediction of type [[ITT]].
-    *
-    *
-    * */
+    */
   override def predict(point: IT): ITT = {
     check_underlying_estimator()
     estimator.get.infer[IT, ID, IS, ITT, IDD, ISS, IT, ITT](() => point)
   }
 
-  /**
-    * Generate predictions for a data set.
+  /** Generate predictions for a data set.
     *
     * Here `input_data` can be of one of the following types:
     *
@@ -265,9 +262,7 @@ class TFModel[
     *     each element in the dataset. Note that the predictions are computed lazily in this case, whenever an element
     *     is requested from the returned iterator.
     *   - A single input of type [[IT]], in which case this method returns a prediction of type [[ITT]].
-    *
-    *
-    * */
+    */
   def infer[InV, InD, InS, OutV, OutD, OutS, InferIn, InferOut](
     input_data: InferIn
   )(
@@ -284,12 +279,11 @@ class TFModel[
   ): InferOut =
     estimator.get.infer(() => input_data)
 
-  /**
-    * Generate predictions for a DynaML data set.
+  /** Generate predictions for a DynaML data set.
     *
     * @param input_data_set The data set containing input patterns
     * @return A DynaML data set of predictions.
-    * */
+    */
   def infer_coll[Pattern](
     input_data_set: DataSet[Pattern],
     handle_ops: TFModel.DataHandleOps[Pattern, IT, ITT, In],
@@ -398,9 +392,8 @@ class TFModel[
     evaluate(tf_dataset, metrics, max_steps, saveSummaries, name)
   }
 
-  /**
-    * Close the underlying tensorflow graph.
-    * */
+  /** Close the underlying tensorflow graph.
+    */
   def close(): Unit = {
     model = None
     estimator = None
@@ -425,8 +418,7 @@ object TFModel {
   type TFDataHandleOps[Pattern, IT, ITT, In] =
     DataHandleOps[Pattern, IT, ITT, In]
 
-  /**
-    * Defines data operations to be performed using TensorFlow data API.
+  /** Defines data operations to be performed using TensorFlow data API.
     *
     * @param shuffleBuffer The size of the shuffle buffer, set to zero if
     *                      data shuffling is not needed.
@@ -438,7 +430,7 @@ object TFModel {
     * @param repeat Decides how many times the tensorflow
     *               data set is to be repeated. Defaults to -1
     *               which repeates it infinitely.
-    * */
+    */
   protected case class DataOps[I](
     shuffleBuffer: Int = 10000,
     batchSize: Int = 16,
@@ -463,7 +455,8 @@ object TFModel {
       else identityPipe[Dataset[T]]
 
     def shuffle[T](buffer: Int, seed: Option[Int] = None) =
-      if (buffer > 0) DataPipe[Dataset[T], Dataset[T]](_.shuffle(buffer, seed = seed))
+      if (buffer > 0)
+        DataPipe[Dataset[T], Dataset[T]](_.shuffle(buffer, seed = seed))
       else identityPipe[Dataset[T]]
 
     def shuffle_and_repeat[T](
@@ -576,8 +569,7 @@ object TFModel {
 
   }
 
-  /**
-    * A training configuration, contains information on
+  /** A training configuration, contains information on
     * optimization method, convergence test etc.
     *
     * @param optimizer The optimization algorithm implementation.
@@ -591,7 +583,7 @@ object TFModel {
     *                     such as saving the current TensorFlow graph, saving the loss, step rate,
     *                     summaries (audio, video, tensor) etc. See the `_train_hooks()` method
     *                     for setting some default training hooks.
-    * */
+    */
   protected case class TrainConfig[In](
     summaryDir: Path,
     data_processing: Ops[In] = TFModel.data_ops(10000, 16, 10),
@@ -601,20 +593,17 @@ object TFModel {
 
   type Config[In] = TrainConfig[In]
 
-  /**
-    * Creates a [[DataOps]] instance.
-    * */
+  /** Creates a [[DataOps]] instance.
+    */
   val data_ops: DataOps.type = DataOps
 
   val tf_data_handle_ops: DataHandleOps.type = DataHandleOps
 
-  /**
-    * Creates a [[TrainConfig]] instance.
-    * */
+  /** Creates a [[TrainConfig]] instance.
+    */
   val trainConfig: TrainConfig.type = TrainConfig
 
-  /**
-    * Create a set of training hooks which save
+  /** Create a set of training hooks which save
     *
     * <ol>
     *   <li>The underlying TensorFlow graph</li>
@@ -628,7 +617,7 @@ object TFModel {
     * @param checkPointFreq How frequently to save model checkpoints.
     *
     * @return A collection of training hooks
-    * */
+    */
   def _train_hooks(
     summary_dir: Path,
     stepRateFreq: Int = 5000,
@@ -680,14 +669,13 @@ object TFModel {
       log = log,
       summaryDir = summaryDir.toNIO,
       datasets = datasets,
-      metrics.map(
-        kv =>
-          Performance(
-            kv._1,
-            DataPipe[(ArchOut, (In, Out)), Output[Float]](
-              v => kv._2(v._1, v._2._2)
-            )
+      metrics.map(kv =>
+        Performance(
+          kv._1,
+          DataPipe[(ArchOut, (In, Out)), Output[Float]](v =>
+            kv._2(v._1, v._2._2)
           )
+        )
       ),
       trigger = tf.learn.StepHookTrigger(stepTrigger),
       triggerAtEnd = false
@@ -723,18 +711,17 @@ object TFModel {
     (ID, TD),
     (IS, TS)
   ] = {
-    val tf_datasets = datasets.map(
-      kv =>
-        (
-          kv._1,
-          () =>
-            data._get_tf_data(
-              kv._2,
-              ((input._1, target._1), (input._2, target._2)),
-              tf_handle_ops,
-              data_ops
-            )
-        )
+    val tf_datasets = datasets.map(kv =>
+      (
+        kv._1,
+        () =>
+          data._get_tf_data(
+            kv._2,
+            ((input._1, target._1), (input._2, target._2)),
+            tf_handle_ops,
+            data_ops
+          )
+      )
     )
 
     _eval_hook(
